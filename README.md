@@ -1,16 +1,35 @@
-# Salesforce DX Project: Next Steps
+# RecruiterPortalProject
 
-Now that you’ve created a Salesforce DX project, what’s next? Here are some documentation resources to get you started.
+A Salesforce DX project for the Recruiter Portal application, featuring a Lightning Web Component dashboard for managing interviews and candidates.
 
-## How Do You Plan to Deploy Your Changes?
+## Project Overview
 
-Do you want to deploy a set of changes, or create a self-contained application? Choose a [development model](https://developer.salesforce.com/tools/vscode/en/user-guide/development-models).
+This project includes:
+- **Lightning Web Components**: Interactive recruiter dashboard
+- **Apex Classes**: Controllers and test data generators
+- **Custom Objects**: Interview management system
+- **MCP Server**: TypeScript-based Model Context Protocol server
+- **Test Data Scripts**: Apex scripts for generating test interview data
 
-## Configure Your Salesforce DX Project
+## Key Components
+
+### Lightning Web Components
+- `recruiterDashboard`: Main dashboard component with interview statistics and candidate management
+
+### Apex Classes
+- `RecruiterDashboardController`: Main controller for dashboard data
+- `InterviewTestDataGenerator`: Generates test interview data
+- `TestDataGenerator`: General test data utilities
+- `RecruiterRescheduleHelper`: Helper for interview rescheduling
+
+### Custom Objects
+- `Interview__c`: Custom object for managing interview records
+
+## Salesforce DX Setup
 
 The `sfdx-project.json` file contains useful configuration information for your project. See [Salesforce DX Project Configuration](https://developer.salesforce.com/docs/atlas.en-us.sfdx_dev.meta/sfdx_dev/sfdx_dev_ws_config.htm) in the _Salesforce DX Developer Guide_ for details about this file.
 
-## Read All About It
+## Development Resources
 
 - [Salesforce Extensions Documentation](https://developer.salesforce.com/tools/vscode/)
 - [Salesforce CLI Setup Guide](https://developer.salesforce.com/docs/atlas.en-us.sfdx_setup.meta/sfdx_setup/sfdx_setup_intro.htm)
