@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Interview_Status__c</fullName>
+    <label>Interview Status</label>
+    <required>false</required>
+    <trackTrending>false</trackTrending>
+    <type>Picklist</type>
+    <valueSet>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>Scheduled</fullName>
+                <default>true</default>
+            </value>
+            <value>
+                <fullName>Completed</fullName>
+                <default>false</default>
+            </value>
+            <value>
+                <fullName>No Show</fullName>
+                <default>false</default>
+            </value>
+            <value>
+                <fullName>Canceled</fullName>
+                <default>false</default>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

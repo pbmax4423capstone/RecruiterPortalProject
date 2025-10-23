@@ -1,0 +1,78 @@
+<template>
+  <div class="dashboard-container">
+    <!-- Branded Header -->
+    <div class="branded-header">
+      <div class="slds-page-header__row">
+        <div class="slds-page-header__col-title">
+          <div class="slds-media">
+            <div class="slds-media__figure">
+              <div class="company-logo">
+                <lightning-icon icon-name="custom:custom63" alternative-text="Company Logo" size="large" class="logo-icon"></lightning-icon>
+              </div>
+            </div>
+            <div class="slds-media__body">
+              <div class="slds-page-header__name">
+                <div class="slds-page-header__name-title">
+                  <h1>
+                    <span class="slds-page-header__title slds-truncate" title="Recruiter Dashboard">Capstone Partners - Recruiter Portal</span>
+                  </h1>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="slds-page-header__col-actions">
+          <!-- Action Buttons Row -->
+          <div class="action-buttons-container">
+            <lightning-button-group>
+              <lightning-button 
+                variant="brand" 
+                label="Create Ticket" 
+                icon-name="utility:add"
+                onclick={openCreateTicketModal}
+                class="action-button">
+              </lightning-button>
+              <lightning-button 
+                variant="brand" 
+                label="Reschedule Calls" 
+                icon-name="utility:event"
+                onclick={openRescheduleCallsModal}
+                class="action-button">
+              </lightning-button>
+              <lightning-button 
+                variant="brand" 
+                label="Manage Candidates" 
+                icon-name="utility:people"
+                onclick={openManageCandidatesModal}
+                class="action-button">
+              </lightning-button>
+              <lightning-button 
+                variant="brand" 
+                label="Contracting" 
+                icon-name="utility:contract"
+                onclick={openContractingModal}
+                class="action-button">
+              </lightning-button>
+              <lightning-button 
+                variant="brand" 
+                label="Notes & Follow-up" 
+                icon-name="utility:note"
+                onclick={openNotesModal}
+                class="action-button">
+              </lightning-button>
+            </lightning-button-group>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Rest of dashboard content -->
+    <div class="slds-grid slds-wrap slds-gutters">
+      <!-- Dashboard stats and content here -->
+      <div class="slds-col slds-size_12-of-12">
+        <h2>Dashboard Content</h2>
+        <p>Action buttons have been integrated into the header. Modals will be added in the next deployment.</p>
+      </div>
+    </div>
+  </div>
+</template>

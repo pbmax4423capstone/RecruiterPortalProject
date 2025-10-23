@@ -1,0 +1,2617 @@
+/* Capstone Partners Company Branding */
+.dashboard-container {
+  background: linear-gradient(135deg, #e6f2ff 0%, #ffffff 100%);
+  min-height: 100vh;
+  color: #2c3e50;
+}
+
+/* Branded Header */
+.branded-header {
+  background: #003366 !important; /* Solid dark blue background - no gradient */
+  background-image: none !important; /* Remove any background images */
+  padding: 1.5rem 2rem;
+  box-shadow: 0 4px 12px rgba(0, 51, 102, 0.15);
+  border-bottom: 3px solid #f4a024;
+  position: relative;
+}
+
+/* Welcome Message Styling */
+.welcome-message {
+  margin-top: 0.25rem;
+  color: #ffffff !important; /* White text for better contrast against blue background */
+  font-weight: 600;
+  background-color: transparent !important;
+}
+
+.welcome-message * {
+  color: #ffffff !important;
+  background-color: transparent !important;
+}
+
+/* Force all text in branded header to be white */
+.branded-header * {
+  color: #ffffff !important;
+  background-color: transparent !important;
+}
+
+.branded-header .slds-text-heading_small {
+  color: #ffffff !important;
+}
+
+.branded-header .slds-text-color_inverse {
+  color: #ffffff !important;
+}
+
+.company-logo {
+  width: 60px;
+  height: 60px;
+  background: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.logo-icon {
+  --slds-c-icon-color-foreground-default: #003366;
+}
+
+.company-name {
+  color: #f4a024;
+  font-size: 1.1rem;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  margin-bottom: 0.25rem;
+}
+
+.slds-page-header__title {
+  color: white !important;
+  font-size: 1.8rem;
+  font-weight: 300;
+  letter-spacing: 0.5px;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.7) !important; /* Stronger shadow for better readability */
+  background-color: transparent !important;
+}
+
+/* Additional overrides for all elements in the header */
+.branded-header .slds-page-header__row * {
+  color: #ffffff !important;
+  background-color: transparent !important;
+}
+
+.branded-header h1, .branded-header span {
+  color: #ffffff !important;
+  background-color: transparent !important;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.7) !important;
+}
+
+/* Override any SLDS utility classes */
+.branded-header .slds-text-color_inverse,
+.branded-header .slds-text-heading_small,
+.branded-header .slds-truncate {
+  color: #ffffff !important;
+  background-color: transparent !important;
+  background-image: none !important;
+}
+
+/* Force styling on the media body and name sections */
+.branded-header .slds-media__body,
+.branded-header .slds-page-header__name,
+.branded-header .slds-page-header__name-title {
+  background-color: transparent !important;
+  background-image: none !important;
+}
+
+.branded-header .slds-media__body *,
+.branded-header .slds-page-header__name *,
+.branded-header .slds-page-header__name-title * {
+  color: #ffffff !important;
+  background-color: transparent !important;
+  background-image: none !important;
+}
+
+/* Disable ALL hover effects in the branded header */
+.branded-header *:hover {
+  color: #ffffff !important;
+  background-color: transparent !important;
+  background-image: none !important;
+  transform: none !important;
+  box-shadow: none !important;
+  border-color: transparent !important;
+}
+
+/* Ensure entire header section stays consistent */
+.branded-header, 
+.branded-header *,
+.branded-header *:hover,
+.branded-header *:focus,
+.branded-header *:active {
+  background: #003366 !important;
+  background-color: #003366 !important;
+  background-image: none !important;
+  color: #ffffff !important;
+}
+
+/* Priority Section - Rachyll's Calls - Light Mode */
+.priority-metric {
+  background: white;
+  border-radius: 8px;
+  padding: 1.5rem;
+  text-align: center;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.12);
+  border: 2px solid #e5e5e5;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.priority-metric:hover {
+  box-shadow: none !important; /* No hover effects */
+  transform: none !important;
+  border-color: #003366 !important; /* Keep consistent */
+  background-color: #003366 !important; /* Keep same background */
+  color: #ffffff !important; /* Keep white text */
+}
+
+.priority-urgent {
+  border-color: #c23934 !important;
+  background: #fef7f7 !important;
+}
+
+.priority-urgent:hover {
+  border-color: #a02620 !important;
+  background: #fdeaea !important;
+}
+
+.priority-number {
+  font-size: 2.8rem;
+  font-weight: 800;
+  color: #080707;
+  line-height: 1;
+  margin-bottom: 0.3rem;
+}
+
+.priority-label {
+  color: #080707;
+  font-size: 1rem;
+  font-weight: 700;
+  margin-bottom: 0.2rem;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+}
+
+.priority-sublabel {
+  color: #706e6b;
+  font-size: 0.8rem;
+  font-style: italic;
+  line-height: 1.2;
+}
+
+/* Priority Status Colors */
+.status-pastdue {
+  color: #c23934 !important;
+}
+
+.status-assigned {
+  color: #0070d2 !important;
+}
+
+/* Metric Tiles - Light Mode */
+.metric-tile {
+  background: white;
+  border-radius: 8px;
+  padding: 1.5rem;
+  text-align: center;
+  margin: 0.5rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  border-left: 4px solid;
+  transition: all 0.3s ease;
+}
+
+.metric-tile:hover {
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+  transform: translateY(-2px);
+}
+
+.metric-primary {
+  border-left-color: #1589ee;
+}
+
+.metric-secondary {
+  border-left-color: #ff6b35;
+}
+
+.metric-success {
+  border-left-color: #4bca81;
+}
+
+.metric-info {
+  border-left-color: #9f42ff;
+}
+
+.metric-number {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: #080707;
+  line-height: 1;
+  margin-bottom: 0.5rem;
+}
+
+.metric-label {
+  color: #706e6b;
+  font-size: 0.875rem;
+  font-weight: 600;
+  margin-bottom: 0.25rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.metric-change {
+  color: #57727c;
+  font-size: 0.75rem;
+  font-style: italic;
+}
+
+/* Status Items */
+.stat-item {
+  display: flex;
+  align-items: center;
+  padding: 0.5rem 0;
+}
+
+.stat-label {
+  color: #2c3e50;
+  font-size: 0.875rem;
+  margin-right: 0.5rem;
+}
+
+.stat-value {
+  color: #003366;
+  font-weight: 700;
+  font-size: 1.1rem;
+}
+
+.total-stat {
+  padding-top: 1rem;
+  border-top: 1px solid #dddbda;
+  text-align: center;
+  color: #080707;
+  font-size: 1.1rem;
+}
+
+/* Status Icons */
+.status-scheduled {
+  color: #ff6b35;
+}
+
+.status-completed {
+  color: #4bca81;
+}
+
+.status-noshow {
+  color: #c23934;
+}
+
+.status-canceled {
+  color: #706e6b;
+}
+
+/* Interview Type Colors */
+.status-si1 {
+  color: #5867e8; /* Purple for SI1 */
+}
+
+.status-si2 {
+  color: #e3abec; /* Light purple for SI2 */
+}
+
+.status-si3 {
+  color: #8b63d6; /* Medium purple for SI3 */
+}
+
+.status-career {
+  color: #00a651; /* Dark green for career */
+}
+
+.status-thisweek {
+  color: #0070d2; /* Blue for this week */
+}
+
+/* Clickable Interview Items */
+.clickable-stat-item {
+  padding: 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border: 1px solid #003366;
+  display: flex;
+  align-items: center;
+  background-color: #003366; /* Dark blue background */
+  color: white; /* White text for contrast */
+}
+
+.clickable-stat-item:hover {
+  background-color: #003366 !important; /* Keep same dark blue - no color change */
+  border-color: #003366 !important;
+  transform: none !important; /* No movement */
+  box-shadow: none !important; /* No shadow effects */
+  color: #ffffff !important; /* Always white text */
+}
+
+.clickable-stat-item:active {
+  background-color: #002244; /* Darker blue when pressed */
+}
+
+.clickable-stat-item .stat-label {
+  font-weight: 500;
+  margin-right: 4px;
+  color: white; /* Ensure white text */
+}
+
+.clickable-stat-item .stat-value {
+  font-weight: bold;
+  font-size: 1.1em;
+  color: white; /* Ensure white text */
+}
+
+/* Override any Salesforce SLDS text color classes within clickable stat items */
+.clickable-stat-item .slds-text-heading_large {
+  color: white !important;
+}
+
+.clickable-stat-item .slds-text-body_regular {
+  color: white !important;
+}
+
+.clickable-stat-item .slds-text-body_small {
+  color: rgba(255, 255, 255, 0.8) !important; /* Slightly transparent white for subtitle */
+}
+
+.clickable-stat-item .slds-text-color_success {
+  color: #90ee90 !important; /* Light green for success text */
+}
+
+.clickable-stat-item .slds-text-color_error {
+  color: #ffcccb !important; /* Light red for error text */
+}
+
+.clickable-stat-item .slds-text-color_weak {
+  color: rgba(255, 255, 255, 0.7) !important; /* More transparent for weak text */
+}
+
+/* Call Management Priority Section Card Styling */
+lightning-card[title*="Call Management"] {
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+lightning-card[title*="Call Management"] .slds-card__header {
+  background: white;
+  color: #003366;
+}
+
+lightning-card[title*="Call Management"] .slds-card__body {
+  background: white;
+  padding: 1rem;
+}
+
+/* Call Modal Styles */
+.call-item {
+  border-left: 3px solid #0070d2;
+  background-color: #fafaf9;
+  transition: all 0.2s ease;
+}
+
+.call-item:hover {
+  background-color: #f3f3f3;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.call-header h3 {
+  margin-bottom: 0.25rem;
+}
+
+.call-subject-link {
+  color: #0070d2;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.call-subject-link:hover {
+  text-decoration: underline;
+}
+
+.related-link {
+  color: #0070d2;
+  text-decoration: none;
+}
+
+.related-link:hover {
+  text-decoration: underline;
+}
+
+.call-detail {
+  display: flex;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+
+.detail-label {
+  font-weight: 600;
+  margin-right: 0.5rem;
+  color: #706e6b;
+}
+
+.status-badge {
+  background-color: #f3f3f3;
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+.overdue {
+  color: #c23934;
+}
+
+.overdue-days {
+  font-weight: 700;
+  color: #c23934;
+}
+
+.call-description {
+  border-top: 1px solid #dddbda;
+  padding-top: 0.75rem;
+  margin-top: 0.5rem;
+}
+
+/* Modal Enhancement - Light Mode */
+.slds-modal__container {
+  max-width: 40rem;
+  width: 45%;
+  background: white;
+  border-radius: 8px;
+}
+
+/* Capstone Partners Branded Card Styling */
+lightning-card {
+  --slds-c-card-color-background: white;
+  --slds-c-card-color-border: #e6f2ff;
+  --slds-c-card-shadow: 0 3px 12px rgba(0, 51, 102, 0.1);
+  --slds-c-card-radius-border: 12px;
+  border-top: 3px solid #0066cc;
+  transition: all 0.3s ease;
+}
+
+lightning-card:hover {
+  --slds-c-card-shadow: 0 6px 20px rgba(0, 51, 102, 0.15);
+  transform: translateY(-2px);
+  border-top-color: #f4a024;
+}
+
+/* Capstone Partners Branded Buttons */
+lightning-button {
+  --slds-c-button-brand-color-background: #0066cc;
+  --slds-c-button-brand-color-border: #0066cc;
+  --slds-c-button-brand-color-background-hover: #003366;
+  --slds-c-button-brand-color-border-hover: #003366;
+}
+
+lightning-button[variant="destructive"] {
+  --slds-c-button-destructive-color-background: #dc3545;
+  --slds-c-button-destructive-color-border: #dc3545;
+}
+
+lightning-button[variant="success"] {
+  --slds-c-button-success-color-background: #28a745;
+  --slds-c-button-success-color-border: #28a745;
+}
+
+/* Light Mode Text Colors */
+.stat-item {
+  display: flex;
+  align-items: center;
+  padding: 0.5rem 0;
+}
+
+.stat-label {
+  color: #706e6b;
+  font-size: 0.875rem;
+  margin-right: 0.5rem;
+}
+
+.stat-value {
+  color: #080707;
+  font-weight: 600;
+  font-size: 1rem;
+}
+
+.total-stat {
+  padding-top: 1rem;
+  border-top: 1px solid #dddbda;
+  text-align: center;
+  color: #080707;
+  font-size: 1.1rem;
+}
+
+/* Call List Sections - Light Mode */
+.call-list-section {
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  border: 1px solid #dddbda;
+  height: 400px;
+  display: flex;
+  flex-direction: column;
+}
+
+.call-list-header {
+  color: #003366;
+  font-size: 1.2rem;
+  font-weight: 700;
+  padding: 1rem 1rem 0.5rem 1rem;
+  border-bottom: 2px solid #0066cc;
+  flex-shrink: 0;
+  background: linear-gradient(135deg, #ffffff 0%, #e6f2ff 100%);
+  border-radius: 8px 8px 0 0;
+}
+
+.call-list-content {
+  flex: 1;
+  overflow-y: auto;
+  padding: 0.5rem 1rem 1rem 1rem;
+  scrollbar-width: thin;
+  scrollbar-color: #dddbda transparent;
+}
+
+.call-list-content::-webkit-scrollbar {
+  width: 6px;
+}
+
+.call-list-content::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.call-list-content::-webkit-scrollbar-thumb {
+  background-color: #dddbda;
+  border-radius: 3px;
+}
+
+.call-list-content::-webkit-scrollbar-thumb:hover {
+  background-color: #c9c7c5;
+}
+
+.call-list-item {
+  background: #f8f9fa;
+  border-radius: 4px;
+  padding: 0.75rem;
+  margin-bottom: 0.5rem;
+  border-left: 3px solid #0070d2;
+  transition: all 0.2s ease;
+  cursor: pointer;
+  border: 1px solid #e5e5e5;
+}
+
+.call-list-item:hover {
+  background: #f3f3f3;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.12);
+  border-color: #0070d2;
+  transform: translateY(-1px);
+}
+
+.call-list-item.past-due {
+  border-left-color: #c23934;
+}
+
+.call-list-item.past-due:hover {
+  border-color: #c23934;
+}
+
+.call-item-name {
+  color: #080707;
+  font-weight: 600;
+  font-size: 0.9rem;
+  margin-bottom: 0.25rem;
+}
+
+.call-item-date {
+  color: #706e6b;
+  font-size: 0.8rem;
+}
+
+.call-item-overdue {
+  color: #c23934;
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+/* Call Completion Form */
+.completion-form {
+  background: #f8f9fa;
+  border: 1px solid #dddbda;
+  border-radius: 8px;
+  margin-top: 1rem;
+}
+
+.completion-form h4 {
+  color: #080707;
+  display: flex;
+  align-items: center;
+  font-weight: 700;
+}
+
+.completion-form .slds-form-element__label {
+  font-weight: 600;
+  color: #080707;
+}
+
+.completion-form lightning-textarea,
+.completion-form lightning-input {
+  --slds-c-textarea-color-border: #dddbda;
+  --slds-c-input-color-border: #dddbda;
+}
+
+.completion-form lightning-textarea:focus-within,
+.completion-form lightning-input:focus-within {
+  --slds-c-textarea-color-border-focus: #0070d2;
+  --slds-c-input-color-border-focus: #0070d2;
+}
+
+/* Call Completion Modal */
+.completion-modal-container {
+  max-width: 50rem;
+  width: 85%;
+}
+
+.call-summary {
+  background: #f8f9fa;
+  border: 1px solid #dddbda;
+  border-radius: 8px;
+}
+
+.call-summary h3 {
+  color: #080707;
+  font-weight: 700;
+}
+
+.summary-details p {
+  margin-bottom: 0.5rem;
+  color: #080707;
+}
+
+.summary-details strong {
+  color: #706e6b;
+  font-weight: 600;
+}
+
+.overdue-indicator {
+  color: #c23934;
+  display: flex;
+  align-items: center;
+}
+
+.follow-up-section {
+  background: #f3f3f3;
+  border: 1px solid #e5e5e5;
+  border-radius: 8px;
+}
+
+.follow-up-section .slds-form-element__label {
+  font-weight: 600;
+  color: #080707;
+}
+
+.completion-modal-container lightning-textarea,
+.completion-modal-container lightning-input {
+  --slds-c-textarea-color-border: #dddbda;
+  --slds-c-input-color-border: #dddbda;
+}
+
+.completion-modal-container lightning-textarea:focus-within,
+.completion-modal-container lightning-input:focus-within {
+  --slds-c-textarea-color-border-focus: #0070d2;
+  --slds-c-input-color-border-focus: #0070d2;
+}
+
+/* Outcome Items */
+.outcome-item {
+  display: flex;
+  align-items: center;
+  padding: 0.75rem;
+  margin-bottom: 0.5rem;
+  border-radius: 4px;
+  background-color: #f8f9fa;
+}
+
+.outcome-proceed {
+  background-color: #e8f5e8;
+  border-left: 3px solid #4bca81;
+}
+
+.outcome-hold {
+  background-color: #fff8e8;
+  border-left: 3px solid #ff6b35;
+}
+
+.outcome-decline {
+  background-color: #fdeaea;
+  border-left: 3px solid #c23934;
+}
+
+.outcome-label {
+  color: #706e6b;
+  font-size: 0.875rem;
+  font-weight: 600;
+  margin-right: 0.5rem;
+  min-width: 80px;
+}
+
+.outcome-value {
+  color: #080707;
+  font-weight: 700;
+  font-size: 1.25rem;
+}
+
+/* Interview Type Items */
+.type-item {
+  margin-bottom: 1rem;
+}
+
+.type-label {
+  color: #080707;
+  font-size: 0.875rem;
+  font-weight: 600;
+}
+
+.type-count {
+  color: #706e6b;
+  font-size: 0.875rem;
+  font-weight: 600;
+}
+
+/* Activity Items */
+.activity-item {
+  padding: 0.75rem 0;
+  border-bottom: 1px solid #f3f2f2;
+}
+
+.activity-item:last-child {
+  border-bottom: none;
+}
+
+.activity-title {
+  color: #080707;
+  font-size: 0.875rem;
+  font-weight: 600;
+  margin-bottom: 0.25rem;
+}
+
+.activity-subtitle {
+  color: #706e6b;
+  font-size: 0.75rem;
+  margin-bottom: 0.25rem;
+}
+
+.activity-detail {
+  color: #57727c;
+  font-size: 0.75rem;
+  margin-bottom: 0.125rem;
+}
+
+/* Cards */
+lightning-card {
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Activity Metrics */
+.activity-metric {
+  text-align: center;
+  padding: 1rem;
+  background-color: #f8f9fa;
+  border-radius: 6px;
+  margin: 0.5rem;
+}
+
+.activity-title {
+  color: #706e6b;
+  font-size: 0.875rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.activity-number {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #1589ee;
+}
+
+/* Interview Metrics */
+.interview-metric {
+  text-align: center;
+  padding: 0.75rem;
+  background-color: #f8f9fa;
+  border-radius: 4px;
+  margin: 0.25rem;
+  border-left: 3px solid #1589ee;
+}
+
+.interview-period {
+  color: #706e6b;
+  font-size: 0.75rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  text-transform: uppercase;
+}
+
+.interview-count {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #080707;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .metric-number {
+    font-size: 2rem;
+  }
+  
+  .metric-tile {
+    margin: 0.25rem;
+    padding: 1rem;
+  }
+  
+  .activity-number {
+    font-size: 1.5rem;
+  }
+  
+  .interview-count {
+    font-size: 1.25rem;
+  }
+}
+
+/* Schedule Interview Modal Styling */
+.slds-modal_large .slds-modal__container {
+  max-width: 1200px;
+  width: 95%;
+}
+
+/* Schedule Call Modal - Compact Width */
+.slds-modal_medium .slds-modal__container {
+  max-width: 40rem;
+  width: 45%;
+  min-width: 30rem;
+}
+
+/* Candidate Detail Modal - Ultra Compact */
+/* Let candidate edit modal use standard SLDS behavior like other working modals */
+section[aria-labelledby="candidate-detail-modal-heading"] .slds-form-element {
+  margin-bottom: 0.5rem !important;
+}
+
+section[aria-labelledby="candidate-detail-modal-heading"] fieldset {
+  margin-bottom: 0.75rem !important;
+}
+
+/* Candidate Detail Modal Content - Remove excessive padding */
+section[aria-labelledby="candidate-detail-modal-heading"] .slds-modal__content {
+  padding: 0.5rem !important;
+  max-height: 75vh !important;
+}
+
+/* This content has been consolidated above to eliminate redundancy */
+
+/* Responsive design for smaller screens */
+@media (max-width: 768px) {
+  .slds-modal_medium .slds-modal__container {
+    width: 90%;
+    min-width: auto;
+  }
+}
+
+.slds-form-element__help {
+  color: #706e6b;
+  font-size: 0.75rem;
+  font-style: italic;
+  margin-top: 0.25rem;
+}
+
+.slds-required {
+  color: #d73349;
+  font-weight: bold;
+}
+
+/* Enhanced form styling for schedule modal */
+.slds-modal__content .slds-form-element {
+  margin-bottom: 1rem;
+}
+
+.slds-modal__content .slds-combobox,
+.slds-modal__content .lightning-input,
+.slds-modal__content .lightning-textarea {
+  --slds-c-input-border-color: #0066cc;
+  --slds-c-input-focus-border-color: #003366;
+}
+
+/* Candidate selection styling */
+.candidate-name-cell {
+  font-weight: 600;
+  color: #003366;
+}
+
+.candidate-search-input {
+  --slds-c-input-border-color: #0066cc;
+  --slds-c-input-focus-border-color: #003366;
+}
+
+/* Enhanced card spacing in schedule modal */
+.slds-modal__content lightning-card {
+  border-top: 3px solid #0066cc;
+}
+
+.slds-modal__content lightning-card:hover {
+  border-top-color: #f4a024;
+  transform: none;
+}
+
+/* Data table enhancements for candidate selection */
+.slds-modal__content .slds-table {
+  font-size: 0.875rem;
+}
+
+.slds-modal__content .slds-table th {
+  background-color: #f8f9fa;
+  border-bottom: 2px solid #0066cc;
+}
+
+.slds-modal__content .slds-table tbody tr:hover {
+  background-color: #e6f2ff;
+}
+
+/* Action Buttons Styling */
+.action-button {
+  margin-right: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+/* Toolbar replacement action bar */
+.slds-page-header__col-actions {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
+.slds-page-header__col-actions lightning-button-group {
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+/* Action Modal Enhancements */
+.slds-modal__content .slds-form-element__help {
+  font-style: italic;
+  color: #706e6b;
+}
+
+.slds-alert_info {
+  border-left: 4px solid #0066cc;
+}
+
+.slds-alert_warning {
+  border-left: 4px solid #f4a024;
+}
+
+/* Attachment styling */
+.slds-media {
+  border: 1px solid #dddbda;
+  border-radius: 4px;
+  padding: 0.5rem;
+  margin-bottom: 0.25rem;
+}
+
+.slds-media:hover {
+  background-color: #f8f9fa;
+}
+
+/* To-do list styling */
+.slds-text-strikethrough {
+  text-decoration: line-through;
+}
+
+/* Professional modal styling */
+.slds-modal__content .slds-grid {
+  height: 60vh;
+}
+
+.slds-modal__content lightning-textarea {
+  height: 100%;
+}
+
+/* Reschedule Modal Form Styles */
+.reschedule-form .slds-form-element__label {
+  font-weight: 600;
+  color: #181818;
+  margin-bottom: 0.25rem;
+  display: block;
+}
+
+.reschedule-form lightning-input,
+.reschedule-form lightning-textarea {
+  --slds-c-textarea-color-border: #dddbda;
+  --slds-c-input-color-border: #dddbda;
+  --slds-c-textarea-color-background: #ffffff;
+  --slds-c-input-color-background: #ffffff;
+  --slds-c-textarea-text-color: #181818;
+  --slds-c-input-text-color: #181818;
+  --slds-c-input-color-text: #181818;
+  --slds-c-textarea-color-text: #181818;
+  display: block;
+  width: 100%;
+}
+
+.reschedule-form lightning-input:focus-within,
+.reschedule-form lightning-textarea:focus-within {
+  --slds-c-textarea-color-border-focus: #0070d2;
+  --slds-c-input-color-border-focus: #0070d2;
+}
+
+.reschedule-form .slds-form-element {
+  margin-bottom: 1rem;
+  display: block;
+}
+
+/* Ensure form fields are visible and accessible */
+.reschedule-form lightning-input input,
+.reschedule-form lightning-textarea textarea {
+  background-color: #ffffff !important;
+  color: #181818 !important;
+  border: 1px solid #dddbda !important;
+  min-height: 2.25rem !important;
+  padding: 0.5rem !important;
+  border-radius: 0.25rem !important;
+}
+
+.reschedule-form lightning-input input:focus,
+.reschedule-form lightning-textarea textarea:focus {
+  border-color: #0070d2 !important;
+  box-shadow: 0 0 0 1px #0070d2 !important;
+}
+
+/* Fix date picker text visibility */
+.reschedule-form lightning-input[type="date"] input,
+.reschedule-form lightning-input[type="time"] input {
+  color: #181818 !important;
+  font-weight: 500 !important;
+}
+
+.reschedule-form lightning-input input[type="date"],
+.reschedule-form lightning-input input[type="time"] {
+  color: #181818 !important;
+  font-weight: 500 !important;
+  -webkit-text-fill-color: #181818 !important;
+}
+
+/* Force date picker styling across browsers */
+.reschedule-form input[type="date"]::-webkit-calendar-picker-indicator {
+  color: #0070d2 !important;
+  cursor: pointer;
+}
+
+.reschedule-form input[type="time"]::-webkit-calendar-picker-indicator {
+  color: #0070d2 !important;
+  cursor: pointer;
+}
+
+/* Additional Lightning input overrides for text visibility */
+.reschedule-form lightning-input .slds-input {
+  color: #181818 !important;
+  background-color: #ffffff !important;
+  font-weight: 500 !important;
+}
+
+.reschedule-form lightning-textarea .slds-textarea {
+  color: #181818 !important;
+  background-color: #ffffff !important;
+  font-weight: 400 !important;
+}
+
+/* Global form element text visibility */
+.reschedule-form .slds-form-element input,
+.reschedule-form .slds-form-element textarea {
+  color: #181818 !important;
+  background-color: #ffffff !important;
+}
+
+/* Create Candidate Modal Styles */
+.candidate-form .slds-form-element__label {
+  font-weight: 600;
+  color: #181818;
+  margin-bottom: 0.25rem;
+  display: block;
+}
+
+.candidate-form lightning-input,
+.candidate-form lightning-textarea,
+.candidate-form lightning-combobox {
+  --slds-c-textarea-color-border: #dddbda;
+  --slds-c-input-color-border: #dddbda;
+  --slds-c-textarea-color-background: #ffffff;
+  --slds-c-input-color-background: #ffffff;
+  --slds-c-textarea-text-color: #181818;
+  --slds-c-input-text-color: #181818;
+  --slds-c-input-color-text: #181818;
+  --slds-c-textarea-color-text: #181818;
+  display: block;
+  width: 100%;
+}
+
+.candidate-form lightning-input:focus-within,
+.candidate-form lightning-textarea:focus-within,
+.candidate-form lightning-combobox:focus-within {
+  --slds-c-textarea-color-border-focus: #0070d2;
+  --slds-c-input-color-border-focus: #0070d2;
+}
+
+.candidate-form .slds-form-element {
+  margin-bottom: 1rem;
+  display: block;
+}
+
+/* Ensure form fields are visible */
+.candidate-form lightning-input input,
+.candidate-form lightning-textarea textarea,
+.candidate-form lightning-combobox input {
+  background-color: #ffffff !important;
+  color: #181818 !important;
+  border: 1px solid #dddbda !important;
+  min-height: 2.25rem !important;
+  padding: 0.5rem !important;
+  border-radius: 0.25rem !important;
+}
+
+.candidate-form lightning-input input:focus,
+.candidate-form lightning-textarea textarea:focus,
+.candidate-form lightning-combobox input:focus {
+  border-color: #0070d2 !important;
+  box-shadow: 0 0 0 1px #0070d2 !important;
+}
+
+/* Required field asterisk */
+.candidate-form .slds-required {
+  color: #d73349;
+  font-weight: bold;
+}
+
+/* Preview box styling */
+.candidate-form .slds-theme_success {
+  border-radius: 0.25rem;
+  padding: 0.75rem;
+}
+
+/* Call Management Modal Styles */
+.call-list-container {
+  border: 1px solid #e0e5ee;
+  border-radius: 8px;
+  background-color: #f8f9fb;
+}
+
+.call-item {
+  cursor: pointer;
+  transition: all 0.2s ease;
+  margin-bottom: 0.5rem;
+}
+
+.call-item:last-child {
+  margin-bottom: 0;
+}
+
+.call-item:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.call-item lightning-card {
+  border: 2px solid transparent;
+  transition: border-color 0.2s ease;
+}
+
+.call-item:hover lightning-card {
+  border-color: var(--capstone-primary);
+}
+
+.priority-indicator[data-priority="High"] lightning-icon {
+  color: #ea001e;
+}
+
+.priority-indicator[data-priority="Medium"] lightning-icon {
+  color: #fe9339;
+}
+
+.priority-indicator[data-priority="Low"] lightning-icon {
+  color: #4bca81;
+}
+
+/* Call Completion Modal Styles */
+.completion-form .slds-form-element__label {
+  font-weight: 600;
+  color: var(--capstone-primary);
+}
+
+.completion-form lightning-radio-group {
+  margin-top: 0.5rem;
+}
+
+.completion-form lightning-textarea {
+  min-height: 80px;
+}
+
+/* Quick Action Buttons */
+.completion-form lightning-button {
+  font-weight: 600;
+  border-radius: 6px;
+  transition: all 0.2s ease;
+}
+
+.completion-form lightning-button:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+/* Contract Performance Metrics */
+.clickable-metric {
+  cursor: pointer;
+  transition: all 0.2s ease;
+  padding: 0.5rem;
+  border-radius: 6px;
+  border: 2px solid transparent;
+}
+
+.clickable-metric:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  border-color: #4bca81;
+  background-color: #f0fff4;
+}
+
+.clickable-metric:hover .slds-text-body_x-small {
+  color: #2e844a !important;
+  font-weight: 600;
+}
+
+/* Fix text visibility in performance metrics */
+.slds-text-color_success {
+  color: #4bca81 !important;
+}
+
+.slds-text-color_error {
+  color: #ea001e !important;
+}
+
+.slds-text-color_warning {
+  color: #fe9339 !important;
+}
+
+.slds-text-color_default {
+  color: #080707 !important;
+}
+
+.slds-text-color_weak {
+  color: #706e6b !important;
+}
+
+.slds-text-body_small {
+  color: #080707 !important;
+}
+
+.slds-text-body_x-small {
+  color: #706e6b !important;
+}
+
+/* Schedule Call Modal Styling */
+.custom-card {
+  border-left: 4px solid #003366;
+  box-shadow: 0 2px 8px rgba(0, 51, 102, 0.1);
+}
+
+.compact-card {
+  margin-bottom: 0.5rem !important;
+}
+
+.compact-card .slds-card__body {
+  padding: 0.75rem !important;
+}
+
+/* Ultra-compact modal styling - Complete rewrite for maximum space efficiency */
+.ultra-compact-modal {
+  padding: 0.5rem !important;
+}
+
+.ultra-compact-form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.form-section {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.section-header {
+  font-weight: 600;
+  font-size: 0.875rem;
+  color: #080707;
+  margin: 0;
+  padding: 0;
+}
+
+.compact-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.compact-label {
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: #3e3e3c;
+  margin: 0;
+  padding: 0;
+}
+
+.compact-row {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.compact-field-half {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+/* Override Salesforce default spacing */
+.ultra-compact-modal .slds-form-element {
+  margin: 0 !important;
+}
+
+.ultra-compact-modal .slds-form-element__control {
+  margin: 0 !important;
+}
+
+.ultra-compact-modal lightning-input,
+.ultra-compact-modal lightning-combobox,
+.ultra-compact-modal lightning-textarea,
+.ultra-compact-modal lightning-input-field {
+  --sds-c-input-spacing-block-start: 0.125rem;
+  --sds-c-input-spacing-block-end: 0.125rem;
+}
+
+/* Contact Lookup Styling */
+.contact-lookup-container {
+  position: relative;
+  z-index: 1000;
+}
+
+/* Ensure modal content doesn't clip dropdowns */
+.slds-modal__content {
+  overflow: visible !important;
+}
+
+/* Ensure modal containers allow overflow for dropdowns */
+.slds-modal__container,
+.slds-modal__header,
+.slds-modal__content,
+.slds-modal__footer {
+  overflow: visible !important;
+}
+
+.contact-dropdown {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  z-index: 999999 !important;
+  background: white !important;
+  border: 1px solid #d8dde6;
+  border-radius: 0.25rem;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.2) !important;
+  max-height: 200px;
+  overflow-y: auto;
+  margin-top: 2px;
+  display: block !important;
+  visibility: visible !important;
+}
+
+.contact-option {
+  cursor: pointer;
+  display: block;
+  padding: 0.5rem;
+}
+
+/* Contact dropdown items */
+.contact-dropdown-item {
+  padding: 0 !important;
+  border-bottom: 1px solid #e5e5e5 !important;
+  list-style: none !important;
+  background: white !important;
+}
+
+.contact-dropdown-item:hover {
+  background-color: #f3f2f2 !important;
+}
+
+.contact-option {
+  cursor: pointer !important;
+  display: block !important;
+  padding: 0.75rem !important;
+  width: 100% !important;
+  color: #181818 !important;
+  font-size: 0.875rem !important;
+  line-height: 1.25 !important;
+  background: white !important;
+}
+
+.contact-option:hover {
+  background-color: #f3f2f2 !important;
+}
+
+.contact-name {
+  color: #181818 !important;
+  font-weight: 600 !important;
+  font-size: 0.875rem !important;
+  margin-bottom: 0.25rem !important;
+}
+
+.contact-email {
+  color: #706e6b !important;
+  font-size: 0.75rem !important;
+  margin-bottom: 0.125rem !important;
+}
+
+.contact-company {
+  color: #706e6b !important;
+  font-size: 0.75rem !important;
+}
+
+/* Contact dropdown visibility improvements */
+.contact-dropdown {
+  background: white !important;
+  border: 1px solid #d8dde6 !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
+}
+
+/* Ensure dropdown list and items are visible */
+.contact-dropdown .slds-dropdown__list {
+  background: white !important;
+  color: #181818 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+.contact-dropdown .slds-dropdown__item {
+  background: white !important;
+  color: #181818 !important;
+}
+
+/* Force visibility on all text elements */
+.contact-dropdown * {
+  color: #181818 !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  display: block !important;
+}
+
+/* Override any hiding styles */
+.contact-dropdown .contact-name,
+.contact-dropdown .contact-email,
+.contact-dropdown .contact-company {
+  color: #000000 !important;
+  font-size: 14px !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  display: block !important;
+  background: white !important;
+}
+
+/* Call List Styling */
+.call-list-container {
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+.call-list-item {
+  transition: background-color 0.2s ease;
+  border-radius: 4px;
+  margin-bottom: 2px;
+}
+
+.call-list-item:hover {
+  background-color: #f8f9fa;
+}
+
+.call-list-item.past-due {
+  border-left: 3px solid #c23934;
+  background-color: #fef7f7;
+}
+
+.call-candidate-name {
+  font-weight: 600;
+  font-size: 0.875rem;
+  color: #181818;
+  margin-bottom: 2px;
+}
+
+.call-details {
+  font-size: 0.75rem;
+  color: #706e6b;
+  display: flex;
+  align-items: center;
+}
+
+.call-date {
+  color: #706e6b;
+}
+
+.call-date.overdue {
+  color: #c23934;
+  font-weight: 600;
+}
+
+.call-time {
+  color: #706e6b;
+}
+
+.call-separator {
+  color: #d8dde6;
+  margin: 0 0.25rem;
+}
+
+.days-overdue {
+  color: #c23934;
+  font-weight: 600;
+  font-size: 0.6875rem;
+  text-transform: uppercase;
+}
+
+/* Empty state styling */
+.slds-text-color_success .slds-icon {
+  fill: #04844b;
+}
+
+/* Responsive adjustments for call lists */
+@media (max-width: 768px) {
+  .call-list-container {
+    max-height: 200px;
+  }
+  
+  .call-candidate-name {
+    font-size: 0.8125rem;
+  }
+  
+  .call-details {
+    font-size: 0.6875rem;
+  }
+}
+
+/* Call Completion Modal Compact Styling */
+.call-completion-modal-container {
+  max-width: 35rem;
+  width: 40%;
+  min-width: 28rem;
+}
+
+.compact-call-summary {
+  border-radius: 4px;
+  line-height: 1.2;
+}
+
+.compact-completion-form .slds-form-element {
+  margin-bottom: 0.5rem;
+}
+
+.compact-completion-form .slds-form-element__label {
+  font-size: 0.875rem;
+  font-weight: 600;
+  margin-bottom: 0.25rem;
+}
+
+.compact-completion-form .slds-radio-group {
+  margin-top: 0.25rem;
+}
+
+/* Make call completion modal more compact */
+.call-completion-modal-container .slds-modal__content {
+  padding: 0.75rem 1rem;
+}
+
+.call-completion-modal-container .slds-modal__header {
+  padding: 0.5rem 1rem;
+}
+
+.call-completion-modal-container .slds-modal__footer {
+  padding: 0.5rem 1rem;
+}
+
+/* Candidates List Styling - ULTRA COMPACT VERSION */
+.candidates-list-container {
+  max-height: 55vh;
+  overflow-y: auto;
+  background: white;
+}
+
+/* Large readable candidate items */
+div.candidate-list-item.slds-box.slds-theme_shade {
+  padding: 14px 16px !important;
+  margin: 6px 0 !important;
+  border-radius: 8px !important;
+  border-left: 4px solid #4bca81 !important;
+  min-height: 70px !important;
+  height: auto !important;
+  display: flex !important;
+  align-items: flex-start !important;
+  background: #ffffff !important;
+  cursor: pointer !important;
+  transition: all 0.2s ease !important;
+  border: 1px solid #e8e8e8 !important;
+}
+
+div.candidate-list-item.slds-box.slds-theme_shade:hover {
+  background: #f0f3f5 !important;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.15) !important;
+  transform: translateY(-1px) !important;
+  border-left-color: #2e8b57 !important;
+}
+
+/* Flexible grid layout */
+div.candidate-list-item .slds-grid {
+  margin: 0 !important;
+  padding: 0 !important;
+  min-height: 50px !important;
+  height: auto !important;
+  align-items: flex-start !important;
+  flex-wrap: wrap !important;
+}
+
+/* Balanced columns */
+div.candidate-list-item .slds-col {
+  padding: 0 8px 0 0 !important;
+  margin: 0 !important;
+  display: flex !important;
+  align-items: center !important;
+  overflow: hidden !important;
+}
+
+/* Large readable text sizing */
+div.candidate-list-item div,
+div.candidate-list-item span,
+div.candidate-list-item a {
+  margin: 0 2px 4px 0 !important;
+  padding: 2px 4px !important;
+  line-height: 1.4 !important;
+  font-size: 15px !important;
+  white-space: normal !important;
+  word-wrap: break-word !important;
+}
+
+div.candidate-list-item strong {
+  font-size: 17px !important;
+  font-weight: 600 !important;
+  color: #1a1a1a !important;
+  margin-bottom: 4px !important;
+  display: block !important;
+}
+
+/* Compact but visible badge */
+div.candidate-list-item .slds-badge {
+  font-size: 11px !important;
+  padding: 3px 8px !important;
+  margin: 0 !important;
+  line-height: 1.2 !important;
+  height: 22px !important;
+  background: #4bca81 !important;
+  color: white !important;
+  border-radius: 12px !important;
+}
+
+/* Force compact icons */
+div.candidate-list-item lightning-icon {
+  margin: 0 2px 0 0 !important;
+  width: 12px !important;
+  height: 12px !important;
+}
+
+/* Override any SLDS spacing */
+div.candidate-list-item .slds-m-bottom_x-small,
+div.candidate-list-item .slds-m-bottom_small,
+div.candidate-list-item .slds-p-around_medium,
+div.candidate-list-item .slds-p-around_small {
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+.compact-completion-form lightning-textarea {
+  --slds-c-textarea-sizing-min-height: 60px;
+}
+
+/* Responsive design for call completion modal */
+@media (max-width: 768px) {
+  .call-completion-modal-container {
+    width: 90%;
+    min-width: auto;
+  }
+}
+
+.custom-card .slds-card__header {
+  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+  border-bottom: 1px solid #dee2e6;
+  padding: 1rem 1.5rem;
+}
+
+.custom-card .slds-card__header-title {
+  font-weight: 600;
+  color: #003366;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+/* Enhanced form styling for Schedule Call */
+.slds-modal_medium .slds-form-element__label {
+  font-weight: 600;
+  color: #2c3e50;
+  margin-bottom: 0.5rem;
+}
+
+.slds-modal_medium .slds-required {
+  color: #e74c3c;
+}
+
+.slds-modal_medium .slds-input,
+.slds-modal_medium .slds-textarea,
+.slds-modal_medium .slds-combobox__input {
+  border: 2px solid #e1e5e9;
+  border-radius: 6px;
+  transition: border-color 0.2s ease;
+}
+
+.slds-modal_medium .slds-input:focus,
+.slds-modal_medium .slds-textarea:focus,
+.slds-modal_medium .slds-combobox__input:focus {
+  border-color: #003366;
+  box-shadow: 0 0 0 3px rgba(0, 51, 102, 0.1);
+}
+
+/* Modal header styling */
+.slds-modal__header {
+  background: linear-gradient(135deg, #003366 0%, #004080 100%);
+  color: white;
+  border-radius: 8px 8px 0 0;
+}
+
+.slds-modal__header h2 {
+  color: white !important;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.slds-modal__header .slds-button_icon-inverse {
+  color: white;
+}
+
+/* Modal footer styling */
+.slds-modal__footer {
+  background: #f8f9fa;
+  border-top: 1px solid #e9ecef;
+  padding: 1.5rem;
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+}
+
+/* Grid enhancements for Schedule Call form */
+.slds-modal__content .slds-grid {
+  align-items: stretch;
+}
+
+.slds-modal__content .slds-col {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Responsive action buttons */
+@media (max-width: 768px) {
+  .slds-page-header__col-actions lightning-button-group {
+    flex-direction: column;
+    width: 100%;
+  }
+  
+  .action-button {
+    width: 100%;
+    margin-right: 0;
+  }
+  
+  /* Mobile modal adjustments */
+  .slds-modal_medium .slds-grid .slds-col {
+    width: 100% !important;
+    flex: none !important;
+  }
+  
+  .slds-modal__footer {
+    flex-direction: column-reverse;
+  }
+  
+  .slds-modal__footer lightning-button {
+    width: 100%;
+  }
+}
+
+/* Chart Styles */
+.chart-container {
+  max-height: 200px;
+  overflow-y: auto;
+  padding: 0.5rem;
+  border: 1px solid #e5e5e5;
+  border-radius: 4px;
+  background-color: #fafafa;
+}
+
+.chart-bar-item {
+  background: white;
+  border: 1px solid #e0e5ee;
+  border-radius: 4px;
+  padding: 0.25rem;
+}
+
+.chart-label {
+  font-weight: 500;
+  max-width: 120px;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.chart-value {
+  font-weight: 600;
+  min-width: 30px;
+}
+
+.chart-bar-container {
+  height: 8px;
+  background-color: #f0f0f0;
+  border-radius: 4px;
+  margin-top: 4px;
+  overflow: hidden;
+}
+
+.chart-bar {
+  height: 100%;
+  background: linear-gradient(90deg, #1589ee, #00D924);
+  border-radius: 4px;
+  transition: width 0.3s ease;
+}
+
+/* Donut Chart Styles */
+.donut-chart-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 1rem;
+}
+
+.donut-chart {
+  max-width: 100%;
+  height: auto;
+}
+
+.donut-segment {
+  cursor: pointer;
+  transition: opacity 0.2s ease;
+}
+
+.donut-segment:hover {
+  opacity: 0.8;
+}
+
+.donut-center-text-large {
+  font-size: 14px;
+  font-weight: 600;
+  fill: #3e3e3c;
+}
+
+.donut-center-text-small {
+  font-size: 18px;
+  font-weight: 700;
+  fill: #0176d3;
+}
+
+/* Chart Legend */
+.chart-legend {
+  padding: 1rem;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+
+.legend-color-box {
+  width: 16px;
+  height: 16px;
+  border-radius: 3px;
+  margin-right: 8px;
+  flex-shrink: 0;
+}
+
+/* Dynamic color classes for legend boxes */
+.legend-color-box[data-color="#0176d3"] { background-color: #0176d3; }
+.legend-color-box[data-color="#06a59a"] { background-color: #06a59a; }
+.legend-color-box[data-color="#e74c3c"] { background-color: #e74c3c; }
+.legend-color-box[data-color="#f39c12"] { background-color: #f39c12; }
+.legend-color-box[data-color="#9b59b6"] { background-color: #9b59b6; }
+.legend-color-box[data-color="#2ecc71"] { background-color: #2ecc71; }
+.legend-color-box[data-color="#34495e"] { background-color: #34495e; }
+.legend-color-box[data-color="#e67e22"] { background-color: #e67e22; }
+.legend-color-box[data-color="#3498db"] { background-color: #3498db; }
+.legend-color-box[data-color="#1abc9c"] { background-color: #1abc9c; }
+
+.legend-text {
+  flex: 1;
+}
+
+.legend-label {
+  font-weight: 500;
+  color: #3e3e3c;
+}
+
+.legend-value {
+  font-size: 0.875rem;
+  color: #706e6b;
+}
+
+/* Pie Chart Styles */
+.pie-chart-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 1rem;
+}
+
+.pie-chart {
+  max-width: 100%;
+  height: auto;
+}
+
+.pie-segment {
+  cursor: pointer;
+  transition: opacity 0.2s ease;
+}
+
+.pie-segment:hover {
+  opacity: 0.8;
+}
+
+.pie-center-text-large {
+  font-size: 14px;
+  font-weight: 600;
+  fill: #3e3e3c;
+}
+
+.pie-center-text-small {
+  font-size: 18px;
+  font-weight: 700;
+  fill: #0176d3;
+}
+
+/* Interview Type Statistics Styles */
+.interview-type-stat {
+  padding: 0.5rem;
+  border-radius: 4px;
+  transition: background-color 0.2s ease;
+}
+
+.interview-type-stat:hover {
+  background-color: #f8f9fa;
+}
+
+.interview-stat-attraction {
+  color: #0176d3;
+  font-weight: 600;
+}
+
+.interview-stat-si1 {
+  color: #06a59a;
+  font-weight: 600;
+}
+
+.interview-stat-si2 {
+  color: #e74c3c;
+  font-weight: 600;
+}
+
+.interview-stat-si3 {
+  color: #f39c12;
+  font-weight: 600;
+}
+
+.interview-stat-career {
+  color: #9b59b6;
+  font-weight: 600;
+}
+
+/* Funnel Chart Styles */
+.funnel-chart-container {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 2rem 1rem;
+}
+
+.funnel-stage {
+  display: flex;
+  align-items: center;
+  margin-bottom: 1rem;
+  padding: 0.5rem 0;
+}
+
+.funnel-stage-visual {
+  flex: 1;
+  margin-right: 1rem;
+}
+
+.funnel-bar {
+  height: 60px;
+  position: relative;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+  border: 2px solid #dee2e6;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.funnel-bar-fill {
+  height: 100%;
+  width: 100%;
+  border-radius: 6px;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Funnel stage widths - tapering effect */
+.funnel-stage[data-index="0"] .funnel-bar { width: 100%; }
+.funnel-stage[data-index="1"] .funnel-bar { width: 85%; }
+.funnel-stage[data-index="2"] .funnel-bar { width: 70%; }
+.funnel-stage[data-index="3"] .funnel-bar { width: 55%; }
+.funnel-stage[data-index="4"] .funnel-bar { width: 40%; }
+
+/* Color variations for funnel stages */
+.funnel-bar-fill[data-color="level1"] { 
+  background: linear-gradient(135deg, #0176d3, #005fb2); 
+}
+.funnel-bar-fill[data-color="level2"] { 
+  background: linear-gradient(135deg, #06a59a, #047f75); 
+}
+.funnel-bar-fill[data-color="level3"] { 
+  background: linear-gradient(135deg, #e74c3c, #c0392b); 
+}
+.funnel-bar-fill[data-color="level4"] { 
+  background: linear-gradient(135deg, #f39c12, #e67e22); 
+}
+.funnel-bar-fill[data-color="level5"] { 
+  background: linear-gradient(135deg, #9b59b6, #8e44ad); 
+}
+
+.funnel-stage-info {
+  min-width: 200px;
+  text-align: left;
+  padding-left: 1rem;
+}
+
+.funnel-stage-label {
+  font-weight: 600;
+  font-size: 1rem;
+  color: #3e3e3c;
+  margin-bottom: 0.25rem;
+}
+
+.funnel-stage-metrics {
+  font-size: 0.875rem;
+  color: #706e6b;
+}
+
+.funnel-count {
+  font-weight: 700;
+  font-size: 1.25rem;
+  color: #0176d3;
+  margin-right: 0.5rem;
+}
+
+.funnel-percentage {
+  font-weight: 500;
+  color: #706e6b;
+}
+
+/* Responsive funnel */
+@media (max-width: 768px) {
+  .funnel-stage {
+    flex-direction: column;
+    text-align: center;
+  }
+  
+  .funnel-stage-visual {
+    margin-right: 0;
+    margin-bottom: 0.5rem;
+    width: 100%;
+  }
+  
+  .funnel-stage-info {
+    min-width: auto;
+    padding-left: 0;
+    text-align: center;
+  }
+}
+
+/* ===== INTERVIEWER STATISTICS STYLES ===== */
+
+.interviewer-stats-container {
+  max-height: 400px;
+  overflow-y: auto;
+  border: 1px solid #dddbda;
+  border-radius: 0.25rem;
+}
+
+.interviewer-stat-row {
+  padding: 0.75rem 1rem;
+  transition: background-color 0.2s ease;
+}
+
+.interviewer-stat-row:hover {
+  background-color: #f8f9fa;
+}
+
+.interviewer-name {
+  font-weight: 600;
+  color: #3e3e3c;
+  min-width: 120px;
+}
+
+.interview-type-bars {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  flex-wrap: wrap;
+}
+
+.interview-bar-container {
+  flex: 0 0 auto;
+}
+
+.interview-type-bar {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 40px;
+  height: 28px;
+  border-radius: 14px;
+  font-weight: 600;
+  font-size: 0.75rem;
+  color: white;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+}
+
+.interview-type-bar:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 2px 4px rgba(0,0,0,0.15);
+}
+
+.interview-bar-label {
+  margin-right: 0.25rem;
+  font-weight: 700;
+}
+
+.interview-bar-count {
+  background-color: rgba(255,255,255,0.3);
+  padding: 0.125rem 0.375rem;
+  border-radius: 10px;
+  font-weight: 700;
+  font-size: 0.625rem;
+}
+
+/* Interview Type Bar Colors */
+.interview-bar-attraction {
+  background: linear-gradient(135deg, #0176d3 0%, #0151a5 100%);
+}
+
+.interview-bar-si1 {
+  background: linear-gradient(135deg, #06a59a 0%, #04857a 100%);
+}
+
+.interview-bar-si2 {
+  background: linear-gradient(135deg, #d83933 0%, #ba281e 100%);
+}
+
+.interview-bar-si3 {
+  background: linear-gradient(135deg, #ff6900 0%, #cc5500 100%);
+}
+
+.interview-bar-career {
+  background: linear-gradient(135deg, #5867c8 0%, #4854a8 100%);
+}
+
+.interviewer-total {
+  font-weight: 700;
+  color: #0176d3;
+  min-width: 30px;
+  text-align: center;
+}
+
+/* Legend Styles */
+.interview-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  align-items: center;
+  justify-content: center;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.legend-color {
+  width: 16px;
+  height: 16px;
+  border-radius: 8px;
+  display: inline-block;
+}
+
+.legend-attraction {
+  background: linear-gradient(135deg, #0176d3 0%, #0151a5 100%);
+}
+
+.legend-si1 {
+  background: linear-gradient(135deg, #06a59a 0%, #04857a 100%);
+}
+
+.legend-si2 {
+  background: linear-gradient(135deg, #d83933 0%, #ba281e 100%);
+}
+
+.legend-si3 {
+  background: linear-gradient(135deg, #ff6900 0%, #cc5500 100%);
+}
+
+.legend-career {
+  background: linear-gradient(135deg, #5867c8 0%, #4854a8 100%);
+}
+
+.legend-text {
+  font-size: 0.75rem;
+  color: #3e3e3c;
+  font-weight: 500;
+}
+
+/* Responsive Design for Interviewer Stats */
+@media (max-width: 768px) {
+  .interviewer-stat-row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+  
+  .interviewer-name {
+    min-width: auto;
+    width: 100%;
+  }
+  
+  .interview-type-bars {
+    width: 100%;
+    justify-content: flex-start;
+  }
+  
+  .interviewer-total {
+    align-self: flex-end;
+  }
+  
+  .interview-legend {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+}
+
+/* ===== INTERVIEWER LEADERBOARD STYLES ===== */
+
+.leaderboard-item {
+  display: flex;
+  align-items: center;
+  padding: 0.75rem;
+  margin-bottom: 0.5rem;
+  background: white;
+  border: 1px solid #e5e5e5;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+  transition: all 0.2s ease;
+}
+
+.leaderboard-item:hover {
+  box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+  transform: translateY(-1px);
+}
+
+.leaderboard-rank {
+  font-size: 1.25rem;
+  font-weight: 700;
+  margin-right: 1rem;
+  min-width: 40px;
+  text-align: center;
+}
+
+.gold-medal {
+  background: linear-gradient(135deg, #ffd700, #ffed4e);
+  color: #8b4513;
+  border-radius: 50%;
+  width: 35px;
+  height: 35px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 4px rgba(255,215,0,0.4);
+}
+
+.silver-medal {
+  background: linear-gradient(135deg, #c0c0c0, #e8e8e8);
+  color: #4a4a4a;
+  border-radius: 50%;
+  width: 35px;
+  height: 35px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 4px rgba(192,192,192,0.4);
+}
+
+.bronze-medal {
+  background: linear-gradient(135deg, #cd7f32, #daa520);
+  color: #2f1b14;
+  border-radius: 50%;
+  width: 35px;
+  height: 35px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 4px rgba(205,127,50,0.4);
+}
+
+.regular-rank {
+  color: #706e6b;
+  background: #f8f9fa;
+  border-radius: 50%;
+  width: 35px;
+  height: 35px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.leaderboard-name {
+  flex: 1;
+  font-weight: 600;
+  font-size: 1rem;
+  color: #3e3e3c;
+}
+
+.leaderboard-total {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #0176d3;
+  margin-right: 0.75rem;
+}
+
+.leaderboard-breakdown {
+  display: flex;
+  gap: 0.25rem;
+}
+
+.breakdown-chip {
+  background: #f8f9fa;
+  color: #3e3e3c;
+  padding: 0.125rem 0.375rem;
+  border-radius: 12px;
+  font-size: 0.625rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+}
+
+.breakdown-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  margin-right: 0.25rem;
+}
+
+/* ===== MINI PIE CHART STYLES ===== */
+
+/* High specificity to override any conflicting styles */
+.interview-analytics-card .mini-pie-container,
+.mini-pie-container {
+  position: relative !important;
+  display: flex !important;
+  flex-direction: row !important;
+  align-items: flex-start !important;
+  justify-content: space-between !important;
+  width: 100% !important;
+  margin: 0 auto !important;
+  min-height: 120px !important;
+  flex-wrap: nowrap !important;
+}
+
+.mini-pie-legend {
+  flex: 1;
+  max-width: 180px;
+  font-size: 0.625rem;
+  color: #3e3e3c;
+  margin-right: 1rem;
+}
+
+.mini-pie-legend-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.25rem 0;
+  border-bottom: 1px solid #f3f3f3;
+}
+
+.mini-pie-legend-item:last-child {
+  border-bottom: none;
+}
+
+.mini-pie-legend-color {
+  width: 10px;
+  height: 10px;
+  border-radius: 2px;
+  margin-right: 0.5rem;
+  flex-shrink: 0;
+}
+
+.mini-pie-legend-label {
+  flex: 1;
+  font-weight: 500;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin-right: 0.5rem;
+  font-size: 0.75rem;
+}
+
+.mini-pie-legend-count {
+  font-weight: 700;
+  color: #0176d3;
+  flex-shrink: 0;
+  font-size: 0.75rem;
+}
+
+.mini-pie-chart-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+}
+
+.mini-pie-chart {
+  width: 100px;
+  height: 100px;
+  transform: rotate(-90deg); /* Start from top */
+  cursor: pointer;
+  transition: transform 0.2s ease;
+  margin-bottom: 0.5rem;
+}
+
+.mini-pie-chart:hover {
+  transform: rotate(-90deg) scale(1.05);
+}
+
+.mini-pie-chart path {
+  stroke: #ffffff;
+  stroke-width: 1;
+  cursor: pointer;
+  transition: opacity 0.2s ease;
+}
+
+.mini-pie-chart path:hover {
+  opacity: 0.8;
+  stroke-width: 1.5;
+}
+
+.mini-pie-total {
+  position: absolute;
+  top: 50px;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 1rem;
+  font-weight: 700;
+  color: #3e3e3c;
+  pointer-events: none;
+  text-align: center;
+  line-height: 1;
+}
+
+/* Color classes for legend items */
+.mini-pie-color-0 {
+  background-color: #0176d3;
+}
+
+.mini-pie-color-1 {
+  background-color: #06a59a;
+}
+
+.mini-pie-color-2 {
+  background-color: #e74c3c;
+}
+
+.mini-pie-color-3 {
+  background-color: #f39c12;
+}
+
+.mini-pie-color-4 {
+  background-color: #9b59b6;
+}
+
+.mini-pie-color-5 {
+  background-color: #2ecc71;
+}
+
+.mini-pie-color-6 {
+  background-color: #34495e;
+}
+
+.mini-pie-color-7 {
+  background-color: #e67e22;
+}
+
+.mini-pie-color-8 {
+  background-color: #3498db;
+}
+
+.mini-pie-color-9 {
+  background-color: #1abc9c;
+}
+
+/* Responsive mini pie charts */
+@media (max-width: 768px) {
+  .mini-pie-chart {
+    width: 50px;
+    height: 50px;
+    margin-bottom: 0.375rem;
+  }
+  
+  .mini-pie-total {
+    top: 25px;
+    font-size: 0.625rem;
+  }
+  
+  .mini-pie-legend {
+    font-size: 0.5rem;
+  }
+  
+  .mini-pie-legend-color {
+    width: 6px;
+    height: 6px;
+  }
+}

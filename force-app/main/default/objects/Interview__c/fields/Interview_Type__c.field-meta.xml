@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Interview_Type__c</fullName>
+    <label>Interview Type</label>
+    <required>false</required>
+    <trackTrending>false</trackTrending>
+    <type>Picklist</type>
+    <valueSet>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>Attraction</fullName>
+                <default>false</default>
+            </value>
+            <value>
+                <fullName>SI1</fullName>
+                <default>false</default>
+            </value>
+            <value>
+                <fullName>SI2</fullName>
+                <default>false</default>
+            </value>
+            <value>
+                <fullName>SI3</fullName>
+                <default>false</default>
+            </value>
+            <value>
+                <fullName>Career</fullName>
+                <default>false</default>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>
