@@ -1916,7 +1916,7 @@ public inherited sharing class RecruiterDashboardController {
                 SELECT Id, Name, Email__c, Phone__c, Position__c, Status__c,
                        Office_Location_Picklist__c, Sales_Manager__c, 
                        RecruiterPicklist__c, Next_Meeting_Date__c,
-                       Lead_Source__c, Experience_Level__c, CreatedDate, LastModifiedDate
+                       CreatedDate, LastModifiedDate
                 FROM Candidate__c 
                 WHERE Status__c = 'Active/In Process'
                 AND Sales_Manager__c = :salesManager
@@ -1940,8 +1940,8 @@ public inherited sharing class RecruiterDashboardController {
                 candidateData.put('salesManager', candidate.Sales_Manager__c);
                 candidateData.put('recruiter', candidate.RecruiterPicklist__c != null ? candidate.RecruiterPicklist__c : 'Unassigned');
                 candidateData.put('nextMeeting', candidate.Next_Meeting_Date__c != null ? String.valueOf(candidate.Next_Meeting_Date__c) : 'Not Scheduled');
-                candidateData.put('leadSource', candidate.Lead_Source__c != null ? candidate.Lead_Source__c : 'Recruiter Portal');
-                candidateData.put('experience', candidate.Experience_Level__c != null ? candidate.Experience_Level__c : 'To Be Determined');
+                candidateData.put('leadSource', 'Recruiter Portal');
+                candidateData.put('experience', 'To Be Determined');
                 candidateData.put('createdDate', candidate.CreatedDate);
                 candidateData.put('lastModified', candidate.LastModifiedDate);
                 
