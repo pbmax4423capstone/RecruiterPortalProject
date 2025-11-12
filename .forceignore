@@ -18,3 +18,8 @@ package.xml
 
 # Exclude permission set references to Event fields
 **/permissionsets/Recruiter_Portal_User.permissionset-meta.xml
+
+# Exclude tabs and flexipages with issues
+**/tabs/Interview_Dashboard.tab-meta.xml
+**/tabs/Recruiter_Portal_LWC.tab-meta.xml
+**/flexipages/Recruiter_Portal_App.flexipage-meta.xml
