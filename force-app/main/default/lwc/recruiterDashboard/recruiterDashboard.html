@@ -218,8 +218,13 @@
                             <div key={item.label} class="legend-item slds-m-bottom_x-small">
                               <div class="slds-grid slds-grid_vertical-align-center">
                                 <div class="legend-color-box" data-color={item.color}></div>
-                                <div class="legend-text slds-p-left_small">
-                                  <div class="legend-label slds-text-body_small">{item.label}</div>
+                                <div class="legend-text-wrapper slds-p-left_small">
+                                  <button class="manager-name-button" 
+                                          onclick={handleSalesManagerClick}
+                                          data-manager={item.label}
+                                          title="Click to view candidates">
+                                    {item.label} →
+                                  </button>
                                   <div class="legend-value slds-text-body_small slds-text-color_weak">{item.value} ({item.percentage}%)</div>
                                 </div>
                               </div>
@@ -1562,6 +1567,114 @@
         <footer class="slds-modal__footer slds-p-vertical_small slds-p-horizontal_medium">
           <lightning-button variant="neutral" label="Close" onclick={closeCandidateModal}></lightning-button>
           <lightning-button variant="brand" label="Add New Candidate" disabled title="Coming Soon"></lightning-button>
+        </footer>
+      </div>
+    </section>
+    <div class="slds-backdrop slds-backdrop_open"></div>
+  </template>
+
+  <!-- Sales Manager Candidates Modal -->
+  <template if:true={showSalesManagerCandidatesModal}>
+    <section role="dialog" tabindex="-1" class="slds-modal slds-fade-in-open slds-modal_medium" aria-labelledby="sales-manager-modal-heading">
+      <div class="slds-modal__container" style="max-height: 80vh;">
+        <header class="slds-modal__header slds-p-vertical_small slds-p-horizontal_medium">
+          <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" title="Close" onclick={closeSalesManagerCandidatesModal}>
+            <lightning-icon icon-name="utility:close" alternative-text="close" size="small"></lightning-icon>
+          </button>
+          <h2 id="sales-manager-modal-heading" class="slds-modal__title slds-hyphenate slds-text-heading_small">
+            <lightning-icon icon-name="utility:people" size="small" class="slds-m-right_x-small"></lightning-icon>
+            {salesManagerCandidatesModalTitle}
+          </h2>
+        </header>
+        <div class="slds-modal__content" id="sales-manager-modal-content" style="max-height: 60vh; overflow-y: auto; padding: 1rem;">
+          
+          <template if:true={isLoadingSalesManagerCandidates}>
+            <div class="slds-text-align_center slds-p-around_large">
+              <lightning-spinner alternative-text="Loading candidates..." size="medium"></lightning-spinner>
+              <p class="slds-text-body_regular slds-m-top_small">Loading candidates for {selectedSalesManager}...</p>
+            </div>
+          </template>
+
+          <template if:false={isLoadingSalesManagerCandidates}>
+            <template if:true={salesManagerCandidates}>
+              <template if:true={salesManagerCandidates.length}>
+                
+                <!-- Candidates List -->
+                <div class="candidates-list-container">
+                  <div class="slds-text-body_small slds-text-color_weak slds-m-bottom_small">
+                    Showing {salesManagerCandidates.length} active candidates for {selectedSalesManager}
+                  </div>
+                  
+                  <template for:each={salesManagerCandidates} for:item="candidate">
+                    <div key={candidate.id} class="candidate-list-item slds-box slds-theme_shade" 
+                         onclick={handleCandidateClick} data-candidate-id={candidate.id} 
+                         title="Click to view candidate details">
+                      <div class="slds-grid slds-grid_align-spread slds-grid_vertical-align-start" style="gap: 12px;">
+                        <div class="slds-col slds-size_5-of-12">
+                          <div style="margin-bottom: 4px;">
+                            <strong style="font-size: 16px; color: #181818;">{candidate.name}</strong>
+                          </div>
+                          <div style="font-size: 14px; color: #666; line-height: 1.3;">
+                            {candidate.position}
+                          </div>
+                          <div style="font-size: 13px; color: #888; margin-top: 2px;">
+                            📍 {candidate.location}
+                          </div>
+                          <div style="font-size: 13px; color: #888; margin-top: 2px;">
+                            Recruiter: {candidate.recruiter}
+                          </div>
+                        </div>
+                        <div class="slds-col slds-size_5-of-12">
+                          <template if:true={candidate.email}>
+                            <div style="margin-bottom: 4px;">
+                              📧 <a href={candidate.emailLink} 
+                                    onclick={handleEmailClick} 
+                                    data-candidate-id={candidate.id}
+                                    title={candidate.email}
+                                    style="text-decoration: underline; color: #0176d3;">{candidate.email}</a>
+                            </div>
+                          </template>
+                          <template if:true={candidate.phone}>
+                            <div style="margin-bottom: 4px;">
+                              📞 <a href={candidate.phoneLink} 
+                                    onclick={handlePhoneClick}
+                                    data-candidate-id={candidate.id}
+                                    style="text-decoration: underline; color: #0176d3;">{candidate.phone}</a>
+                            </div>
+                          </template>
+                          <div style="font-size: 13px; color: #666; margin-top: 4px;">
+                            Next Meeting: {candidate.nextMeeting}
+                          </div>
+                        </div>
+                        <div class="slds-col slds-size_2-of-12 slds-text-align_right">
+                          <div class="slds-badge slds-badge_success" style="font-size: 12px; padding: 4px 8px;">
+                            Active
+                          </div>
+                          <div style="font-size: 11px; color: #888; margin-top: 4px;">
+                            {candidate.experience}
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </template>
+                </div>
+
+              </template>
+              <template if:false={salesManagerCandidates.length}>
+                <div class="slds-text-align_center slds-p-around_large">
+                  <lightning-icon icon-name="utility:info" size="large" class="slds-m-bottom_medium"></lightning-icon>
+                  <h3 class="slds-text-heading_small slds-m-bottom_small">No Active Candidates Found</h3>
+                  <p class="slds-text-body_regular slds-text-color_weak">
+                    {selectedSalesManager} has no candidates with "Active/In Process" status at this time.
+                  </p>
+                </div>
+              </template>
+            </template>
+          </template>
+
+        </div>
+        <footer class="slds-modal__footer slds-p-vertical_small slds-p-horizontal_medium">
+          <lightning-button variant="neutral" label="Close" onclick={closeSalesManagerCandidatesModal}></lightning-button>
         </footer>
       </div>
     </section>
