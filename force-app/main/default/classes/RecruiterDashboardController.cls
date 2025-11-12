@@ -1,6 +1,6 @@
 public inherited sharing class RecruiterDashboardController {
     
-    @AuraEnabled(cacheable=true)
+    @AuraEnabled
     public static Map<String, Object> getDashboardData() {
         Map<String, Object> dashboardData = new Map<String, Object>();
         
@@ -16,9 +16,9 @@ public inherited sharing class RecruiterDashboardController {
         Map<String, Integer> scheduledInterviewStats = getScheduledInterviewStats();
         dashboardData.put('scheduledInterviewStats', scheduledInterviewStats);
         
-        // Get recent activity data
-        List<Map<String, Object>> recentActivity = getRecentActivity();
-        dashboardData.put('recentActivity', recentActivity);
+        // Recent activity now loaded separately via wire adapter in LWC
+        // to reduce SOQL query count and improve performance
+        dashboardData.put('recentActivity', new List<Map<String, Object>>());
         
         // Get recruiting metrics by type
         List<Map<String, Object>> interviewsByType = getInterviewsByType();
@@ -95,17 +95,12 @@ public inherited sharing class RecruiterDashboardController {
                 String managerName = result.get('manager') != null ? (String)result.get('manager') : 'Unassigned';
                 Integer count = (Integer)result.get('cnt');
                 
-                // Reassign candidates according to specifications
-                if (managerName == 'Scott Primm') {
-                    // Add Scott Primm's candidates to Bradley Sofonia
+                // Normalize manager names (Brad Sofonia = Bradley Sofonia)
+                if (managerName == 'Brad Sofonia') {
                     managerName = 'Bradley Sofonia';
-                } else if (managerName == 'Diljeet Masuda') {
-                    // Add Diljeet Masuda's candidates to Elizabeth Kagele
-                    managerName = 'Elizabeth Kagele';
                 }
-                // Skip if this is one of the excluded managers (already reassigned above)
                 
-                // Accumulate counts for managers (in case of multiple reassignments)
+                // Accumulate counts for managers
                 if (managerCounts.containsKey(managerName)) {
                     managerCounts.put(managerName, managerCounts.get(managerName) + count);
                 } else {
@@ -141,66 +136,62 @@ public inherited sharing class RecruiterDashboardController {
         Map<String, Object> interviewStats = new Map<String, Object>();
         
         try {
-            // Get interview counts by type
-            List<AggregateResult> typeResults = [
-                SELECT Interview_Type__c type, COUNT(Id) cnt
-                FROM Interview__c 
-                WHERE Interview_Type__c != null
-                GROUP BY Interview_Type__c
-                ORDER BY Interview_Type__c
-            ];
+            // Count interviews by checking completed date fields on Candidate__c
+            Integer attractionCount = [SELECT COUNT() FROM Candidate__c WHERE Attraction_Interview_Date_Completed__c != null];
+            Integer si1Count = [SELECT COUNT() FROM Candidate__c WHERE SI_1_Date_Completed__c != null];
+            Integer si2Count = [SELECT COUNT() FROM Candidate__c WHERE SI_2_Date_Completed__c != null];
+            Integer si3Count = [SELECT COUNT() FROM Candidate__c WHERE SI_3_Completed__c != null];
+            Integer careerCount = [SELECT COUNT() FROM Candidate__c WHERE Career_Presentation_Date_Completed__c != null];
             
-            // Initialize all types to 0
-            Map<String, Integer> typeCounts = new Map<String, Integer>{
-                'Attraction' => 0,
-                'SI1' => 0,
-                'SI2' => 0,
-                'SI3' => 0,
-                'Career' => 0
-            };
+            // Calculate total
+            Integer totalInterviews = attractionCount + si1Count + si2Count + si3Count + careerCount;
             
-            // Populate actual counts
-            for (AggregateResult result : typeResults) {
-                String type = (String)result.get('type');
-                Integer count = (Integer)result.get('cnt');
-                
-                if (typeCounts.containsKey(type)) {
-                    typeCounts.put(type, count);
-                }
-            }
-            
-            // Calculate totals
-            Integer totalInterviews = 0;
-            for (Integer count : typeCounts.values()) {
-                totalInterviews += count;
-            }
-            
-            // Get this week's interviews
+            // Get this week's completed interviews
             Date weekStart = Date.today().toStartOfWeek();
             Date weekEnd = weekStart.addDays(6);
             
             Integer thisWeekCount = [
                 SELECT COUNT() 
-                FROM Interview__c 
-                WHERE CreatedDate >= :weekStart 
-                AND CreatedDate <= :weekEnd
+                FROM Candidate__c 
+                WHERE (Attraction_Interview_Date_Completed__c >= :weekStart AND Attraction_Interview_Date_Completed__c <= :weekEnd)
+                OR (SI_1_Date_Completed__c >= :weekStart AND SI_1_Date_Completed__c <= :weekEnd)
+                OR (SI_2_Date_Completed__c >= :weekStart AND SI_2_Date_Completed__c <= :weekEnd)
+                OR (SI_3_Completed__c >= :weekStart AND SI_3_Completed__c <= :weekEnd)
+                OR (Career_Presentation_Date_Completed__c >= :weekStart AND Career_Presentation_Date_Completed__c <= :weekEnd)
             ];
             
-            // Get scheduled interviews (assuming we have a date field for scheduling)
+            // Get this month's completed interviews
+            Date monthStart = Date.today().toStartOfMonth();
+            Date monthEnd = monthStart.addMonths(1).addDays(-1);
+            
+            Integer attractionThisMonth = [SELECT COUNT() FROM Candidate__c WHERE Attraction_Interview_Date_Completed__c >= :monthStart AND Attraction_Interview_Date_Completed__c <= :monthEnd];
+            Integer si1ThisMonth = [SELECT COUNT() FROM Candidate__c WHERE SI_1_Date_Completed__c >= :monthStart AND SI_1_Date_Completed__c <= :monthEnd];
+            Integer si2ThisMonth = [SELECT COUNT() FROM Candidate__c WHERE SI_2_Date_Completed__c >= :monthStart AND SI_2_Date_Completed__c <= :monthEnd];
+            Integer si3ThisMonth = [SELECT COUNT() FROM Candidate__c WHERE SI_3_Completed__c >= :monthStart AND SI_3_Completed__c <= :monthEnd];
+            Integer careerThisMonth = [SELECT COUNT() FROM Candidate__c WHERE Career_Presentation_Date_Completed__c >= :monthStart AND Career_Presentation_Date_Completed__c <= :monthEnd];
+            
+            Integer thisMonthTotal = attractionThisMonth + si1ThisMonth + si2ThisMonth + si3ThisMonth + careerThisMonth;
+            
+            // Get scheduled interviews (future scheduled dates)
             Integer scheduledCount = [
                 SELECT COUNT() 
-                FROM Interview__c 
-                WHERE Interview_Status__c = 'Scheduled'
+                FROM Candidate__c 
+                WHERE Attraction_Interview_Date_Scheduled__c >= TODAY
+                OR SI_1_Date_Scheduled__c >= TODAY
+                OR SI_2_Date_Scheduled__c >= TODAY
+                OR SI_3_Scheduled__c >= TODAY
+                OR Career_Presentation_Date_Scheduled__c >= TODAY
             ];
             
-            interviewStats.put('attraction', typeCounts.get('Attraction'));
-            interviewStats.put('si1', typeCounts.get('SI1'));
-            interviewStats.put('si2', typeCounts.get('SI2'));
-            interviewStats.put('si3', typeCounts.get('SI3'));
-            interviewStats.put('career', typeCounts.get('Career'));
-            interviewStats.put('total', totalInterviews);
+            interviewStats.put('attraction', attractionThisMonth);
+            interviewStats.put('si1', si1ThisMonth);
+            interviewStats.put('si2', si2ThisMonth);
+            interviewStats.put('si3', si3ThisMonth);
+            interviewStats.put('career', careerThisMonth);
+            interviewStats.put('total', thisMonthTotal);
             interviewStats.put('thisWeek', thisWeekCount);
             interviewStats.put('scheduled', scheduledCount);
+            interviewStats.put('allTimeTotal', totalInterviews);
             
         } catch (Exception e) {
             System.debug('Error in getInterviewStatsByType: ' + e.getMessage());
@@ -223,31 +214,32 @@ public inherited sharing class RecruiterDashboardController {
         List<Map<String, Object>> interviewerStats = new List<Map<String, Object>>();
         
         try {
-            // Get interview counts by interviewer and type
-            List<AggregateResult> results = [
-                SELECT Conducted_By__c interviewer, 
-                       Conducted_By__r.Name interviewerName, 
-                       Interview_Type__c type, 
-                       COUNT(Id) cnt
-                FROM Interview__c 
-                WHERE Conducted_By__c != null 
-                AND Interview_Type__c != null
-                GROUP BY Conducted_By__c, Conducted_By__r.Name, Interview_Type__c
-                ORDER BY Conducted_By__r.Name, Interview_Type__c
+            // Get interview counts by interviewer from Candidate "Conducted By" fields
+            // Since Conducted By fields are text/picklist (CP_Conducted_by__c is multi-select), 
+            // we need to query and count manually
+            List<Candidate__c> attractionCandidates = [
+                SELECT Attraction_Interview_Conducted_By__c
+                FROM Candidate__c 
+                WHERE Attraction_Interview_Date_Completed__c != null 
+                AND Attraction_Interview_Conducted_By__c != null
             ];
             
-            // Group results by interviewer
-            Map<Id, Map<String, Object>> interviewerMap = new Map<Id, Map<String, Object>>();
+            List<Candidate__c> careerCandidates = [
+                SELECT CP_Conducted_by__c
+                FROM Candidate__c 
+                WHERE Career_Presentation_Date_Completed__c != null 
+                AND CP_Conducted_by__c != null
+            ];
             
-            for (AggregateResult result : results) {
-                Id interviewerId = (Id)result.get('interviewer');
-                String interviewerName = (String)result.get('interviewerName');
-                String type = (String)result.get('type');
-                Integer count = (Integer)result.get('cnt');
+            // Build interviewer map by counting manually
+            Map<String, Map<String, Object>> interviewerMap = new Map<String, Map<String, Object>>();
+            
+            // Process Attraction interviews
+            for (Candidate__c cand : attractionCandidates) {
+                String interviewerName = cand.Attraction_Interview_Conducted_By__c;
                 
-                if (!interviewerMap.containsKey(interviewerId)) {
-                    interviewerMap.put(interviewerId, new Map<String, Object>{
-                        'interviewerId' => interviewerId,
+                if (!interviewerMap.containsKey(interviewerName)) {
+                    interviewerMap.put(interviewerName, new Map<String, Object>{
                         'interviewerName' => interviewerName,
                         'attraction' => 0,
                         'si1' => 0,
@@ -258,27 +250,39 @@ public inherited sharing class RecruiterDashboardController {
                     });
                 }
                 
-                Map<String, Object> interviewer = interviewerMap.get(interviewerId);
-                
-                // Map the type to lowercase for consistency
-                if (type == 'Attraction') {
-                    interviewer.put('attraction', count);
-                } else if (type == 'SI1') {
-                    interviewer.put('si1', count);
-                } else if (type == 'SI2') {
-                    interviewer.put('si2', count);
-                } else if (type == 'SI3') {
-                    interviewer.put('si3', count);
-                } else if (type == 'Career') {
-                    interviewer.put('career', count);
-                }
-                
-                // Update total
-                Integer currentTotal = (Integer)interviewer.get('total');
-                interviewer.put('total', currentTotal + count);
+                Map<String, Object> interviewer = interviewerMap.get(interviewerName);
+                interviewer.put('attraction', (Integer)interviewer.get('attraction') + 1);
+                interviewer.put('total', (Integer)interviewer.get('total') + 1);
             }
             
-            // Convert to list and sort by total interviews (descending)
+            // Process Career Presentation interviews (multi-select picklist)
+            for (Candidate__c cand : careerCandidates) {
+                // CP_Conducted_by__c is multi-select, so split by semicolon
+                if (cand.CP_Conducted_by__c != null) {
+                    List<String> interviewers = cand.CP_Conducted_by__c.split(';');
+                    for (String interviewerName : interviewers) {
+                        interviewerName = interviewerName.trim();
+                        
+                        if (!interviewerMap.containsKey(interviewerName)) {
+                            interviewerMap.put(interviewerName, new Map<String, Object>{
+                                'interviewerName' => interviewerName,
+                                'attraction' => 0,
+                                'si1' => 0,
+                                'si2' => 0,
+                                'si3' => 0,
+                                'career' => 0,
+                                'total' => 0
+                            });
+                        }
+                        
+                        Map<String, Object> interviewer = interviewerMap.get(interviewerName);
+                        interviewer.put('career', (Integer)interviewer.get('career') + 1);
+                        interviewer.put('total', (Integer)interviewer.get('total') + 1);
+                    }
+                }
+            }
+            
+            // Convert to list
             interviewerStats.addAll(interviewerMap.values());
             
         } catch (Exception e) {
@@ -293,52 +297,159 @@ public inherited sharing class RecruiterDashboardController {
         Map<String, Object> result = new Map<String, Object>();
         
         try {
-            // Query ALL interviews by type and interviewer - no filtering
-            List<AggregateResult> results = [
-                SELECT Interview_Type__c type, 
-                       Conducted_By__r.Name interviewerName,
-                       COUNT(Id) cnt
-                FROM Interview__c 
-                WHERE Conducted_By__c != null 
-                AND Interview_Type__c != null
-                GROUP BY Interview_Type__c, Conducted_By__r.Name
-                ORDER BY Interview_Type__c, COUNT(Id) DESC
-            ];
-            
-            System.debug('Total interview results found: ' + results.size());
+            // Get current month date range
+            Date monthStart = Date.today().toStartOfMonth();
+            Date monthEnd = monthStart.addMonths(1).addDays(-1);
             
             // Initialize structure for each interview type
-            Map<String, List<Map<String, Object>>> typeStats = new Map<String, List<Map<String, Object>>>{
-                'Attraction' => new List<Map<String, Object>>(),
-                'SI1' => new List<Map<String, Object>>(),
-                'SI2' => new List<Map<String, Object>>(),
-                'SI3' => new List<Map<String, Object>>(),
-                'Career' => new List<Map<String, Object>>()
-            };
+            List<Map<String, Object>> attractionByInterviewer = new List<Map<String, Object>>();
+            List<Map<String, Object>> si1ByInterviewer = new List<Map<String, Object>>();
+            List<Map<String, Object>> si2ByInterviewer = new List<Map<String, Object>>();
+            List<Map<String, Object>> si3ByInterviewer = new List<Map<String, Object>>();
+            List<Map<String, Object>> careerByInterviewer = new List<Map<String, Object>>();
             
-            // Populate the data
-            for (AggregateResult ar : results) {
-                String type = (String)ar.get('type');
-                String interviewer = (String)ar.get('interviewerName');
-                Integer count = (Integer)ar.get('cnt');
-                
-                System.debug('Processing: Type=' + type + ', Interviewer=' + interviewer + ', Count=' + count);
-                
-                if (typeStats.containsKey(type)) {
-                    typeStats.get(type).add(new Map<String, Object>{
-                        'interviewer' => interviewer,
-                        'count' => count
-                    });
+            // Get Attraction interviews by AI_Conducted_By - THIS MONTH ONLY
+            // AI_Conducted_By__c is a multi-select picklist, so we need to manually process
+            List<Candidate__c> attractionCandidates = [
+                SELECT AI_Conducted_By__c
+                FROM Candidate__c 
+                WHERE Attraction_Interview_Date_Completed__c >= :monthStart
+                AND Attraction_Interview_Date_Completed__c <= :monthEnd
+            ];
+            
+            Map<String, Integer> attractionCounts = new Map<String, Integer>();
+            Integer unassignedCount = 0;
+            
+            for (Candidate__c cand : attractionCandidates) {
+                if (String.isNotBlank(cand.AI_Conducted_By__c)) {
+                    // Split multi-select picklist values
+                    List<String> interviewers = cand.AI_Conducted_By__c.split(';');
+                    for (String interviewer : interviewers) {
+                        interviewer = interviewer.trim();
+                        if (!attractionCounts.containsKey(interviewer)) {
+                            attractionCounts.put(interviewer, 0);
+                        }
+                        attractionCounts.put(interviewer, attractionCounts.get(interviewer) + 1);
+                    }
+                } else {
+                    unassignedCount++;
                 }
             }
             
-            result.put('attractionByInterviewer', typeStats.get('Attraction'));
-            result.put('si1ByInterviewer', typeStats.get('SI1'));
-            result.put('si2ByInterviewer', typeStats.get('SI2'));
-            result.put('si3ByInterviewer', typeStats.get('SI3'));
-            result.put('careerByInterviewer', typeStats.get('Career'));
+            // Convert attraction counts to list format, sorted by count
+            List<Map<String, Object>> attractionList = new List<Map<String, Object>>();
+            for (String interviewer : attractionCounts.keySet()) {
+                attractionList.add(new Map<String, Object>{
+                    'interviewer' => interviewer,
+                    'count' => attractionCounts.get(interviewer)
+                });
+            }
             
-            System.debug('Final result: ' + result);
+            // Add unassigned if any
+            if (unassignedCount > 0) {
+                attractionList.add(new Map<String, Object>{
+                    'interviewer' => 'Unassigned',
+                    'count' => unassignedCount
+                });
+            }
+            
+            // Sort by count descending
+            attractionList.sort(new InterviewCountComparator());
+            attractionByInterviewer = attractionList;
+            
+            // Get SI1 interviews by interviewer - THIS MONTH ONLY
+            List<AggregateResult> si1Results = [
+                SELECT Sales_Manager__c interviewer, COUNT(Id) cnt
+                FROM Candidate__c 
+                WHERE SI_1_Date_Completed__c >= :monthStart
+                AND SI_1_Date_Completed__c <= :monthEnd
+                AND Sales_Manager__c != null
+                GROUP BY Sales_Manager__c
+                ORDER BY COUNT(Id) DESC
+            ];
+            
+            for (AggregateResult ar : si1Results) {
+                si1ByInterviewer.add(new Map<String, Object>{
+                    'interviewer' => (String)ar.get('interviewer'),
+                    'count' => (Integer)ar.get('cnt')
+                });
+            }
+            
+            // Get SI2 interviews by Sales Manager - THIS MONTH ONLY
+            List<AggregateResult> si2Results = [
+                SELECT Sales_Manager__c interviewer, COUNT(Id) cnt
+                FROM Candidate__c 
+                WHERE SI_2_Date_Completed__c >= :monthStart
+                AND SI_2_Date_Completed__c <= :monthEnd
+                AND Sales_Manager__c != null
+                GROUP BY Sales_Manager__c
+                ORDER BY COUNT(Id) DESC
+            ];
+            
+            for (AggregateResult ar : si2Results) {
+                si2ByInterviewer.add(new Map<String, Object>{
+                    'interviewer' => (String)ar.get('interviewer'),
+                    'count' => (Integer)ar.get('cnt')
+                });
+            }
+            
+            // Get SI3 interviews by Sales Manager - THIS MONTH ONLY
+            List<AggregateResult> si3Results = [
+                SELECT Sales_Manager__c interviewer, COUNT(Id) cnt
+                FROM Candidate__c 
+                WHERE SI_3_Completed__c >= :monthStart
+                AND SI_3_Completed__c <= :monthEnd
+                AND Sales_Manager__c != null
+                GROUP BY Sales_Manager__c
+                ORDER BY COUNT(Id) DESC
+            ];
+            
+            for (AggregateResult ar : si3Results) {
+                si3ByInterviewer.add(new Map<String, Object>{
+                    'interviewer' => (String)ar.get('interviewer'),
+                    'count' => (Integer)ar.get('cnt')
+                });
+            }
+            
+            // Get Career interviews by CP_Conducted_by__c (multi-select picklist) - THIS MONTH ONLY
+            List<Candidate__c> careerCandidates = [
+                SELECT CP_Conducted_by__c
+                FROM Candidate__c 
+                WHERE Career_Presentation_Date_Completed__c >= :monthStart
+                AND Career_Presentation_Date_Completed__c <= :monthEnd
+                AND CP_Conducted_by__c != null
+            ];
+            
+            Map<String, Integer> careerCounts = new Map<String, Integer>();
+            for (Candidate__c cand : careerCandidates) {
+                if (String.isNotBlank(cand.CP_Conducted_by__c)) {
+                    // Split multi-select picklist values
+                    List<String> interviewers = cand.CP_Conducted_by__c.split(';');
+                    for (String interviewer : interviewers) {
+                        interviewer = interviewer.trim();
+                        if (!careerCounts.containsKey(interviewer)) {
+                            careerCounts.put(interviewer, 0);
+                        }
+                        careerCounts.put(interviewer, careerCounts.get(interviewer) + 1);
+                    }
+                }
+            }
+            
+            // Convert career counts to list format
+            for (String interviewer : careerCounts.keySet()) {
+                careerByInterviewer.add(new Map<String, Object>{
+                    'interviewer' => interviewer,
+                    'count' => careerCounts.get(interviewer)
+                });
+            }
+            
+            result.put('attractionByInterviewer', attractionByInterviewer);
+            result.put('si1ByInterviewer', si1ByInterviewer);
+            result.put('si2ByInterviewer', si2ByInterviewer);
+            result.put('si3ByInterviewer', si3ByInterviewer);
+            result.put('careerByInterviewer', careerByInterviewer);
+            
+            System.debug('Interview type with interviewer stats (THIS MONTH): ' + result);
             
         } catch (Exception e) {
             System.debug('Error in getInterviewTypeWithInterviewerStats: ' + e.getMessage());
@@ -537,34 +648,198 @@ public inherited sharing class RecruiterDashboardController {
     
     @AuraEnabled(cacheable=true)
     public static List<Map<String, Object>> getRecentActivity() {
+        return getUserRecentActivity();
+    }
+    
+    @AuraEnabled(cacheable=true)
+    public static List<Map<String, Object>> getUserRecentActivity() {
         List<Map<String, Object>> activities = new List<Map<String, Object>>();
+        String currentUserId = UserInfo.getUserId();
         
         try {
-            // Get recent interviews
-            List<Interview__c> recentInterviews = [
-                SELECT Id, Name, Interview_Type__c, Interview_Status__c, CreatedDate,
-                       Candidate__r.Name, Conducted_By__r.Name
-                FROM Interview__c 
-                ORDER BY CreatedDate DESC 
-                LIMIT 10
-            ];
+            // Get current user info to determine view permissions
+            Map<String, String> currentUserInfo = getCurrentUserInfo();
+            String userType = currentUserInfo.get('userType');
+            String userName = currentUserInfo.get('name');
+            
+            System.debug('getUserRecentActivity - userType: ' + userType + ', userName: ' + userName);
+            
+            // Query recently COMPLETED interviews only
+            String interviewQuery = 'SELECT Id, Name, Interview_Type__c, Interview_Status__c, CreatedDate, ' +
+                                  'Candidate__r.Name, Candidate__r.Sales_Manager__c, Conducted_By__r.Name, Conducted_By__c ' +
+                                  'FROM Interview__c ' +
+                                  'WHERE Interview_Status__c = \'Completed\' ';
+            
+            if (userType == 'Sales Manager') {
+                // Filter by interviews for candidates assigned to this Sales Manager
+                interviewQuery += 'AND Candidate__r.Sales_Manager__c = :userName ';
+            }
+            
+            interviewQuery += 'ORDER BY CreatedDate DESC LIMIT 15';
+            
+            List<Interview__c> recentInterviews = Database.query(interviewQuery);
+            System.debug('Found ' + recentInterviews.size() + ' interviews for user');
             
             for (Interview__c interview : recentInterviews) {
                 Map<String, Object> activity = new Map<String, Object>();
-                activity.put('id', interview.Id);
-                activity.put('type', 'Interview');
-                activity.put('title', interview.Name);
-                activity.put('subtitle', 'Type: ' + interview.Interview_Type__c + ' | Status: ' + interview.Interview_Status__c);
-                activity.put('candidateName', interview.Candidate__r?.Name);
-                activity.put('interviewerName', interview.Conducted_By__r?.Name);
-                activity.put('date', interview.CreatedDate);
+                activity.put('id', interview.Id + '_interview');
+                activity.put('type', '📅');
+                activity.put('description', interview.Interview_Type__c + ' Interview');
+                activity.put('candidateName', interview.Candidate__r?.Name != null ? interview.Candidate__r.Name : 'N/A');
+                activity.put('salesManager', interview.Candidate__r?.Sales_Manager__c != null ? interview.Candidate__r.Sales_Manager__c : 'N/A');
+                activity.put('conductedBy', interview.Conducted_By__r?.Name != null ? interview.Conducted_By__r.Name : 'N/A');
+                activity.put('status', interview.Interview_Status__c != null ? interview.Interview_Status__c : 'Scheduled');
+                activity.put('statusVariant', getStatusVariant(interview.Interview_Status__c));
+                activity.put('timeAgo', getTimeAgo(interview.CreatedDate));
+                activity.put('activityDate', interview.CreatedDate);
                 activities.add(activity);
             }
+            
+            // Query recent candidates added - filter by Sales_Manager__c field
+            String candidateQuery = 'SELECT Id, Name, Contact__r.Name, Status__c, Sales_Manager__c, CreatedDate, CreatedById, CreatedBy.Name, OwnerId, Owner.Name ' +
+                                   'FROM Candidate__c ';
+            
+            if (userType == 'Sales Manager') {
+                // Filter by candidates assigned to this Sales Manager
+                candidateQuery += 'WHERE Sales_Manager__c = :userName ';
+            }
+            
+            candidateQuery += 'ORDER BY CreatedDate DESC LIMIT 15';
+            
+            List<Candidate__c> recentCandidates = Database.query(candidateQuery);
+            System.debug('Found ' + recentCandidates.size() + ' candidates for user');
+            
+            for (Candidate__c candidate : recentCandidates) {
+                Map<String, Object> activity = new Map<String, Object>();
+                activity.put('id', candidate.Id + '_candidate');
+                activity.put('type', '👤');
+                activity.put('description', 'Candidate Added');
+                String candidateName = candidate.Contact__r?.Name != null ? candidate.Contact__r.Name : candidate.Name;
+                activity.put('candidateName', candidateName != null ? candidateName : 'N/A');
+                activity.put('salesManager', candidate.Sales_Manager__c != null ? candidate.Sales_Manager__c : 'N/A');
+                activity.put('createdBy', candidate.CreatedBy?.Name != null ? candidate.CreatedBy.Name : 'N/A');
+                activity.put('status', candidate.Status__c != null ? candidate.Status__c : 'New');
+                activity.put('statusVariant', getStatusVariant(candidate.Status__c));
+                activity.put('timeAgo', getTimeAgo(candidate.CreatedDate));
+                activity.put('activityDate', candidate.CreatedDate);
+                activities.add(activity);
+            }
+            
+            // Query recent calls/tasks - filter by owner and COMPLETED status only
+            String taskQuery = 'SELECT Id, Subject, Status, CreatedDate, ActivityDate, Who.Name, WhoId, ' +
+                              'What.Name, WhatId, OwnerId, Owner.Name, Description ' +
+                              'FROM Task ' +
+                              'WHERE Status = \'Completed\' ';
+            
+            if (userType == 'Sales Manager') {
+                taskQuery += 'AND OwnerId = :currentUserId ';
+            }
+            
+            taskQuery += 'ORDER BY CreatedDate DESC LIMIT 15';
+            
+            List<Task> recentTasks = Database.query(taskQuery);
+            System.debug('Found ' + recentTasks.size() + ' tasks for user');
+            
+            for (Task taskRecord : recentTasks) {
+                Map<String, Object> activity = new Map<String, Object>();
+                activity.put('id', taskRecord.Id + '_task');
+                activity.put('type', '📞');
+                activity.put('description', taskRecord.Subject != null ? taskRecord.Subject : 'Call Scheduled');
+                
+                // Try to get the contact/lead name from Who field, or related record from What field
+                String contactName = 'N/A';
+                if (taskRecord.Who?.Name != null) {
+                    contactName = taskRecord.Who.Name;
+                } else if (taskRecord.What?.Name != null) {
+                    contactName = taskRecord.What.Name;
+                }
+                
+                activity.put('candidateName', contactName);
+                activity.put('taskOwner', taskRecord.Owner?.Name != null ? taskRecord.Owner.Name : 'N/A');
+                activity.put('status', taskRecord.Status != null ? taskRecord.Status : 'Not Started');
+                activity.put('statusVariant', getStatusVariant(taskRecord.Status));
+                activity.put('timeAgo', getTimeAgo(taskRecord.CreatedDate));
+                activity.put('activityDate', taskRecord.CreatedDate);
+                activity.put('dueDate', taskRecord.ActivityDate); // Add due date for tasks
+                activities.add(activity);
+            }
+            
+            // Sort all activities by date (most recent first)
+            activities.sort(new ActivityDateComparator());
+            
+            System.debug('Total activities before limiting: ' + activities.size());
+            
+            // Limit to top 10 most recent
+            if (activities.size() > 10) {
+                List<Map<String, Object>> topActivities = new List<Map<String, Object>>();
+                for (Integer i = 0; i < 10; i++) {
+                    topActivities.add(activities[i]);
+                }
+                System.debug('Returning top 10 activities');
+                return topActivities;
+            }
+            
+            System.debug('Returning all ' + activities.size() + ' activities');
+            return activities;
+            
         } catch (Exception e) {
-            System.debug('Error in getRecentActivity: ' + e.getMessage());
+            System.debug('Error in getUserRecentActivity: ' + e.getMessage());
+            System.debug('Stack trace: ' + e.getStackTraceString());
         }
         
         return activities;
+    }
+    
+    // Helper method to get status variant for badge
+    private static String getStatusVariant(String status) {
+        if (status == null) return 'warning';
+        
+        String lowerStatus = status.toLowerCase();
+        if (lowerStatus.contains('complete') || lowerStatus.contains('success') || lowerStatus.contains('done')) {
+            return 'success';
+        } else if (lowerStatus.contains('cancel') || lowerStatus.contains('fail') || lowerStatus.contains('no show')) {
+            return 'error';
+        } else if (lowerStatus.contains('progress') || lowerStatus.contains('schedule')) {
+            return 'warning';
+        }
+        return 'inverse';
+    }
+    
+    // Helper method to calculate relative time
+    private static String getTimeAgo(DateTime activityDate) {
+        if (activityDate == null) return 'Unknown';
+        
+        Long secondsAgo = (DateTime.now().getTime() - activityDate.getTime()) / 1000;
+        
+        if (secondsAgo < 60) {
+            return 'Just now';
+        } else if (secondsAgo < 3600) {
+            Long minutes = secondsAgo / 60;
+            return minutes + (minutes == 1 ? ' minute ago' : ' minutes ago');
+        } else if (secondsAgo < 86400) {
+            Long hours = secondsAgo / 3600;
+            return hours + (hours == 1 ? ' hour ago' : ' hours ago');
+        } else if (secondsAgo < 604800) {
+            Long days = secondsAgo / 86400;
+            return days + (days == 1 ? ' day ago' : ' days ago');
+        } else {
+            return activityDate.format('MMM d, yyyy');
+        }
+    }
+    
+    // Comparator class for sorting activities by date
+    private class ActivityDateComparator implements Comparator<Map<String, Object>> {
+        public Integer compare(Map<String, Object> a, Map<String, Object> b) {
+            DateTime dateA = (DateTime)a.get('activityDate');
+            DateTime dateB = (DateTime)b.get('activityDate');
+            
+            if (dateA == null && dateB == null) return 0;
+            if (dateA == null) return 1;
+            if (dateB == null) return -1;
+            
+            // Sort descending (most recent first)
+            return dateB > dateA ? 1 : (dateB < dateA ? -1 : 0);
+        }
     }
     
     @AuraEnabled(cacheable=true)
@@ -805,16 +1080,21 @@ public inherited sharing class RecruiterDashboardController {
         return stats;
     }
     
-    @AuraEnabled(cacheable=true)
+    @AuraEnabled
     public static List<Map<String, Object>> getRachyllCallDetails(String callType) {
         // Backward compatibility shim that returns current user's details
         return getCurrentUserCallDetails(callType);
     }
     
-    @AuraEnabled(cacheable=true)
+    @AuraEnabled
     public static List<Map<String, Object>> getCurrentUserCallDetails(String callType) {
         List<Map<String, Object>> callDetails = new List<Map<String, Object>>();
         try {
+            System.debug('=== getCurrentUserCallDetails Debug ===');
+            System.debug('Call Type: ' + callType);
+            System.debug('Current User ID: ' + UserInfo.getUserId());
+            System.debug('Current User Name: ' + UserInfo.getName());
+            
             Date today = Date.today();
             String whereClause = '';
             switch on callType {
@@ -829,7 +1109,13 @@ public inherited sharing class RecruiterDashboardController {
                            'AND IsClosed = false ' +
                            whereClause + ' ' +
                            'ORDER BY ActivityDate ASC LIMIT 50';
+            
+            System.debug('Query: ' + query);
+            
             List<Task> tasks = Database.query(query);
+            
+            System.debug('Number of tasks found: ' + tasks.size());
+            
             for (Task task : tasks) {
                 Map<String, Object> detail = new Map<String, Object>();
                 detail.put('id', task.Id);
@@ -847,8 +1133,13 @@ public inherited sharing class RecruiterDashboardController {
                 }
                 callDetails.add(detail);
             }
+            
+            System.debug('Call details created: ' + callDetails.size());
+            System.debug('=== End getCurrentUserCallDetails Debug ===');
+            
         } catch (Exception e) {
             System.debug('Error in getCurrentUserCallDetails: ' + e.getMessage());
+            System.debug('Stack trace: ' + e.getStackTraceString());
         }
         return callDetails;
     }
@@ -868,11 +1159,11 @@ public inherited sharing class RecruiterDashboardController {
     }
     
     @AuraEnabled
-    public static String completeCallWithNotesAndSchedule(String taskId, String notes, Date nextCallDate) {
+    public static String completeCallWithNotesAndSchedule(String taskId, String notes, Date nextCallDate, Date newDueDate) {
         try {
             // Complete the current task
             Task taskToComplete = [
-                SELECT Id, Status, Description, WhatId, WhoId, OwnerId, Subject
+                SELECT Id, Status, Description, WhatId, WhoId, OwnerId, Subject, ActivityDate
                 FROM Task 
                 WHERE Id = :taskId 
                 LIMIT 1
@@ -883,6 +1174,11 @@ public inherited sharing class RecruiterDashboardController {
             if (String.isNotBlank(notes)) {
                 String existingDescription = taskToComplete.Description != null ? taskToComplete.Description : '';
                 taskToComplete.Description = existingDescription + '\n\nCall Completion Notes: ' + notes;
+            }
+            
+            // Update the due date if provided
+            if (newDueDate != null) {
+                taskToComplete.ActivityDate = newDueDate;
             }
             
             update taskToComplete;
@@ -1199,21 +1495,125 @@ public inherited sharing class RecruiterDashboardController {
         }
     }
     
-    @AuraEnabled
+    @AuraEnabled(cacheable=true)
     public static Map<String, String> getCurrentUserInfo() {
         Map<String, String> result = new Map<String, String>();
         try {
-            User currentUser = [SELECT Id, Name, Email FROM User WHERE Id = :UserInfo.getUserId() LIMIT 1];
+            User currentUser = [SELECT Id, Name, FirstName, Email, Profile.Name, UserRole.Name FROM User WHERE Id = :UserInfo.getUserId() LIMIT 1];
+            
+            System.debug('=== getCurrentUserInfo Debug ===');
+            System.debug('User ID: ' + currentUser.Id);
+            System.debug('User Name: ' + currentUser.Name);
+            System.debug('User FirstName: ' + currentUser.FirstName);
+            System.debug('User Email: ' + currentUser.Email);
+            System.debug('User Profile: ' + currentUser.Profile?.Name);
+            System.debug('User Role: ' + currentUser.UserRole?.Name);
+            
             result.put('id', currentUser.Id);
             result.put('name', currentUser.Name);
+            result.put('firstName', currentUser.FirstName != null ? currentUser.FirstName : '');
             result.put('email', currentUser.Email);
+            result.put('profileName', currentUser.Profile != null ? currentUser.Profile.Name : '');
+            result.put('roleName', currentUser.UserRole != null ? currentUser.UserRole.Name : '');
+            
+            // Determine if user is Director or Sales Manager
+            String profileName = currentUser.Profile != null ? currentUser.Profile.Name : '';
+            String roleName = currentUser.UserRole != null ? currentUser.UserRole.Name : '';
+            String userName = currentUser.Name;
+            
+            // Global/Director view users - specific recruiting team members who see all data
+            Set<String> globalViewUsers = new Set<String>{
+                'Rachyll Tenny',
+                'Neilie Torres', 
+                'Van Hess',
+                'Patrick Baker'
+            };
+            
+            System.debug('Checking global view access for: ' + userName);
+            
+            // Check if user has global view access
+            if (globalViewUsers.contains(userName)) {
+                result.put('userType', 'Director');
+                System.debug('User has global view access - userType set to Director');
+            }
+            // Check if Director of Recruiting (UserRole = "Recruiting Director")
+            else if (roleName.containsIgnoreCase('Recruiting Director') || 
+                (profileName.containsIgnoreCase('Director') && profileName.containsIgnoreCase('Recruit'))) {
+                result.put('userType', 'Director');
+                System.debug('User is Recruiting Director - userType set to Director');
+            } 
+            // Check if Sales Manager (UserRole = "SM" or Profile = "Sales Manager")
+            else if (roleName == 'SM' || profileName.containsIgnoreCase('Sales Manager')) {
+                result.put('userType', 'Sales Manager');
+                System.debug('User is Sales Manager - userType set to Sales Manager');
+            } 
+            // System Administrator sees Director view
+            else if (profileName.containsIgnoreCase('System Administrator')) {
+                result.put('userType', 'Director');
+                System.debug('User is System Administrator - userType set to Director');
+            }
+            else {
+                result.put('userType', 'Other');
+                System.debug('User has standard access - userType set to Other');
+            }
+            
+            System.debug('Final result: ' + result);
+            System.debug('=== End getCurrentUserInfo Debug ===');
+            
         } catch (Exception e) {
             System.debug('Error getting current user info: ' + e.getMessage());
+            System.debug('Stack trace: ' + e.getStackTraceString());
             result.put('id', UserInfo.getUserId());
             result.put('name', UserInfo.getName());
+            result.put('firstName', UserInfo.getFirstName() != null ? UserInfo.getFirstName() : '');
             result.put('email', '');
+            result.put('profileName', '');
+            result.put('roleName', '');
+            result.put('userType', 'Other');
         }
         return result;
+    }
+    
+    @AuraEnabled(cacheable=true)
+    public static Map<String, Object> getUserPipelineAnalytics(String userName) {
+        Map<String, Object> analytics = new Map<String, Object>();
+        
+        try {
+            // Get candidates for this specific Sales Manager by highest level achieved
+            List<AggregateResult> levelResults = [
+                SELECT Highest_Level_Achieved__c level, COUNT(Id) cnt
+                FROM Candidate__c 
+                WHERE Status__c = 'Active/In Process' 
+                AND Sales_Manager__c = :userName
+                GROUP BY Highest_Level_Achieved__c
+                ORDER BY Highest_Level_Achieved__c
+            ];
+            
+            // Format level data
+            List<Map<String, Object>> levelData = new List<Map<String, Object>>();
+            Integer totalCount = 0;
+            
+            for (AggregateResult result : levelResults) {
+                String level = result.get('level') != null ? (String)result.get('level') : 'Not Set';
+                Integer count = (Integer)result.get('cnt');
+                totalCount += count;
+                
+                levelData.add(new Map<String, Object>{
+                    'label' => level,
+                    'value' => count
+                });
+            }
+            
+            analytics.put('levelData', levelData);
+            analytics.put('total', totalCount);
+            
+        } catch (Exception e) {
+            System.debug('Error in getUserPipelineAnalytics: ' + e.getMessage());
+            analytics.put('levelData', new List<Map<String, Object>>());
+            analytics.put('total', 0);
+        }
+        
+        return analytics;
     }
 
     @AuraEnabled
@@ -1496,6 +1896,15 @@ public inherited sharing class RecruiterDashboardController {
         } catch (Exception e) {
             System.debug('Error updating candidate: ' + e.getMessage());
             throw new AuraHandledException('Failed to update candidate: ' + e.getMessage());
+        }
+    }
+    
+    // Comparator class to sort interview counts descending
+    private class InterviewCountComparator implements Comparator<Map<String, Object>> {
+        public Integer compare(Map<String, Object> a, Map<String, Object> b) {
+            Integer countA = (Integer)a.get('count');
+            Integer countB = (Integer)b.get('count');
+            return countB - countA; // Descending order
         }
     }
 }

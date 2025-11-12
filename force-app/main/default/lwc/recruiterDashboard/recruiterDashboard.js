@@ -1,5 +1,6 @@
 import { LightningElement, wire, track } from 'lwc';
 import getDashboardData from '@salesforce/apex/RecruiterDashboardController.getDashboardData';
+import getUserRecentActivity from '@salesforce/apex/RecruiterDashboardController.getUserRecentActivity';
 import getRachyllCallDetails from '@salesforce/apex/RecruiterDashboardController.getRachyllCallDetails';
 import completeCallTask from '@salesforce/apex/RecruiterDashboardController.completeCallTask';
 import completeCallWithNotesAndSchedule from '@salesforce/apex/RecruiterDashboardController.completeCallWithNotesAndSchedule';
@@ -9,6 +10,7 @@ import getPastDueCalls from '@salesforce/apex/RecruiterDashboardController.getPa
 import createCandidate from '@salesforce/apex/RecruiterDashboardController.createCandidate';
 import updateCandidate from '@salesforce/apex/RecruiterDashboardController.updateCandidate';
 import getCurrentUserInfo from '@salesforce/apex/RecruiterDashboardController.getCurrentUserInfo';
+import getUserPipelineAnalytics from '@salesforce/apex/RecruiterDashboardController.getUserPipelineAnalytics';
 import searchContacts from '@salesforce/apex/RecruiterDashboardController.searchContacts';
 import createScheduledCall from '@salesforce/apex/RecruiterDashboardController.createScheduledCall';
 import getActiveCandidates from '@salesforce/apex/RecruiterDashboardController.getActiveCandidates';
@@ -28,6 +30,10 @@ export default class RecruiterDashboard extends NavigationMixin(LightningElement
   userScheduledCalls = 0;
   userPastDueCalls = 0;
   userTotalAssigned = 0;
+  
+  // User Pipeline Data (for Sales Managers)
+  @track userPipelineData = [];
+  userPipelineTotal = 0;
 
   // Contract Activity Statistics
   contractAAdded = 3;
@@ -45,7 +51,7 @@ export default class RecruiterDashboard extends NavigationMixin(LightningElement
   contractAJan1 = 125;
 
   connectedCallback() {
-    console.log('RecruiterDashboard connected');
+    console.log('🚀🚀🚀 RecruiterDashboard connected 🚀🚀🚀');
     // Initialize call management properties
     this.callsList = [];
     this.callType = '';
@@ -57,25 +63,80 @@ export default class RecruiterDashboard extends NavigationMixin(LightningElement
     this.loadContractPerformanceData();
     
     // Get current user information
+    console.log('🎯 About to call fetchCurrentUser() 🎯');
     this.fetchCurrentUser();
+    console.log('✨ fetchCurrentUser() called (async, may not be complete yet) ✨');
     
     // Load call lists for dashboard display
     this.loadCallLists();
   }
   
-  async fetchCurrentUser() {
+  fetchCurrentUser() {
+    console.log('🚀🚀🚀 fetchCurrentUser START (using .then() syntax) 🚀🚀🚀');
+    
+    getCurrentUserInfo()
+      .then(userInfo => {
+        console.log('✅✅✅ SUCCESS! User info received ✅✅✅');
+        console.log('UserInfo:', JSON.stringify(userInfo));
+        console.log('FirstName:', userInfo.firstName);
+        console.log('Name:', userInfo.name);
+        
+        if (!userInfo) {
+          console.error('❌ userInfo is null or undefined');
+          throw new Error('No user info returned');
+        }
+        
+        // Set reactive properties
+        this.userName = userInfo.name || 'Unknown';
+        this.userEmail = userInfo.email || '';
+        this.userId = userInfo.id || '';
+        this.userType = userInfo.userType || 'Other';
+        this.userProfileName = userInfo.profileName || '';
+        this.userRoleName = userInfo.roleName || '';
+        this.userFirstName = userInfo.firstName || 'User';
+        
+        console.log('✨ Properties set successfully ✨');
+        console.log('this.userFirstName:', this.userFirstName);
+        console.log('this.userName:', this.userName);
+        console.log('this.computedUserFirstName:', this.computedUserFirstName);
+        
+        // Load pipeline data if Sales Manager
+        if (this.userType === 'Sales Manager') {
+          console.log('Loading Sales Manager pipeline data...');
+          this.loadUserPipelineData();
+        }
+      })
+      .catch(error => {
+        console.error('❌❌❌ ERROR in getCurrentUserInfo ❌❌❌');
+        console.error('Error:', error);
+        console.error('Error.message:', error?.message);
+        console.error('Error.body:', error?.body);
+        console.error('Error.statusText:', error?.statusText);
+        
+        // Set fallback values
+        this.userName = 'Recruiter';
+        this.userEmail = '';
+        this.userId = '';
+        this.userType = 'Other';
+        this.userFirstName = 'Recruiter';
+        this.userProfileName = '';
+        this.userRoleName = '';
+        
+        console.log('Fallback values set');
+      });
+  }
+  
+  async loadUserPipelineData() {
     try {
-      // Fetch current user information from Salesforce
-      const userInfo = await getCurrentUserInfo();
-      this.currentUser.name = userInfo.name;
-      this.currentUser.email = userInfo.email;
-      this.currentUser.id = userInfo.id;
+      const pipelineData = await getUserPipelineAnalytics({ userName: this.userName });
+      if (pipelineData && pipelineData.levelData) {
+        this.userPipelineData = pipelineData.levelData;
+        this.userPipelineTotal = pipelineData.total || 0;
+      }
     } catch (error) {
-      console.error('Error fetching current user:', error);
-      // Set default values if there's an error
-      this.currentUser.name = 'Recruiter';
-      this.currentUser.email = '';
-      this.currentUser.id = '';
+      console.error('Error loading user pipeline data:', error);
+      this.userPipelineData = [];
+      this.userPipelineTotal = 0;
     }
   }
 
@@ -140,6 +201,7 @@ export default class RecruiterDashboard extends NavigationMixin(LightningElement
   @track callNotes = '';
   @track nextCallDate = null;
   @track scheduleNextCall = false;
+  @track editableCallDueDate = '';
   
   // Detailed Metrics Modals
   @track showCandidateModal = false;
@@ -307,14 +369,27 @@ export default class RecruiterDashboard extends NavigationMixin(LightningElement
   @track ticketAttachments = [];
   @track allowScreenCapture = true;
 
-  // User Information
-  currentUser = {
-    name: '', // Will be populated from Salesforce
-    email: '',
-    phone: '',
-    department: '',
-    id: ''
-  };
+  // User Information - Individual tracked properties for reactivity
+  @track userName = '';
+  @track userFirstName = '';
+  @track userEmail = '';
+  @track userId = '';
+  @track userType = 'Other';
+  @track userProfileName = '';
+  @track userRoleName = '';
+  
+  // Legacy currentUser object for backward compatibility
+  get currentUser() {
+    return {
+      name: this.userName,
+      firstName: this.userFirstName,
+      email: this.userEmail,
+      id: this.userId,
+      userType: this.userType,
+      profileName: this.userProfileName,
+      roleName: this.userRoleName
+    };
+  }
 
   // Computed properties for header
   get timeBasedGreeting() {
@@ -330,17 +405,21 @@ export default class RecruiterDashboard extends NavigationMixin(LightningElement
     }
   }
 
-  get userFirstName() {
-    if (!this.currentUser.name) {
+  get computedUserFirstName() {
+    // Use firstName from backend if available
+    if (this.userFirstName) {
+      return this.userFirstName;
+    }
+    if (!this.userName) {
       return 'Recruiter';
     }
-    // Extract first name from full name
-    const nameParts = this.currentUser.name.trim().split(' ');
+    // Extract first name from full name as fallback
+    const nameParts = this.userName.trim().split(' ');
     return nameParts[0] || 'Recruiter';
   }
 
   get callManagementTitle() {
-    return `🚨 ${this.userFirstName}'s Call Management - Priority Section`;
+    return `🚨 ${this.computedUserFirstName}'s Call Management - Priority Section`;
   }
 
   // Reschedule Calls Data
@@ -570,13 +649,45 @@ export default class RecruiterDashboard extends NavigationMixin(LightningElement
   callsThisMonth = 0;
   
   // Recent Activity
-  recentActivities = [];
+  @track recentActivities = [];
+  @track recentActivityError;
   
   // Interview Type Distribution
   interviewTypeData = [];
   
   // Wire result for refresh capability
   wiredDashboardResult;
+  
+  // Wire for user-specific recent activity
+  @wire(getUserRecentActivity)
+  wiredRecentActivity({ error, data }) {
+    if (data) {
+      console.log('Recent activity data received:', data);
+      // Format the due date for display
+      this.recentActivities = data.map(activity => {
+        const formattedActivity = { ...activity };
+        if (formattedActivity.dueDate) {
+          const dueDate = new Date(formattedActivity.dueDate);
+          formattedActivity.formattedDueDate = dueDate.toLocaleDateString('en-US', { 
+            month: 'short', 
+            day: 'numeric',
+            year: 'numeric'
+          });
+        }
+        return formattedActivity;
+      });
+      this.recentActivityError = undefined;
+    } else if (error) {
+      console.error('Error loading recent activity:', error);
+      this.recentActivities = [];
+      this.recentActivityError = error;
+    }
+  }
+  
+  // Getter for template compatibility
+  get recentActivity() {
+    return this.recentActivities || [];
+  }
 
   @wire(getDashboardData)
   wiredDashboardData(result) {
@@ -742,9 +853,7 @@ export default class RecruiterDashboard extends NavigationMixin(LightningElement
       // Format data for pie chart - focusing on Sales Manager data
       if (data.byManager && data.byManager.length > 0) {
         this.pieChartData = this.formatPieChart(data.byManager);
-        console.log('DEBUG: Pie chart data set:', this.pieChartData);
       } else {
-        console.log('DEBUG: No byManager data available');
         this.pieChartData = [];
       }
       
@@ -759,7 +868,6 @@ export default class RecruiterDashboard extends NavigationMixin(LightningElement
   // Helper method to format data for pie chart by Sales Manager
   formatPieChart(managerData) {
     if (!managerData || managerData.length === 0) {
-      console.log('DEBUG: No manager data available for pie chart');
       return [];
     }
     
@@ -767,8 +875,6 @@ export default class RecruiterDashboard extends NavigationMixin(LightningElement
       '#0176d3', '#06a59a', '#e74c3c', '#f39c12', '#9b59b6',
       '#2ecc71', '#34495e', '#e67e22', '#3498db', '#1abc9c'
     ];
-    
-    console.log('DEBUG: Raw manager data:', managerData);
     
     // Calculate total for percentages
     const total = managerData.reduce((sum, item) => sum + (item.Count || item.value || 0), 0);
@@ -804,11 +910,11 @@ export default class RecruiterDashboard extends NavigationMixin(LightningElement
         value: item.value,
         percentage: item.percentage,
         color: colors[index % colors.length],
+        colorStyle: `background-color: ${colors[index % colors.length]}`,
         pathData: pathData
       };
     });
     
-    console.log('DEBUG: Formatted pie chart data (sorted by percentage):', pieData);
     return pieData;
   }
 
@@ -1020,8 +1126,13 @@ export default class RecruiterDashboard extends NavigationMixin(LightningElement
   }
 
   get totalInterviews() {
-    if (!this.interviewerLeaderboard) return 0;
-    return this.interviewerLeaderboard.reduce((sum, interviewer) => sum + interviewer.total, 0);
+    if (!this.interviewStats || !this.interviewStats.total) return 0;
+    return this.interviewStats.total;
+  }
+  
+  get allTimeTotal() {
+    if (!this.interviewStats || !this.interviewStats.allTimeTotal) return 0;
+    return this.interviewStats.allTimeTotal;
   }
 
   get activeInterviewers() {
@@ -1046,6 +1157,33 @@ export default class RecruiterDashboard extends NavigationMixin(LightningElement
   // Format success rate as percentage
   get formattedSuccessRate() {
     return this.successRate + '%';
+  }
+  
+  // Determine if user is Director of Recruiting
+  get isDirector() {
+    return this.currentUser.userType === 'Director';
+  }
+  
+  // Determine if user is Sales Manager
+  get isSalesManager() {
+    return this.currentUser.userType === 'Sales Manager';
+  }
+  
+  // Get pipeline title based on user type
+  get pipelineTitle() {
+    if (this.isSalesManager) {
+      const firstName = this.userFirstName || 'Your';
+      return `👥 ${firstName}'s Pipeline by Highest Level Achieved`;
+    }
+    return '👥 Candidate Pipeline';
+  }
+  
+  // Get user pipeline pie chart data (for Sales Managers)
+  get userPieChartData() {
+    if (!this.userPipelineData || this.userPipelineData.length === 0) {
+      return null;
+    }
+    return this.formatPieChart(this.userPipelineData);
   }
   
   // Calculate total candidates for pie chart center
@@ -1403,38 +1541,72 @@ export default class RecruiterDashboard extends NavigationMixin(LightningElement
   
   async loadCallLists() {
     try {
+      console.log('🔄 Loading call lists for current user...');
+      
       // Load scheduled calls
+      console.log('📞 Fetching scheduled calls...');
       const scheduledCalls = await getRachyllCallDetails({ callType: 'scheduled' });
+      console.log('✅ Scheduled calls received:', scheduledCalls);
+      console.log('📊 Number of scheduled calls:', scheduledCalls?.length || 0);
+      
       this.scheduledCallsList = this.formatCallsForDisplay(scheduledCalls).slice(0, 5);
+      console.log('📋 Scheduled calls list set:', this.scheduledCallsList);
       
       // Load past due calls
+      console.log('⚠️ Fetching past due calls...');
       const pastDueCalls = await getRachyllCallDetails({ callType: 'pastdue' });
-      this.pastDueCallsList = this.formatCallsForDisplay(pastDueCalls).slice(0, 5);
+      console.log('✅ Past due calls received:', pastDueCalls);
+      console.log('📊 Number of past due calls:', pastDueCalls?.length || 0);
       
-      console.log('Scheduled calls loaded:', this.scheduledCallsList);
-      console.log('Past due calls loaded:', this.pastDueCallsList);
+      this.pastDueCallsList = this.formatCallsForDisplay(pastDueCalls).slice(0, 5);
+      console.log('📋 Past due calls list set:', this.pastDueCallsList);
+      
+      console.log('✅ Call lists loaded successfully');
       
     } catch (error) {
-      console.error('Error loading call lists:', error);
+      console.error('❌ Error loading call lists:', error);
+      console.error('Error message:', error?.message);
+      console.error('Error body:', error?.body);
+      console.error('Error stack:', error?.stack);
     }
   }
 
   formatCallsForDisplay(calls) {
+    if (!calls || calls.length === 0) {
+      console.log('No calls to format');
+      return [];
+    }
+    
+    console.log('Formatting calls for display:', calls);
+    
     return calls.map(call => {
-      const dueDate = new Date(call.dueDate);
-      const formattedDate = dueDate.toLocaleDateString('en-US', { 
-        month: 'short', 
-        day: 'numeric' 
-      });
-      const formattedTime = dueDate.toLocaleTimeString('en-US', { 
-        hour: 'numeric', 
-        minute: '2-digit',
-        hour12: true 
-      });
+      let formattedDate = 'No date';
+      let formattedTime = '';
       
-      return {
+      try {
+        if (call.dueDate) {
+          const dueDate = new Date(call.dueDate);
+          formattedDate = dueDate.toLocaleDateString('en-US', { 
+            month: 'short', 
+            day: 'numeric',
+            year: 'numeric'
+          });
+          formattedTime = dueDate.toLocaleTimeString('en-US', { 
+            hour: 'numeric', 
+            minute: '2-digit',
+            hour12: true 
+          });
+        }
+      } catch (error) {
+        console.error('Error formatting date for call:', call.id, error);
+      }
+      
+      // Better candidate name resolution
+      const candidateName = call.relatedPerson || call.relatedTo || call.subject || 'Unknown Contact';
+      
+      const formattedCall = {
         id: call.id,
-        candidateName: call.relatedPerson || call.subject || 'Unknown Contact',
+        candidateName: candidateName,
         subject: call.subject,
         formattedDate: formattedDate,
         formattedTime: formattedTime,
@@ -1447,6 +1619,9 @@ export default class RecruiterDashboard extends NavigationMixin(LightningElement
         relatedPersonId: call.relatedPersonId,
         daysOverdue: call.daysOverdue || 0
       };
+      
+      console.log('Formatted call:', formattedCall);
+      return formattedCall;
     });
   }
 
@@ -1488,6 +1663,135 @@ export default class RecruiterDashboard extends NavigationMixin(LightningElement
         variant: 'error'
       }));
     }
+  }
+
+  // Recent Activity Handlers
+  handleActivityClick(event) {
+    const activityId = event.currentTarget.dataset.activityId;
+    console.log('Activity clicked:', activityId);
+    
+    // Find the activity in the recentActivities array
+    const activity = this.recentActivities.find(a => a.id === activityId);
+    
+    if (!activity) {
+      console.error('Activity not found:', activityId);
+      return;
+    }
+    
+    console.log('Activity type:', activity.type, 'ID:', activityId);
+    
+    // Determine the type based on the ID suffix
+    if (activityId.endsWith('_interview')) {
+      // Handle interview click - open interview detail/edit modal
+      this.handleInterviewActivityClick(activity, activityId);
+    } else if (activityId.endsWith('_candidate')) {
+      // Handle candidate click - open candidate detail modal
+      this.handleCandidateActivityClick(activity, activityId);
+    } else if (activityId.endsWith('_task')) {
+      // Handle task/call click - open call completion modal
+      this.handleTaskActivityClick(activity, activityId);
+    }
+  }
+  
+  handleInterviewActivityClick(activity, activityId) {
+    // Extract the real Interview ID (remove the _interview suffix)
+    const interviewId = activityId.replace('_interview', '');
+    console.log('Opening interview modal for:', interviewId);
+    
+    // For now, show an alert - you can enhance this to open an interview detail modal
+    this.showToast('Interview Details', `Interview: ${activity.description} for ${activity.candidateName}`, 'info');
+    
+    // TODO: Implement interview detail modal
+    // this.selectedInterview = { id: interviewId, ...activity };
+    // this.showInterviewDetailModal = true;
+  }
+  
+  handleCandidateActivityClick(activity, activityId) {
+    // Extract the real Candidate ID (remove the _candidate suffix)
+    const candidateId = activityId.replace('_candidate', '');
+    console.log('Opening candidate modal for:', candidateId);
+    
+    // Load and open the candidate detail modal
+    this.loadCandidateDetail(candidateId);
+  }
+  
+  handleTaskActivityClick(activity, activityId) {
+    // Extract the real Task ID (remove the _task suffix)
+    const taskId = activityId.replace('_task', '');
+    console.log('Opening task/call completion modal for:', taskId);
+    
+    // Set up the call completion data with due date
+    this.selectedCall = {
+      id: taskId,
+      subject: activity.description,
+      candidateName: activity.candidateName,
+      status: activity.status,
+      dueDate: activity.dueDate,
+      formattedDueDate: activity.formattedDueDate
+    };
+    
+    // Initialize the editable due date field
+    this.editableCallDueDate = activity.dueDate || '';
+    
+    this.callCompletionSubject = activity.description;
+    this.callCompletionNotes = '';
+    this.callCompletionOutcome = '';
+    this.callCompletionNextSteps = '';
+    
+    // Open the call completion modal
+    this.showCallCompletionModal = true;
+  }
+  
+  loadCandidateDetail(candidateId) {
+    console.log('Loading candidate details for ID:', candidateId);
+    
+    // Find the candidate in active candidates list or fetch it
+    getActiveCandidates()
+      .then(candidates => {
+        const candidate = candidates.find(c => c.id === candidateId);
+        if (candidate) {
+          this.openCandidateDetailModal(candidate);
+        } else {
+          console.error('Candidate not found in active candidates list');
+          this.showToast('Error', 'Could not load candidate details', 'error');
+        }
+      })
+      .catch(error => {
+        console.error('Error loading candidate:', error);
+        this.showToast('Error', 'Failed to load candidate details', 'error');
+      });
+  }
+  
+  openCandidateDetailModal(candidate) {
+    // Populate the candidate detail fields
+    this.selectedCandidateDetail = candidate;
+    this.candidateEditId = candidate.id;
+    this.candidateEditName = candidate.name;
+    this.candidateEditEmail = candidate.email;
+    this.candidateEditPhone = candidate.phone;
+    this.candidateEditPosition = candidate.position;
+    this.candidateEditStatus = candidate.status;
+    this.candidateEditOfficeLocation = candidate.location || '';
+    this.candidateEditSalesManager = candidate.ownerName || '';
+    this.candidateEditRecruiter = '';
+    this.candidateEditNextMeeting = candidate.nextMeeting || '';
+    this.candidateEditSummary = '';
+    this.candidateEditAllNotes = '';
+    this.candidateEditCreatedDate = candidate.createdDate;
+    this.candidateEditLastModified = candidate.lastModified;
+    
+    // Open the modal
+    this.showCandidateDetailModal = true;
+  }
+  
+  handleActivityHover(event) {
+    event.currentTarget.style.boxShadow = '0 2px 8px rgba(0, 0, 0, 0.15)';
+    event.currentTarget.style.transform = 'translateY(-2px)';
+  }
+  
+  handleActivityHoverOut(event) {
+    event.currentTarget.style.boxShadow = 'none';
+    event.currentTarget.style.transform = 'translateY(0)';
   }
 
   handleCompleteCall(event) {
@@ -2089,7 +2393,7 @@ export default class RecruiterDashboard extends NavigationMixin(LightningElement
   openCreateTicketModal() {
     this.showCreateTicketModal = true;
     // Pre-fill user information
-    this.ticketContact = `${this.currentUser.name} (${this.currentUser.email})`;
+    this.ticketContact = `${this.userName} (${this.userEmail})`;
   }
 
   closeCreateTicketModal() {
@@ -2109,6 +2413,19 @@ export default class RecruiterDashboard extends NavigationMixin(LightningElement
       this.scheduleCallSubject = 'Call';
     }, 10);
     this.showScheduleCallModal = true;
+  }
+  
+  openScheduleInterviewModal() {
+    console.log('Schedule Interview button clicked');
+    // For now, redirect to the standard Lightning navigation or open a candidate selection modal
+    // This will navigate to the Interview object to create a new record
+    this[NavigationMixin.Navigate]({
+      type: 'standard__objectPage',
+      attributes: {
+        objectApiName: 'Interview__c',
+        actionName: 'new'
+      }
+    });
   }
 
   openRescheduleCallsModal() {
@@ -3232,6 +3549,7 @@ export default class RecruiterDashboard extends NavigationMixin(LightningElement
     this.needsFollowUp = false;
     this.followUpDate = '';
     this.followUpTime = '';
+    this.editableCallDueDate = '';
     this.createNewCall = false;
     this.newCallSubject = '';
     this.newCallDate = '';
@@ -3246,6 +3564,10 @@ export default class RecruiterDashboard extends NavigationMixin(LightningElement
 
   handleCallNotesChange(event) {
     this.callNotes = event.detail.value;
+  }
+
+  handleCallDueDateChange(event) {
+    this.editableCallDueDate = event.detail.value;
   }
 
   handleFollowUpDateChange(event) {
@@ -3332,7 +3654,9 @@ export default class RecruiterDashboard extends NavigationMixin(LightningElement
       const result = await completeCallWithNotesAndSchedule({ 
         taskId: this.selectedCall.id,
         notes: this.callNotes,
-        outcome: this.callOutcome
+        outcome: this.callOutcome,
+        nextCallDate: null,
+        newDueDate: this.editableCallDueDate || null
       });
       
       const successMessage = `Call completed successfully for ${this.selectedCall.candidateName}`;
