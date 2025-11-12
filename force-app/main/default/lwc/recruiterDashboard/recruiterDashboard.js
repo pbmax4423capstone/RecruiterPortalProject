@@ -15,6 +15,7 @@ import searchContacts from '@salesforce/apex/RecruiterDashboardController.search
 import createScheduledCall from '@salesforce/apex/RecruiterDashboardController.createScheduledCall';
 import getActiveCandidates from '@salesforce/apex/RecruiterDashboardController.getActiveCandidates';
 import getActiveCandidateAnalytics from '@salesforce/apex/RecruiterDashboardController.getActiveCandidateAnalytics';
+import getCandidatesBySalesManager from '@salesforce/apex/RecruiterDashboardController.getCandidatesBySalesManager';
 import getInterviewStatsByType from '@salesforce/apex/RecruiterDashboardController.getInterviewStatsByType';
 import getInterviewStatsByInterviewer from '@salesforce/apex/RecruiterDashboardController.getInterviewStatsByInterviewer';
 import getInterviewTypeWithInterviewerStats from '@salesforce/apex/RecruiterDashboardController.getInterviewTypeWithInterviewerStats';
@@ -226,6 +227,13 @@ export default class RecruiterDashboard extends NavigationMixin(LightningElement
   // Candidate Detail Modal
   @track showCandidateDetailModal = false;
   @track selectedCandidateDetail = null;
+  
+  // Sales Manager Candidates Modal
+  @track showSalesManagerCandidatesModal = false;
+  @track salesManagerCandidatesModalTitle = '';
+  @track salesManagerCandidates = [];
+  @track isLoadingSalesManagerCandidates = false;
+  @track selectedSalesManager = '';
   
   // Individual form fields for better reactivity
   @track candidateEditId = '';
@@ -2012,6 +2020,67 @@ export default class RecruiterDashboard extends NavigationMixin(LightningElement
     this.showCallStatsModal = false;
     this.callStatsModalData = [];
     this.isLoadingCallStats = false;
+  }
+
+  // Sales Manager Candidates Modal Handlers
+  closeSalesManagerCandidatesModal() {
+    this.showSalesManagerCandidatesModal = false;
+    this.salesManagerCandidatesModalTitle = '';
+    this.salesManagerCandidates = [];
+    this.isLoadingSalesManagerCandidates = false;
+    this.selectedSalesManager = '';
+  }
+
+  async handleSalesManagerClick(event) {
+    event.preventDefault();
+    event.stopPropagation();
+    const salesManager = event.currentTarget.dataset.manager;
+    console.log('=== Sales Manager Button Clicked ===');
+    console.log('Sales manager clicked:', salesManager);
+    console.log('Event target:', event.target);
+    console.log('Event currentTarget:', event.currentTarget);
+    
+    this.selectedSalesManager = salesManager;
+    this.salesManagerCandidatesModalTitle = `Active/In Process Candidates - ${salesManager}`;
+    this.isLoadingSalesManagerCandidates = true;
+    this.showSalesManagerCandidatesModal = true;
+    
+    try {
+      console.log('Fetching candidates for:', salesManager);
+      const result = await getCandidatesBySalesManager({ salesManager: salesManager });
+      console.log('Candidates fetched:', result);
+      
+      if (result && result.length > 0) {
+        this.salesManagerCandidates = result.map(candidate => ({
+          id: candidate.id,
+          name: candidate.name,
+          email: candidate.email,
+          phone: candidate.phone,
+          emailLink: candidate.emailLink || '',
+          phoneLink: candidate.phoneLink || '',
+          position: candidate.position || 'Insurance Agent',
+          status: candidate.status,
+          location: candidate.location || 'Remote',
+          salesManager: candidate.salesManager,
+          recruiter: candidate.recruiter || 'Unassigned',
+          nextMeeting: candidate.nextMeeting || 'Not Scheduled',
+          leadSource: candidate.leadSource || 'Recruiter Portal',
+          experience: candidate.experience || 'To Be Determined',
+          createdDate: candidate.createdDate,
+          lastModified: candidate.lastModified
+        }));
+        console.log('Final sales manager candidates:', this.salesManagerCandidates);
+      } else {
+        console.log('No candidates found for', salesManager);
+        this.salesManagerCandidates = [];
+      }
+    } catch (error) {
+      console.error('Error loading sales manager candidates:', error);
+      this.salesManagerCandidates = [];
+      this.showToast('Error', 'Failed to load candidates: ' + (error.body?.message || error.message), 'error');
+    } finally {
+      this.isLoadingSalesManagerCandidates = false;
+    }
   }
 
   // Active Candidates Click Handler

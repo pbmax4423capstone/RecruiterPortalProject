@@ -1899,6 +1899,63 @@ public inherited sharing class RecruiterDashboardController {
         }
     }
     
+    /**
+     * Get Active/In Process candidates for a specific sales manager
+     * @param salesManager The name of the sales manager
+     * @return List of candidates with their details
+     */
+    @AuraEnabled(cacheable=true)
+    public static List<Map<String, Object>> getCandidatesBySalesManager(String salesManager) {
+        List<Map<String, Object>> candidateList = new List<Map<String, Object>>();
+        
+        try {
+            System.debug('Getting candidates for sales manager: ' + salesManager);
+            
+            // Query Active/In Process candidates for the specified sales manager
+            List<Candidate__c> candidates = [
+                SELECT Id, Name, Email__c, Phone__c, Position__c, Status__c,
+                       Office_Location_Picklist__c, Sales_Manager__c, 
+                       RecruiterPicklist__c, Next_Meeting_Date__c,
+                       Lead_Source__c, Experience_Level__c, CreatedDate, LastModifiedDate
+                FROM Candidate__c 
+                WHERE Status__c = 'Active/In Process'
+                AND Sales_Manager__c = :salesManager
+                ORDER BY Name ASC
+            ];
+            
+            System.debug('Found ' + candidates.size() + ' candidates for ' + salesManager);
+            
+            // Format each candidate
+            for (Candidate__c candidate : candidates) {
+                Map<String, Object> candidateData = new Map<String, Object>();
+                candidateData.put('id', candidate.Id);
+                candidateData.put('name', candidate.Name);
+                candidateData.put('email', candidate.Email__c != null ? candidate.Email__c : '');
+                candidateData.put('phone', candidate.Phone__c != null ? candidate.Phone__c : '');
+                candidateData.put('emailLink', candidate.Email__c != null ? 'mailto:' + candidate.Email__c : '');
+                candidateData.put('phoneLink', candidate.Phone__c != null ? 'tel:' + candidate.Phone__c : '');
+                candidateData.put('position', candidate.Position__c != null ? candidate.Position__c : 'Insurance Agent');
+                candidateData.put('status', candidate.Status__c);
+                candidateData.put('location', candidate.Office_Location_Picklist__c != null ? candidate.Office_Location_Picklist__c : 'Remote');
+                candidateData.put('salesManager', candidate.Sales_Manager__c);
+                candidateData.put('recruiter', candidate.RecruiterPicklist__c != null ? candidate.RecruiterPicklist__c : 'Unassigned');
+                candidateData.put('nextMeeting', candidate.Next_Meeting_Date__c != null ? String.valueOf(candidate.Next_Meeting_Date__c) : 'Not Scheduled');
+                candidateData.put('leadSource', candidate.Lead_Source__c != null ? candidate.Lead_Source__c : 'Recruiter Portal');
+                candidateData.put('experience', candidate.Experience_Level__c != null ? candidate.Experience_Level__c : 'To Be Determined');
+                candidateData.put('createdDate', candidate.CreatedDate);
+                candidateData.put('lastModified', candidate.LastModifiedDate);
+                
+                candidateList.add(candidateData);
+            }
+            
+        } catch (Exception e) {
+            System.debug('Error in getCandidatesBySalesManager: ' + e.getMessage());
+            throw new AuraHandledException('Failed to get candidates: ' + e.getMessage());
+        }
+        
+        return candidateList;
+    }
+    
     // Comparator class to sort interview counts descending
     private class InterviewCountComparator implements Comparator<Map<String, Object>> {
         public Integer compare(Map<String, Object> a, Map<String, Object> b) {
