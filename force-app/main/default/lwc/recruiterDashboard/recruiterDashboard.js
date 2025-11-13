@@ -292,13 +292,12 @@ export default class RecruiterDashboard extends NavigationMixin(LightningElement
   ];
 
   salesManagerOptions = [
-    { label: 'Diljeet Masuda', value: 'Diljeet Masuda' },
-    { label: 'Scott Primm', value: 'Scott Primm' },
-    { label: 'Son Le', value: 'Son Le' },
+    { label: 'Elizabeth Kagele', value: 'Elizabeth Kagele' },
+    { label: 'Bradley Sofonia', value: 'Bradley Sofonia' },
     { label: 'Tim Denton', value: 'Tim Denton' },
+    { label: 'Son Le', value: 'Son Le' },
     { label: 'Van Hess', value: 'Van Hess' },
-    { label: 'Michael Yang', value: 'Michael Yang' },
-    { label: 'Brad Sofonia', value: 'Brad Sofonia' }
+    { label: 'Michael Yang', value: 'Michael Yang' }
   ];
 
   recruiterOptions = [
