@@ -856,8 +856,8 @@ export default class RecruiterDashboard extends NavigationMixin(LightningElement
       // Calculate angle for this segment
       const segmentAngle = total > 0 ? (item.value / total) * 360 : 0;
       
-      // Generate SVG path data for pie segment
-      const pathData = this.createPiePath(110, 110, 90, currentAngle, currentAngle + segmentAngle);
+      // Generate SVG path data for pie segment (200, 200 center, 170 radius for 400x400 viewBox)
+      const pathData = this.createPiePath(200, 200, 170, currentAngle, currentAngle + segmentAngle);
       
       currentAngle += segmentAngle;
       

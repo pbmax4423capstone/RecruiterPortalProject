@@ -245,36 +245,14 @@
               <template if:true={pieChartData}>
                 <div class="slds-grid slds-wrap slds-m-bottom_medium">
                   <div class="slds-col slds-size_12">
-                    <div class="slds-text-align_center">
-                      <h3 class="slds-text-heading_small slds-m-bottom_small">📊 Active/In Progress Candidates by Sales Manager</h3>
-                      <div class="slds-grid slds-grid_align-center">
-                        
-                        <!-- Pie Chart -->
-                        <div class="slds-col slds-size_6-of-12">
-                          <div class="pie-chart-container">
-                            <svg width="220" height="220" viewBox="0 0 220 220" class="pie-chart">
-                              <template for:each={pieChartData} for:item="segment" for:index="index">
-                                <path key={segment.label} 
-                                      d={segment.pathData} 
-                                      fill={segment.color}
-                                      stroke="#fff"
-                                      stroke-width="2"
-                                      class="pie-segment"
-                                      data-manager={segment.label}
-                                      onclick={handleSalesManagerClick}
-                                      style="cursor: pointer;">
-                                </path>
-                              </template>
-                            </svg>
-                          </div>
-                        </div>
-                      </div>
+                    <h3 class="slds-text-heading_small slds-m-bottom_medium slds-text-align_center">📊 Active/In Progress Candidates by Sales Manager</h3>
+                    <div class="slds-grid slds-gutters" style="align-items: center;">
                       
-                      <!-- Legend -->
-                      <div class="slds-col slds-size_6-of-12">
+                      <!-- Manager Legend List (Left Side) -->
+                      <div class="slds-col slds-size_1-of-3">
                         <div class="chart-legend">
                           <template for:each={pieChartData} for:item="item">
-                            <div key={item.label} class="legend-item slds-m-bottom_x-small">
+                            <div key={item.label} class="legend-item slds-m-bottom_small">
                               <div class="slds-grid slds-grid_vertical-align-center">
                                 <div class="legend-color-box" data-color={item.color}></div>
                                 <div class="legend-text-wrapper slds-p-left_small">
@@ -289,10 +267,29 @@
                               </div>
                             </div>
                           </template>
-                          </div>
                         </div>
-                        
                       </div>
+                      
+                      <!-- Pie Chart (Right Side - Larger) -->
+                      <div class="slds-col slds-size_2-of-3">
+                        <div class="pie-chart-container">
+                          <svg width="400" height="400" viewBox="0 0 400 400" class="pie-chart">
+                            <template for:each={pieChartData} for:item="segment" for:index="index">
+                              <path key={segment.label} 
+                                    d={segment.pathData} 
+                                    fill={segment.color}
+                                    stroke="#fff"
+                                    stroke-width="3"
+                                    class="pie-segment"
+                                    data-manager={segment.label}
+                                    onclick={handleSalesManagerClick}
+                                    style="cursor: pointer;">
+                              </path>
+                            </template>
+                          </svg>
+                        </div>
+                      </div>
+                      
                     </div>
                   </div>
                 </div>

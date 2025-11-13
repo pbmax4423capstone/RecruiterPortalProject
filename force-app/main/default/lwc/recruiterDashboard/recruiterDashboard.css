@@ -2168,6 +2168,7 @@ div.candidate-list-item .slds-p-around_small {
 .pie-chart {
   max-width: 100%;
   height: auto;
+  display: block;
 }
 
 .pie-segment {
