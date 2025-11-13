@@ -427,283 +427,145 @@
           <div class="slds-p-around_medium">
             <template if:true={interviewerLeaderboard}>
               
-              <!-- Leaderboard Header Stats -->
-              <div class="slds-grid slds-gutters slds-m-bottom_medium">
-                <div class="slds-col slds-size_6-of-12">
-                  <div class="slds-text-align_center slds-p-around_small" style="background: linear-gradient(135deg, #5a6c7d, #4a5c6d); color: white; border-radius: 8px;">
-                    <div class="slds-text-heading_large">{interviewStats.thisWeek}</div>
-                    <div class="slds-text-body_small">This Week</div>
+              <!-- Top Stats Row -->
+              <div class="slds-grid slds-gutters slds-m-bottom_large">
+                <div class="slds-col slds-size_1-of-2">
+                  <div class="slds-text-align_center slds-p-around_medium" style="background: linear-gradient(135deg, #5a6c7d, #4a5c6d); color: white; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+                    <div class="slds-text-heading_large" style="font-size: 2.5rem; font-weight: 700;">{interviewStats.thisWeek}</div>
+                    <div class="slds-text-body_regular" style="font-size: 0.875rem; margin-top: 0.25rem;">Interviews This Week</div>
                   </div>
                 </div>
-                <div class="slds-col slds-size_6-of-12">
-                  <div class="slds-text-align_center slds-p-around_small" style="background: linear-gradient(135deg, #0176d3, #06a59a); color: white; border-radius: 8px;">
-                    <div class="slds-text-heading_large">{totalInterviews}</div>
-                    <div class="slds-text-body_small">This Month</div>
+                <div class="slds-col slds-size_1-of-2">
+                  <div class="slds-text-align_center slds-p-around_medium" style="background: linear-gradient(135deg, #0176d3, #06a59a); color: white; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+                    <div class="slds-text-heading_large" style="font-size: 2.5rem; font-weight: 700;">{totalInterviews}</div>
+                    <div class="slds-text-body_regular" style="font-size: 0.875rem; margin-top: 0.25rem;">Total This Month</div>
                   </div>
                 </div>
               </div>
 
               <!-- Interview Type Breakdown -->
-              <div class="slds-grid slds-wrap slds-gutters slds-m-bottom_medium">
-                <div class="slds-col slds-size_1-of-5 slds-text-align_center">
-                  <div class="slds-p-around_small" style="background: #0176d3; color: white; border-radius: 8px;">
-                    <div class="slds-text-heading_medium">{interviewStats.attraction}</div>
-                    <div class="slds-text-body_small">Attraction</div>
+              <div class="slds-grid slds-wrap slds-gutters slds-m-bottom_large">
+                <div class="slds-col slds-size_1-of-5">
+                  <div class="slds-text-align_center slds-p-around_small" style="background: #0176d3; color: white; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+                    <div class="slds-text-heading_large" style="font-size: 1.75rem; font-weight: 700;">{interviewStats.attraction}</div>
+                    <div class="slds-text-body_small" style="margin-top: 0.25rem; font-size: 0.75rem;">Attraction</div>
                   </div>
                 </div>
-                <div class="slds-col slds-size_1-of-5 slds-text-align_center">
-                  <div class="slds-p-around_small" style="background: #06a59a; color: white; border-radius: 8px;">
-                    <div class="slds-text-heading_medium">{interviewStats.si1}</div>
-                    <div class="slds-text-body_small">SI 1</div>
+                <div class="slds-col slds-size_1-of-5">
+                  <div class="slds-text-align_center slds-p-around_small" style="background: #06a59a; color: white; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+                    <div class="slds-text-heading_large" style="font-size: 1.75rem; font-weight: 700;">{interviewStats.si1}</div>
+                    <div class="slds-text-body_small" style="margin-top: 0.25rem; font-size: 0.75rem;">SI 1</div>
                   </div>
                 </div>
-                <div class="slds-col slds-size_1-of-5 slds-text-align_center">
-                  <div class="slds-p-around_small" style="background: #e74c3c; color: white; border-radius: 8px;">
-                    <div class="slds-text-heading_medium">{interviewStats.si2}</div>
-                    <div class="slds-text-body_small">SI 2</div>
+                <div class="slds-col slds-size_1-of-5">
+                  <div class="slds-text-align_center slds-p-around_small" style="background: #e74c3c; color: white; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+                    <div class="slds-text-heading_large" style="font-size: 1.75rem; font-weight: 700;">{interviewStats.si2}</div>
+                    <div class="slds-text-body_small" style="margin-top: 0.25rem; font-size: 0.75rem;">SI 2</div>
                   </div>
                 </div>
-                <div class="slds-col slds-size_1-of-5 slds-text-align_center">
-                  <div class="slds-p-around_small" style="background: #f39c12; color: white; border-radius: 8px;">
-                    <div class="slds-text-heading_medium">{interviewStats.si3}</div>
-                    <div class="slds-text-body_small">SI 3</div>
+                <div class="slds-col slds-size_1-of-5">
+                  <div class="slds-text-align_center slds-p-around_small" style="background: #f39c12; color: white; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+                    <div class="slds-text-heading_large" style="font-size: 1.75rem; font-weight: 700;">{interviewStats.si3}</div>
+                    <div class="slds-text-body_small" style="margin-top: 0.25rem; font-size: 0.75rem;">SI 3</div>
                   </div>
                 </div>
-                <div class="slds-col slds-size_1-of-5 slds-text-align_center">
-                  <div class="slds-p-around_small" style="background: #9b59b6; color: white; border-radius: 8px;">
-                    <div class="slds-text-heading_medium">{interviewStats.career}</div>
-                    <div class="slds-text-body_small">Career</div>
+                <div class="slds-col slds-size_1-of-5">
+                  <div class="slds-text-align_center slds-p-around_small" style="background: #9b59b6; color: white; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+                    <div class="slds-text-heading_large" style="font-size: 1.75rem; font-weight: 700;">{interviewStats.career}</div>
+                    <div class="slds-text-body_small" style="margin-top: 0.25rem; font-size: 0.75rem;">Career</div>
                   </div>
                 </div>
               </div>
 
-              <!-- Leaderboard List -->
-              <div class="slds-grid slds-wrap slds-m-bottom_medium">
-                <div class="slds-col slds-size_6-of-12 slds-p-bottom_small" style="border-right: 1px solid #dddbda; padding-right: 0.75rem;">
-                  <div class="slds-text-align_center interview-type-stat" data-type="attraction" style="border-bottom: 1px solid #dddbda; padding-bottom: 0.75rem; margin-bottom: 0.75rem;">
-                    
-                    <!-- Mini Pie Chart for Attraction - Table Layout -->
+              <!-- Interviewer Rankings by Type -->
+              <!-- Interviewer Rankings by Type -->
+              <div class="slds-grid slds-wrap slds-gutters">
+                
+                <!-- Attraction Rankings -->
+                <div class="slds-col slds-size_1-of-2 slds-m-bottom_medium">
+                  <div style="background: #f9f9f9; border-left: 4px solid #0176d3; padding: 1rem; border-radius: 4px;">
+                    <h3 class="slds-text-heading_small slds-m-bottom_small" style="color: #0176d3; font-weight: 700;">🎯 Attraction Interviews</h3>
                     <template if:true={attractionMiniChart}>
                       <template if:true={attractionMiniChart.length}>
-                        <table style="width: 100%; margin-bottom: 0.5rem;">
-                          <tr>
-                            <!-- Legend (Left Side) -->
-                            <td style="width: 70%; vertical-align: top; padding-right: 1rem;">
-                              <template for:each={attractionMiniChart} for:item="segment">
-                                <div key={segment.interviewer} style="display: flex; justify-content: space-between; align-items: center; padding: 0.25rem 0; border-bottom: 1px solid #f3f3f3; font-size: 0.75rem;">
-                                  <div style="display: flex; align-items: center;">
-                                    <div class={segment.colorClass} style="width: 10px; height: 10px; border-radius: 2px; margin-right: 0.5rem;"></div>
-                                    <span style="font-weight: 500;" title={segment.interviewer}>{segment.interviewer}</span>
-                                  </div>
-                                  <span style="font-weight: 700; color: #0176d3;">{segment.count}</span>
-                                </div>
-                              </template>
-                            </td>
-                            
-                            <!-- Pie Chart (Right Side) -->
-                            <td style="width: 30%; text-align: center; vertical-align: top; position: relative;">
-                              <div style="position: relative; display: inline-block;">
-                                <svg style="width: 100px; height: 100px; transform: rotate(-90deg);" viewBox="0 0 100 100">
-                                  <template for:each={attractionMiniChart} for:item="segment">
-                                    <path key={segment.interviewer} 
-                                          d={segment.pathData} 
-                                          fill={segment.color}
-                                          stroke="#ffffff"
-                                          stroke-width="1"
-                                          title={segment.interviewer}>
-                                    </path>
-                                  </template>
-                                </svg>
-                                <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 1rem; font-weight: 700; color: #3e3e3c;">{attractionMiniTotal}</div>
-                              </div>
-                            </td>
-                          </tr>
-                        </table>
+                        <template for:each={attractionMiniChart} for:item="segment">
+                          <div key={segment.interviewer} style="display: flex; justify-content: space-between; align-items: center; padding: 0.5rem; border-bottom: 1px solid #e5e5e5; background: white; margin-bottom: 0.25rem; border-radius: 4px;">
+                            <span style="font-weight: 600; font-size: 0.875rem; color: #3e3e3c;">{segment.interviewer}</span>
+                            <span style="background: #0176d3; color: white; padding: 0.25rem 0.75rem; border-radius: 12px; font-weight: 700; font-size: 0.875rem;">{segment.count}</span>
+                          </div>
+                        </template>
                       </template>
                     </template>
-                    
-                    <div class="slds-text-heading_medium interview-stat-attraction">{interviewStats.attraction}</div>
-                    <div class="slds-text-body_small">Attraction</div>
                   </div>
                 </div>
-                <div class="slds-col slds-size_6-of-12 slds-p-bottom_small" style="padding-left: 0.75rem;">
-                  <div class="slds-text-align_center interview-type-stat" data-type="si1" style="border-bottom: 1px solid #dddbda; padding-bottom: 0.75rem; margin-bottom: 0.75rem;">
-                    
-                    <!-- Mini Pie Chart for SI1 -->
+
+                <!-- SI 1 Rankings -->
+                <div class="slds-col slds-size_1-of-2 slds-m-bottom_medium">
+                  <div style="background: #f9f9f9; border-left: 4px solid #06a59a; padding: 1rem; border-radius: 4px;">
+                    <h3 class="slds-text-heading_small slds-m-bottom_small" style="color: #06a59a; font-weight: 700;">📋 SI 1 Interviews</h3>
                     <template if:true={si1MiniChart}>
                       <template if:true={si1MiniChart.length}>
-                        <div class="slds-grid slds-wrap slds-gutters_x-small slds-m-bottom_x-small" style="align-items: flex-start;">
-                          <!-- Legend for SI1 (Left Side) -->
-                          <div class="slds-col slds-size_8-of-12" style="min-width: 200px;">
-                            <div style="font-size: 0.75rem; color: #3e3e3c;">
-                              <template for:each={si1MiniChart} for:item="segment">
-                                <div key={segment.interviewer} class="slds-grid slds-grid_align-spread slds-p-vertical_xx-small" style="border-bottom: 1px solid #f3f3f3;">
-                                  <div class="slds-col slds-grid slds-grid_vertical-align-center">
-                                    <div class={segment.colorClass} style="width: 10px; height: 10px; border-radius: 2px; margin-right: 0.5rem; display: inline-block;"></div>
-                                    <span style="font-weight: 500; font-size: 0.75rem;" title={segment.interviewer}>{segment.interviewer}</span>
-                                  </div>
-                                  <div class="slds-col slds-shrink-none" style="font-weight: 700; color: #0176d3; font-size: 0.75rem;">{segment.count}</div>
-                                </div>
-                              </template>
-                            </div>
+                        <template for:each={si1MiniChart} for:item="segment">
+                          <div key={segment.interviewer} style="display: flex; justify-content: space-between; align-items: center; padding: 0.5rem; border-bottom: 1px solid #e5e5e5; background: white; margin-bottom: 0.25rem; border-radius: 4px;">
+                            <span style="font-weight: 600; font-size: 0.875rem; color: #3e3e3c;">{segment.interviewer}</span>
+                            <span style="background: #06a59a; color: white; padding: 0.25rem 0.75rem; border-radius: 12px; font-weight: 700; font-size: 0.875rem;">{segment.count}</span>
                           </div>
-                          
-                          <!-- Pie Chart (Right Side) -->
-                          <div class="slds-col slds-size_4-of-12" style="text-align: center; position: relative;">
-                            <svg style="width: 100px; height: 100px; transform: rotate(-90deg);" viewBox="0 0 100 100">
-                              <template for:each={si1MiniChart} for:item="segment">
-                                <path key={segment.interviewer} 
-                                      d={segment.pathData} 
-                                      fill={segment.color}
-                                      stroke="#ffffff"
-                                      stroke-width="1"
-                                      title={segment.interviewer}>
-                                </path>
-                              </template>
-                            </svg>
-                            <div style="position: absolute; top: 50px; left: 50%; transform: translate(-50%, -50%); font-size: 1rem; font-weight: 700; color: #3e3e3c; pointer-events: none;">{si1MiniTotal}</div>
-                          </div>
-                        </div>
+                        </template>
                       </template>
                     </template>
-                    
-                    <div class="slds-text-heading_medium interview-stat-si1">{interviewStats.si1}</div>
-                    <div class="slds-text-body_small">SI 1</div>
                   </div>
                 </div>
-                <div class="slds-col slds-size_4-of-12 slds-p-bottom_small" style="border-right: 1px solid #dddbda; padding-right: 0.5rem;">
-                  <div class="slds-text-align_center interview-type-stat" data-type="si2" style="border-bottom: 1px solid #dddbda; padding-bottom: 0.75rem; margin-bottom: 0.75rem;">
-                    
-                    <!-- Mini Pie Chart for SI2 -->
+
+                <!-- SI 2 Rankings -->
+                <div class="slds-col slds-size_1-of-3 slds-m-bottom_medium">
+                  <div style="background: #f9f9f9; border-left: 4px solid #e74c3c; padding: 1rem; border-radius: 4px;">
+                    <h3 class="slds-text-heading_small slds-m-bottom_small" style="color: #e74c3c; font-weight: 700;">📝 SI 2</h3>
                     <template if:true={si2MiniChart}>
                       <template if:true={si2MiniChart.length}>
-                        <div class="mini-pie-container slds-m-bottom_x-small">
-                          <!-- Legend for SI2 (Left Side) -->
-                          <div class="mini-pie-legend">
-                            <template for:each={si2MiniChart} for:item="segment">
-                              <div key={segment.interviewer} class="mini-pie-legend-item">
-                                <div class={segment.colorClass}></div>
-                                <div class="mini-pie-legend-label" title={segment.interviewer}>{segment.interviewer}</div>
-                                <div class="mini-pie-legend-count">{segment.count}</div>
-                              </div>
-                            </template>
+                        <template for:each={si2MiniChart} for:item="segment">
+                          <div key={segment.interviewer} style="display: flex; justify-content: space-between; align-items: center; padding: 0.5rem; border-bottom: 1px solid #e5e5e5; background: white; margin-bottom: 0.25rem; border-radius: 4px;">
+                            <span style="font-weight: 600; font-size: 0.875rem; color: #3e3e3c;">{segment.interviewer}</span>
+                            <span style="background: #e74c3c; color: white; padding: 0.25rem 0.75rem; border-radius: 12px; font-weight: 700; font-size: 0.875rem;">{segment.count}</span>
                           </div>
-                          
-                          <!-- Pie Chart (Right Side) -->
-                          <div class="mini-pie-chart-section">
-                            <svg class="mini-pie-chart" viewBox="0 0 100 100" width="100" height="100">
-                              <template for:each={si2MiniChart} for:item="segment">
-                                <path key={segment.interviewer} 
-                                      d={segment.pathData} 
-                                      fill={segment.color}
-                                      title={segment.interviewer}>
-                                </path>
-                              </template>
-                            </svg>
-                            <div class="mini-pie-total">{si2MiniTotal}</div>
-                          </div>
-                        </div>
+                        </template>
                       </template>
                     </template>
-                    
-                    <div class="slds-text-heading_medium interview-stat-si2">{interviewStats.si2}</div>
-                    <div class="slds-text-body_small">SI 2</div>
                   </div>
                 </div>
-                <div class="slds-col slds-size_4-of-12 slds-p-bottom_small" style="border-right: 1px solid #dddbda; padding-right: 0.5rem; padding-left: 0.5rem;">
-                  <div class="slds-text-align_center interview-type-stat" data-type="si3" style="border-bottom: 1px solid #dddbda; padding-bottom: 0.75rem; margin-bottom: 0.75rem;">
-                    
-                    <!-- Mini Pie Chart for SI3 -->
+
+                <!-- SI 3 Rankings -->
+                <div class="slds-col slds-size_1-of-3 slds-m-bottom_medium">
+                  <div style="background: #f9f9f9; border-left: 4px solid #f39c12; padding: 1rem; border-radius: 4px;">
+                    <h3 class="slds-text-heading_small slds-m-bottom_small" style="color: #f39c12; font-weight: 700;">💼 SI 3</h3>
                     <template if:true={si3MiniChart}>
                       <template if:true={si3MiniChart.length}>
-                        <div class="mini-pie-container slds-m-bottom_x-small">
-                          <!-- Legend for SI3 (Left Side) -->
-                          <div class="mini-pie-legend">
-                            <template for:each={si3MiniChart} for:item="segment">
-                              <div key={segment.interviewer} class="mini-pie-legend-item">
-                                <div class={segment.colorClass}></div>
-                                <div class="mini-pie-legend-label" title={segment.interviewer}>{segment.interviewer}</div>
-                                <div class="mini-pie-legend-count">{segment.count}</div>
-                              </div>
-                            </template>
+                        <template for:each={si3MiniChart} for:item="segment">
+                          <div key={segment.interviewer} style="display: flex; justify-content: space-between; align-items: center; padding: 0.5rem; border-bottom: 1px solid #e5e5e5; background: white; margin-bottom: 0.25rem; border-radius: 4px;">
+                            <span style="font-weight: 600; font-size: 0.875rem; color: #3e3e3c;">{segment.interviewer}</span>
+                            <span style="background: #f39c12; color: white; padding: 0.25rem 0.75rem; border-radius: 12px; font-weight: 700; font-size: 0.875rem;">{segment.count}</span>
                           </div>
-                          
-                          <!-- Pie Chart (Right Side) -->
-                          <div class="mini-pie-chart-section">
-                            <svg class="mini-pie-chart" viewBox="0 0 100 100" width="100" height="100">
-                              <template for:each={si3MiniChart} for:item="segment">
-                                <path key={segment.interviewer} 
-                                      d={segment.pathData} 
-                                      fill={segment.color}
-                                      title={segment.interviewer}>
-                                </path>
-                              </template>
-                            </svg>
-                            <div class="mini-pie-total">{si3MiniTotal}</div>
-                          </div>
-                        </div>
+                        </template>
                       </template>
                     </template>
-                    
-                    <div class="slds-text-heading_medium interview-stat-si3">{interviewStats.si3}</div>
-                    <div class="slds-text-body_small">SI 3</div>
                   </div>
                 </div>
-                <div class="slds-col slds-size_4-of-12 slds-p-bottom_small" style="padding-left: 0.5rem;">
-                  <div class="slds-text-align_center interview-type-stat" data-type="career" style="border-bottom: 1px solid #dddbda; padding-bottom: 0.75rem; margin-bottom: 0.75rem;">
-                    
-                    <!-- Mini Pie Chart for Career -->
+
+                <!-- Career Rankings -->
+                <div class="slds-col slds-size_1-of-3 slds-m-bottom_medium">
+                  <div style="background: #f9f9f9; border-left: 4px solid #9b59b6; padding: 1rem; border-radius: 4px;">
+                    <h3 class="slds-text-heading_small slds-m-bottom_small" style="color: #9b59b6; font-weight: 700;">🎓 Career</h3>
                     <template if:true={careerMiniChart}>
                       <template if:true={careerMiniChart.length}>
-                        <div class="mini-pie-container slds-m-bottom_x-small">
-                          <!-- Legend for Career (Left Side) -->
-                          <div class="mini-pie-legend">
-                            <template for:each={careerMiniChart} for:item="segment">
-                              <div key={segment.interviewer} class="mini-pie-legend-item">
-                                <div class={segment.colorClass}></div>
-                                <div class="mini-pie-legend-label" title={segment.interviewer}>{segment.interviewer}</div>
-                                <div class="mini-pie-legend-count">{segment.count}</div>
-                              </div>
-                            </template>
+                        <template for:each={careerMiniChart} for:item="segment">
+                          <div key={segment.interviewer} style="display: flex; justify-content: space-between; align-items: center; padding: 0.5rem; border-bottom: 1px solid #e5e5e5; background: white; margin-bottom: 0.25rem; border-radius: 4px;">
+                            <span style="font-weight: 600; font-size: 0.875rem; color: #3e3e3c;">{segment.interviewer}</span>
+                            <span style="background: #9b59b6; color: white; padding: 0.25rem 0.75rem; border-radius: 12px; font-weight: 700; font-size: 0.875rem;">{segment.count}</span>
                           </div>
-                          
-                          <!-- Pie Chart (Right Side) -->
-                          <div class="mini-pie-chart-section">
-                            <svg class="mini-pie-chart" viewBox="0 0 100 100" width="100" height="100">
-                              <template for:each={careerMiniChart} for:item="segment">
-                                <path key={segment.interviewer} 
-                                      d={segment.pathData} 
-                                      fill={segment.color}
-                                      title={segment.interviewer}>
-                                </path>
-                              </template>
-                            </svg>
-                            <div class="mini-pie-total">{careerMiniTotal}</div>
-                          </div>
-                        </div>
+                        </template>
                       </template>
                     </template>
-                    
-                    <div class="slds-text-heading_medium interview-stat-career">{interviewStats.career}</div>
-                    <div class="slds-text-body_small">Career</div>
                   </div>
                 </div>
-              </div>
-              
-              <!-- Summary Stats -->
-              <div class="slds-grid slds-wrap slds-border_top slds-p-top_small">
-                <div class="slds-col slds-size_6-of-12">
-                  <div class="slds-text-align_center">
-                    <div class="slds-text-heading_medium slds-text-color_success">{interviewStats.thisWeek}</div>
-                    <div class="slds-text-body_small">This Week</div>
-                  </div>
-                </div>
-                <div class="slds-col slds-size_6-of-12">
-                  <div class="slds-text-align_center">
-                    <div class="slds-text-heading_medium slds-text-color_default">{interviewStats.total}</div>
-                    <div class="slds-text-body_small">Total Interviews</div>
-                  </div>
-                </div>
+                
               </div>
               
             </template>
