@@ -511,7 +511,7 @@ public inherited sharing class RecruiterDashboardController {
                     }
                 }
                 
-            } else if (interviewType == 'Structured Interview 1') {
+            } else if (interviewType == 'Align-2nd' || interviewType == 'Structured Interview 1') {
                 candidates = [
                     SELECT Id, Name, Sales_Manager__c,
                            SI_1_Date_Completed__c
@@ -532,7 +532,7 @@ public inherited sharing class RecruiterDashboardController {
                     });
                 }
                 
-            } else if (interviewType == 'Structured Interview 2') {
+            } else if (interviewType == 'Plan-3rd' || interviewType == 'Structured Interview 2') {
                 candidates = [
                     SELECT Id, Name, Sales_Manager__c,
                            SI_2_Date_Completed__c
@@ -553,7 +553,7 @@ public inherited sharing class RecruiterDashboardController {
                     });
                 }
                 
-            } else if (interviewType == 'Structured Interview 3') {
+            } else if (interviewType == 'Present-4th' || interviewType == 'Structured Interview 3') {
                 candidates = [
                     SELECT Id, Name, Sales_Manager__c,
                            SI_3_Completed__c
@@ -574,7 +574,7 @@ public inherited sharing class RecruiterDashboardController {
                     });
                 }
                 
-            } else if (interviewType == 'Career') {
+            } else if (interviewType == 'Optional-5th' || interviewType == 'Career') {
                 // Query Career interviews - check multi-select picklist
                 candidates = [
                     SELECT Id, Name, CP_Conducted_by__c,

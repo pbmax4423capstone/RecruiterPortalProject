@@ -454,25 +454,25 @@
                 <div class="slds-col slds-size_1-of-5">
                   <div class="slds-text-align_center slds-p-around_small" style="background: #06a59a; color: white; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
                     <div class="slds-text-heading_large" style="font-size: 1.75rem; font-weight: 700;">{interviewStats.si1}</div>
-                    <div class="slds-text-body_small" style="margin-top: 0.25rem; font-size: 0.75rem;">SI 1</div>
+                    <div class="slds-text-body_small" style="margin-top: 0.25rem; font-size: 0.75rem;">Align-2nd</div>
                   </div>
                 </div>
                 <div class="slds-col slds-size_1-of-5">
                   <div class="slds-text-align_center slds-p-around_small" style="background: #e74c3c; color: white; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
                     <div class="slds-text-heading_large" style="font-size: 1.75rem; font-weight: 700;">{interviewStats.si2}</div>
-                    <div class="slds-text-body_small" style="margin-top: 0.25rem; font-size: 0.75rem;">SI 2</div>
+                    <div class="slds-text-body_small" style="margin-top: 0.25rem; font-size: 0.75rem;">Plan-3rd</div>
                   </div>
                 </div>
                 <div class="slds-col slds-size_1-of-5">
                   <div class="slds-text-align_center slds-p-around_small" style="background: #f39c12; color: white; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
                     <div class="slds-text-heading_large" style="font-size: 1.75rem; font-weight: 700;">{interviewStats.si3}</div>
-                    <div class="slds-text-body_small" style="margin-top: 0.25rem; font-size: 0.75rem;">SI 3</div>
+                    <div class="slds-text-body_small" style="margin-top: 0.25rem; font-size: 0.75rem;">Present-4th</div>
                   </div>
                 </div>
                 <div class="slds-col slds-size_1-of-5">
                   <div class="slds-text-align_center slds-p-around_small" style="background: #9b59b6; color: white; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
                     <div class="slds-text-heading_large" style="font-size: 1.75rem; font-weight: 700;">{interviewStats.career}</div>
-                    <div class="slds-text-body_small" style="margin-top: 0.25rem; font-size: 0.75rem;">Career</div>
+                    <div class="slds-text-body_small" style="margin-top: 0.25rem; font-size: 0.75rem;">Optional-5th</div>
                   </div>
                 </div>
               </div>
@@ -507,7 +507,7 @@
                 <!-- SI 1 Rankings -->
                 <div class="slds-col slds-size_1-of-2 slds-m-bottom_medium">
                   <div style="background: #f9f9f9; border-left: 4px solid #06a59a; padding: 1rem; border-radius: 4px;">
-                    <h3 class="slds-text-heading_small slds-m-bottom_small" style="color: #06a59a; font-weight: 700;">SI 1 Interviews</h3>
+                    <h3 class="slds-text-heading_small slds-m-bottom_small" style="color: #06a59a; font-weight: 700;">Align-2nd</h3>
                     <template if:true={si1MiniChart}>
                       <template if:true={si1MiniChart.length}>
                         <template for:each={si1MiniChart} for:item="segment">
@@ -517,7 +517,7 @@
                                onmouseleave={handleInterviewerHoverOut}
                                onclick={handleInterviewerClick}
                                data-interviewer={segment.interviewer}
-                               data-interview-type="Structured Interview 1">
+                               data-interview-type="Align-2nd">
                             <span style="font-weight: 600; font-size: 0.875rem; color: #06a59a; text-decoration: underline;">{segment.interviewer}</span>
                             <span style="background: #06a59a; color: white; padding: 0.25rem 0.75rem; border-radius: 12px; font-weight: 700; font-size: 0.875rem;">{segment.count}</span>
                           </div>
@@ -530,7 +530,7 @@
                 <!-- SI 2 Rankings -->
                 <div class="slds-col slds-size_1-of-3 slds-m-bottom_medium">
                   <div style="background: #f9f9f9; border-left: 4px solid #e74c3c; padding: 1rem; border-radius: 4px;">
-                    <h3 class="slds-text-heading_small slds-m-bottom_small" style="color: #e74c3c; font-weight: 700;">SI 2</h3>
+                    <h3 class="slds-text-heading_small slds-m-bottom_small" style="color: #e74c3c; font-weight: 700;">Plan-3rd</h3>
                     <template if:true={si2MiniChart}>
                       <template if:true={si2MiniChart.length}>
                         <template for:each={si2MiniChart} for:item="segment">
@@ -540,7 +540,7 @@
                                onmouseleave={handleInterviewerHoverOut}
                                onclick={handleInterviewerClick}
                                data-interviewer={segment.interviewer}
-                               data-interview-type="Structured Interview 2">
+                               data-interview-type="Plan-3rd">
                             <span style="font-weight: 600; font-size: 0.875rem; color: #e74c3c; text-decoration: underline;">{segment.interviewer}</span>
                             <span style="background: #e74c3c; color: white; padding: 0.25rem 0.75rem; border-radius: 12px; font-weight: 700; font-size: 0.875rem;">{segment.count}</span>
                           </div>
@@ -553,7 +553,7 @@
                 <!-- SI 3 Rankings -->
                 <div class="slds-col slds-size_1-of-3 slds-m-bottom_medium">
                   <div style="background: #f9f9f9; border-left: 4px solid #f39c12; padding: 1rem; border-radius: 4px;">
-                    <h3 class="slds-text-heading_small slds-m-bottom_small" style="color: #f39c12; font-weight: 700;">SI 3</h3>
+                    <h3 class="slds-text-heading_small slds-m-bottom_small" style="color: #f39c12; font-weight: 700;">Present-4th</h3>
                     <template if:true={si3MiniChart}>
                       <template if:true={si3MiniChart.length}>
                         <template for:each={si3MiniChart} for:item="segment">
@@ -563,7 +563,7 @@
                                onmouseleave={handleInterviewerHoverOut}
                                onclick={handleInterviewerClick}
                                data-interviewer={segment.interviewer}
-                               data-interview-type="Structured Interview 3">
+                               data-interview-type="Present-4th">
                             <span style="font-weight: 600; font-size: 0.875rem; color: #f39c12; text-decoration: underline;">{segment.interviewer}</span>
                             <span style="background: #f39c12; color: white; padding: 0.25rem 0.75rem; border-radius: 12px; font-weight: 700; font-size: 0.875rem;">{segment.count}</span>
                           </div>
@@ -576,7 +576,7 @@
                 <!-- Career Rankings -->
                 <div class="slds-col slds-size_1-of-3 slds-m-bottom_medium">
                   <div style="background: #f9f9f9; border-left: 4px solid #9b59b6; padding: 1rem; border-radius: 4px;">
-                    <h3 class="slds-text-heading_small slds-m-bottom_small" style="color: #9b59b6; font-weight: 700;">Career</h3>
+                    <h3 class="slds-text-heading_small slds-m-bottom_small" style="color: #9b59b6; font-weight: 700;">Optional-5th</h3>
                     <template if:true={careerMiniChart}>
                       <template if:true={careerMiniChart.length}>
                         <template for:each={careerMiniChart} for:item="segment">
@@ -586,7 +586,7 @@
                                onmouseleave={handleInterviewerHoverOut}
                                onclick={handleInterviewerClick}
                                data-interviewer={segment.interviewer}
-                               data-interview-type="Career">
+                               data-interview-type="Optional-5th">
                             <span style="font-weight: 600; font-size: 0.875rem; color: #9b59b6; text-decoration: underline;">{segment.interviewer}</span>
                             <span style="background: #9b59b6; color: white; padding: 0.25rem 0.75rem; border-radius: 12px; font-weight: 700; font-size: 0.875rem;">{segment.count}</span>
                           </div>
