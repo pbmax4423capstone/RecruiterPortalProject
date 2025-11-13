@@ -471,10 +471,28 @@ lightning-card[title*="Call Management"] .slds-card__body {
 
 /* Modal Enhancement - Light Mode */
 .slds-modal__container {
-  max-width: 40rem;
-  width: 45%;
+  max-width: 50rem;
+  width: 55%;
   background: white;
-  border-radius: 8px;
+  border-radius: 12px;
+  margin: 2rem auto;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+}
+
+.slds-modal__header {
+  padding: 1.5rem 2rem;
+  border-radius: 12px 12px 0 0;
+}
+
+.slds-modal__content {
+  padding: 2rem;
+  max-height: 70vh;
+  overflow-y: auto;
+}
+
+.slds-modal__footer {
+  padding: 1.5rem 2rem;
+  border-radius: 0 0 12px 12px;
 }
 
 /* Capstone Partners Branded Card Styling */
@@ -879,30 +897,60 @@ lightning-card {
 /* Schedule Interview Modal Styling */
 .slds-modal_large .slds-modal__container {
   max-width: 1200px;
-  width: 95%;
+  width: 90%;
+  margin: 2rem auto;
+}
+
+.slds-modal_large .slds-modal__content {
+  padding: 2rem 2.5rem;
 }
 
 /* Schedule Call Modal - Compact Width */
 .slds-modal_medium .slds-modal__container {
-  max-width: 40rem;
-  width: 45%;
-  min-width: 30rem;
+  max-width: 50rem;
+  width: 55%;
+  min-width: 35rem;
+  margin: 2rem auto;
+}
+
+.slds-modal_medium .slds-modal__content {
+  padding: 1.5rem 2rem;
+}
+
+.slds-modal_medium .slds-modal__header {
+  padding: 1.25rem 2rem;
+}
+
+.slds-modal_medium .slds-modal__footer {
+  padding: 1.25rem 2rem;
 }
 
 /* Candidate Detail Modal - Ultra Compact */
 /* Let candidate edit modal use standard SLDS behavior like other working modals */
 section[aria-labelledby="candidate-detail-modal-heading"] .slds-form-element {
-  margin-bottom: 0.5rem !important;
+  margin-bottom: 1rem !important;
 }
 
 section[aria-labelledby="candidate-detail-modal-heading"] fieldset {
-  margin-bottom: 0.75rem !important;
+  margin-bottom: 1.25rem !important;
 }
 
-/* Candidate Detail Modal Content - Remove excessive padding */
+section[aria-labelledby="candidate-detail-modal-heading"] .slds-form-element__label {
+  margin-bottom: 0.5rem !important;
+}
+
+/* Candidate Detail Modal Content - Better spacing */
 section[aria-labelledby="candidate-detail-modal-heading"] .slds-modal__content {
-  padding: 0.5rem !important;
-  max-height: 75vh !important;
+  padding: 1.5rem 2rem !important;
+  max-height: 70vh !important;
+}
+
+section[aria-labelledby="candidate-detail-modal-heading"] .slds-modal__header {
+  padding: 1.25rem 2rem !important;
+}
+
+section[aria-labelledby="candidate-detail-modal-heading"] .slds-modal__footer {
+  padding: 1.25rem 2rem !important;
 }
 
 /* This content has been consolidated above to eliminate redundancy */
@@ -1603,9 +1651,10 @@ section[aria-labelledby="candidate-detail-modal-heading"] .slds-modal__content {
 
 /* Call Completion Modal Compact Styling */
 .call-completion-modal-container {
-  max-width: 35rem;
-  width: 40%;
-  min-width: 28rem;
+  max-width: 45rem;
+  width: 50%;
+  min-width: 35rem;
+  margin: 2rem auto;
 }
 
 .compact-call-summary {
@@ -1627,33 +1676,35 @@ section[aria-labelledby="candidate-detail-modal-heading"] .slds-modal__content {
   margin-top: 0.25rem;
 }
 
-/* Make call completion modal more compact */
+/* Call completion modal better spacing */
 .call-completion-modal-container .slds-modal__content {
-  padding: 0.75rem 1rem;
+  padding: 1.5rem 2rem;
 }
 
 .call-completion-modal-container .slds-modal__header {
-  padding: 0.5rem 1rem;
+  padding: 1.25rem 2rem;
 }
 
 .call-completion-modal-container .slds-modal__footer {
-  padding: 0.5rem 1rem;
+  padding: 1.25rem 2rem;
 }
 
-/* Candidates List Styling - ULTRA COMPACT VERSION */
+/* Candidates List Styling - Better spacing */
 .candidates-list-container {
-  max-height: 55vh;
+  max-height: 60vh;
   overflow-y: auto;
   background: white;
+  padding: 1rem;
+  margin: 0.5rem 0;
 }
 
 /* Large readable candidate items */
 div.candidate-list-item.slds-box.slds-theme_shade {
-  padding: 14px 16px !important;
-  margin: 6px 0 !important;
-  border-radius: 8px !important;
+  padding: 1rem 1.25rem !important;
+  margin: 0.75rem 0 !important;
+  border-radius: 10px !important;
   border-left: 4px solid #4bca81 !important;
-  min-height: 70px !important;
+  min-height: 80px !important;
   height: auto !important;
   display: flex !important;
   align-items: flex-start !important;
@@ -1661,6 +1712,7 @@ div.candidate-list-item.slds-box.slds-theme_shade {
   cursor: pointer !important;
   transition: all 0.2s ease !important;
   border: 1px solid #e8e8e8 !important;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08) !important;
 }
 
 div.candidate-list-item.slds-box.slds-theme_shade:hover {
