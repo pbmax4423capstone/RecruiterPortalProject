@@ -16,15 +16,6 @@
                   <h1>
                     <span class="slds-page-header__title slds-truncate" title="Recruiter Dashboard">Capstone Partners - Recruiter Portal</span>
                   </h1>
-                  <!-- Dark Mode Toggle - next to title -->
-                  <lightning-button-icon
-                    icon-name={darkModeIcon}
-                    alternative-text="Toggle Dark Mode"
-                    title="Toggle Dark Mode"
-                    onclick={toggleDarkMode}
-                    variant="border-filled"
-                    class="dark-mode-toggle-inline">
-                  </lightning-button-icon>
                 </div>
               </div>
               <!-- Welcome Message - moved below title -->
@@ -37,6 +28,15 @@
         <div class="slds-page-header__col-actions">
           <!-- Action Buttons Row -->
           <div class="action-buttons-container">
+            <!-- Dark Mode Toggle -->
+            <lightning-button-icon
+              icon-name={darkModeIcon}
+              alternative-text="Toggle Dark Mode"
+              title="Toggle Dark Mode"
+              onclick={toggleDarkMode}
+              variant="border-filled"
+              class="dark-mode-toggle-nav">
+            </lightning-button-icon>
             <lightning-button-group>
               <lightning-button 
                 variant="brand" 
