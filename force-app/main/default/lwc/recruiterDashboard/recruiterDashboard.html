@@ -259,7 +259,10 @@
                                       fill={segment.color}
                                       stroke="#fff"
                                       stroke-width="2"
-                                      class="pie-segment">
+                                      class="pie-segment"
+                                      data-manager={segment.label}
+                                      onclick={handleSalesManagerClick}
+                                      style="cursor: pointer;">
                                 </path>
                               </template>
                             </svg>

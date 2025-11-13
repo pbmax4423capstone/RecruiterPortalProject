@@ -2172,11 +2172,13 @@ div.candidate-list-item .slds-p-around_small {
 
 .pie-segment {
   cursor: pointer;
-  transition: opacity 0.2s ease;
+  transition: all 0.2s ease;
 }
 
 .pie-segment:hover {
-  opacity: 0.8;
+  opacity: 0.85;
+  filter: brightness(1.1);
+  stroke-width: 3;
 }
 
 .pie-center-text-large {
