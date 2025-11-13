@@ -68,10 +68,14 @@ export default class RecruiterDashboard extends NavigationMixin(LightningElement
     this.fetchCurrentUser();
     console.log('✨ fetchCurrentUser() called (async, may not be complete yet) ✨');
     
-    // Load candidate analytics for pie chart
+    // Load all dashboard data fresh on every page load
     this.loadCandidateAnalytics();
-    
-    // Load call lists for dashboard display
+    this.loadRecentActivity();
+    this.loadDashboardData();
+    this.loadActiveCandidates();
+    this.loadInterviewStats();
+    this.loadInterviewerStats();
+    this.loadInterviewTypeInterviewerStats();
     this.loadCallLists();
   }
   
@@ -201,6 +205,138 @@ export default class RecruiterDashboard extends NavigationMixin(LightningElement
     } catch (error) {
       console.error('Error loading candidate analytics:', error);
       this.pieChartData = [];
+    }
+  }
+
+  async loadRecentActivity() {
+    try {
+      const data = await getUserRecentActivity();
+      if (data) {
+        this.recentActivities = data.map(activity => {
+          const formattedActivity = { ...activity };
+          if (formattedActivity.dueDate) {
+            const dueDate = new Date(formattedActivity.dueDate);
+            formattedActivity.formattedDueDate = dueDate.toLocaleDateString('en-US', { 
+              month: 'short', 
+              day: 'numeric',
+              year: 'numeric'
+            });
+          }
+          return formattedActivity;
+        });
+        this.recentActivityError = undefined;
+      }
+    } catch (error) {
+      console.error('Error loading recent activity:', error);
+      this.recentActivities = [];
+      this.recentActivityError = error;
+    }
+  }
+
+  async loadDashboardData() {
+    try {
+      const data = await getDashboardData();
+      if (data) {
+        if (data.userCallStats) {
+          this.userScheduledCalls = data.userCallStats.scheduledCalls || 0;
+          this.userPastDueCalls = data.userCallStats.pastDueCalls || 0;
+          this.userTotalAssigned = data.userCallStats.totalAssigned || 0;
+        }
+        if (data.salesManagerMetrics) {
+          this.salesManagerMetrics = data.salesManagerMetrics;
+        }
+        if (data.candidateStats) {
+          this.activeCandidates = data.candidateStats.active || 0;
+          this.leads = data.candidateStats.leads || 0;
+          this.totalCandidates = data.candidateStats.total || 0;
+          this.newCandidatesThisWeek = data.candidateStats.newThisWeek || 0;
+          this.upcomingMeetings = data.candidateStats.upcomingMeetings || 0;
+        }
+        if (data.scheduledInterviewStats) {
+          this.attractionScheduled = data.scheduledInterviewStats.attractionScheduled || 0;
+          this.si1Scheduled = data.scheduledInterviewStats.si1Scheduled || 0;
+          this.si2Scheduled = data.scheduledInterviewStats.si2Scheduled || 0;
+          this.si3Scheduled = data.scheduledInterviewStats.si3Scheduled || 0;
+          this.careerScheduled = data.scheduledInterviewStats.careerScheduled || 0;
+          this.interviewsCompleted = data.scheduledInterviewStats.completed || 0;
+          this.interviewsNoShow = data.scheduledInterviewStats.noShow || 0;
+          this.interviewsCanceled = data.scheduledInterviewStats.canceled || 0;
+          this.interviewsThisWeek = data.scheduledInterviewStats.thisWeek || 0;
+        }
+        if (data.performanceMetrics) {
+          this.proceedOutcome = data.performanceMetrics.proceedOutcome || 0;
+          this.holdOutcome = data.performanceMetrics.holdOutcome || 0;
+          this.declineOutcome = data.performanceMetrics.declineOutcome || 0;
+          this.successRate = data.performanceMetrics.successRate || 0;
+        }
+        if (data.interviewsByType) {
+          this.interviewTypeData = data.interviewsByType;
+        }
+        if (data.detailedInterviewStats) {
+          this.attractionThisWeek = data.detailedInterviewStats.attractionThisWeek || 0;
+          this.attractionThisMonth = data.detailedInterviewStats.attractionThisMonth || 0;
+          this.si1ThisWeek = data.detailedInterviewStats.si1ThisWeek || 0;
+          this.si1ThisMonth = data.detailedInterviewStats.si1ThisMonth || 0;
+          this.si2ThisWeek = data.detailedInterviewStats.si2ThisWeek || 0;
+          this.si2ThisMonth = data.detailedInterviewStats.si2ThisMonth || 0;
+          this.careerThisWeek = data.detailedInterviewStats.careerThisWeek || 0;
+          this.careerThisMonth = data.detailedInterviewStats.careerThisMonth || 0;
+          this.callsThisWeek = data.detailedInterviewStats.callsThisWeek || 0;
+          this.callsThisMonth = data.detailedInterviewStats.callsThisMonth || 0;
+        }
+      }
+    } catch (error) {
+      console.error('Error loading dashboard data:', error);
+    }
+  }
+
+  async loadActiveCandidates() {
+    try {
+      const data = await getActiveCandidates();
+      if (data) {
+        this.activeCandidates = data;
+        this.activeCandidatesError = undefined;
+      }
+    } catch (error) {
+      console.error('Error loading active candidates:', error);
+      this.activeCandidatesError = error;
+      this.activeCandidates = [];
+    }
+  }
+
+  async loadInterviewStats() {
+    try {
+      const data = await getInterviewStatsByType();
+      if (data) {
+        this.interviewStats = data;
+      }
+    } catch (error) {
+      console.error('Error loading interview stats:', error);
+      this.interviewStats = {};
+    }
+  }
+
+  async loadInterviewerStats() {
+    try {
+      const data = await getInterviewStatsByInterviewer();
+      if (data) {
+        this.interviewerStats = data;
+      }
+    } catch (error) {
+      console.error('Error loading interviewer stats:', error);
+      this.interviewerStats = [];
+    }
+  }
+
+  async loadInterviewTypeInterviewerStats() {
+    try {
+      const data = await getInterviewTypeWithInterviewerStats();
+      if (data) {
+        this.interviewTypeInterviewerStats = data;
+      }
+    } catch (error) {
+      console.error('Error loading interview type interviewer stats:', error);
+      this.interviewTypeInterviewerStats = {};
     }
   }
   
@@ -680,186 +816,9 @@ export default class RecruiterDashboard extends NavigationMixin(LightningElement
   // Wire result for refresh capability
   wiredDashboardResult;
   
-  // Wire for user-specific recent activity
-  @wire(getUserRecentActivity)
-  wiredRecentActivity({ error, data }) {
-    if (data) {
-      console.log('Recent activity data received:', data);
-      // Format the due date for display
-      this.recentActivities = data.map(activity => {
-        const formattedActivity = { ...activity };
-        if (formattedActivity.dueDate) {
-          const dueDate = new Date(formattedActivity.dueDate);
-          formattedActivity.formattedDueDate = dueDate.toLocaleDateString('en-US', { 
-            month: 'short', 
-            day: 'numeric',
-            year: 'numeric'
-          });
-        }
-        return formattedActivity;
-      });
-      this.recentActivityError = undefined;
-    } else if (error) {
-      console.error('Error loading recent activity:', error);
-      this.recentActivities = [];
-      this.recentActivityError = error;
-    }
-  }
-  
   // Getter for template compatibility
   get recentActivity() {
     return this.recentActivities || [];
-  }
-
-  @wire(getDashboardData)
-  wiredDashboardData(result) {
-    this.wiredDashboardResult = result;
-    const { error, data } = result;
-    
-    if (data) {
-      console.log('Dashboard data received:', data);
-      
-      // Process current user's call statistics (priority section)
-      if (data.userCallStats) {
-        this.userScheduledCalls = data.userCallStats.scheduledCalls || 0;
-        this.userPastDueCalls = data.userCallStats.pastDueCalls || 0;
-        this.userTotalAssigned = data.userCallStats.totalAssigned || 0;
-      }
-      
-      // Process sales manager metrics
-      if (data.salesManagerMetrics) {
-        this.salesManagerMetrics = data.salesManagerMetrics;
-      }
-      
-      // Load call lists for side-by-side display
-      this.loadCallLists();
-      
-      // Process candidate statistics
-      if (data.candidateStats) {
-        this.activeCandidates = data.candidateStats.active || 0;
-        this.leads = data.candidateStats.leads || 0;
-        this.totalCandidates = data.candidateStats.total || 0;
-        this.newCandidatesThisWeek = data.candidateStats.newThisWeek || 0;
-        this.upcomingMeetings = data.candidateStats.upcomingMeetings || 0;
-      }
-      
-      // Process scheduled interview statistics
-      if (data.scheduledInterviewStats) {
-        this.attractionScheduled = data.scheduledInterviewStats.attractionScheduled || 0;
-        this.si1Scheduled = data.scheduledInterviewStats.si1Scheduled || 0;
-        this.si2Scheduled = data.scheduledInterviewStats.si2Scheduled || 0;
-        this.si3Scheduled = data.scheduledInterviewStats.si3Scheduled || 0;
-        this.careerScheduled = data.scheduledInterviewStats.careerScheduled || 0;
-        this.interviewsCompleted = data.scheduledInterviewStats.completed || 0;
-        this.interviewsNoShow = data.scheduledInterviewStats.noShow || 0;
-        this.interviewsCanceled = data.scheduledInterviewStats.canceled || 0;
-        this.interviewsThisWeek = data.scheduledInterviewStats.thisWeek || 0;
-      }
-      
-      // Process performance metrics
-      if (data.performanceMetrics) {
-        this.proceedOutcome = data.performanceMetrics.proceedOutcome || 0;
-        this.holdOutcome = data.performanceMetrics.holdOutcome || 0;
-        this.declineOutcome = data.performanceMetrics.declineOutcome || 0;
-        this.successRate = data.performanceMetrics.successRate || 0;
-      }
-      
-      // Process recent activity
-      if (data.recentActivity) {
-        this.recentActivities = data.recentActivity.slice(0, 5); // Show top 5 activities
-      }
-      
-      // Process interview type data
-      if (data.interviewsByType) {
-        this.interviewTypeData = data.interviewsByType;
-      }
-      
-      // Process detailed interview statistics
-      if (data.detailedInterviewStats) {
-        this.attractionThisWeek = data.detailedInterviewStats.attractionThisWeek || 0;
-        this.attractionThisMonth = data.detailedInterviewStats.attractionThisMonth || 0;
-        this.si1ThisWeek = data.detailedInterviewStats.si1ThisWeek || 0;
-        this.si1ThisMonth = data.detailedInterviewStats.si1ThisMonth || 0;
-        this.si2ThisWeek = data.detailedInterviewStats.si2ThisWeek || 0;
-        this.si2ThisMonth = data.detailedInterviewStats.si2ThisMonth || 0;
-        this.careerThisWeek = data.detailedInterviewStats.careerThisWeek || 0;
-        this.careerThisMonth = data.detailedInterviewStats.careerThisMonth || 0;
-        this.callsThisWeek = data.detailedInterviewStats.callsThisWeek || 0;
-        this.callsThisMonth = data.detailedInterviewStats.callsThisMonth || 0;
-      }
-      
-      // Get current user name for welcome message
-      try {
-        // We can get the user name from the first call detail or from a separate method
-        // Since we already have userCallStats, we'll use the current user info
-        // For now, we'll use the UserInfo.getUserId() approach from the Apex controller
-        // but we'll set a placeholder for now and update it in the connectedCallback
-        
-      } catch (err) {
-        console.error('Error getting user info:', err);
-      }
-      
-    } else if (error) {
-      console.error('Error fetching dashboard data:', error);
-    }
-  }
-  
-  // Wire active candidates data
-  @wire(getActiveCandidates)
-  wiredActiveCandidates(result) {
-    const { error, data } = result;
-    
-    if (data) {
-      console.log('Active candidates data received:', data);
-      this.activeCandidates = data;
-      this.activeCandidatesError = undefined;
-    } else if (error) {
-      console.error('Error fetching active candidates:', error);
-      this.activeCandidatesError = error;
-      this.activeCandidates = [];
-    }
-  }
-  
-  // Wire interview statistics data
-  @wire(getInterviewStatsByType)
-  wiredInterviewStats(result) {
-    const { error, data } = result;
-    
-    if (data) {
-      console.log('Interview statistics data received:', data);
-      this.interviewStats = data;
-    } else if (error) {
-      console.error('Error fetching interview statistics:', error);
-      this.interviewStats = {};
-    }
-  }
-
-  // Wire interview statistics by interviewer data
-  @wire(getInterviewStatsByInterviewer)
-  wiredInterviewerStats(result) {
-    const { error, data } = result;
-    
-    if (data) {
-      console.log('Interviewer statistics data received:', data);
-      this.interviewerStats = data;
-    } else if (error) {
-      console.error('Error fetching interviewer statistics:', error);
-      this.interviewerStats = [];
-    }
-  }
-
-  // Wire interview type with interviewer statistics
-  @wire(getInterviewTypeWithInterviewerStats)
-  wiredInterviewTypeInterviewerStats(result) {
-    const { error, data } = result;
-    
-    if (data) {
-      console.log('Interview type with interviewer stats received:', data);
-      this.interviewTypeInterviewerStats = data;
-    } else if (error) {
-      console.error('Error fetching interview type interviewer stats:', error);
-      this.interviewTypeInterviewerStats = {};
-    }
   }
   
   // Helper method to format data for pie chart by Sales Manager
