@@ -864,6 +864,9 @@ export default class RecruiterDashboard extends NavigationMixin(LightningElement
       const labelRadius = 100; // Position labels at 100px from center (out of 170px radius)
       const labelPosition = this.polarToCartesian(200, 200, labelRadius, labelAngle);
       
+      // Get manager initials (first letter of each word)
+      const initials = item.label.split(' ').map(word => word.charAt(0).toUpperCase()).join('');
+      
       currentAngle += segmentAngle;
       
       return {
@@ -875,7 +878,8 @@ export default class RecruiterDashboard extends NavigationMixin(LightningElement
         pathData: pathData,
         labelX: labelPosition.x,
         labelY: labelPosition.y,
-        showLabel: item.percentage >= 5 // Only show label if segment is >= 5%
+        initials: initials,
+        showLabel: true // Always show label for all managers
       };
     });
     
