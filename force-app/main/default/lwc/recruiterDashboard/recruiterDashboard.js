@@ -68,6 +68,9 @@ export default class RecruiterDashboard extends NavigationMixin(LightningElement
     this.fetchCurrentUser();
     console.log('✨ fetchCurrentUser() called (async, may not be complete yet) ✨');
     
+    // Load candidate analytics for pie chart
+    this.loadCandidateAnalytics();
+    
     // Load call lists for dashboard display
     this.loadCallLists();
   }
@@ -186,6 +189,18 @@ export default class RecruiterDashboard extends NavigationMixin(LightningElement
       this.totalContractBTerms = 45;
       this.totalBtoATransitions = 18;
       this.contractAJan1 = 125;
+    }
+  }
+
+  async loadCandidateAnalytics() {
+    try {
+      const data = await getActiveCandidateAnalytics();
+      if (data && data.byManager) {
+        this.pieChartData = this.formatPieChart(data.byManager);
+      }
+    } catch (error) {
+      console.error('Error loading candidate analytics:', error);
+      this.pieChartData = [];
     }
   }
   
@@ -844,31 +859,6 @@ export default class RecruiterDashboard extends NavigationMixin(LightningElement
     } else if (error) {
       console.error('Error fetching interview type interviewer stats:', error);
       this.interviewTypeInterviewerStats = {};
-    }
-  }
-
-  // Wire candidate analytics data
-  @wire(getActiveCandidateAnalytics)
-  wiredCandidateAnalytics(result) {
-    const { error, data } = result;
-    
-    if (data) {
-      console.log('Candidate analytics data received:', data);
-      this.candidateAnalytics = data;
-      this.candidateAnalyticsError = undefined;
-      
-      // Format data for pie chart - focusing on Sales Manager data
-      if (data.byManager && data.byManager.length > 0) {
-        this.pieChartData = this.formatPieChart(data.byManager);
-      } else {
-        this.pieChartData = [];
-      }
-      
-    } else if (error) {
-      console.error('Error fetching candidate analytics:', error);
-      this.candidateAnalyticsError = error;
-      this.candidateAnalytics = {};
-      this.pieChartData = [];
     }
   }
   
