@@ -274,6 +274,7 @@
                       <div class="slds-col slds-size_2-of-3">
                         <div class="pie-chart-container">
                           <svg width="400" height="400" viewBox="0 0 400 400" class="pie-chart">
+                            <!-- Pie segments -->
                             <template for:each={pieChartData} for:item="segment" for:index="index">
                               <path key={segment.label} 
                                     d={segment.pathData} 
@@ -285,6 +286,20 @@
                                     onclick={handleSalesManagerClick}
                                     style="cursor: pointer;">
                               </path>
+                            </template>
+                            <!-- Labels on segments -->
+                            <template for:each={pieChartData} for:item="segment" for:index="index">
+                              <template if:true={segment.showLabel}>
+                                <text key={segment.label}
+                                      x={segment.labelX}
+                                      y={segment.labelY}
+                                      class="pie-label"
+                                      text-anchor="middle"
+                                      dominant-baseline="middle"
+                                      pointer-events="none">
+                                  {segment.percentage}%
+                                </text>
+                              </template>
                             </template>
                           </svg>
                         </div>

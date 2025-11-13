@@ -859,6 +859,11 @@ export default class RecruiterDashboard extends NavigationMixin(LightningElement
       // Generate SVG path data for pie segment (200, 200 center, 170 radius for 400x400 viewBox)
       const pathData = this.createPiePath(200, 200, 170, currentAngle, currentAngle + segmentAngle);
       
+      // Calculate label position (at the middle of the segment, 60% of radius from center)
+      const labelAngle = currentAngle + (segmentAngle / 2);
+      const labelRadius = 100; // Position labels at 100px from center (out of 170px radius)
+      const labelPosition = this.polarToCartesian(200, 200, labelRadius, labelAngle);
+      
       currentAngle += segmentAngle;
       
       return {
@@ -867,7 +872,10 @@ export default class RecruiterDashboard extends NavigationMixin(LightningElement
         percentage: item.percentage,
         color: colors[index % colors.length],
         colorStyle: `background-color: ${colors[index % colors.length]}`,
-        pathData: pathData
+        pathData: pathData,
+        labelX: labelPosition.x,
+        labelY: labelPosition.y,
+        showLabel: item.percentage >= 5 // Only show label if segment is >= 5%
       };
     });
     
