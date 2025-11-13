@@ -2849,6 +2849,17 @@ div.candidate-list-item .slds-p-around_small {
   margin-right: 1rem;
 }
 
+.dark-mode-toggle-inline {
+  margin-left: 1rem;
+  vertical-align: middle;
+  display: inline-block;
+}
+
+.slds-page-header__name-title {
+  display: flex;
+  align-items: center;
+}
+
 /* Dark Mode Container */
 .dashboard-container.dark-mode {
   background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
