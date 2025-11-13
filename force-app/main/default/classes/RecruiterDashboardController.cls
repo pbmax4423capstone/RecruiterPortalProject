@@ -485,7 +485,7 @@ public inherited sharing class RecruiterDashboardController {
             List<Candidate__c> candidates = new List<Candidate__c>();
             
             // Query based on interview type
-            if (interviewType == 'Attraction') {
+            if (interviewType == 'C1-First' || interviewType == 'Attraction') {
                 // Query Attraction interviews - check multi-select picklist
                 candidates = [
                     SELECT Id, Name, AI_Conducted_By__c, 

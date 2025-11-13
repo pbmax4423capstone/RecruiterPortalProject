@@ -448,7 +448,7 @@
                 <div class="slds-col slds-size_1-of-5">
                   <div class="slds-text-align_center slds-p-around_small" style="background: #0176d3; color: white; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
                     <div class="slds-text-heading_large" style="font-size: 1.75rem; font-weight: 700;">{interviewStats.attraction}</div>
-                    <div class="slds-text-body_small" style="margin-top: 0.25rem; font-size: 0.75rem;">Attraction</div>
+                    <div class="slds-text-body_small" style="margin-top: 0.25rem; font-size: 0.75rem;">C1-First</div>
                   </div>
                 </div>
                 <div class="slds-col slds-size_1-of-5">
@@ -481,10 +481,10 @@
               <!-- Interviewer Rankings by Type -->
               <div class="slds-grid slds-wrap slds-gutters">
                 
-                <!-- Attraction Rankings -->
+                <!-- C1-First Rankings -->
                 <div class="slds-col slds-size_1-of-2 slds-m-bottom_medium">
                   <div style="background: #f9f9f9; border-left: 4px solid #0176d3; padding: 1rem; border-radius: 4px;">
-                    <h3 class="slds-text-heading_small slds-m-bottom_small" style="color: #0176d3; font-weight: 700;">🎯 Attraction Interviews</h3>
+                    <h3 class="slds-text-heading_small slds-m-bottom_small" style="color: #0176d3; font-weight: 700;">🎯 C1-First Interviews</h3>
                     <template if:true={attractionMiniChart}>
                       <template if:true={attractionMiniChart.length}>
                         <template for:each={attractionMiniChart} for:item="segment">
@@ -494,7 +494,7 @@
                                onmouseleave={handleInterviewerHoverOut}
                                onclick={handleInterviewerClick}
                                data-interviewer={segment.interviewer}
-                               data-interview-type="Attraction">
+                               data-interview-type="C1-First">
                             <span style="font-weight: 600; font-size: 0.875rem; color: #0176d3; text-decoration: underline;">{segment.interviewer}</span>
                             <span style="background: #0176d3; color: white; padding: 0.25rem 0.75rem; border-radius: 12px; font-weight: 700; font-size: 0.875rem;">{segment.count}</span>
                           </div>
