@@ -95,6 +95,15 @@ public inherited sharing class RecruiterDashboardController {
                 String managerName = result.get('manager') != null ? (String)result.get('manager') : 'Unassigned';
                 Integer count = (Integer)result.get('cnt');
                 
+                // Skip inactive managers and reassign their candidates
+                if (managerName == 'Scott Primm') {
+                    // Reassign Scott Primm's candidates to Bradley Sofonia
+                    managerName = 'Bradley Sofonia';
+                } else if (managerName == 'Diljeet Masuda') {
+                    // Reassign Diljeet Masuda's candidates to Elizabeth Kagele
+                    managerName = 'Elizabeth Kagele';
+                }
+                
                 // Normalize manager names (Brad Sofonia = Bradley Sofonia)
                 if (managerName == 'Brad Sofonia') {
                     managerName = 'Bradley Sofonia';
