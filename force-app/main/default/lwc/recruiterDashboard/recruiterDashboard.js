@@ -859,10 +859,17 @@ export default class RecruiterDashboard extends NavigationMixin(LightningElement
       // Generate SVG path data for pie segment (200, 200 center, 170 radius for 400x400 viewBox)
       const pathData = this.createPiePath(200, 200, 170, currentAngle, currentAngle + segmentAngle);
       
-      // Calculate label position (at the middle of the segment, 60% of radius from center)
+      // Calculate positions for label and line
       const labelAngle = currentAngle + (segmentAngle / 2);
-      const labelRadius = 100; // Position labels at 100px from center (out of 170px radius)
-      const labelPosition = this.polarToCartesian(200, 200, labelRadius, labelAngle);
+      
+      // Line start point (edge of pie at 170px radius)
+      const lineStart = this.polarToCartesian(200, 200, 170, labelAngle);
+      
+      // Line end point (outside the pie at 190px radius)
+      const lineEnd = this.polarToCartesian(200, 200, 190, labelAngle);
+      
+      // Label position (further out at 210px radius)
+      const labelPosition = this.polarToCartesian(200, 200, 210, labelAngle);
       
       // Get manager initials (first letter of each word)
       const initials = item.label.split(' ').map(word => word.charAt(0).toUpperCase()).join('');
@@ -876,6 +883,10 @@ export default class RecruiterDashboard extends NavigationMixin(LightningElement
         color: colors[index % colors.length],
         colorStyle: `background-color: ${colors[index % colors.length]}`,
         pathData: pathData,
+        lineX1: lineStart.x,
+        lineY1: lineStart.y,
+        lineX2: lineEnd.x,
+        lineY2: lineEnd.y,
         labelX: labelPosition.x,
         labelY: labelPosition.y,
         initials: initials,

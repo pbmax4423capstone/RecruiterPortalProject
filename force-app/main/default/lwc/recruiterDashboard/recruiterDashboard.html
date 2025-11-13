@@ -273,7 +273,7 @@
                       <!-- Pie Chart (Right Side - Larger) -->
                       <div class="slds-col slds-size_2-of-3">
                         <div class="pie-chart-container">
-                          <svg width="400" height="400" viewBox="0 0 400 400" class="pie-chart">
+                          <svg width="450" height="450" viewBox="0 0 450 450" class="pie-chart">
                             <!-- Pie segments -->
                             <template for:each={pieChartData} for:item="segment" for:index="index">
                               <path key={segment.label} 
@@ -287,16 +287,31 @@
                                     style="cursor: pointer;">
                               </path>
                             </template>
-                            <!-- Labels on segments -->
+                            <!-- Lines from pie to labels -->
+                            <template for:each={pieChartData} for:item="segment" for:index="index">
+                              <template if:true={segment.showLabel}>
+                                <line key={segment.label}
+                                      x1={segment.lineX1}
+                                      y1={segment.lineY1}
+                                      x2={segment.lineX2}
+                                      y2={segment.lineY2}
+                                      class="pie-label-line"
+                                      stroke={segment.color}
+                                      stroke-width="2">
+                                </line>
+                              </template>
+                            </template>
+                            <!-- Labels outside segments -->
                             <template for:each={pieChartData} for:item="segment" for:index="index">
                               <template if:true={segment.showLabel}>
                                 <text key={segment.label}
                                       x={segment.labelX}
                                       y={segment.labelY}
-                                      class="pie-label"
+                                      class="pie-label-outside"
                                       text-anchor="middle"
                                       dominant-baseline="middle"
-                                      pointer-events="none">
+                                      pointer-events="none"
+                                      fill={segment.color}>
                                   {segment.initials}
                                 </text>
                               </template>

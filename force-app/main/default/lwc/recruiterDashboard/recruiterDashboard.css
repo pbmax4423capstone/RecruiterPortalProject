@@ -2182,6 +2182,16 @@ div.candidate-list-item .slds-p-around_small {
   stroke-width: 3;
 }
 
+.pie-label-line {
+  pointer-events: none;
+}
+
+.pie-label-outside {
+  font-size: 14px;
+  font-weight: 700;
+  pointer-events: none;
+}
+
 .pie-label {
   font-size: 16px;
   font-weight: 700;
