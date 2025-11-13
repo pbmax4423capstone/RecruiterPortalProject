@@ -856,20 +856,20 @@ export default class RecruiterDashboard extends NavigationMixin(LightningElement
       // Calculate angle for this segment
       const segmentAngle = total > 0 ? (item.value / total) * 360 : 0;
       
-      // Generate SVG path data for pie segment (250, 250 center, 150 radius for 500x500 viewBox)
-      const pathData = this.createPiePath(250, 250, 150, currentAngle, currentAngle + segmentAngle);
+      // Generate SVG path data for pie segment (250, 250 center, 140 radius for 500x500 viewBox)
+      const pathData = this.createPiePath(250, 250, 140, currentAngle, currentAngle + segmentAngle);
       
       // Calculate positions for label and line
       const labelAngle = currentAngle + (segmentAngle / 2);
       
-      // Line start point (edge of pie at 150px radius)
-      const lineStart = this.polarToCartesian(250, 250, 150, labelAngle);
+      // Line start point (edge of pie at 140px radius)
+      const lineStart = this.polarToCartesian(250, 250, 140, labelAngle);
       
-      // Line end point (outside the pie at 180px radius)
-      const lineEnd = this.polarToCartesian(250, 250, 180, labelAngle);
+      // Line end point (outside the pie at 175px radius)
+      const lineEnd = this.polarToCartesian(250, 250, 175, labelAngle);
       
-      // Label position (further out at 210px radius)
-      const labelPosition = this.polarToCartesian(250, 250, 210, labelAngle);
+      // Label position (further out at 220px radius)
+      const labelPosition = this.polarToCartesian(250, 250, 220, labelAngle);
       
       // Get manager initials (first letter of each word)
       const initials = item.label.split(' ').map(word => word.charAt(0).toUpperCase()).join('');
