@@ -695,7 +695,7 @@ public inherited sharing class RecruiterDashboardController {
             for (Interview__c interview : recentInterviews) {
                 Map<String, Object> activity = new Map<String, Object>();
                 activity.put('id', interview.Id + '_interview');
-                activity.put('type', '🎯');
+                activity.put('type', '📅');
                 activity.put('description', interview.Interview_Type__c + ' Interview');
                 activity.put('candidateName', interview.Candidate__r?.Name != null ? interview.Candidate__r.Name : 'N/A');
                 activity.put('salesManager', interview.Candidate__r?.Sales_Manager__c != null ? interview.Candidate__r.Sales_Manager__c : 'N/A');
