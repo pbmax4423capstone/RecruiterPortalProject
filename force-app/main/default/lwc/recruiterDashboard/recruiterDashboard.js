@@ -3830,7 +3830,12 @@ export default class RecruiterDashboard extends NavigationMixin(LightningElement
   // Candidate Detail Modal Methods
   handleCandidateClick(event) {
     const candidateId = event.currentTarget.dataset.candidateId;
-    const candidate = this.candidateModalData.find(c => c.id === candidateId);
+    
+    // Try to find candidate in either modal's data
+    let candidate = this.candidateModalData.find(c => c.id === candidateId);
+    if (!candidate && this.salesManagerCandidates) {
+      candidate = this.salesManagerCandidates.find(c => c.id === candidateId);
+    }
     
     console.log('Candidate clicked:', candidateId);
     console.log('Found candidate:', candidate);
