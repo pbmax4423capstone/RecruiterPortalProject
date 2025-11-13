@@ -1,5 +1,5 @@
 ﻿<template>
-  <div class="dashboard-container">
+  <div class={dashboardContainerClass}>
     <!-- Branded Header -->
     <div class="branded-header">
       <div class="slds-page-header__row">
@@ -26,6 +26,15 @@
           </div>
         </div>
         <div class="slds-page-header__col-actions">
+          <!-- Dark Mode Toggle -->
+          <lightning-button-icon
+            icon-name={darkModeIcon}
+            alternative-text="Toggle Dark Mode"
+            title="Toggle Dark Mode"
+            onclick={toggleDarkMode}
+            variant="border-filled"
+            class="dark-mode-toggle">
+          </lightning-button-icon>
           <!-- Action Buttons Row -->
           <div class="action-buttons-container">
             <lightning-button-group>

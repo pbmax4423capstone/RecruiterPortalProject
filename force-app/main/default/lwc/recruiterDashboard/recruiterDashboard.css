@@ -2840,3 +2840,169 @@ div.candidate-list-item .slds-p-around_small {
     height: 6px;
   }
 }
+/* ========================================
+   DARK MODE STYLES
+   ======================================== */
+
+/* Dark Mode Toggle Button */
+.dark-mode-toggle {
+  margin-right: 1rem;
+}
+
+/* Dark Mode Container */
+.dashboard-container.dark-mode {
+  background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+  color: #e0e0e0;
+}
+
+/* Dark Mode Header */
+.dark-mode .branded-header {
+  background: #1a1a1a !important;
+  border-bottom-color: #f4a024;
+}
+
+.dark-mode .company-logo {
+  background: #2d2d2d;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+}
+
+/* Dark Mode Cards */
+.dark-mode lightning-card {
+  --slds-c-card-color-background: #2d2d2d;
+  --slds-c-card-color-border: #404040;
+  --slds-c-card-shadow: 0 3px 12px rgba(0, 0, 0, 0.5);
+  border-top-color: #f4a024;
+}
+
+.dark-mode lightning-card:hover {
+  --slds-c-card-shadow: 0 6px 20px rgba(244, 160, 36, 0.3);
+  border-top-color: #0176d3;
+}
+
+/* Dark Mode Text */
+.dark-mode .slds-text-heading_medium,
+.dark-mode .slds-text-heading_small,
+.dark-mode .slds-card__header-title {
+  color: #e0e0e0 !important;
+}
+
+.dark-mode .slds-text-body_regular,
+.dark-mode .slds-text-color_weak {
+  color: #b0b0b0 !important;
+}
+
+/* Dark Mode Stats Boxes */
+.dark-mode .stat-box {
+  background: #2d2d2d !important;
+  border-color: #404040 !important;
+  color: #e0e0e0 !important;
+}
+
+.dark-mode .stat-value {
+  color: #f4a024 !important;
+}
+
+/* Dark Mode Interview Leaderboard */
+.dark-mode .slds-box {
+  background: #2d2d2d !important;
+  color: #e0e0e0 !important;
+}
+
+.dark-mode .slds-notify {
+  background: #3d3d3d !important;
+  border-color: #505050 !important;
+}
+
+/* Dark Mode Modal */
+.dark-mode .slds-modal__container {
+  background: #2d2d2d;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.7);
+}
+
+.dark-mode .slds-modal__header {
+  background: #1a1a1a;
+  border-bottom: 1px solid #404040;
+}
+
+.dark-mode .slds-modal__content {
+  background: #2d2d2d;
+  color: #e0e0e0;
+}
+
+.dark-mode .slds-modal__footer {
+  background: #1a1a1a;
+  border-top: 1px solid #404040;
+}
+
+/* Dark Mode Interview Cards in Modal */
+.dark-mode .slds-box[style*="background: #f3f3f3"] {
+  background: #3d3d3d !important;
+}
+
+/* Dark Mode Activity Feed */
+.dark-mode .activity-card {
+  background: #2d2d2d !important;
+  border-color: #404040 !important;
+}
+
+.dark-mode .activity-icon {
+  background: #1a1a1a !important;
+}
+
+/* Dark Mode Tables */
+.dark-mode table {
+  background: #2d2d2d;
+  color: #e0e0e0;
+}
+
+.dark-mode th {
+  background: #1a1a1a;
+  border-color: #404040;
+  color: #f4a024;
+}
+
+.dark-mode td {
+  border-color: #404040;
+}
+
+.dark-mode tr:hover {
+  background: #3d3d3d;
+}
+
+/* Dark Mode Pie Charts */
+.dark-mode .pie-chart-container {
+  background: #2d2d2d;
+}
+
+.dark-mode .pie-legend-item {
+  color: #e0e0e0;
+}
+
+.dark-mode .pie-label-outside {
+  fill: #e0e0e0;
+}
+
+/* Dark Mode Buttons */
+.dark-mode lightning-button {
+  --slds-c-button-neutral-color-background: #3d3d3d;
+  --slds-c-button-neutral-color-border: #505050;
+  --slds-c-button-text-color: #e0e0e0;
+}
+
+/* Dark Mode Input Fields */
+.dark-mode lightning-input,
+.dark-mode lightning-textarea,
+.dark-mode lightning-combobox {
+  --slds-g-color-neutral-base-100: #3d3d3d;
+  --slds-g-color-border-base-1: #505050;
+}
+
+/* Dark Mode Backdrop */
+.dark-mode .slds-backdrop {
+  background-color: rgba(0, 0, 0, 0.8);
+}
+
+/* Dark mode interview section cards */
+.dark-mode div[style*="border-left: 4px solid"] {
+  background: #3d3d3d !important;
+}

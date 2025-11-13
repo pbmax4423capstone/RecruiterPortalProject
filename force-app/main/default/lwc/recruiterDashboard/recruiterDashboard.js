@@ -394,6 +394,9 @@ export default class RecruiterDashboard extends NavigationMixin(LightningElement
   @track selectedInterviewer = '';
   @track selectedInterviewType = '';
   
+  // Dark Mode
+  @track isDarkMode = false;
+  
   // Individual form fields for better reactivity
   @track candidateEditId = '';
   @track candidateEditName = '';
@@ -1169,6 +1172,15 @@ export default class RecruiterDashboard extends NavigationMixin(LightningElement
   // Format success rate as percentage
   get formattedSuccessRate() {
     return this.successRate + '%';
+  }
+  
+  // Dark mode computed properties
+  get dashboardContainerClass() {
+    return this.isDarkMode ? 'dashboard-container dark-mode' : 'dashboard-container';
+  }
+  
+  get darkModeIcon() {
+    return this.isDarkMode ? 'utility:light_bulb' : 'utility:preview';
   }
   
   // Determine if user is Director of Recruiting
@@ -4020,6 +4032,12 @@ export default class RecruiterDashboard extends NavigationMixin(LightningElement
     this.selectedInterviewer = '';
     this.selectedInterviewType = '';
     console.log('Closed interview details modal');
+  }
+
+  // Dark Mode Toggle
+  toggleDarkMode() {
+    this.isDarkMode = !this.isDarkMode;
+    console.log('Dark mode toggled:', this.isDarkMode);
   }
 
   // Candidate Detail Form Handlers
