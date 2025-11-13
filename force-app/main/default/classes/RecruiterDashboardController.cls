@@ -39,7 +39,7 @@ public inherited sharing class RecruiterDashboardController {
         return dashboardData;
     }
     
-    @AuraEnabled(cacheable=true)
+    @AuraEnabled(cacheable=false)
     public static Map<String, Integer> getCandidateStats() {
         Map<String, Integer> stats = new Map<String, Integer>();
         
@@ -72,7 +72,7 @@ public inherited sharing class RecruiterDashboardController {
         return stats;
     }
     
-    @AuraEnabled(cacheable=true)
+    @AuraEnabled(cacheable=false)
     public static Map<String, Object> getActiveCandidateAnalytics() {
         Map<String, Object> analytics = new Map<String, Object>();
         
@@ -140,7 +140,7 @@ public inherited sharing class RecruiterDashboardController {
         return analytics;
     }
 
-    @AuraEnabled(cacheable=true)
+    @AuraEnabled(cacheable=false)
     public static Map<String, Object> getInterviewStatsByType() {
         Map<String, Object> interviewStats = new Map<String, Object>();
         
@@ -218,7 +218,7 @@ public inherited sharing class RecruiterDashboardController {
         return interviewStats;
     }
 
-    @AuraEnabled(cacheable=true)
+    @AuraEnabled(cacheable=false)
     public static List<Map<String, Object>> getInterviewStatsByInterviewer() {
         List<Map<String, Object>> interviewerStats = new List<Map<String, Object>>();
         
@@ -301,7 +301,7 @@ public inherited sharing class RecruiterDashboardController {
         return interviewerStats;
     }
 
-    @AuraEnabled(cacheable=true)
+    @AuraEnabled(cacheable=false)
     public static Map<String, Object> getInterviewTypeWithInterviewerStats() {
         Map<String, Object> result = new Map<String, Object>();
         
@@ -612,7 +612,7 @@ public inherited sharing class RecruiterDashboardController {
         }
     }
 
-    @AuraEnabled(cacheable=true)
+    @AuraEnabled(cacheable=false)
     public static Map<String, Integer> getScheduledInterviewStats() {
         Map<String, Integer> stats = new Map<String, Integer>();
         
@@ -655,12 +655,12 @@ public inherited sharing class RecruiterDashboardController {
         return stats;
     }
     
-    @AuraEnabled(cacheable=true)
+    @AuraEnabled(cacheable=false)
     public static List<Map<String, Object>> getRecentActivity() {
         return getUserRecentActivity();
     }
     
-    @AuraEnabled(cacheable=true)
+    @AuraEnabled(cacheable=false)
     public static List<Map<String, Object>> getUserRecentActivity() {
         List<Map<String, Object>> activities = new List<Map<String, Object>>();
         String currentUserId = UserInfo.getUserId();
@@ -851,7 +851,7 @@ public inherited sharing class RecruiterDashboardController {
         }
     }
     
-    @AuraEnabled(cacheable=true)
+    @AuraEnabled(cacheable=false)
     public static Map<String, Object> getDetailedInterviewStats() {
         Map<String, Object> interviewStats = new Map<String, Object>();
         
@@ -917,7 +917,7 @@ public inherited sharing class RecruiterDashboardController {
         }
     }
     
-    @AuraEnabled(cacheable=true)
+    @AuraEnabled(cacheable=false)
     public static List<Map<String, Object>> getInterviewsByType() {
         List<Map<String, Object>> interviewData = new List<Map<String, Object>>();
         
@@ -943,7 +943,7 @@ public inherited sharing class RecruiterDashboardController {
         return interviewData;
     }
     
-    @AuraEnabled(cacheable=true)
+    @AuraEnabled(cacheable=false)
     public static Map<String, Integer> getPerformanceMetrics() {
         Map<String, Integer> metrics = new Map<String, Integer>();
         
@@ -975,7 +975,7 @@ public inherited sharing class RecruiterDashboardController {
         return metrics;
     }
     
-    @AuraEnabled(cacheable=true)
+    @AuraEnabled(cacheable=false)
     public static List<Map<String, Object>> getScheduledCandidateDetails(String interviewType) {
         List<Map<String, Object>> candidateDetails = new List<Map<String, Object>>();
         
@@ -1050,7 +1050,7 @@ public inherited sharing class RecruiterDashboardController {
         return candidateDetails;
     }
     
-    @AuraEnabled(cacheable=true)
+    @AuraEnabled(cacheable=false)
     public static Map<String, Integer> getCurrentUserCallStats() {
         Map<String, Integer> stats = new Map<String, Integer>();
         try {
@@ -1215,7 +1215,7 @@ public inherited sharing class RecruiterDashboardController {
         }
     }
     
-    @AuraEnabled(cacheable=true)
+    @AuraEnabled(cacheable=false)
     public static List<Map<String, Object>> getSalesManagerMetrics() {
         List<Map<String, Object>> managerMetrics = new List<Map<String, Object>>();
         
@@ -1346,7 +1346,7 @@ public inherited sharing class RecruiterDashboardController {
         }
     }
     
-    @AuraEnabled(cacheable=true)
+    @AuraEnabled(cacheable=false)
     public static List<Map<String, Object>> getPastDueCalls() {
         List<Map<String, Object>> pastDueCalls = new List<Map<String, Object>>();
         
@@ -1504,7 +1504,7 @@ public inherited sharing class RecruiterDashboardController {
         }
     }
     
-    @AuraEnabled(cacheable=true)
+    @AuraEnabled(cacheable=false)
     public static Map<String, String> getCurrentUserInfo() {
         Map<String, String> result = new Map<String, String>();
         try {
@@ -1583,7 +1583,7 @@ public inherited sharing class RecruiterDashboardController {
         return result;
     }
     
-    @AuraEnabled(cacheable=true)
+    @AuraEnabled(cacheable=false)
     public static Map<String, Object> getUserPipelineAnalytics(String userName) {
         Map<String, Object> analytics = new Map<String, Object>();
         
@@ -1744,7 +1744,7 @@ public inherited sharing class RecruiterDashboardController {
         }
     }
     
-    @AuraEnabled(cacheable=true)
+    @AuraEnabled(cacheable=false)
     public static List<Map<String, Object>> getActiveCandidates() {
         List<Map<String, Object>> candidateResults = new List<Map<String, Object>>();
         
@@ -1913,7 +1913,7 @@ public inherited sharing class RecruiterDashboardController {
      * @param salesManager The name of the sales manager
      * @return List of candidates with their details
      */
-    @AuraEnabled(cacheable=true)
+    @AuraEnabled(cacheable=false)
     public static List<Map<String, Object>> getCandidatesBySalesManager(String salesManager) {
         List<Map<String, Object>> candidateList = new List<Map<String, Object>>();
         
