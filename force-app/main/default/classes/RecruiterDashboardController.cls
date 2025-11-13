@@ -1920,7 +1920,18 @@ public inherited sharing class RecruiterDashboardController {
         try {
             System.debug('Getting candidates for sales manager: ' + salesManager);
             
-            // Query Active/In Process candidates for the specified sales manager
+            // Build list of manager names to query based on reassignment logic
+            List<String> managerNames = new List<String>();
+            managerNames.add(salesManager);
+            
+            // Include inactive managers whose candidates are reassigned to this manager
+            if (salesManager == 'Bradley Sofonia') {
+                managerNames.add('Scott Primm');
+            } else if (salesManager == 'Elizabeth Kagele') {
+                managerNames.add('Diljeet Masuda');
+            }
+            
+            // Query Active/In Process candidates for the specified sales manager(s)
             List<Candidate__c> candidates = [
                 SELECT Id, Name, Email__c, Phone__c, Position__c, Status__c,
                        Office_Location_Picklist__c, Sales_Manager__c, 
@@ -1928,11 +1939,11 @@ public inherited sharing class RecruiterDashboardController {
                        CreatedDate, LastModifiedDate
                 FROM Candidate__c 
                 WHERE Status__c = 'Active/In Process'
-                AND Sales_Manager__c = :salesManager
+                AND Sales_Manager__c IN :managerNames
                 ORDER BY Name ASC
             ];
             
-            System.debug('Found ' + candidates.size() + ' candidates for ' + salesManager);
+            System.debug('Found ' + candidates.size() + ' candidates for ' + salesManager + ' (including reassigned)');
             
             // Format each candidate
             for (Candidate__c candidate : candidates) {
