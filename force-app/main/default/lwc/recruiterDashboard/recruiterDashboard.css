@@ -477,6 +477,8 @@ lightning-card[title*="Call Management"] .slds-card__body {
   border-radius: 12px;
   margin: 2rem auto;
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+  position: relative;
+  z-index: 9000;
 }
 
 .slds-modal__header {
@@ -488,6 +490,29 @@ lightning-card[title*="Call Management"] .slds-card__body {
   padding: 2rem;
   max-height: 70vh;
   overflow-y: auto;
+  position: relative;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Prevent background scroll when modal is open */
+.slds-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+  z-index: 9000;
+}
+
+.slds-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 8999;
 }
 
 .slds-modal__footer {
