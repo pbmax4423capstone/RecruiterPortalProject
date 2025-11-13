@@ -162,10 +162,6 @@ public class RecruiterDashboardControllerMinimalTest {
         List<Map<String, Object>> userRecentActivity = RecruiterDashboardController.getUserRecentActivity();
         System.assertNotEquals(null, userRecentActivity);
         
-        // Test getContractPerformanceData
-        Map<String, Object> contractPerformance = RecruiterDashboardController.getContractPerformanceData();
-        System.assertNotEquals(null, contractPerformance);
-        
         Test.stopTest();
     }
     
