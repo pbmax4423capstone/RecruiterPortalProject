@@ -13,14 +13,13 @@ public class RecruiterDashboardControllerMinimalTest {
         Contact con = new Contact(FirstName = 'Test', LastName = 'Contact', Email = 'test@example.com', AccountId = acc.Id);
         insert con;
         
-        // Create candidates with different sales managers including inactive ones
+        // Create candidates - some with sales managers, some without
         List<Candidate__c> candidates = new List<Candidate__c>();
         
         candidates.add(new Candidate__c(
             Name = 'Test Candidate 1',
             Email__c = 'candidate1@example.com',
             Status__c = 'Active/In Process',
-            Sales_Manager__c = 'Bradley Sofonia',
             Contact__c = con.Id
         ));
         
@@ -28,23 +27,6 @@ public class RecruiterDashboardControllerMinimalTest {
             Name = 'Test Candidate 2',
             Email__c = 'candidate2@example.com',
             Status__c = 'Active/In Process',
-            Sales_Manager__c = 'Scott Primm',
-            Contact__c = con.Id
-        ));
-        
-        candidates.add(new Candidate__c(
-            Name = 'Test Candidate 3',
-            Email__c = 'candidate3@example.com',
-            Status__c = 'Active/In Process',
-            Sales_Manager__c = 'Elizabeth Kagele',
-            Contact__c = con.Id
-        ));
-        
-        candidates.add(new Candidate__c(
-            Name = 'Test Candidate 4',
-            Email__c = 'candidate4@example.com',
-            Status__c = 'Active/In Process',
-            Sales_Manager__c = 'Diljeet Masuda',
             Contact__c = con.Id
         ));
         
