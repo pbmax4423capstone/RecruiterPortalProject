@@ -3944,11 +3944,48 @@ export default class RecruiterDashboard extends NavigationMixin(LightningElement
 
   // Interview Details Modal Handlers
   handleInterviewerHover(event) {
-    event.currentTarget.style.background = '#f3f3f3';
+    const interviewType = event.currentTarget.dataset.interviewType;
+    let hoverGradient = 'linear-gradient(to right, #fef8f0 0%, #fff5e6 100%)';
+    let borderColor = '#f4a024';
+    
+    // Set hover colors based on interview type
+    if (interviewType === 'C1-First') {
+      hoverGradient = 'linear-gradient(to right, #e6f2ff 0%, #d9ebff 100%)';
+      borderColor = '#0176d3';
+    } else if (interviewType === 'Align-2nd') {
+      hoverGradient = 'linear-gradient(to right, #d9f7f4 0%, #ccf5f1 100%)';
+      borderColor = '#06a59a';
+    } else if (interviewType === 'Plan-3rd') {
+      hoverGradient = 'linear-gradient(to right, #ffe6e0 0%, #ffddd4 100%)';
+      borderColor = '#e74c3c';
+    } else if (interviewType === 'Present-4th') {
+      hoverGradient = 'linear-gradient(to right, #fff4e6 0%, #ffedd9 100%)';
+      borderColor = '#f4a024';
+    } else if (interviewType === 'Optional-5th') {
+      hoverGradient = 'linear-gradient(to right, #f3e6ff 0%, #ecdcff 100%)';
+      borderColor = '#9b59b6';
+    }
+    
+    event.currentTarget.style.background = hoverGradient;
+    event.currentTarget.style.borderLeftColor = borderColor;
+    event.currentTarget.style.transform = 'translateX(4px)';
+    event.currentTarget.style.boxShadow = `0 4px 12px rgba(0, 51, 102, 0.12)`;
   }
 
   handleInterviewerHoverOut(event) {
-    event.currentTarget.style.background = 'white';
+    event.currentTarget.style.background = 'linear-gradient(to right, #ffffff 0%, #f8f9fa 100%)';
+    const interviewType = event.currentTarget.dataset.interviewType;
+    let borderColor = '#e0e5ee';
+    
+    if (interviewType === 'C1-First') borderColor = '#e0e5ee';
+    else if (interviewType === 'Align-2nd') borderColor = '#d0f0ed';
+    else if (interviewType === 'Plan-3rd') borderColor = '#f5d5d0';
+    else if (interviewType === 'Present-4th') borderColor = '#fce4c4';
+    else if (interviewType === 'Optional-5th') borderColor = '#e6d5f0';
+    
+    event.currentTarget.style.borderLeftColor = borderColor;
+    event.currentTarget.style.transform = 'translateX(0)';
+    event.currentTarget.style.boxShadow = '0 2px 4px rgba(0, 51, 102, 0.06)';
   }
 
   handleInterviewerClick(event) {
