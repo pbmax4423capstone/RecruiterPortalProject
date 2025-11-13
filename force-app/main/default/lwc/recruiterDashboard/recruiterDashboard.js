@@ -19,6 +19,7 @@ import getCandidatesBySalesManager from '@salesforce/apex/RecruiterDashboardCont
 import getInterviewStatsByType from '@salesforce/apex/RecruiterDashboardController.getInterviewStatsByType';
 import getInterviewStatsByInterviewer from '@salesforce/apex/RecruiterDashboardController.getInterviewStatsByInterviewer';
 import getInterviewTypeWithInterviewerStats from '@salesforce/apex/RecruiterDashboardController.getInterviewTypeWithInterviewerStats';
+import getInterviewDetailsByInterviewer from '@salesforce/apex/RecruiterDashboardController.getInterviewDetailsByInterviewer';
 import reassignInterviewsToSalesManagers from '@salesforce/apex/RecruiterDashboardController.reassignInterviewsToSalesManagers';
 import { NavigationMixin } from 'lightning/navigation';
 import { refreshApex } from '@salesforce/apex';
@@ -385,6 +386,13 @@ export default class RecruiterDashboard extends NavigationMixin(LightningElement
   @track salesManagerCandidates = [];
   @track isLoadingSalesManagerCandidates = false;
   @track selectedSalesManager = '';
+  
+  // Interview Details Modal
+  @track showInterviewDetailsModal = false;
+  @track interviewDetailsTitle = '';
+  @track interviewDetailsList = [];
+  @track selectedInterviewer = '';
+  @track selectedInterviewType = '';
   
   // Individual form fields for better reactivity
   @track candidateEditId = '';
@@ -3920,6 +3928,98 @@ export default class RecruiterDashboard extends NavigationMixin(LightningElement
     this.showCandidateDetailModal = false;
     this.selectedCandidateDetail = null;
     console.log('Closed candidate detail modal');
+  }
+
+  // Interview Details Modal Handlers
+  handleInterviewerHover(event) {
+    event.currentTarget.style.background = '#f3f3f3';
+  }
+
+  handleInterviewerHoverOut(event) {
+    event.currentTarget.style.background = 'white';
+  }
+
+  handleInterviewerClick(event) {
+    const interviewer = event.currentTarget.dataset.interviewer;
+    const interviewType = event.currentTarget.dataset.interviewType;
+    
+    console.log('Clicked interviewer:', interviewer, 'Type:', interviewType);
+    
+    this.selectedInterviewer = interviewer;
+    this.selectedInterviewType = interviewType;
+    this.interviewDetailsTitle = `${interviewer} - ${interviewType} Interviews`;
+    
+    // Filter interviews from the interviewerLeaderboard data
+    this.loadInterviewDetails(interviewer, interviewType);
+    
+    this.showInterviewDetailsModal = true;
+  }
+
+  async loadInterviewDetails(interviewer, interviewType) {
+    try {
+      // Call Apex to get interview details
+      const interviews = await getInterviewDetailsByInterviewer({ 
+        interviewer: interviewer, 
+        interviewType: interviewType 
+      });
+
+      // Map to display format
+      this.interviewDetailsList = interviews.map(interview => {
+        return {
+          id: interview.id,
+          candidateName: interview.candidateName || 'Unknown Candidate',
+          interviewDate: this.formatDate(interview.interviewDate),
+          status: interview.status || 'Completed',
+          statusClass: this.getStatusClass(interview.status),
+          notes: interview.notes || ''
+        };
+      });
+
+      console.log('Loaded interview details:', this.interviewDetailsList.length, 'interviews');
+    } catch (error) {
+      console.error('Error loading interview details:', error);
+      this.interviewDetailsList = [];
+      this.showToast('Error', 'Failed to load interview details', 'error');
+    }
+  }
+
+  getStatusClass(status) {
+    if (!status) return 'slds-badge';
+    
+    const statusLower = status.toLowerCase();
+    if (statusLower.includes('completed') || statusLower.includes('passed')) {
+      return 'slds-badge slds-theme_success';
+    } else if (statusLower.includes('scheduled') || statusLower.includes('pending')) {
+      return 'slds-badge slds-theme_warning';
+    } else if (statusLower.includes('cancelled') || statusLower.includes('failed')) {
+      return 'slds-badge slds-theme_error';
+    }
+    return 'slds-badge';
+  }
+
+  formatDate(dateValue) {
+    if (!dateValue) return 'No date';
+    
+    try {
+      const date = new Date(dateValue);
+      return date.toLocaleDateString('en-US', { 
+        year: 'numeric', 
+        month: 'short', 
+        day: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit'
+      });
+    } catch (e) {
+      return dateValue;
+    }
+  }
+
+  closeInterviewDetailsModal() {
+    this.showInterviewDetailsModal = false;
+    this.interviewDetailsList = [];
+    this.selectedInterviewer = '';
+    this.selectedInterviewType = '';
+    console.log('Closed interview details modal');
   }
 
   // Candidate Detail Form Handlers

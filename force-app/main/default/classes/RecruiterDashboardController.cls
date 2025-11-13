@@ -474,6 +474,142 @@ public inherited sharing class RecruiterDashboardController {
     }
 
     @AuraEnabled
+    public static List<Map<String, Object>> getInterviewDetailsByInterviewer(String interviewer, String interviewType) {
+        List<Map<String, Object>> interviewDetails = new List<Map<String, Object>>();
+        
+        try {
+            // Get current month date range
+            Date monthStart = Date.today().toStartOfMonth();
+            Date monthEnd = monthStart.addMonths(1).addDays(-1);
+            
+            List<Candidate__c> candidates = new List<Candidate__c>();
+            
+            // Query based on interview type
+            if (interviewType == 'Attraction') {
+                // Query Attraction interviews - check multi-select picklist
+                candidates = [
+                    SELECT Id, Name, AI_Conducted_By__c, 
+                           Attraction_Interview_Date_Completed__c
+                    FROM Candidate__c 
+                    WHERE Attraction_Interview_Date_Completed__c >= :monthStart
+                    AND Attraction_Interview_Date_Completed__c <= :monthEnd
+                    AND AI_Conducted_By__c != null
+                    ORDER BY Attraction_Interview_Date_Completed__c DESC
+                ];
+                
+                // Filter by interviewer (multi-select picklist)
+                for (Candidate__c cand : candidates) {
+                    if (String.isNotBlank(cand.AI_Conducted_By__c) && 
+                        cand.AI_Conducted_By__c.contains(interviewer)) {
+                        interviewDetails.add(new Map<String, Object>{
+                            'id' => cand.Id,
+                            'candidateName' => cand.Name,
+                            'interviewDate' => cand.Attraction_Interview_Date_Completed__c,
+                            'status' => 'Completed',
+                            'notes' => ''
+                        });
+                    }
+                }
+                
+            } else if (interviewType == 'Structured Interview 1') {
+                candidates = [
+                    SELECT Id, Name, Sales_Manager__c,
+                           SI_1_Date_Completed__c
+                    FROM Candidate__c 
+                    WHERE SI_1_Date_Completed__c >= :monthStart
+                    AND SI_1_Date_Completed__c <= :monthEnd
+                    AND Sales_Manager__c = :interviewer
+                    ORDER BY SI_1_Date_Completed__c DESC
+                ];
+                
+                for (Candidate__c cand : candidates) {
+                    interviewDetails.add(new Map<String, Object>{
+                        'id' => cand.Id,
+                        'candidateName' => cand.Name,
+                        'interviewDate' => cand.SI_1_Date_Completed__c,
+                        'status' => 'Completed',
+                        'notes' => ''
+                    });
+                }
+                
+            } else if (interviewType == 'Structured Interview 2') {
+                candidates = [
+                    SELECT Id, Name, Sales_Manager__c,
+                           SI_2_Date_Completed__c
+                    FROM Candidate__c 
+                    WHERE SI_2_Date_Completed__c >= :monthStart
+                    AND SI_2_Date_Completed__c <= :monthEnd
+                    AND Sales_Manager__c = :interviewer
+                    ORDER BY SI_2_Date_Completed__c DESC
+                ];
+                
+                for (Candidate__c cand : candidates) {
+                    interviewDetails.add(new Map<String, Object>{
+                        'id' => cand.Id,
+                        'candidateName' => cand.Name,
+                        'interviewDate' => cand.SI_2_Date_Completed__c,
+                        'status' => 'Completed',
+                        'notes' => ''
+                    });
+                }
+                
+            } else if (interviewType == 'Structured Interview 3') {
+                candidates = [
+                    SELECT Id, Name, Sales_Manager__c,
+                           SI_3_Completed__c
+                    FROM Candidate__c 
+                    WHERE SI_3_Completed__c >= :monthStart
+                    AND SI_3_Completed__c <= :monthEnd
+                    AND Sales_Manager__c = :interviewer
+                    ORDER BY SI_3_Completed__c DESC
+                ];
+                
+                for (Candidate__c cand : candidates) {
+                    interviewDetails.add(new Map<String, Object>{
+                        'id' => cand.Id,
+                        'candidateName' => cand.Name,
+                        'interviewDate' => cand.SI_3_Completed__c,
+                        'status' => 'Completed',
+                        'notes' => ''
+                    });
+                }
+                
+            } else if (interviewType == 'Career') {
+                // Query Career interviews - check multi-select picklist
+                candidates = [
+                    SELECT Id, Name, CP_Conducted_by__c,
+                           Career_Presentation_Date_Completed__c
+                    FROM Candidate__c 
+                    WHERE Career_Presentation_Date_Completed__c >= :monthStart
+                    AND Career_Presentation_Date_Completed__c <= :monthEnd
+                    AND CP_Conducted_by__c != null
+                    ORDER BY Career_Presentation_Date_Completed__c DESC
+                ];
+                
+                for (Candidate__c cand : candidates) {
+                    if (String.isNotBlank(cand.CP_Conducted_by__c) && 
+                        cand.CP_Conducted_by__c.contains(interviewer)) {
+                        interviewDetails.add(new Map<String, Object>{
+                            'id' => cand.Id,
+                            'candidateName' => cand.Name,
+                            'interviewDate' => cand.Career_Presentation_Date_Completed__c,
+                            'status' => 'Completed',
+                            'notes' => ''
+                        });
+                    }
+                }
+            }
+            
+            System.debug('Retrieved ' + interviewDetails.size() + ' interview details for ' + interviewer + ' - ' + interviewType);
+            
+        } catch (Exception e) {
+            System.debug('Error in getInterviewDetailsByInterviewer: ' + e.getMessage());
+        }
+        
+        return interviewDetails;
+    }
+
+    @AuraEnabled
     public static String reassignInterviewsToSalesManagers() {
         try {
             // First, find Elizabeth Kagele specifically as she's the preferred Sales Manager
