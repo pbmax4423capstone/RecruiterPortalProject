@@ -13,13 +13,42 @@ public class RecruiterDashboardControllerMinimalTest {
         Contact con = new Contact(FirstName = 'Test', LastName = 'Contact', Email = 'test@example.com', AccountId = acc.Id);
         insert con;
         
-        Candidate__c candidate = new Candidate__c(
-            Name = 'Test Candidate',
-            Email__c = 'candidate@example.com',
+        // Create candidates with different sales managers including inactive ones
+        List<Candidate__c> candidates = new List<Candidate__c>();
+        
+        candidates.add(new Candidate__c(
+            Name = 'Test Candidate 1',
+            Email__c = 'candidate1@example.com',
             Status__c = 'Active/In Process',
+            Sales_Manager__c = 'Bradley Sofonia',
             Contact__c = con.Id
-        );
-        insert candidate;
+        ));
+        
+        candidates.add(new Candidate__c(
+            Name = 'Test Candidate 2',
+            Email__c = 'candidate2@example.com',
+            Status__c = 'Active/In Process',
+            Sales_Manager__c = 'Scott Primm',
+            Contact__c = con.Id
+        ));
+        
+        candidates.add(new Candidate__c(
+            Name = 'Test Candidate 3',
+            Email__c = 'candidate3@example.com',
+            Status__c = 'Active/In Process',
+            Sales_Manager__c = 'Elizabeth Kagele',
+            Contact__c = con.Id
+        ));
+        
+        candidates.add(new Candidate__c(
+            Name = 'Test Candidate 4',
+            Email__c = 'candidate4@example.com',
+            Status__c = 'Active/In Process',
+            Sales_Manager__c = 'Diljeet Masuda',
+            Contact__c = con.Id
+        ));
+        
+        insert candidates;
         
         Task task = new Task(
             Subject = 'Test Call',
@@ -106,6 +135,16 @@ public class RecruiterDashboardControllerMinimalTest {
         // This is the method causing SOQL limit issues - isolate it
         List<Map<String, Object>> salesManagerMetrics = RecruiterDashboardController.getSalesManagerMetrics();
         System.assertNotEquals(null, salesManagerMetrics);
+        
+        // Test getCandidatesBySalesManager with various managers including reassignments
+        List<Map<String, Object>> bradleyCandidates = RecruiterDashboardController.getCandidatesBySalesManager('Bradley Sofonia');
+        System.assertNotEquals(null, bradleyCandidates);
+        
+        List<Map<String, Object>> elizabethCandidates = RecruiterDashboardController.getCandidatesBySalesManager('Elizabeth Kagele');
+        System.assertNotEquals(null, elizabethCandidates);
+        
+        List<Map<String, Object>> otherCandidates = RecruiterDashboardController.getCandidatesBySalesManager('Other Manager');
+        System.assertNotEquals(null, otherCandidates);
         
         Test.stopTest();
     }
