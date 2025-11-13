@@ -673,15 +673,18 @@ public inherited sharing class RecruiterDashboardController {
             
             System.debug('getUserRecentActivity - userType: ' + userType + ', userName: ' + userName);
             
-            // Query recently COMPLETED interviews only
+            // Query recently COMPLETED interviews only - filter by user who conducted them
             String interviewQuery = 'SELECT Id, Name, Interview_Type__c, Interview_Status__c, CreatedDate, ' +
                                   'Candidate__r.Name, Candidate__r.Sales_Manager__c, Conducted_By__r.Name, Conducted_By__c ' +
                                   'FROM Interview__c ' +
                                   'WHERE Interview_Status__c = \'Completed\' ';
             
             if (userType == 'Sales Manager') {
-                // Filter by interviews for candidates assigned to this Sales Manager
-                interviewQuery += 'AND Candidate__r.Sales_Manager__c = :userName ';
+                // Filter by interviews for candidates assigned to this Sales Manager OR conducted by them
+                interviewQuery += 'AND (Candidate__r.Sales_Manager__c = :userName OR Conducted_By__c = :currentUserId) ';
+            } else {
+                // For other users, show only interviews they conducted
+                interviewQuery += 'AND Conducted_By__c = :currentUserId ';
             }
             
             interviewQuery += 'ORDER BY CreatedDate DESC LIMIT 15';
@@ -704,13 +707,17 @@ public inherited sharing class RecruiterDashboardController {
                 activities.add(activity);
             }
             
-            // Query recent candidates added - filter by Sales_Manager__c field
+            // Query recent candidates added - filter by owner or sales manager
             String candidateQuery = 'SELECT Id, Name, Contact__r.Name, Status__c, Sales_Manager__c, CreatedDate, CreatedById, CreatedBy.Name, OwnerId, Owner.Name ' +
-                                   'FROM Candidate__c ';
+                                   'FROM Candidate__c ' +
+                                   'WHERE ';
             
             if (userType == 'Sales Manager') {
-                // Filter by candidates assigned to this Sales Manager
-                candidateQuery += 'WHERE Sales_Manager__c = :userName ';
+                // Filter by candidates assigned to this Sales Manager OR owned by them
+                candidateQuery += '(Sales_Manager__c = :userName OR OwnerId = :currentUserId) ';
+            } else {
+                // For other users, show only candidates they own or created
+                candidateQuery += '(OwnerId = :currentUserId OR CreatedById = :currentUserId) ';
             }
             
             candidateQuery += 'ORDER BY CreatedDate DESC LIMIT 15';
@@ -738,13 +745,9 @@ public inherited sharing class RecruiterDashboardController {
             String taskQuery = 'SELECT Id, Subject, Status, CreatedDate, ActivityDate, Who.Name, WhoId, ' +
                               'What.Name, WhatId, OwnerId, Owner.Name, Description ' +
                               'FROM Task ' +
-                              'WHERE Status = \'Completed\' ';
-            
-            if (userType == 'Sales Manager') {
-                taskQuery += 'AND OwnerId = :currentUserId ';
-            }
-            
-            taskQuery += 'ORDER BY CreatedDate DESC LIMIT 15';
+                              'WHERE Status = \'Completed\' ' +
+                              'AND OwnerId = :currentUserId ' +
+                              'ORDER BY CreatedDate DESC LIMIT 15';
             
             List<Task> recentTasks = Database.query(taskQuery);
             System.debug('Found ' + recentTasks.size() + ' tasks for user');
