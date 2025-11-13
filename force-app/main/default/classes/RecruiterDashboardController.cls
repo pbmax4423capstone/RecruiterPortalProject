@@ -695,7 +695,7 @@ public inherited sharing class RecruiterDashboardController {
             for (Interview__c interview : recentInterviews) {
                 Map<String, Object> activity = new Map<String, Object>();
                 activity.put('id', interview.Id + '_interview');
-                activity.put('type', '📅');
+                activity.put('type', '🎯');
                 activity.put('description', interview.Interview_Type__c + ' Interview');
                 activity.put('candidateName', interview.Candidate__r?.Name != null ? interview.Candidate__r.Name : 'N/A');
                 activity.put('salesManager', interview.Candidate__r?.Sales_Manager__c != null ? interview.Candidate__r.Sales_Manager__c : 'N/A');
@@ -728,7 +728,7 @@ public inherited sharing class RecruiterDashboardController {
             for (Candidate__c candidate : recentCandidates) {
                 Map<String, Object> activity = new Map<String, Object>();
                 activity.put('id', candidate.Id + '_candidate');
-                activity.put('type', '👤');
+                activity.put('type', '✅');
                 activity.put('description', 'Candidate Added');
                 String candidateName = candidate.Contact__r?.Name != null ? candidate.Contact__r.Name : candidate.Name;
                 activity.put('candidateName', candidateName != null ? candidateName : 'N/A');
@@ -755,8 +755,22 @@ public inherited sharing class RecruiterDashboardController {
             for (Task taskRecord : recentTasks) {
                 Map<String, Object> activity = new Map<String, Object>();
                 activity.put('id', taskRecord.Id + '_task');
-                activity.put('type', '📞');
-                activity.put('description', taskRecord.Subject != null ? taskRecord.Subject : 'Call Scheduled');
+                
+                // Determine icon based on task subject
+                String taskType = '✓';
+                String taskSubject = taskRecord.Subject != null ? taskRecord.Subject.toLowerCase() : '';
+                if (taskSubject.contains('call') || taskSubject.contains('phone')) {
+                    taskType = '📞';
+                } else if (taskSubject.contains('email') || taskSubject.contains('mail')) {
+                    taskType = '📧';
+                } else if (taskSubject.contains('meeting') || taskSubject.contains('interview')) {
+                    taskType = '🤝';
+                } else if (taskSubject.contains('review') || taskSubject.contains('access')) {
+                    taskType = '📋';
+                }
+                
+                activity.put('type', taskType);
+                activity.put('description', taskRecord.Subject != null ? taskRecord.Subject : 'Task Completed');
                 
                 // Try to get the contact/lead name from Who field, or related record from What field
                 String contactName = 'N/A';
