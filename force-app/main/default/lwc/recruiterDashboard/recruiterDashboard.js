@@ -51,6 +51,17 @@ export default class RecruiterDashboard extends NavigationMixin(LightningElement
   totalContractBTerms = 0;
   totalBtoATransitions = 7;
   contractAJan1 = 175;
+  
+  // Transfer metrics
+  transferIn = 0;
+  transferOut = -1;
+  recruitsTransferIn = 0;
+  recruitsTransferOut = 0;
+  
+  // Performance metrics
+  overallYear1Retention = 78.9;
+  threeYearCompoundGrowth = -14.0;
+  fourYearRetention = 16.0;
 
   connectedCallback() {
     console.log('🚀🚀🚀 RecruiterDashboard connected 🚀🚀🚀');
@@ -3380,6 +3391,9 @@ export default class RecruiterDashboard extends NavigationMixin(LightningElement
     // Net Field Force = Jan 1 + A Added - A Termed + Net B Activity
     const netFieldForce = contractAJan1 + totalContractAAdded - totalContractATerms + netContractBActivity;
     
+    // Transfer metrics
+    const totalNetTransfer = this.transferIn + this.transferOut;
+    
     return {
       // Monthly Contract Activity
       contractAAdded: contractAAdded,
@@ -3394,7 +3408,19 @@ export default class RecruiterDashboard extends NavigationMixin(LightningElement
       totalContractAAdded: totalContractAAdded,
       totalContractATerms: totalContractATerms,
       netContractBActivity: netContractBActivity,
-      netFieldForce: netFieldForce
+      netFieldForce: netFieldForce,
+      
+      // Transfer metrics
+      transferIn: this.transferIn,
+      transferOut: this.transferOut,
+      recruitsTransferIn: this.recruitsTransferIn,
+      recruitsTransferOut: this.recruitsTransferOut,
+      totalNetTransfer: totalNetTransfer,
+      
+      // Performance metrics
+      overallYear1Retention: this.overallYear1Retention,
+      threeYearCompoundGrowth: this.threeYearCompoundGrowth,
+      fourYearRetention: this.fourYearRetention
     };
   }
 

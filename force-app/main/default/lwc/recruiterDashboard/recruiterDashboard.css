@@ -2928,6 +2928,20 @@ div.candidate-list-item .slds-p-around_small {
   color: #e0e0e0 !important;
 }
 
+.dark-mode .slds-box[style*="border-left: 4px solid #4bca81"] {
+  background: #2d2d2d !important;
+  border-color: #404040 !important;
+  border-left-color: #4bca81 !important;
+}
+
+.dark-mode .slds-box h4 {
+  color: #4bca81 !important;
+}
+
+.dark-mode .slds-box div[style*="border-top: 1px solid #dddbda"] {
+  border-top-color: #404040 !important;
+}
+
 .dark-mode .slds-notify {
   background: #3d3d3d !important;
   border-color: #505050 !important;

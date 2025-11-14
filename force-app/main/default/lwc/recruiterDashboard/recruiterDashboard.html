@@ -686,36 +686,92 @@
                     <div class="slds-text-align_center">
                       <div class="slds-text-heading_large slds-text-color_success" style="font-weight: 700; font-size: 2.5rem;">{performanceMetrics.netFieldForce}</div>
                       <div class="slds-text-body_regular" style="font-weight: 600; color: #2e844a;">Net Field Force</div>
-                      <div class="slds-text-body_small slds-text-color_weak">Jan 1 Start + Additions - Terminations - B to A Moves</div>
+                      <div class="slds-text-body_small slds-text-color_weak">Jan 1 Start + Additions - Terminations + Net B Activity</div>
                     </div>
                   </div>
                 </div>
                 
                 <!-- Calculation Breakdown -->
-                <div class="slds-grid slds-wrap slds-gutters">
-                  <div class="slds-col slds-size_3-of-12">
+                <div class="slds-grid slds-wrap slds-gutters slds-m-bottom_medium">
+                  <div class="slds-col slds-size_1-of-5">
                     <div class="slds-text-align_center">
-                      <div class="slds-text-heading_medium slds-text-color_default">{performanceMetrics.contractAJan1}</div>
-                      <div class="slds-text-body_small">📅 Contract A (Jan 1)</div>
+                      <div class="slds-text-heading_medium slds-text-color_default" style="font-size: 1.5rem;">{performanceMetrics.contractAJan1}</div>
+                      <div class="slds-text-body_small" style="font-weight: 600;">📅 Begin Yr NFF</div>
                     </div>
                   </div>
-                  <div class="slds-col slds-size_3-of-12">
+                  <div class="slds-col slds-size_1-of-5">
                     <div class="slds-text-align_center">
-                      <div class="slds-text-heading_medium slds-text-color_success">+{performanceMetrics.totalContractAAdded}</div>
-                      <div class="slds-text-body_small">➕ Contract A Added YTD</div>
+                      <div class="slds-text-heading_medium slds-text-color_success" style="font-size: 1.5rem;">+{performanceMetrics.totalContractAAdded}</div>
+                      <div class="slds-text-body_small" style="font-weight: 600;">➕ YTD Recruits</div>
                     </div>
                   </div>
-                  <div class="slds-col slds-size_3-of-12">
+                  <div class="slds-col slds-size_1-of-5">
                     <div class="slds-text-align_center">
-                      <div class="slds-text-heading_medium slds-text-color_error">-{performanceMetrics.totalContractATerms}</div>
-                      <div class="slds-text-body_small">➖ Contract A Terms YTD</div>
+                      <div class="slds-text-heading_medium slds-text-color_error" style="font-size: 1.5rem;">-{performanceMetrics.totalContractATerms}</div>
+                      <div class="slds-text-body_small" style="font-weight: 600;">➖ Terminated</div>
                     </div>
                   </div>
-                  <div class="slds-col slds-size_3-of-12">
+                  <div class="slds-col slds-size_1-of-5">
                     <div class="slds-text-align_center clickable-metric" onclick={handleNetFieldForceClick}>
-                      <div class="slds-text-heading_medium slds-text-color_warning">+{performanceMetrics.netContractBActivity}</div>
-                      <div class="slds-text-body_small">� Net Contract B Activity</div>
+                      <div class="slds-text-heading_medium slds-text-color_warning" style="font-size: 1.5rem;">+{performanceMetrics.netContractBActivity}</div>
+                      <div class="slds-text-body_small" style="font-weight: 600;">🔄 Net Contract B</div>
                       <div class="slds-text-body_x-small slds-text-color_weak">Click for details</div>
+                    </div>
+                  </div>
+                  <div class="slds-col slds-size_1-of-5">
+                    <div class="slds-text-align_center">
+                      <div class="slds-text-heading_medium" style="font-size: 1.5rem; color: #0176d3;">{performanceMetrics.totalNetTransfer}</div>
+                      <div class="slds-text-body_small" style="font-weight: 600;">⇄ Total Net Transfer</div>
+                    </div>
+                  </div>
+                </div>
+                
+                <!-- Transfer Details Row -->
+                <div class="slds-grid slds-wrap slds-gutters slds-m-bottom_medium" style="border-top: 1px solid #dddbda; padding-top: 1rem;">
+                  <div class="slds-col slds-size_1-of-4">
+                    <div class="slds-text-align_center">
+                      <div class="slds-text-heading_small">{performanceMetrics.transferIn}</div>
+                      <div class="slds-text-body_x-small slds-text-color_weak">Transfer In</div>
+                    </div>
+                  </div>
+                  <div class="slds-col slds-size_1-of-4">
+                    <div class="slds-text-align_center">
+                      <div class="slds-text-heading_small">{performanceMetrics.transferOut}</div>
+                      <div class="slds-text-body_x-small slds-text-color_weak">Transfer Out</div>
+                    </div>
+                  </div>
+                  <div class="slds-col slds-size_1-of-4">
+                    <div class="slds-text-align_center">
+                      <div class="slds-text-heading_small">{performanceMetrics.recruitsTransferIn}</div>
+                      <div class="slds-text-body_x-small slds-text-color_weak">Recruits Transfer In</div>
+                    </div>
+                  </div>
+                  <div class="slds-col slds-size_1-of-4">
+                    <div class="slds-text-align_center">
+                      <div class="slds-text-heading_small">{performanceMetrics.recruitsTransferOut}</div>
+                      <div class="slds-text-body_x-small slds-text-color_weak">Recruits Transfer Out</div>
+                    </div>
+                  </div>
+                </div>
+                
+                <!-- Performance Metrics Row -->
+                <div class="slds-grid slds-wrap slds-gutters" style="border-top: 1px solid #dddbda; padding-top: 1rem;">
+                  <div class="slds-col slds-size_1-of-3">
+                    <div class="slds-text-align_center">
+                      <div class="slds-text-heading_medium slds-text-color_success" style="font-size: 1.75rem; font-weight: 700;">{performanceMetrics.overallYear1Retention}%</div>
+                      <div class="slds-text-body_small" style="font-weight: 600; color: #2e844a;">📊 Overall Year1 Retention %</div>
+                    </div>
+                  </div>
+                  <div class="slds-col slds-size_1-of-3">
+                    <div class="slds-text-align_center">
+                      <div class="slds-text-heading_medium" style="font-size: 1.75rem; font-weight: 700; color: #e74c3c;">{performanceMetrics.threeYearCompoundGrowth}%</div>
+                      <div class="slds-text-body_small" style="font-weight: 600;">📈 3 Year Compound Growth Rate</div>
+                    </div>
+                  </div>
+                  <div class="slds-col slds-size_1-of-3">
+                    <div class="slds-text-align_center">
+                      <div class="slds-text-heading_medium slds-text-color_default" style="font-size: 1.75rem; font-weight: 700;">{performanceMetrics.fourYearRetention}%</div>
+                      <div class="slds-text-body_small" style="font-weight: 600;">🎯 4 Year Retention (YTD Basis)</div>
                     </div>
                   </div>
                 </div>
