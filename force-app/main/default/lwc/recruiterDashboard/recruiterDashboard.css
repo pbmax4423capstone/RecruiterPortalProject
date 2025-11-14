@@ -3036,7 +3036,7 @@ div.candidate-list-item .slds-p-around_small {
 
 /* Section headers */
 .dark-mode .slds-col h3[style*="color: #003366"] {
-  color: #e0e0e0 !important;
+  color: #9a9a9a !important;
   border-bottom-color: currentColor !important;
 }
 
