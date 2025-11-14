@@ -2942,6 +2942,16 @@ div.candidate-list-item .slds-p-around_small {
   border-top-color: #404040 !important;
 }
 
+/* NFF Firm Filter Dropdown */
+.nff-firm-filter {
+  max-width: 100%;
+}
+
+.dark-mode .nff-firm-filter lightning-combobox {
+  --slds-g-color-neutral-base-100: #3d3d3d;
+  --slds-g-color-border-base-1: #505050;
+}
+
 .dark-mode .slds-notify {
   background: #3d3d3d !important;
   border-color: #505050 !important;

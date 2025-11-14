@@ -680,7 +680,23 @@
 
               <!-- Net Field Force Calculation -->
               <div class="slds-box" style="background-color: #ffffff; border: 1px solid #dddbda; border-left: 4px solid #4bca81; margin-bottom: 1rem;">
-                <h4 class="slds-text-heading_small slds-m-bottom_small" style="color: #2e844a;">🏆 Net Field Force Analysis (2025)</h4>
+                <div class="slds-grid slds-gutters slds-m-bottom_small">
+                  <div class="slds-col slds-size_8-of-12">
+                    <h4 class="slds-text-heading_small" style="color: #2e844a;">🏆 Net Field Force Analysis (2025)</h4>
+                  </div>
+                  <div class="slds-col slds-size_4-of-12">
+                    <lightning-combobox
+                      name="nffFirm"
+                      label=""
+                      value={selectedNffFirm}
+                      placeholder="Select Firm"
+                      options={nffFirmOptions}
+                      onchange={handleNffFirmChange}
+                      variant="label-hidden"
+                      class="nff-firm-filter">
+                    </lightning-combobox>
+                  </div>
+                </div>
                 <div class="slds-grid slds-wrap slds-gutters slds-m-bottom_medium">
                   <div class="slds-col slds-size_12-of-12">
                     <div class="slds-text-align_center">

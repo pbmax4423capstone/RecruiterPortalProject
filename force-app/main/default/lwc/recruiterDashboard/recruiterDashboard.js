@@ -45,6 +45,7 @@ export default class RecruiterDashboard extends NavigationMixin(LightningElement
   contractBtoA = 2;
   
   // Year-to-Date Totals (from NFF Overview table - 11/12/2025)
+  // Combined totals (both firms)
   totalContractAAdded = 29;
   totalContractATerms = 37;
   totalContractBAdded = 0;
@@ -62,6 +63,52 @@ export default class RecruiterDashboard extends NavigationMixin(LightningElement
   overallYear1Retention = 78.9;
   threeYearCompoundGrowth = -14.0;
   fourYearRetention = 16.0;
+  
+  // Firm filter
+  @track selectedNffFirm = 'both';
+  
+  // Firm-specific data
+  nffDataByFirm = {
+    'utah': {
+      contractAJan1: 30,
+      totalContractAAdded: 6,
+      totalContractATerms: 6,
+      netContractBActivity: -3,
+      transferIn: 0,
+      transferOut: 0,
+      recruitsTransferIn: 0,
+      recruitsTransferOut: 0,
+      overallYear1Retention: 69.4,
+      threeYearCompoundGrowth: -22.0,
+      fourYearRetention: 15.0
+    },
+    'california': {
+      contractAJan1: 145,
+      totalContractAAdded: 23,
+      totalContractATerms: 29,
+      netContractBActivity: -6,
+      transferIn: 0,
+      transferOut: -1,
+      recruitsTransferIn: 0,
+      recruitsTransferOut: 0,
+      overallYear1Retention: 78.5,
+      threeYearCompoundGrowth: -14.0,
+      fourYearRetention: 16.5
+    },
+    'both': {
+      contractAJan1: 175,
+      totalContractAAdded: 29,
+      totalContractATerms: 37,
+      netContractBActivity: -7,
+      transferIn: 0,
+      transferOut: -1,
+      recruitsTransferIn: 0,
+      recruitsTransferOut: 0,
+      overallYear1Retention: 78.9,
+      threeYearCompoundGrowth: -14.0,
+      fourYearRetention: 16.0
+    }
+  };
 
   connectedCallback() {
     console.log('🚀🚀🚀 RecruiterDashboard connected 🚀🚀🚀');
@@ -1191,6 +1238,14 @@ export default class RecruiterDashboard extends NavigationMixin(LightningElement
   
   get darkModeIcon() {
     return this.isDarkMode ? 'utility:light_bulb' : 'utility:preview';
+  }
+  
+  get nffFirmOptions() {
+    return [
+      { label: 'Both Firms', value: 'both' },
+      { label: 'Capstone Utah (007)', value: 'utah' },
+      { label: 'Capstone California-Nevada (157)', value: 'california' }
+    ];
   }
   
   // Determine if user is Director of Recruiting
@@ -3377,22 +3432,25 @@ export default class RecruiterDashboard extends NavigationMixin(LightningElement
     const contractBTerminations = this.contractBTerminations || 4;
     const contractBtoA = this.contractBtoA || 2;
     
-    // Year-to-Date totals
-    const totalContractAAdded = this.totalContractAAdded || 25;
-    const totalContractATerms = this.totalContractATerms || 15;
-    const totalContractBAdded = this.totalContractBAdded || 78;
-    const totalContractBTerms = this.totalContractBTerms || 45;
-    const totalBtoATransitions = this.totalBtoATransitions || 18;
-    const contractAJan1 = this.contractAJan1 || 125;
+    // Get firm-specific data
+    const firmData = this.nffDataByFirm[this.selectedNffFirm] || this.nffDataByFirm['both'];
     
-    // Net Contract B Activity = B Added - B Termed - B to A Moves
-    const netContractBActivity = totalContractBAdded - totalContractBTerms - totalBtoATransitions;
+    // Year-to-Date totals from selected firm
+    const totalContractAAdded = firmData.totalContractAAdded;
+    const totalContractATerms = firmData.totalContractATerms;
+    const totalContractBAdded = this.totalContractBAdded || 0;
+    const totalContractBTerms = this.totalContractBTerms || 0;
+    const totalBtoATransitions = Math.abs(firmData.netContractBActivity);
+    const contractAJan1 = firmData.contractAJan1;
+    
+    // Net Contract B Activity from firm data
+    const netContractBActivity = firmData.netContractBActivity;
     
     // Net Field Force = Jan 1 + A Added - A Termed + Net B Activity
     const netFieldForce = contractAJan1 + totalContractAAdded - totalContractATerms + netContractBActivity;
     
-    // Transfer metrics
-    const totalNetTransfer = this.transferIn + this.transferOut;
+    // Transfer metrics from firm data
+    const totalNetTransfer = firmData.transferIn + firmData.transferOut;
     
     return {
       // Monthly Contract Activity
@@ -3411,16 +3469,16 @@ export default class RecruiterDashboard extends NavigationMixin(LightningElement
       netFieldForce: netFieldForce,
       
       // Transfer metrics
-      transferIn: this.transferIn,
-      transferOut: this.transferOut,
-      recruitsTransferIn: this.recruitsTransferIn,
-      recruitsTransferOut: this.recruitsTransferOut,
+      transferIn: firmData.transferIn,
+      transferOut: firmData.transferOut,
+      recruitsTransferIn: firmData.recruitsTransferIn,
+      recruitsTransferOut: firmData.recruitsTransferOut,
       totalNetTransfer: totalNetTransfer,
       
       // Performance metrics
-      overallYear1Retention: this.overallYear1Retention,
-      threeYearCompoundGrowth: this.threeYearCompoundGrowth,
-      fourYearRetention: this.fourYearRetention
+      overallYear1Retention: firmData.overallYear1Retention,
+      threeYearCompoundGrowth: firmData.threeYearCompoundGrowth,
+      fourYearRetention: firmData.fourYearRetention
     };
   }
 
@@ -4134,6 +4192,11 @@ export default class RecruiterDashboard extends NavigationMixin(LightningElement
   toggleDarkMode() {
     this.isDarkMode = !this.isDarkMode;
     console.log('Dark mode toggled:', this.isDarkMode);
+  }
+  
+  handleNffFirmChange(event) {
+    this.selectedNffFirm = event.detail.value;
+    console.log('NFF Firm filter changed to:', this.selectedNffFirm);
   }
 
   // Candidate Detail Form Handlers
