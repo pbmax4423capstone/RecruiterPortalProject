@@ -3022,7 +3022,59 @@ div.candidate-list-item .slds-p-around_small {
   background-color: rgba(0, 0, 0, 0.8);
 }
 
-/* Dark mode interview section cards */
-.dark-mode div[style*="border-left: 4px solid"] {
-  background: #3d3d3d !important;
+/* Dark Mode Interview Leaderboard Tables */
+/* Section containers */
+.dark-mode .slds-col div[style*="border-left: 4px solid #0176d3"],
+.dark-mode .slds-col div[style*="border-left: 4px solid #06a59a"],
+.dark-mode .slds-col div[style*="border-left: 4px solid #e74c3c"],
+.dark-mode .slds-col div[style*="border-left: 4px solid #f4a024"],
+.dark-mode .slds-col div[style*="border-left: 4px solid #9b59b6"] {
+  background: linear-gradient(to bottom, #2d2d2d 0%, #252525 100%) !important;
+  border-color: #404040 !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4) !important;
 }
+
+/* Section headers */
+.dark-mode .slds-col h3[style*="color: #003366"] {
+  color: #e0e0e0 !important;
+  border-bottom-color: currentColor !important;
+}
+
+/* Interviewer name rows */
+.dark-mode .slds-col div[style*="padding: 0.75rem 1rem"] {
+  background: linear-gradient(to right, #2d2d2d 0%, #333333 100%) !important;
+  border-color: #404040 !important;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3) !important;
+}
+
+/* Interviewer name text */
+.dark-mode .slds-col span[style*="color: #003366"] {
+  color: #e0e0e0 !important;
+}
+
+/* Count badges - keep their vibrant colors but slightly muted */
+.dark-mode .slds-col span[style*="background: linear-gradient(135deg, #0176d3"] {
+  background: linear-gradient(135deg, #0176d3 0%, #015ba8 100%) !important;
+  box-shadow: 0 2px 6px rgba(1, 118, 211, 0.4) !important;
+}
+
+.dark-mode .slds-col span[style*="background: linear-gradient(135deg, #06a59a"] {
+  background: linear-gradient(135deg, #06a59a 0%, #058478 100%) !important;
+  box-shadow: 0 2px 6px rgba(6, 165, 154, 0.4) !important;
+}
+
+.dark-mode .slds-col span[style*="background: linear-gradient(135deg, #e74c3c"] {
+  background: linear-gradient(135deg, #e74c3c 0%, #c44133 100%) !important;
+  box-shadow: 0 2px 6px rgba(231, 76, 60, 0.4) !important;
+}
+
+.dark-mode .slds-col span[style*="background: linear-gradient(135deg, #f4a024"] {
+  background: linear-gradient(135deg, #f4a024 0%, #d18a1e 100%) !important;
+  box-shadow: 0 2px 6px rgba(244, 160, 36, 0.4) !important;
+}
+
+.dark-mode .slds-col span[style*="background: linear-gradient(135deg, #9b59b6"] {
+  background: linear-gradient(135deg, #9b59b6 0%, #7d4a94 100%) !important;
+  box-shadow: 0 2px 6px rgba(155, 89, 182, 0.4) !important;
+}
+

@@ -3945,47 +3945,81 @@ export default class RecruiterDashboard extends NavigationMixin(LightningElement
   // Interview Details Modal Handlers
   handleInterviewerHover(event) {
     const interviewType = event.currentTarget.dataset.interviewType;
-    let hoverGradient = 'linear-gradient(to right, #fef8f0 0%, #fff5e6 100%)';
-    let borderColor = '#f4a024';
+    const isDark = this.isDarkMode;
+    let hoverGradient, borderColor;
     
-    // Set hover colors based on interview type
-    if (interviewType === 'C1-First') {
-      hoverGradient = 'linear-gradient(to right, #e6f2ff 0%, #d9ebff 100%)';
-      borderColor = '#0176d3';
-    } else if (interviewType === 'Align-2nd') {
-      hoverGradient = 'linear-gradient(to right, #d9f7f4 0%, #ccf5f1 100%)';
-      borderColor = '#06a59a';
-    } else if (interviewType === 'Plan-3rd') {
-      hoverGradient = 'linear-gradient(to right, #ffe6e0 0%, #ffddd4 100%)';
-      borderColor = '#e74c3c';
-    } else if (interviewType === 'Present-4th') {
-      hoverGradient = 'linear-gradient(to right, #fff4e6 0%, #ffedd9 100%)';
-      borderColor = '#f4a024';
-    } else if (interviewType === 'Optional-5th') {
-      hoverGradient = 'linear-gradient(to right, #f3e6ff 0%, #ecdcff 100%)';
-      borderColor = '#9b59b6';
+    // Set hover colors based on interview type and dark mode
+    if (isDark) {
+      // Dark mode hover colors
+      if (interviewType === 'C1-First') {
+        hoverGradient = 'linear-gradient(to right, #1a3a5a 0%, #234666 100%)';
+        borderColor = '#0176d3';
+      } else if (interviewType === 'Align-2nd') {
+        hoverGradient = 'linear-gradient(to right, #1a4540 0%, #235550 100%)';
+        borderColor = '#06a59a';
+      } else if (interviewType === 'Plan-3rd') {
+        hoverGradient = 'linear-gradient(to right, #4a2828 0%, #5a3535 100%)';
+        borderColor = '#e74c3c';
+      } else if (interviewType === 'Present-4th') {
+        hoverGradient = 'linear-gradient(to right, #4a3820 0%, #5a4428 100%)';
+        borderColor = '#f4a024';
+      } else if (interviewType === 'Optional-5th') {
+        hoverGradient = 'linear-gradient(to right, #3a2a4a 0%, #4a3658 100%)';
+        borderColor = '#9b59b6';
+      }
+    } else {
+      // Light mode hover colors
+      if (interviewType === 'C1-First') {
+        hoverGradient = 'linear-gradient(to right, #e6f2ff 0%, #d9ebff 100%)';
+        borderColor = '#0176d3';
+      } else if (interviewType === 'Align-2nd') {
+        hoverGradient = 'linear-gradient(to right, #d9f7f4 0%, #ccf5f1 100%)';
+        borderColor = '#06a59a';
+      } else if (interviewType === 'Plan-3rd') {
+        hoverGradient = 'linear-gradient(to right, #ffe6e0 0%, #ffddd4 100%)';
+        borderColor = '#e74c3c';
+      } else if (interviewType === 'Present-4th') {
+        hoverGradient = 'linear-gradient(to right, #fff4e6 0%, #ffedd9 100%)';
+        borderColor = '#f4a024';
+      } else if (interviewType === 'Optional-5th') {
+        hoverGradient = 'linear-gradient(to right, #f3e6ff 0%, #ecdcff 100%)';
+        borderColor = '#9b59b6';
+      }
     }
     
     event.currentTarget.style.background = hoverGradient;
     event.currentTarget.style.borderLeftColor = borderColor;
     event.currentTarget.style.transform = 'translateX(4px)';
-    event.currentTarget.style.boxShadow = `0 4px 12px rgba(0, 51, 102, 0.12)`;
+    event.currentTarget.style.boxShadow = isDark 
+      ? `0 4px 12px rgba(0, 0, 0, 0.5)` 
+      : `0 4px 12px rgba(0, 51, 102, 0.12)`;
   }
 
   handleInterviewerHoverOut(event) {
-    event.currentTarget.style.background = 'linear-gradient(to right, #ffffff 0%, #f8f9fa 100%)';
     const interviewType = event.currentTarget.dataset.interviewType;
-    let borderColor = '#e0e5ee';
+    const isDark = this.isDarkMode;
+    let defaultGradient, borderColor;
     
-    if (interviewType === 'C1-First') borderColor = '#e0e5ee';
-    else if (interviewType === 'Align-2nd') borderColor = '#d0f0ed';
-    else if (interviewType === 'Plan-3rd') borderColor = '#f5d5d0';
-    else if (interviewType === 'Present-4th') borderColor = '#fce4c4';
-    else if (interviewType === 'Optional-5th') borderColor = '#e6d5f0';
+    if (isDark) {
+      // Dark mode default colors
+      defaultGradient = 'linear-gradient(to right, #2d2d2d 0%, #333333 100%)';
+      borderColor = '#404040';
+    } else {
+      // Light mode default colors
+      defaultGradient = 'linear-gradient(to right, #ffffff 0%, #f8f9fa 100%)';
+      if (interviewType === 'C1-First') borderColor = '#e0e5ee';
+      else if (interviewType === 'Align-2nd') borderColor = '#d0f0ed';
+      else if (interviewType === 'Plan-3rd') borderColor = '#f5d5d0';
+      else if (interviewType === 'Present-4th') borderColor = '#fce4c4';
+      else if (interviewType === 'Optional-5th') borderColor = '#e6d5f0';
+    }
     
+    event.currentTarget.style.background = defaultGradient;
     event.currentTarget.style.borderLeftColor = borderColor;
     event.currentTarget.style.transform = 'translateX(0)';
-    event.currentTarget.style.boxShadow = '0 2px 4px rgba(0, 51, 102, 0.06)';
+    event.currentTarget.style.boxShadow = isDark 
+      ? '0 2px 4px rgba(0, 0, 0, 0.3)' 
+      : '0 2px 4px rgba(0, 51, 102, 0.06)';
   }
 
   handleInterviewerClick(event) {
