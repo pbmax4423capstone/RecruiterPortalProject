@@ -1,5 +1,10 @@
 ﻿<template>
   <div class={dashboardContainerClass}>
+    <!-- Top Greeting Banner -->
+    <div class="greeting-banner">
+      <h2 class="greeting-text">{timeBasedGreeting}, {computedUserFirstName}! 👋</h2>
+    </div>
+
     <!-- Branded Header -->
     <div class="branded-header">
       <div class="slds-page-header__row">
@@ -73,6 +78,13 @@
                 onclick={openScheduleInterviewModal}
                 class="action-button">
               </lightning-button>
+              <lightning-button 
+                variant="brand" 
+                label="Submit Feedback" 
+                icon-name="utility:feedback"
+                onclick={openFeedbackModal}
+                class="action-button">
+              </lightning-button>
 
             </lightning-button-group>
           </div>
@@ -100,6 +112,11 @@
                 </lightning-button-menu>
               </div>
               <div class="slds-p-horizontal_medium">
+                <template if:true={lastRefreshedTime}>
+                  <div class="slds-text-body_small slds-text-color_weak slds-p-bottom_x-small">
+                    Last refreshed: {lastRefreshedTime}
+                  </div>
+                </template>
                 <template if:true={scheduledCallsList}>
                   <template if:true={scheduledCallsList.length}>
                     <div class="call-list-container">
@@ -110,8 +127,6 @@
                               <div class="call-candidate-name">{call.candidateName}</div>
                               <div class="call-details">
                                 <span class="call-date">{call.formattedDate}</span>
-                                <span class="call-separator"> • </span>
-                                <span class="call-time">{call.formattedTime}</span>
                               </div>
                             </div>
                             <div class="slds-col slds-no-flex">
@@ -153,6 +168,11 @@
                 </lightning-button-menu>
               </div>
               <div class="slds-p-horizontal_medium">
+                <template if:true={lastRefreshedTime}>
+                  <div class="slds-text-body_small slds-text-color_weak slds-p-bottom_x-small">
+                    Last refreshed: {lastRefreshedTime}
+                  </div>
+                </template>
                 <template if:true={pastDueCallsList}>
                   <template if:true={pastDueCallsList.length}>
                     <div class="call-list-container">
@@ -164,9 +184,7 @@
                               <div class="call-details">
                                 <span class="call-date overdue">{call.formattedDate}</span>
                                 <span class="call-separator"> • </span>
-                                <span class="call-time">{call.formattedTime}</span>
-                                <span class="call-separator"> • </span>
-                                <span class="days-overdue">Past due</span>
+                                <span class="past-due-label">PAST DUE</span>
                               </div>
                             </div>
                             <div class="slds-col slds-no-flex">
@@ -457,7 +475,7 @@
                 <div class="slds-col slds-size_1-of-5">
                   <div class="slds-text-align_center slds-p-around_small" style="background: #0176d3; color: white; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
                     <div class="slds-text-heading_large" style="font-size: 1.75rem; font-weight: 700;">{interviewStats.attraction}</div>
-                    <div class="slds-text-body_small" style="margin-top: 0.25rem; font-size: 0.75rem;">C1-First</div>
+                    <div class="slds-text-body_small" style="margin-top: 0.25rem; font-size: 0.75rem;">Ci-First</div>
                   </div>
                 </div>
                 <div class="slds-col slds-size_1-of-5">
@@ -490,10 +508,10 @@
               <!-- Interviewer Rankings by Type -->
               <div class="slds-grid slds-wrap slds-gutters">
                 
-                <!-- C1-First Rankings -->
+                <!-- Ci-First Rankings -->
                 <div class="slds-col slds-size_1-of-2 slds-m-bottom_medium">
                   <div style="background: linear-gradient(to bottom, #f0f7ff 0%, #ffffff 100%); border-left: 4px solid #0176d3; padding: 1.25rem; border-radius: 8px; box-shadow: 0 2px 8px rgba(0, 51, 102, 0.1); border: 1px solid #e0e5ee;">
-                    <h3 class="slds-text-heading_small slds-m-bottom_small" style="color: #003366; font-weight: 700; font-size: 1.1rem; letter-spacing: 0.5px; margin-bottom: 1rem; border-bottom: 2px solid #0176d3; padding-bottom: 0.5rem;">C1-First Interviews</h3>
+                    <h3 class="slds-text-heading_small slds-m-bottom_small" style="color: #003366; font-weight: 700; font-size: 1.1rem; letter-spacing: 0.5px; margin-bottom: 1rem; border-bottom: 2px solid #0176d3; padding-bottom: 0.5rem;">Ci-First Interviews</h3>
                     <template if:true={attractionMiniChart}>
                       <template if:true={attractionMiniChart.length}>
                         <template for:each={attractionMiniChart} for:item="segment">
@@ -503,7 +521,7 @@
                                onmouseleave={handleInterviewerHoverOut}
                                onclick={handleInterviewerClick}
                                data-interviewer={segment.interviewer}
-                               data-interview-type="C1-First">
+                               data-interview-type="Ci-First">
                             <span style="font-weight: 600; font-size: 0.95rem; color: #003366; text-decoration: none; letter-spacing: 0.3px;">{segment.interviewer}</span>
                             <span style="background: linear-gradient(135deg, #0176d3 0%, #0190e8 100%); color: white; padding: 0.35rem 0.85rem; border-radius: 16px; font-weight: 700; font-size: 0.9rem; box-shadow: 0 2px 6px rgba(1, 118, 211, 0.25); border: 1px solid rgba(255, 255, 255, 0.2);">{segment.count}</span>
                           </div>
@@ -612,182 +630,199 @@
         </lightning-card>
       </div>
 
-      <!-- Performance Metrics -->
+      <!-- Net Field Force Analysis -->
       <div class="slds-col slds-size_12-of-12 slds-p-top_medium">
-        <lightning-card title="📈 Recruiting Performance" icon-name="utility:chart">
+        <lightning-card title="📊 Net Field Force Analysis (2025)" icon-name="custom:custom48">
           <div class="slds-p-around_medium">
-            <!-- Coming Soon Banner -->
-            <div class="slds-notify slds-notify_alert slds-alert_warning" role="alert" style="margin-bottom: 1rem;">
-              <span class="slds-assistive-text">warning</span>
-              <span class="slds-icon_container slds-icon-utility-warning slds-m-right_small">
-                <lightning-icon icon-name="utility:warning" alternative-text="Warning" size="x-small"></lightning-icon>
-              </span>
-              <h2>
-                <strong>🚧 Coming Soon - Under Development</strong>
-                <p class="slds-text-body_small slds-m-top_xx-small">This section is currently being developed and is not yet ready for production use. Data shown is for demonstration purposes only.</p>
-              </h2>
-            </div>
-            
             <template if:true={performanceMetrics}>
-              
-              <!-- Contract Activity Section -->
-              <div class="slds-box" style="background-color: #ffffff; border: 1px solid #dddbda; border-left: 4px solid #0176d3; margin-bottom: 1rem;">
-                <h4 class="slds-text-heading_small slds-m-bottom_small" style="color: #0176d3;">📊 Contract Activity (October 2025)</h4>
-                <div class="slds-grid slds-wrap slds-gutters">
-                  <div class="slds-col slds-size_2-of-12">
-                    <div class="slds-text-align_center clickable-metric" onclick={handleContractAAddedClick}>
-                      <div class="slds-text-heading_medium slds-text-color_success">{performanceMetrics.contractAAdded}</div>
-                      <div class="slds-text-body_small">� Contract A Added</div>
-                      <div class="slds-text-body_x-small slds-text-color_weak">Click to view</div>
-                    </div>
-                  </div>
-                  <div class="slds-col slds-size_2-of-12">
-                    <div class="slds-text-align_center clickable-metric" onclick={handleContractBAddedClick}>
-                      <div class="slds-text-heading_medium slds-text-color_success">{performanceMetrics.contractBAdded}</div>
-                      <div class="slds-text-body_small">� Contract B Added</div>
-                      <div class="slds-text-body_x-small slds-text-color_weak">Click to view</div>
-                    </div>
-                  </div>
-                  <div class="slds-col slds-size_2-of-12">
-                    <div class="slds-text-align_center clickable-metric" onclick={handleContractATermsClick}>
-                      <div class="slds-text-heading_medium slds-text-color_error">{performanceMetrics.contractATerminations}</div>
-                      <div class="slds-text-body_small">❌ Contract A Terms</div>
-                      <div class="slds-text-body_x-small slds-text-color_weak">Click to view</div>
-                    </div>
-                  </div>
-                  <div class="slds-col slds-size_2-of-12">
-                    <div class="slds-text-align_center clickable-metric" onclick={handleContractBTermsClick}>
-                      <div class="slds-text-heading_medium slds-text-color_error">{performanceMetrics.contractBTerminations}</div>
-                      <div class="slds-text-body_small">❌ Contract B Terms</div>
-                      <div class="slds-text-body_x-small slds-text-color_weak">Click to view</div>
-                    </div>
-                  </div>
-                  <div class="slds-col slds-size_2-of-12">
-                    <div class="slds-text-align_center clickable-metric" onclick={handleBtoATransitionsClick}>
-                      <div class="slds-text-heading_medium slds-text-color_warning">{performanceMetrics.contractBtoA}</div>
-                      <div class="slds-text-body_small">🔄 B to A Moves</div>
-                      <div class="slds-text-body_x-small slds-text-color_weak">Click to view</div>
-                    </div>
-                  </div>
-                  <div class="slds-col slds-size_2-of-12">
-                    <div class="slds-text-align_center">
-                      <div class="slds-text-heading_medium slds-text-color_warning">{performanceMetrics.interviewsScheduled}</div>
-                      <div class="slds-text-body_small">📅 Interviews This Week</div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <!-- Net Field Force Calculation -->
-              <div class="slds-box" style="background-color: #ffffff; border: 1px solid #dddbda; border-left: 4px solid #4bca81; margin-bottom: 1rem;">
-                <div class="slds-grid slds-gutters slds-m-bottom_small">
-                  <div class="slds-col slds-size_8-of-12">
-                    <h4 class="slds-text-heading_small" style="color: #2e844a;">🏆 Net Field Force Analysis (2025)</h4>
-                  </div>
-                  <div class="slds-col slds-size_4-of-12">
+              <div class="nff-container">
+                <!-- Header with Filter -->
+                <div class="slds-grid slds-gutters slds-m-bottom_medium">
+                  <div class="slds-col slds-size_12-of-12">
                     <lightning-combobox
                       name="nffFirm"
-                      label=""
+                      label="Filter by Firm"
                       value={selectedNffFirm}
                       placeholder="Select Firm"
                       options={nffFirmOptions}
                       onchange={handleNffFirmChange}
-                      variant="label-hidden"
                       class="nff-firm-filter">
                     </lightning-combobox>
                   </div>
                 </div>
-                <div class="slds-grid slds-wrap slds-gutters slds-m-bottom_medium">
-                  <div class="slds-col slds-size_12-of-12">
-                    <div class="slds-text-align_center">
-                      <div class="slds-text-heading_large slds-text-color_success" style="font-weight: 700; font-size: 2.5rem;">{performanceMetrics.netFieldForce}</div>
-                      <div class="slds-text-body_regular" style="font-weight: 600; color: #2e844a;">Net Field Force</div>
-                      <div class="slds-text-body_small slds-text-color_weak">Jan 1 Start + Additions - Terminations + Net B Activity</div>
+                
+                <!-- Main NFF Display Card -->
+                <div class="nff-main-card">
+                  <div class="slds-text-align_center">
+                    <div class="nff-main-value">{performanceMetrics.netFieldForce}</div>
+                    <div class="nff-main-label">Current Net Field Force</div>
+                    <div class="nff-main-formula">Begin Year + Recruits - Terminated + Net B Activity</div>
+                  </div>
+                </div>
+                
+                <!-- Key Metrics Grid -->
+                <div class="slds-grid slds-wrap slds-gutters_small slds-m-bottom_medium">
+                  <div class="slds-col slds-size_1-of-5">
+                    <div class="nff-metric-card nff-metric-neutral">
+                      <div class="nff-metric-icon">📅</div>
+                      <div class="nff-metric-value">{performanceMetrics.contractAJan1}</div>
+                      <div class="nff-metric-label">Begin Yr NFF</div>
+                    </div>
+                  </div>
+                  <div class="slds-col slds-size_1-of-5">
+                    <div class="nff-metric-card nff-metric-positive">
+                      <div class="nff-metric-icon">➕</div>
+                      <div class="nff-metric-value">+{performanceMetrics.totalContractAAdded}</div>
+                      <div class="nff-metric-label">YTD Recruits</div>
+                    </div>
+                  </div>
+                  <div class="slds-col slds-size_1-of-5">
+                    <div class="nff-metric-card nff-metric-negative">
+                      <div class="nff-metric-icon">➖</div>
+                      <div class="nff-metric-value">-{performanceMetrics.totalContractATerms}</div>
+                      <div class="nff-metric-label">Terminated</div>
+                    </div>
+                  </div>
+                  <div class="slds-col slds-size_1-of-5">
+                    <div class="nff-metric-card nff-metric-warning clickable-metric" onclick={handleNetFieldForceClick}>
+                      <div class="nff-metric-icon">🔄</div>
+                      <div class="nff-metric-value">{performanceMetrics.netContractBActivity}</div>
+                      <div class="nff-metric-label">Net Contract B</div>
+                      <div class="nff-click-hint">Click for details</div>
+                    </div>
+                  </div>
+                  <div class="slds-col slds-size_1-of-5">
+                    <div class="nff-metric-card nff-metric-info">
+                      <div class="nff-metric-icon">⇄</div>
+                      <div class="nff-metric-value">{performanceMetrics.totalNetTransfer}</div>
+                      <div class="nff-metric-label">Total Net Transfer</div>
                     </div>
                   </div>
                 </div>
                 
-                <!-- Calculation Breakdown -->
-                <div class="slds-grid slds-wrap slds-gutters slds-m-bottom_medium">
-                  <div class="slds-col slds-size_1-of-5">
-                    <div class="slds-text-align_center">
-                      <div class="slds-text-heading_medium slds-text-color_default" style="font-size: 1.5rem;">{performanceMetrics.contractAJan1}</div>
-                      <div class="slds-text-body_small" style="font-weight: 600;">📅 Begin Yr NFF</div>
+                <!-- NFF by Contract Year Section -->
+                <div class="nff-details-section">
+                  <h4 class="nff-details-title">NFF by Contract Year</h4>
+                  <div class="slds-grid slds-wrap slds-gutters_small">
+                    <div class="slds-col slds-size_1-of-4">
+                      <div class="nff-detail-item">
+                        <div class="nff-detail-value">{performanceMetrics.nffYear1}</div>
+                        <div class="nff-detail-label">Year 1</div>
+                      </div>
                     </div>
-                  </div>
-                  <div class="slds-col slds-size_1-of-5">
-                    <div class="slds-text-align_center">
-                      <div class="slds-text-heading_medium slds-text-color_success" style="font-size: 1.5rem;">+{performanceMetrics.totalContractAAdded}</div>
-                      <div class="slds-text-body_small" style="font-weight: 600;">➕ YTD Recruits</div>
+                    <div class="slds-col slds-size_1-of-4">
+                      <div class="nff-detail-item">
+                        <div class="nff-detail-value">{performanceMetrics.nffYear2}</div>
+                        <div class="nff-detail-label">Year 2</div>
+                      </div>
                     </div>
-                  </div>
-                  <div class="slds-col slds-size_1-of-5">
-                    <div class="slds-text-align_center">
-                      <div class="slds-text-heading_medium slds-text-color_error" style="font-size: 1.5rem;">-{performanceMetrics.totalContractATerms}</div>
-                      <div class="slds-text-body_small" style="font-weight: 600;">➖ Terminated</div>
+                    <div class="slds-col slds-size_1-of-4">
+                      <div class="nff-detail-item">
+                        <div class="nff-detail-value">{performanceMetrics.nffYear3}</div>
+                        <div class="nff-detail-label">Year 3</div>
+                      </div>
                     </div>
-                  </div>
-                  <div class="slds-col slds-size_1-of-5">
-                    <div class="slds-text-align_center clickable-metric" onclick={handleNetFieldForceClick}>
-                      <div class="slds-text-heading_medium slds-text-color_warning" style="font-size: 1.5rem;">+{performanceMetrics.netContractBActivity}</div>
-                      <div class="slds-text-body_small" style="font-weight: 600;">🔄 Net Contract B</div>
-                      <div class="slds-text-body_x-small slds-text-color_weak">Click for details</div>
-                    </div>
-                  </div>
-                  <div class="slds-col slds-size_1-of-5">
-                    <div class="slds-text-align_center">
-                      <div class="slds-text-heading_medium" style="font-size: 1.5rem; color: #0176d3;">{performanceMetrics.totalNetTransfer}</div>
-                      <div class="slds-text-body_small" style="font-weight: 600;">⇄ Total Net Transfer</div>
+                    <div class="slds-col slds-size_1-of-4">
+                      <div class="nff-detail-item">
+                        <div class="nff-detail-value">{performanceMetrics.nffYear4Plus}</div>
+                        <div class="nff-detail-label">Year 4+</div>
+                      </div>
                     </div>
                   </div>
                 </div>
                 
-                <!-- Transfer Details Row -->
-                <div class="slds-grid slds-wrap slds-gutters slds-m-bottom_medium" style="border-top: 1px solid #dddbda; padding-top: 1rem;">
-                  <div class="slds-col slds-size_1-of-4">
-                    <div class="slds-text-align_center">
-                      <div class="slds-text-heading_small">{performanceMetrics.transferIn}</div>
-                      <div class="slds-text-body_x-small slds-text-color_weak">Transfer In</div>
+                <!-- Terminations by Contract Year Section -->
+                <div class="nff-details-section">
+                  <h4 class="nff-details-title">Terminations by Contract Year</h4>
+                  <div class="slds-grid slds-wrap slds-gutters_small">
+                    <div class="slds-col slds-size_1-of-4">
+                      <div class="nff-detail-item">
+                        <div class="nff-detail-value">{performanceMetrics.termsYear1}</div>
+                        <div class="nff-detail-label">Year 1</div>
+                      </div>
                     </div>
-                  </div>
-                  <div class="slds-col slds-size_1-of-4">
-                    <div class="slds-text-align_center">
-                      <div class="slds-text-heading_small">{performanceMetrics.transferOut}</div>
-                      <div class="slds-text-body_x-small slds-text-color_weak">Transfer Out</div>
+                    <div class="slds-col slds-size_1-of-4">
+                      <div class="nff-detail-item">
+                        <div class="nff-detail-value">{performanceMetrics.termsYear2}</div>
+                        <div class="nff-detail-label">Year 2</div>
+                      </div>
                     </div>
-                  </div>
-                  <div class="slds-col slds-size_1-of-4">
-                    <div class="slds-text-align_center">
-                      <div class="slds-text-heading_small">{performanceMetrics.recruitsTransferIn}</div>
-                      <div class="slds-text-body_x-small slds-text-color_weak">Recruits Transfer In</div>
+                    <div class="slds-col slds-size_1-of-4">
+                      <div class="nff-detail-item">
+                        <div class="nff-detail-value">{performanceMetrics.termsYear3}</div>
+                        <div class="nff-detail-label">Year 3</div>
+                      </div>
                     </div>
-                  </div>
-                  <div class="slds-col slds-size_1-of-4">
-                    <div class="slds-text-align_center">
-                      <div class="slds-text-heading_small">{performanceMetrics.recruitsTransferOut}</div>
-                      <div class="slds-text-body_x-small slds-text-color_weak">Recruits Transfer Out</div>
+                    <div class="slds-col slds-size_1-of-4">
+                      <div class="nff-detail-item">
+                        <div class="nff-detail-value">{performanceMetrics.termsYear4Plus}</div>
+                        <div class="nff-detail-label">Year 4+</div>
+                      </div>
                     </div>
                   </div>
                 </div>
                 
-                <!-- Performance Metrics Row -->
-                <div class="slds-grid slds-wrap slds-gutters" style="border-top: 1px solid #dddbda; padding-top: 1rem;">
-                  <div class="slds-col slds-size_1-of-3">
-                    <div class="slds-text-align_center">
-                      <div class="slds-text-heading_medium slds-text-color_success" style="font-size: 1.75rem; font-weight: 700;">{performanceMetrics.overallYear1Retention}%</div>
-                      <div class="slds-text-body_small" style="font-weight: 600; color: #2e844a;">📊 Overall Year1 Retention %</div>
+                <!-- Year End Goal and YTD Goal Section -->
+                <div class="nff-details-section">
+                  <h4 class="nff-details-title">Goals & Progress</h4>
+                  <div class="slds-grid slds-wrap slds-gutters_small">
+                    <div class="slds-col slds-size_1-of-2">
+                      <div class="nff-goal-item">
+                        <div class="nff-goal-header">
+                          <span class="nff-goal-icon">🎯</span>
+                          <span class="nff-goal-title">Year End Goal</span>
+                        </div>
+                        <div class="nff-goal-value">{performanceMetrics.yearEndGoal}</div>
+                        <div class="nff-goal-progress">
+                          <div class="nff-progress-bar">
+                            <div class="nff-progress-fill" style={yearEndGoalProgressStyle}></div>
+                          </div>
+                          <div class="nff-progress-text">{performanceMetrics.yearEndGoalPercent}%</div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="slds-col slds-size_1-of-2">
+                      <div class="nff-goal-item">
+                        <div class="nff-goal-header">
+                          <span class="nff-goal-icon">📅</span>
+                          <span class="nff-goal-title">YTD Goal</span>
+                        </div>
+                        <div class="nff-goal-value">{performanceMetrics.ytdGoal}</div>
+                        <div class="nff-goal-progress">
+                          <div class="nff-progress-bar">
+                            <div class="nff-progress-fill" style={ytdGoalProgressStyle}></div>
+                          </div>
+                          <div class="nff-progress-text">{performanceMetrics.ytdGoalPercent}%</div>
+                        </div>
+                      </div>
                     </div>
                   </div>
-                  <div class="slds-col slds-size_1-of-3">
-                    <div class="slds-text-align_center">
-                      <div class="slds-text-heading_medium" style="font-size: 1.75rem; font-weight: 700; color: #e74c3c;">{performanceMetrics.threeYearCompoundGrowth}%</div>
-                      <div class="slds-text-body_small" style="font-weight: 600;">📈 3 Year Compound Growth Rate</div>
+                </div>
+                
+                <!-- Performance Indicators -->
+                <div class="nff-performance-section">
+                  <h4 class="nff-details-title">Performance Indicators</h4>
+                  <div class="slds-grid slds-wrap slds-gutters_small">
+                    <div class="slds-col slds-size_1-of-3">
+                      <div class="nff-performance-card nff-perf-success">
+                        <div class="nff-perf-icon">📊</div>
+                        <div class="nff-perf-value">{performanceMetrics.overallYear1Retention}%</div>
+                        <div class="nff-perf-label">Overall Year1 Retention</div>
+                      </div>
                     </div>
-                  </div>
-                  <div class="slds-col slds-size_1-of-3">
-                    <div class="slds-text-align_center">
-                      <div class="slds-text-heading_medium slds-text-color_default" style="font-size: 1.75rem; font-weight: 700;">{performanceMetrics.fourYearRetention}%</div>
-                      <div class="slds-text-body_small" style="font-weight: 600;">🎯 4 Year Retention (YTD Basis)</div>
+                    <div class="slds-col slds-size_1-of-3">
+                      <div class="nff-performance-card nff-perf-warning">
+                        <div class="nff-perf-icon">📈</div>
+                        <div class="nff-perf-value">{performanceMetrics.threeYearCompoundGrowth}%</div>
+                        <div class="nff-perf-label">3 Year Compound Growth Rate</div>
+                      </div>
+                    </div>
+                    <div class="slds-col slds-size_1-of-3">
+                      <div class="nff-performance-card nff-perf-info">
+                        <div class="nff-perf-icon">🎯</div>
+                        <div class="nff-perf-value">{performanceMetrics.fourYearRetention}%</div>
+                        <div class="nff-perf-label">4 Year Retention (YTD Basis)</div>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -807,7 +842,7 @@
   <template if:true={showCreateTicketModal}>
     <section role="dialog" tabindex="-1" class="slds-modal slds-fade-in-open slds-modal_large" aria-labelledby="create-ticket-modal-heading">
       <div class="slds-modal__container">
-        <header class="slds-modal__header">
+        <header class="slds-modal__header" style="padding-top: 0.5rem; padding-bottom: 0.5rem;">
           <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" title="Close" onclick={closeCreateTicketModal}>
             <lightning-icon icon-name="utility:close" alternative-text="close" size="small"></lightning-icon>
           </button>
@@ -908,35 +943,35 @@
   <!-- Reschedule Calls Modal -->
   <template if:true={showRescheduleCallsModal}>
     <section role="dialog" tabindex="-1" class="slds-modal slds-fade-in-open slds-modal_large" aria-labelledby="reschedule-modal-heading">
-      <div class="slds-modal__container" style="max-height: 80vh;">
-        <header class="slds-modal__header">
+      <div class="slds-modal__container" style="max-height: 80vh; background-color: #e8f4ff;">
+        <header class="slds-modal__header" style="background-color: #0176d3; color: white; padding-top: 0.5rem; padding-bottom: 0.5rem;">
           <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" title="Close" onclick={closeRescheduleCallsModal}>
             <lightning-icon icon-name="utility:close" alternative-text="close" size="small"></lightning-icon>
           </button>
-          <h2 id="reschedule-modal-heading" class="slds-text-heading_medium slds-hyphenate">Reschedule Past Due Calls</h2>
+          <h2 id="reschedule-modal-heading" class="slds-text-heading_medium slds-hyphenate" style="color: white;">Reschedule Past Due Calls</h2>
         </header>
-        <div class="slds-modal__content slds-p-around_medium" id="reschedule-modal-content" style="overflow-y: auto; max-height: 60vh;">
+        <div class="slds-modal__content" id="reschedule-modal-content" style="overflow-y: auto; max-height: 60vh; background-color: #e8f4ff; padding: 0.75rem;">
           <!-- Loading State -->
           <template if:true={isLoadingRescheduleCalls}>
-            <div class="slds-align_absolute-center slds-p-around_large">
+            <div class="slds-align_absolute-center" style="padding: 1rem;">
               <lightning-spinner alternative-text="Loading..." size="medium"></lightning-spinner>
             </div>
           </template>
           
           <!-- Main Content -->
           <template if:false={isLoadingRescheduleCalls}>
-            <!-- Reschedule Form - MOVED TO TOP FOR VISIBILITY -->
-            <template if:true={selectedCallsForReschedule.length}>
-              <div class="slds-box slds-theme_info" style="background-color: #e8f4ff; border: 2px solid #0176d3; margin-bottom: 1rem;">
-                <div class="slds-text-align_center slds-p-bottom_small">
-                  <h3 class="slds-text-heading_medium" style="color: #0176d3;">📅 Reschedule Form - Selected: {selectedRescheduleCalls.length} calls</h3>
-                  <p class="slds-text-body_regular">First select calls below, then fill in the new schedule date:</p>
+            <div style="border: 2px solid #0176d3; padding: 0.75rem; border-radius: 8px; background-color: #e8f4ff;">
+              <!-- Reschedule Form -->
+              <template if:true={selectedCallsForReschedule.length}>
+                <div class="slds-text-align_center" style="margin-bottom: 0.5rem;">
+                  <h3 class="slds-text-heading_small" style="color: #0176d3; margin-bottom: 0.25rem;">📅 Reschedule Form - Selected: {selectedRescheduleCalls.length} calls</h3>
+                  <p class="slds-text-body_small">First select calls below, then fill in the new schedule date:</p>
                 </div>
                 
                 <!-- Date/Time Form -->
                 <div class="reschedule-form">
                   <lightning-layout multiple-rows>
-                    <lightning-layout-item size="12" class="slds-p-bottom_small">
+                    <lightning-layout-item size="12" style="margin-bottom: 0.5rem;">
                       <div class="slds-form-element">
                         <label class="slds-form-element__label slds-text-heading_small" for="reschedule-date">
                           📅 New Schedule Date (Required)
@@ -955,7 +990,7 @@
                     </div>
                   </lightning-layout-item>
                   
-                  <lightning-layout-item size="12" class="slds-p-vertical_small">
+                  <lightning-layout-item size="12" style="margin-bottom: 0.5rem;">
                     <div class="slds-form-element">
                       <label class="slds-form-element__label" for="reschedule-time">
                         🕐 New Time (Optional)
@@ -973,9 +1008,9 @@
                     </div>
                   </lightning-layout-item>
                   
-                  <lightning-layout-item size="12" class="slds-p-top_small">
-                    <div class="slds-form-element">
-                      <label class="slds-form-element__label" for="reschedule-notes">
+                  <lightning-layout-item size="12" style="margin-bottom: 0.5rem;">
+                    <div class="slds-form-element" style="margin-bottom: 0;">
+                      <label class="slds-form-element__label" for="reschedule-notes" style="font-weight: 600; margin-bottom: 0.25rem;">
                         📝 Reschedule Notes (Optional)
                       </label>
                       <div class="slds-form-element__control">
@@ -992,42 +1027,41 @@
                   </lightning-layout-item>
                   
                     <!-- Debug Info -->
-                    <lightning-layout-item size="12" class="slds-p-top_small">
+                    <lightning-layout-item size="12" style="margin-top: 0.25rem;">
                       <div class="slds-text-body_small slds-text-color_weak">
                         Debug: Date="{newRescheduleDate}" | Time="{newRescheduleTime}" | Notes="{rescheduleNotes}"
                       </div>
                     </lightning-layout-item>
                   </lightning-layout>
                 </div>
-              </div>
-            </template>
-            
-            <!-- Calls Table -->
-            <template if:true={selectedCallsForReschedule.length}>
-              <div class="slds-p-bottom_small">
-                <h4 class="slds-text-heading_small">Select Calls to Reschedule:</h4>
-              </div>
-              
-              <lightning-datatable
-                data={selectedCallsForReschedule}
-                columns={rescheduleCallColumns}
-                key-field="id"
-                onrowselection={handleRescheduleCallSelection}
-                show-row-number-column>
-              </lightning-datatable>
-              
-            </template>
-            
-            <!-- No Calls Found -->
-            <template if:false={selectedCallsForReschedule.length}>
-              <div class="slds-align_absolute-center slds-p-around_large">
-                <div class="slds-text-align_center">
-                  <lightning-icon icon-name="utility:success" size="large" class="slds-m-bottom_small"></lightning-icon>
-                  <p class="slds-text-heading_small">No Past Due Calls Found</p>
-                  <p class="slds-text-body_regular">All calls are up to date!</p>
+                
+                <!-- Calls Table -->
+                <div style="margin-top: 0.75rem;">
+                  <div style="margin-bottom: 0.5rem;">
+                    <h4 class="slds-text-heading_small" style="color: #0176d3; margin: 0;">Select Calls to Reschedule:</h4>
+                  </div>
+                  
+                  <lightning-datatable
+                    data={selectedCallsForReschedule}
+                    columns={rescheduleCallColumns}
+                    key-field="id"
+                    onrowselection={handleRescheduleCallSelection}
+                    show-row-number-column>
+                  </lightning-datatable>
                 </div>
-              </div>
-            </template>
+              </template>
+              
+              <!-- No Calls Found -->
+              <template if:false={selectedCallsForReschedule.length}>
+                <div class="slds-align_absolute-center" style="padding: 1.5rem;">
+                  <div class="slds-text-align_center">
+                    <lightning-icon icon-name="utility:success" size="large" style="margin-bottom: 0.5rem;"></lightning-icon>
+                    <p class="slds-text-heading_small" style="margin-bottom: 0.25rem;">No Past Due Calls Found</p>
+                    <p class="slds-text-body_regular" style="margin: 0;">All calls are up to date!</p>
+                  </div>
+                </div>
+              </template>
+            </div>
           </template>
         </div>
         <footer class="slds-modal__footer">
@@ -1054,7 +1088,7 @@
   <template if:true={showCreateCandidateModal}>
     <section role="dialog" tabindex="-1" class="slds-modal slds-fade-in-open slds-modal_medium" aria-labelledby="candidate-modal-heading">
       <div class="slds-modal__container">
-        <header class="slds-modal__header">
+        <header class="slds-modal__header" style="padding-top: 0.5rem; padding-bottom: 0.5rem;">
           <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" title="Close" onclick={closeCreateCandidateModal}>
             <lightning-icon icon-name="utility:close" alternative-text="close" size="small"></lightning-icon>
           </button>
@@ -1219,11 +1253,168 @@
     <div class="slds-backdrop slds-backdrop_open"></div>
   </template>
 
+  <!-- Schedule Interview Modal -->
+  <template if:true={showScheduleInterviewModal}>
+    <section role="dialog" tabindex="-1" class="slds-modal slds-fade-in-open slds-modal_medium" aria-labelledby="schedule-interview-modal-heading">
+      <div class="slds-modal__container">
+        <header class="slds-modal__header" style="padding-top: 0.5rem; padding-bottom: 0.5rem;">
+          <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" title="Close" onclick={closeScheduleInterviewModal}>
+            <lightning-icon icon-name="utility:close" alternative-text="close" size="small"></lightning-icon>
+          </button>
+          <h2 id="schedule-interview-modal-heading" class="slds-text-heading_medium slds-hyphenate">
+            <lightning-icon icon-name="utility:event" size="small" class="slds-m-right_x-small"></lightning-icon>
+            Schedule Interview
+          </h2>
+        </header>
+        <div class="slds-modal__content slds-p-around_medium" id="schedule-interview-modal-content">
+          
+          <!-- Interview Name -->
+          <div class="slds-form-element slds-m-bottom_small">
+            <label class="slds-form-element__label" for="interview-name">
+              <abbr class="slds-required" title="required">*</abbr>
+              Interview Name
+            </label>
+            <div class="slds-form-element__control">
+              <lightning-input
+                id="interview-name"
+                value={selectedCandidateName}
+                onchange={handleInterviewNameChange}
+                placeholder="Enter interview name"
+                required>
+              </lightning-input>
+            </div>
+          </div>
+
+          <!-- Interview Type -->
+          <div class="slds-form-element slds-m-bottom_small">
+            <label class="slds-form-element__label" for="interview-type">
+              <abbr class="slds-required" title="required">*</abbr>
+              Interview Type
+            </label>
+            <div class="slds-form-element__control">
+              <lightning-combobox
+                id="interview-type"
+                value={interviewType}
+                placeholder="Select interview type"
+                options={interviewTypeOptions}
+                onchange={handleInterviewTypeChange}
+                required>
+              </lightning-combobox>
+            </div>
+          </div>
+
+          <!-- Contact Information Section -->
+          <div class="slds-form-element slds-m-top_medium slds-m-bottom_small">
+            <h3 class="slds-text-heading_small slds-m-bottom_small">📞 Contact Information</h3>
+          </div>
+
+          <!-- Phone Number -->
+          <div class="slds-form-element slds-m-bottom_small">
+            <label class="slds-form-element__label" for="interview-phone">
+              Phone Number
+            </label>
+            <div class="slds-form-element__control">
+              <lightning-input
+                id="interview-phone"
+                type="tel"
+                value={interviewPhone}
+                onchange={handleInterviewPhoneChange}
+                placeholder="(555) 555-5555"
+                pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}">
+              </lightning-input>
+            </div>
+          </div>
+
+          <!-- Email -->
+          <div class="slds-form-element slds-m-bottom_small">
+            <label class="slds-form-element__label" for="interview-email">
+              Email Address
+            </label>
+            <div class="slds-form-element__control">
+              <lightning-input
+                id="interview-email"
+                type="email"
+                value={interviewEmail}
+                onchange={handleInterviewEmailChange}
+                placeholder="example@email.com">
+              </lightning-input>
+            </div>
+          </div>
+
+          <!-- Schedule Information Section -->
+          <div class="slds-form-element slds-m-top_medium slds-m-bottom_small">
+            <h3 class="slds-text-heading_small slds-m-bottom_small">📅 Schedule Information</h3>
+          </div>
+
+          <!-- Date and Time Row -->
+          <div class="slds-grid slds-gutters slds-m-bottom_small">
+            <div class="slds-col slds-size_6-of-12">
+              <div class="slds-form-element">
+                <label class="slds-form-element__label" for="interview-date">
+                  <abbr class="slds-required" title="required">*</abbr>
+                  Interview Date
+                </label>
+                <div class="slds-form-element__control">
+                  <lightning-input
+                    id="interview-date"
+                    type="date"
+                    value={interviewDate}
+                    onchange={handleInterviewDateChange}
+                    required>
+                  </lightning-input>
+                </div>
+              </div>
+            </div>
+            <div class="slds-col slds-size_6-of-12">
+              <div class="slds-form-element">
+                <label class="slds-form-element__label" for="interview-time">
+                  <abbr class="slds-required" title="required">*</abbr>
+                  Interview Time
+                </label>
+                <div class="slds-form-element__control">
+                  <lightning-input
+                    id="interview-time"
+                    type="time"
+                    value={interviewTime}
+                    onchange={handleInterviewTimeChange}
+                    required>
+                  </lightning-input>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Notes -->
+          <div class="slds-form-element slds-m-bottom_small">
+            <label class="slds-form-element__label" for="interview-notes">
+              Notes
+            </label>
+            <div class="slds-form-element__control">
+              <lightning-textarea
+                id="interview-notes"
+                value={interviewNotes}
+                onchange={handleInterviewNotesChange}
+                placeholder="Add any additional notes or details about the interview..."
+                rows="3">
+              </lightning-textarea>
+            </div>
+          </div>
+
+        </div>
+        <footer class="slds-modal__footer">
+          <lightning-button variant="neutral" label="Cancel" onclick={closeScheduleInterviewModal}></lightning-button>
+          <lightning-button variant="brand" label="Schedule Interview" onclick={handleScheduleInterview} icon-name="utility:check"></lightning-button>
+        </footer>
+      </div>
+    </section>
+    <div class="slds-backdrop slds-backdrop_open"></div>
+  </template>
+
   <!-- Call Management Modal (Scheduled & Past Due Calls) -->
   <template if:true={showCallManagementModal}>
     <section role="dialog" tabindex="-1" class="slds-modal slds-fade-in-open slds-modal_large" aria-labelledby="calls-modal-heading">
       <div class="slds-modal__container" style="max-height: 85vh;">
-        <header class="slds-modal__header">
+        <header class="slds-modal__header" style="padding-top: 0.5rem; padding-bottom: 0.5rem;">
           <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" title="Close" onclick={closeCallManagementModal}>
             <lightning-icon icon-name="utility:close" alternative-text="close" size="small"></lightning-icon>
           </button>
@@ -1340,7 +1531,7 @@
   <template if:true={showCallCompletionModal}>
     <section role="dialog" tabindex="-1" class="slds-modal slds-fade-in-open slds-modal_small" aria-labelledby="completion-modal-heading">
       <div class="slds-modal__container call-completion-modal-container">
-        <header class="slds-modal__header slds-p-vertical_small slds-p-horizontal_medium">
+        <header class="slds-modal__header" style="padding-top: 0.5rem; padding-bottom: 0.5rem;">
           <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" title="Close" onclick={closeCallCompletionModal}>
             <lightning-icon icon-name="utility:close" alternative-text="close" size="small"></lightning-icon>
           </button>
@@ -1441,7 +1632,7 @@
   <template if:true={showScheduleCallModal}>
     <section role="dialog" tabindex="-1" class="slds-modal slds-fade-in-open slds-modal_medium" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1">
       <div class="slds-modal__container">
-        <header class="slds-modal__header">
+        <header class="slds-modal__header" style="padding-top: 0.5rem; padding-bottom: 0.5rem;">
           <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" title="Close" onclick={closeScheduleCallModal}>
             <lightning-icon icon-name="utility:close" alternative-text="close" size="small"></lightning-icon>
             <span class="slds-assistive-text">Close</span>
@@ -1611,7 +1802,7 @@
   <template if:true={showCandidateModal}>
     <section role="dialog" tabindex="-1" class="slds-modal slds-fade-in-open slds-modal_medium" aria-labelledby="candidate-modal-heading">
       <div class="slds-modal__container" style="max-height: 80vh;">
-        <header class="slds-modal__header slds-p-vertical_small slds-p-horizontal_medium">
+        <header class="slds-modal__header" style="padding-top: 0.5rem; padding-bottom: 0.5rem;">
           <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" title="Close" onclick={closeCandidateModal}>
             <lightning-icon icon-name="utility:close" alternative-text="close" size="small"></lightning-icon>
           </button>
@@ -1711,7 +1902,7 @@
   <template if:true={showSalesManagerCandidatesModal}>
     <section role="dialog" tabindex="-1" class="slds-modal slds-fade-in-open slds-modal_medium" aria-labelledby="sales-manager-modal-heading">
       <div class="slds-modal__container" style="max-height: 80vh;">
-        <header class="slds-modal__header slds-p-vertical_small slds-p-horizontal_medium">
+        <header class="slds-modal__header" style="padding-top: 0.5rem; padding-bottom: 0.5rem;">
           <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" title="Close" onclick={closeSalesManagerCandidatesModal}>
             <lightning-icon icon-name="utility:close" alternative-text="close" size="small"></lightning-icon>
           </button>
@@ -1819,7 +2010,7 @@
   <template if:true={showCandidateDetailModal}>
     <section role="dialog" tabindex="-1" class="slds-modal slds-fade-in-open slds-modal_medium" aria-labelledby="candidate-detail-modal-heading">
       <div class="slds-modal__container" style="max-height: 80vh;">
-        <header class="slds-modal__header">
+        <header class="slds-modal__header" style="padding-top: 0.5rem; padding-bottom: 0.5rem;">
           <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" title="Close" onclick={closeCandidateDetailModal}>
             <lightning-icon icon-name="utility:close" alternative-text="close" size="small"></lightning-icon>
           </button>
@@ -2062,7 +2253,7 @@
   <template if:true={showInterviewDetailsModal}>
     <section role="dialog" tabindex="-1" aria-modal="true" class="slds-modal slds-fade-in-open slds-modal_large">
       <div class="slds-modal__container">
-        <header class="slds-modal__header">
+        <header class="slds-modal__header" style="padding-top: 0.5rem; padding-bottom: 0.5rem;">
           <lightning-button
             icon-name="utility:close"
             variant="bare"
@@ -2108,6 +2299,243 @@
             variant="neutral" 
             label="Close" 
             onclick={closeInterviewDetailsModal}>
+          </lightning-button>
+        </footer>
+      </div>
+    </section>
+    <div class="slds-backdrop slds-backdrop_open"></div>
+  </template>
+
+  <!-- View All Scheduled Calls Modal -->
+  <template if:true={showAllScheduledCallsModal}>
+    <section role="dialog" tabindex="-1" class="slds-modal slds-fade-in-open slds-modal_large">
+      <div class="slds-modal__container" style="background-color: white;">
+        <header class="slds-modal__header" style="background-color: white; padding-top: 0.5rem; padding-bottom: 0.5rem;">
+          <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" onclick={closeScheduledCallsModal}>
+            <lightning-icon icon-name="utility:close" alternative-text="Close" size="small"></lightning-icon>
+          </button>
+          <h2 class="slds-text-heading_medium">All Scheduled Calls ({allScheduledCalls.length})</h2>
+        </header>
+        <div class="slds-modal__content slds-p-around_small" style="background-color: white; padding-top: 0;">
+          <template if:true={allScheduledCalls}>
+            <template if:true={allScheduledCalls.length}>
+              <ul class="slds-has-dividers_bottom-space" style="background-color: white; margin: 0; padding: 0;">
+                <template for:each={allScheduledCalls} for:item="call">
+                  <li key={call.id} class="slds-item" style="padding: 0.25rem 0; border-bottom: 1px solid #e5e5e5;">
+                    <div class="slds-grid slds-grid_align-spread slds-grid_vertical-align-center">
+                      <div class="slds-col slds-size_9-of-12">
+                        <div class="slds-text-body_small slds-m-bottom_none">
+                          <strong>{call.candidateName}</strong> • {call.subject} • <span class="slds-text-color_weak">{call.formattedDate}</span>
+                        </div>
+                        <template if:true={call.description}>
+                          <div class="slds-text-body_small slds-text-color_weak" style="font-size: 0.75rem;">{call.description}</div>
+                        </template>
+                      </div>
+                      <div class="slds-col slds-size_3-of-12 slds-text-align_right">
+                        <lightning-button 
+                          variant="brand" 
+                          label="Complete" 
+                          size="small"
+                          data-call-id={call.id}
+                          onclick={handleCompleteCall}>
+                        </lightning-button>
+                      </div>
+                    </div>
+                  </li>
+                </template>
+              </ul>
+            </template>
+            <template if:false={allScheduledCalls.length}>
+              <div class="slds-text-align_center slds-p-around_large">
+                <lightning-icon icon-name="utility:success" size="large" class="slds-text-color_success"></lightning-icon>
+                <p class="slds-text-heading_small slds-m-top_small">🎉 No Calls Scheduled</p>
+                <p class="slds-text-body_regular slds-text-color_weak slds-m-top_x-small">You're all caught up! No scheduled calls at this time.</p>
+              </div>
+            </template>
+          </template>
+        </div>
+        <footer class="slds-modal__footer" style="background-color: white;">
+          <lightning-button 
+            variant="neutral" 
+            label="Close" 
+            onclick={closeScheduledCallsModal}>
+          </lightning-button>
+        </footer>
+      </div>
+    </section>
+    <div class="slds-backdrop slds-backdrop_open"></div>
+  </template>
+
+  <!-- View All Past Due Calls Modal -->
+  <template if:true={showAllPastDueCallsModal}>
+    <section role="dialog" tabindex="-1" class="slds-modal slds-fade-in-open slds-modal_large">
+      <div class="slds-modal__container" style="background-color: white;">
+        <header class="slds-modal__header" style="background-color: white; padding-top: 0.5rem; padding-bottom: 0.5rem;">
+          <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" onclick={closePastDueCallsModal}>
+            <lightning-icon icon-name="utility:close" alternative-text="Close" size="small"></lightning-icon>
+          </button>
+          <h2 class="slds-text-heading_medium">All Past Due Calls ({allPastDueCalls.length})</h2>
+        </header>
+        <div class="slds-modal__content slds-p-around_small" style="background-color: white; padding-top: 0;">
+          <template if:true={allPastDueCalls}>
+            <template if:true={allPastDueCalls.length}>
+              <ul class="slds-has-dividers_bottom-space" style="background-color: white; margin: 0; padding: 0;">
+                <template for:each={allPastDueCalls} for:item="call">
+                  <li key={call.id} class="slds-item" style="padding: 0.25rem 0; border-bottom: 1px solid #e5e5e5;">
+                    <div class="slds-grid slds-grid_align-spread slds-grid_vertical-align-center">
+                      <div class="slds-col slds-size_9-of-12">
+                        <div class="slds-text-body_small slds-m-bottom_none">
+                          <strong class="slds-text-color_error">{call.candidateName}</strong> • {call.subject} • <span class="slds-text-color_error">{call.formattedDate} • PAST DUE</span>
+                        </div>
+                        <template if:true={call.description}>
+                          <div class="slds-text-body_small slds-text-color_weak" style="font-size: 0.75rem;">{call.description}</div>
+                        </template>
+                      </div>
+                      <div class="slds-col slds-size_3-of-12 slds-text-align_right">
+                        <lightning-button 
+                          variant="destructive" 
+                          label="Complete" 
+                          size="small"
+                          data-call-id={call.id}
+                          onclick={handleCompleteCall}>
+                        </lightning-button>
+                      </div>
+                    </div>
+                  </li>
+                </template>
+              </ul>
+            </template>
+            <template if:false={allPastDueCalls.length}>
+              <div class="slds-text-align_center slds-p-around_large">
+                <lightning-icon icon-name="utility:success" size="large" class="slds-text-color_success"></lightning-icon>
+                <p class="slds-text-heading_small slds-m-top_small">No past due calls</p>
+              </div>
+            </template>
+          </template>
+        </div>
+        <footer class="slds-modal__footer" style="background-color: white;">
+          <lightning-button 
+            variant="neutral" 
+            label="Close" 
+            onclick={closePastDueCallsModal}>
+          </lightning-button>
+        </footer>
+      </div>
+    </section>
+    <div class="slds-backdrop slds-backdrop_open"></div>
+  </template>
+
+  <!-- Submit Feedback Modal (Bug Reports & Feature Requests) -->
+  <template if:true={showFeedbackModal}>
+    <section role="dialog" tabindex="-1" class="slds-modal slds-fade-in-open slds-modal_medium">
+      <div class="slds-modal__container" style="background-color: white;">
+        <header class="slds-modal__header" style="background: white !important; padding: 0.75rem 1rem !important; min-height: auto !important; border-bottom: 1px solid #dddbda;">
+          <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" onclick={closeFeedbackModal}>
+            <lightning-icon icon-name="utility:close" alternative-text="Close" size="small"></lightning-icon>
+          </button>
+          <h2 class="slds-text-heading_medium" style="color: #080707 !important; font-size: 1.125rem !important; line-height: 1.25 !important; margin: 0 !important;">Submit Feedback</h2>
+        </header>
+        <div class="slds-modal__content slds-p-around_small" style="background-color: white; padding-top: 0;">
+          <div class="slds-form" role="list">
+            
+            <!-- Submitted By -->
+            <div class="slds-form-element slds-m-bottom_small">
+              <label class="slds-form-element__label" for="submitted-by">
+                <abbr class="slds-required" title="required">* </abbr>Submitted By
+              </label>
+              <div class="slds-form-element__control">
+                <lightning-combobox
+                  name="submittedBy"
+                  value={feedbackSubmittedById}
+                  placeholder="Select a user..."
+                  options={feedbackUserOptions}
+                  onchange={handleUserSelection}
+                  required>
+                </lightning-combobox>
+              </div>
+            </div>
+
+            <!-- Feedback Type -->
+            <div class="slds-form-element slds-m-bottom_small">
+              <label class="slds-form-element__label" for="feedback-type">
+                <abbr class="slds-required" title="required">* </abbr>Feedback Type
+              </label>
+              <div class="slds-form-element__control">
+                <lightning-combobox
+                  name="feedbackType"
+                  value={feedbackType}
+                  placeholder="Select feedback type"
+                  options={feedbackTypeOptions}
+                  onchange={handleFeedbackTypeChange}
+                  required>
+                </lightning-combobox>
+              </div>
+            </div>
+
+            <!-- Priority (only for bugs) -->
+            <template if:true={isBugReport}>
+              <div class="slds-form-element slds-m-bottom_small">
+                <label class="slds-form-element__label" for="priority">
+                  <abbr class="slds-required" title="required">* </abbr>Priority
+                </label>
+                <div class="slds-form-element__control">
+                  <lightning-combobox
+                    name="priority"
+                    value={feedbackPriority}
+                    placeholder="Select priority"
+                    options={priorityOptions}
+                    onchange={handlePriorityChange}
+                    required>
+                  </lightning-combobox>
+                </div>
+              </div>
+            </template>
+
+            <!-- Subject -->
+            <div class="slds-form-element slds-m-bottom_small">
+              <label class="slds-form-element__label" for="subject">
+                <abbr class="slds-required" title="required">* </abbr>Subject
+              </label>
+              <div class="slds-form-element__control">
+                <lightning-input
+                  name="subject"
+                  value={feedbackSubject}
+                  placeholder="Brief summary of your feedback"
+                  onchange={handleSubjectChange}
+                  required>
+                </lightning-input>
+              </div>
+            </div>
+
+            <!-- Description -->
+            <div class="slds-form-element">
+              <label class="slds-form-element__label" for="description">
+                <abbr class="slds-required" title="required">* </abbr>Description
+              </label>
+              <div class="slds-form-element__control">
+                <lightning-textarea
+                  name="description"
+                  value={feedbackDescription}
+                  placeholder={feedbackPlaceholder}
+                  onchange={handleDescriptionChange}
+                  required>
+                </lightning-textarea>
+              </div>
+            </div>
+
+          </div>
+        </div>
+        <footer class="slds-modal__footer" style="background-color: white;">
+          <lightning-button 
+            variant="neutral" 
+            label="Cancel" 
+            onclick={closeFeedbackModal}>
+          </lightning-button>
+          <lightning-button 
+            variant="brand" 
+            label="Submit" 
+            onclick={handleSubmitFeedback}
+            disabled={isSubmitDisabled}>
           </lightning-button>
         </footer>
       </div>

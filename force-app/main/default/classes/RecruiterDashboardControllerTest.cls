@@ -123,12 +123,22 @@ public class RecruiterDashboardControllerTest {
         }
         insert interviews;
 
-        // Create more Tasks with varied scenarios
+        // Create more Tasks with varied scenarios - including TaskSubtype for Recent Activity filter
         List<Task> tasks = new List<Task>();
         for (Integer i = 0; i < 25; i++) {
+            String taskSubtype = 'Call'; // Default
+            if (i >= 5 && i < 10) {
+                taskSubtype = 'Email';
+            } else if (i >= 10 && i < 15) {
+                taskSubtype = 'Task';
+            } else if (i >= 15 && i < 20) {
+                taskSubtype = 'LinkedIn';
+            }
+            
             tasks.add(new Task(
                 Subject = i < 15 ? 'Call - ' + i : 'Test Call ' + i,
                 Type = i < 15 ? 'Call' : (i < 20 ? 'Email' : null),
+                TaskSubtype = taskSubtype,
                 Status = i < 8 ? 'Completed' : (i < 18 ? 'Not Started' : 'In Progress'),
                 Priority = i < 10 ? 'Normal' : (i < 20 ? 'High' : 'Low'),
                 ActivityDate = Date.today().addDays(i - 10),

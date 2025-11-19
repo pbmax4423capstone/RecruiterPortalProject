@@ -5,6 +5,23 @@
   color: #2c3e50;
 }
 
+/* Greeting Banner at Top */
+.greeting-banner {
+  background: linear-gradient(135deg, #0176d3 0%, #003366 100%);
+  padding: 1.25rem 2rem;
+  text-align: center;
+  box-shadow: 0 2px 8px rgba(0, 51, 102, 0.2);
+  border-bottom: 3px solid #f4a024;
+}
+
+.greeting-text {
+  color: #ffffff;
+  font-size: 1.75rem;
+  font-weight: 600;
+  margin: 0;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
 /* Branded Header */
 .branded-header {
   background: #003366 !important; /* Solid dark blue background - no gradient */
@@ -484,6 +501,7 @@ lightning-card[title*="Call Management"] .slds-card__body {
 .slds-modal__header {
   padding: 1.5rem 2rem;
   border-radius: 12px 12px 0 0;
+  background-color: white !important;
 }
 
 .slds-modal__content {
@@ -492,6 +510,7 @@ lightning-card[title*="Call Management"] .slds-card__body {
   overflow-y: auto;
   position: relative;
   -webkit-overflow-scrolling: touch;
+  background-color: white !important;
 }
 
 /* Prevent background scroll when modal is open */
@@ -513,11 +532,14 @@ lightning-card[title*="Call Management"] .slds-card__body {
   right: 0;
   bottom: 0;
   z-index: 8999;
+  background-color: rgba(0, 0, 0, 0.5) !important;
+  opacity: 0.7;
 }
 
 .slds-modal__footer {
   padding: 1.5rem 2rem;
   border-radius: 0 0 12px 12px;
+  background-color: white !important;
 }
 
 /* Capstone Partners Branded Card Styling */
@@ -1401,7 +1423,7 @@ section[aria-labelledby="candidate-detail-modal-heading"] .slds-modal__footer {
 
 /* Ultra-compact modal styling - Complete rewrite for maximum space efficiency */
 .ultra-compact-modal {
-  padding: 0.5rem !important;
+  padding: 0.25rem 0.5rem !important;
 }
 
 .ultra-compact-form {
@@ -1871,6 +1893,8 @@ div.candidate-list-item .slds-p-around_small {
   background: linear-gradient(135deg, #003366 0%, #004080 100%);
   color: white;
   border-radius: 8px 8px 0 0;
+  padding: 0.5rem 1rem !important;
+  min-height: auto !important;
 }
 
 .slds-modal__header h2 {
@@ -1878,6 +1902,9 @@ div.candidate-list-item .slds-p-around_small {
   display: flex;
   align-items: center;
   gap: 0.5rem;
+  font-size: 1rem !important;
+  line-height: 1.25 !important;
+  margin: 0 !important;
 }
 
 .slds-modal__header .slds-button_icon-inverse {
@@ -2875,6 +2902,16 @@ div.candidate-list-item .slds-p-around_small {
   color: #e0e0e0;
 }
 
+/* Dark Mode Greeting Banner */
+.dark-mode .greeting-banner {
+  background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+  border-bottom-color: #f4a024;
+}
+
+.dark-mode .greeting-text {
+  color: #f4a024;
+}
+
 /* Dark Mode Header */
 .dark-mode .branded-header {
   background: #1a1a1a !important;
@@ -2942,6 +2979,47 @@ div.candidate-list-item .slds-p-around_small {
   border-top-color: #404040 !important;
 }
 
+/* Dark Mode Interview Leaderboard Section Boxes */
+.dark-mode div[style*="background: linear-gradient(to bottom, #f0f7ff"] {
+  background: linear-gradient(to bottom, #2d3e50 0%, #2d2d2d 100%) !important;
+  border-color: #404040 !important;
+}
+
+.dark-mode div[style*="background: linear-gradient(to bottom, #e6fff9"] {
+  background: linear-gradient(to bottom, #2d4540 0%, #2d2d2d 100%) !important;
+  border-color: #404040 !important;
+}
+
+.dark-mode div[style*="background: linear-gradient(to bottom, #ffebe6"] {
+  background: linear-gradient(to bottom, #4a3535 0%, #2d2d2d 100%) !important;
+  border-color: #404040 !important;
+}
+
+.dark-mode div[style*="background: linear-gradient(to bottom, #fff4e6"] {
+  background: linear-gradient(to bottom, #4a4235 0%, #2d2d2d 100%) !important;
+  border-color: #404040 !important;
+}
+
+.dark-mode div[style*="background: linear-gradient(to bottom, #f3e6ff"] {
+  background: linear-gradient(to bottom, #3d2d4a 0%, #2d2d2d 100%) !important;
+  border-color: #404040 !important;
+}
+
+/* Dark Mode Interview Leaderboard Section Headers */
+.dark-mode h3[style*="color: #003366"] {
+  color: #e0e0e0 !important;
+}
+
+/* Dark Mode Interview Items */
+.dark-mode div[style*="background: linear-gradient(to right, #ffffff 0%, #f8f9fa"] {
+  background: linear-gradient(to right, #3d3d3d 0%, #454545 100%) !important;
+  border-color: #505050 !important;
+}
+
+.dark-mode div[style*="background: linear-gradient(to right, #ffffff 0%, #f8f9fa"] span[style*="color: #003366"] {
+  color: #e0e0e0 !important;
+}
+
 /* NFF Firm Filter Dropdown */
 .nff-firm-filter {
   max-width: 100%;
@@ -2950,6 +3028,344 @@ div.candidate-list-item .slds-p-around_small {
 .dark-mode .nff-firm-filter lightning-combobox {
   --slds-g-color-neutral-base-100: #3d3d3d;
   --slds-g-color-border-base-1: #505050;
+}
+
+/* ===== NET FIELD FORCE ANALYSIS SECTION ===== */
+
+.nff-container {
+  background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+  border-radius: 12px;
+  padding: 2rem;
+  margin-bottom: 1.5rem;
+  box-shadow: 0 4px 12px rgba(0, 51, 102, 0.08);
+  border: 1px solid #e0e5ee;
+  border-top: 4px solid #4bca81;
+}
+
+.nff-section-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #003366;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin: 0;
+}
+
+.nff-icon {
+  color: #4bca81;
+}
+
+/* Main NFF Card */
+.nff-main-card {
+  background: linear-gradient(135deg, #4bca81 0%, #3ab770 100%);
+  border-radius: 16px;
+  padding: 2.5rem;
+  margin-bottom: 2rem;
+  box-shadow: 0 6px 20px rgba(75, 202, 129, 0.25);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.nff-main-value {
+  font-size: 4rem;
+  font-weight: 800;
+  color: #ffffff;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  line-height: 1;
+  margin-bottom: 0.5rem;
+}
+
+.nff-main-label {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #ffffff;
+  margin-bottom: 0.5rem;
+  opacity: 0.95;
+}
+
+.nff-main-formula {
+  font-size: 0.875rem;
+  color: #ffffff;
+  opacity: 0.85;
+  font-weight: 500;
+}
+
+/* Metric Cards */
+.nff-metric-card {
+  background: #ffffff;
+  border-radius: 10px;
+  padding: 1.25rem;
+  text-align: center;
+  border: 2px solid #e0e5ee;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 2px 6px rgba(0, 51, 102, 0.06);
+  min-height: 140px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.nff-metric-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 16px rgba(0, 51, 102, 0.12);
+}
+
+.nff-metric-icon {
+  font-size: 1.75rem;
+  margin-bottom: 0.5rem;
+}
+
+.nff-metric-value {
+  font-size: 2rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+  line-height: 1.2;
+}
+
+.nff-metric-label {
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: #5c5c5c;
+}
+
+.nff-click-hint {
+  font-size: 0.65rem;
+  color: #706e6b;
+  margin-top: 0.25rem;
+  font-style: italic;
+}
+
+/* Metric Card Variants */
+.nff-metric-neutral {
+  border-color: #003366;
+  border-left-width: 4px;
+}
+
+.nff-metric-neutral .nff-metric-value {
+  color: #003366;
+}
+
+.nff-metric-positive {
+  border-color: #4bca81;
+  border-left-width: 4px;
+}
+
+.nff-metric-positive .nff-metric-value {
+  color: #4bca81;
+}
+
+.nff-metric-negative {
+  border-color: #e74c3c;
+  border-left-width: 4px;
+}
+
+.nff-metric-negative .nff-metric-value {
+  color: #e74c3c;
+}
+
+.nff-metric-warning {
+  border-color: #f4a024;
+  border-left-width: 4px;
+  cursor: pointer;
+}
+
+.nff-metric-warning .nff-metric-value {
+  color: #f4a024;
+}
+
+.nff-metric-warning:hover {
+  border-color: #d18a1e;
+  background: #fff8f0;
+}
+
+.nff-metric-info {
+  border-color: #0176d3;
+  border-left-width: 4px;
+}
+
+.nff-metric-info .nff-metric-value {
+  color: #0176d3;
+}
+
+/* Details Section */
+.nff-details-section,
+.nff-performance-section {
+  background: #ffffff;
+  border-radius: 10px;
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+  border: 1px solid #e0e5ee;
+  box-shadow: 0 2px 6px rgba(0, 51, 102, 0.04);
+}
+
+.nff-details-title {
+  font-size: 1rem;
+  font-weight: 700;
+  color: #003366;
+  margin-bottom: 1rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 2px solid #e0e5ee;
+}
+
+.nff-detail-item {
+  text-align: center;
+  padding: 0.75rem;
+  background: #f8f9fa;
+  border-radius: 6px;
+  border: 1px solid #e0e5ee;
+}
+
+.nff-detail-value {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #003366;
+  margin-bottom: 0.25rem;
+}
+
+.nff-detail-label {
+  font-size: 0.75rem;
+  color: #706e6b;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+/* Performance Cards */
+.nff-performance-card {
+  background: #ffffff;
+  border-radius: 10px;
+  padding: 1.5rem;
+  text-align: center;
+  border: 2px solid #e0e5ee;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 6px rgba(0, 51, 102, 0.06);
+}
+
+.nff-performance-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 14px rgba(0, 51, 102, 0.1);
+}
+
+.nff-perf-icon {
+  font-size: 2rem;
+  margin-bottom: 0.75rem;
+}
+
+.nff-perf-value {
+  font-size: 2.5rem;
+  font-weight: 800;
+  margin-bottom: 0.5rem;
+  line-height: 1;
+}
+
+.nff-perf-label {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #5c5c5c;
+}
+
+.nff-perf-success {
+  border-color: #4bca81;
+  border-left-width: 4px;
+}
+
+.nff-perf-success .nff-perf-value {
+  color: #4bca81;
+}
+
+.nff-perf-warning {
+  border-color: #e74c3c;
+  border-left-width: 4px;
+}
+
+.nff-perf-warning .nff-perf-value {
+  color: #e74c3c;
+}
+
+.nff-perf-info {
+  border-color: #0176d3;
+  border-left-width: 4px;
+}
+
+.nff-perf-info .nff-perf-value {
+  color: #0176d3;
+}
+
+/* ===== DARK MODE - NFF SECTION ===== */
+
+.dark-mode .nff-container {
+  background: linear-gradient(135deg, #2d2d2d 0%, #252525 100%);
+  border-color: #404040;
+  border-top-color: #4bca81;
+}
+
+.dark-mode .nff-section-title {
+  color: #e0e0e0;
+}
+
+.dark-mode .nff-main-card {
+  background: linear-gradient(135deg, #3ab770 0%, #2e944a 100%);
+  box-shadow: 0 6px 20px rgba(58, 183, 112, 0.3);
+}
+
+.dark-mode .nff-metric-card {
+  background: #3d3d3d;
+  border-color: #505050;
+}
+
+.dark-mode .nff-metric-card:hover {
+  background: #454545;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.4);
+}
+
+.dark-mode .nff-metric-label {
+  color: #b0b0b0;
+}
+
+.dark-mode .nff-click-hint {
+  color: #9a9a9a;
+}
+
+.dark-mode .nff-metric-warning:hover {
+  background: #4a3820;
+}
+
+.dark-mode .nff-details-section,
+.dark-mode .nff-performance-section {
+  background: #3d3d3d;
+  border-color: #505050;
+}
+
+.dark-mode .nff-details-title {
+  color: #e0e0e0;
+  border-bottom-color: #505050;
+}
+
+.dark-mode .nff-detail-item {
+  background: #2d2d2d;
+  border-color: #505050;
+}
+
+.dark-mode .nff-detail-value {
+  color: #e0e0e0;
+}
+
+.dark-mode .nff-detail-label {
+  color: #9a9a9a;
+}
+
+.dark-mode .nff-performance-card {
+  background: #3d3d3d;
+  border-color: #505050;
+}
+
+.dark-mode .nff-performance-card:hover {
+  background: #454545;
+}
+
+.dark-mode .nff-perf-label {
+  color: #b0b0b0;
 }
 
 .dark-mode .slds-notify {
@@ -3101,4 +3517,265 @@ div.candidate-list-item .slds-p-around_small {
   background: linear-gradient(135deg, #9b59b6 0%, #7d4a94 100%) !important;
   box-shadow: 0 2px 6px rgba(155, 89, 182, 0.4) !important;
 }
+
+/* Goal Items */
+.nff-goal-item {
+  background: #ffffff;
+  border-radius: 8px;
+  padding: 1.25rem;
+  border: 2px solid #e0e5ee;
+  box-shadow: 0 2px 6px rgba(0, 51, 102, 0.06);
+  transition: all 0.3s ease;
+}
+
+.nff-goal-item:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 10px rgba(0, 51, 102, 0.1);
+}
+
+.nff-goal-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 0.75rem;
+}
+
+.nff-goal-icon {
+  font-size: 1.5rem;
+  margin-right: 0.5rem;
+}
+
+.nff-goal-title {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #706e6b;
+  text-transform: uppercase;
+}
+
+.nff-goal-value {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #003366;
+  margin-bottom: 0.75rem;
+}
+
+.nff-goal-progress {
+  margin-top: 0.75rem;
+}
+
+.nff-progress-bar {
+  width: 100%;
+  height: 12px;
+  background: #e0e5ee;
+  border-radius: 6px;
+  overflow: hidden;
+  margin-bottom: 0.5rem;
+}
+
+.nff-progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #0176d3 0%, #06a59a 100%);
+  border-radius: 6px;
+  transition: width 0.3s ease;
+}
+
+.nff-progress-text {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #0176d3;
+  text-align: right;
+}
+
+/* Dark mode for goal items */
+.dark-mode .nff-goal-item {
+  background: linear-gradient(to bottom, #1f1f1f 0%, #2a2a2a 100%);
+  border-color: #404040;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+}
+
+.dark-mode .nff-goal-title {
+  color: #9a9a9a;
+}
+
+.dark-mode .nff-goal-value {
+  color: #f4a024;
+}
+
+.dark-mode .nff-progress-bar {
+  background: #333333;
+}
+
+.dark-mode .nff-progress-text {
+  color: #f4a024;
+}
+
+
+/* ===============================================
+   LIGHT MODE RESETS - Override dark mode when switching back
+   =============================================== */
+
+/* Reset modals to light mode */
+:not(.dark-mode) .slds-modal__container {
+  background: #ffffff !important;
+  box-shadow: 0 0 3px 0 rgba(0, 0, 0, 0.16) !important;
+}
+
+:not(.dark-mode) .slds-modal__header {
+  background: #ffffff !important;
+  border-bottom: 1px solid #dddbda !important;
+}
+
+:not(.dark-mode) .slds-modal__content {
+  background: #ffffff !important;
+  color: #181818 !important;
+}
+
+:not(.dark-mode) .slds-modal__footer {
+  background: #ffffff !important;
+  border-top: 1px solid #dddbda !important;
+}
+
+/* Reset interview cards in modals */
+:not(.dark-mode) .slds-box {
+  background: #f3f3f3 !important;
+}
+
+/* Reset activity feed */
+:not(.dark-mode) .activity-card {
+  background: #ffffff !important;
+  border-color: #e0e5ee !important;
+}
+
+:not(.dark-mode) .activity-icon {
+  background: #f4f6f9 !important;
+}
+
+/* Reset tables */
+:not(.dark-mode) table {
+  background: #ffffff !important;
+  color: #181818 !important;
+}
+
+:not(.dark-mode) th {
+  background: #f8f9fa !important;
+  border-color: #dddbda !important;
+  color: #003366 !important;
+}
+
+:not(.dark-mode) td {
+  border-color: #dddbda !important;
+  color: #181818 !important;
+}
+
+:not(.dark-mode) tr:hover {
+  background: #f8f9fa !important;
+}
+
+:not(.dark-mode) .slds-modal__content .slds-table tbody tr:hover {
+  background-color: #e6f2ff !important;
+}
+
+/* Reset interview leaderboard sections */
+:not(.dark-mode) .slds-col div[style*="border-left: 4px solid"] {
+  background: #ffffff !important;
+  box-shadow: 0 2px 6px rgba(0, 51, 102, 0.06) !important;
+}
+
+:not(.dark-mode) .slds-col h3[style*="color: #003366"] {
+  color: #003366 !important;
+  border-bottom-color: #e0e5ee !important;
+}
+
+:not(.dark-mode) .slds-col div[style*="padding: 0.75rem 1rem"] {
+  background: #ffffff !important;
+  box-shadow: 0 2px 4px rgba(0, 51, 102, 0.05) !important;
+}
+
+:not(.dark-mode) .slds-col span[style*="color: #003366"] {
+  color: #003366 !important;
+}
+
+/* Reset backdrop */
+:not(.dark-mode) .slds-backdrop {
+  background-color: rgba(0, 0, 0, 0.5) !important;
+}
+
+/* Reset buttons */
+:not(.dark-mode) lightning-button {
+  --slds-c-button-neutral-color-background: #ffffff !important;
+  --slds-c-button-neutral-color-border: #dddbda !important;
+  --slds-c-button-text-color: #181818 !important;
+}
+
+/* Reset input fields */
+:not(.dark-mode) lightning-input,
+:not(.dark-mode) lightning-textarea,
+:not(.dark-mode) lightning-combobox {
+  --slds-g-color-neutral-base-100: #ffffff !important;
+  --slds-g-color-border-base-1: #dddbda !important;
+}
+
+/* Reset cards and containers */
+:not(.dark-mode) lightning-card {
+  background: #ffffff !important;
+  border-color: #e0e5ee !important;
+}
+
+:not(.dark-mode) .slds-card {
+  background: #ffffff !important;
+  border-color: #e0e5ee !important;
+}
+
+:not(.dark-mode) .candidate-card,
+:not(.dark-mode) .nff-card,
+:not(.dark-mode) .interview-card {
+  background: #ffffff !important;
+  border-color: #e0e5ee !important;
+}
+
+/* Reschedule Modal Compact Layout */
+section[aria-labelledby="reschedule-modal-heading"] .slds-form-element {
+  margin-bottom: 0 !important;
+}
+
+section[aria-labelledby="reschedule-modal-heading"] .slds-form-element__label {
+  margin-bottom: 0.25rem !important;
+  font-size: 0.875rem !important;
+}
+
+section[aria-labelledby="reschedule-modal-heading"] lightning-input,
+section[aria-labelledby="reschedule-modal-heading"] lightning-textarea {
+  margin-bottom: 0 !important;
+}
+
+section[aria-labelledby="reschedule-modal-heading"] .slds-text-heading_small {
+  font-size: 0.875rem !important;
+  line-height: 1.25 !important;
+}
+
+section[aria-labelledby="reschedule-modal-heading"] .slds-text-body_small {
+  font-size: 0.8125rem !important;
+  line-height: 1.3 !important;
+}
+
+/* Call List Modals - Full White Background */
+.slds-modal_large .slds-modal__container {
+  background-color: white !important;
+}
+
+.slds-modal_large .slds-modal__header {
+  background-color: white !important;
+}
+
+.slds-modal_large .slds-modal__content {
+  background-color: white !important;
+}
+
+.slds-modal_large .slds-modal__footer {
+  background-color: white !important;
+}
+
+section[aria-labelledby="reschedule-modal-heading"] lightning-datatable {
+  margin-top: 0 !important;
+}
+
 

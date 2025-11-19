@@ -485,7 +485,7 @@ public inherited sharing class RecruiterDashboardController {
             List<Candidate__c> candidates = new List<Candidate__c>();
             
             // Query based on interview type
-            if (interviewType == 'C1-First' || interviewType == 'Attraction') {
+            if (interviewType == 'Ci-First' || interviewType == 'Attraction') {
                 // Query Attraction interviews - check multi-select picklist
                 candidates = [
                     SELECT Id, Name, AI_Conducted_By__c, 
@@ -799,6 +799,8 @@ public inherited sharing class RecruiterDashboardController {
     @AuraEnabled(cacheable=false)
     public static List<Map<String, Object>> getUserRecentActivity() {
         List<Map<String, Object>> activities = new List<Map<String, Object>>();
+        
+        // ALWAYS get the current active user's ID - this ensures data is always correct for whoever is logged in
         String currentUserId = UserInfo.getUserId();
         
         try {
@@ -807,7 +809,7 @@ public inherited sharing class RecruiterDashboardController {
             String userType = currentUserInfo.get('userType');
             String userName = currentUserInfo.get('name');
             
-            System.debug('getUserRecentActivity - userType: ' + userType + ', userName: ' + userName);
+            System.debug('getUserRecentActivity - Current User ID: ' + currentUserId + ', userType: ' + userType + ', userName: ' + userName);
             
             // Query recently COMPLETED interviews only - filter by user who conducted them
             String interviewQuery = 'SELECT Id, Name, Interview_Type__c, Interview_Status__c, CreatedDate, ' +
@@ -877,13 +879,17 @@ public inherited sharing class RecruiterDashboardController {
                 activities.add(activity);
             }
             
-            // Query recent calls/tasks - filter by owner and COMPLETED status only
+            // Query recent calls/tasks - matching report filters exactly:
+            // Status = Completed, Subtype = Task/Email/Call/LinkedIn, Modified >= YESTERDAY
+            // Use My tasks (OwnerId = current user)
             String taskQuery = 'SELECT Id, Subject, Status, CreatedDate, ActivityDate, Who.Name, WhoId, ' +
-                              'What.Name, WhatId, OwnerId, Owner.Name, Description ' +
+                              'What.Name, WhatId, OwnerId, Owner.Name, Description, TaskSubtype, LastModifiedDate ' +
                               'FROM Task ' +
-                              'WHERE Status = \'Completed\' ' +
-                              'AND OwnerId = :currentUserId ' +
-                              'ORDER BY CreatedDate DESC LIMIT 15';
+                              'WHERE OwnerId = :currentUserId ' +
+                              'AND Status = \'Completed\' ' +
+                              'AND TaskSubtype IN (\'Task\', \'Email\', \'Call\', \'LinkedIn\') ' +
+                              'AND LastModifiedDate >= YESTERDAY ' +
+                              'ORDER BY LastModifiedDate DESC LIMIT 50';
             
             List<Task> recentTasks = Database.query(taskQuery);
             System.debug('Found ' + recentTasks.size() + ' tasks for user');
@@ -1242,13 +1248,13 @@ public inherited sharing class RecruiterDashboardController {
         return stats;
     }
     
-    @AuraEnabled
+    @AuraEnabled(cacheable=false)
     public static List<Map<String, Object>> getRachyllCallDetails(String callType) {
         // Backward compatibility shim that returns current user's details
         return getCurrentUserCallDetails(callType);
     }
     
-    @AuraEnabled
+    @AuraEnabled(cacheable=false)
     public static List<Map<String, Object>> getCurrentUserCallDetails(String callType) {
         List<Map<String, Object>> callDetails = new List<Map<String, Object>>();
         try {
@@ -1259,18 +1265,28 @@ public inherited sharing class RecruiterDashboardController {
             
             Date today = Date.today();
             String whereClause = '';
+            
+            // Build query matching the report filters:
+            // Show: Open Activities (Tasks)
+            // Date: ONLY TODAY (not future dates) for scheduled, less than TODAY for past due
+            // Assigned: equals current user
             switch on callType {
-                when 'scheduled' { whereClause = 'AND ActivityDate >= TODAY'; }
-                when 'pastdue'   { whereClause = 'AND ActivityDate < TODAY'; }
+                when 'scheduled' { 
+                    whereClause = 'AND ActivityDate = TODAY'; 
+                }
+                when 'pastdue' { 
+                    whereClause = 'AND ActivityDate < TODAY'; 
+                }
             }
+            
+            // Query open tasks assigned to current user
             String query = 'SELECT Id, Subject, ActivityDate, Status, Description, WhatId, WhoId, ' +
                            'What.Name, Who.Name ' +
                            'FROM Task ' +
                            'WHERE OwnerId = \'' + String.escapeSingleQuotes(UserInfo.getUserId()) + '\' ' +
-                           'AND Type = \'Call\' ' +
                            'AND IsClosed = false ' +
                            whereClause + ' ' +
-                           'ORDER BY ActivityDate ASC LIMIT 50';
+                           'ORDER BY ActivityDate ASC LIMIT 1000';
             
             System.debug('Query: ' + query);
             
@@ -1734,6 +1750,53 @@ public inherited sharing class RecruiterDashboardController {
             result.put('userType', 'Other');
         }
         return result;
+    }
+    
+    @AuraEnabled(cacheable=false)
+    public static List<Map<String, String>> searchUsers(String searchTerm) {
+        List<Map<String, String>> userResults = new List<Map<String, String>>();
+        
+        try {
+            List<User> users;
+            
+            if (String.isBlank(searchTerm)) {
+                // Return all active users with Salesforce User License if no search term
+                users = [
+                    SELECT Id, Name, Email, Username, Profile.UserLicense.Name
+                    FROM User
+                    WHERE IsActive = true
+                    AND Profile.UserLicense.Name = 'Salesforce'
+                    ORDER BY Name
+                    LIMIT 50
+                ];
+            } else {
+                // Search users by name or email, only Salesforce licensed users
+                String wildcardSearch = '%' + String.escapeSingleQuotes(searchTerm) + '%';
+                users = [
+                    SELECT Id, Name, Email, Username, Profile.UserLicense.Name
+                    FROM User
+                    WHERE IsActive = true
+                    AND Profile.UserLicense.Name = 'Salesforce'
+                    AND (Name LIKE :wildcardSearch OR Email LIKE :wildcardSearch)
+                    ORDER BY Name
+                    LIMIT 50
+                ];
+            }
+            
+            for (User u : users) {
+                Map<String, String> userMap = new Map<String, String>();
+                userMap.put('id', u.Id);
+                userMap.put('name', u.Name);
+                userMap.put('email', u.Email != null ? u.Email : '');
+                userMap.put('username', u.Username);
+                userResults.add(userMap);
+            }
+            
+        } catch (Exception e) {
+            System.debug('Error searching users: ' + e.getMessage());
+        }
+        
+        return userResults;
     }
     
     @AuraEnabled(cacheable=false)
