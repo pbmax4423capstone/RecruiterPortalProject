@@ -2717,8 +2717,8 @@ export default class RecruiterDashboard extends NavigationMixin(LightningElement
       subject: this.feedbackSubject,
       description: description
     })
-    .then(caseId => {
-      this.showToast('Success', `Feedback case created successfully and assigned to System Administrators. Case ID: ${caseId}`, 'success');
+    .then(feedbackId => {
+      this.showToast('Success', `Feedback submitted successfully. Feedback ID: ${feedbackId}`, 'success');
       this.closeFeedbackModal();
     })
     .catch(error => {

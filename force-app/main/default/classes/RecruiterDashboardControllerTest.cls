@@ -1306,26 +1306,9 @@ public class RecruiterDashboardControllerTest {
     
     @isTest
     static void testCreateFeedbackCase() {
-        // Create a test System Administrator user
-        Profile sysAdminProfile = [SELECT Id FROM Profile WHERE Name='System Administrator' LIMIT 1];
-        User testSysAdmin = new User(
-            FirstName = 'Test',
-            LastName = 'Admin',
-            Email = 'testadmin@feedback.test',
-            Username = 'testadmin@feedback.test' + System.currentTimeMillis(),
-            Alias = 'tadmin',
-            TimeZoneSidKey = 'America/New_York',
-            LocaleSidKey = 'en_US',
-            EmailEncodingKey = 'UTF-8',
-            LanguageLocaleKey = 'en_US',
-            ProfileId = sysAdminProfile.Id,
-            IsActive = true
-        );
-        insert testSysAdmin;
-        
         Test.startTest();
         try {
-            String caseId = RecruiterDashboardController.createFeedbackCase(
+            String feedbackId = RecruiterDashboardController.createFeedbackCase(
                 UserInfo.getUserId(),
                 'Bug Report',
                 'High',
@@ -1333,22 +1316,24 @@ public class RecruiterDashboardControllerTest {
                 'Test feedback description with details'
             );
             
-            // Verify Case was created
-            System.assertNotEquals(null, caseId, 'Case ID should not be null');
-            Case createdCase = [SELECT Id, Subject, Description, Origin, Status, Type, Priority FROM Case WHERE Id = :caseId];
-            System.assertEquals('Test Feedback Subject', createdCase.Subject);
-            System.assertEquals('Test feedback description with details', createdCase.Description);
-            System.assertEquals('Recruiter Portal', createdCase.Origin);
-            System.assertEquals('New', createdCase.Status);
-            System.assertEquals('Bug Report', createdCase.Type);
-            System.assertEquals('High', createdCase.Priority);
-            
-            // Verify CaseTeamMembers were created for System Administrators
-            List<CaseTeamMember> teamMembers = [SELECT Id, MemberId FROM CaseTeamMember WHERE ParentId = :caseId];
-            System.assert(teamMembers.size() > 0, 'Should have case team members assigned to System Administrators');
+            // Verify Feedback was created
+            System.assertNotEquals(null, feedbackId, 'Feedback ID should not be null');
+            Feedback__c createdFeedback = [
+                SELECT Id, Subject__c, Description__c, Feedback_Type__c, 
+                       Status__c, Priority__c, Submitted_By__c, Assigned_To__c
+                FROM Feedback__c 
+                WHERE Id = :feedbackId
+            ];
+            System.assertEquals('Test Feedback Subject', createdFeedback.Subject__c);
+            System.assertEquals('Test feedback description with details', createdFeedback.Description__c);
+            System.assertEquals('Bug Report', createdFeedback.Feedback_Type__c);
+            System.assertEquals('New', createdFeedback.Status__c);
+            System.assertEquals('High', createdFeedback.Priority__c);
+            System.assertEquals(UserInfo.getUserId(), createdFeedback.Submitted_By__c);
+            System.assertEquals(null, createdFeedback.Assigned_To__c, 'Should be unassigned initially');
         } catch (Exception e) {
-            // If the method fails (e.g., no System Administrators found), verify the error message
-            System.assert(e.getMessage().contains('System Administrator') || e.getMessage().contains('Failed to create feedback') || e.getMessage().contains('Script-thrown exception'), 
+            // If feedback creation fails, verify error message
+            System.assert(e.getMessage().contains('Failed to create feedback') || e.getMessage().contains('Script-thrown exception'), 
                 'Error should be related to feedback creation: ' + e.getMessage());
         }
         Test.stopTest();

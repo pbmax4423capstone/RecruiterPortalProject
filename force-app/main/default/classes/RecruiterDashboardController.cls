@@ -2204,65 +2204,29 @@ public inherited sharing class RecruiterDashboardController {
     @AuraEnabled
     public static String createFeedbackCase(String submittedById, String feedbackType, String priority, String subject, String description) {
         try {
-            // Get all active System Administrator users
-            List<User> sysAdmins = [
-                SELECT Id, Name 
-                FROM User 
-                WHERE Profile.Name = 'System Administrator' 
-                AND IsActive = true
-            ];
+            // Create Feedback record
+            Feedback__c feedback = new Feedback__c();
+            feedback.Subject__c = subject;
+            feedback.Description__c = description;
+            feedback.Feedback_Type__c = feedbackType;
+            feedback.Status__c = 'New';
+            feedback.Submitted_By__c = UserInfo.getUserId();
             
-            if (sysAdmins.isEmpty()) {
-                throw new AuraHandledException('No active System Administrator users found in the system.');
-            }
-            
-            // Create the Case
-            Case feedbackCase = new Case();
-            feedbackCase.Subject = subject;
-            feedbackCase.Description = description;
-            feedbackCase.Origin = 'Recruiter Portal';
-            feedbackCase.Status = 'New';
-            feedbackCase.Type = feedbackType;
-            
-            // Set priority if provided
+            // Set priority
             if (String.isNotBlank(priority)) {
-                feedbackCase.Priority = priority;
+                feedback.Priority__c = priority;
             } else {
-                feedbackCase.Priority = 'Medium';
+                feedback.Priority__c = 'Medium';
             }
             
-            // Set the contact/submitted by if available
-            if (String.isNotBlank(submittedById)) {
-                feedbackCase.ContactId = submittedById; // Assuming this is a Contact ID
-            }
+            // Leave Assigned_To__c null for unassigned queue
             
-            insert feedbackCase;
+            insert feedback;
             
-            // Create Case Team Members for all System Administrators
-            List<CaseTeamMember> caseTeamMembers = new List<CaseTeamMember>();
-            
-            // Get the CaseTeamRole for assignment (you may need to adjust the role name)
-            List<CaseTeamRole> roles = [SELECT Id FROM CaseTeamRole WHERE Name = 'Engineer' LIMIT 1];
-            Id roleId = roles.isEmpty() ? null : roles[0].Id;
-            
-            for (User admin : sysAdmins) {
-                CaseTeamMember ctm = new CaseTeamMember();
-                ctm.ParentId = feedbackCase.Id;
-                ctm.MemberId = admin.Id;
-                if (roleId != null) {
-                    ctm.TeamRoleId = roleId;
-                }
-                caseTeamMembers.add(ctm);
-            }
-            
-            if (!caseTeamMembers.isEmpty()) {
-                insert caseTeamMembers;
-            }
-            
-            return feedbackCase.Id;
+            return feedback.Id;
             
         } catch (Exception e) {
-            System.debug('Error creating feedback case: ' + e.getMessage());
+            System.debug('Error creating feedback: ' + e.getMessage());
             throw new AuraHandledException('Failed to create feedback: ' + e.getMessage());
         }
     }
