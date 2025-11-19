@@ -943,14 +943,14 @@
   <!-- Reschedule Calls Modal -->
   <template if:true={showRescheduleCallsModal}>
     <section role="dialog" tabindex="-1" class="slds-modal slds-fade-in-open slds-modal_large" aria-labelledby="reschedule-modal-heading">
-      <div class="slds-modal__container" style="max-height: 80vh; background-color: #e8f4ff;">
+      <div class="slds-modal__container" style="max-height: 90vh; width: 95%; max-width: 1400px; background-color: #e8f4ff; overflow: hidden;">
         <header class="slds-modal__header" style="background-color: #0176d3; color: white; padding-top: 0.5rem; padding-bottom: 0.5rem;">
           <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" title="Close" onclick={closeRescheduleCallsModal}>
             <lightning-icon icon-name="utility:close" alternative-text="close" size="small"></lightning-icon>
           </button>
           <h2 id="reschedule-modal-heading" class="slds-text-heading_medium slds-hyphenate" style="color: white;">Reschedule Past Due Calls</h2>
         </header>
-        <div class="slds-modal__content" id="reschedule-modal-content" style="overflow-y: auto; max-height: 60vh; background-color: #e8f4ff; padding: 0.75rem;">
+        <div class="slds-modal__content" id="reschedule-modal-content" style="overflow-y: auto; overflow-x: hidden; max-height: calc(90vh - 120px); background-color: #e8f4ff; padding: 0.5rem;">
           <!-- Loading State -->
           <template if:true={isLoadingRescheduleCalls}>
             <div class="slds-align_absolute-center" style="padding: 1rem;">
@@ -960,7 +960,7 @@
           
           <!-- Main Content -->
           <template if:false={isLoadingRescheduleCalls}>
-            <div style="border: 2px solid #0176d3; padding: 0.75rem; border-radius: 8px; background-color: #e8f4ff;">
+            <div style="border: 2px solid #0176d3; padding: 0.5rem; border-radius: 8px; background-color: #e8f4ff; max-width: 100%; box-sizing: border-box; overflow: hidden;">
               <!-- Reschedule Form -->
               <template if:true={selectedCallsForReschedule.length}>
                 <div class="slds-text-align_center" style="margin-bottom: 0.5rem;">
@@ -1035,19 +1035,18 @@
                   </lightning-layout>
                 </div>
                 
-                <!-- Calls Table -->
-                <div style="margin-top: 0.75rem;">
-                  <div style="margin-bottom: 0.5rem;">
-                    <h4 class="slds-text-heading_small" style="color: #0176d3; margin: 0;">Select Calls to Reschedule:</h4>
-                  </div>
-                  
-                  <lightning-datatable
-                    data={selectedCallsForReschedule}
-                    columns={rescheduleCallColumns}
-                    key-field="id"
-                    onrowselection={handleRescheduleCallSelection}
-                    show-row-number-column>
-                  </lightning-datatable>
+                <!-- Button to Open Call Selection Modal -->
+                <div style="margin-top: 0.75rem; text-align: center;">
+                  <lightning-button 
+                    variant="brand" 
+                    label="Select Calls to Reschedule" 
+                    icon-name="utility:checkin"
+                    onclick={openCallSelectionModal}
+                    class="slds-m-bottom_small">
+                  </lightning-button>
+                  <p class="slds-text-body_small" style="margin-top: 0.5rem;">
+                    Selected: <strong>{selectedRescheduleCalls.length}</strong> calls
+                  </p>
                 </div>
               </template>
               
@@ -1082,6 +1081,43 @@
       </div>
     </section>
     <div class="slds-backdrop slds-backdrop_open"></div>
+  </template>
+
+  <!-- Call Selection Modal (Popup from Reschedule Modal) -->
+  <template if:true={showCallSelectionModal}>
+    <section role="dialog" tabindex="-1" class="slds-modal slds-fade-in-open slds-modal_large" aria-labelledby="call-selection-modal-heading" style="z-index: 9001;">
+      <div class="slds-modal__container" style="max-height: 60vh; width: 95%; max-width: 1400px; background-color: #e8f4ff; overflow: hidden;">
+        <header class="slds-modal__header" style="background-color: #0176d3; color: white; padding-top: 0.5rem; padding-bottom: 0.5rem;">
+          <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" title="Close" onclick={closeCallSelectionModal}>
+            <lightning-icon icon-name="utility:close" alternative-text="close" size="small"></lightning-icon>
+          </button>
+          <h2 id="call-selection-modal-heading" class="slds-text-heading_medium slds-hyphenate" style="color: white;">Select Calls to Reschedule</h2>
+        </header>
+        <div class="slds-modal__content" style="overflow-y: auto; overflow-x: hidden; max-height: calc(60vh - 120px); background-color: #e8f4ff; padding: 0.5rem;">
+          <div style="border: 2px solid #0176d3; padding: 0.5rem; border-radius: 8px; background-color: #e8f4ff; max-width: 100%; box-sizing: border-box; overflow: hidden;">
+            <div style="margin-bottom: 0.5rem;">
+              <h4 class="slds-text-heading_small" style="color: #0176d3; margin: 0;">Select Calls to Reschedule:</h4>
+              <p class="slds-text-body_small" style="margin-top: 0.25rem;">Currently selected: <strong>{selectedRescheduleCalls.length}</strong> calls</p>
+            </div>
+            
+            <div style="width: 100%; overflow-x: auto; max-height: 400px; overflow-y: auto;">
+              <lightning-datatable
+                data={selectedCallsForReschedule}
+                columns={rescheduleCallColumns}
+                key-field="id"
+                onrowselection={handleRescheduleCallSelection}
+                show-row-number-column
+                max-row-selection="1000">
+              </lightning-datatable>
+            </div>
+          </div>
+        </div>
+        <footer class="slds-modal__footer">
+          <lightning-button variant="brand" label="Done" onclick={closeCallSelectionModal}></lightning-button>
+        </footer>
+      </div>
+    </section>
+    <div class="slds-backdrop slds-backdrop_open" style="z-index: 9000;"></div>
   </template>
 
   <!-- Create New Candidate Modal -->
@@ -2427,13 +2463,13 @@
 
   <!-- Submit Feedback Modal (Bug Reports & Feature Requests) -->
   <template if:true={showFeedbackModal}>
-    <section role="dialog" tabindex="-1" class="slds-modal slds-fade-in-open slds-modal_medium">
+    <section role="dialog" tabindex="-1" class="slds-modal slds-fade-in-open slds-modal_medium feedback-modal">
       <div class="slds-modal__container" style="background-color: white;">
-        <header class="slds-modal__header" style="background: white !important; padding: 0.75rem 1rem !important; min-height: auto !important; border-bottom: 1px solid #dddbda;">
+        <header class="slds-modal__header">
           <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" onclick={closeFeedbackModal}>
             <lightning-icon icon-name="utility:close" alternative-text="Close" size="small"></lightning-icon>
           </button>
-          <h2 class="slds-text-heading_medium" style="color: #080707 !important; font-size: 1.125rem !important; line-height: 1.25 !important; margin: 0 !important;">Submit Feedback</h2>
+          <h2 class="slds-text-heading_medium">Submit Feedback</h2>
         </header>
         <div class="slds-modal__content slds-p-around_small" style="background-color: white; padding-top: 0;">
           <div class="slds-form" role="list">

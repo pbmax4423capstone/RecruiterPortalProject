@@ -659,6 +659,7 @@ export default class RecruiterDashboard extends NavigationMixin(LightningElement
   // Action Modal States
   @track showCreateTicketModal = false;
   @track showRescheduleCallsModal = false;
+  @track showCallSelectionModal = false;
   @track showCreateCandidateModal = false;
   @track showContractingModal = false;
   @track showNotesModal = false;
@@ -2609,6 +2610,9 @@ export default class RecruiterDashboard extends NavigationMixin(LightningElement
   // Feedback Modal Methods
   openFeedbackModal() {
     this.showFeedbackModal = true;
+    // Auto-fill with current user
+    this.feedbackSubmittedById = this.userId;
+    this.feedbackSubmittedBy = this.userName;
     // Load all active users when modal opens
     this.loadAllUsers();
   }
@@ -3183,6 +3187,14 @@ export default class RecruiterDashboard extends NavigationMixin(LightningElement
     this.isLoadingRescheduleCalls = false;
   }
 
+  openCallSelectionModal() {
+    this.showCallSelectionModal = true;
+  }
+
+  closeCallSelectionModal() {
+    this.showCallSelectionModal = false;
+  }
+
   openCreateCandidateModal() {
     this.showCreateCandidateModal = true;
   }
@@ -3446,8 +3458,10 @@ export default class RecruiterDashboard extends NavigationMixin(LightningElement
       console.log('Loaded past due calls:', pastDueCalls);
       
       if (pastDueCalls && pastDueCalls.length > 0) {
-        this.selectedCallsForReschedule = pastDueCalls;
-        console.log(`Loaded ${pastDueCalls.length} past due calls from Salesforce`);
+        // Show only half of the total past due calls
+        const halfCount = Math.ceil(pastDueCalls.length / 2);
+        this.selectedCallsForReschedule = pastDueCalls.slice(0, halfCount);
+        console.log(`Showing ${halfCount} of ${pastDueCalls.length} past due calls (50%)`);
       } else {
         // If no real past due calls, use test data for demo
         this.selectedCallsForReschedule = [

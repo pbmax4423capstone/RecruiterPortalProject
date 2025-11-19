@@ -1911,6 +1911,50 @@ div.candidate-list-item .slds-p-around_small {
   color: white;
 }
 
+/* Standard Salesforce modal header (white background) */
+.standard-modal-header {
+  background: white !important;
+  color: #080707 !important;
+  padding: 0.75rem 1rem !important;
+  min-height: auto !important;
+  border-bottom: 1px solid #dddbda !important;
+  border-radius: 0 !important;
+}
+
+.standard-modal-header h2 {
+  color: #080707 !important;
+  font-size: 1.125rem !important;
+  line-height: 1.25 !important;
+  margin: 0 !important;
+}
+
+.standard-modal-header .slds-button_icon-inverse {
+  color: #706e6b !important;
+}
+
+/* Feedback modal specific styling */
+.feedback-modal .slds-modal__header {
+  background: #ffffff !important;
+  background-image: none !important;
+  color: #080707 !important;
+  padding: 0.75rem 1rem !important;
+  min-height: 2.5rem !important;
+  border-bottom: 1px solid #dddbda !important;
+  border-radius: 0.25rem 0.25rem 0 0 !important;
+}
+
+.feedback-modal .slds-modal__header h2 {
+  color: #080707 !important;
+  font-size: 1.125rem !important;
+  line-height: 1.25rem !important;
+  margin: 0 !important;
+  font-weight: 400 !important;
+}
+
+.feedback-modal .slds-modal__header .slds-button_icon-inverse {
+  color: #706e6b !important;
+}
+
 /* Modal footer styling */
 .slds-modal__footer {
   background: #f8f9fa;
