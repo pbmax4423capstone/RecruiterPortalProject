@@ -22,6 +22,7 @@ import getInterviewStatsByInterviewer from '@salesforce/apex/RecruiterDashboardC
 import getInterviewTypeWithInterviewerStats from '@salesforce/apex/RecruiterDashboardController.getInterviewTypeWithInterviewerStats';
 import getInterviewDetailsByInterviewer from '@salesforce/apex/RecruiterDashboardController.getInterviewDetailsByInterviewer';
 import reassignInterviewsToSalesManagers from '@salesforce/apex/RecruiterDashboardController.reassignInterviewsToSalesManagers';
+import createFeedbackCase from '@salesforce/apex/RecruiterDashboardController.createFeedbackCase';
 import { NavigationMixin } from 'lightning/navigation';
 import { refreshApex } from '@salesforce/apex';
 import { ShowToastEvent } from 'lightning/platformShowToastEvent';
@@ -2692,20 +2693,38 @@ export default class RecruiterDashboard extends NavigationMixin(LightningElement
   }
 
   handleSubmitFeedback() {
-    // Create case record
+    // Validate required fields
+    if (!this.feedbackSubmittedById || !this.feedbackType || !this.feedbackSubject || !this.feedbackDescription) {
+      this.showToast('Error', 'Please fill in all required fields', 'error');
+      return;
+    }
+
+    // Create case record via Apex
     const feedbackTypeLabel = this.feedbackTypeOptions.find(opt => opt.value === this.feedbackType)?.label || this.feedbackType;
     const priorityLabel = this.isBugReport ? 
       this.priorityOptions.find(opt => opt.value === this.feedbackPriority)?.label || this.feedbackPriority : 
-      'N/A';
+      'Medium';
 
     const description = `Submitted By: ${this.feedbackSubmittedBy}\n` +
       `Type: ${feedbackTypeLabel}\n` +
       (this.isBugReport ? `Priority: ${priorityLabel}\n` : '') +
       `\n${this.feedbackDescription}`;
 
-    // For now, show success message - you can add Apex method to create Case later
-    this.showToast('Success', `Feedback submitted by ${this.feedbackSubmittedBy}: ${this.feedbackSubject}`, 'success');
-    this.closeFeedbackModal();
+    createFeedbackCase({
+      submittedById: this.feedbackSubmittedById,
+      feedbackType: feedbackTypeLabel,
+      priority: priorityLabel,
+      subject: this.feedbackSubject,
+      description: description
+    })
+    .then(caseId => {
+      this.showToast('Success', `Feedback case created successfully and assigned to System Administrators. Case ID: ${caseId}`, 'success');
+      this.closeFeedbackModal();
+    })
+    .catch(error => {
+      console.error('Error creating feedback case:', error);
+      this.showToast('Error', 'Failed to create feedback case: ' + (error.body?.message || error.message), 'error');
+    });
   }
 
   handleCandidateSelection(event) {

@@ -2200,4 +2200,70 @@ public inherited sharing class RecruiterDashboardController {
             return countB - countA; // Descending order
         }
     }
+    
+    @AuraEnabled
+    public static String createFeedbackCase(String submittedById, String feedbackType, String priority, String subject, String description) {
+        try {
+            // Get all active System Administrator users
+            List<User> sysAdmins = [
+                SELECT Id, Name 
+                FROM User 
+                WHERE Profile.Name = 'System Administrator' 
+                AND IsActive = true
+            ];
+            
+            if (sysAdmins.isEmpty()) {
+                throw new AuraHandledException('No active System Administrator users found in the system.');
+            }
+            
+            // Create the Case
+            Case feedbackCase = new Case();
+            feedbackCase.Subject = subject;
+            feedbackCase.Description = description;
+            feedbackCase.Origin = 'Recruiter Portal';
+            feedbackCase.Status = 'New';
+            feedbackCase.Type = feedbackType;
+            
+            // Set priority if provided
+            if (String.isNotBlank(priority)) {
+                feedbackCase.Priority = priority;
+            } else {
+                feedbackCase.Priority = 'Medium';
+            }
+            
+            // Set the contact/submitted by if available
+            if (String.isNotBlank(submittedById)) {
+                feedbackCase.ContactId = submittedById; // Assuming this is a Contact ID
+            }
+            
+            insert feedbackCase;
+            
+            // Create Case Team Members for all System Administrators
+            List<CaseTeamMember> caseTeamMembers = new List<CaseTeamMember>();
+            
+            // Get the CaseTeamRole for assignment (you may need to adjust the role name)
+            List<CaseTeamRole> roles = [SELECT Id FROM CaseTeamRole WHERE Name = 'Engineer' LIMIT 1];
+            Id roleId = roles.isEmpty() ? null : roles[0].Id;
+            
+            for (User admin : sysAdmins) {
+                CaseTeamMember ctm = new CaseTeamMember();
+                ctm.ParentId = feedbackCase.Id;
+                ctm.MemberId = admin.Id;
+                if (roleId != null) {
+                    ctm.TeamRoleId = roleId;
+                }
+                caseTeamMembers.add(ctm);
+            }
+            
+            if (!caseTeamMembers.isEmpty()) {
+                insert caseTeamMembers;
+            }
+            
+            return feedbackCase.Id;
+            
+        } catch (Exception e) {
+            System.debug('Error creating feedback case: ' + e.getMessage());
+            throw new AuraHandledException('Failed to create feedback: ' + e.getMessage());
+        }
+    }
 }
