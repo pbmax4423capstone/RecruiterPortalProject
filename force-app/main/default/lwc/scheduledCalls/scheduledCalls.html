@@ -1,0 +1,67 @@
+<template>
+    <div class="slds-card">
+        <div class="slds-card__header slds-grid">
+            <header class="slds-media slds-media_center slds-has-flexi-truncate">
+                <div class="slds-media__figure">
+                    <span class="slds-icon_container slds-icon-standard-task">
+                        <lightning-icon icon-name="standard:task" size="small"></lightning-icon>
+                    </span>
+                </div>
+                <div class="slds-media__body">
+                    <h2 class="slds-card__header-title">
+                        <span>Scheduled Calls</span>
+                    </h2>
+                </div>
+            </header>
+            <div class="slds-no-flex">
+                <p class="slds-text-body_small slds-text-color_weak">Last refreshed: {lastRefreshed}</p>
+            </div>
+        </div>
+        <div class="slds-card__body slds-card__body_inner">
+            <template if:true={isLoading}>
+                <div class="slds-align_absolute-center slds-p-around_medium">
+                    <lightning-spinner alternative-text="Loading" size="small"></lightning-spinner>
+                </div>
+            </template>
+
+            <template if:false={isLoading}>
+                <template if:true={hasData}>
+                    <lightning-datatable
+                        key-field="Id"
+                        data={calls}
+                        columns={columns}
+                        hide-checkbox-column
+                        show-row-number-column
+                        onrowaction={handleRowAction}
+                        oncellclick={handleCellClick}>
+                    </lightning-datatable>
+                </template>
+
+                <template if:false={hasData}>
+                    <div class="slds-align_absolute-center slds-p-around_large">
+                        <div class="slds-text-align_center">
+                            <lightning-icon icon-name="utility:success" size="large" variant="success"></lightning-icon>
+                            <div class="slds-text-heading_medium slds-m-top_medium">
+                                No scheduled calls
+                            </div>
+                            <div class="slds-text-body_regular slds-text-color_weak slds-m-top_small">
+                                All caught up!
+                            </div>
+                        </div>
+                    </div>
+                </template>
+            </template>
+        </div>
+        <footer class="slds-card__footer">
+            <div class="slds-align_absolute-center">
+                <lightning-button
+                    label="Refresh"
+                    icon-name="utility:refresh"
+                    onclick={handleRefresh}
+                    disabled={isLoading}
+                    variant="neutral">
+                </lightning-button>
+            </div>
+        </footer>
+    </div>
+</template>

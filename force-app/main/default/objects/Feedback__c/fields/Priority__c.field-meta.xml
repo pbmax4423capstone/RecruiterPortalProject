@@ -12,6 +12,11 @@
         <valueSetDefinition>
             <sorted>false</sorted>
             <value>
+                <fullName>Critical</fullName>
+                <default>false</default>
+                <label>Critical</label>
+            </value>
+            <value>
                 <fullName>High</fullName>
                 <default>false</default>
                 <label>High</label>

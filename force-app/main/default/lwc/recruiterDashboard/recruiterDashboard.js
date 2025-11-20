@@ -677,16 +677,16 @@ export default class RecruiterDashboard extends NavigationMixin(LightningElement
   @track feedbackDescription = '';
 
   feedbackTypeOptions = [
-    { label: '🐛 Bug Report', value: 'bug' },
-    { label: '💡 Feature Request', value: 'feature' },
-    { label: '📝 General Feedback', value: 'general' }
+    { label: '🐛 Bug Report', value: 'Bug Report' },
+    { label: '💡 Feature Request', value: 'Feature Request' },
+    { label: '📝 General Feedback', value: 'General Feedback' }
   ];
 
   priorityOptions = [
-    { label: '🔴 Critical - System Down', value: 'critical' },
-    { label: '🟠 High - Major Issue', value: 'high' },
-    { label: '🟡 Medium - Noticeable Problem', value: 'medium' },
-    { label: '🟢 Low - Minor Issue', value: 'low' }
+    { label: '🔴 Critical - System Down', value: 'Critical' },
+    { label: '🟠 High - Major Issue', value: 'High' },
+    { label: '🟡 Medium - Noticeable Problem', value: 'Medium' },
+    { label: '🟢 Low - Minor Issue', value: 'Low' }
   ];
 
   // Call Management Modal properties
@@ -2700,20 +2700,17 @@ export default class RecruiterDashboard extends NavigationMixin(LightningElement
     }
 
     // Create case record via Apex
-    const feedbackTypeLabel = this.feedbackTypeOptions.find(opt => opt.value === this.feedbackType)?.label || this.feedbackType;
-    const priorityLabel = this.isBugReport ? 
-      this.priorityOptions.find(opt => opt.value === this.feedbackPriority)?.label || this.feedbackPriority : 
-      'Medium';
+    const priorityValue = this.isBugReport ? this.feedbackPriority : 'Medium';
 
     const description = `Submitted By: ${this.feedbackSubmittedBy}\n` +
-      `Type: ${feedbackTypeLabel}\n` +
-      (this.isBugReport ? `Priority: ${priorityLabel}\n` : '') +
+      `Type: ${this.feedbackType}\n` +
+      (this.isBugReport ? `Priority: ${priorityValue}\n` : '') +
       `\n${this.feedbackDescription}`;
 
     createFeedbackCase({
       submittedById: this.feedbackSubmittedById,
-      feedbackType: feedbackTypeLabel,
-      priority: priorityLabel,
+      feedbackType: this.feedbackType,
+      priority: priorityValue,
       subject: this.feedbackSubject,
       description: description
     })
