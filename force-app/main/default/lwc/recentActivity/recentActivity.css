@@ -1,0 +1,9 @@
+lightning-datatable {
+    cursor: pointer;
+}
+
+/* Make table rows appear clickable */
+lightning-datatable tbody tr:hover {
+    background-color: #f3f3f3;
+    cursor: pointer;
+}
