@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<EmailTemplate xmlns="http://soap.sforce.com/2006/04/metadata">
+    <available>true</available>
+    <description>Email sent when candidate advances to Ci (1st) stage</description>
+    <encodingKey>UTF-8</encodingKey>
+    <name>Candidate Stage - Ci First Interview</name>
+    <style>none</style>
+    <subject>Next Step: Career Interview at Capstone Financial</subject>
+    <type>text</type>
+</EmailTemplate>

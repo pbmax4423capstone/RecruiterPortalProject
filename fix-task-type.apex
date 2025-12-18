@@ -1,0 +1,1 @@
+List<Task> tasksToUpdate = [SELECT Id FROM Task WHERE OwnerId = '0055f00000DqpnpAAB' AND TaskSubtype = 'Call' AND CreatedDate = TODAY]; for (Task t : tasksToUpdate) { t.Type = 'Call'; } update tasksToUpdate; System.debug('Updated ' + tasksToUpdate.size() + ' tasks');

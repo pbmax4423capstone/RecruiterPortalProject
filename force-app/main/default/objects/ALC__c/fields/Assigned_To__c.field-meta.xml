@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Assigned_To__c</fullName>
+    <label>Assigned To</label>
+    <required>false</required>
+    <trackFeedHistory>true</trackFeedHistory>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>MultiselectPicklist</type>
+    <valueSet>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>Tenny, Rachyll</fullName>
+                <default>false</default>
+                <label>Tenny, Rachyll</label>
+            </value>
+            <value>
+                <fullName>Haney, Anna</fullName>
+                <default>false</default>
+                <label>Haney, Anna</label>
+            </value>
+            <value>
+                <fullName>Watson, Angel</fullName>
+                <default>false</default>
+                <label>Watson, Angel</label>
+            </value>
+            <value>
+                <fullName>Gruber, Jonathan</fullName>
+                <default>false</default>
+                <label>Gruber, Jonathan</label>
+            </value>
+            <value>
+                <fullName>Masuda, Diljeet</fullName>
+                <default>false</default>
+                <label>Masuda, Diljeet</label>
+            </value>
+            <value>
+                <fullName>Denton, Timothy</fullName>
+                <default>false</default>
+                <label>Denton, Timothy</label>
+            </value>
+            <value>
+                <fullName>Ianni, Brooke</fullName>
+                <default>false</default>
+                <label>Ianni, Brooke</label>
+            </value>
+            <value>
+                <fullName>Hess, Van</fullName>
+                <default>false</default>
+                <label>Hess, Van</label>
+            </value>
+            <value>
+                <fullName>Signorelli, Sara Moore</fullName>
+                <default>false</default>
+                <label>Signorelli, Sara Moore</label>
+            </value>
+            <value>
+                <fullName>Member</fullName>
+                <default>false</default>
+                <label>Member</label>
+            </value>
+            <value>
+                <fullName>Blum, Philip</fullName>
+                <default>false</default>
+                <label>Blum, Philip</label>
+            </value>
+            <value>
+                <fullName>Former member</fullName>
+                <default>false</default>
+                <label>Former member</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+    <visibleLines>4</visibleLines>
+</CustomField>

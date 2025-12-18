@@ -1,0 +1,319 @@
+/* Container Styles */
+.cases-container {
+    padding: 0;
+}
+
+.empty-state {
+    padding: 2rem;
+}
+
+.success-icon {
+    color: #4bca81;
+}
+
+/* Case Count Badge */
+.case-count-badge {
+    --sds-c-badge-color-background: #0176d3;
+    --sds-c-badge-text-color: #ffffff;
+}
+
+/* Priority Indicators */
+.priority-high::before,
+.priority-medium::before,
+.priority-low::before,
+.priority-default::before {
+    content: '';
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    margin-right: 4px;
+}
+
+.priority-high::before {
+    background-color: #ea001e;
+    box-shadow: 0 0 6px rgba(234, 0, 30, 0.4);
+}
+
+.priority-medium::before {
+    background-color: #ff9500;
+    box-shadow: 0 0 6px rgba(255, 149, 0, 0.4);
+}
+
+.priority-low::before {
+    background-color: #4bca81;
+}
+
+.priority-default::before {
+    background-color: #747474;
+}
+
+/* Status Badges */
+.status-new,
+.status-working,
+.status-escalated,
+.status-default {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.status-new {
+    background-color: #e3f3ff;
+    color: #0176d3;
+}
+
+.status-working {
+    background-color: #fff3e0;
+    color: #ff9500;
+}
+
+.status-escalated {
+    background-color: #ffeaea;
+    color: #ea001e;
+}
+
+.status-default {
+    background-color: #f3f2f2;
+    color: #514f4d;
+}
+
+/* Compact List Styles */
+.compact-list {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.case-item-compact {
+    cursor: pointer;
+    transition: background-color 0.15s ease;
+}
+
+.case-item-compact:hover {
+    background-color: #f3f2f2;
+}
+
+.case-item-compact:active {
+    background-color: #e5e5e5;
+}
+
+/* Case Card Styles */
+.case-card {
+    background: #ffffff;
+    border: 1px solid #dddbda;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.case-card:hover {
+    border-color: #0176d3;
+    box-shadow: 0 2px 8px rgba(1, 118, 211, 0.15);
+    transform: translateY(-1px);
+}
+
+.case-card:active {
+    transform: translateY(0);
+    box-shadow: 0 1px 4px rgba(1, 118, 211, 0.1);
+}
+
+.case-card-header {
+    padding: 1rem 1rem 0.5rem 1rem;
+    border-bottom: 1px solid #f3f2f2;
+}
+
+.case-card-body {
+    padding: 0.5rem 1rem 1rem 1rem;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.case-number {
+    font-size: 0.875rem;
+    font-weight: 700;
+    color: #0176d3;
+    margin: 0;
+}
+
+.case-subject {
+    font-size: 0.875rem;
+    line-height: 1.4;
+    color: #181818;
+    margin: 0;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.case-subject.no-subject {
+    color: #747474;
+    font-style: italic;
+}
+
+.case-meta {
+    margin-top: auto;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .case-card-header,
+    .case-card-body {
+        padding-left: 0.75rem;
+        padding-right: 0.75rem;
+    }
+    
+    .case-subject {
+        font-size: 0.8125rem;
+    }
+}
+
+/* Animation for loading state */
+.slds-spinner {
+    opacity: 0.8;
+}
+
+/* Hover effects for buttons */
+.slds-button-icon:hover {
+    transform: scale(1.05);
+}
+
+/* Focus states for accessibility */
+.case-card:focus-within {
+    outline: 2px solid #0176d3;
+    outline-offset: 2px;
+}
+
+.case-item-compact:focus-within {
+    outline: 2px solid #0176d3;
+    outline-offset: -2px;
+}
+
+/* Dark Mode Styles */
+.unassigned-cases-container {
+    background-color: white;
+    border: 1px solid #d8dde6;
+    border-radius: 0.25rem;
+    box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.1);
+}
+
+.unassigned-cases-container.dark-mode {
+    background-color: #2c2c2c;
+    border-color: #444444;
+    color: #e0e0e0;
+}
+
+.unassigned-cases-container.dark-mode .slds-card__header {
+    background-color: #2c2c2c;
+    border-bottom-color: #444444;
+    color: #e0e0e0;
+}
+
+.unassigned-cases-container.dark-mode .slds-card__body {
+    background-color: #2c2c2c;
+    color: #e0e0e0;
+}
+
+.unassigned-cases-container.dark-mode .case-card {
+    background-color: #3a3a3a;
+    border-color: #555555;
+    color: #e0e0e0;
+}
+
+.unassigned-cases-container.dark-mode .case-item-compact {
+    background-color: #3a3a3a;
+    border-color: #555555;
+    color: #e0e0e0;
+}
+
+.unassigned-cases-container.dark-mode .case-card:hover,
+.unassigned-cases-container.dark-mode .case-item-compact:hover {
+    background-color: #4a4a4a;
+    border-color: #666666;
+}
+
+.unassigned-cases-container.dark-mode .slds-text-body_small,
+.unassigned-cases-container.dark-mode .slds-text-color_weak {
+    color: #b0b0b0;
+}
+
+.unassigned-cases-container.dark-mode .empty-state {
+    background-color: #2c2c2c;
+    color: #e0e0e0;
+}
+
+.unassigned-cases-container.dark-mode .slds-card__footer {
+    background-color: #2c2c2c;
+    border-top-color: #444444;
+}
+
+.unassigned-cases-container.dark-mode lightning-button {
+    --slds-c-button-neutral-color-background: #444444;
+    --slds-c-button-neutral-color-border: #555555;
+    --slds-c-button-text-color: #e0e0e0;
+}
+
+.unassigned-cases-container.dark-mode lightning-button:hover {
+    --slds-c-button-neutral-color-background-hover: #555555;
+    --slds-c-button-neutral-color-border-hover: #666666;
+}
+
+/* Force text visibility in dark mode */
+.unassigned-cases-container.dark-mode .case-number {
+    color: #54a3ff !important;
+}
+
+.unassigned-cases-container.dark-mode .case-subject {
+    color: #ffffff !important;
+}
+
+.unassigned-cases-container.dark-mode .case-account,
+.unassigned-cases-container.dark-mode .case-created {
+    color: #cccccc !important;
+}
+
+.unassigned-cases-container.dark-mode h3,
+.unassigned-cases-container.dark-mode p,
+.unassigned-cases-container.dark-mode div {
+    color: #ffffff !important;
+}
+
+.unassigned-cases-container.dark-mode .slds-text-body_small {
+    color: #cccccc !important;
+}
+
+/* Override any inherited colors */
+.unassigned-cases-container.dark-mode * {
+    color: inherit;
+}
+
+/* Dark mode status badges */
+.unassigned-cases-container.dark-mode .status-new {
+    background-color: #1e3a8a;
+    color: #93c5fd !important;
+}
+
+.unassigned-cases-container.dark-mode .status-working {
+    background-color: #92400e;
+    color: #fbbf24 !important;
+}
+
+.unassigned-cases-container.dark-mode .status-escalated {
+    background-color: #991b1b;
+    color: #fca5a5 !important;
+}
+
+.unassigned-cases-container.dark-mode .status-default {
+    background-color: #4b5563;
+    color: #d1d5db !important;
+}

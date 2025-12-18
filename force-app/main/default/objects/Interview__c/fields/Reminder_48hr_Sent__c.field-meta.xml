@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Reminder_48hr_Sent__c</fullName>
+    <defaultValue>false</defaultValue>
+    <description>Tracks whether 48-hour interview reminder email has been sent to candidate</description>
+    <externalId>false</externalId>
+    <label>48hr Reminder Sent</label>
+    <trackTrending>false</trackTrending>
+    <type>Checkbox</type>
+</CustomField>

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>58.0</apiVersion>
+    <areMetricsLoggedToDataCloud>false</areMetricsLoggedToDataCloud>
+    <description>Screen flow to create a new device inspection record with contact lookup</description>
+    <interviewLabel>Device Inspection Creation {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>Device Inspection Creation</label>
+    <processType>Flow</processType>
+    <status>InvalidDraft</status>
+    <variables>
+        <name>ContactLookup</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+</Flow>

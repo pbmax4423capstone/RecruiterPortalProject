@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>61.0</apiVersion>
+    <areMetricsLoggedToDataCloud>false</areMetricsLoggedToDataCloud>
+    <assignments>
+        <name>Assign_Personal_Email_Address</name>
+        <label>Assign Personal Email Address</label>
+        <locationX>176</locationX>
+        <locationY>287</locationY>
+        <assignmentItems>
+            <assignToReference>$Record.personal_email__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>PersonalEmail</elementReference>
+            </value>
+        </assignmentItems>
+    </assignments>
+    <description>Use Email to populate personal email address for candidate when record is saved or updated with email address</description>
+    <environments>Default</environments>
+    <formulas>
+        <name>PersonalEmail</name>
+        <dataType>String</dataType>
+        <expression>{!$Record.Email__c}</expression>
+    </formulas>
+    <interviewLabel>Assign Personal Email Address {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>Assign Personal Email Address</label>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>AUTO_LAYOUT_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>OriginBuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>AutoLaunchedFlow</processType>
+    <start>
+        <locationX>50</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>Assign_Personal_Email_Address</targetReference>
+        </connector>
+        <object>Candidate__c</object>
+        <recordTriggerType>CreateAndUpdate</recordTriggerType>
+        <triggerType>RecordBeforeSave</triggerType>
+    </start>
+    <status>Active</status>
+</Flow>

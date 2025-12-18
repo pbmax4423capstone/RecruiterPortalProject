@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Reminder_10_Day_Sent__c</fullName>
+    <defaultValue>false</defaultValue>
+    <description>Indicates if the 10-day urgent reminder email has been sent to the candidate</description>
+    <label>10 Day Reminder Sent</label>
+    <trackFeedHistory>false</trackFeedHistory>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Checkbox</type>
+</CustomField>

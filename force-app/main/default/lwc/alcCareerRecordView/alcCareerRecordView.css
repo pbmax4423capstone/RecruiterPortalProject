@@ -1,0 +1,333 @@
+.career-record-container {
+    background: #f4f6f9;
+    min-height: 100vh;
+    padding-bottom: 2rem;
+}
+
+/* Hero Header */
+.hero-header {
+    background: #032d60;
+    padding: 2.5rem 2rem;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    margin-bottom: 2rem;
+}
+
+.hero-content {
+    max-width: 1400px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.hero-left {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+}
+
+.avatar-circle {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    background: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.hero-info {
+    color: white;
+}
+
+.hero-title {
+    font-size: 2rem;
+    font-weight: 700;
+    margin: 0 0 0.5rem 0;
+    color: white;
+}
+
+.hero-subtitle {
+    font-size: 1rem;
+    opacity: 0.95;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.position-badge {
+    background: rgba(255, 255, 255, 0.25);
+    padding: 0.25rem 0.75rem;
+    border-radius: 20px;
+    font-size: 0.875rem;
+    font-weight: 600;
+}
+
+.hero-right {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 1rem;
+}
+
+.stage-badge-container {
+    background: white;
+    padding: 0.5rem 1.25rem;
+    border-radius: 25px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.stage-badge {
+    font-weight: 700;
+    font-size: 0.95rem;
+    color: #032d60;
+}
+
+/* Content Grid */
+.content-grid {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 2rem;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+    gap: 1.5rem;
+}
+
+/* Info Cards */
+.info-card {
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    overflow: hidden;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.info-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+}
+
+.full-width-card {
+    grid-column: 1 / -1;
+}
+
+.card-header {
+    background: linear-gradient(to right, #f8f9fa, #e9ecef);
+    padding: 1rem 1.5rem;
+    border-bottom: 2px solid #032d60;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.card-header h2 {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #2d3748;
+    margin: 0;
+}
+
+.card-body {
+    padding: 1.5rem;
+}
+
+/* Field Rows */
+.field-row {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 1.25rem;
+}
+
+.field-row:last-child {
+    margin-bottom: 0;
+}
+
+.field-item {
+    display: flex;
+    gap: 0.75rem;
+    align-items: flex-start;
+}
+
+.field-item.full-width {
+    grid-column: 1 / -1;
+}
+
+.field-icon {
+    margin-top: 0.25rem;
+    color: #032d60;
+}
+
+.field-content {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    flex: 1;
+}
+
+.field-label {
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: #718096;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.field-value {
+    font-size: 1rem;
+    color: #2d3748;
+    font-weight: 500;
+}
+
+.field-value.link {
+    color: #032d60;
+    text-decoration: none;
+    transition: color 0.2s;
+}
+
+.field-value.link:hover {
+    color: #0176d3;
+    text-decoration: underline;
+}
+
+.field-value.highlight {
+    color: #032d60;
+    font-weight: 600;
+}
+
+/* License Badges */
+.license-badges {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+.license-badge {
+    flex: 1;
+    min-width: 200px;
+    padding: 1rem;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    font-weight: 600;
+    border: 2px solid #e2e8f0;
+    transition: all 0.2s;
+}
+
+.license-badge[data-licensed="true"],
+.license-badge[data-registered="true"] {
+    background: #d4edda;
+    border-color: #28a745;
+    color: #155724;
+}
+
+.license-badge[data-licensed="false"],
+.license-badge[data-registered="false"] {
+    background: #f8d7da;
+    border-color: #dc3545;
+    color: #721c24;
+}
+
+.badge-icon {
+    flex-shrink: 0;
+}
+
+/* Next Meeting Banner */
+.next-meeting-banner {
+    background: #032d60;
+    color: white;
+    padding: 1rem 1.25rem;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1rem;
+    box-shadow: 0 2px 8px rgba(3, 45, 96, 0.3);
+}
+
+.meeting-label {
+    font-weight: 700;
+    margin-right: 0.5rem;
+}
+
+/* Notes Section */
+.notes-section {
+    background: #f8f9fa;
+    padding: 1rem;
+    border-radius: 8px;
+    border-left: 4px solid #032d60;
+    min-height: 100px;
+}
+
+/* Action Buttons Row */
+.action-buttons-row {
+    display: flex;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+}
+
+.action-button-wrapper {
+    min-width: 150px;
+}
+
+.action-button {
+    width: 100%;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Buttons */
+.full-width-button {
+    width: 100%;
+}
+
+/* Error Message */
+.error-message {
+    padding: 2rem;
+    text-align: center;
+    color: #dc3545;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .hero-content {
+        flex-direction: column;
+        gap: 1.5rem;
+        align-items: flex-start;
+    }
+
+    .hero-right {
+        width: 100%;
+        align-items: stretch;
+    }
+
+    .action-buttons-row {
+        flex-direction: column;
+        width: 100%;
+    }
+
+    .action-button-wrapper {
+        width: 100%;
+        min-width: auto;
+    }
+
+    .stage-badge-container {
+        width: 100%;
+        text-align: center;
+    }
+
+    .content-grid {
+        grid-template-columns: 1fr;
+        padding: 0 1rem;
+    }
+
+    .field-row {
+        grid-template-columns: 1fr;
+    }
+}

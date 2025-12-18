@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>61.0</apiVersion>
+    <areMetricsLoggedToDataCloud>false</areMetricsLoggedToDataCloud>
+    <description>This is a Schedule-Triggered Flow.
+The flow starts by getting Device Compliance records where the ReportDate is less than or equal to a week ago. It then deletes these records. The flow uses a formula to calculate the date one week ago.
+
+Several objects and their fields worth mentioning. Below are the details (the format is given as: object_name - field_name: interaction)
+  * Device_Compliance__c - ReportDate__c : The flow interacts with the ReportDate field to filter records based on their age.</description>
+    <environments>Default</environments>
+    <formulas>
+        <name>ThisWeekVar</name>
+        <dataType>Date</dataType>
+        <expression>TODAY() - MOD(TODAY() - DATE(1900, 1, 8), 7)</expression>
+    </formulas>
+    <interviewLabel>Delete Old Device Compliance Records {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>Delete Old Device Compliance Records</label>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>AUTO_LAYOUT_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>OriginBuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>Flow</processType>
+    <recordDeletes>
+        <name>Delete_Device_Compliance_Records_not_from_this_week</name>
+        <label>Delete Device Compliance Records prior to this week</label>
+        <locationX>176</locationX>
+        <locationY>242</locationY>
+        <inputReference>Get_Device_Compliance_Records</inputReference>
+    </recordDeletes>
+    <recordLookups>
+        <name>Get_Device_Compliance_Records</name>
+        <label>Get Device Compliance Records</label>
+        <locationX>176</locationX>
+        <locationY>134</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Delete_Device_Compliance_Records_not_from_this_week</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>ReportDate__c</field>
+            <operator>LessThanOrEqualTo</operator>
+            <value>
+                <elementReference>ThisWeekVar</elementReference>
+            </value>
+        </filters>
+        <getFirstRecordOnly>false</getFirstRecordOnly>
+        <object>Device_Compliance__c</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <start>
+        <locationX>50</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>Get_Device_Compliance_Records</targetReference>
+        </connector>
+    </start>
+    <status>Active</status>
+</Flow>

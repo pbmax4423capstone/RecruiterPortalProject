@@ -1,0 +1,122 @@
+<template>
+    <lightning-card title="Candidate Pipeline Funnel" icon-name="standard:opportunity">
+        <div slot="actions">
+            <lightning-badge label={totalCandidates} class="slds-badge_inverse"></lightning-badge>
+        </div>
+
+        <template if:true={isLoading}>
+            <div class="slds-p-around_large slds-align_absolute-center">
+                <lightning-spinner alternative-text="Loading..." size="medium"></lightning-spinner>
+            </div>
+        </template>
+
+        <template if:true={error}>
+            <div class="slds-text-color_error slds-p-around_medium">
+                {error}
+            </div>
+        </template>
+
+        <template if:false={isLoading}>
+            <!-- Summary Cards -->
+            <div class="summary-cards slds-p-horizontal_medium slds-p-bottom_medium">
+                <div class="summary-card">
+                    <div class="summary-value">{totalCandidates}</div>
+                    <div class="summary-label">Candidates in Pipeline</div>
+                </div>
+                <div class="summary-card highlight-green">
+                    <div class="summary-value">{totalScheduledInterviews}</div>
+                    <div class="summary-label">Scheduled Interviews</div>
+                </div>
+                <div class="summary-card">
+                    <div class="summary-value">{completedThisMonth}</div>
+                    <div class="summary-label">Completed This Month</div>
+                </div>
+                <div class="summary-card highlight-red">
+                    <div class="summary-value">{biggestDropOffRate}%</div>
+                    <div class="summary-label">Biggest Drop-off</div>
+                    <div class="summary-sublabel">{biggestDropOffStage}</div>
+                </div>
+            </div>
+
+            <!-- Funnel Visualization -->
+            <div class="funnel-container slds-p-horizontal_medium">
+                <template for:each={stages} for:item="stage">
+                    <div key={stage.value} 
+                         class="funnel-row"
+                         data-stage={stage.value}
+                         onclick={handleStageClick}>
+                        
+                        <!-- Stage Label -->
+                        <div class="stage-label">
+                            <span class="stage-name">{stage.label}</span>
+                        </div>
+
+                        <!-- Funnel Bar -->
+                        <div class="funnel-bar-container">
+                            <div class="funnel-bar" style={stage.barStyle}>
+                                <span class="funnel-count">{stage.count} completed</span>
+                            </div>
+                            <template if:true={stage.scheduledCount}>
+                                <span class="scheduled-badge">{stage.scheduledCount} scheduled</span>
+                            </template>
+                        </div>
+
+                        <!-- Metrics -->
+                        <div class="stage-metrics">
+                            <template if:false={stage.isFirst}>
+                                <div class={stage.conversionClass}>
+                                    <lightning-icon icon-name="utility:arrowdown" size="xx-small" class="metric-icon"></lightning-icon>
+                                    {stage.conversionRate}%
+                                </div>
+                            </template>
+                            <template if:true={stage.isFirst}>
+                                <div class="conversion-start">
+                                    <lightning-icon icon-name="utility:trending" size="xx-small" class="metric-icon"></lightning-icon>
+                                    Start
+                                </div>
+                            </template>
+                        </div>
+
+                        <!-- Drop-off Indicator -->
+                        <div class="dropoff-indicator">
+                            <template if:false={stage.isFirst}>
+                                <template if:true={stage.dropOffCount}>
+                                    <span class={stage.dropOffClass}>
+                                        -{stage.dropOffCount} ({stage.dropOffRate}%)
+                                    </span>
+                                </template>
+                            </template>
+                        </div>
+                    </div>
+
+                    <!-- Connector Arrow -->
+                    <template if:false={stage.isLast}>
+                        <div key={stage.value} class="connector-arrow">
+                            <lightning-icon icon-name="utility:chevrondown" size="x-small"></lightning-icon>
+                        </div>
+                    </template>
+                </template>
+            </div>
+
+            <!-- Legend -->
+            <div class="legend slds-p-around_medium">
+                <div class="legend-item">
+                    <span class="legend-dot conversion-excellent"></span>
+                    <span>≥80% Conversion</span>
+                </div>
+                <div class="legend-item">
+                    <span class="legend-dot conversion-good"></span>
+                    <span>60-79% Conversion</span>
+                </div>
+                <div class="legend-item">
+                    <span class="legend-dot conversion-fair"></span>
+                    <span>40-59% Conversion</span>
+                </div>
+                <div class="legend-item">
+                    <span class="legend-dot conversion-poor"></span>
+                    <span>&lt;40% Conversion</span>
+                </div>
+            </div>
+        </template>
+    </lightning-card>
+</template>

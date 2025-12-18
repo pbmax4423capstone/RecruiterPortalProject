@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>MM_ID_cannot_be_NA</fullName>
+    <active>true</active>
+    <description>MM ID cannot be NA</description>
+    <errorConditionFormula>AND(
+    RecordType.DeveloperName = &quot;Career&quot;,
+    LEN(TRIM(MMID__c)) &gt; 0,  /* only validate when user entered something */
+    NOT(
+        REGEX(
+            LOWER(TRIM(MMID__c)),
+            &quot;^(aa[0-9]{6}|ae[0-9]{5})$&quot;
+        )
+    )
+)</errorConditionFormula>
+    <errorDisplayField>MMID__c</errorDisplayField>
+    <errorMessage>MM ID must be AA followed by 6 digits or AE followed by 5 digits (case-insensitive). Help the tech team out by giving them the accurate information they will need to do their job.</errorMessage>
+</ValidationRule>

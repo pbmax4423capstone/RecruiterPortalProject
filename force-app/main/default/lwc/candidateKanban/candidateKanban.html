@@ -1,0 +1,135 @@
+<template>
+    <lightning-card title="Candidate Pipeline" icon-name="standard:opportunity">
+        <div slot="actions">
+            <lightning-badge label={totalCandidates} class="slds-m-right_small"></lightning-badge>
+            <lightning-button-icon 
+                icon-name="utility:refresh" 
+                alternative-text="Refresh"
+                onclick={handleRefresh}
+                class="slds-m-right_small">
+            </lightning-button-icon>
+        </div>
+
+        <template if:true={isLoading}>
+            <div class="slds-is-relative loading-container">
+                <lightning-spinner alternative-text="Loading..." size="medium"></lightning-spinner>
+            </div>
+        </template>
+
+        <template if:true={error}>
+            <div class="slds-text-color_error slds-p-around_medium">
+                {error}
+            </div>
+        </template>
+
+        <template if:false={isLoading}>
+            <div class="kanban-container">
+                <template for:each={stagesWithCandidates} for:item="stage">
+                    <div key={stage.value} 
+                         class="kanban-column"
+                         data-stage={stage.value}
+                         ondragover={handleDragOver}
+                         ondragleave={handleDragLeave}
+                         ondrop={handleDrop}>
+                        
+                        <!-- Column Header -->
+                        <div class="column-header">
+                            <span class="column-title">{stage.label}</span>
+                            <span class="column-count">{stage.count}</span>
+                        </div>
+
+                        <!-- Cards Container -->
+                        <div class="cards-container">
+                            <template for:each={stage.candidates} for:item="candidate">
+                                <div key={candidate.id} 
+                                     class={candidate.cardClass}
+                                     data-id={candidate.id}
+                                     data-stage={stage.value}
+                                     draggable="true"
+                                     ondragstart={handleDragStart}
+                                     ondragend={handleDragEnd}
+                                     onclick={handleCardClick}>
+                                    
+                                    <!-- Card Header -->
+                                    <div class="card-header">
+                                        <div class="avatar">
+                                            <span class="initials">{candidate.initials}</span>
+                                        </div>
+                                        <div class="candidate-info">
+                                            <div class="candidate-name">{candidate.name}</div>
+                                            <div class="candidate-location">{candidate.location}</div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Quick Actions -->
+                                    <div class="quick-actions">
+                                        <template if:true={candidate.email}>
+                                            <button class="action-btn" 
+                                                    data-email={candidate.email}
+                                                    onclick={handleEmailClick}
+                                                    title="Send Email">
+                                                <lightning-icon icon-name="utility:email" size="xx-small"></lightning-icon>
+                                            </button>
+                                        </template>
+                                        <template if:true={candidate.phone}>
+                                            <button class="action-btn"
+                                                    data-phone={candidate.phone}
+                                                    onclick={handlePhoneClick}
+                                                    title="Call">
+                                                <lightning-icon icon-name="utility:call" size="xx-small"></lightning-icon>
+                                            </button>
+                                        </template>
+                                        <button class="action-btn" title="View Record">
+                                            <lightning-icon icon-name="utility:preview" size="xx-small"></lightning-icon>
+                                        </button>
+                                    </div>
+
+                                    <!-- Card Details -->
+                                    <div class="card-details">
+                                        <div class="detail-row">
+                                            <lightning-icon icon-name="utility:user" size="xx-small" class="detail-icon"></lightning-icon>
+                                            <span class="detail-text">{candidate.recruiterName}</span>
+                                        </div>
+                                        <!-- Interview Stage -->
+                                        <template if:true={candidate.interviewStage}>
+                                            <div class="detail-row">
+                                                <lightning-icon icon-name="utility:event" size="xx-small" class="detail-icon"></lightning-icon>
+                                                <span class="detail-text interview-badge">{candidate.interviewStage}</span>
+                                                <template if:true={candidate.interviewStatus}>
+                                                    <span class="interview-status">({candidate.interviewStatus})</span>
+                                                </template>
+                                            </div>
+                                        </template>
+                                        <!-- ALC Contracting Stage -->
+                                        <template if:true={candidate.contractingStage}>
+                                            <div class="detail-row contracting-row">
+                                                <lightning-icon icon-name="utility:contract" size="xx-small" class="detail-icon contracting-icon"></lightning-icon>
+                                                <span class="detail-text contracting-stage-text">{candidate.contractingStage}</span>
+                                            </div>
+                                        </template>
+                                    </div>
+
+                                    <!-- Card Footer -->
+                                    <div class="card-footer">
+                                        <span class="time-ago">
+                                            <lightning-icon icon-name="utility:clock" size="xx-small" class="time-icon"></lightning-icon>
+                                            {candidate.timeAgo}
+                                        </span>
+                                    </div>
+                                </div>
+                            </template>
+
+                            <!-- Empty State -->
+                            <template if:false={stage.hasCandidates}>
+                                <div class="empty-column">
+                                    <lightning-icon icon-name="utility:add" size="small"></lightning-icon>
+                                    <span>No candidates</span>
+                                </div>
+                            </template>
+                        </div>
+                    </div>
+                </template>
+            </div>
+        </template>
+    </lightning-card>
+</template>

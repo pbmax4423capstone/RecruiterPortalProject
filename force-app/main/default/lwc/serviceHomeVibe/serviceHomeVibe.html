@@ -1,0 +1,524 @@
+<template>
+  <div class={containerClass}>
+    <!-- Personalized Greeting + Dark Mode Header -->
+    <div class="slds-page-header">
+      <div class="slds-page-header__row">
+        <div class="slds-page-header__col-title">
+          <div class="slds-media">
+            <div class="slds-media__figure">
+              <lightning-icon icon-name="utility:service_appointment" size="medium"></lightning-icon>
+            </div>
+            <div class="slds-media__body">
+              <div class="slds-page-header__name">
+                <h1 class="slds-page-header__title">{greetingMessage}</h1>
+              </div>
+              <p class="slds-page-header__info">Your central hub for managing cases, flows, and quick actions</p>
+            </div>
+          </div>
+        </div>
+        <div class="slds-page-header__col-actions">
+          <lightning-button
+            label={themeLabel}
+            icon-name={themeIcon}
+            variant="brand"
+            onclick={toggleTheme}>
+          </lightning-button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Quick Actions Section -->
+    <div class="slds-m-top_large">
+      <div class="slds-section slds-is-open">
+        <h3 class="slds-section__title slds-theme_shade">
+          <span class="slds-truncate slds-p-horizontal_small" title="Quick Actions">Quick Actions</span>
+        </h3>
+        <div class="slds-section__content slds-p-around_medium">
+          <div class="slds-grid slds-gutters slds-wrap">
+            <!-- Create Case Button -->
+            <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2 slds-large-size_1-of-4 slds-m-bottom_medium">
+              <lightning-button 
+                variant="brand" 
+                label="Create A Case" 
+                title="Create a case for someone else"
+                icon-name="utility:add"
+                class="action-button"
+                onclick={handleCreateTicket}>
+              </lightning-button>
+            </div>
+
+            <!-- Add New Agent/Staff Button -->
+            <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2 slds-large-size_1-of-4 slds-m-bottom_medium">
+              <lightning-button 
+                variant="brand" 
+                label="Add New Agent/Staff" 
+                title="Start screen flow to add new agent/staff"
+                icon-name="utility:adduser"
+                class="action-button"
+                onclick={handleAddAgent}>
+              </lightning-button>
+            </div>
+
+            <!-- Device Inspection Button -->
+            <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2 slds-large-size_1-of-4 slds-m-bottom_medium">
+              <lightning-button 
+                variant="brand" 
+                label="Device Inspection" 
+                title="Start device inspection flow"
+                icon-name="utility:search"
+                class="action-button"
+                onclick={handleDeviceInspection}>
+              </lightning-button>
+            </div>
+
+            <!-- Encrypt Device Button -->
+            <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2 slds-large-size_1-of-4 slds-m-bottom_medium">
+              <lightning-button 
+                variant="brand" 
+                label="Encrypt A New Device" 
+                title="Start device encryption flow"
+                icon-name="utility:lock"
+                class="action-button"
+                onclick={handleEncryptDevice}>
+              </lightning-button>
+            </div>
+
+            <!-- Device Offboarding Button -->
+            <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2 slds-large-size_1-of-4 slds-m-bottom_medium">
+              <lightning-button 
+                variant="brand" 
+                label="Device Offboarding" 
+                title="Start device offboarding flow"
+                icon-name="utility:logout"
+                class="action-button"
+                onclick={handleDeviceOffboarding}>
+              </lightning-button>
+            </div>
+
+            <!-- Macros Button -->
+            <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2 slds-large-size_1-of-4 slds-m-bottom_medium">
+              <lightning-button 
+                variant="brand" 
+                label="Macros" 
+                title="Access available macros"
+                icon-name="utility:macros"
+                class="action-button"
+                onclick={handleMacros}>
+              </lightning-button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Service Dashboard Section -->
+    <div class="slds-m-top_large">
+      <div class="slds-section slds-is-open">
+        <h3 class="slds-section__title slds-theme_shade">
+          <span class="slds-truncate slds-p-horizontal_small" title="Service Analytics Dashboard">Service Analytics Dashboard</span>
+        </h3>
+        <div class="slds-section__content slds-p-around_medium">
+          <c-service-dashboard dark-mode={darkMode}></c-service-dashboard>
+        </div>
+      </div>
+    </div>
+
+    <!-- Recent Items Section -->
+    <div class="slds-m-top_large">
+      <div class="slds-section slds-is-open">
+        <h3 class="slds-section__title slds-theme_shade">
+          <span class="slds-truncate slds-p-horizontal_small" title="Recent Items">Recent Items</span>
+        </h3>
+        <div class="slds-section__content slds-p-around_medium">
+          <template if:true={recentItems}>
+            <div class="slds-grid slds-gutters slds-wrap">
+              <template for:each={recentItems} for:item="item">
+                <div key={item.Id} class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2 slds-large-size_1-of-3 slds-m-bottom_small">
+                  <article class="slds-card">
+                    <div class="slds-card__header slds-grid">
+                      <header class="slds-media slds-media_center slds-has-flexi-truncate">
+                        <div class="slds-media__figure">
+                          <lightning-icon icon-name={item.IconName} size="small" variant="border-filled"></lightning-icon>
+                        </div>
+                        <div class="slds-media__body">
+                          <h2 class="slds-card__header-title">
+                            <a href="javascript:void(0);" onclick={handleRecentItemClick} data-id={item.Id} class="slds-card__header-link slds-truncate" title={item.Name}>
+                              <span>{item.Name}</span>
+                            </a>
+                          </h2>
+                        </div>
+                      </header>
+                    </div>
+                    <div class="slds-card__body slds-card__body_inner">
+                      <div class="slds-text-body_small slds-text-color_weak">
+                        <p>{item.Type} • Last viewed {item.LastViewedDate}</p>
+                        <template if:true={item.Description}>
+                          <p class="slds-m-top_xx-small slds-truncate">{item.Description}</p>
+                        </template>
+                      </div>
+                    </div>
+                  </article>
+                </div>
+              </template>
+            </div>
+          </template>
+          <template if:false={recentItems}>
+            <div class="slds-text-align_center slds-m-vertical_large">
+              <lightning-icon icon-name="utility:clock" size="large" variant="inverse"></lightning-icon>
+              <h3 class="slds-text-heading_small slds-m-top_medium">No recent items</h3>
+              <p class="slds-text-body_regular slds-text-color_weak">Items you've recently accessed will appear here</p>
+            </div>
+          </template>
+        </div>
+      </div>
+    </div>
+
+    <!-- My Open Cases Section -->
+    <div class="slds-m-top_large">
+      <div class="slds-section slds-is-open">
+        <h3 class="slds-section__title slds-theme_shade">
+          <div class="slds-grid slds-grid_align-spread slds-grid_vertical-align-center">
+            <div class="slds-col">
+              <span class="slds-truncate slds-p-horizontal_small" title="My Open Cases">My Open Cases</span>
+            </div>
+            <div class="slds-col slds-no-flex">
+              <lightning-button-icon
+                icon-name="utility:refresh"
+                variant="border-filled"
+                alternative-text="Refresh My Open Cases"
+                title="Refresh My Open Cases"
+                onclick={refreshMyOpenCases}
+                class="slds-m-right_small">
+              </lightning-button-icon>
+            </div>
+          </div>
+        </h3>
+        <div class="slds-section__content slds-p-around_medium">
+          <template if:true={myOpenCases}>
+            <template if:true={myOpenCases.length}>
+              <div class="slds-grid slds-gutters slds-wrap">
+              <template for:each={myOpenCases} for:item="caseItem">
+                <div key={caseItem.Id} class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2 slds-large-size_1-of-3 slds-m-bottom_small">
+                  <article class="slds-card">
+                    <div class="slds-card__header slds-grid">
+                      <header class="slds-media slds-media_center slds-has-flexi-truncate">
+                        <div class="slds-media__figure">
+                          <lightning-icon icon-name="standard:case" size="small" variant="border-filled"></lightning-icon>
+                        </div>
+                        <div class="slds-media__body">
+                          <h2 class="slds-card__header-title">
+                            <a href="javascript:void(0);" onclick={handleCaseClick} data-id={caseItem.Id} class="slds-card__header-link slds-truncate" title={caseItem.Subject}>
+                              <span>{caseItem.CaseNumber}</span>
+                            </a>
+                          </h2>
+                        </div>
+                        <div class="slds-media__trailing">
+                          <span class={caseItem.PriorityClass}>{caseItem.Priority}</span>
+                        </div>
+                      </header>
+                    </div>
+                    <div class="slds-card__body slds-card__body_inner">
+                      <div class="slds-text-body_small">
+                        <p class="slds-truncate slds-m-bottom_xx-small" title={caseItem.Subject}><strong>{caseItem.Subject}</strong></p>
+                        <p class="slds-text-color_weak">Status: {caseItem.Status}</p>
+                        <p class="slds-text-color_weak">Created: {caseItem.CreatedDate}</p>
+                        <template if:true={caseItem.Account}>
+                          <p class="slds-text-color_weak">Account: {caseItem.Account.Name}</p>
+                        </template>
+                      </div>
+                    </div>
+                    <div class="slds-card__footer">
+                      <div class="slds-grid slds-grid_align-spread">
+                        <div class="slds-col">
+                          <lightning-button 
+                            label="View Case" 
+                            variant="neutral" 
+                            size="small"
+                            onclick={handleCaseClick} 
+                            data-id={caseItem.Id}>
+                          </lightning-button>
+                        </div>
+                        <div class="slds-col slds-no-flex">
+                          <lightning-button 
+                            label="Update" 
+                            variant="brand" 
+                            size="small"
+                            onclick={handleCaseClick} 
+                            data-id={caseItem.Id}>
+                          </lightning-button>
+                        </div>
+                      </div>
+                    </div>
+                  </article>
+                </div>
+              </template>
+            </div>
+            </template>
+            <template if:false={myOpenCases.length}>
+              <div class="slds-text-align_center slds-m-vertical_large">
+                <lightning-icon icon-name="utility:info" size="large" variant="inverse"></lightning-icon>
+                <h3 class="slds-text-heading_small slds-m-top_medium">No open cases found</h3>
+                <p class="slds-text-body_regular slds-text-color_weak">You don't have any open cases assigned to you at this time</p>
+                <lightning-button 
+                  variant="neutral" 
+                  label="Refresh" 
+                  onclick={refreshMyOpenCases}
+                  class="slds-m-top_medium">
+                </lightning-button>
+              </div>
+            </template>
+          </template>
+          <template if:false={myOpenCases}>
+            <div class="slds-text-align_center slds-m-vertical_large">
+              <lightning-spinner alternative-text="Loading cases..." size="medium"></lightning-spinner>
+              <h3 class="slds-text-heading_small slds-m-top_medium">Loading your open cases...</h3>
+            </div>
+          </template>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tasks & To-Do Section -->
+    <div class="slds-m-top_large">
+      <div class="slds-section slds-is-open">
+        <h3 class="slds-section__title slds-theme_shade">
+          <span class="slds-truncate slds-p-horizontal_small" title="Tasks & To-Do">Tasks & To-Do</span>
+        </h3>
+        <div class="slds-section__content slds-p-around_medium">
+          <div class="slds-grid slds-gutters slds-wrap">
+            
+            <!-- Upcoming Tasks -->
+            <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2">
+              <div class="task-section">
+                <div class="slds-media slds-media_center slds-m-bottom_small">
+                  <div class="slds-media__figure">
+                    <lightning-icon icon-name="utility:clock" size="small" class="upcoming-icon"></lightning-icon>
+                  </div>
+                  <div class="slds-media__body">
+                    <h4 class="slds-text-heading_small">Upcoming Tasks</h4>
+                  </div>
+                </div>
+                
+                <template if:true={upcomingTasks}>
+                  <template for:each={upcomingTasks} for:item="task">
+                    <div key={task.id} class="task-item upcoming-task" data-id={task.id} onclick={handleTaskClick}>
+                      <div class="slds-grid slds-grid_align-spread">
+                        <div class="slds-col slds-has-flexi-truncate">
+                          <div class="task-subject">{task.subject}</div>
+                          <div class="task-due-date slds-text-body_small">Due: {task.dueDate}</div>
+                        </div>
+                        <div class="slds-col slds-no-flex">
+                          <span class="task-priority" data-priority={task.priority}></span>
+                        </div>
+                      </div>
+                    </div>
+                  </template>
+                </template>
+                
+                <template if:false={upcomingTasks}>
+                  <div class="empty-state">
+                    <lightning-icon icon-name="utility:success" size="medium" class="success-icon"></lightning-icon>
+                    <p class="slds-text-body_small slds-text-color_weak">No upcoming tasks</p>
+                  </div>
+                </template>
+              </div>
+            </div>
+
+            <!-- Past Due Tasks -->
+            <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2">
+              <div class="task-section">
+                <div class="slds-media slds-media_center slds-m-bottom_small">
+                  <div class="slds-media__figure">
+                    <lightning-icon icon-name="utility:warning" size="small" class="overdue-icon"></lightning-icon>
+                  </div>
+                  <div class="slds-media__body">
+                    <h4 class="slds-text-heading_small">Past Due Tasks</h4>
+                  </div>
+                </div>
+                
+                <template if:true={pastDueTasks}>
+                  <template for:each={pastDueTasks} for:item="task">
+                    <div key={task.id} class="task-item past-due-task" data-id={task.id} onclick={handleTaskClick}>
+                      <div class="slds-grid slds-grid_align-spread">
+                        <div class="slds-col slds-has-flexi-truncate">
+                          <div class="task-subject">{task.subject}</div>
+                          <div class="task-due-date slds-text-body_small">Overdue: {task.dueDate}</div>
+                        </div>
+                        <div class="slds-col slds-no-flex">
+                          <span class="task-priority" data-priority={task.priority}></span>
+                        </div>
+                      </div>
+                    </div>
+                  </template>
+                </template>
+                
+                <template if:false={pastDueTasks}>
+                  <div class="empty-state">
+                    <lightning-icon icon-name="utility:success" size="medium" class="success-icon"></lightning-icon>
+                    <p class="slds-text-body_small slds-text-color_weak">No past due tasks</p>
+                  </div>
+                </template>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="slds-m-top_large">
+      <hr class="slds-m-vertical_medium">
+    </div>
+
+    <div class="slds-m-top_large">
+      <c-unassigned-cases 
+        class={unassignedCasesClass} 
+        dark-mode={darkMode}
+        oncaseacceptedfromlist={handleCaseAcceptedFromUnassigned}>
+      </c-unassigned-cases>
+    </div>
+
+    <!-- Create Ticket Modal -->
+    <template if:true={showCreateTicketModal}>
+      <section role="dialog" tabindex="-1" class="slds-modal slds-fade-in-open slds-modal_large">
+        <div class="slds-modal__container">
+          <header class="slds-modal__header">
+            <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" title="Close" onclick={handleCloseCreateTicketModal}>
+              <lightning-icon icon-name="utility:close" alternative-text="close" size="small"></lightning-icon>
+              <span class="slds-assistive-text">Close</span>
+            </button>
+            <h2 class="slds-modal__title slds-hyphenate">Create A Case</h2>
+          </header>
+          <div class="slds-modal__content slds-p-around_medium">
+            <lightning-flow 
+              flow-api-name="Create_A_New_Ticket_for_non_Salesforce_User"
+              onstatuschange={handleFlowFinish}>
+            </lightning-flow>
+          </div>
+        </div>
+      </section>
+      <div class="slds-backdrop slds-backdrop_open"></div>
+    </template>
+
+    <!-- Add Agent Modal -->
+    <template if:true={showAddAgentModal}>
+      <section role="dialog" tabindex="-1" class="slds-modal slds-fade-in-open slds-modal_large">
+        <div class="slds-modal__container">
+          <header class="slds-modal__header">
+            <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" title="Close" onclick={handleCloseAddAgentModal}>
+              <lightning-icon icon-name="utility:close" alternative-text="close" size="small"></lightning-icon>
+              <span class="slds-assistive-text">Close</span>
+            </button>
+            <h2 class="slds-modal__title slds-hyphenate">Add New Agent/Staff</h2>
+          </header>
+          <div class="slds-modal__content slds-p-around_medium">
+            <lightning-flow 
+              flow-api-name="Onboarding_Staff_Agents"
+              onstatuschange={handleAddAgentFlowFinish}>
+            </lightning-flow>
+          </div>
+        </div>
+      </section>
+      <div class="slds-backdrop slds-backdrop_open"></div>
+    </template>
+
+    <!-- Device Inspection Modal -->
+    <template if:true={showDeviceInspectionModal}>
+      <section role="dialog" tabindex="-1" class="slds-modal slds-fade-in-open slds-modal_large">
+        <div class="slds-modal__container">
+          <header class="slds-modal__header">
+            <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" title="Close" onclick={handleCloseDeviceInspectionModal}>
+              <lightning-icon icon-name="utility:close" alternative-text="close" size="small"></lightning-icon>
+              <span class="slds-assistive-text">Close</span>
+            </button>
+            <h2 class="slds-modal__title slds-hyphenate">Device Inspection</h2>
+          </header>
+          <div class="slds-modal__content slds-p-around_medium">
+            <lightning-flow 
+              flow-api-name="Create_Device_Inspection_Record"
+              onstatuschange={handleDeviceInspectionFlowFinish}>
+            </lightning-flow>
+          </div>
+        </div>
+      </section>
+      <div class="slds-backdrop slds-backdrop_open"></div>
+    </template>
+
+    <!-- Encrypt Device Modal -->
+    <template if:true={showEncryptDeviceModal}>
+      <section role="dialog" tabindex="-1" class="slds-modal slds-fade-in-open slds-modal_large">
+        <div class="slds-modal__container">
+          <header class="slds-modal__header">
+            <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" title="Close" onclick={handleCloseEncryptDeviceModal}>
+              <lightning-icon icon-name="utility:close" alternative-text="close" size="small"></lightning-icon>
+              <span class="slds-assistive-text">Close</span>
+            </button>
+            <h2 class="slds-modal__title slds-hyphenate">Encrypt A New Device</h2>
+          </header>
+          <div class="slds-modal__content slds-p-around_medium">
+            <lightning-flow 
+              flow-api-name="Device_Encryption_Screen_Flow"
+              onstatuschange={handleEncryptDeviceFlowFinish}>
+            </lightning-flow>
+          </div>
+        </div>
+      </section>
+      <div class="slds-backdrop slds-backdrop_open"></div>
+    </template>
+
+    <!-- Device Offboarding Modal -->
+    <template if:true={showDeviceOffboardingModal}>
+      <section role="dialog" tabindex="-1" class="slds-modal slds-fade-in-open slds-modal_large">
+        <div class="slds-modal__container">
+          <header class="slds-modal__header">
+            <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" title="Close" onclick={handleCloseDeviceOffboardingModal}>
+              <lightning-icon icon-name="utility:close" alternative-text="close" size="small"></lightning-icon>
+              <span class="slds-assistive-text">Close</span>
+            </button>
+            <h2 class="slds-modal__title slds-hyphenate">Device Offboarding</h2>
+          </header>
+          <div class="slds-modal__content slds-p-around_medium">
+            <lightning-flow 
+              flow-api-name="Device_Offboarding"
+              onstatuschange={handleDeviceOffboardingFlowFinish}>
+            </lightning-flow>
+          </div>
+        </div>
+      </section>
+      <div class="slds-backdrop slds-backdrop_open"></div>
+    </template>
+
+    <!-- Record Modal -->
+    <template if:true={showRecordModal}>
+      <c-record-modal
+        record-id={selectedRecordId}
+        object-api-name={selectedObjectApiName}
+        dark-mode={isDarkMode}
+        onclose={handleCloseModal}>
+      </c-record-modal>
+    </template>
+
+    <!-- Case Record Modal -->
+    <template if:true={showCaseModal}>
+      <c-case-record-modal
+        case-id={selectedCaseId}
+        dark-mode={isDarkMode}
+        is-unassigned={selectedCaseIsUnassigned}
+        is-mock-data={selectedCaseIsMockData}
+        onclose={handleCloseModal}
+        oncaseaccepted={handleCaseAcceptedFromUnassigned}
+        oncasereassigned={handleCaseReassigned}
+        oncaseclosed={handleCaseClosed}>
+      </c-case-record-modal>
+    </template>
+
+    <!-- Task Record Modal -->
+    <template if:true={showTaskModal}>
+      <c-task-record-modal
+        task-data={selectedTaskData}
+        dark-mode={isDarkMode}
+        onclose={handleCloseModal}
+        ontaskcompleted={handleTaskCompleted}>
+      </c-task-record-modal>
+    </template>
+  </div>
+</template>

@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>61.0</apiVersion>
+    <areMetricsLoggedToDataCloud>false</areMetricsLoggedToDataCloud>
+    <description>This flow is to guide us from recruiting, thru contracting, and finishing with bookkeeping and technology onboarding</description>
+    <environments>Default</environments>
+    <interviewLabel>Recruiting thru Onboarding Orchestrated Flow {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>Recruiting thru Onboarding Orchestrated Flow</label>
+    <orchestratedStages>
+        <name>Bookkeeping_Onboarding</name>
+        <label>Bookkeeping Onboarding</label>
+        <locationX>176</locationX>
+        <locationY>611</locationY>
+        <exitConditionLogic>and</exitConditionLogic>
+    </orchestratedStages>
+    <orchestratedStages>
+        <name>Contracting_and_Licensing</name>
+        <label>Contracting and Licensing</label>
+        <locationX>176</locationX>
+        <locationY>395</locationY>
+        <connector>
+            <targetReference>Technology_Onboarding</targetReference>
+        </connector>
+        <exitConditionLogic>and</exitConditionLogic>
+    </orchestratedStages>
+    <orchestratedStages>
+        <name>Recruiting</name>
+        <label>Recruiting</label>
+        <locationX>176</locationX>
+        <locationY>287</locationY>
+        <connector>
+            <targetReference>Contracting_and_Licensing</targetReference>
+        </connector>
+        <exitConditionLogic>and</exitConditionLogic>
+        <stageSteps>
+            <name>Background_Step_1_of_Recruiting</name>
+            <actionType>stepBackground</actionType>
+            <canAssigneeEdit>false</canAssigneeEdit>
+            <debugSimulateStep>false</debugSimulateStep>
+            <entryConditionLogic>and</entryConditionLogic>
+            <exitConditionLogic>and</exitConditionLogic>
+            <label>Background Step 1 of Recruiting</label>
+            <requiresAsyncProcessing>false</requiresAsyncProcessing>
+            <runAsUser>false</runAsUser>
+            <shouldLock>false</shouldLock>
+            <stepSubtype>BackgroundStep</stepSubtype>
+        </stageSteps>
+    </orchestratedStages>
+    <orchestratedStages>
+        <name>Technology_Onboarding</name>
+        <label>Technology Onboarding</label>
+        <locationX>176</locationX>
+        <locationY>503</locationY>
+        <connector>
+            <targetReference>Bookkeeping_Onboarding</targetReference>
+        </connector>
+        <exitConditionLogic>and</exitConditionLogic>
+        <stageSteps>
+            <name>Interactive_Step_1_of_Technology_Onboarding</name>
+            <actionName>Onboarding_Staff_Agents</actionName>
+            <actionType>stepInteractive</actionType>
+            <assignees>
+                <assigneeType>Queue</assigneeType>
+            </assignees>
+            <canAssigneeEdit>false</canAssigneeEdit>
+            <debugSimulateStep>false</debugSimulateStep>
+            <entryConditionLogic>and</entryConditionLogic>
+            <exitConditionLogic>and</exitConditionLogic>
+            <inputParameters>
+                <name>ActionInput__RecordId</name>
+            </inputParameters>
+            <label>Interactive Step 1 of Technology Onboarding</label>
+            <requiresAsyncProcessing>false</requiresAsyncProcessing>
+            <runAsUser>false</runAsUser>
+            <shouldLock>false</shouldLock>
+            <stepSubtype>InteractiveStep</stepSubtype>
+        </stageSteps>
+    </orchestratedStages>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>AUTO_LAYOUT_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>OriginBuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>Orchestrator</processType>
+    <start>
+        <locationX>50</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>Recruiting</targetReference>
+        </connector>
+        <object>Candidate__c</object>
+        <recordTriggerType>Create</recordTriggerType>
+        <triggerType>RecordAfterSave</triggerType>
+    </start>
+    <status>InvalidDraft</status>
+</Flow>

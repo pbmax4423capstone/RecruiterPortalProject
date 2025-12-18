@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Career_Corp_MM_ID__c</fullName>
+    <description>MM ID for Career Corps</description>
+    <externalId>false</externalId>
+    <inlineHelpText>MM ID for Career Corps</inlineHelpText>
+    <label>Career Corp MM ID</label>
+    <length>8</length>
+    <required>false</required>
+    <trackFeedHistory>false</trackFeedHistory>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Text</type>
+    <unique>false</unique>
+</CustomField>

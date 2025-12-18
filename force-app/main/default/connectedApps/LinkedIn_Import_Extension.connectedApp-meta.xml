@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ConnectedApp xmlns="http://soap.sforce.com/2006/04/metadata">
+    <contactEmail>patrickbakeradmin2@financialguide.com</contactEmail>
+    <label>LinkedIn Import Extension</label>
+    <oauthConfig>
+        <callbackUrl>https://ondifgbcphfobecpenbdoaafailmilfo.chromiumapp.org/
+https://ainimbbieggffjdgaedbdjjgppldghfh.chromiumapp.org/</callbackUrl>
+        <isConsumerSecretOptional>true</isConsumerSecretOptional>
+        <scopes>Api</scopes>
+        <scopes>RefreshToken</scopes>
+    </oauthConfig>
+</ConnectedApp>

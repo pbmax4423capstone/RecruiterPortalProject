@@ -1,0 +1,294 @@
+<template>
+  <!-- Branded Header -->
+  <div class="branded-header">
+    <div class="slds-page-header__row">
+      <div class="slds-page-header__col-title">
+        <div class="slds-media">
+          <div class="slds-media__figure">
+            <div class="company-logo">
+              <lightning-icon icon-name="standard:lead" alternative-text="Company Logo" size="large" class="logo-icon"></lightning-icon>
+            </div>
+          </div>
+          <div class="slds-media__body">
+            <div class="slds-page-header__name">
+              <div class="slds-page-header__name-title">
+                <h1>
+                  <span class="slds-page-header__title slds-truncate" title="Recruiter Portal">Capstone Partners - Recruiter Portal</span>
+                </h1>
+              </div>
+            </div>
+            <!-- Welcome Message -->
+            <div class="welcome-message">
+              <span class="slds-text-heading_small slds-text-color_inverse">{timeBasedGreeting}, {computedUserFirstName}! 👋</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="slds-page-header__col-actions">
+        <!-- Action Buttons Row -->
+        <div class="action-buttons-container">
+          <lightning-button-group>
+            <lightning-button 
+              variant="brand" 
+              label="Create Ticket" 
+              icon-name="utility:add"
+              onclick={handleCreateTicket}
+              class="action-button">
+            </lightning-button>
+            <lightning-button 
+              variant="brand" 
+              label="Schedule Call" 
+              icon-name="utility:phone_portrait"
+              onclick={handleScheduleCall}
+              class="action-button">
+            </lightning-button>
+            <lightning-button 
+              variant="brand" 
+              label="Reschedule Calls" 
+              icon-name="utility:event"
+              onclick={handleRescheduleCalls}
+              class="action-button">
+            </lightning-button>
+            <lightning-button 
+              variant="brand" 
+              label="Create New Candidate" 
+              icon-name="utility:add_contact"
+              onclick={handleCreateCandidate}
+              class="action-button">
+            </lightning-button>
+            <lightning-button 
+              variant="brand" 
+              label="Schedule Interview" 
+              icon-name="utility:event"
+              onclick={handleScheduleInterview}
+              class="action-button">
+            </lightning-button>
+          </lightning-button-group>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Create Ticket Modal -->
+  <template if:true={showCreateTicketModal}>
+    <section role="dialog" tabindex="-1" class="slds-modal slds-fade-in-open slds-modal_medium" aria-labelledby="create-ticket-modal-heading">
+      <div class="slds-modal__container">
+        <header class="slds-modal__header">
+          <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" title="Close" onclick={closeCreateTicketModal}>
+            <lightning-icon icon-name="utility:close" alternative-text="close" size="small"></lightning-icon>
+            <span class="slds-assistive-text">Close</span>
+          </button>
+          <h2 id="create-ticket-modal-heading" class="slds-modal__title slds-hyphenate">Create Support Ticket</h2>
+        </header>
+        <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+          <lightning-record-edit-form object-api-name="Case" onsuccess={handleTicketSuccess} onerror={handleTicketError}>
+            <lightning-messages></lightning-messages>
+            <div class="slds-grid slds-wrap slds-gutters">
+              <!-- Hidden OwnerId field set to Unassigned queue -->
+              <lightning-input-field field-name="OwnerId" value="00G5f000004Hc9hEAC" class="slds-hide"></lightning-input-field>
+              
+              <template if:true={userContactId}>
+                <div class="slds-col slds-size_1-of-1">
+                  <lightning-input-field field-name="ContactId" value={userContactId}></lightning-input-field>
+                </div>
+              </template>
+              <div class="slds-col slds-size_1-of-1">
+                <lightning-input-field field-name="Subject" required></lightning-input-field>
+              </div>
+              <div class="slds-col slds-size_1-of-1">
+                <lightning-input-field field-name="Description"></lightning-input-field>
+              </div>
+              <div class="slds-col slds-size_1-of-2">
+                <lightning-input-field field-name="Priority"></lightning-input-field>
+              </div>
+              <div class="slds-col slds-size_1-of-2">
+                <lightning-input-field field-name="Status"></lightning-input-field>
+              </div>
+            </div>
+            <div class="slds-modal__footer">
+              <lightning-button variant="neutral" label="Cancel" onclick={closeCreateTicketModal}></lightning-button>
+              <lightning-button variant="brand" type="submit" label="Create Ticket"></lightning-button>
+            </div>
+          </lightning-record-edit-form>
+        </div>
+      </div>
+    </section>
+    <div class="slds-backdrop slds-backdrop_open"></div>
+  </template>
+
+  <!-- Schedule Call Modal -->
+  <template if:true={showScheduleCallModal}>
+    <section role="dialog" tabindex="-1" class="slds-modal slds-fade-in-open slds-modal_medium" aria-labelledby="schedule-call-modal-heading">
+      <div class="slds-modal__container">
+        <header class="slds-modal__header">
+          <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" title="Close" onclick={closeScheduleCallModal}>
+            <lightning-icon icon-name="utility:close" alternative-text="close" size="small"></lightning-icon>
+            <span class="slds-assistive-text">Close</span>
+          </button>
+          <h2 id="schedule-call-modal-heading" class="slds-modal__title slds-hyphenate">Schedule A Call</h2>
+        </header>
+        <div class="slds-modal__content slds-p-around_medium">
+          <div class="slds-form" role="list">
+            <div class="slds-grid slds-wrap slds-gutters">
+              <div class="slds-col slds-size_1-of-1">
+                <lightning-input 
+                  label="Subject" 
+                  value={callSubject} 
+                  onchange={handleCallSubjectChange}
+                  required>
+                </lightning-input>
+              </div>
+              <div class="slds-col slds-size_1-of-2">
+                <lightning-input 
+                  type="date" 
+                  label="Due Date" 
+                  value={callActivityDate} 
+                  onchange={handleCallActivityDateChange}
+                  required>
+                </lightning-input>
+              </div>
+              <div class="slds-col slds-size_1-of-2">
+                <lightning-combobox
+                  label="Status"
+                  value={callStatus}
+                  placeholder="Select Status"
+                  options={statusOptions}
+                  onchange={handleCallStatusChange}
+                  required>
+                </lightning-combobox>
+              </div>
+              <div class="slds-col slds-size_1-of-2">
+                <lightning-record-picker
+                  label="Name (Contact)"
+                  placeholder="Search Contacts..."
+                  object-api-name="Contact"
+                  onchange={handleCallWhoIdChange}>
+                </lightning-record-picker>
+              </div>
+              <div class="slds-col slds-size_1-of-2">
+                <lightning-combobox
+                  label="Priority"
+                  value={callPriority}
+                  placeholder="Select Priority"
+                  options={priorityOptions}
+                  onchange={handleCallPriorityChange}>
+                </lightning-combobox>
+              </div>
+              <div class="slds-col slds-size_1-of-1">
+                <lightning-record-picker
+                  label="Related To"
+                  placeholder="Search..."
+                  object-api-name="Candidate__c"
+                  onchange={handleCallWhatIdChange}>
+                </lightning-record-picker>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="slds-modal__footer">
+          <lightning-button variant="neutral" label="Cancel" onclick={closeScheduleCallModal}></lightning-button>
+          <lightning-button variant="brand" label="Schedule Call" onclick={handleScheduleCallSubmit}></lightning-button>
+        </div>
+      </div>
+    </section>
+    <div class="slds-backdrop slds-backdrop_open"></div>
+  </template>
+
+  <!-- Create Candidate Flow Modal -->
+  <template if:true={showCreateCandidateModal}>
+    <section role="dialog" tabindex="-1" class="slds-modal slds-fade-in-open slds-modal_large" aria-labelledby="create-candidate-modal-heading">
+      <div class="slds-modal__container">
+        <header class="slds-modal__header">
+          <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" title="Close" onclick={closeCreateCandidateModal}>
+            <lightning-icon icon-name="utility:close" alternative-text="close" size="small"></lightning-icon>
+            <span class="slds-assistive-text">Close</span>
+          </button>
+          <h2 id="create-candidate-modal-heading" class="slds-modal__title slds-hyphenate">Create New Candidate</h2>
+        </header>
+        <div class="slds-modal__content slds-p-around_medium">
+          <lightning-flow
+            flow-api-name="New_Candidate_Screen_Flow"
+            onstatuschange={handleCreateCandidateFlowStatusChange}>
+          </lightning-flow>
+        </div>
+        <div class="slds-modal__footer">
+          <lightning-button variant="neutral" label="Close" onclick={closeCreateCandidateModal}></lightning-button>
+        </div>
+      </div>
+    </section>
+    <div class="slds-backdrop slds-backdrop_open"></div>
+  </template>
+
+  <!-- Reschedule Calls Flow Modal -->
+  <template if:true={showRescheduleFlowModal}>
+    <section role="dialog" tabindex="-1" class="slds-modal slds-fade-in-open slds-modal_large" aria-labelledby="reschedule-flow-modal-heading">
+      <div class="slds-modal__container">
+        <header class="slds-modal__header">
+          <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" title="Close" onclick={closeRescheduleFlowModal}>
+            <lightning-icon icon-name="utility:close" alternative-text="close" size="small"></lightning-icon>
+            <span class="slds-assistive-text">Close</span>
+          </button>
+          <h2 id="reschedule-flow-modal-heading" class="slds-modal__title slds-hyphenate">Reschedule Past Due Calls</h2>
+        </header>
+        <div class="slds-modal__content slds-p-around_medium">
+          <lightning-flow
+            flow-api-name="Reschedule_Selected_Past_Due_Tasks_to_Selected_Date"
+            onstatuschange={handleRescheduleFlowStatusChange}>
+          </lightning-flow>
+        </div>
+        <div class="slds-modal__footer">
+          <lightning-button variant="neutral" label="Close" onclick={closeRescheduleFlowModal}></lightning-button>
+        </div>
+      </div>
+    </section>
+    <div class="slds-backdrop slds-backdrop_open"></div>
+  </template>
+
+  <!-- Schedule Interview Modal -->
+  <template if:true={showScheduleInterviewModal}>
+    <section role="dialog" tabindex="-1" class="slds-modal slds-fade-in-open slds-modal_medium" aria-labelledby="schedule-interview-modal-heading">
+      <div class="slds-modal__container">
+        <header class="slds-modal__header">
+          <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" title="Close" onclick={closeScheduleInterviewModal}>
+            <lightning-icon icon-name="utility:close" alternative-text="close" size="small"></lightning-icon>
+            <span class="slds-assistive-text">Close</span>
+          </button>
+          <h2 id="schedule-interview-modal-heading" class="slds-modal__title slds-hyphenate">Schedule Interview</h2>
+        </header>
+        <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-2">
+          <lightning-record-edit-form object-api-name="Interview__c" onsuccess={handleInterviewSuccess} onerror={handleInterviewError}>
+            <lightning-messages></lightning-messages>
+            <div class="slds-grid slds-wrap slds-gutters">
+              <div class="slds-col slds-size_1-of-1">
+                <lightning-input-field field-name="Candidate__c" required></lightning-input-field>
+              </div>
+              <div class="slds-col slds-size_1-of-2">
+                <lightning-input-field field-name="Interview_Type__c" required></lightning-input-field>
+              </div>
+              <div class="slds-col slds-size_1-of-2">
+                <lightning-input-field field-name="Date_Time_Scheduled__c" required></lightning-input-field>
+              </div>
+              <div class="slds-col slds-size_1-of-1">
+                <lightning-input-field field-name="Interviewer_s__c"></lightning-input-field>
+              </div>
+              <div class="slds-col slds-size_1-of-2">
+                <lightning-input-field field-name="Interview_Status__c"></lightning-input-field>
+              </div>
+              <div class="slds-col slds-size_1-of-2">
+                <lightning-input-field field-name="Outcome__c"></lightning-input-field>
+              </div>
+              <div class="slds-col slds-size_1-of-1">
+                <lightning-input-field field-name="Notes__c"></lightning-input-field>
+              </div>
+            </div>
+            <div class="slds-modal__footer">
+              <lightning-button variant="neutral" label="Cancel" onclick={closeScheduleInterviewModal}></lightning-button>
+              <lightning-button variant="brand" type="submit" label="Schedule Interview"></lightning-button>
+            </div>
+          </lightning-record-edit-form>
+        </div>
+      </div>
+    </section>
+    <div class="slds-backdrop slds-backdrop_open"></div>
+  </template>
+</template>

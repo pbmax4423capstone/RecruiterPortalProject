@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>61.0</apiVersion>
+    <areMetricsLoggedToDataCloud>false</areMetricsLoggedToDataCloud>
+    <assignments>
+        <description>Assign Alex Garcia&apos;s user id to the variable Pat Baker ID to be used in other flows when needed.</description>
+        <name>Alex_Garcia_User_ID</name>
+        <label>Alex Garcia User ID</label>
+        <locationX>176</locationX>
+        <locationY>350</locationY>
+        <assignmentItems>
+            <assignToReference>AlexGarciaID</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <stringValue>0055f00000DrQuo</stringValue>
+            </value>
+        </assignmentItems>
+    </assignments>
+    <assignments>
+        <description>Assign Donna Deluca&apos;s user id to the variable Donna Deluca ID to be used in other flows when needed.</description>
+        <name>DonnaDeluca_User_ID</name>
+        <label>Donna Deluca User ID</label>
+        <locationX>176</locationX>
+        <locationY>242</locationY>
+        <assignmentItems>
+            <assignToReference>DonnaDelucaID</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <stringValue>0055f00000DrQut</stringValue>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Alex_Garcia_User_ID</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <description>Assign Pat Baker&apos;s user id to the variable Pat Baker ID to be used in other flows when needed.</description>
+        <name>Pat_Baker_User_ID</name>
+        <label>Pat Baker User ID</label>
+        <locationX>176</locationX>
+        <locationY>134</locationY>
+        <assignmentItems>
+            <assignToReference>PatBakerID</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <stringValue>0055f000007zsZ6</stringValue>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>DonnaDeluca_User_ID</targetReference>
+        </connector>
+    </assignments>
+    <description>Assign Variables for the Service team users to be used in other flows.</description>
+    <environments>Default</environments>
+    <interviewLabel>Assign Service Team User IDs to variable {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>Assign Service Team User IDs to variable</label>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>AUTO_LAYOUT_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>OriginBuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>AutoLaunchedFlow</processType>
+    <runInMode>SystemModeWithoutSharing</runInMode>
+    <start>
+        <locationX>50</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>Pat_Baker_User_ID</targetReference>
+        </connector>
+    </start>
+    <status>Active</status>
+    <variables>
+        <description>Variable to hold Alex Garcia&apos;s User ID to be used in automations.</description>
+        <name>AlexGarciaID</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <description>Variable to hold Donna Deluca&apos;s Salesforce User ID to be used in flows.</description>
+        <name>DonnaDelucaID</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <description>Variable that holds Pat Baker&apos;s user ID that is used by Salesforce flows to assign to his user.</description>
+        <name>PatBakerID</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+</Flow>

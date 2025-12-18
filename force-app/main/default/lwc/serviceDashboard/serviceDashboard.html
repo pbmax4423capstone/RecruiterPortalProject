@@ -1,0 +1,338 @@
+<template>
+  <div class={dashboardClass}>
+    <!-- Loading State -->
+    <template if:true={isLoading}>
+      <div class="slds-text-align_center slds-p-vertical_large">
+        <lightning-spinner alternative-text="Loading dashboard..." size="large"></lightning-spinner>
+        <h3 class="slds-text-heading_small slds-m-top_medium">Loading analytics...</h3>
+      </div>
+    </template>
+
+    <!-- Dashboard Content -->
+    <template if:false={isLoading}>
+      <!-- Top Metrics Row -->
+      <div class="slds-grid slds-gutters slds-wrap slds-m-bottom_large">
+        <!-- Open Cases -->
+        <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2 slds-large-size_1-of-4">
+          <div class={metricCardClass}>
+            <div class="metric-header">
+              <h3 class="metric-title">Open Cases</h3>
+              <lightning-button-icon 
+                icon-name="utility:refresh" 
+                variant="bare" 
+                alternative-text="Refresh">
+              </lightning-button-icon>
+            </div>
+            <div class="metric-value">{dashboardMetrics.openCases}</div>
+            <div class="metric-link">
+              <a href="javascript:void(0);" onclick={handleViewReport} data-report="open-cases">
+                View Report (Cases Currently Open)
+              </a>
+            </div>
+            <div class="metric-timestamp">As of Oct 17, 2025, 5:00 PM</div>
+          </div>
+        </div>
+
+        <!-- Case Age Technology Tickets -->
+        <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2 slds-large-size_1-of-4">
+          <div class={metricCardClass}>
+            <div class="metric-header">
+              <h3 class="metric-title">Case Age Technology Tickets</h3>
+              <lightning-button-icon 
+                icon-name="utility:refresh" 
+                variant="bare" 
+                alternative-text="Refresh">
+              </lightning-button-icon>
+            </div>
+            <div class="metric-value metric-value-orange">{dashboardMetrics.caseAge}</div>
+            <div class="metric-link">
+              <a href="javascript:void(0);" onclick={handleViewReport} data-report="case-age">
+                View Report (Average Age of Open T...)
+              </a>
+            </div>
+            <div class="metric-timestamp">As of Oct 17, 2025, 5:00 PM</div>
+          </div>
+        </div>
+
+        <!-- Case Age A360 and Compliance Tickets -->
+        <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2 slds-large-size_1-of-4">
+          <div class={metricCardClass}>
+            <div class="metric-header">
+              <h3 class="metric-title">Case Age- A360 and Compliance Tickets</h3>
+              <lightning-button-icon 
+                icon-name="utility:refresh" 
+                variant="bare" 
+                alternative-text="Refresh">
+              </lightning-button-icon>
+            </div>
+            <div class="metric-value metric-value-red">{dashboardMetrics.a360Tickets}</div>
+            <div class="metric-link">
+              <a href="javascript:void(0);" onclick={handleViewReport} data-report="a360-tickets">
+                View Report (A360 Tickets)
+              </a>
+            </div>
+            <div class="metric-timestamp">As of Oct 17, 2025, 5:00 PM</div>
+          </div>
+        </div>
+
+        <!-- Cases Created MTD -->
+        <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2 slds-large-size_1-of-4">
+          <div class={metricCardClass}>
+            <div class="metric-header">
+              <h3 class="metric-title">Cases Created MTD</h3>
+              <lightning-button-icon 
+                icon-name="utility:refresh" 
+                variant="bare" 
+                alternative-text="Refresh">
+              </lightning-button-icon>
+            </div>
+            <div class="metric-value metric-value-red">{dashboardMetrics.casesCreatedMTD}</div>
+            <div class="metric-link">
+              <a href="javascript:void(0);" onclick={handleViewReport} data-report="cases-mtd">
+                View Report (Cases Created MTD)
+              </a>
+            </div>
+            <div class="metric-timestamp">As of Oct 17, 2025, 5:00 PM</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Total Tickets This Week Chart -->
+      <div class="slds-m-bottom_large">
+        <div class={chartContainerClass}>
+          <div class="chart-header">
+            <h3 class="chart-title">Total Tickets This Week by Agency</h3>
+            <lightning-button-icon 
+              icon-name="utility:refresh" 
+              variant="bare" 
+              alternative-text="Refresh">
+            </lightning-button-icon>
+          </div>
+          <div class="chart-content">
+            <div class="chart-placeholder">
+              <div class="donut-chart-container">
+                <div class="chart-placeholder-circle">
+                  <div class="chart-center-value">36</div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="chart-link">
+            <a href="javascript:void(0);" onclick={handleViewReport} data-report="weekly-tickets">
+              View Report (Total Tickets This Week by Agency)
+            </a>
+          </div>
+          <div class="chart-timestamp">As of Oct 17, 2025, 5:00 PM</div>
+        </div>
+      </div>
+
+      <!-- Charts Row -->
+      <div class="slds-grid slds-gutters slds-wrap slds-m-bottom_large">
+        <!-- Open Cases by Priority -->
+        <div class="slds-col slds-size_1-of-1 slds-large-size_1-of-3">
+          <div class={chartContainerClass}>
+            <div class="chart-header">
+              <h3 class="chart-title">Open Cases by Priority</h3>
+              <lightning-button-icon 
+                icon-name="utility:refresh" 
+                variant="bare" 
+                alternative-text="Refresh">
+              </lightning-button-icon>
+            </div>
+            <div class="chart-content">
+              <div class="donut-chart-container">
+                <div class="chart-placeholder-circle">
+                  <div class="chart-center-value">39</div>
+                </div>
+              </div>
+            </div>
+            <div class="chart-link">
+              <a href="javascript:void(0);" onclick={handleViewReport} data-report="cases-priority">
+                View Report (Cases Currently Open by Priority)
+              </a>
+            </div>
+            <div class="chart-timestamp">As of Oct 17, 2025, 5:00 PM</div>
+          </div>
+        </div>
+
+        <!-- Open Cases by Status -->
+        <div class="slds-col slds-size_1-of-1 slds-large-size_1-of-3">
+          <div class={chartContainerClass}>
+            <div class="chart-header">
+              <h3 class="chart-title">Open Cases by Status</h3>
+              <lightning-button-icon 
+                icon-name="utility:refresh" 
+                variant="bare" 
+                alternative-text="Refresh">
+              </lightning-button-icon>
+            </div>
+            <div class="chart-content">
+              <div class="donut-chart-container">
+                <div class="chart-placeholder-circle">
+                  <div class="chart-center-value">47</div>
+                </div>
+              </div>
+            </div>
+            <div class="chart-link">
+              <a href="javascript:void(0);" onclick={handleViewReport} data-report="cases-status">
+                View Report (Cases Currently Open)
+              </a>
+            </div>
+            <div class="chart-timestamp">As of Oct 17, 2025, 5:00 PM</div>
+          </div>
+        </div>
+
+        <!-- Open Cases by Type -->
+        <div class="slds-col slds-size_1-of-1 slds-large-size_1-of-3">
+          <div class={chartContainerClass}>
+            <div class="chart-header">
+              <h3 class="chart-title">Open Cases by Type</h3>
+              <lightning-button-icon 
+                icon-name="utility:refresh" 
+                variant="bare" 
+                alternative-text="Refresh">
+              </lightning-button-icon>
+            </div>
+            <div class="chart-content">
+              <div class="donut-chart-container">
+                <div class="chart-placeholder-circle">
+                  <div class="chart-center-value">39</div>
+                </div>
+              </div>
+            </div>
+            <div class="chart-link">
+              <a href="javascript:void(0);" onclick={handleViewReport} data-report="cases-type">
+                View Report (Cases Currently Open by Type)
+              </a>
+            </div>
+            <div class="chart-timestamp">As of Oct 17, 2025, 5:00 PM</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Bottom Tables Row -->
+      <div class="slds-grid slds-gutters slds-wrap">
+        <!-- Top Open Cases by Age -->
+        <div class="slds-col slds-size_1-of-1 slds-large-size_1-of-3">
+          <div class={chartContainerClass}>
+            <div class="chart-header">
+              <h3 class="chart-title">Top Open Cases by Age (Days)</h3>
+              <lightning-button-icon 
+                icon-name="utility:refresh" 
+                variant="bare" 
+                alternative-text="Refresh">
+              </lightning-button-icon>
+            </div>
+            <div class="chart-content">
+              <table class={tableClass}>
+                <thead>
+                  <tr class="slds-line-height_reset">
+                    <th class="slds-text-title_caps" scope="col">Case Owner</th>
+                    <th class="slds-text-title_caps" scope="col">Average Age</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <template for:each={topCasesByAge} for:item="caseItem">
+                    <tr key={caseItem.name} class="slds-hint-parent">
+                      <td data-label="Case Owner">
+                        <div class="slds-grid slds-grid_align-spread">
+                          <span>{caseItem.name}</span>
+                        </div>
+                      </td>
+                      <td data-label="Average Age">
+                        <div class="age-bar-container">
+                          <div class="age-bar"></div>
+                          <span class="age-value">{caseItem.age}</span>
+                        </div>
+                      </td>
+                    </tr>
+                  </template>
+                </tbody>
+              </table>
+            </div>
+            <div class="chart-link">
+              <a href="javascript:void(0);" onclick={handleViewReport} data-report="top-cases-age">
+                View Report (Top 10 Cases by Age)
+              </a>
+            </div>
+            <div class="chart-timestamp">As of Oct 17, 2025, 5:00 PM</div>
+          </div>
+        </div>
+
+        <!-- Top Agents by Open Cases -->
+        <div class="slds-col slds-size_1-of-1 slds-large-size_1-of-3">
+          <div class={chartContainerClass}>
+            <div class="chart-header">
+              <h3 class="chart-title">Top Agents by Open Cases</h3>
+              <lightning-button-icon 
+                icon-name="utility:refresh" 
+                variant="bare" 
+                alternative-text="Refresh">
+              </lightning-button-icon>
+            </div>
+            <div class="chart-content">
+              <div class="bar-chart-container">
+                <div class="chart-placeholder-bar">
+                  <div class="bar-chart-placeholder">Chart Placeholder</div>
+                </div>
+              </div>
+            </div>
+            <div class="chart-link">
+              <a href="javascript:void(0);" onclick={handleViewReport} data-report="agents-cases">
+                View Report (Cases Currently Open by Agent)
+              </a>
+            </div>
+            <div class="chart-timestamp">As of Oct 17, 2025, 5:00 PM</div>
+          </div>
+        </div>
+
+        <!-- Top Agents by Open Case Age -->
+        <div class="slds-col slds-size_1-of-1 slds-large-size_1-of-3">
+          <div class={chartContainerClass}>
+            <div class="chart-header">
+              <h3 class="chart-title">Top Agents by Open Case Age</h3>
+              <lightning-button-icon 
+                icon-name="utility:refresh" 
+                variant="bare" 
+                alternative-text="Refresh">
+              </lightning-button-icon>
+            </div>
+            <div class="chart-content">
+              <table class={tableClass}>
+                <thead>
+                  <tr class="slds-line-height_reset">
+                    <th class="slds-text-title_caps" scope="col">Case Owner</th>
+                    <th class="slds-text-title_caps" scope="col">Largest Age</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <template for:each={topAgentsByAge} for:item="agent">
+                    <tr key={agent.name} class="slds-hint-parent">
+                      <td data-label="Case Owner">
+                        <div class="slds-grid slds-grid_align-spread">
+                          <span>{agent.name}</span>
+                        </div>
+                      </td>
+                      <td data-label="Largest Age">
+                        <div class="age-bar-container">
+                          <div class="age-bar" data-color={agent.color} data-width={agent.age}></div>
+                          <span class="age-value">{agent.age}</span>
+                        </div>
+                      </td>
+                    </tr>
+                  </template>
+                </tbody>
+              </table>
+            </div>
+            <div class="chart-link">
+              <a href="javascript:void(0);" onclick={handleViewReport} data-report="agents-age">
+                View Report (Aged Cases by Agent)
+              </a>
+            </div>
+            <div class="chart-timestamp">As of Oct 17, 2025, 5:00 PM</div>
+          </div>
+        </div>
+      </div>
+    </template>
+  </div>
+</template>

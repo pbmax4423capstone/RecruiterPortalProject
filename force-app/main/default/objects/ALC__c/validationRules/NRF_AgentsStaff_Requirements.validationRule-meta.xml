@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>NRF_AgentsStaff_Requirements</fullName>
+    <active>true</active>
+    <description>Requires all necessary fields for agents_staff record creation in order to save.</description>
+    <errorConditionFormula>AND(
+  $RecordType.DeveloperName = &quot;NRF&quot;,
+  ISPICKVAL(Stage__c, &quot;Fingerprinting&quot;),
+  OR(
+    ISBLANK(MMID__c),
+    ISBLANK(Mobile__c),
+    /* blank‐check the picklist by converting it to text */
+    ISBLANK(TEXT(Position__c)),
+    ISBLANK(Start_date__c)
+  )
+)</errorConditionFormula>
+    <errorMessage>In order to save a record at the Fingerprinting Stage, the following fields cannot be blank: MM ID, Mobile #, Position, and Start Date</errorMessage>
+</ValidationRule>

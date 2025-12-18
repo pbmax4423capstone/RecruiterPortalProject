@@ -1,0 +1,4 @@
+/* Content script styles */
+#sf-save-btn:active {
+  transform: translateY(0) !important;
+}

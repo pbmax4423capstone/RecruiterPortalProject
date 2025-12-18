@@ -1,0 +1,109 @@
+/* Record Modal Styles */
+.record-modal {
+    z-index: 9000;
+}
+
+.modal-backdrop {
+    z-index: 8999;
+}
+
+.modal-title {
+    color: white;
+    font-weight: 600;
+}
+
+.modal-subtitle {
+    color: rgba(255, 255, 255, 0.8);
+    margin-top: 0.25rem;
+}
+
+.modal-content {
+    max-height: 70vh;
+    overflow-y: auto;
+}
+
+.modal-footer {
+    flex-shrink: 0;
+    border-top: 1px solid #d8dde6;
+    padding: 1rem;
+    background-color: #f3f3f3;
+    justify-content: flex-end;
+    gap: 0.5rem;
+}
+
+.record-form-container {
+    background: white;
+    border-radius: 0.25rem;
+    padding: 1rem;
+}
+
+/* Dark Mode Styles */
+.record-modal.dark-mode .slds-modal__header {
+    background: linear-gradient(135deg, #1a1a1a 0%, #2a2a2a 100%);
+    border-bottom: 1px solid #444;
+}
+
+.record-modal.dark-mode .slds-modal__content {
+    background-color: #1a1a1a;
+    color: #e0e0e0;
+}
+
+.record-modal.dark-mode .modal-footer {
+    background-color: #2a2a2a;
+    border-top: 1px solid #444;
+}
+
+.record-modal.dark-mode .modal-footer .slds-button {
+    color: #ffffff !important;
+}
+
+.record-modal.dark-mode .record-form-container {
+    background: #2a2a2a;
+    border: 1px solid #444;
+}
+
+.record-modal.dark-mode .slds-button_neutral {
+    background-color: #444;
+    border-color: #666;
+    color: #e0e0e0;
+}
+
+.record-modal.dark-mode .slds-button_neutral:hover {
+    background-color: #555;
+    border-color: #777;
+}
+
+.record-modal.dark-mode .slds-button_brand {
+    background-color: #0176d3;
+    border-color: #0176d3;
+}
+
+.record-modal.dark-mode .slds-button_outline-brand {
+    background-color: transparent;
+    border-color: #0176d3;
+    color: #54a3ff;
+}
+
+.record-modal.dark-mode .slds-button_outline-brand:hover {
+    background-color: rgba(1, 118, 211, 0.1);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .modal-content {
+        max-height: 60vh;
+    }
+    
+    .modal-footer {
+        flex-direction: column;
+    }
+    
+    .modal-footer .slds-button {
+        width: 100%;
+        margin-bottom: 0.5rem;
+    }
+    
+    .modal-footer .slds-button:last-child {
+        margin-bottom: 0;
+    }
+}

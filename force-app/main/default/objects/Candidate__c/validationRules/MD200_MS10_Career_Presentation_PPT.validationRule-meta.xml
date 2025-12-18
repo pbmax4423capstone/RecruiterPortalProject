@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>MD200_MS10_Career_Presentation_PPT</fullName>
+    <active>false</active>
+    <errorConditionFormula>AND(
+  /* MD200 required at Stage ≥3 */
+  VALUE(
+    LEFT(
+      TEXT(Highest_Level_Achieved__c),
+      FIND(&quot;-&quot;, TEXT(Highest_Level_Achieved__c)) - 1
+    )
+  ) &gt;= 3 &amp;&amp;
+  ISBLANK(TEXT(MDE200__c)) ||
+  /* MS-10 &amp; Career PPT required at Stage ≥4 */
+  (
+    VALUE(
+      LEFT(
+        TEXT(Highest_Level_Achieved__c),
+        FIND(&quot;-&quot;, TEXT(Highest_Level_Achieved__c)) - 1
+      )
+    ) &gt;= 4 &amp;&amp;
+    (
+      ISBLANK(TEXT(MS_10__c)) ||
+      ISBLANK(TEXT(Career_Presentation_ppt__c))
+    )
+  )
+)</errorConditionFormula>
+    <errorMessage>You must indicate whether MDE 200 has been completed when Highest Level Achieved is 3 or above, and must answer whether MS-10 and Career Presentation PPT are completed by Stage 4.</errorMessage>
+</ValidationRule>

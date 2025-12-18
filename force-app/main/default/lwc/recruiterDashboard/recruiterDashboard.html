@@ -20,7 +20,7 @@
               </div>
               <!-- Welcome Message - moved below title -->
               <div class="welcome-message">
-                <span class="slds-text-heading_small slds-text-color_inverse">{timeBasedGreeting}, {userFirstName}!</span>
+                <span class="slds-text-heading_small slds-text-color_inverse">{timeBasedGreeting}, {computedUserFirstName}!</span>
               </div>
             </div>
           </div>
@@ -55,6 +55,13 @@
                 label="Create New Candidate" 
                 icon-name="utility:add_contact"
                 onclick={openCreateNewCandidateFlow}
+                class="action-button">
+              </lightning-button>
+              <lightning-button 
+                variant="brand" 
+                label="Schedule Interview" 
+                icon-name="utility:event"
+                onclick={openScheduleInterviewModal}
                 class="action-button">
               </lightning-button>
 
@@ -181,137 +188,267 @@
         </div>
       </div>
 
+      <!-- Recent Activity - Full Width Horizontal Scroll -->
+      <div class="slds-col slds-size_12-of-12 slds-p-top_medium">
+        <lightning-card title="🔄 Recent Activity" icon-name="utility:activity">
+          <div class="slds-p-around_medium">
+            <template if:true={recentActivity.length}>
+              <div style="overflow-x: auto; overflow-y: hidden;">
+                <div style="display: flex; gap: 8px;">
+                  <template for:each={recentActivity} for:item="activity">
+                    <div key={activity.id} 
+                         data-activity-id={activity.id}
+                         onclick={handleActivityClick}
+                         style="border: 1px solid #dddbda; border-radius: 4px; padding: 8px; background: #ffffff; min-width: 180px; flex: 0 0 auto; cursor: pointer; transition: all 0.2s ease;"
+                         onmouseenter={handleActivityHover}
+                         onmouseleave={handleActivityHoverOut}>
+                      <div style="margin-bottom: 2px;">
+                        <div style="font-size: 0.75rem; font-weight: 600; color: #706e6b; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                          {activity.type} {activity.description}
+                        </div>
+                      </div>
+                      <div style="font-size: 0.875rem; color: #0176d3; font-weight: 700; margin-bottom: 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                        {activity.candidateName}
+                      </div>
+                      <template if:true={activity.dueDate}>
+                        <div style="font-size: 0.75rem; color: #c23934; font-weight: 600; margin-bottom: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                          📅 {activity.formattedDueDate}
+                        </div>
+                      </template>
+                      <div style="display: flex; justify-content: space-between; align-items: center; gap: 4px; margin-top: 4px;">
+                        <span style="font-size: 0.7rem; color: #706e6b; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; flex: 1;">
+                          {activity.timeAgo}
+                        </span>
+                        <lightning-badge label={activity.status} variant={activity.statusVariant} style="font-size: 0.65rem; flex-shrink: 0;"></lightning-badge>
+                      </div>
+                    </div>
+                  </template>
+                </div>
+              </div>
+            </template>
+            <template if:false={recentActivity.length}>
+              <div class="slds-text-align_center slds-p-vertical_medium">
+                <div class="slds-text-body_regular slds-text-color_weak">No recent activity to display</div>
+              </div>
+            </template>
+          </div>
+        </lightning-card>
+      </div>
+
       <!-- Candidate Statistics -->
-      <div class="slds-col slds-size_6-of-12">
-        <lightning-card title="👥 Candidate Pipeline" icon-name="utility:people">
+      <div class="slds-col slds-size_6-of-12 slds-p-top_medium">
+        <lightning-card title={pipelineTitle} icon-name="utility:people">
           <div class="slds-p-around_medium">
             
-            <!-- Active/In Progress Candidate Analytics Pie Chart -->
-            <template if:true={pieChartData}>
-              <div class="slds-grid slds-wrap slds-m-bottom_medium">
-                <div class="slds-col slds-size_12">
-                  <div class="slds-text-align_center">
-                    <h3 class="slds-text-heading_small slds-m-bottom_small">📊 Active/In Progress Candidates by Sales Manager</h3>
-                    <div class="slds-grid slds-grid_align-center">
-                      
-                      <!-- Pie Chart -->
-                      <div class="slds-col slds-size_6-of-12">
-                        <div class="pie-chart-container">
-                          <svg width="220" height="220" viewBox="0 0 220 220" class="pie-chart">
-                            <template for:each={pieChartData} for:item="segment" for:index="index">
-                              <path key={segment.label} 
-                                    d={segment.pathData} 
-                                    fill={segment.color}
-                                    stroke="#fff"
-                                    stroke-width="2"
-                                    class="pie-segment">
-                              </path>
-                            </template>
-                          </svg>
+            <!-- Director View: Active/In Progress Candidates by Sales Manager -->
+            <template if:true={isDirector}>
+              <template if:true={pieChartData}>
+                <div class="slds-grid slds-wrap slds-m-bottom_medium">
+                  <div class="slds-col slds-size_12">
+                    <div class="slds-text-align_center">
+                      <h3 class="slds-text-heading_small slds-m-bottom_small">📊 Active/In Progress Candidates by Sales Manager</h3>
+                      <div class="slds-grid slds-grid_align-center">
+                        
+                        <!-- Pie Chart -->
+                        <div class="slds-col slds-size_6-of-12">
+                          <div class="pie-chart-container">
+                            <svg width="220" height="220" viewBox="0 0 220 220" class="pie-chart">
+                              <template for:each={pieChartData} for:item="segment" for:index="index">
+                                <path key={segment.label} 
+                                      d={segment.pathData} 
+                                      fill={segment.color}
+                                      stroke="#fff"
+                                      stroke-width="2"
+                                      class="pie-segment">
+                                </path>
+                              </template>
+                            </svg>
+                          </div>
                         </div>
-                      </div>
-                      
-                      <!-- Legend -->
-                      <div class="slds-col slds-size_6-of-12">
-                        <div class="chart-legend">
-                          <template for:each={pieChartData} for:item="item">
-                            <div key={item.label} class="legend-item slds-m-bottom_x-small">
-                              <div class="slds-grid slds-grid_vertical-align-center">
-                                <div class="legend-color-box" data-color={item.color}></div>
-                                <div class="legend-text slds-p-left_small">
-                                  <div class="legend-label slds-text-body_small">{item.label}</div>
-                                  <div class="legend-value slds-text-body_small slds-text-color_weak">{item.value} ({item.percentage}%)</div>
+                        
+                        <!-- Legend -->
+                        <div class="slds-col slds-size_6-of-12">
+                          <div class="chart-legend">
+                            <template for:each={pieChartData} for:item="item">
+                              <div key={item.label} class="legend-item slds-m-bottom_x-small">
+                                <div class="slds-grid slds-grid_vertical-align-center">
+                                  <div class="legend-color-box" style={item.colorStyle}></div>
+                                  <div class="legend-text slds-p-left_small">
+                                    <div class="legend-label slds-text-body_small">{item.label}</div>
+                                    <div class="legend-value slds-text-body_small slds-text-color_weak">{item.value} ({item.percentage}%)</div>
+                                  </div>
                                 </div>
                               </div>
-                            </div>
-                          </template>
+                            </template>
+                          </div>
                         </div>
+                        
                       </div>
-                      
                     </div>
+                  </div>
+                </div>
+              </template>
+              
+              <div class="slds-grid slds-wrap slds-m-top_medium">
+                <div class="slds-col slds-size_12 slds-p-bottom_small">
+                  <div class="slds-text-align_center">
+                    <lightning-button 
+                      variant="brand" 
+                      label="View All Active Candidates" 
+                      icon-name="utility:people"
+                      onclick={showActiveCandidates} 
+                      class="slds-m-top_small">
+                    </lightning-button>
                   </div>
                 </div>
               </div>
             </template>
             
-            <div class="slds-grid slds-wrap">
-              <div class="slds-col slds-size_12 slds-p-bottom_small">
-                <div class="slds-text-align_center clickable-metric" onclick={showActiveCandidates} title="Click to view active candidates">
-                  <div class="slds-text-heading_large slds-text-color_success">{candidateStats.active}</div>
-                  <div class="slds-text-body_regular slds-m-top_x-small">Active/In Process</div>
+            <!-- Sales Manager View: User's Pipeline by Highest Level Achieved -->
+            <template if:true={isSalesManager}>
+              <template if:true={userPieChartData}>
+                <div class="slds-grid slds-wrap slds-m-bottom_medium">
+                  <div class="slds-col slds-size_12">
+                    <div class="slds-text-align_center">
+                      <div class="slds-grid slds-grid_align-center">
+                        
+                        <!-- Pie Chart -->
+                        <div class="slds-col slds-size_6-of-12">
+                          <div class="pie-chart-container">
+                            <svg width="220" height="220" viewBox="0 0 220 220" class="pie-chart">
+                              <template for:each={userPieChartData} for:item="segment" for:index="index">
+                                <path key={segment.label} 
+                                      d={segment.pathData} 
+                                      fill={segment.color}
+                                      stroke="#fff"
+                                      stroke-width="2"
+                                      class="pie-segment">
+                                </path>
+                              </template>
+                            </svg>
+                          </div>
+                        </div>
+                        
+                        <!-- Legend -->
+                        <div class="slds-col slds-size_6-of-12">
+                          <div class="chart-legend">
+                            <template for:each={userPieChartData} for:item="item">
+                              <div key={item.label} class="legend-item slds-m-bottom_x-small">
+                                <div class="slds-grid slds-grid_vertical-align-center">
+                                  <div class="legend-color-box" style={item.colorStyle}></div>
+                                  <div class="legend-text slds-p-left_small">
+                                    <div class="legend-label slds-text-body_small">{item.label}</div>
+                                    <div class="legend-value slds-text-body_small slds-text-color_weak">{item.value} ({item.percentage}%)</div>
+                                  </div>
+                                </div>
+                              </div>
+                            </template>
+                          </div>
+                        </div>
+                        
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </template>
+              
+              <div class="slds-grid slds-wrap slds-m-top_medium">
+                <div class="slds-col slds-size_12 slds-p-bottom_small">
+                  <div class="slds-text-align_center">
+                    <lightning-button 
+                      variant="brand" 
+                      label="View My Active Candidates" 
+                      icon-name="utility:people"
+                      onclick={showActiveCandidates} 
+                      class="slds-m-top_small">
+                    </lightning-button>
+                  </div>
                 </div>
               </div>
-            </div>
+            </template>
+            
+            <!-- Default View (Other Users) -->
+            <template if:false={isDirector}>
+              <template if:false={isSalesManager}>
+                <div class="slds-grid slds-wrap slds-m-top_medium">
+                  <div class="slds-col slds-size_12 slds-p-bottom_small">
+                    <div class="slds-text-align_center">
+                      <lightning-button 
+                        variant="brand" 
+                        label="View All Active Candidates" 
+                        icon-name="utility:people"
+                        onclick={showActiveCandidates} 
+                        class="slds-m-top_small">
+                      </lightning-button>
+                    </div>
+                  </div>
+                </div>
+              </template>
+            </template>
           </div>
         </lightning-card>
       </div>
 
       <!-- Interview Statistics -->
       <div class="slds-col slds-size_6-of-12">
-        <lightning-card title="� Interview Leaderboard 🚨" icon-name="utility:event">
+        <lightning-card title="📊 Interview Leaderboard - Current Month" icon-name="utility:event">
           <div class="slds-p-around_medium">
             <template if:true={interviewerLeaderboard}>
               
               <!-- Leaderboard Header Stats -->
               <div class="slds-grid slds-gutters slds-m-bottom_medium">
                 <div class="slds-col slds-size_6-of-12">
-                  <div class="slds-text-align_center slds-p-around_small" style="background: linear-gradient(135deg, #0176d3, #06a59a); color: white; border-radius: 8px;">
-                    <div class="slds-text-heading_large">{totalInterviews}</div>
-                    <div class="slds-text-body_small">Total Interviews</div>
+                  <div class="slds-text-align_center slds-p-around_small" style="background: linear-gradient(135deg, #5a6c7d, #4a5c6d); color: white; border-radius: 8px;">
+                    <div class="slds-text-heading_large">{interviewStats.thisWeek}</div>
+                    <div class="slds-text-body_small">This Week</div>
                   </div>
                 </div>
                 <div class="slds-col slds-size_6-of-12">
-                  <div class="slds-text-align_center slds-p-around_small" style="background: linear-gradient(135deg, #e74c3c, #f39c12); color: white; border-radius: 8px;">
-                    <div class="slds-text-heading_large">{activeInterviewers}</div>
-                    <div class="slds-text-body_small">Active Interviewers</div>
+                  <div class="slds-text-align_center slds-p-around_small" style="background: linear-gradient(135deg, #0176d3, #06a59a); color: white; border-radius: 8px;">
+                    <div class="slds-text-heading_large">{totalInterviews}</div>
+                    <div class="slds-text-body_small">This Month</div>
                   </div>
                 </div>
               </div>
 
               <!-- Interview Type Breakdown -->
               <div class="slds-grid slds-wrap slds-gutters slds-m-bottom_medium">
-                <div class="slds-col slds-size_2-of-12 slds-text-align_center">
+                <div class="slds-col slds-size_1-of-5 slds-text-align_center">
                   <div class="slds-p-around_small" style="background: #0176d3; color: white; border-radius: 8px;">
                     <div class="slds-text-heading_medium">{interviewStats.attraction}</div>
                     <div class="slds-text-body_small">Attraction</div>
                   </div>
                 </div>
-                <div class="slds-col slds-size_2-of-12 slds-text-align_center">
+                <div class="slds-col slds-size_1-of-5 slds-text-align_center">
                   <div class="slds-p-around_small" style="background: #06a59a; color: white; border-radius: 8px;">
                     <div class="slds-text-heading_medium">{interviewStats.si1}</div>
                     <div class="slds-text-body_small">SI 1</div>
                   </div>
                 </div>
-                <div class="slds-col slds-size_2-of-12 slds-text-align_center">
+                <div class="slds-col slds-size_1-of-5 slds-text-align_center">
                   <div class="slds-p-around_small" style="background: #e74c3c; color: white; border-radius: 8px;">
                     <div class="slds-text-heading_medium">{interviewStats.si2}</div>
                     <div class="slds-text-body_small">SI 2</div>
                   </div>
                 </div>
-                <div class="slds-col slds-size_2-of-12 slds-text-align_center">
+                <div class="slds-col slds-size_1-of-5 slds-text-align_center">
                   <div class="slds-p-around_small" style="background: #f39c12; color: white; border-radius: 8px;">
                     <div class="slds-text-heading_medium">{interviewStats.si3}</div>
                     <div class="slds-text-body_small">SI 3</div>
                   </div>
                 </div>
-                <div class="slds-col slds-size_2-of-12 slds-text-align_center">
+                <div class="slds-col slds-size_1-of-5 slds-text-align_center">
                   <div class="slds-p-around_small" style="background: #9b59b6; color: white; border-radius: 8px;">
                     <div class="slds-text-heading_medium">{interviewStats.career}</div>
                     <div class="slds-text-body_small">Career</div>
-                  </div>
-                </div>
-                <div class="slds-col slds-size_2-of-12 slds-text-align_center">
-                  <div class="slds-p-around_small" style="background: #34495e; color: white; border-radius: 8px;">
-                    <div class="slds-text-heading_medium">{interviewStats.thisWeek}</div>
-                    <div class="slds-text-body_small">This Week</div>
                   </div>
                 </div>
               </div>
 
               <!-- Leaderboard List -->
               <div class="slds-grid slds-wrap slds-m-bottom_medium">
-                <div class="slds-col slds-size_6-of-12 slds-p-bottom_small">
-                  <div class="slds-text-align_center interview-type-stat" data-type="attraction">
+                <div class="slds-col slds-size_6-of-12 slds-p-bottom_small" style="border-right: 1px solid #dddbda; padding-right: 0.75rem;">
+                  <div class="slds-text-align_center interview-type-stat" data-type="attraction" style="border-bottom: 1px solid #dddbda; padding-bottom: 0.75rem; margin-bottom: 0.75rem;">
                     
                     <!-- Mini Pie Chart for Attraction - Table Layout -->
                     <template if:true={attractionMiniChart}>
@@ -357,8 +494,8 @@
                     <div class="slds-text-body_small">Attraction</div>
                   </div>
                 </div>
-                <div class="slds-col slds-size_6-of-12 slds-p-bottom_small">
-                  <div class="slds-text-align_center interview-type-stat" data-type="si1">
+                <div class="slds-col slds-size_6-of-12 slds-p-bottom_small" style="padding-left: 0.75rem;">
+                  <div class="slds-text-align_center interview-type-stat" data-type="si1" style="border-bottom: 1px solid #dddbda; padding-bottom: 0.75rem; margin-bottom: 0.75rem;">
                     
                     <!-- Mini Pie Chart for SI1 -->
                     <template if:true={si1MiniChart}>
@@ -402,8 +539,8 @@
                     <div class="slds-text-body_small">SI 1</div>
                   </div>
                 </div>
-                <div class="slds-col slds-size_4-of-12 slds-p-bottom_small">
-                  <div class="slds-text-align_center interview-type-stat" data-type="si2">
+                <div class="slds-col slds-size_4-of-12 slds-p-bottom_small" style="border-right: 1px solid #dddbda; padding-right: 0.5rem;">
+                  <div class="slds-text-align_center interview-type-stat" data-type="si2" style="border-bottom: 1px solid #dddbda; padding-bottom: 0.75rem; margin-bottom: 0.75rem;">
                     
                     <!-- Mini Pie Chart for SI2 -->
                     <template if:true={si2MiniChart}>
@@ -441,8 +578,8 @@
                     <div class="slds-text-body_small">SI 2</div>
                   </div>
                 </div>
-                <div class="slds-col slds-size_4-of-12 slds-p-bottom_small">
-                  <div class="slds-text-align_center interview-type-stat" data-type="si3">
+                <div class="slds-col slds-size_4-of-12 slds-p-bottom_small" style="border-right: 1px solid #dddbda; padding-right: 0.5rem; padding-left: 0.5rem;">
+                  <div class="slds-text-align_center interview-type-stat" data-type="si3" style="border-bottom: 1px solid #dddbda; padding-bottom: 0.75rem; margin-bottom: 0.75rem;">
                     
                     <!-- Mini Pie Chart for SI3 -->
                     <template if:true={si3MiniChart}>
@@ -480,8 +617,8 @@
                     <div class="slds-text-body_small">SI 3</div>
                   </div>
                 </div>
-                <div class="slds-col slds-size_4-of-12 slds-p-bottom_small">
-                  <div class="slds-text-align_center interview-type-stat" data-type="career">
+                <div class="slds-col slds-size_4-of-12 slds-p-bottom_small" style="padding-left: 0.5rem;">
+                  <div class="slds-text-align_center interview-type-stat" data-type="career" style="border-bottom: 1px solid #dddbda; padding-bottom: 0.75rem; margin-bottom: 0.75rem;">
                     
                     <!-- Mini Pie Chart for Career -->
                     <template if:true={careerMiniChart}>
@@ -546,6 +683,18 @@
       <div class="slds-col slds-size_12-of-12 slds-p-top_medium">
         <lightning-card title="📈 Recruiting Performance" icon-name="utility:chart">
           <div class="slds-p-around_medium">
+            <!-- Coming Soon Banner -->
+            <div class="slds-notify slds-notify_alert slds-alert_warning" role="alert" style="margin-bottom: 1rem;">
+              <span class="slds-assistive-text">warning</span>
+              <span class="slds-icon_container slds-icon-utility-warning slds-m-right_small">
+                <lightning-icon icon-name="utility:warning" alternative-text="Warning" size="x-small"></lightning-icon>
+              </span>
+              <h2>
+                <strong>🚧 Coming Soon - Under Development</strong>
+                <p class="slds-text-body_small slds-m-top_xx-small">This section is currently being developed and is not yet ready for production use. Data shown is for demonstration purposes only.</p>
+              </h2>
+            </div>
+            
             <template if:true={performanceMetrics}>
               
               <!-- Contract Activity Section -->
@@ -637,38 +786,6 @@
                     </div>
                   </div>
                 </div>
-              </div>
-            </template>
-          </div>
-        </lightning-card>
-      </div>
-
-      <!-- Recent Activity -->
-      <div class="slds-col slds-size_12-of-12 slds-p-top_medium">
-        <lightning-card title="🔄 Recent Activity" icon-name="utility:activity">
-          <div class="slds-p-around_medium">
-            <template if:true={recentActivity.length}>
-              <template for:each={recentActivity} for:item="activity">
-                <div key={activity.id} class="slds-border_bottom slds-p-vertical_small">
-                  <div class="slds-grid">
-                    <div class="slds-col slds-size_8-of-12">
-                      <div class="slds-text-body_regular">
-                        <strong>{activity.type}</strong> - {activity.description}
-                      </div>
-                      <div class="slds-text-body_small slds-text-color_weak">
-                        {activity.candidateName} • {activity.timeAgo}
-                      </div>
-                    </div>
-                    <div class="slds-col slds-size_4-of-12 slds-text-align_right">
-                      <lightning-badge label={activity.status} variant={activity.statusVariant}></lightning-badge>
-                    </div>
-                  </div>
-                </div>
-              </template>
-            </template>
-            <template if:false={recentActivity.length}>
-              <div class="slds-text-align_center slds-p-vertical_large">
-                <div class="slds-text-body_regular slds-text-color_weak">No recent activity to display</div>
               </div>
             </template>
           </div>
@@ -1241,6 +1358,23 @@
 
           <!-- Compact Completion Form -->
           <div class="compact-completion-form">
+            
+            <!-- Due Date -->
+            <div class="slds-form-element" style="margin-bottom: 10px;">
+              <label class="slds-form-element__label slds-text-body_small" style="margin-bottom: 4px; font-weight: 600;">
+                📅 Due Date
+              </label>
+              <div class="slds-form-element__control">
+                <lightning-input 
+                  type="date"
+                  name="callDueDate"
+                  value={editableCallDueDate}
+                  onchange={handleCallDueDateChange}
+                  variant="standard">
+                </lightning-input>
+              </div>
+            </div>
+            
             <!-- Call Outcome (Required) -->
             <div class="slds-form-element" style="margin-bottom: 10px;">
               <label class="slds-form-element__label slds-text-body_small" style="margin-bottom: 4px; font-weight: 600;">

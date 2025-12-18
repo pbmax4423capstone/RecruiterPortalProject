@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Career_AgentsStaff_Requirements</fullName>
+    <active>true</active>
+    <errorConditionFormula>AND(
+  /* only for Career record type */
+  $RecordType.DeveloperName = &quot;Career&quot;,
+
+  /* enforce on AA Received or any subsequent non-terminal stage */
+  OR(
+    ISPICKVAL(Stage__c, &quot;AA Received&quot;),
+    ISPICKVAL(Stage__c, &quot;Create Card in Capstone ALC Trackers&quot;),
+    ISPICKVAL(Stage__c, &quot;Candidate Complete&quot;),
+    ISPICKVAL(Stage__c, &quot;Waiting on License to Post&quot;),
+    ISPICKVAL(Stage__c, &quot;Contract A or B CLXP Codes Sent&quot;),
+    ISPICKVAL(Stage__c, &quot;Training&quot;),
+    ISPICKVAL(Stage__c, &quot;ALC Trackers&quot;)
+  ),
+
+  /* any of the required fields is blank */
+  OR(
+    ISBLANK(MMID__c),
+    ISBLANK(Mobile__c),
+    ISBLANK(TEXT(Position__c)),
+    ISBLANK(Start_date__c)
+  )
+)</errorConditionFormula>
+    <errorMessage>Please complete MMID, Mobile, Position and Start Date before advancing past Submit to Home Office.</errorMessage>
+</ValidationRule>

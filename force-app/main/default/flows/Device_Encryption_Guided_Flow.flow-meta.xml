@@ -1,0 +1,932 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>61.0</apiVersion>
+    <areMetricsLoggedToDataCloud>false</areMetricsLoggedToDataCloud>
+    <environments>Default</environments>
+    <interviewLabel>Device Encryption Guided Flow {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>Device Encryption Guided Flow</label>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>AUTO_LAYOUT_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>OriginBuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>Flow</processType>
+    <recordUpdates>
+        <name>Complete_Create_ATS_Admin_Account_Task</name>
+        <label>Complete Create ATS Admin Account Task</label>
+        <locationX>176</locationX>
+        <locationY>242</locationY>
+        <connector>
+            <targetReference>User_Name_is_compliant_AA_or_AE</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Subject</field>
+            <operator>EqualTo</operator>
+            <value>
+                <stringValue>Create ATS Admin Account</stringValue>
+            </value>
+        </filters>
+        <inputAssignments>
+            <field>Status</field>
+            <value>
+                <stringValue>Completed</stringValue>
+            </value>
+        </inputAssignments>
+        <object>Task</object>
+    </recordUpdates>
+    <recordUpdates>
+        <name>Complete_Enable_Removable_Storage_Encryption_Task</name>
+        <label>Complete Enable Removable Storage Encryption Task</label>
+        <locationX>176</locationX>
+        <locationY>1106</locationY>
+        <connector>
+            <targetReference>Install_Adobe_Reader_Task_Screen</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Subject</field>
+            <operator>EqualTo</operator>
+            <value>
+                <stringValue>Removable Storage Encryption Enabled</stringValue>
+            </value>
+        </filters>
+        <inputAssignments>
+            <field>Status</field>
+            <value>
+                <stringValue>Completed</stringValue>
+            </value>
+        </inputAssignments>
+        <object>Task</object>
+    </recordUpdates>
+    <recordUpdates>
+        <name>Complete_Enroll_In_Workspace_One_Task</name>
+        <label>Complete Enroll In Workspace One Task</label>
+        <locationX>176</locationX>
+        <locationY>890</locationY>
+        <connector>
+            <targetReference>Removable_Storage_Encryption_Enabled</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Subject</field>
+            <operator>Contains</operator>
+            <value>
+                <stringValue>Enroll User in Workspace One</stringValue>
+            </value>
+        </filters>
+        <inputAssignments>
+            <field>Status</field>
+            <value>
+                <stringValue>Completed</stringValue>
+            </value>
+        </inputAssignments>
+        <object>Task</object>
+    </recordUpdates>
+    <recordUpdates>
+        <name>Complete_Install_Adobe_Reader_Task</name>
+        <label>Complete Install Adobe Reader Task</label>
+        <locationX>176</locationX>
+        <locationY>1322</locationY>
+        <connector>
+            <targetReference>Install_Quick_Assist_screen</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Subject</field>
+            <operator>Contains</operator>
+            <value>
+                <stringValue>Install Adobe Reader</stringValue>
+            </value>
+        </filters>
+        <inputAssignments>
+            <field>Status</field>
+            <value>
+                <stringValue>Completed</stringValue>
+            </value>
+        </inputAssignments>
+        <object>Task</object>
+    </recordUpdates>
+    <recordUpdates>
+        <name>Complete_Install_and_set_up_Teams_Task</name>
+        <label>Complete Install and set up Teams Task</label>
+        <locationX>176</locationX>
+        <locationY>2834</locationY>
+        <connector>
+            <targetReference>Install_OneDrive_from_Okta_Screen</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Subject</field>
+            <operator>Contains</operator>
+            <value>
+                <stringValue>Install and set up Teams</stringValue>
+            </value>
+        </filters>
+        <inputAssignments>
+            <field>Status</field>
+            <value>
+                <stringValue>Completed</stringValue>
+            </value>
+        </inputAssignments>
+        <object>Task</object>
+    </recordUpdates>
+    <recordUpdates>
+        <name>Complete_Install_Calling_Card_Task</name>
+        <label>Complete Install Calling Card Task</label>
+        <locationX>176</locationX>
+        <locationY>3266</locationY>
+        <connector>
+            <targetReference>Pin_and_Unpin_necessary_apps_to_task_bar_Screen</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Subject</field>
+            <operator>Contains</operator>
+            <value>
+                <stringValue>Complete Install Calling Card Task</stringValue>
+            </value>
+        </filters>
+        <inputAssignments>
+            <field>Status</field>
+            <value>
+                <stringValue>Completed</stringValue>
+            </value>
+        </inputAssignments>
+        <object>Task</object>
+    </recordUpdates>
+    <recordUpdates>
+        <name>Complete_Install_Global_Relay_App_from_Workspace_One_Task</name>
+        <label>Complete Install Global Relay App from Workspace One Task</label>
+        <locationX>176</locationX>
+        <locationY>1970</locationY>
+        <connector>
+            <targetReference>Sign_Up_for_Last_Pass_Screen</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Subject</field>
+            <operator>Contains</operator>
+            <value>
+                <stringValue>Install Global Relay App from Workspace One</stringValue>
+            </value>
+        </filters>
+        <inputAssignments>
+            <field>Status</field>
+            <value>
+                <stringValue>Completed</stringValue>
+            </value>
+        </inputAssignments>
+        <object>Task</object>
+    </recordUpdates>
+    <recordUpdates>
+        <name>Complete_Install_Office_365_Task</name>
+        <label>Complete Install Office 365 Task</label>
+        <locationX>176</locationX>
+        <locationY>1754</locationY>
+        <connector>
+            <targetReference>Install_Global_Relay_App_from_Workspace_One</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Subject</field>
+            <operator>Contains</operator>
+            <value>
+                <stringValue>Install Office 365</stringValue>
+            </value>
+        </filters>
+        <inputAssignments>
+            <field>Status</field>
+            <value>
+                <stringValue>Completed</stringValue>
+            </value>
+        </inputAssignments>
+        <object>Task</object>
+    </recordUpdates>
+    <recordUpdates>
+        <name>Complete_Install_OneDrive_from_Okta_Task</name>
+        <label>Complete Install OneDrive from Okta Task</label>
+        <locationX>176</locationX>
+        <locationY>3050</locationY>
+        <connector>
+            <targetReference>Install_Calling_Card_Screen</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Subject</field>
+            <operator>Contains</operator>
+            <value>
+                <stringValue>Install OneDrive from Okta</stringValue>
+            </value>
+        </filters>
+        <inputAssignments>
+            <field>Status</field>
+            <value>
+                <stringValue>Completed</stringValue>
+            </value>
+        </inputAssignments>
+        <object>Task</object>
+    </recordUpdates>
+    <recordUpdates>
+        <name>Complete_Install_Outlook_Plugin_for_Zoom_Task</name>
+        <label>Complete Install Outlook Plugin for Zoom Task</label>
+        <locationX>176</locationX>
+        <locationY>2618</locationY>
+        <connector>
+            <targetReference>Install_and_set_up_Teams_Screen</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Subject</field>
+            <operator>Contains</operator>
+            <value>
+                <stringValue>Install and set up Teams</stringValue>
+            </value>
+        </filters>
+        <inputAssignments>
+            <field>Status</field>
+            <value>
+                <stringValue>Completed</stringValue>
+            </value>
+        </inputAssignments>
+        <object>Task</object>
+    </recordUpdates>
+    <recordUpdates>
+        <name>Complete_Install_Quick_Assist_Task</name>
+        <label>Complete Install Quick Assist Task</label>
+        <locationX>176</locationX>
+        <locationY>1538</locationY>
+        <connector>
+            <targetReference>Install_Office_365</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Subject</field>
+            <operator>Contains</operator>
+            <value>
+                <stringValue>Install Quick Assist</stringValue>
+            </value>
+        </filters>
+        <inputAssignments>
+            <field>Status</field>
+            <value>
+                <stringValue>Completed</stringValue>
+            </value>
+        </inputAssignments>
+        <object>Task</object>
+    </recordUpdates>
+    <recordUpdates>
+        <name>Complete_Make_Sure_no_other_Antivirus_is_installed_Task</name>
+        <label>Complete Make Sure no other Antivirus is installed Task</label>
+        <locationX>176</locationX>
+        <locationY>674</locationY>
+        <connector>
+            <targetReference>Enroll_User_in_Workspace_One</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Subject</field>
+            <operator>EqualTo</operator>
+            <value>
+                <stringValue> Make sure no other Antivirus is installed on computer before installing Symantec</stringValue>
+            </value>
+        </filters>
+        <inputAssignments>
+            <field>Status</field>
+            <value>
+                <stringValue>Completed</stringValue>
+            </value>
+        </inputAssignments>
+        <object>Task</object>
+    </recordUpdates>
+    <recordUpdates>
+        <name>Complete_Pin_and_Unpin_necessary_apps_to_task_bar_Task</name>
+        <label>Complete Pin and Unpin necessary apps to task bar Task</label>
+        <locationX>176</locationX>
+        <locationY>3482</locationY>
+        <connector>
+            <targetReference>Schedule_PDS_Training_Screen</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Subject</field>
+            <operator>Contains</operator>
+            <value>
+                <stringValue>Pin and Unpin necessary apps to task bar</stringValue>
+            </value>
+        </filters>
+        <inputAssignments>
+            <field>Status</field>
+            <value>
+                <stringValue>Completed</stringValue>
+            </value>
+        </inputAssignments>
+        <object>Task</object>
+    </recordUpdates>
+    <recordUpdates>
+        <name>Complete_Schedule_PDS_Training_Task</name>
+        <label>Complete Schedule PDS Training Task</label>
+        <locationX>176</locationX>
+        <locationY>3698</locationY>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Subject</field>
+            <operator>Contains</operator>
+            <value>
+                <stringValue>Schedule PDS Training</stringValue>
+            </value>
+        </filters>
+        <inputAssignments>
+            <field>Status</field>
+            <value>
+                <stringValue>Completed</stringValue>
+            </value>
+        </inputAssignments>
+        <object>Task</object>
+    </recordUpdates>
+    <recordUpdates>
+        <name>Complete_Sign_Up_for_Last_Pass_Task</name>
+        <label>Complete Sign Up for Last Pass Task</label>
+        <locationX>176</locationX>
+        <locationY>2186</locationY>
+        <connector>
+            <targetReference>Install_Zoom_Meeting_Client_Screen</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Subject</field>
+            <operator>Contains</operator>
+            <value>
+                <stringValue>Sign Up for Last Pass</stringValue>
+            </value>
+        </filters>
+        <inputAssignments>
+            <field>Status</field>
+            <value>
+                <stringValue>Completed</stringValue>
+            </value>
+        </inputAssignments>
+        <object>Task</object>
+    </recordUpdates>
+    <recordUpdates>
+        <name>Complete_User_Name_is_Compliant_Task</name>
+        <label>Complete User Name is Compliant Task</label>
+        <locationX>176</locationX>
+        <locationY>458</locationY>
+        <connector>
+            <targetReference>Make_sure_no_other_Antivirus_is_installed_on_computer_before_installing_Symantec</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Subject</field>
+            <operator>Contains</operator>
+            <value>
+                <stringValue>User Name is compliant?</stringValue>
+            </value>
+        </filters>
+        <inputAssignments>
+            <field>Status</field>
+            <value>
+                <stringValue>Completed</stringValue>
+            </value>
+        </inputAssignments>
+        <object>Task</object>
+    </recordUpdates>
+    <recordUpdates>
+        <name>Complete_Zoom_Meeting_Client_Task</name>
+        <label>Complete Zoom Meeting Client Task</label>
+        <locationX>176</locationX>
+        <locationY>2402</locationY>
+        <connector>
+            <targetReference>Outlook_Plugin_for_Zoom_Screen</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Subject</field>
+            <operator>Contains</operator>
+            <value>
+                <stringValue>Zoom Meeting Client </stringValue>
+            </value>
+        </filters>
+        <inputAssignments>
+            <field>Status</field>
+            <value>
+                <stringValue>Completed</stringValue>
+            </value>
+        </inputAssignments>
+        <object>Task</object>
+    </recordUpdates>
+    <runInMode>SystemModeWithoutSharing</runInMode>
+    <screens>
+        <description>Create ATS Admin Account</description>
+        <name>Create_ATS_Admin_Account</name>
+        <label>Create ATS Admin Account</label>
+        <locationX>176</locationX>
+        <locationY>134</locationY>
+        <allowBack>false</allowBack>
+        <allowFinish>true</allowFinish>
+        <allowPause>false</allowPause>
+        <connector>
+            <targetReference>Complete_Create_ATS_Admin_Account_Task</targetReference>
+        </connector>
+        <fields>
+            <name>ATS_Admin_Account_Creation</name>
+            <fieldText>&lt;p&gt;Create an ATS Admin Account on the device from computer management&lt;/p&gt;</fieldText>
+            <fieldType>DisplayText</fieldType>
+            <styleProperties>
+                <verticalAlignment>
+                    <stringValue>top</stringValue>
+                </verticalAlignment>
+                <width>
+                    <stringValue>12</stringValue>
+                </width>
+            </styleProperties>
+        </fields>
+        <nextOrFinishButtonLabel>Task Complete</nextOrFinishButtonLabel>
+        <showFooter>true</showFooter>
+        <showHeader>true</showHeader>
+    </screens>
+    <screens>
+        <description>Enroll User in Workspace One</description>
+        <name>Enroll_User_in_Workspace_One</name>
+        <label>Enroll User in Workspace One</label>
+        <locationX>176</locationX>
+        <locationY>782</locationY>
+        <allowBack>false</allowBack>
+        <allowFinish>true</allowFinish>
+        <allowPause>false</allowPause>
+        <connector>
+            <targetReference>Complete_Enroll_In_Workspace_One_Task</targetReference>
+        </connector>
+        <fields>
+            <name>Copy_1_of_ATS_Admin_Account_Creation</name>
+            <fieldText>&lt;p&gt;Create an ATS Admin Account on the device from computer management&lt;/p&gt;</fieldText>
+            <fieldType>DisplayText</fieldType>
+            <styleProperties>
+                <verticalAlignment>
+                    <stringValue>top</stringValue>
+                </verticalAlignment>
+                <width>
+                    <stringValue>12</stringValue>
+                </width>
+            </styleProperties>
+        </fields>
+        <nextOrFinishButtonLabel>Task Complete</nextOrFinishButtonLabel>
+        <showFooter>true</showFooter>
+        <showHeader>true</showHeader>
+    </screens>
+    <screens>
+        <description>Install Adobe Reader from Workspace One</description>
+        <name>Install_Adobe_Reader_Task_Screen</name>
+        <label>Install Adobe Reader</label>
+        <locationX>176</locationX>
+        <locationY>1214</locationY>
+        <allowBack>false</allowBack>
+        <allowFinish>true</allowFinish>
+        <allowPause>false</allowPause>
+        <connector>
+            <targetReference>Complete_Install_Adobe_Reader_Task</targetReference>
+        </connector>
+        <fields>
+            <name>Install_Adobe_Reader_Task</name>
+            <fieldText>&lt;p&gt;Install Adobe Reader&lt;/p&gt;</fieldText>
+            <fieldType>DisplayText</fieldType>
+            <styleProperties>
+                <verticalAlignment>
+                    <stringValue>top</stringValue>
+                </verticalAlignment>
+                <width>
+                    <stringValue>12</stringValue>
+                </width>
+            </styleProperties>
+        </fields>
+        <nextOrFinishButtonLabel>Task Complete</nextOrFinishButtonLabel>
+        <showFooter>true</showFooter>
+        <showHeader>true</showHeader>
+    </screens>
+    <screens>
+        <description>Install and set up Teams</description>
+        <name>Install_and_set_up_Teams_Screen</name>
+        <label>Install and set up Teams</label>
+        <locationX>176</locationX>
+        <locationY>2726</locationY>
+        <allowBack>false</allowBack>
+        <allowFinish>true</allowFinish>
+        <allowPause>false</allowPause>
+        <connector>
+            <targetReference>Complete_Install_and_set_up_Teams_Task</targetReference>
+        </connector>
+        <fields>
+            <name>Install_and_set_up_Teams</name>
+            <fieldText>&lt;p&gt;Install and set up Teams from the Workspace One App&lt;/p&gt;</fieldText>
+            <fieldType>DisplayText</fieldType>
+            <styleProperties>
+                <verticalAlignment>
+                    <stringValue>top</stringValue>
+                </verticalAlignment>
+                <width>
+                    <stringValue>12</stringValue>
+                </width>
+            </styleProperties>
+        </fields>
+        <nextOrFinishButtonLabel>Task Complete</nextOrFinishButtonLabel>
+        <showFooter>true</showFooter>
+        <showHeader>true</showHeader>
+    </screens>
+    <screens>
+        <description>Install Calling Card</description>
+        <name>Install_Calling_Card_Screen</name>
+        <label>Install Calling Card</label>
+        <locationX>176</locationX>
+        <locationY>3158</locationY>
+        <allowBack>false</allowBack>
+        <allowFinish>true</allowFinish>
+        <allowPause>false</allowPause>
+        <connector>
+            <targetReference>Complete_Install_Calling_Card_Task</targetReference>
+        </connector>
+        <fields>
+            <name>Install_Calling_Card</name>
+            <fieldText>&lt;p&gt;Install Calling Card from LogMeInRescue Console&lt;/p&gt;</fieldText>
+            <fieldType>DisplayText</fieldType>
+            <styleProperties>
+                <verticalAlignment>
+                    <stringValue>top</stringValue>
+                </verticalAlignment>
+                <width>
+                    <stringValue>12</stringValue>
+                </width>
+            </styleProperties>
+        </fields>
+        <nextOrFinishButtonLabel>Task Complete</nextOrFinishButtonLabel>
+        <showFooter>true</showFooter>
+        <showHeader>true</showHeader>
+    </screens>
+    <screens>
+        <description>Install Global Relay App from Workspace One</description>
+        <name>Install_Global_Relay_App_from_Workspace_One</name>
+        <label>Install Global Relay App from Workspace One</label>
+        <locationX>176</locationX>
+        <locationY>1862</locationY>
+        <allowBack>false</allowBack>
+        <allowFinish>true</allowFinish>
+        <allowPause>false</allowPause>
+        <connector>
+            <targetReference>Complete_Install_Global_Relay_App_from_Workspace_One_Task</targetReference>
+        </connector>
+        <fields>
+            <name>Install_Global_Relay_App_from_Workspace_One_Screen</name>
+            <fieldText>&lt;p&gt;Install Global Relay App from Workspace One&lt;/p&gt;</fieldText>
+            <fieldType>DisplayText</fieldType>
+            <styleProperties>
+                <verticalAlignment>
+                    <stringValue>top</stringValue>
+                </verticalAlignment>
+                <width>
+                    <stringValue>12</stringValue>
+                </width>
+            </styleProperties>
+        </fields>
+        <nextOrFinishButtonLabel>Task Complete</nextOrFinishButtonLabel>
+        <showFooter>true</showFooter>
+        <showHeader>true</showHeader>
+    </screens>
+    <screens>
+        <description>Install Office 365</description>
+        <name>Install_Office_365</name>
+        <label>Install Office 365</label>
+        <locationX>176</locationX>
+        <locationY>1646</locationY>
+        <allowBack>false</allowBack>
+        <allowFinish>true</allowFinish>
+        <allowPause>false</allowPause>
+        <connector>
+            <targetReference>Complete_Install_Office_365_Task</targetReference>
+        </connector>
+        <fields>
+            <name>Copy_2_of_Copy_1_of_Copy_2_of_Copy_2_of_Copy_2_of_ATS_Admin_Account_Creation</name>
+            <fieldText>&lt;p&gt;Install Quick Assist&lt;/p&gt;</fieldText>
+            <fieldType>DisplayText</fieldType>
+            <styleProperties>
+                <verticalAlignment>
+                    <stringValue>top</stringValue>
+                </verticalAlignment>
+                <width>
+                    <stringValue>12</stringValue>
+                </width>
+            </styleProperties>
+        </fields>
+        <nextOrFinishButtonLabel>Task Complete</nextOrFinishButtonLabel>
+        <showFooter>true</showFooter>
+        <showHeader>true</showHeader>
+    </screens>
+    <screens>
+        <description>Install OneDrive from Okta</description>
+        <name>Install_OneDrive_from_Okta_Screen</name>
+        <label>Install OneDrive from Okta</label>
+        <locationX>176</locationX>
+        <locationY>2942</locationY>
+        <allowBack>false</allowBack>
+        <allowFinish>true</allowFinish>
+        <allowPause>false</allowPause>
+        <connector>
+            <targetReference>Complete_Install_OneDrive_from_Okta_Task</targetReference>
+        </connector>
+        <fields>
+            <name>Install_OneDrive_from_Okta</name>
+            <fieldText>&lt;p&gt;Install OneDrive from Okta and launch so that OneDrive for Business shows up in file explorer.&lt;/p&gt;</fieldText>
+            <fieldType>DisplayText</fieldType>
+            <styleProperties>
+                <verticalAlignment>
+                    <stringValue>top</stringValue>
+                </verticalAlignment>
+                <width>
+                    <stringValue>12</stringValue>
+                </width>
+            </styleProperties>
+        </fields>
+        <nextOrFinishButtonLabel>Task Complete</nextOrFinishButtonLabel>
+        <showFooter>true</showFooter>
+        <showHeader>true</showHeader>
+    </screens>
+    <screens>
+        <description>Install Quick Assist</description>
+        <name>Install_Quick_Assist_screen</name>
+        <label>Install Quick Assist</label>
+        <locationX>176</locationX>
+        <locationY>1430</locationY>
+        <allowBack>false</allowBack>
+        <allowFinish>true</allowFinish>
+        <allowPause>false</allowPause>
+        <connector>
+            <targetReference>Complete_Install_Quick_Assist_Task</targetReference>
+        </connector>
+        <fields>
+            <name>Install_Quick_Assist</name>
+            <fieldText>&lt;p&gt;Install Quick Assist&lt;/p&gt;</fieldText>
+            <fieldType>DisplayText</fieldType>
+            <styleProperties>
+                <verticalAlignment>
+                    <stringValue>top</stringValue>
+                </verticalAlignment>
+                <width>
+                    <stringValue>12</stringValue>
+                </width>
+            </styleProperties>
+        </fields>
+        <nextOrFinishButtonLabel>Task Complete</nextOrFinishButtonLabel>
+        <showFooter>true</showFooter>
+        <showHeader>true</showHeader>
+    </screens>
+    <screens>
+        <description>Zoom Meeting Client</description>
+        <name>Install_Zoom_Meeting_Client_Screen</name>
+        <label>Install Zoom Meeting Client</label>
+        <locationX>176</locationX>
+        <locationY>2294</locationY>
+        <allowBack>false</allowBack>
+        <allowFinish>true</allowFinish>
+        <allowPause>false</allowPause>
+        <connector>
+            <targetReference>Complete_Zoom_Meeting_Client_Task</targetReference>
+        </connector>
+        <fields>
+            <name>Install_Zoom_Meeting_Client</name>
+            <fieldText>&lt;p&gt;Install Zoom Meeting Client&amp;nbsp;from Workspace One&lt;/p&gt;</fieldText>
+            <fieldType>DisplayText</fieldType>
+            <styleProperties>
+                <verticalAlignment>
+                    <stringValue>top</stringValue>
+                </verticalAlignment>
+                <width>
+                    <stringValue>12</stringValue>
+                </width>
+            </styleProperties>
+        </fields>
+        <nextOrFinishButtonLabel>Task Complete</nextOrFinishButtonLabel>
+        <showFooter>true</showFooter>
+        <showHeader>true</showHeader>
+    </screens>
+    <screens>
+        <name>Make_sure_no_other_Antivirus_is_installed_on_computer_before_installing_Symantec</name>
+        <label>Make sure no other Antivirus is installed on computer before installing Symantec</label>
+        <locationX>176</locationX>
+        <locationY>566</locationY>
+        <allowBack>false</allowBack>
+        <allowFinish>true</allowFinish>
+        <allowPause>false</allowPause>
+        <connector>
+            <targetReference>Complete_Make_Sure_no_other_Antivirus_is_installed_Task</targetReference>
+        </connector>
+        <fields>
+            <name>Copy_1_of_User_Name_is_compliant</name>
+            <fieldText>&lt;p&gt;User Name is compliant? (AA or AE#)?&lt;/p&gt;</fieldText>
+            <fieldType>DisplayText</fieldType>
+            <styleProperties>
+                <verticalAlignment>
+                    <stringValue>top</stringValue>
+                </verticalAlignment>
+                <width>
+                    <stringValue>12</stringValue>
+                </width>
+            </styleProperties>
+        </fields>
+        <nextOrFinishButtonLabel>Task Complete</nextOrFinishButtonLabel>
+        <showFooter>true</showFooter>
+        <showHeader>true</showHeader>
+    </screens>
+    <screens>
+        <description>Install Outlook Plugin for Zoom</description>
+        <name>Outlook_Plugin_for_Zoom_Screen</name>
+        <label>Outlook Plugin for Zoom</label>
+        <locationX>176</locationX>
+        <locationY>2510</locationY>
+        <allowBack>false</allowBack>
+        <allowFinish>true</allowFinish>
+        <allowPause>false</allowPause>
+        <connector>
+            <targetReference>Complete_Install_Outlook_Plugin_for_Zoom_Task</targetReference>
+        </connector>
+        <fields>
+            <name>Outlook_Plugin_for_Zoom</name>
+            <fieldText>&lt;p&gt;Install Outlook Plugin for Zoom from Workspace One App&lt;/p&gt;</fieldText>
+            <fieldType>DisplayText</fieldType>
+            <styleProperties>
+                <verticalAlignment>
+                    <stringValue>top</stringValue>
+                </verticalAlignment>
+                <width>
+                    <stringValue>12</stringValue>
+                </width>
+            </styleProperties>
+        </fields>
+        <nextOrFinishButtonLabel>Task Complete</nextOrFinishButtonLabel>
+        <showFooter>true</showFooter>
+        <showHeader>true</showHeader>
+    </screens>
+    <screens>
+        <description>Pin and Unpin necessary apps to task bar</description>
+        <name>Pin_and_Unpin_necessary_apps_to_task_bar_Screen</name>
+        <label>Pin and Unpin necessary apps to task bar</label>
+        <locationX>176</locationX>
+        <locationY>3374</locationY>
+        <allowBack>false</allowBack>
+        <allowFinish>true</allowFinish>
+        <allowPause>false</allowPause>
+        <connector>
+            <targetReference>Complete_Pin_and_Unpin_necessary_apps_to_task_bar_Task</targetReference>
+        </connector>
+        <fields>
+            <name>Pin_and_unpin_necessary_apps_to_task_bar</name>
+            <fieldText>&lt;p&gt;Pin and Unpin necessary apps to task bar&lt;/p&gt;</fieldText>
+            <fieldType>DisplayText</fieldType>
+            <styleProperties>
+                <verticalAlignment>
+                    <stringValue>top</stringValue>
+                </verticalAlignment>
+                <width>
+                    <stringValue>12</stringValue>
+                </width>
+            </styleProperties>
+        </fields>
+        <nextOrFinishButtonLabel>Task Complete</nextOrFinishButtonLabel>
+        <showFooter>true</showFooter>
+        <showHeader>true</showHeader>
+    </screens>
+    <screens>
+        <description>Enroll User in Workspace One</description>
+        <name>Removable_Storage_Encryption_Enabled</name>
+        <label>Enable Removable Storage Encryption</label>
+        <locationX>176</locationX>
+        <locationY>998</locationY>
+        <allowBack>false</allowBack>
+        <allowFinish>true</allowFinish>
+        <allowPause>false</allowPause>
+        <connector>
+            <targetReference>Complete_Enable_Removable_Storage_Encryption_Task</targetReference>
+        </connector>
+        <fields>
+            <name>Copy_1_of_Copy_2_of_ATS_Admin_Account_Creation</name>
+            <fieldText>&lt;p&gt;Enable Removable Storage Encryption &lt;/p&gt;&lt;p&gt;&lt;br&gt;&lt;/p&gt;&lt;p&gt;From the Start menu, type gpedit.msc and then open Group Policy Editor as Admin. Navigate to Computer Configuration &amp;gt; Administrative Templates &amp;gt; Windows&amp;nbsp;&lt;/p&gt;&lt;p&gt;Components.&amp;nbsp;&lt;/p&gt;&lt;p&gt;B Click BitLocker Drive Encryption folder. NOTE: Do not expand the folder.&lt;/p&gt;&lt;p&gt;C Double-click Choose drive encryption method and cipher strength (Windows&amp;nbsp;&lt;/p&gt;&lt;p&gt;10[Version 1511] and later). Select Enable.&lt;/p&gt;&lt;p&gt;E In the Options section, change all three dropdowns to XTS-AES-256-bit.&amp;nbsp;&lt;/p&gt;&lt;p&gt;F Click Apply, and then click OK.&lt;/p&gt;&lt;p&gt;&lt;br&gt;&lt;/p&gt;&lt;p&gt;Navigate to Computer Configuration &amp;gt; Administrative Templates &amp;gt; Windows&amp;nbsp;&lt;/p&gt;&lt;p&gt;Components &amp;gt; BitLocker Drive Encryption &amp;gt; Fixed Data Drives.&lt;/p&gt;&lt;p&gt;B Double-click Deny write access to fixed driver not protected by BitLocker.&lt;/p&gt;&lt;p&gt;5. On the next screen, complete the steps in the chart below:&lt;/p&gt;&lt;p&gt;C Select Enabled.&lt;/p&gt;&lt;p&gt;D Click Apply, and then click OK. Navigate to Computer Configuration &amp;gt; Administrative Templates &amp;gt; Windows&amp;nbsp;&lt;/p&gt;&lt;p&gt;Components &amp;gt; BitLocker Drive Encryption &amp;gt; Removable Data Drives.&lt;/p&gt;&lt;p&gt;B Double-click Configure use of passwords for removable data drives.&lt;/p&gt;&lt;p&gt;7. On the next screen, complete the steps in the chart below:&lt;/p&gt;&lt;p&gt;C Select Enabled.&lt;/p&gt;&lt;p&gt;D Check the box Require password for removable data drive.&lt;/p&gt;&lt;p&gt;E Select Allow Password Complexity and set the Minimum password&amp;nbsp;&lt;/p&gt;&lt;p&gt;length for removable data drive to 8.&amp;nbsp;&lt;/p&gt;&lt;p&gt;F Click Apply, and then click OK&lt;/p&gt;</fieldText>
+            <fieldType>DisplayText</fieldType>
+            <styleProperties>
+                <verticalAlignment>
+                    <stringValue>top</stringValue>
+                </verticalAlignment>
+                <width>
+                    <stringValue>12</stringValue>
+                </width>
+            </styleProperties>
+        </fields>
+        <nextOrFinishButtonLabel>Task Complete</nextOrFinishButtonLabel>
+        <showFooter>true</showFooter>
+        <showHeader>true</showHeader>
+    </screens>
+    <screens>
+        <description>Schedule PDS Training</description>
+        <name>Schedule_PDS_Training_Screen</name>
+        <label>Schedule PDS Training</label>
+        <locationX>176</locationX>
+        <locationY>3590</locationY>
+        <allowBack>false</allowBack>
+        <allowFinish>true</allowFinish>
+        <allowPause>false</allowPause>
+        <connector>
+            <targetReference>Complete_Schedule_PDS_Training_Task</targetReference>
+        </connector>
+        <fields>
+            <name>Schedule_PDS_Training</name>
+            <fieldText>&lt;p&gt;Schedule PDS Training&lt;/p&gt;&lt;p&gt;&lt;br&gt;&lt;/p&gt;&lt;p&gt;Use this link to schedule time for us to set up office phone in core office.&lt;/p&gt;&lt;p&gt;&lt;a href=&quot;https://calendly.com/a360-support/a360-orientation&quot; rel=&quot;noopener noreferrer&quot; target=&quot;_blank&quot;&gt;Schedule PDS Training&lt;/a&gt;&lt;/p&gt;</fieldText>
+            <fieldType>DisplayText</fieldType>
+            <styleProperties>
+                <verticalAlignment>
+                    <stringValue>top</stringValue>
+                </verticalAlignment>
+                <width>
+                    <stringValue>12</stringValue>
+                </width>
+            </styleProperties>
+        </fields>
+        <nextOrFinishButtonLabel>Task Complete</nextOrFinishButtonLabel>
+        <showFooter>true</showFooter>
+        <showHeader>true</showHeader>
+    </screens>
+    <screens>
+        <description>Sign Up for Last Pass</description>
+        <name>Sign_Up_for_Last_Pass_Screen</name>
+        <label>Sign Up for Last Pass</label>
+        <locationX>176</locationX>
+        <locationY>2078</locationY>
+        <allowBack>false</allowBack>
+        <allowFinish>true</allowFinish>
+        <allowPause>false</allowPause>
+        <connector>
+            <targetReference>Complete_Sign_Up_for_Last_Pass_Task</targetReference>
+        </connector>
+        <fields>
+            <name>Sign_Up_for_Last_Pass</name>
+            <fieldText>&lt;p&gt;Sign Up for Last Pass&lt;/p&gt;</fieldText>
+            <fieldType>DisplayText</fieldType>
+            <styleProperties>
+                <verticalAlignment>
+                    <stringValue>top</stringValue>
+                </verticalAlignment>
+                <width>
+                    <stringValue>12</stringValue>
+                </width>
+            </styleProperties>
+        </fields>
+        <nextOrFinishButtonLabel>Task Complete</nextOrFinishButtonLabel>
+        <showFooter>true</showFooter>
+        <showHeader>true</showHeader>
+    </screens>
+    <screens>
+        <name>User_Name_is_compliant_AA_or_AE</name>
+        <label>User Name is compliant? (AA or AE#)</label>
+        <locationX>176</locationX>
+        <locationY>350</locationY>
+        <allowBack>false</allowBack>
+        <allowFinish>true</allowFinish>
+        <allowPause>false</allowPause>
+        <connector>
+            <targetReference>Complete_User_Name_is_Compliant_Task</targetReference>
+        </connector>
+        <fields>
+            <name>User_Name_is_compliant</name>
+            <fieldText>&lt;p&gt;User Name is compliant? (AA or AE#)?&lt;/p&gt;</fieldText>
+            <fieldType>DisplayText</fieldType>
+            <styleProperties>
+                <verticalAlignment>
+                    <stringValue>top</stringValue>
+                </verticalAlignment>
+                <width>
+                    <stringValue>12</stringValue>
+                </width>
+            </styleProperties>
+        </fields>
+        <nextOrFinishButtonLabel>Task Complete</nextOrFinishButtonLabel>
+        <showFooter>true</showFooter>
+        <showHeader>true</showHeader>
+    </screens>
+    <start>
+        <locationX>50</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>Create_ATS_Admin_Account</targetReference>
+        </connector>
+    </start>
+    <status>Active</status>
+</Flow>

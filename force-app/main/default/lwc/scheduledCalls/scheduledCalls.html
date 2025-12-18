@@ -1,0 +1,229 @@
+<template>
+    <div class="slds-grid slds-gutters">
+        <div class="slds-card__header slds-grid">
+            <header class="slds-media slds-media_center slds-has-flexi-truncate">
+                <div class="slds-media__figure">
+                    <span class="slds-icon_container slds-icon-standard-task">
+                        <lightning-icon icon-name="standard:task" size="small"></lightning-icon>
+                    </span>
+                </div>
+                    <div class="slds-media__body">
+                        <h2 class="slds-card__header-title">
+                            <span>Scheduled Calls</span>
+                        </h2>
+                    </div>
+                </header>
+                <div class="slds-no-flex">
+                    <lightning-badge label={scheduledCount}></lightning-badge>
+                </div>
+            </div>
+            <div class="slds-card__body slds-card__body_inner">
+            <template if:true={isLoading}>
+                <div class="slds-align_absolute-center slds-p-around_medium">
+                    <lightning-spinner alternative-text="Loading" size="small"></lightning-spinner>
+                </div>
+            </template>
+
+            <template if:false={isLoading}>
+                <template if:true={hasScheduledCalls}>
+                    <lightning-datatable
+                        key-field="Id"
+                        data={scheduledCalls}
+                        columns={columns}
+                        hide-checkbox-column
+                        show-row-number-column
+                        onrowaction={handleRowAction}>
+                    </lightning-datatable>
+                </template>
+
+                <template if:false={hasScheduledCalls}>
+                    <div class="slds-align_absolute-center slds-p-around_large">
+                        <div class="slds-text-align_center">
+                            <lightning-icon icon-name="utility:success" size="large" variant="success"></lightning-icon>
+                            <div class="slds-text-heading_medium slds-m-top_medium">
+                                No scheduled calls
+                            </div>
+                            <div class="slds-text-body_regular slds-text-color_weak slds-m-top_small">
+                                All caught up!
+                            </div>
+                        </div>
+                    </div>
+                </template>
+            </template>
+        </div>
+            <footer class="slds-card__footer">
+                <div class="slds-align_absolute-center">
+                    <lightning-button
+                        label="Refresh"
+                        icon-name="utility:refresh"
+                        onclick={handleRefresh}
+                        disabled={isLoading}
+                        variant="neutral">
+                    </lightning-button>
+                </div>
+            </footer>
+        </div>
+    </div>
+
+    <!-- Past Due Calls Column -->
+    <div class="slds-col slds-size_1-of-2">
+        <div class="slds-card">
+            <div class="slds-card__header slds-grid">
+                <header class="slds-media slds-media_center slds-has-flexi-truncate">
+                    <div class="slds-media__figure">
+                        <span class="slds-icon_container slds-icon-standard-task">
+                            <lightning-icon icon-name="standard:task" size="small" variant="error"></lightning-icon>
+                        </span>
+                    </div>
+                    <div class="slds-media__body">
+                        <h2 class="slds-card__header-title">
+                            <span>Past Due Calls</span>
+                        </h2>
+                    </div>
+                </header>
+                <div class="slds-no-flex">
+                    <lightning-badge label={pastDueCount} class="slds-theme_error"></lightning-badge>
+                </div>
+            </div>
+            <div class="slds-card__body slds-card__body_inner">
+                <template if:true={isLoading}>
+                    <div class="slds-align_absolute-center slds-p-around_medium">
+                        <lightning-spinner alternative-text="Loading" size="small"></lightning-spinner>
+                    </div>
+                </template>
+
+                <template if:false={isLoading}>
+                    <template if:true={hasPastDueCalls}>
+                        <lightning-datatable
+                            key-field="Id"
+                            data={pastDueCalls}
+                            columns={columns}
+                            hide-checkbox-column
+                            show-row-number-column
+                            onrowaction={handleRowAction}
+                            oncellclick={handleCellClick}>
+                        </lightning-datatable>
+                    </template>
+
+                    <template if:false={hasPastDueCalls}>
+                        <div class="slds-align_absolute-center slds-p-around_large">
+                            <div class="slds-text-align_center">
+                                <lightning-icon icon-name="utility:success" size="large" variant="success"></lightning-icon>
+                                <div class="slds-text-heading_medium slds-m-top_medium">
+                                    No past due calls
+                                </div>
+                                <div class="slds-text-body_regular slds-text-color_weak slds-m-top_small">
+                                    Great job staying on top of things!
+                                </div>
+                            </div>
+                        </div>
+                    </template>
+                </template>
+            </div>
+            <footer class="slds-card__footer">
+                <div class="slds-align_absolute-center">
+                    <p class="slds-text-body_small slds-text-color_weak">Last refreshed: {lastRefreshed}</p>
+                </div>
+            </footer>
+        </div>
+    </div>
+</div>
+
+    <!-- Edit Task Modal -->
+    <template if:true={showEditModal}>
+        <section role="dialog" tabindex="-1" class="slds-modal slds-fade-in-open">
+            <div class="slds-modal__container">
+                <header class="slds-modal__header">
+                    <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" title="Close" onclick={closeEditModal}>
+                        <lightning-icon icon-name="utility:close" alternative-text="close" size="small"></lightning-icon>
+                        <span class="slds-assistive-text">Close</span>
+                    </button>
+                    <h2 class="slds-modal__title slds-hyphenate">Call - {editTaskClientName}</h2>
+                </header>
+                <div class="slds-modal__content slds-p-around_medium">
+                    <!-- Complete Button -->
+                    <div class="slds-m-bottom_medium">
+                        <lightning-button 
+                            variant="success" 
+                            label="Complete Call" 
+                            icon-name="utility:check"
+                            onclick={handleCompleteCall}
+                            class="slds-m-right_small">
+                        </lightning-button>
+                    </div>
+
+                    <!-- Reschedule Section -->
+                    <template if:true={showReschedule}>
+                        <div class="slds-box slds-m-bottom_medium">
+                            <h3 class="slds-text-heading_small slds-m-bottom_small">Reschedule Call</h3>
+                            <div class="slds-grid slds-gutters">
+                                <div class="slds-col slds-size_1-of-2">
+                                    <lightning-input 
+                                        type="date" 
+                                        label="New Date"
+                                        value={rescheduleDate}
+                                        onchange={handleRescheduleDateChange}
+                                        required>
+                                    </lightning-input>
+                                </div>
+                                <div class="slds-col slds-size_1-of-2">
+                                    <lightning-input 
+                                        type="time" 
+                                        label="New Time"
+                                        value={rescheduleTime}
+                                        onchange={handleRescheduleTimeChange}>
+                                    </lightning-input>
+                                </div>
+                            </div>
+                            <div class="slds-m-top_small">
+                                <lightning-button 
+                                    variant="brand" 
+                                    label="Save Reschedule" 
+                                    onclick={handleSaveReschedule}
+                                    class="slds-m-right_small">
+                                </lightning-button>
+                                <lightning-button 
+                                    variant="neutral" 
+                                    label="Cancel" 
+                                    onclick={handleCancelReschedule}>
+                                </lightning-button>
+                            </div>
+                        </div>
+                    </template>
+
+                    <!-- Reschedule Button (when not showing reschedule form) -->
+                    <template if:false={showReschedule}>
+                        <div class="slds-m-bottom_medium">
+                            <lightning-button 
+                                variant="neutral" 
+                                label="Reschedule" 
+                                icon-name="utility:date_time"
+                                onclick={handleShowReschedule}>
+                            </lightning-button>
+                        </div>
+                    </template>
+
+                    <hr class="slds-m-vertical_medium">
+
+                    <!-- Edit Form -->
+                    <lightning-record-edit-form
+                        record-id={editTaskId}
+                        object-api-name="Task"
+                        onsuccess={handleEditSuccess}>
+                        <lightning-messages></lightning-messages>
+                        <lightning-input-field field-name="Subject"></lightning-input-field>
+                        <lightning-input-field field-name="Status"></lightning-input-field>
+                        <lightning-input-field field-name="Priority"></lightning-input-field>
+                        <lightning-input-field field-name="ActivityDate"></lightning-input-field>
+                        <lightning-input-field field-name="Description"></lightning-input-field>
+                        <div class="slds-m-top_medium">
+                            <lightning-button variant="neutral" label="Cancel" onclick={closeEditModal}></lightning-button>
+                            <lightning-button variant="brand" type="submit" label="Save"></lightning-button>
+                        </div>
+                    </lightning-record-edit-form>
+                </div>
+            </div>
+        </section>
+        <div class="slds-backdrop slds-backdrop_open"></div>
+    </template>
+</template>

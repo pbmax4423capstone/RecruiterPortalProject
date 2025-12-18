@@ -1,0 +1,268 @@
+<template>
+    <template if:true={alcRecord.data}>
+        <div class="career-record-container">
+            <!-- Hero Header Section -->
+            <div class="hero-header">
+                <div class="hero-content">
+                    <div class="hero-left">
+                        <div class="avatar-circle">
+                            <lightning-icon icon-name="standard:contact" size="large"></lightning-icon>
+                        </div>
+                        <div class="hero-info">
+                            <h1 class="hero-title">{fullName}</h1>
+                            <div class="hero-subtitle">
+                                <span class="position-badge">{position}</span>
+                                {office}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="hero-right">
+                        <div class="action-buttons-row">
+                            <div class="action-button-wrapper">
+                                <lightning-button 
+                                    label="Edit" 
+                                    variant="brand" 
+                                    icon-name="utility:edit"
+                                    onclick={handleEdit}
+                                    class="action-button">
+                                </lightning-button>
+                            </div>
+                            <div class="action-button-wrapper">
+                                <lightning-button 
+                                    label="Create a Ticket" 
+                                    variant="neutral" 
+                                    icon-name="utility:case"
+                                    onclick={handleCreateTicket}
+                                    class="action-button">
+                                </lightning-button>
+                            </div>
+                            <div class="action-button-wrapper">
+                                <lightning-button 
+                                    label="Start Contracting" 
+                                    variant="success" 
+                                    icon-name="utility:contract"
+                                    onclick={handleStartContracting}
+                                    class="action-button">
+                                </lightning-button>
+                            </div>
+                            <div class="action-button-wrapper">
+                                <lightning-button 
+                                    label="Change Record Type" 
+                                    variant="neutral" 
+                                    icon-name="utility:change_record_type"
+                                    onclick={handleChangeRecordType}
+                                    class="action-button">
+                                </lightning-button>
+                            </div>
+                            <div class="action-button-wrapper">
+                                <lightning-button 
+                                    label="Delete" 
+                                    variant="destructive" 
+                                    icon-name="utility:delete"
+                                    onclick={handleDelete}
+                                    class="action-button">
+                                </lightning-button>
+                            </div>
+                        </div>
+                        <div class="stage-badge-container">
+                            <span class="stage-badge">
+                                {stage}
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Main Content Grid -->
+            <div class="content-grid">
+                <!-- Contact Information Card -->
+                <div class="info-card">
+                    <div class="card-header">
+                        <lightning-icon icon-name="standard:contact" size="small"></lightning-icon>
+                        <h2>Contact Information</h2>
+                    </div>
+                    <div class="card-body">
+                        <div class="field-row">
+                            <div class="field-item">
+                                <lightning-icon icon-name="utility:phone" size="x-small" class="field-icon"></lightning-icon>
+                                <div class="field-content">
+                                    <span class="field-label">Mobile</span>
+                                    <a href={phoneLink} class="field-value link">{mobile}</a>
+                                </div>
+                            </div>
+                            <div class="field-item">
+                                <lightning-icon icon-name="utility:email" size="x-small" class="field-icon"></lightning-icon>
+                                <div class="field-content">
+                                    <span class="field-label">Email</span>
+                                    <a href={emailLink} class="field-value link">{email}</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="field-row">
+                            <div class="field-item full-width">
+                                <lightning-icon icon-name="utility:location" size="x-small" class="field-icon"></lightning-icon>
+                                <div class="field-content">
+                                    <span class="field-label">Home Address</span>
+                                    <span class="field-value">{homeAddress}</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="field-row">
+                            <div class="field-item">
+                                <lightning-icon icon-name="utility:date_input" size="x-small" class="field-icon"></lightning-icon>
+                                <div class="field-content">
+                                    <span class="field-label">Date of Birth</span>
+                                    <span class="field-value">{dob}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Career Details Card -->
+                <div class="info-card">
+                    <div class="card-header">
+                        <lightning-icon icon-name="standard:work_order" size="small"></lightning-icon>
+                        <h2>Career Details</h2>
+                    </div>
+                    <div class="card-body">
+                        <div class="field-row">
+                            <div class="field-item">
+                                <lightning-icon icon-name="utility:user" size="x-small" class="field-icon"></lightning-icon>
+                                <div class="field-content">
+                                    <span class="field-label">Sales Manager</span>
+                                    <span class="field-value highlight">{salesManager}</span>
+                                </div>
+                            </div>
+                            <div class="field-item">
+                                <lightning-icon icon-name="utility:office" size="x-small" class="field-icon"></lightning-icon>
+                                <div class="field-content">
+                                    <span class="field-label">Office Location</span>
+                                    <span class="field-value">{office}</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="field-row">
+                            <div class="field-item">
+                                <lightning-icon icon-name="utility:date_input" size="x-small" class="field-icon"></lightning-icon>
+                                <div class="field-content">
+                                    <span class="field-label">Start Date</span>
+                                    <span class="field-value">{startDate}</span>
+                                </div>
+                            </div>
+                            <div class="field-item">
+                                <lightning-icon icon-name="utility:number_input" size="x-small" class="field-icon"></lightning-icon>
+                                <div class="field-content">
+                                    <span class="field-label">MM ID</span>
+                                    <span class="field-value">{mmid}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Contract Information Card -->
+                <div class="info-card">
+                    <div class="card-header">
+                        <lightning-icon icon-name="standard:contract" size="small"></lightning-icon>
+                        <h2>Contract Information</h2>
+                    </div>
+                    <div class="card-body">
+                        <div class="field-row">
+                            <div class="field-item">
+                                <lightning-icon icon-name="utility:contract" size="x-small" class="field-icon"></lightning-icon>
+                                <div class="field-content">
+                                    <span class="field-label">Contract Type</span>
+                                    <span class="field-value">{contractType}</span>
+                                </div>
+                            </div>
+                            <div class="field-item">
+                                <lightning-icon icon-name="utility:date_input" size="x-small" class="field-icon"></lightning-icon>
+                                <div class="field-content">
+                                    <span class="field-label">Effective Date</span>
+                                    <span class="field-value">{contractEffective}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Licensing & Compliance Card -->
+                <div class="info-card">
+                    <div class="card-header">
+                        <lightning-icon icon-name="standard:approval" size="small"></lightning-icon>
+                        <h2>Licensing & Compliance</h2>
+                    </div>
+                    <div class="card-body">
+                        <div class="license-badges">
+                            <div class="license-badge" data-licensed={hasLicense}>
+                                <lightning-icon 
+                                    icon-name={licenseIcon} 
+                                    size="small" 
+                                    class="badge-icon">
+                                </lightning-icon>
+                                <span>Life Insurance Licensed</span>
+                            </div>
+                            <div class="license-badge" data-registered={isRegistered}>
+                                <lightning-icon 
+                                    icon-name={registeredIcon} 
+                                    size="small" 
+                                    class="badge-icon">
+                                </lightning-icon>
+                                <span>Registered</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Notes & Next Steps Card (Full Width) -->
+                <div class="info-card full-width-card">
+                    <div class="card-header">
+                        <lightning-icon icon-name="standard:note" size="small"></lightning-icon>
+                        <h2>Notes & Next Steps</h2>
+                    </div>
+                    <div class="card-body">
+                        <template if:true={nextMeeting}>
+                            <div class="next-meeting-banner">
+                                <lightning-icon icon-name="utility:event" size="small"></lightning-icon>
+                                <div>
+                                    <span class="meeting-label">Next Meeting:</span>
+                                    <span class="field-value">{nextMeeting}</span>
+                                </div>
+                            </div>
+                        </template>
+                        <div class="notes-section">
+                            <div class="field-value">{notes}</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Related Candidate Link -->
+                <template if:true={candidateId}>
+                    <div class="info-card">
+                        <div class="card-header">
+                            <lightning-icon icon-name="standard:lead" size="small"></lightning-icon>
+                            <h2>Related Records</h2>
+                        </div>
+                        <div class="card-body">
+                            <lightning-button 
+                                label="View Candidate Record" 
+                                variant="brand-outline" 
+                                icon-name="utility:new_window"
+                                onclick={navigateToCandidate}
+                                class="full-width-button">
+                            </lightning-button>
+                        </div>
+                    </div>
+                </template>
+            </div>
+        </div>
+    </template>
+
+    <template if:true={alcRecord.error}>
+        <div class="error-message">
+            <lightning-icon icon-name="utility:error" size="small"></lightning-icon>
+            <p>Error loading record data</p>
+        </div>
+    </template>
+</template>

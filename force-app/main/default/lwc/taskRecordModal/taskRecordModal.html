@@ -1,0 +1,104 @@
+<template>
+    <div class={modalClass} role="dialog" tabindex="-1" aria-modal="true" onclick={handleBackdropClick}>
+        <div class="slds-modal__container" onclick={stopPropagation}>
+            <!-- Modal Header -->
+            <header class="slds-modal__header slds-modal__header_empty">
+                <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" 
+                        title="Close" onclick={handleClose}>
+                    <lightning-icon icon-name="utility:close" alternative-text="close" size="large"></lightning-icon>
+                    <span class="slds-assistive-text">Close</span>
+                </button>
+                
+                <div class="slds-media slds-media_center">
+                    <div class="slds-media__figure">
+                        <lightning-icon icon-name="standard:task" 
+                                      variant="inverse" 
+                                      size="medium" 
+                                      class="slds-icon-standard-task"></lightning-icon>
+                    </div>
+                    <div class="slds-media__body">
+                        <h2 class="slds-text-heading_medium slds-hyphenate modal-title">
+                            {taskSubject}
+                        </h2>
+                        <p class="slds-text-body_small modal-subtitle">Task</p>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Modal Body -->
+            <div class="slds-modal__content slds-p-around_medium modal-content">
+                <template lwc:if={isLoading}>
+                    <div class="slds-align_absolute-center slds-p-around_large">
+                        <lightning-spinner alternative-text="Loading" size="medium"></lightning-spinner>
+                    </div>
+                </template>
+
+                <template lwc:elseif={error}>
+                    <div class="slds-notify slds-notify_alert slds-theme_alert-texture slds-theme_error" role="alert">
+                        <span class="slds-assistive-text">Error</span>
+                        <h2>Error loading task: {error.body.message}</h2>
+                    </div>
+                </template>
+
+                <template lwc:else>
+                    <!-- Task Details Display -->
+                    <div class="task-details">
+                        <div class="slds-grid slds-gutters slds-wrap">
+                            <!-- Status and Priority Row -->
+                            <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2">
+                                <div class="detail-item">
+                                    <label class="slds-form-element__label detail-label">Status</label>
+                                    <div class="detail-value">
+                                        <span class={statusClass}>{taskStatus}</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2">
+                                <div class="detail-item">
+                                    <label class="slds-form-element__label detail-label">Priority</label>
+                                    <div class="detail-value">
+                                        <span class={priorityClass}>{taskPriority}</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Due Date -->
+                            <div class="slds-col slds-size_1-of-1">
+                                <div class="detail-item">
+                                    <label class="slds-form-element__label detail-label">Due Date</label>
+                                    <div class="detail-value task-due-date">
+                                        <lightning-icon icon-name="utility:event" size="x-small" class="date-icon"></lightning-icon>
+                                        {taskDueDate}
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Description -->
+                            <div class="slds-col slds-size_1-of-1">
+                                <div class="detail-item">
+                                    <label class="slds-form-element__label detail-label">Description</label>
+                                    <div class="detail-value task-description">
+                                        {taskDescription}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </template>
+            </div>
+
+            <!-- Modal Footer -->
+            <footer class="slds-modal__footer modal-footer">
+                <button class="slds-button slds-button_neutral" onclick={handleClose}>Close</button>
+                <button class="slds-button slds-button_success" onclick={handleComplete}>
+                    <lightning-icon icon-name="utility:check" size="x-small" class="slds-m-right_xx-small"></lightning-icon>
+                    Complete Task
+                </button>
+                <button class="slds-button slds-button_brand" onclick={handleEdit}>Edit</button>
+            </footer>
+        </div>
+    </div>
+    
+    <!-- Modal Backdrop -->
+    <div class="slds-backdrop slds-backdrop_open modal-backdrop"></div>
+</template>

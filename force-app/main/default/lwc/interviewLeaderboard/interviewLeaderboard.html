@@ -1,0 +1,314 @@
+<template>
+    <lightning-card icon-name="custom:custom63">
+        <h2 slot="title" class="slds-text-heading_medium">
+            <lightning-icon icon-name="custom:custom63" size="small" class="slds-m-right_x-small"></lightning-icon>
+            Interview Leaderboard - Current Month
+        </h2>
+        <div slot="actions">
+            <lightning-button 
+                label="Refresh" 
+                icon-name="utility:refresh" 
+                onclick={handleRefresh}
+                variant="neutral">
+            </lightning-button>
+        </div>
+
+        <!-- Loading Spinner -->
+        <template if:true={isLoading}>
+            <div class="slds-align_absolute-center slds-m-around_large">
+                <lightning-spinner alternative-text="Loading" size="medium"></lightning-spinner>
+            </div>
+        </template>
+
+        <!-- Error Message -->
+        <template if:true={error}>
+            <div class="slds-m-around_medium">
+                <div class="slds-text-color_error">
+                    <lightning-icon icon-name="utility:error" size="small" class="slds-m-right_x-small"></lightning-icon>
+                    Error loading leaderboard data. Please try again.
+                </div>
+            </div>
+        </template>
+
+        <!-- Main Content -->
+        <template if:true={hasData}>
+            <div class="slds-p-around_medium">
+                
+                <!-- Top Summary Cards -->
+                <div class="slds-grid slds-gutters slds-m-bottom_medium">
+                    <div class="slds-col slds-size_1-of-2">
+                        <div class="summary-card summary-card-week" 
+                             onclick={openWeeklyModal}>
+                            <div class="summary-number">{totalInterviewsThisWeek}</div>
+                            <div class="summary-label">Interviews This Week</div>
+                        </div>
+                    </div>
+                    <div class="slds-col slds-size_1-of-2">
+                        <div class="summary-card summary-card-month"
+                             onclick={openMonthlyModal}>
+                            <div class="summary-number">{totalInterviewsThisMonth}</div>
+                            <div class="summary-label">Total This Month</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Weekly Interviews Modal -->
+                <template if:true={showWeeklyModal}>
+                    <section role="dialog" tabindex="-1" class="slds-modal slds-fade-in-open" aria-modal="true">
+                        <div class="slds-modal__container">
+                            <header class="slds-modal__header">
+                                <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" 
+                                        title="Close" onclick={closeWeeklyModal}>
+                                    <lightning-icon icon-name="utility:close" size="small" alternative-text="close"></lightning-icon>
+                                    <span class="slds-assistive-text">Close</span>
+                                </button>
+                                <h2 class="slds-text-heading_medium">Interviews This Week ({totalInterviewsThisWeek})</h2>
+                            </header>
+                            <div class="slds-modal__content slds-p-around_medium weekly-interview-list">
+                                <template if:true={isLoadingWeekly}>
+                                    <div class="slds-align_absolute-center slds-m-around_large">
+                                        <lightning-spinner alternative-text="Loading" size="small"></lightning-spinner>
+                                    </div>
+                                </template>
+                                <template if:true={weeklyInterviews}>
+                                    <template for:each={weeklyInterviews} for:item="interview">
+                                        <div key={interview.id} class="weekly-interview-item slds-box slds-m-bottom_x-small">
+                                            <div class="slds-grid slds-grid_vertical-align-center">
+                                                <div class="slds-col slds-size_1-of-3">
+                                                    <div class="slds-text-body_small slds-text-color_weak">{interview.formattedDate}</div>
+                                                    <div class="slds-text-body_regular">{interview.candidateName}</div>
+                                                </div>
+                                                <div class="slds-col slds-size_1-of-3">
+                                                    <lightning-badge label={interview.interviewType} class="interview-type-badge"></lightning-badge>
+                                                </div>
+                                                <div class="slds-col slds-size_1-of-3">
+                                                    <div class="slds-text-body_small">{interview.interviewers}</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </template>
+                                </template>
+                            </div>
+                        </div>
+                    </section>
+                    <div class="slds-backdrop slds-backdrop_open"></div>
+                </template>
+
+                <!-- Category Count Cards -->
+                <div class="slds-grid slds-gutters slds-m-bottom_large">
+                    <div class="slds-col">
+                        <div class="category-card category-ci-first"
+                             onclick={handleCiFirstClick}>
+                            <div class="category-number">{totalCiFirst}</div>
+                            <div class="category-label">CI-First</div>
+                        </div>
+                    </div>
+                    <div class="slds-col">
+                        <div class="category-card category-align"
+                             onclick={handleAlignSecondClick}>
+                            <div class="category-number">{totalAlignSecond}</div>
+                            <div class="category-label">Align-2nd</div>
+                        </div>
+                    </div>
+                    <div class="slds-col">
+                        <div class="category-card category-plan"
+                             onclick={handlePlanThirdClick}>
+                            <div class="category-number">{totalPlanThird}</div>
+                            <div class="category-label">Plan-3rd</div>
+                        </div>
+                    </div>
+                    <div class="slds-col">
+                        <div class="category-card category-present"
+                             onclick={handlePresentFourthClick}>
+                            <div class="category-number">{totalPresentFourth}</div>
+                            <div class="category-label">Present-4th</div>
+                        </div>
+                    </div>
+                    <div class="slds-col">
+                        <div class="category-card category-optional"
+                             onclick={handleOptionalFifthClick}>
+                            <div class="category-number">{totalOptionalFifth}</div>
+                            <div class="category-label">Optional-5th</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Breakdown Sections -->
+                <div class="slds-grid slds-wrap slds-gutters">
+                    
+                    <!-- CI-First Interviews -->
+                    <div class="slds-col slds-size_1-of-2 slds-m-bottom_medium">
+                        <div class="breakdown-section">
+                            <h3 class="slds-text-heading_small slds-m-bottom_small">CI-First Interviews</h3>
+                            <template if:true={ciFirstLeaders.length}>
+                                <template for:each={ciFirstLeaders} for:item="leader">
+                                    <div key={leader.userId} class="leader-row">
+                                        <div class="leader-name">{leader.userName}</div>
+                                        <div class="leader-badge badge-ci-first">{leader.ciFirstCount}</div>
+                                    </div>
+                                </template>
+                            </template>
+                        </div>
+                    </div>
+
+                    <!-- Align-2nd -->
+                    <div class="slds-col slds-size_1-of-2 slds-m-bottom_medium">
+                        <div class="breakdown-section">
+                            <h3 class="slds-text-heading_small slds-m-bottom_small">Align-2nd</h3>
+                            <template if:true={alignSecondLeaders.length}>
+                                <template for:each={alignSecondLeaders} for:item="leader">
+                                    <div key={leader.userId} class="leader-row">
+                                        <div class="leader-name">{leader.userName}</div>
+                                        <div class="leader-badge badge-align">{leader.alignSecondCount}</div>
+                                    </div>
+                                </template>
+                            </template>
+                        </div>
+                    </div>
+
+                    <!-- Plan-3rd -->
+                    <div class="slds-col slds-size_1-of-2 slds-m-bottom_medium">
+                        <div class="breakdown-section">
+                            <h3 class="slds-text-heading_small slds-m-bottom_small">Plan-3rd</h3>
+                            <template if:true={planThirdLeaders.length}>
+                                <template for:each={planThirdLeaders} for:item="leader">
+                                    <div key={leader.userId} class="leader-row">
+                                        <div class="leader-name">{leader.userName}</div>
+                                        <div class="leader-badge badge-plan">{leader.planThirdCount}</div>
+                                    </div>
+                                </template>
+                            </template>
+                        </div>
+                    </div>
+
+                    <!-- Present-4th -->
+                    <div class="slds-col slds-size_1-of-2 slds-m-bottom_medium">
+                        <div class="breakdown-section">
+                            <h3 class="slds-text-heading_small slds-m-bottom_small">Present-4th</h3>
+                            <template if:true={presentFourthLeaders.length}>
+                                <template for:each={presentFourthLeaders} for:item="leader">
+                                    <div key={leader.userId} class="leader-row">
+                                        <div class="leader-name">{leader.userName}</div>
+                                        <div class="leader-badge badge-present">{leader.presentFourthCount}</div>
+                                    </div>
+                                </template>
+                            </template>
+                        </div>
+                    </div>
+
+                    <!-- Optional-5th -->
+                    <template if:true={optionalFifthLeaders.length}>
+                        <div class="slds-col slds-size_1-of-2 slds-m-bottom_medium">
+                            <div class="breakdown-section">
+                                <h3 class="slds-text-heading_small slds-m-bottom_small">Optional-5th</h3>
+                                <template for:each={optionalFifthLeaders} for:item="leader">
+                                    <div key={leader.userId} class="leader-row">
+                                        <div class="leader-name">{leader.userName}</div>
+                                        <div class="leader-badge badge-optional">{leader.optionalFifthCount}</div>
+                                    </div>
+                                </template>
+                            </div>
+                        </div>
+                    </template>
+
+                </div>
+            </div>
+        </template>
+
+        <!-- No Data Message -->
+        <template if:false={hasData}>
+            <template if:false={isLoading}>
+                <template if:false={error}>
+                    <div class="slds-align_absolute-center slds-m-around_large">
+                        <p class="slds-text-color_weak">{noDataMessage}</p>
+                    </div>
+                </template>
+            </template>
+        </template>
+
+        <!-- Monthly Interviews Modal -->
+        <template if:true={showMonthlyModal}>
+            <section role="dialog" tabindex="-1" class="slds-modal slds-fade-in-open" aria-modal="true">
+                <div class="slds-modal__container">
+                    <header class="slds-modal__header">
+                        <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" 
+                                title="Close" onclick={closeMonthlyModal}>
+                            <lightning-icon icon-name="utility:close" size="small" alternative-text="close"></lightning-icon>
+                            <span class="slds-assistive-text">Close</span>
+                        </button>
+                        <h2 class="slds-text-heading_medium">Total This Month ({totalInterviewsThisMonth})</h2>
+                    </header>
+                    <div class="slds-modal__content slds-p-around_medium weekly-interview-list">
+                        <template if:true={isLoadingMonthly}>
+                            <div class="slds-align_absolute-center slds-m-around_large">
+                                <lightning-spinner alternative-text="Loading" size="small"></lightning-spinner>
+                            </div>
+                        </template>
+                        <template if:true={monthlyInterviews}>
+                            <template for:each={monthlyInterviews} for:item="interview">
+                                <div key={interview.id} class="weekly-interview-item slds-box slds-m-bottom_x-small">
+                                    <div class="slds-grid slds-grid_vertical-align-center">
+                                        <div class="slds-col slds-size_1-of-3">
+                                            <div class="slds-text-body_small slds-text-color_weak">{interview.formattedDate}</div>
+                                            <div class="slds-text-body_regular">{interview.candidateName}</div>
+                                        </div>
+                                        <div class="slds-col slds-size_1-of-3">
+                                            <lightning-badge label={interview.interviewType} class="interview-type-badge"></lightning-badge>
+                                        </div>
+                                        <div class="slds-col slds-size_1-of-3">
+                                            <div class="slds-text-body_small">{interview.interviewers}</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </template>
+                        </template>
+                    </div>
+                </div>
+            </section>
+            <div class="slds-backdrop slds-backdrop_open"></div>
+        </template>
+
+        <!-- Type-specific Interviews Modal -->
+        <template if:true={showTypeModal}>
+            <section role="dialog" tabindex="-1" class="slds-modal slds-fade-in-open" aria-modal="true">
+                <div class="slds-modal__container">
+                    <header class="slds-modal__header">
+                        <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" 
+                                title="Close" onclick={closeTypeModal}>
+                            <lightning-icon icon-name="utility:close" size="small" alternative-text="close"></lightning-icon>
+                            <span class="slds-assistive-text">Close</span>
+                        </button>
+                        <h2 class="slds-text-heading_medium">{currentModalTitle} ({typeModalCount})</h2>
+                    </header>
+                    <div class="slds-modal__content slds-p-around_medium weekly-interview-list">
+                        <template if:true={isLoadingType}>
+                            <div class="slds-align_absolute-center slds-m-around_large">
+                                <lightning-spinner alternative-text="Loading" size="small"></lightning-spinner>
+                            </div>
+                        </template>
+                        <template if:true={typeInterviews}>
+                            <template for:each={typeInterviews} for:item="interview">
+                                <div key={interview.id} class="weekly-interview-item slds-box slds-m-bottom_x-small">
+                                    <div class="slds-grid slds-grid_vertical-align-center">
+                                        <div class="slds-col slds-size_1-of-3">
+                                            <div class="slds-text-body_small slds-text-color_weak">{interview.formattedDate}</div>
+                                            <div class="slds-text-body_regular">{interview.candidateName}</div>
+                                        </div>
+                                        <div class="slds-col slds-size_1-of-3">
+                                            <lightning-badge label={interview.interviewType} class="interview-type-badge"></lightning-badge>
+                                        </div>
+                                        <div class="slds-col slds-size_1-of-3">
+                                            <div class="slds-text-body_small">{interview.interviewers}</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </template>
+                        </template>
+                    </div>
+                </div>
+            </section>
+            <div class="slds-backdrop slds-backdrop_open"></div>
+        </template>
+
+    </lightning-card>
+</template>

@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>SI_3_Interviewer__c</fullName>
+    <description>Interviewer who conducted SI 3 Interview</description>
+    <label>SI 3 Interviewer</label>
+    <required>false</required>
+    <trackFeedHistory>false</trackFeedHistory>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Picklist</type>
+    <valueSet>
+        <restricted>true</restricted>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>Van Hess</fullName>
+                <default>false</default>
+                <label>Van Hess</label>
+            </value>
+            <value>
+                <fullName>Tim Denton</fullName>
+                <default>false</default>
+                <label>Tim Denton</label>
+            </value>
+            <value>
+                <fullName>Jonathan Gruber</fullName>
+                <default>false</default>
+                <label>Jonathan Gruber</label>
+            </value>
+            <value>
+                <fullName>Diljeet Masuda</fullName>
+                <default>false</default>
+                <label>Diljeet Masuda</label>
+            </value>
+            <value>
+                <fullName>Scott Primm</fullName>
+                <default>false</default>
+                <label>Scott Primm</label>
+            </value>
+            <value>
+                <fullName>Rachyll Tenny</fullName>
+                <default>false</default>
+                <label>Rachyll Tenny</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Urgent_Task_Created__c</fullName>
+    <defaultValue>false</defaultValue>
+    <description>Indicates if an urgent follow-up task has been created for Rachyll after 12 days</description>
+    <label>Urgent Task Created</label>
+    <trackFeedHistory>false</trackFeedHistory>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Checkbox</type>
+</CustomField>

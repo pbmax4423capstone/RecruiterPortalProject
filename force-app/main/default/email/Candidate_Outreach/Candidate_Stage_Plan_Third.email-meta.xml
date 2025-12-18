@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<EmailTemplate xmlns="http://soap.sforce.com/2006/04/metadata">
+    <available>true</available>
+    <description>Email sent when candidate advances to Plan (3rd) stage</description>
+    <encodingKey>UTF-8</encodingKey>
+    <name>Candidate Stage - Plan Third Interview</name>
+    <style>none</style>
+    <subject>Planning Stage - Let's Map Your Success</subject>
+    <type>text</type>
+</EmailTemplate>

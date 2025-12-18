@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Stage__c</fullName>
+    <label>Stage</label>
+    <required>false</required>
+    <trackFeedHistory>true</trackFeedHistory>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Picklist</type>
+    <valueSet>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>Initial Form Sent</fullName>
+                <default>true</default>
+                <label>Initial Form Sent</label>
+            </value>
+            <value>
+                <fullName>MM_ONX_Sent</fullName>
+                <default>false</default>
+                <label>MM ONX sent</label>
+            </value>
+            <value>
+                <fullName>In Background</fullName>
+                <default>false</default>
+                <label>In Background</label>
+            </value>
+            <value>
+                <fullName>Receive NRF Info</fullName>
+                <default>false</default>
+                <label>Receive NRF Info</label>
+            </value>
+            <value>
+                <fullName>Request AE</fullName>
+                <default>false</default>
+                <label>Request AE</label>
+            </value>
+            <value>
+                <fullName>Step 1 Email</fullName>
+                <default>false</default>
+                <label>Step 1 Email</label>
+            </value>
+            <value>
+                <fullName>NRF BIG Review</fullName>
+                <default>false</default>
+                <label>NRF BIG Review</label>
+            </value>
+            <value>
+                <fullName>Fingerprinting</fullName>
+                <default>false</default>
+                <label>Fingerprinting</label>
+            </value>
+            <value>
+                <fullName>Background Check</fullName>
+                <default>false</default>
+                <label>Background Check</label>
+            </value>
+            <value>
+                <fullName>CORP- ECQ Request</fullName>
+                <default>false</default>
+                <label>CORP- ECQ Request</label>
+            </value>
+            <value>
+                <fullName>Post Background - Pending Rachyll</fullName>
+                <default>false</default>
+                <label>Post Background - Pending Rachyll</label>
+            </value>
+            <value>
+                <fullName>Sent To Compliance</fullName>
+                <default>false</default>
+                <label>Sent To Compliance</label>
+            </value>
+            <value>
+                <fullName>Pending SM</fullName>
+                <default>false</default>
+                <label>Pending SM</label>
+            </value>
+            <value>
+                <fullName>Contract Codes (A/B) &amp; DocuSign</fullName>
+                <default>false</default>
+                <label>Contract Codes (A/B) &amp; DocuSign</label>
+            </value>
+            <value>
+                <fullName>Submit to HO</fullName>
+                <default>false</default>
+                <label>Submit to HO</label>
+            </value>
+            <value>
+                <fullName>AA Received</fullName>
+                <default>false</default>
+                <label>AA Received</label>
+            </value>
+            <value>
+                <fullName>Candidate Complete</fullName>
+                <default>false</default>
+                <label>Candidate Complete</label>
+            </value>
+            <value>
+                <fullName>TERMINATED</fullName>
+                <default>false</default>
+                <label>TERMINATED</label>
+            </value>
+            <value>
+                <fullName>Initial Setup</fullName>
+                <default>false</default>
+                <label>Initial Setup</label>
+            </value>
+            <value>
+                <fullName>Request FieldNet/CoverPath Access</fullName>
+                <default>false</default>
+                <label>Request FieldNet/CoverPath Access</label>
+            </value>
+            <value>
+                <fullName>COMPLETE</fullName>
+                <default>false</default>
+                <label>COMPLETE</label>
+            </value>
+            <value>
+                <fullName>Pending Instructions</fullName>
+                <default>false</default>
+                <label>Pending Instructions</label>
+            </value>
+            <value>
+                <fullName>Pending Scheduling Zoom</fullName>
+                <default>false</default>
+                <label>Pending Scheduling Zoom</label>
+            </value>
+            <value>
+                <fullName>Complete U4</fullName>
+                <default>false</default>
+                <label>Complete U4</label>
+            </value>
+            <value>
+                <fullName>Follow Up with Agent</fullName>
+                <default>false</default>
+                <label>Follow up with Agent</label>
+            </value>
+            <value>
+                <fullName>Background Check (if 6 months or more)</fullName>
+                <default>false</default>
+                <label>Background Check (if 6 months or more)</label>
+            </value>
+            <value>
+                <fullName>Received Approval Letter</fullName>
+                <default>false</default>
+                <label>Received Approval Letter</label>
+            </value>
+            <value>
+                <fullName>Send DocuSign Consent</fullName>
+                <default>false</default>
+                <label>Send DocuSign Consent</label>
+            </value>
+            <value>
+                <fullName>CANCELED</fullName>
+                <default>false</default>
+                <label>CANCELED</label>
+            </value>
+            <value>
+                <fullName>Submit to HO (Registration)</fullName>
+                <default>false</default>
+                <label>Submit to HO (Registration)</label>
+            </value>
+            <value>
+                <fullName>Received Approval Letter-Registration</fullName>
+                <default>false</default>
+                <label>Received Approval Letter-(Registration)</label>
+            </value>
+            <value>
+                <fullName>CANCELED-(Registrations)</fullName>
+                <default>false</default>
+                <label>CANCELED-(Registrations)</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

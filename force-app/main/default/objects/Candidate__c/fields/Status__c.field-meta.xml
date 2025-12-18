@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Status__c</fullName>
+    <label>Status</label>
+    <required>false</required>
+    <trackFeedHistory>false</trackFeedHistory>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Picklist</type>
+    <valueSet>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>Active/In Process</fullName>
+                <default>false</default>
+                <label>Active/In Process</label>
+            </value>
+            <value>
+                <fullName>Contracted- Broker</fullName>
+                <default>false</default>
+                <label>Contracted- Broker</label>
+            </value>
+            <value>
+                <fullName>Contracted- Career</fullName>
+                <default>false</default>
+                <label>Contracted- Career</label>
+            </value>
+            <value>
+                <fullName>Contracted- Contract B</fullName>
+                <default>false</default>
+                <label>Contracted- Contract B</label>
+            </value>
+            <value>
+                <fullName>Contracted- Intern</fullName>
+                <default>false</default>
+                <label>Contracted- Intern</label>
+            </value>
+            <value>
+                <fullName>Keep In Touch</fullName>
+                <default>false</default>
+                <label>Keep In Touch</label>
+            </value>
+            <value>
+                <fullName>Lead</fullName>
+                <default>false</default>
+                <label>Lead</label>
+            </value>
+            <value>
+                <fullName>No Show/Dead File</fullName>
+                <default>false</default>
+                <label>No Show/Dead File</label>
+            </value>
+            <value>
+                <fullName>Pre-Contract Termination</fullName>
+                <default>false</default>
+                <label>Pre-Contract Termination</label>
+            </value>
+            <value>
+                <fullName>Redirect</fullName>
+                <default>false</default>
+                <label>Redirect</label>
+            </value>
+            <value>
+                <fullName>Terminated</fullName>
+                <default>false</default>
+                <label>Terminated</label>
+            </value>
+            <value>
+                <fullName>Contracting Started</fullName>
+                <default>false</default>
+                <label>Contracting Started</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

@@ -1,0 +1,418 @@
+/* Service Dashboard Styles */
+.service-dashboard {
+    padding: 1rem;
+    background: #f3f3f3;
+    min-height: 100vh;
+}
+
+.service-dashboard.dark-mode {
+    background: #1a1a1a;
+    color: #ffffff;
+}
+
+/* Metric Cards */
+.metric-card {
+    padding: 1.5rem;
+    background: #ffffff;
+    border-radius: 8px;
+    border: 1px solid #dddbda;
+    min-height: 140px;
+    position: relative;
+}
+
+.metric-card.dark-mode {
+    background: #2c2c2c;
+    border-color: #444444;
+    color: #ffffff;
+}
+
+.metric-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 0.5rem;
+}
+
+.metric-title {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: #3e3e3c;
+    margin: 0;
+    line-height: 1.25;
+    max-width: 85%;
+}
+
+.metric-card.dark-mode .metric-title {
+    color: #ffffff;
+}
+
+.metric-value {
+    font-size: 3rem;
+    font-weight: 300;
+    color: #0176d3;
+    line-height: 1;
+    margin: 0.75rem 0;
+}
+
+.metric-value-orange {
+    color: #ff9500;
+}
+
+.metric-value-red {
+    color: #d73527;
+}
+
+.metric-link {
+    margin-bottom: 0.5rem;
+}
+
+.metric-link a {
+    color: #0176d3;
+    text-decoration: none;
+    font-size: 0.8125rem;
+}
+
+.metric-link a:hover {
+    text-decoration: underline;
+}
+
+.metric-card.dark-mode .metric-link a {
+    color: #4fc3f7;
+}
+
+.metric-timestamp {
+    font-size: 0.75rem;
+    color: #706e6b;
+    position: absolute;
+    bottom: 1rem;
+    right: 1.5rem;
+}
+
+.metric-card.dark-mode .metric-timestamp {
+    color: #b0b0b0;
+}
+
+/* Chart Containers */
+.chart-container {
+    padding: 1.5rem;
+    background: #ffffff;
+    border-radius: 8px;
+    border: 1px solid #dddbda;
+    min-height: 300px;
+}
+
+.chart-container.dark-mode {
+    background: #2c2c2c;
+    border-color: #444444;
+    color: #ffffff;
+}
+
+.chart-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 1px solid #dddbda;
+}
+
+.chart-container.dark-mode .chart-header {
+    border-bottom-color: #444444;
+}
+
+.chart-title {
+    font-size: 1rem;
+    font-weight: 600;
+    color: #3e3e3c;
+    margin: 0;
+}
+
+.chart-container.dark-mode .chart-title {
+    color: #ffffff;
+}
+
+.chart-content {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 200px;
+    margin-bottom: 1rem;
+}
+
+/* Chart Specific Styles */
+.donut-chart-container {
+    position: relative;
+    width: 200px;
+    height: 200px;
+}
+
+.bar-chart-container {
+    width: 100%;
+    height: 200px;
+}
+
+.chart-canvas {
+    max-width: 100%;
+    max-height: 100%;
+}
+
+/* Chart placeholders */
+.chart-placeholder-circle {
+    width: 200px;
+    height: 200px;
+    border: 8px solid var(--dashboard-primary-color, #0176d3);
+    border-radius: 50%;
+    border-top: 8px solid var(--dashboard-secondary-color, #e8f4fd);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    background: var(--dashboard-background-color, #ffffff);
+}
+
+/* Dark mode chart placeholders */
+.chart-container.dark-mode .chart-placeholder-circle {
+    border-color: #0176d3;
+    border-top-color: #4a90e2;
+    background: #2c2c2c;
+}
+
+.chart-placeholder-bar {
+    width: 100%;
+    height: 200px;
+    background: var(--dashboard-card-background, #ffffff);
+    border: 2px dashed var(--dashboard-border-color, #d9dbdd);
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.bar-chart-placeholder {
+    color: var(--dashboard-text-muted, #747474);
+    font-size: 14px;
+}
+
+/* Dark mode bar chart placeholders */
+.chart-container.dark-mode .chart-placeholder-bar {
+    background: #2c2c2c;
+    border-color: #4a4a4a;
+}
+
+.chart-container.dark-mode .bar-chart-placeholder {
+    color: #a8a8a8;
+}
+
+.chart-center-value {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: var(--dashboard-text-primary, #3e3e3c);
+    z-index: 10;
+}
+
+/* Dark mode chart values */
+.service-dashboard.dark-mode .chart-center-value {
+    color: #ffffff;
+}
+
+.chart-placeholder-circle {
+    position: relative;
+}
+
+.chart-placeholder {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 200px;
+}
+
+.chart-link {
+    margin-bottom: 0.5rem;
+    text-align: center;
+}
+
+.chart-link a {
+    color: #0176d3;
+    text-decoration: none;
+    font-size: 0.8125rem;
+}
+
+.chart-link a:hover {
+    text-decoration: underline;
+}
+
+.chart-container.dark-mode .chart-link a {
+    color: #4fc3f7;
+}
+
+.chart-timestamp {
+    font-size: 0.75rem;
+    color: #706e6b;
+    text-align: center;
+}
+
+.chart-container.dark-mode .chart-timestamp {
+    color: #b0b0b0;
+}
+
+/* Table Styles */
+.slds-table.dark-mode {
+    background: transparent;
+    color: #ffffff;
+}
+
+.slds-table.dark-mode th {
+    background: #444444;
+    color: #ffffff;
+    border-color: #666666;
+}
+
+.slds-table.dark-mode td {
+    border-color: #444444;
+    color: #ffffff;
+}
+
+.slds-table.dark-mode tbody tr:nth-child(even) {
+    background: #333333;
+}
+
+.slds-table.dark-mode tbody tr:hover {
+    background: #404040;
+}
+
+/* Age Bar Styles */
+.age-bar-container {
+    display: flex;
+    align-items: center;
+    width: 100%;
+}
+
+.age-bar {
+    height: 20px;
+    border-radius: 10px;
+    margin-right: 8px;
+    transition: width 0.3s ease;
+    flex-grow: 1;
+    max-width: 120px;
+    position: relative;
+}
+
+.age-bar[data-color="#d73527"] {
+    background: #d73527;
+}
+
+.age-bar[data-color="#ffc500"] {
+    background: #ffc500;
+}
+
+.age-bar[data-color="#06a59a"] {
+    background: #06a59a;
+}
+
+.age-value {
+    font-weight: 600;
+    min-width: 30px;
+    text-align: right;
+    font-size: 0.875rem;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .service-dashboard {
+        padding: 0.5rem;
+    }
+    
+    .metric-card,
+    .chart-container {
+        padding: 1rem;
+    }
+    
+    .metric-value {
+        font-size: 2.5rem;
+    }
+    
+    .chart-content {
+        min-height: 150px;
+    }
+    
+    .donut-chart-container {
+        width: 150px;
+        height: 150px;
+    }
+}
+
+/* Loading State */
+.slds-spinner_container {
+    background: rgba(255, 255, 255, 0.8);
+}
+
+.service-dashboard.dark-mode .slds-spinner_container {
+    background: rgba(26, 26, 26, 0.8);
+}
+
+/* Button Icon Overrides for Dark Mode */
+.chart-container.dark-mode .slds-button_icon,
+.metric-card.dark-mode .slds-button_icon {
+    color: #ffffff;
+}
+
+.chart-container.dark-mode .slds-button_icon:hover,
+.metric-card.dark-mode .slds-button_icon:hover {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+/* Chart Legend Styling */
+.chart-legend {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-top: 1rem;
+    gap: 1rem;
+}
+
+.legend-item {
+    display: flex;
+    align-items: center;
+    font-size: 0.875rem;
+}
+
+.legend-color {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    margin-right: 6px;
+}
+
+/* Accessibility */
+.service-dashboard a:focus,
+.service-dashboard button:focus {
+    outline: 2px solid #0176d3;
+    outline-offset: 2px;
+}
+
+.service-dashboard.dark-mode a:focus,
+.service-dashboard.dark-mode button:focus {
+    outline-color: #4fc3f7;
+}
+
+/* Animation */
+.metric-card,
+.chart-container {
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.metric-card:hover,
+.chart-container:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.service-dashboard.dark-mode .metric-card:hover,
+.service-dashboard.dark-mode .chart-container:hover {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}

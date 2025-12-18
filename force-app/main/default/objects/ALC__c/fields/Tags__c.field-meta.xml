@@ -1,0 +1,201 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Tags__c</fullName>
+    <label>Tags</label>
+    <required>false</required>
+    <trackFeedHistory>true</trackFeedHistory>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>MultiselectPicklist</type>
+    <valueSet>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>Newport Beach</fullName>
+                <default>false</default>
+                <label>Newport Beach</label>
+            </value>
+            <value>
+                <fullName>Education Statement</fullName>
+                <default>false</default>
+                <label>Education Statement</label>
+            </value>
+            <value>
+                <fullName>Financial Statement</fullName>
+                <default>false</default>
+                <label>Financial Statement</label>
+            </value>
+            <value>
+                <fullName>Diljeet Masuda</fullName>
+                <default>false</default>
+                <label>Diljeet Masuda</label>
+            </value>
+            <value>
+                <fullName>CCB Statement</fullName>
+                <default>false</default>
+                <label>CCB Statement</label>
+            </value>
+            <value>
+                <fullName>Bakersfield</fullName>
+                <default>false</default>
+                <label>Bakersfield</label>
+            </value>
+            <value>
+                <fullName>Utah</fullName>
+                <default>false</default>
+                <label>Utah</label>
+            </value>
+            <value>
+                <fullName>Disclosure on FINRA</fullName>
+                <default>false</default>
+                <label>Disclosure on FINRA</label>
+            </value>
+            <value>
+                <fullName>Contract B</fullName>
+                <default>false</default>
+                <label>Contract B</label>
+            </value>
+            <value>
+                <fullName>Contract A</fullName>
+                <default>false</default>
+                <label>Contract A</label>
+            </value>
+            <value>
+                <fullName>Licensed</fullName>
+                <default>false</default>
+                <label>Licensed</label>
+            </value>
+            <value>
+                <fullName>Las Vegas</fullName>
+                <default>false</default>
+                <label>Las Vegas</label>
+            </value>
+            <value>
+                <fullName>Release Needed</fullName>
+                <default>false</default>
+                <label>Release Needed</label>
+            </value>
+            <value>
+                <fullName>Gruber</fullName>
+                <default>false</default>
+                <label>Gruber</label>
+            </value>
+            <value>
+                <fullName>Century City</fullName>
+                <default>false</default>
+                <label>Century City</label>
+            </value>
+            <value>
+                <fullName>SOE</fullName>
+                <default>false</default>
+                <label>SOE</label>
+            </value>
+            <value>
+                <fullName>Not Licensed</fullName>
+                <default>false</default>
+                <label>Not Licensed</label>
+            </value>
+            <value>
+                <fullName>Tim Denton</fullName>
+                <default>false</default>
+                <label>Tim Denton</label>
+            </value>
+            <value>
+                <fullName>EAP</fullName>
+                <default>false</default>
+                <label>EAP</label>
+            </value>
+            <value>
+                <fullName>NWM Docs</fullName>
+                <default>false</default>
+                <label>NWM Docs</label>
+            </value>
+            <value>
+                <fullName>Son Le</fullName>
+                <default>false</default>
+                <label>Son Le</label>
+            </value>
+            <value>
+                <fullName>IAP</fullName>
+                <default>false</default>
+                <label>IAP</label>
+            </value>
+            <value>
+                <fullName>Disclosure Broker</fullName>
+                <default>false</default>
+                <label>Disclosure Broker</label>
+            </value>
+            <value>
+                <fullName>VIP</fullName>
+                <default>false</default>
+                <label>VIP</label>
+            </value>
+            <value>
+                <fullName>Registered</fullName>
+                <default>false</default>
+                <label>Registered</label>
+            </value>
+            <value>
+                <fullName>Carol-Ann Beers</fullName>
+                <default>false</default>
+                <label>Carol-Ann Beers</label>
+            </value>
+            <value>
+                <fullName>No Release Needed</fullName>
+                <default>false</default>
+                <label>No Release Needed</label>
+            </value>
+            <value>
+                <fullName>Andrew Moore Jr</fullName>
+                <default>false</default>
+                <label>Andrew Moore Jr</label>
+            </value>
+            <value>
+                <fullName>Individual</fullName>
+                <default>false</default>
+                <label>Individual</label>
+            </value>
+            <value>
+                <fullName>Corporation</fullName>
+                <default>false</default>
+                <label>Corporation</label>
+            </value>
+            <value>
+                <fullName>Member of Corp</fullName>
+                <default>false</default>
+                <label>Member of Corp</label>
+            </value>
+            <value>
+                <fullName>Diane Tweedy</fullName>
+                <default>false</default>
+                <label>Diane Tweedy</label>
+            </value>
+            <value>
+                <fullName>Lion Street</fullName>
+                <default>false</default>
+                <label>Lion Street</label>
+            </value>
+            <value>
+                <fullName>Pending Business</fullName>
+                <default>false</default>
+                <label>Pending Business</label>
+            </value>
+            <value>
+                <fullName>Disclosures</fullName>
+                <default>false</default>
+                <label>Disclosures</label>
+            </value>
+            <value>
+                <fullName>Bankruptcy</fullName>
+                <default>false</default>
+                <label>Bankruptcy</label>
+            </value>
+            <value>
+                <fullName>Statements Needed</fullName>
+                <default>false</default>
+                <label>Statements Needed</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+    <visibleLines>4</visibleLines>
+</CustomField>

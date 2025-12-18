@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<WebLink xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Calendly</fullName>
+    <availability>online</availability>
+    <description>Schedule Calendly Meeting 10 minute reconnect</description>
+    <displayType>button</displayType>
+    <encodingKey>UTF-8</encodingKey>
+    <height>600</height>
+    <linkType>url</linkType>
+    <masterLabel>Calendly</masterLabel>
+    <openType>sidebar</openType>
+    <protected>false</protected>
+    <url>https://calendly.com/rachyll/10-min-phone-call?sfid={!Candidate__c.Name}&amp;name={!Candidate__c.First_Name__c}%20{!Candidate__c.Last_Name__c}&amp;email={!Candidate__c.Email__c}</url>
+</WebLink>

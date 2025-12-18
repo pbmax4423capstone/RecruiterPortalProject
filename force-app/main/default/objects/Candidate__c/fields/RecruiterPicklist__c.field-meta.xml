@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>RecruiterPicklist__c</fullName>
+    <label>Recruiter</label>
+    <required>false</required>
+    <trackFeedHistory>false</trackFeedHistory>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Picklist</type>
+    <valueSet>
+        <restricted>true</restricted>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>Brooke Ianni</fullName>
+                <default>false</default>
+                <label>Brooke Ianni</label>
+            </value>
+            <value>
+                <fullName>Rachyll Tenny</fullName>
+                <default>false</default>
+                <label>Rachyll Tenny</label>
+            </value>
+            <value>
+                <fullName>Susan Kim</fullName>
+                <default>false</default>
+                <label>Susan Kim</label>
+            </value>
+            <value>
+                <fullName>Jonathan Gruber</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>Jonathan Gruber</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

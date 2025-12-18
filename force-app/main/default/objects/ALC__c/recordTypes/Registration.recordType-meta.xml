@@ -1,0 +1,416 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<RecordType xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Registration</fullName>
+    <active>true</active>
+    <label>Registration</label>
+    <picklistValues>
+        <picklist>A360__c</picklist>
+        <values>
+            <fullName>No</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Yes</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Agency__c</picklist>
+        <values>
+            <fullName>A007</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>A157</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Assigned_To__c</picklist>
+        <values>
+            <fullName>Blum%2C Philip</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Denton%2C Timothy</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Former member</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Gruber%2C Jonathan</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Haney%2C Anna</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Hess%2C Van</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Ianni%2C Brooke</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Masuda%2C Diljeet</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Member</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Signorelli%2C Sara Moore</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Tenny%2C Rachyll</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Watson%2C Angel</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Contract_Type__c</picklist>
+        <values>
+            <fullName>A</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>B</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Broker</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>MSA</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>NRF</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Sales Manager</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Created_By__c</picklist>
+        <values>
+            <fullName>Haney%2C Anna</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Member</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Signorelli%2C Sara Moore</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Watson%2C Angel</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Employed_at_Insurance_Brokerage_in_las__c</picklist>
+        <values>
+            <fullName>No</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Yes</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Kaplan_Exam_Request__c</picklist>
+        <values>
+            <fullName>No</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Yes</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>LADL_Sales_Experience__c</picklist>
+        <values>
+            <fullName>Less_than_2_years</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>More_than_2_years</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>None</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Life_Insurance_Licensed__c</picklist>
+        <values>
+            <fullName>No</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Yes</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Position__c</picklist>
+        <values>
+            <fullName>Registrant</fullName>
+            <default>true</default>
+        </values>
+        <values>
+            <fullName>Sales Manager</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Prior_NWM__c</picklist>
+        <values>
+            <fullName>No</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Yes</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Sales_Manager__c</picklist>
+        <values>
+            <fullName>Bradley Sofonia</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Elizabeth Kagele</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>House</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Michael Yang</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Rachyll Tenny</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Son Le</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Tim Denton</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Van Hess</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Stage__c</picklist>
+        <values>
+            <fullName>Background Check %28if 6 months or more%29</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>CANCELED-%28Registrations%29</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Complete U4</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Follow Up with Agent</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Pending Instructions</fullName>
+            <default>true</default>
+        </values>
+        <values>
+            <fullName>Pending Scheduling Zoom</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Received Approval Letter-Registration</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Submit to HO %28Registration%29</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Tags__c</picklist>
+        <values>
+            <fullName>Andrew Moore Jr</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Bakersfield</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Bankruptcy</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>CCB Statement</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Carol-Ann Beers</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Century City</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Contract A</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Contract B</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Corporation</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Diane Tweedy</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Diljeet Masuda</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Disclosure Broker</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Disclosure on FINRA</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Disclosures</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>EAP</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Education Statement</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Financial Statement</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Gruber</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>IAP</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Individual</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Las Vegas</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Licensed</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Lion Street</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Member of Corp</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>NWM Docs</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Newport Beach</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>No Release Needed</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Not Licensed</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Pending Business</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Registered</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Release Needed</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>SOE</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Son Le</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Statements Needed</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Tim Denton</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Utah</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>VIP</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+</RecordType>

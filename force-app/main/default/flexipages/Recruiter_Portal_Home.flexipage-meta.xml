@@ -3,8 +3,30 @@
     <flexiPageRegions>
         <itemInstances>
             <componentInstance>
-                <componentName>recruiterDashboard</componentName>
-                <identifier>c_recruiterDashboard</identifier>
+                <componentName>recruiterPortalHeader</componentName>
+                <identifier>c_recruiterPortalHeader</identifier>
+            </componentInstance>
+        </itemInstances>
+        <itemInstances>
+            <componentInstance>
+                <componentInstanceProperties>
+                    <name>isOpen</name>
+                    <value>false</value>
+                </componentInstanceProperties>
+                <componentName>scheduledCallsModal</componentName>
+                <identifier>c_scheduledCallsModal</identifier>
+            </componentInstance>
+        </itemInstances>
+        <itemInstances>
+            <componentInstance>
+                <componentName>recentActivity</componentName>
+                <identifier>c_recentActivity</identifier>
+            </componentInstance>
+        </itemInstances>
+        <itemInstances>
+            <componentInstance>
+                <componentName>interviewLeaderboard</componentName>
+                <identifier>c_interviewLeaderboard</identifier>
             </componentInstance>
         </itemInstances>
         <name>main</name>

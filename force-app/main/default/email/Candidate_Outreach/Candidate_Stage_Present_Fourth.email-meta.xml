@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<EmailTemplate xmlns="http://soap.sforce.com/2006/04/metadata">
+    <available>true</available>
+    <description>Email sent when candidate advances to Present (4th) stage</description>
+    <encodingKey>UTF-8</encodingKey>
+    <name>Candidate Stage - Present Fourth Interview</name>
+    <style>none</style>
+    <subject>Presentation Stage - Almost There!</subject>
+    <type>text</type>
+</EmailTemplate>

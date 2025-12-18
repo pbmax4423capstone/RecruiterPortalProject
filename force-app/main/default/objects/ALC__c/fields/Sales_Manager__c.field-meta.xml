@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Sales_Manager__c</fullName>
+    <label>Sales Manager</label>
+    <required>false</required>
+    <trackFeedHistory>true</trackFeedHistory>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Picklist</type>
+    <valueSet>
+        <restricted>true</restricted>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>Tim Denton</fullName>
+                <default>false</default>
+                <label>Tim Denton</label>
+            </value>
+            <value>
+                <fullName>Rachyll Tenny</fullName>
+                <default>false</default>
+                <label>Rachyll Tenny</label>
+            </value>
+            <value>
+                <fullName>Van Hess</fullName>
+                <default>false</default>
+                <label>Van Hess</label>
+            </value>
+            <value>
+                <fullName>House</fullName>
+                <default>false</default>
+                <label>House</label>
+            </value>
+            <value>
+                <fullName>Michael Yang</fullName>
+                <default>false</default>
+                <label>Michael Yang</label>
+            </value>
+            <value>
+                <fullName>Son Le</fullName>
+                <default>false</default>
+                <label>Son Le</label>
+            </value>
+            <value>
+                <fullName>Bradley Sofonia</fullName>
+                <default>false</default>
+                <label>Bradley Sofonia</label>
+            </value>
+            <value>
+                <fullName>Elizabeth Kagele</fullName>
+                <default>false</default>
+                <label>Elizabeth Kagele</label>
+            </value>
+            <value>
+                <fullName>Diljeet Masuda</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>Diljeet Masuda</label>
+            </value>
+            <value>
+                <fullName>Jonathan Gruber</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>Jonathan Gruber</label>
+            </value>
+            <value>
+                <fullName>Scott Primm</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>Scott Primm</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

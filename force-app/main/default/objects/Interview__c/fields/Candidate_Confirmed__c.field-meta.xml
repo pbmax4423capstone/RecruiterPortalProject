@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Candidate_Confirmed__c</fullName>
+    <defaultValue>false</defaultValue>
+    <description>Indicates whether the candidate has confirmed their attendance for the interview</description>
+    <externalId>false</externalId>
+    <label>Candidate Confirmed</label>
+    <trackTrending>false</trackTrending>
+    <type>Checkbox</type>
+</CustomField>

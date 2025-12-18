@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ListView xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Copy_of_Career_A_Candidates</fullName>
+    <columns>NAME</columns>
+    <columns>Contact__c</columns>
+    <columns>Office_Location__c</columns>
+    <columns>Mobile__c</columns>
+    <columns>Email__c</columns>
+    <columns>OWNER.FIRST_NAME</columns>
+    <columns>Gender__c</columns>
+    <filterScope>Everything</filterScope>
+    <filters>
+        <field>Status__c</field>
+        <operation>contains</operation>
+        <value>Contracted- Career</value>
+    </filters>
+    <label>Career A Candidates MASTER</label>
+</ListView>

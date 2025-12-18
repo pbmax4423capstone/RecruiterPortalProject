@@ -11,7 +11,7 @@
     <enableSharing>true</enableSharing>
     <enableStreamingApi>true</enableStreamingApi>
     <enableBulkApi>true</enableBulkApi>
-    <sharingModel>ReadWrite</sharingModel>
+    <sharingModel>Read</sharingModel>
     <nameField>
         <label>Interview Name</label>
         <type>Text</type>

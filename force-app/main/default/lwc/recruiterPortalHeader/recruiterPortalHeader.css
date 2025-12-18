@@ -1,0 +1,134 @@
+/* Capstone Partners Company Branding */
+/* Branded Header */
+.branded-header {
+  background: #003366 !important; /* Solid dark blue background */
+  background-image: none !important; /* Remove any background images */
+  padding: 1.5rem 2rem;
+  box-shadow: 0 4px 12px rgba(0, 51, 102, 0.15);
+  border-bottom: 3px solid #f4a024;
+  position: relative;
+}
+
+/* Welcome Message Styling */
+.welcome-message {
+  margin-top: 0.25rem;
+  color: #ffffff !important; /* White text for better contrast */
+  font-weight: 600;
+  background-color: transparent !important;
+}
+
+.welcome-message * {
+  color: #ffffff !important;
+  background-color: transparent !important;
+}
+
+/* Force all text in branded header to be white */
+.branded-header * {
+  color: #ffffff !important;
+  background-color: transparent !important;
+}
+
+.branded-header .slds-text-heading_small {
+  color: #ffffff !important;
+}
+
+.branded-header .slds-text-color_inverse {
+  color: #ffffff !important;
+}
+
+.company-logo {
+  width: 60px;
+  height: 60px;
+  background: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.logo-icon {
+  --slds-c-icon-color-foreground-default: #003366;
+}
+
+.slds-page-header__title {
+  color: white !important;
+  font-size: 1.8rem;
+  font-weight: 300;
+  letter-spacing: 0.5px;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.7) !important; /* Shadow for readability */
+  background-color: transparent !important;
+}
+
+/* Additional overrides for all elements in the header */
+.branded-header .slds-page-header__row * {
+  color: #ffffff !important;
+  background-color: transparent !important;
+}
+
+.branded-header h1, .branded-header span {
+  color: #ffffff !important;
+  background-color: transparent !important;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.7) !important;
+}
+
+/* Override SLDS utility classes */
+.branded-header .slds-text-color_inverse,
+.branded-header .slds-text-heading_small,
+.branded-header .slds-truncate {
+  color: #ffffff !important;
+  background-color: transparent !important;
+  background-image: none !important;
+}
+
+/* Action buttons styling */
+.action-buttons-container {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.action-button {
+  white-space: nowrap;
+  font-weight: 500;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .branded-header {
+    padding: 1rem;
+  }
+  
+  .slds-page-header__title {
+    font-size: 1.4rem;
+  }
+  
+  .action-buttons-container {
+    flex-direction: column;
+    width: 100%;
+  }
+  
+  .action-button {
+    width: 100%;
+  }
+}
+
+.button-with-badge {
+  position: relative;
+  display: inline-block;
+}
+
+.coming-soon-badge {
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  background-color: #f59e0b;
+  color: white;
+  font-size: 0.65rem;
+  font-weight: bold;
+  padding: 2px 6px;
+  border-radius: 10px;
+  white-space: nowrap;
+  z-index: 10;
+  pointer-events: none;
+}

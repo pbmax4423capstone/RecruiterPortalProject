@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>63.0</apiVersion>
+    <areMetricsLoggedToDataCloud>false</areMetricsLoggedToDataCloud>
+    <assignments>
+        <name>Append_Timestamp_to_Notes</name>
+        <label>Append Timestamp to Notes</label>
+        <locationX>50</locationX>
+        <locationY>431</locationY>
+        <assignmentItems>
+            <assignToReference>$Record.Notes__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>NoteWTimeStampvar</elementReference>
+            </value>
+        </assignmentItems>
+    </assignments>
+    <decisions>
+        <name>Notes_Updated</name>
+        <label>Notes Updated</label>
+        <locationX>182</locationX>
+        <locationY>323</locationY>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>Yes</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.Notes__c</leftValueReference>
+                <operator>IsChanged</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Append_Timestamp_to_Notes</targetReference>
+            </connector>
+            <label>Yes</label>
+        </rules>
+    </decisions>
+    <description>This is a Record-Triggered Flow.
+This flow is triggered after a record of object &apos;ALC__c&apos; is created or updated. If the &apos;Notes&apos; field has been changed, it appends a timestamp to the existing notes. The flow uses a formula to create a new string with the current notes and the timestamp, then assigns this new value back to the &apos;Notes&apos; field.
+
+Several objects and their fields worth mentioning. Below are the details (the format is given as: object_name - field_name: interaction)
+  * ALC__c - Notes__c : The flow checks if this field has changed and appends a timestamp if it has.</description>
+    <environments>Default</environments>
+    <formulas>
+        <name>NoteWTimeStampvar</name>
+        <dataType>String</dataType>
+        <expression>{!$Record.Notes__c} &amp; BR() &amp; &quot;Timestamp: &quot; &amp; TEXT(NOW())</expression>
+    </formulas>
+    <interviewLabel>Time Stamp Notes {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>Time Stamp Notes</label>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>AUTO_LAYOUT_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>OriginBuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>AutoLaunchedFlow</processType>
+    <start>
+        <locationX>56</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>Notes_Updated</targetReference>
+        </connector>
+        <object>ALC__c</object>
+        <recordTriggerType>CreateAndUpdate</recordTriggerType>
+        <triggerType>RecordAfterSave</triggerType>
+    </start>
+    <status>Draft</status>
+</Flow>

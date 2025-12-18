@@ -1,0 +1,311 @@
+<template>
+    <!-- Modal with simplified structure -->
+    <section class={modalClass} aria-labelledby="modal-heading" aria-modal="true" role="dialog" tabindex="-1">
+        <div class="slds-modal__container">
+            <!-- Modal Header -->
+            <header class="slds-modal__header slds-theme_brand">
+                <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" 
+                        title="Close Modal" onclick={handleClose} type="button">
+                    <lightning-icon icon-name="utility:close" alternative-text="close" size="small"></lightning-icon>
+                    <span class="slds-assistive-text">Close</span>
+                </button>
+                <h2 id="modal-heading" class="slds-modal__title slds-hyphenate">
+                    <lightning-icon icon-name="standard:case" size="small" class="slds-m-right_small"></lightning-icon>
+                    <template if:false={isLoading}>
+                        Case {caseNumber}
+                        <template if:true={isUnassigned}>
+                            <span class="slds-badge slds-theme_warning slds-m-left_small">Unassigned</span>
+                        </template>
+                    </template>
+                    <template if:true={isLoading}>
+                        Loading Case...
+                    </template>
+                </h2>
+            </header>
+
+            <!-- Modal Body -->
+            <div class="slds-modal__content slds-p-around_medium">
+                <!-- Loading State -->
+                <template if:true={isLoading}>
+                    <div class="slds-text-align_center slds-p-vertical_large">
+                        <lightning-spinner alternative-text="Loading..." size="medium"></lightning-spinner>
+                        <p class="slds-m-top_small">Loading case details...</p>
+                    </div>
+                </template>
+
+                <!-- Error State -->
+                <template if:true={error}>
+                    <div class="slds-illustration slds-illustration_small">
+                        <div class="slds-text-align_center">
+                            <lightning-icon icon-name="utility:error" size="large" variant="error"></lightning-icon>
+                            <h3 class="slds-illustration__header slds-text-heading_medium">Error Loading Case</h3>
+                            <p class="slds-text-body_regular">Unable to load case details. Please try again.</p>
+                        </div>
+                    </div>
+                </template>
+
+                <!-- Case Content -->
+                <template if:true={caseRecord}>
+                    <template if:false={error}>
+                        <div class="case-content">
+                            <!-- Case Header Info -->
+                            <div class="slds-grid slds-wrap slds-gutters_medium slds-m-bottom_large">
+                                <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2">
+                                    <div class="slds-form-element">
+                                        <label class="slds-form-element__label">
+                                            <strong>Subject</strong>
+                                        </label>
+                                        <div class="slds-form-element__control">
+                                            <template if:false={isEditing}>
+                                                <div class="slds-form-element__static">
+                                                    {subject}
+                                                </div>
+                                            </template>
+                                            <template if:true={isEditing}>
+                                                <lightning-input
+                                                    type="text"
+                                                    value={editableFields.Subject}
+                                                    data-field="Subject"
+                                                    onchange={handleFieldChange}>
+                                                </lightning-input>
+                                            </template>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2">
+                                    <div class="slds-form-element">
+                                        <label class="slds-form-element__label">
+                                            <strong>Priority</strong>
+                                        </label>
+                                        <div class="slds-form-element__control">
+                                            <template if:false={isEditing}>
+                                                <div class="slds-form-element__static">
+                                                    <span class={priorityClass}>{priority}</span>
+                                                </div>
+                                            </template>
+                                            <template if:true={isEditing}>
+                                                <lightning-combobox
+                                                    value={editableFields.Priority}
+                                                    options={priorityOptions}
+                                                    data-field="Priority"
+                                                    onchange={handleFieldChange}>
+                                                </lightning-combobox>
+                                            </template>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Status and Details -->
+                            <div class="slds-grid slds-wrap slds-gutters_medium slds-m-bottom_large">
+                                <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2">
+                                    <div class="slds-form-element">
+                                        <label class="slds-form-element__label">
+                                            <strong>Status</strong>
+                                        </label>
+                                        <div class="slds-form-element__control">
+                                            <template if:false={isEditing}>
+                                                <div class="slds-form-element__static">
+                                                    <span class={statusClass}>{status}</span>
+                                                </div>
+                                            </template>
+                                            <template if:true={isEditing}>
+                                                <lightning-combobox
+                                                    value={editableFields.Status}
+                                                    options={statusOptions}
+                                                    data-field="Status"
+                                                    onchange={handleFieldChange}>
+                                                </lightning-combobox>
+                                            </template>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2">
+                                    <div class="slds-form-element">
+                                        <label class="slds-form-element__label">
+                                            <strong>Origin</strong>
+                                        </label>
+                                        <div class="slds-form-element__control">
+                                            <div class="slds-form-element__static">
+                                                {origin}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Account and Contact -->
+                            <div class="slds-grid slds-wrap slds-gutters_medium slds-m-bottom_large">
+                                <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2">
+                                    <div class="slds-form-element">
+                                        <label class="slds-form-element__label">
+                                            <strong>Account</strong>
+                                        </label>
+                                        <div class="slds-form-element__control">
+                                            <div class="slds-form-element__static">
+                                                {accountName}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2">
+                                    <div class="slds-form-element">
+                                        <label class="slds-form-element__label">
+                                            <strong>Contact</strong>
+                                        </label>
+                                        <div class="slds-form-element__control">
+                                            <div class="slds-form-element__static">
+                                                {contactName}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Description -->
+                            <div class="slds-form-element slds-m-bottom_large">
+                                <label class="slds-form-element__label">
+                                    <strong>Description</strong>
+                                </label>
+                                <div class="slds-form-element__control">
+                                    <template if:false={isEditing}>
+                                        <div class="slds-form-element__static description-field">
+                                            {description}
+                                        </div>
+                                    </template>
+                                    <template if:true={isEditing}>
+                                        <lightning-textarea
+                                            value={editableFields.Description}
+                                            data-field="Description"
+                                            onchange={handleFieldChange}
+                                            rows="4">
+                                        </lightning-textarea>
+                                    </template>
+                                </div>
+                            </div>
+
+                            <!-- Metadata -->
+                            <div class="slds-grid slds-wrap slds-gutters_medium">
+                                <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2">
+                                    <div class="slds-form-element">
+                                        <label class="slds-form-element__label">
+                                            <strong>Assigned To</strong>
+                                        </label>
+                                        <div class="slds-form-element__control">
+                                            <div class="slds-form-element__static">
+                                                {ownerName}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2">
+                                    <div class="slds-form-element">
+                                        <label class="slds-form-element__label">
+                                            <strong>Created Date</strong>
+                                        </label>
+                                        <div class="slds-form-element__control">
+                                            <div class="slds-form-element__static">
+                                                {createdDate}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </template>
+                </template>
+            </div>
+
+            <!-- Modal Footer -->
+            <footer class="slds-modal__footer">
+                <template if:false={isEditing}>
+                    <div class="slds-grid slds-grid_align-spread">
+                        <div class="slds-col">
+                            <template if:true={isUnassigned}>
+                                <lightning-button 
+                                    variant="brand" 
+                                    label="Accept Case" 
+                                    onclick={handleAcceptCase}
+                                    disabled={isSaving}
+                                    icon-name="utility:check"
+                                    type="button">
+                                </lightning-button>
+                            </template>
+                            <template if:false={isUnassigned}>
+                                <lightning-button 
+                                    variant="destructive" 
+                                    label="Reassign" 
+                                    onclick={handleReassignCase}
+                                    disabled={isSaving}
+                                    icon-name="utility:share"
+                                    type="button"
+                                    class="slds-m-right_x-small">
+                                </lightning-button>
+                                <lightning-button 
+                                    variant="success" 
+                                    label="Close Case" 
+                                    onclick={handleShowCloseModal}
+                                    disabled={isSaving}
+                                    icon-name="utility:check"
+                                    type="button">
+                                </lightning-button>
+                            </template>
+                        </div>
+                        <div class="slds-col slds-no-flex">
+                            <lightning-button 
+                                variant="neutral" 
+                                label="Edit" 
+                                onclick={handleEdit}
+                                disabled={isSaving}
+                                icon-name="utility:edit"
+                                class="slds-m-right_x-small"
+                                type="button">
+                            </lightning-button>
+                            <lightning-button 
+                                variant="neutral" 
+                                label="Close" 
+                                onclick={handleClose}
+                                type="button">
+                            </lightning-button>
+                        </div>
+                    </div>
+                </template>
+                
+                <template if:true={isEditing}>
+                    <div class="slds-grid slds-grid_align-end">
+                        <lightning-button 
+                            variant="neutral" 
+                            label="Cancel" 
+                            onclick={handleCancelEdit}
+                            disabled={isSaving}
+                            class="slds-m-right_x-small"
+                            type="button">
+                        </lightning-button>
+                        <lightning-button 
+                            variant="brand" 
+                            label="Save" 
+                            onclick={handleSave}
+                            disabled={isSaving}
+                            type="button">
+                        </lightning-button>
+                    </div>
+                </template>
+            </footer>
+        </div>
+    </section>
+    
+    <!-- Simplified Backdrop -->
+    <div class="slds-backdrop slds-backdrop_open" onclick={handleBackdropClick}></div>
+
+    <!-- Close Case Modal -->
+    <template if:true={showCloseModal}>
+        <c-close-case-modal
+            case-id={caseId}
+            case-number={caseNumber}
+            dark-mode={darkMode}
+            is-mock-data={isMockData}
+            oncancel={handleCloseCaseModalCancel}
+            oncaseclosed={handleCaseClosed}>
+        </c-close-case-modal>
+    </template>
+</template>

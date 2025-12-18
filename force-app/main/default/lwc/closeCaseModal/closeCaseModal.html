@@ -1,0 +1,116 @@
+<template>
+    <div class={modalClass} role="dialog" tabindex="-1" aria-modal="true" onclick={handleBackdropClick}>
+        <div class="slds-modal__container" onclick={stopPropagation}>
+            <!-- Modal Header -->
+            <header class="slds-modal__header slds-modal__header_empty">
+                <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" 
+                        title="Cancel" onclick={handleCancel}>
+                    <lightning-icon icon-name="utility:close" alternative-text="cancel" size="large"></lightning-icon>
+                    <span class="slds-assistive-text">Cancel</span>
+                </button>
+                
+                <div class="slds-media slds-media_center">
+                    <div class="slds-media__figure">
+                        <lightning-icon icon-name="utility:check" 
+                                      variant="inverse" 
+                                      size="medium" 
+                                      class="slds-icon-utility-check close-icon"></lightning-icon>
+                    </div>
+                    <div class="slds-media__body">
+                        <h2 class="slds-text-heading_medium slds-hyphenate modal-title">
+                            Close Case {caseNumber}
+                        </h2>
+                        <p class="slds-text-body_small modal-subtitle">Complete case closure information</p>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Modal Body -->
+            <div class="slds-modal__content slds-p-around_medium modal-content">
+                <template lwc:if={isLoading}>
+                    <div class="slds-align_absolute-center slds-p-around_large">
+                        <lightning-spinner alternative-text="Closing case..." size="medium"></lightning-spinner>
+                    </div>
+                </template>
+
+                <template lwc:elseif={error}>
+                    <div class="slds-notify slds-notify_alert slds-theme_alert-texture slds-theme_error" role="alert">
+                        <span class="slds-assistive-text">Error</span>
+                        <h2>Error closing case: {error.body.message}</h2>
+                    </div>
+                </template>
+
+                <template lwc:else>
+                    <div class="close-case-form">
+                        <!-- Close Reason -->
+                        <div class="slds-form-element slds-m-bottom_medium">
+                            <label class="slds-form-element__label" for="close-reason">
+                                <abbr class="slds-required" title="required">*</abbr>
+                                Close Reason
+                            </label>
+                            <div class="slds-form-element__control">
+                                <lightning-combobox
+                                    name="closeReason"
+                                    value={closeReason}
+                                    placeholder="Select a reason for closing"
+                                    options={reasonOptions}
+                                    onchange={handleReasonChange}
+                                    required>
+                                </lightning-combobox>
+                            </div>
+                        </div>
+
+                        <!-- Closure Notes -->
+                        <div class="slds-form-element">
+                            <label class="slds-form-element__label" for="closure-notes">
+                                Closure Notes
+                            </label>
+                            <div class="slds-form-element__control">
+                                <lightning-textarea
+                                    name="closureNotes"
+                                    value={closureNotes}
+                                    placeholder="Add any additional notes about the case closure (optional)"
+                                    onchange={handleNotesChange}
+                                    max-length="1000"
+                                    rows="4">
+                                </lightning-textarea>
+                            </div>
+                            <div class="slds-form-element__help">
+                                Provide any additional information about how the case was resolved or why it's being closed.
+                            </div>
+                        </div>
+
+                        <!-- Warning Message -->
+                        <div class="slds-box slds-theme_warning slds-m-top_medium">
+                            <div class="slds-media">
+                                <div class="slds-media__figure">
+                                    <lightning-icon icon-name="utility:warning" size="small" variant="inverse"></lightning-icon>
+                                </div>
+                                <div class="slds-media__body">
+                                    <p class="slds-text-body_small">
+                                        <strong>Warning:</strong> Once closed, this case will be removed from your active cases list. 
+                                        Make sure all work is completed before closing.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </template>
+            </div>
+
+            <!-- Modal Footer -->
+            <footer class="slds-modal__footer modal-footer">
+                <button class="slds-button slds-button_neutral" onclick={handleCancel} disabled={isLoading}>
+                    Cancel
+                </button>
+                <button class="slds-button slds-button_brand" onclick={handleCloseCase} disabled={isCloseDisabled}>
+                    <lightning-icon icon-name="utility:check" size="x-small" class="slds-m-right_xx-small"></lightning-icon>
+                    Close Case
+                </button>
+            </footer>
+        </div>
+    </div>
+    
+    <!-- Modal Backdrop -->
+    <div class="slds-backdrop slds-backdrop_open modal-backdrop"></div>
+</template>

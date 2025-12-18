@@ -1,0 +1,93 @@
+<template>
+    <lightning-card title="Candidates in Contracting (Editable)" icon-name="standard:kanban">
+        <div slot="actions">
+            <lightning-button
+                label="Refresh"
+                icon-name="utility:refresh"
+                onclick={handleRefresh}
+                title="Refresh Data">
+            </lightning-button>
+        </div>
+        <div class="slds-p-around_small">
+            <template if:true={isLoading}>
+                <lightning-spinner alternative-text="Loading candidates..."></lightning-spinner>
+            </template>
+
+            <template if:true={hasData}>
+                <div class="kanban-container">
+                    <template for:each={stageGroups} for:item="stageGroup">
+                        <div key={stageGroup.stageKey} 
+                             class="kanban-column"
+                             data-stage={stageGroup.stage}
+                             ondragover={handleDragOver}
+                             ondrop={handleDrop}>
+                            
+                            <div style={stageGroup.headerStyle} class="kanban-header">
+                                <h3 class="slds-text-heading_small" style="color: white; font-weight: bold; margin: 0;">
+                                    <lightning-icon icon-name="standard:stage" size="small" class="slds-m-right_x-small"></lightning-icon>
+                                    {stageGroup.stage}
+                                </h3>
+                                <span class="kanban-count">{stageGroup.count}</span>
+                            </div>
+
+                            <div class="kanban-cards">
+                                <template for:each={stageGroup.candidates} for:item="candidate">
+                                    <div key={candidate.candidateId}
+                                         class="kanban-card"
+                                         draggable="true"
+                                         data-candidate-id={candidate.candidateId}
+                                         data-alc-id={candidate.alcId}
+                                         data-stage={stageGroup.stage}
+                                         ondragstart={handleDragStart}
+                                         ondblclick={handleCardDoubleClick}>
+                                        <div class="slds-media slds-media_small">
+                                            <div class="slds-media__figure">
+                                                <lightning-icon icon-name="standard:contact" size="x-small"></lightning-icon>
+                                            </div>
+                                            <div class="slds-media__body">
+                                                <h4 class="slds-text-body_regular slds-m-bottom_xx-small" title={candidate.candidateName}>
+                                                    {candidate.candidateName}
+                                                </h4>
+                                                <div class="slds-text-body_small slds-text-color_weak">
+                                                    <lightning-formatted-date-time 
+                                                        value={candidate.lastStageChange} 
+                                                        year="numeric" 
+                                                        month="short" 
+                                                        day="numeric">
+                                                    </lightning-formatted-date-time>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="drag-handle">
+                                            <lightning-icon icon-name="utility:drag_and_drop" size="xx-small" alternative-text="Drag to move"></lightning-icon>
+                                        </div>
+                                    </div>
+                                </template>
+                            </div>
+                        </div>
+                    </template>
+                </div>
+            </template>
+
+            <template if:false={hasData}>
+                <template if:false={isLoading}>
+                    <div class="slds-align_absolute-center slds-p-around_large">
+                        <div class="slds-text-align_center">
+                            <lightning-icon icon-name="utility:info" size="large" alternative-text="No data"></lightning-icon>
+                            <p class="slds-text-heading_small slds-m-top_small">{noDataMessage}</p>
+                        </div>
+                    </div>
+                </template>
+            </template>
+
+            <template if:true={error}>
+                <div class="slds-p-around_medium">
+                    <div class="slds-notify slds-notify_alert slds-alert_error" role="alert">
+                        <span class="slds-assistive-text">Error</span>
+                        <h2>Error loading candidates</h2>
+                    </div>
+                </div>
+            </template>
+        </div>
+    </lightning-card>
+</template>

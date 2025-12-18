@@ -1,0 +1,553 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <actionCalls>
+        <description>Send first reminder email 5 days after ALC creation</description>
+        <name>Send_5_Day_Reminder_Email</name>
+        <label>Send 5 Day Reminder Email</label>
+        <locationX>176</locationX>
+        <locationY>350</locationY>
+        <actionName>emailSimple</actionName>
+        <actionType>emailSimple</actionType>
+        <connector>
+            <targetReference>Log_5_Day_Email</targetReference>
+        </connector>
+        <flowTransactionModel>CurrentTransaction</flowTransactionModel>
+        <inputParameters>
+            <name>emailAddresses</name>
+            <value>
+                <elementReference>Loop_ALC_Records.Personal_Email_Address__c</elementReference>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>senderAddress</name>
+            <value>
+                <stringValue>noreply@financialguide.com</stringValue>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>emailSubject</name>
+            <value>
+                <stringValue>Reminder: Complete Your MassMutual Agent Application</stringValue>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>emailBody</name>
+            <value>
+                <elementReference>EmailBody_5Day</elementReference>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>sendRichBody</name>
+            <value>
+                <booleanValue>true</booleanValue>
+            </value>
+        </inputParameters>
+        <nameSegment>emailSimple</nameSegment>
+        <versionSegment>1</versionSegment>
+    </actionCalls>
+    <actionCalls>
+        <description>Send urgent reminder email 10 days after ALC creation</description>
+        <name>Send_10_Day_Urgent_Reminder</name>
+        <label>Send 10 Day Urgent Reminder</label>
+        <locationX>440</locationX>
+        <locationY>350</locationY>
+        <actionName>emailSimple</actionName>
+        <actionType>emailSimple</actionType>
+        <connector>
+            <targetReference>Log_10_Day_Email</targetReference>
+        </connector>
+        <flowTransactionModel>CurrentTransaction</flowTransactionModel>
+        <inputParameters>
+            <name>emailAddresses</name>
+            <value>
+                <elementReference>Loop_ALC_Records.Personal_Email_Address__c</elementReference>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>senderAddress</name>
+            <value>
+                <stringValue>noreply@financialguide.com</stringValue>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>emailSubject</name>
+            <value>
+                <stringValue>URGENT: Action Required - Complete Your Agent Application</stringValue>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>emailBody</name>
+            <value>
+                <elementReference>EmailBody_10Day</elementReference>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>sendRichBody</name>
+            <value>
+                <booleanValue>true</booleanValue>
+            </value>
+        </inputParameters>
+        <nameSegment>emailSimple</nameSegment>
+        <versionSegment>1</versionSegment>
+    </actionCalls>
+    <recordCreates>
+        <description>Create urgent task for Rachyll Tenny after 12 days</description>
+        <name>Create_Urgent_Follow_Up_Task</name>
+        <label>Create Urgent Follow Up Task</label>
+        <locationX>704</locationX>
+        <locationY>350</locationY>
+        <connector>
+            <targetReference>Update_12_Day_Task_Created</targetReference>
+        </connector>
+        <inputAssignments>
+            <field>OwnerId</field>
+            <value>
+                <stringValue>0055f00000DqpnpAAB</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Subject</field>
+            <value>
+                <stringValue>URGENT: Follow up on incomplete ALC application</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Description</field>
+            <value>
+                <elementReference>TaskDescription</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Priority</field>
+            <value>
+                <stringValue>High</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Status</field>
+            <value>
+                <stringValue>Not Started</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>ActivityDate</field>
+            <value>
+                <elementReference>$Flow.CurrentDate</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>WhatId</field>
+            <value>
+                <elementReference>Loop_ALC_Records.Id</elementReference>
+            </value>
+        </inputAssignments>
+        <object>Task</object>
+    </recordCreates>
+    <recordCreates>
+        <description>Log 5 day reminder email to EmailMessage</description>
+        <name>Log_5_Day_Email</name>
+        <label>Log 5 Day Email</label>
+        <locationX>176</locationX>
+        <locationY>458</locationY>
+        <connector>
+            <targetReference>Update_5_Day_Reminder_Sent</targetReference>
+        </connector>
+        <inputAssignments>
+            <field>RelatedToId</field>
+            <value>
+                <elementReference>Loop_ALC_Records.Id</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Subject</field>
+            <value>
+                <stringValue>Reminder: Complete Your MassMutual Agent Application</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>TextBody</field>
+            <value>
+                <elementReference>EmailBody_5Day</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>ToAddress</field>
+            <value>
+                <elementReference>Loop_ALC_Records.Personal_Email_Address__c</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Status</field>
+            <value>
+                <stringValue>3</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>MessageDate</field>
+            <value>
+                <elementReference>$Flow.CurrentDateTime</elementReference>
+            </value>
+        </inputAssignments>
+        <object>EmailMessage</object>
+    </recordCreates>
+    <recordCreates>
+        <description>Log 10 day urgent reminder email to EmailMessage</description>
+        <name>Log_10_Day_Email</name>
+        <label>Log 10 Day Email</label>
+        <locationX>440</locationX>
+        <locationY>458</locationY>
+        <connector>
+            <targetReference>Update_10_Day_Reminder_Sent</targetReference>
+        </connector>
+        <inputAssignments>
+            <field>RelatedToId</field>
+            <value>
+                <elementReference>Loop_ALC_Records.Id</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Subject</field>
+            <value>
+                <stringValue>URGENT: Action Required - Complete Your Agent Application</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>TextBody</field>
+            <value>
+                <elementReference>EmailBody_10Day</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>ToAddress</field>
+            <value>
+                <elementReference>Loop_ALC_Records.Personal_Email_Address__c</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Status</field>
+            <value>
+                <stringValue>3</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>MessageDate</field>
+            <value>
+                <elementReference>$Flow.CurrentDateTime</elementReference>
+            </value>
+        </inputAssignments>
+        <object>EmailMessage</object>
+    </recordCreates>
+    <apiVersion>65.0</apiVersion>
+    <decisions>
+        <description>Check how many days have passed since ALC creation</description>
+        <name>Check_Days_Since_Creation</name>
+        <label>Check Days Since Creation</label>
+        <locationX>176</locationX>
+        <locationY>242</locationY>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>Day_5_Send_First_Reminder</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>DaysSinceCreation</leftValueReference>
+                <operator>GreaterThanOrEqualTo</operator>
+                <rightValue>
+                    <numberValue>5.0</numberValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>DaysSinceCreation</leftValueReference>
+                <operator>LessThan</operator>
+                <rightValue>
+                    <numberValue>10.0</numberValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>Loop_ALC_Records.Reminder_5_Day_Sent__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Send_5_Day_Reminder_Email</targetReference>
+            </connector>
+            <label>Day 5 - Send First Reminder</label>
+        </rules>
+        <rules>
+            <name>Day_10_Send_Urgent_Reminder</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>DaysSinceCreation</leftValueReference>
+                <operator>GreaterThanOrEqualTo</operator>
+                <rightValue>
+                    <numberValue>10.0</numberValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>DaysSinceCreation</leftValueReference>
+                <operator>LessThan</operator>
+                <rightValue>
+                    <numberValue>12.0</numberValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>Loop_ALC_Records.Reminder_10_Day_Sent__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Send_10_Day_Urgent_Reminder</targetReference>
+            </connector>
+            <label>Day 10 - Send Urgent Reminder</label>
+        </rules>
+        <rules>
+            <name>Day_12_Create_Task</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>DaysSinceCreation</leftValueReference>
+                <operator>GreaterThanOrEqualTo</operator>
+                <rightValue>
+                    <numberValue>12.0</numberValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>Loop_ALC_Records.Urgent_Task_Created__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Create_Urgent_Follow_Up_Task</targetReference>
+            </connector>
+            <label>Day 12 - Create Task</label>
+        </rules>
+    </decisions>
+    <description>Automated follow-up for ALC records stuck in Initial Form Sent stage:
+- Day 5: Send reminder email to candidate
+- Day 10: Send urgent reminder email
+- Day 12: Create urgent task for Rachyll Tenny</description>
+    <environments>Default</environments>
+    <formulas>
+        <description>Calculate days since ALC record was created</description>
+        <name>DaysSinceCreation</name>
+        <dataType>Number</dataType>
+        <expression>TODAY() - DATEVALUE({!Loop_ALC_Records.CreatedDate})</expression>
+        <scale>0</scale>
+    </formulas>
+    <interviewLabel>ALC Application Follow Up Reminders {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>ALC Application Follow Up Reminders</label>
+    <loops>
+        <description>Loop through ALC records in Initial Form Sent stage</description>
+        <name>Loop_ALC_Records</name>
+        <label>Loop ALC Records</label>
+        <locationX>176</locationX>
+        <locationY>134</locationY>
+        <collectionReference>Get_ALC_Records_Initial_Form_Sent</collectionReference>
+        <iterationOrder>Asc</iterationOrder>
+        <nextValueConnector>
+            <targetReference>Check_Days_Since_Creation</targetReference>
+        </nextValueConnector>
+    </loops>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>AUTO_LAYOUT_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>OriginBuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>AutoLaunchedFlow</processType>
+    <recordLookups>
+        <description>Get all ALC records stuck in Initial Form Sent stage</description>
+        <name>Get_ALC_Records_Initial_Form_Sent</name>
+        <label>Get ALC Records - Initial Form Sent</label>
+        <locationX>176</locationX>
+        <locationY>50</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Loop_ALC_Records</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Stage__c</field>
+            <operator>EqualTo</operator>
+            <value>
+                <stringValue>Initial Form Sent</stringValue>
+            </value>
+        </filters>
+        <filters>
+            <field>Personal_Email_Address__c</field>
+            <operator>IsNull</operator>
+            <value>
+                <booleanValue>false</booleanValue>
+            </value>
+        </filters>
+        <getFirstRecordOnly>false</getFirstRecordOnly>
+        <object>ALC__c</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <recordUpdates>
+        <description>Mark that 5 day reminder was sent</description>
+        <name>Update_5_Day_Reminder_Sent</name>
+        <label>Update 5 Day Reminder Sent</label>
+        <locationX>176</locationX>
+        <locationY>566</locationY>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Id</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>Loop_ALC_Records.Id</elementReference>
+            </value>
+        </filters>
+        <inputAssignments>
+            <field>Reminder_5_Day_Sent__c</field>
+            <value>
+                <booleanValue>true</booleanValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Last_Reminder_Date__c</field>
+            <value>
+                <elementReference>$Flow.CurrentDate</elementReference>
+            </value>
+        </inputAssignments>
+        <object>ALC__c</object>
+    </recordUpdates>
+    <recordUpdates>
+        <description>Mark that 10 day urgent reminder was sent</description>
+        <name>Update_10_Day_Reminder_Sent</name>
+        <label>Update 10 Day Reminder Sent</label>
+        <locationX>440</locationX>
+        <locationY>566</locationY>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Id</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>Loop_ALC_Records.Id</elementReference>
+            </value>
+        </filters>
+        <inputAssignments>
+            <field>Reminder_10_Day_Sent__c</field>
+            <value>
+                <booleanValue>true</booleanValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Last_Reminder_Date__c</field>
+            <value>
+                <elementReference>$Flow.CurrentDate</elementReference>
+            </value>
+        </inputAssignments>
+        <object>ALC__c</object>
+    </recordUpdates>
+    <recordUpdates>
+        <description>Mark that urgent task was created</description>
+        <name>Update_12_Day_Task_Created</name>
+        <label>Update 12 Day Task Created</label>
+        <locationX>704</locationX>
+        <locationY>458</locationY>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Id</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>Loop_ALC_Records.Id</elementReference>
+            </value>
+        </filters>
+        <inputAssignments>
+            <field>Urgent_Task_Created__c</field>
+            <value>
+                <booleanValue>true</booleanValue>
+            </value>
+        </inputAssignments>
+        <object>ALC__c</object>
+    </recordUpdates>
+    <start>
+        <locationX>50</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>Get_ALC_Records_Initial_Form_Sent</targetReference>
+        </connector>
+        <schedule>
+            <frequency>Daily</frequency>
+            <startDate>2025-12-10</startDate>
+            <startTime>09:00:00.000Z</startTime>
+        </schedule>
+        <triggerType>Scheduled</triggerType>
+    </start>
+    <status>Active</status>
+    <textTemplates>
+        <description>Email body for 5 day reminder</description>
+        <name>EmailBody_5Day</name>
+        <isViewedAsPlainText>false</isViewedAsPlainText>
+        <text>&lt;p&gt;Dear {!Loop_ALC_Records.First_Name__c} {!Loop_ALC_Records.Last_Name__c},&lt;/p&gt;
+
+&lt;p&gt;We noticed that you haven't completed your MassMutual Agent application yet. We're excited about the possibility of you joining our team!&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Please take a few minutes to complete your application.&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;If you have any questions or need assistance, please don't hesitate to reach out to us.&lt;/p&gt;
+
+&lt;p&gt;Best regards,&lt;br/&gt;
+MassMutual Recruiting Team&lt;/p&gt;</text>
+    </textTemplates>
+    <textTemplates>
+        <description>Email body for 10 day urgent reminder</description>
+        <name>EmailBody_10Day</name>
+        <isViewedAsPlainText>false</isViewedAsPlainText>
+        <text>&lt;p&gt;Dear {!Loop_ALC_Records.First_Name__c} {!Loop_ALC_Records.Last_Name__c},&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;URGENT: Action Required&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;Your MassMutual Agent application has been pending for 10 days. We want to ensure you don't miss this opportunity!&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Please complete your application within the next 2 days to continue the process.&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;If you're experiencing any issues or have questions, please contact us immediately at rtenny@financialguide.com.&lt;/p&gt;
+
+&lt;p&gt;We look forward to hearing from you soon.&lt;/p&gt;
+
+&lt;p&gt;Best regards,&lt;br/&gt;
+MassMutual Recruiting Team&lt;/p&gt;</text>
+    </textTemplates>
+    <textTemplates>
+        <description>Task description for 12 day follow up</description>
+        <name>TaskDescription</name>
+        <isViewedAsPlainText>false</isViewedAsPlainText>
+        <text>URGENT: Follow up with {!Loop_ALC_Records.First_Name__c} {!Loop_ALC_Records.Last_Name__c} regarding their incomplete ALC application.
+
+ALC Record: {!Loop_ALC_Records.Name}
+Email: {!Loop_ALC_Records.Personal_Email_Address__c}
+Stage: {!Loop_ALC_Records.Stage__c}
+Days in Initial Form Sent: {!DaysSinceCreation}
+
+Action Required:
+Contact the applicant to determine why they have not completed and returned their application. Document their response and next steps.</text>
+    </textTemplates>
+    <variables>
+        <name>RachyllTennyUserId</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+        <value>
+            <stringValue>0055f00000DqpnpAAB</stringValue>
+        </value>
+    </variables>
+</Flow>

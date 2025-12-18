@@ -1,0 +1,265 @@
+/* Main Component Container */
+.calls-component-container {
+  padding: 1rem;
+  background: #f3f3f3;
+  border-radius: 0.5rem;
+}
+
+/* Modal Container */
+.slds-modal_medium .slds-modal__container {
+  max-width: 50rem;
+  width: 90%;
+}
+
+/* Section Styling */
+.calls-section {
+  background: #ffffff;
+  border-radius: 0.5rem;
+  padding: 1rem;
+  height: 100%;
+  min-height: 400px;
+  border: 1px solid #e5e5e5;
+}
+
+/* Section Header */
+.section-header {
+  display: flex;
+  align-items: center;
+  padding-bottom: 0.75rem;
+  margin-bottom: 1rem;
+  border-bottom: 2px solid #0070d2;
+}
+
+.pastdue-header {
+  border-bottom-color: #c23934;
+}
+
+.section-header h3 {
+  flex-grow: 1;
+  margin: 0;
+  font-weight: 600;
+  color: #080707;
+}
+
+.call-count {
+  background: #0070d2;
+  color: white;
+  padding: 0.25rem 0.75rem;
+  border-radius: 1rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  min-width: 2rem;
+  text-align: center;
+}
+
+.pastdue-count {
+  background: #c23934;
+}
+
+/* Calls List */
+.calls-list {
+  max-height: 500px;
+  overflow-y: auto;
+  padding-right: 0.5rem;
+}
+
+/* Custom Scrollbar */
+.calls-list::-webkit-scrollbar {
+  width: 6px;
+}
+
+.calls-list::-webkit-scrollbar-track {
+  background: #f4f6f9;
+  border-radius: 3px;
+}
+
+.calls-list::-webkit-scrollbar-thumb {
+  background: #c9c9c9;
+  border-radius: 3px;
+}
+
+.calls-list::-webkit-scrollbar-thumb:hover {
+  background: #a8a8a8;
+}
+
+/* Call Card */
+.call-card {
+  background: #ffffff;
+  border-radius: 0.5rem;
+  padding: 1rem;
+  margin-bottom: 1rem;
+  border-left: 4px solid #0070d2;
+  transition: all 0.2s ease;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+}
+
+.call-card:hover {
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+  transform: translateY(-2px);
+  background: #fafafa;
+}
+
+.scheduled-card {
+  border-left-color: #0070d2;
+}
+
+.pastdue-card {
+  border-left-color: #c23934;
+  background: #fef5f5;
+}
+
+/* Call Header */
+.call-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 0.75rem;
+  gap: 0.5rem;
+}
+
+.candidate-name {
+  font-weight: 600;
+  font-size: 1rem;
+  color: #080707;
+}
+
+/* Call Details */
+.call-details {
+  margin-bottom: 1rem;
+}
+
+.detail-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+  font-size: 0.875rem;
+}
+
+.detail-row lightning-icon {
+  margin-top: 0.125rem;
+}
+
+.detail-text {
+  color: #3e3e3c;
+  line-height: 1.4;
+}
+
+.pastdue-text {
+  color: #c23934;
+  font-weight: 600;
+}
+
+.description {
+  margin-top: 0.5rem;
+  padding-left: 1.5rem;
+}
+
+.description .detail-text {
+  font-style: italic;
+  color: #706e6b;
+}
+
+.warning-icon {
+  color: #fe9339;
+}
+
+/* Call Actions */
+.call-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.5rem;
+  padding-top: 0.5rem;
+  border-top: 1px solid #dddbda;
+}
+
+.view-button,
+.complete-button {
+  width: auto;
+}
+
+/* Empty State */
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem 1rem;
+  text-align: center;
+  min-height: 300px;
+}
+
+.success-icon {
+  color: #2e844a;
+}
+
+.empty-state p {
+  margin: 0.25rem 0;
+}
+
+/* Modal Content Enhancement */
+.slds-modal__content {
+  background: #fafafa;
+}
+
+.slds-modal__header {
+  background: linear-gradient(135deg, #003366 0%, #0070d2 100%);
+}
+
+.slds-modal__header h2 {
+  color: white;
+}
+
+.slds-modal__close {
+  color: white !important;
+}
+
+/* Call Information Card */
+.slds-theme_shade {
+  background: linear-gradient(135deg, #e8f4f8 0%, #d4e9f7 100%);
+  border-left: 4px solid #0070d2;
+}
+
+.slds-text-title {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #706e6b;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* Form Fields Styling */
+lightning-input,
+lightning-combobox,
+lightning-textarea {
+  --slds-c-input-shadow-focus: 0 0 3px #0070d2;
+}
+
+/* Modal Footer Enhancement */
+.slds-modal__footer {
+  display: flex;
+  justify-content: space-between;
+  background: #f3f3f3;
+  border-top: 1px solid #e5e5e5;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .slds-modal_large .slds-modal__container {
+    width: 95%;
+  }
+  
+  .calls-section {
+    min-height: 300px;
+    margin-bottom: 1rem;
+  }
+  
+  .calls-list {
+    max-height: 300px;
+  }
+}
+
+/* Loading State */
+.slds-align_absolute-center {
+  min-height: 400px;
+}

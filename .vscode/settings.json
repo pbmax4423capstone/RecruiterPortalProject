@@ -13,5 +13,6 @@
     "**/.DS_Store": true,
     "**/Thumbs.db": true,
     ".mule": true
-  }
+  },
+  "gitflow.disableOnRepo": true
 }

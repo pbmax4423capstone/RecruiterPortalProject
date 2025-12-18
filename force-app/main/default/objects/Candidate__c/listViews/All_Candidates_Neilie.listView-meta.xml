@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ListView xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>All_Candidates_Neilie</fullName>
+    <columns>NAME</columns>
+    <columns>Highest_Level_Achieved__c</columns>
+    <columns>Email__c</columns>
+    <columns>Agency__c</columns>
+    <columns>Candidate_Sourced_By__c</columns>
+    <filterScope>Everything</filterScope>
+    <filters>
+        <field>RECORDTYPE</field>
+        <operation>equals</operation>
+    </filters>
+    <filters>
+        <field>RecruiterPicklist__c</field>
+        <operation>equals</operation>
+    </filters>
+    <label>All Candidates- Neilie</label>
+    <sharedTo>
+        <role>COO</role>
+    </sharedTo>
+</ListView>

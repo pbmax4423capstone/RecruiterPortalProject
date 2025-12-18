@@ -1,0 +1,228 @@
+<template>
+    <article class={containerClass}>
+        <!-- Header -->
+        <div class="slds-card__header slds-grid slds-grid_align-spread">
+            <header class="slds-media slds-media_center slds-has-flexi-truncate">
+                <div class="slds-media__figure">
+                    <lightning-icon icon-name="standard:case" size="small" alternative-text="Cases"></lightning-icon>
+                </div>
+                <div class="slds-media__body">
+                    <h2 class="slds-card__header-title">
+                        <span>Unassigned Cases</span>
+                        <template if:true={totalCases}>
+                            <lightning-badge label={totalCases} class="slds-m-left_small case-count-badge"></lightning-badge>
+                        </template>
+                    </h2>
+                    <p class="slds-text-body_small slds-line-height_reset">Cases awaiting assignment</p>
+                </div>
+            </header>
+            <div class="slds-no-flex">
+                <lightning-button-group>
+                    <lightning-button-icon
+                        icon-name={viewToggleIcon}
+                        variant="border-filled"
+                        alternative-text={viewToggleLabel}
+                        title={viewToggleLabel}
+                        onclick={toggleView}>
+                    </lightning-button-icon>
+                    <lightning-button-icon
+                        icon-name="utility:refresh"
+                        variant="border-filled"
+                        alternative-text="Refresh"
+                        title="Refresh cases"
+                        onclick={handleRefresh}>
+                    </lightning-button-icon>
+                </lightning-button-group>
+            </div>
+        </div>
+
+        <!-- Loading State -->
+        <template if:true={isLoading}>
+            <div class="slds-card__body slds-card__body_inner">
+                <div class="slds-text-align_center slds-p-vertical_large">
+                    <lightning-spinner alternative-text="Loading cases..." size="medium"></lightning-spinner>
+                    <p class="slds-m-top_small slds-text-body_small">Loading unassigned cases...</p>
+                </div>
+            </div>
+        </template>
+
+        <!-- Error State -->
+        <template if:true={error}>
+            <div class="slds-card__body slds-card__body_inner">
+                <div class="slds-illustration slds-illustration_small">
+                    <div class="slds-text-align_center">
+                        <lightning-icon icon-name="utility:error" size="large" variant="error"></lightning-icon>
+                        <h3 class="slds-illustration__header slds-text-heading_medium">Error Loading Cases</h3>
+                        <p class="slds-text-body_regular">There was a problem loading unassigned cases. Please try refreshing.</p>
+                        <lightning-button 
+                            label="Retry" 
+                            variant="brand" 
+                            onclick={handleRefresh}
+                            class="slds-m-top_medium">
+                        </lightning-button>
+                    </div>
+                </div>
+            </div>
+        </template>
+
+        <!-- Empty State -->
+        <template if:false={isLoading}>
+            <template if:false={error}>
+                <template if:false={hasCases}>
+                    <div class="slds-card__body slds-card__body_inner">
+                        <div class="slds-illustration slds-illustration_small empty-state">
+                            <div class="slds-text-align_center">
+                                <lightning-icon icon-name="utility:success" size="large" class="success-icon"></lightning-icon>
+                                <h3 class="slds-illustration__header slds-text-heading_medium">All Caught Up!</h3>
+                                <p class="slds-text-body_regular">There are no unassigned cases at the moment.</p>
+                                <p class="slds-text-body_small slds-text-color_weak">Great job keeping up with case assignments!</p>
+                            </div>
+                        </div>
+                    </div>
+                </template>
+            </template>
+        </template>
+
+        <!-- Cases List -->
+        <template if:true={hasCases}>
+            <div class="slds-card__body cases-container">
+                <!-- Compact View -->
+                <template if:true={showCompactView}>
+                    <ul class="slds-has-dividers_top-space compact-list">
+                        <template for:each={cases} for:item="caseItem">
+                            <li key={caseItem.Id} class="slds-item case-item-compact" data-case-id={caseItem.Id} onclick={handleCaseClick}>
+                                <div class="slds-grid slds-grid_align-spread slds-grid_vertical-align-center slds-p-horizontal_small slds-p-vertical_x-small">
+                                    <div class="slds-col slds-has-flexi-truncate">
+                                        <div class="slds-grid slds-grid_vertical-align-center">
+                                            <span class={caseItem.priorityClass}></span>
+                                            <div class="slds-truncate slds-m-left_x-small">
+                                                <strong>{caseItem.CaseNumber}</strong>
+                                                <template if:true={caseItem.hasSubject}>
+                                                    <span class="slds-m-left_x-small">{caseItem.truncatedSubject}</span>
+                                                </template>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="slds-col slds-no-flex">
+                                        <div class="slds-grid slds-grid_align-end slds-grid_vertical-align-center">
+                                            <span class="slds-text-body_small slds-text-color_weak slds-m-right_small">{caseItem.timeAgo}</span>
+                                            <lightning-button-icon
+                                                icon-name="utility:preview"
+                                                variant="border-filled"
+                                                alternative-text="View case details"
+                                                title="View case details"
+                                                size="x-small"
+                                                data-case-id={caseItem.Id}
+                                                onclick={handleViewCase}
+                                                class="slds-m-right_xx-small">
+                                            </lightning-button-icon>
+                                            <lightning-button-icon
+                                                icon-name="utility:user"
+                                                variant="border-filled"
+                                                alternative-text="Accept case"
+                                                title="Accept this case"
+                                                size="x-small"
+                                                data-case-id={caseItem.Id}
+                                                onclick={handleAcceptCase}
+                                                disabled={selectedCaseId}>
+                                            </lightning-button-icon>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                        </template>
+                    </ul>
+                </template>
+
+                <!-- Expanded View (Card Layout) -->
+                <template if:false={showCompactView}>
+                    <div class="slds-grid slds-wrap slds-gutters_small">
+                        <template for:each={cases} for:item="caseItem">
+                            <div key={caseItem.Id} class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2 slds-large-size_1-of-3">
+                                <article class="case-card" data-case-id={caseItem.Id} onclick={handleCaseClick}>
+                                    <div class="case-card-header">
+                                        <div class="slds-grid slds-grid_align-spread slds-grid_vertical-align-start">
+                                            <div class="slds-col slds-has-flexi-truncate">
+                                                <div class="slds-grid slds-grid_vertical-align-center">
+                                                    <span class={caseItem.priorityClass}></span>
+                                                    <h3 class="case-number slds-m-left_x-small">{caseItem.CaseNumber}</h3>
+                                                </div>
+                                            </div>
+                                            <div class="slds-col slds-no-flex">
+                                                <div class="slds-grid">
+                                                    <lightning-button-icon
+                                                        icon-name="utility:preview"
+                                                        variant="border-filled"
+                                                        alternative-text="View case details"
+                                                        title="View case details"
+                                                        size="small"
+                                                        data-case-id={caseItem.Id}
+                                                        onclick={handleViewCase}
+                                                        class="slds-m-right_xx-small">
+                                                    </lightning-button-icon>
+                                                    <lightning-button-icon
+                                                        icon-name="utility:user"
+                                                        variant="border-filled"
+                                                        alternative-text="Accept case"
+                                                        title="Accept this case"
+                                                        size="small"
+                                                        data-case-id={caseItem.Id}
+                                                        onclick={handleAcceptCase}
+                                                        disabled={selectedCaseId}>
+                                                    </lightning-button-icon>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="case-card-body">
+                                        <template if:true={caseItem.hasSubject}>
+                                            <p class="case-subject">{caseItem.Subject}</p>
+                                        </template>
+                                        <template if:false={caseItem.hasSubject}>
+                                            <p class="case-subject no-subject">No subject provided</p>
+                                        </template>
+                                        
+                                        <div class="case-meta slds-m-top_small">
+                                            <div class="slds-grid slds-grid_align-spread slds-text-body_small">
+                                                <div class="slds-col">
+                                                    <span class={caseItem.statusClass}>{caseItem.Status}</span>
+                                                </div>
+                                                <div class="slds-col slds-text-align_right">
+                                                    <span class="slds-text-color_weak">{caseItem.timeAgo}</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </article>
+                            </div>
+                        </template>
+                    </div>
+                </template>
+            </div>
+
+            <!-- Footer -->
+            <footer class="slds-card__footer">
+                <div class="slds-text-align_center">
+                    <lightning-button 
+                        label="View All Unassigned Cases" 
+                        variant="neutral" 
+                        onclick={handleViewAll}
+                        icon-name="utility:open">
+                    </lightning-button>
+                </div>
+            </footer>
+        </template>
+    </article>
+
+    <!-- Case Record Modal -->
+    <template if:true={showCaseModal}>
+        <c-case-record-modal
+            case-id={selectedCaseId}
+            dark-mode={darkMode}
+            is-unassigned="true"
+            onclose={handleCloseModal}
+            oncaseaccepted={handleCaseAcceptedFromModal}>
+        </c-case-record-modal>
+    </template>
+</template>

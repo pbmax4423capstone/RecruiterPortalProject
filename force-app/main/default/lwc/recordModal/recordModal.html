@@ -1,0 +1,68 @@
+<template>
+    <div class={modalClass} role="dialog" tabindex="-1" aria-modal="true" onclick={handleBackdropClick}>
+        <div class="slds-modal__container" onclick={stopPropagation}>
+            <!-- Modal Header -->
+            <header class="slds-modal__header slds-modal__header_empty">
+                <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" 
+                        title="Close" onclick={handleClose}>
+                    <lightning-icon icon-name="utility:close" alternative-text="close" size="large"></lightning-icon>
+                    <span class="slds-assistive-text">Close</span>
+                </button>
+                
+                <div class="slds-media slds-media_center">
+                    <div class="slds-media__figure">
+                        <lightning-icon icon-name={objectIcon} 
+                                      variant="inverse" 
+                                      size="medium" 
+                                      class="slds-icon-standard-case"></lightning-icon>
+                    </div>
+                    <div class="slds-media__body">
+                        <h2 class="slds-text-heading_medium slds-hyphenate modal-title">
+                            {recordName}
+                        </h2>
+                        <p class="slds-text-body_small modal-subtitle">{objectLabel}</p>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Modal Body -->
+            <div class="slds-modal__content slds-p-around_medium modal-content">
+                <template lwc:if={isLoading}>
+                    <div class="slds-align_absolute-center slds-p-around_large">
+                        <lightning-spinner alternative-text="Loading" size="medium"></lightning-spinner>
+                    </div>
+                </template>
+
+                <template lwc:elseif={error}>
+                    <div class="slds-notify slds-notify_alert slds-theme_alert-texture slds-theme_error" role="alert">
+                        <span class="slds-assistive-text">Error</span>
+                        <h2>Error loading record: {error.body.message}</h2>
+                    </div>
+                </template>
+
+                <template lwc:else>
+                    <!-- Dynamic Record Display using Lightning Record Form for better handling -->
+                    <div class="record-form-container">
+                        <lightning-record-form
+                            record-id={recordId}
+                            object-api-name={objectApiName}
+                            mode="readonly"
+                            density="compact"
+                            columns="2">
+                        </lightning-record-form>
+                    </div>
+                </template>
+            </div>
+
+            <!-- Modal Footer -->
+            <footer class="slds-modal__footer modal-footer">
+                <button class="slds-button slds-button_neutral" onclick={handleClose}>Close</button>
+                <button class="slds-button slds-button_brand" onclick={handleEdit}>Edit</button>
+                <button class="slds-button slds-button_outline-brand" onclick={handleViewFullRecord}>View Full Record</button>
+            </footer>
+        </div>
+    </div>
+    
+    <!-- Modal Backdrop -->
+    <div class="slds-backdrop slds-backdrop_open modal-backdrop"></div>
+</template>

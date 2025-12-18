@@ -1,0 +1,1112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<RecordType xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Candidate</fullName>
+    <active>true</active>
+    <compactLayoutAssignment>Candidate_Layout</compactLayoutAssignment>
+    <label>Candidate</label>
+    <picklistValues>
+        <picklist>AI_Conducted_By__c</picklist>
+        <values>
+            <fullName>Brad Sofonia</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Brooke Ianni</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Diljeet Masuda</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Elizabeth Kagele</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Jonathan Gruber</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Manuel Hernandez</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Michael Yang</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Rachyll Tenny</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Scott Grove</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Scott Primm</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Simon Reyes</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Son Le</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Tim Denton</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Van Hess</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Agency__c</picklist>
+        <values>
+            <fullName>A007</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>A026</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>A157</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>A255</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Attraction_Conducted_by__c</picklist>
+        <values>
+            <fullName>Brad Sofonia</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Brooke Ianni</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Diljeet Masuda</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Joy Avedesian</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Rachyll Tenny</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Scott Primm</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Tim Denton</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Van Hess</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>CP_Conducted_By__c</picklist>
+        <values>
+            <fullName>Brad Sofonia</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Brooke Ianni</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Diljeet Masuda</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Elizabeth Kagele</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Jonathan Gruber</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Manuel Hernandez</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Michael Yang</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Rachyll Tenny</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Scott Grove</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Scott Primm</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Simon Reyes</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Son Le</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Tim Denton</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Van Hess</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>CP_Interviewer__c</picklist>
+        <values>
+            <fullName>Brad Sofonia</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Diljeet Masuda</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Joy Avedesian</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Scott Grove</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Scott Primm</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Tim Denton</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Van Hess</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Candidate_Rating__c</picklist>
+        <values>
+            <fullName>A</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>B</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>C</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>D</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Hot</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Career_Conducted_by__c</picklist>
+        <values>
+            <fullName>Andrew Moore</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Brady Murray</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Brooke Ianni</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Diljeet Masuda</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Jonathan Gruber</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Joy Avedesian</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Rachyll Tenny</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Scott Grove</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Scott Primm</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Tim Denton</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Van Hess</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Career_Presentation_ppt__c</picklist>
+        <values>
+            <fullName>No</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Yes</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Contract_Type__c</picklist>
+        <values>
+            <fullName>Broker</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Career Contract</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>College Intern</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Contract B</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Device_Inspection_Status__c</picklist>
+        <values>
+            <fullName>Failed</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Not Scheduled</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Passed</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Scheduled</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Education__c</picklist>
+        <values>
+            <fullName>Associate%27s Degree</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>BA%2FBS</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>HS Diploma</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>MA%2FMS%2FMBA</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Ph%2ED%2E</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Post Doc</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Gender__c</picklist>
+        <values>
+            <fullName>Female</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Male</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Highest_Level_Achieved__c</picklist>
+        <values>
+            <fullName>0-Prequal</fullName>
+            <default>true</default>
+        </values>
+        <values>
+            <fullName>6-Offer Acc</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>7-Contracted</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Align %282nd%29</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Ci_1st</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Optional_5th</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Plan_3rd</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Present-4th</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>MDE200__c</picklist>
+        <values>
+            <fullName>No</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Yes</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>MMLISI_Registration__c</picklist>
+        <values>
+            <fullName>No</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Yes</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>MS_10__c</picklist>
+        <values>
+            <fullName>No</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Yes</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Next_Step__c</picklist>
+        <values>
+            <fullName>Attend Pre-Launch</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Close Record</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Contracted_A</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>F%2Fup of MDE - P200</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>F%2Fup of MS</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>F%2Fup to schedule AI</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>F%2Fup to schedule CP</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>F%2Fup to schedule Pre-Launch Meeting</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>F%2Fup to schedule SI 1</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>F%2Fup to schedule SI 2</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>In Background Check</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Keep In Touch</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Post Background Check</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>SOE %2F Financial %2F Crim</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Sent A Codes</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Sent B Codes</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Sent to ASO</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Office_Location_Picklist__c</picklist>
+        <values>
+            <fullName>Bakersfield</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>KoreaTown</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Las Vegas</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Los Angeles</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Newport Beach</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Roseville</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Utah</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Position__c</picklist>
+        <values>
+            <fullName>Agent</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Agent Assistant</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Registrant</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Sales Manager</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Staff</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>RELATIONSHIPS__c</picklist>
+        <values>
+            <fullName>In A Relaionship with Kids</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>In A Relationship- No Kids</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Married</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Single</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Recruit_Source_Temp__c</picklist>
+        <values>
+            <fullName>Cold Source</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Warm Source</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>RecruiterPicklist__c</picklist>
+        <values>
+            <fullName>Brooke Ianni</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Rachyll Tenny</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Susan Kim</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Recruiting_Source__c</picklist>
+        <values>
+            <fullName>Advertising</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Agency%2FMassMutual</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Career Fair%2FTrade Show</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>College</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Employment%2FStaffing Agency</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Home Office Lead</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Internet</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>LinkedIn</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Networking Event</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Personal Observation</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Recruiter</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Referral</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>SI1_Conducted_by__c</picklist>
+        <values>
+            <fullName>Brad Sofonia</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Brooke Ianni</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Diljeet Masuda</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Joy Avedesian</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Rachyll Tenny</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Scott Grove</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Scott Primm</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Tim Denton</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Van Hess</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>SI2_Conducted_by__c</picklist>
+        <values>
+            <fullName>Brad Sofonia</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Brooke Ianni</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Diljeet Masuda</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Rachyll Tenny</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Scott Grove</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Scott Primm</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Tim Denton</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Van Hess</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>SI3_Conducted_by__c</picklist>
+        <values>
+            <fullName>Brad Sofonia</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Brooke Ianni</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Diljeet Masuda</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Scott Grove</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Scott Primm</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Tim Denton</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Van Hess</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>SI_1_Conducted_By__c</picklist>
+        <values>
+            <fullName>Brad Sofonia</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Brooke Ianni</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Diljeet Masuda</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Elizabeth Kagele</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Jonathan Gruber</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Manuel Hernandez</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Michael Yang</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Rachyll Tenny</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Scott Grove</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Scott Primm</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Simon Reyes</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Son Le</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Tim Denton</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Van Hess</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>SI_2_Conducted_By__c</picklist>
+        <values>
+            <fullName>Brad Sofonia</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Brooke Ianni</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Diljeet Masuda</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Elizabeth Kagele</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Jonathan Gruber</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Manuel Hernandez</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Michael Yang</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Rachyll Tenny</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Scott Grove</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Scott Primm</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Simon Reyes</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Son Le</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Tim Denton</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Van Hess</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>SI_3_Conducted_By__c</picklist>
+        <values>
+            <fullName>Brad Sofonia</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Brooke Ianni</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Diljeet Masuda</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Elizabeth Kagele</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Jonathan Gruber</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Manuel Hernandez</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Michael Yang</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Rachyll Tenny</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Scott Grove</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Scott Primm</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Simon Reyes</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Son Le</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Tim Denton</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Van Hess</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>SI_3_Interviewer__c</picklist>
+        <values>
+            <fullName>Diljeet Masuda</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Jonathan Gruber</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Rachyll Tenny</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Scott Primm</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Tim Denton</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Van Hess</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Sales_Manager__c</picklist>
+        <values>
+            <fullName>Brad Sofonia</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Elizabeth Kagele</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Michael Yang</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Son Le</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Tim Denton</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Van Hess</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Salutation__c</picklist>
+        <values>
+            <fullName>Dr%2E</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Mr%2E</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Mrs%2E</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Ms%2E</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Prof</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Status__c</picklist>
+        <values>
+            <fullName>Active%2FIn Process</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Contracted- Broker</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Contracted- Career</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Contracted- Contract B</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Contracted- Intern</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Contracting Started</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Keep In Touch</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Lead</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>No Show%2FDead File</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Pre-Contract Termination</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Redirect</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Terminated</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Target_Market__c</picklist>
+        <values>
+            <fullName>Career Changer</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Experienced 1-2 years</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Experienced 2-4 years</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Experienced 5%2B years</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>IXP</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Institutional_Investment_Industry</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Type__c</picklist>
+        <values>
+            <fullName>Broker</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Candidate</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Internal Candidate</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Nominator</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+</RecordType>

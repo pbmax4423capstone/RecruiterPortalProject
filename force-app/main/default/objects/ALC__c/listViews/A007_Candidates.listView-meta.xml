@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ListView xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>A007_Candidates</fullName>
+    <columns>NAME</columns>
+    <columns>Candidate_Name__c</columns>
+    <columns>Notes__c</columns>
+    <columns>Start_date__c</columns>
+    <columns>Tags__c</columns>
+    <filterScope>Everything</filterScope>
+    <filters>
+        <field>Agency__c</field>
+        <operation>equals</operation>
+        <value>A007</value>
+    </filters>
+    <label>A007 Candidates</label>
+</ListView>

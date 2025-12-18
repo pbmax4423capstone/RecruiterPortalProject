@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Target_Market__c</fullName>
+    <label>Target Market</label>
+    <required>false</required>
+    <trackFeedHistory>false</trackFeedHistory>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Picklist</type>
+    <valueSet>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>Institutional_Investment_Industry</fullName>
+                <default>false</default>
+                <label>Institutional Investment Industry</label>
+            </value>
+            <value>
+                <fullName>Career Changer</fullName>
+                <default>false</default>
+                <label>Career Changer</label>
+            </value>
+            <value>
+                <fullName>Experienced 1-2 years</fullName>
+                <default>false</default>
+                <label>Experienced 1-2 years</label>
+            </value>
+            <value>
+                <fullName>Experienced 2-4 years</fullName>
+                <default>false</default>
+                <label>Experienced 2-4 years</label>
+            </value>
+            <value>
+                <fullName>Experienced 5+ years</fullName>
+                <default>false</default>
+                <label>Experienced 5+ years</label>
+            </value>
+            <value>
+                <fullName>IXP</fullName>
+                <default>false</default>
+                <label>IXP</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

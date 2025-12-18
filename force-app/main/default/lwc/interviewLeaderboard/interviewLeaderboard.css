@@ -1,0 +1,169 @@
+/* Summary Cards */
+.summary-card {
+    padding: 2rem;
+    border-radius: 8px;
+    text-align: center;
+    color: white;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.summary-card:hover {
+    cursor: pointer;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.summary-card-week {
+    background: linear-gradient(135deg, #4a5568 0%, #2d3748 100%);
+}
+
+.summary-card-month {
+    background: linear-gradient(135deg, #0891b2 0%, #0e7490 100%);
+}
+
+.summary-number {
+    font-size: 3.5rem;
+    font-weight: 700;
+    line-height: 1;
+    margin-bottom: 0.5rem;
+}
+
+.summary-label {
+    font-size: 1rem;
+    font-weight: 400;
+    opacity: 0.95;
+}
+
+/* Category Cards */
+.category-card {
+    padding: 1.5rem 1rem;
+    border-radius: 8px;
+    text-align: center;
+    color: white;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.category-card:hover {
+    cursor: pointer;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.category-ci-first {
+    background: linear-gradient(135deg, #2563eb 0%, #1e40af 100%);
+}
+
+.category-align {
+    background: linear-gradient(135deg, #059669 0%, #047857 100%);
+}
+
+.category-plan {
+    background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
+}
+
+.category-present {
+    background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+}
+
+.category-optional {
+    background: linear-gradient(135deg, #9333ea 0%, #7e22ce 100%);
+}
+
+.category-number {
+    font-size: 2.5rem;
+    font-weight: 700;
+    line-height: 1;
+    margin-bottom: 0.25rem;
+}
+
+.category-label {
+    font-size: 0.875rem;
+    font-weight: 500;
+}
+
+/* Breakdown Sections */
+.breakdown-section {
+    background-color: #f9fafb;
+    padding: 1.25rem;
+    border-radius: 8px;
+    border: 1px solid #e5e7eb;
+}
+
+.breakdown-section h3 {
+    color: #1f2937;
+    font-weight: 600;
+}
+
+.leader-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.75rem 1rem;
+    background-color: white;
+    border-left: 3px solid transparent;
+    margin-bottom: 0.5rem;
+    border-radius: 4px;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+
+.leader-row:hover {
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.leader-name {
+    font-weight: 500;
+    color: #374151;
+}
+
+.leader-badge {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-weight: 700;
+    font-size: 0.875rem;
+    flex-shrink: 0;
+}
+
+.badge-ci-first {
+    background: linear-gradient(135deg, #2563eb 0%, #1e40af 100%);
+}
+
+.badge-align {
+    background: linear-gradient(135deg, #059669 0%, #047857 100%);
+}
+
+.badge-plan {
+    background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
+}
+
+.badge-present {
+    background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+}
+
+.badge-optional {
+    background: linear-gradient(135deg, #9333ea 0%, #7e22ce 100%);
+}
+
+/* Weekly Interviews Modal */
+.weekly-interview-list {
+    max-height: 500px;
+    overflow-y: auto;
+}
+
+.weekly-interview-item {
+    padding: 0.75rem;
+    border-left: 3px solid #0891b2;
+    background-color: #f9fafb;
+}
+
+.weekly-interview-item:hover {
+    background-color: #f3f4f6;
+}
+
+.interview-type-badge {
+    font-weight: 600;
+}
