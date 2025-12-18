@@ -3,8 +3,8 @@
     <flexiPageRegions>
         <itemInstances>
             <componentInstance>
-                <componentName>recruiterPortalHeader</componentName>
-                <identifier>c_recruiterPortalHeader</identifier>
+                <componentName>portalHeaderNew</componentName>
+                <identifier>c_portalHeaderNew</identifier>
             </componentInstance>
         </itemInstances>
         <itemInstances>
@@ -19,8 +19,26 @@
         </itemInstances>
         <itemInstances>
             <componentInstance>
+                <componentName>candidateFunnelDashboard</componentName>
+                <identifier>c_candidateFunnelDashboard</identifier>
+            </componentInstance>
+        </itemInstances>
+        <itemInstances>
+            <componentInstance>
+                <componentName>candidateKanban</componentName>
+                <identifier>c_candidateKanban</identifier>
+            </componentInstance>
+        </itemInstances>
+        <itemInstances>
+            <componentInstance>
                 <componentName>recentActivity</componentName>
                 <identifier>c_recentActivity</identifier>
+            </componentInstance>
+        </itemInstances>
+        <itemInstances>
+            <componentInstance>
+                <componentName>candidatesInContractingReadOnly</componentName>
+                <identifier>c_candidatesInContractingReadOnly</identifier>
             </componentInstance>
         </itemInstances>
         <itemInstances>
@@ -29,12 +47,20 @@
                 <identifier>c_interviewLeaderboard</identifier>
             </componentInstance>
         </itemInstances>
-        <name>main</name>
+        <name>region1</name>
+        <type>Region</type>
+    </flexiPageRegions>
+    <flexiPageRegions>
+        <name>region2</name>
+        <type>Region</type>
+    </flexiPageRegions>
+    <flexiPageRegions>
+        <name>region3</name>
         <type>Region</type>
     </flexiPageRegions>
     <masterLabel>Recruiter Portal Home</masterLabel>
     <template>
-        <name>flexipage:defaultAppHomeTemplate</name>
+        <name>flexipage:appHomeTemplateHeaderTwoColumnsEqualWidth</name>
     </template>
     <type>AppPage</type>
 </FlexiPage>

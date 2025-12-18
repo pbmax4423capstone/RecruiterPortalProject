@@ -31,10 +31,10 @@ public class RecruiterDashboardControllerMinimalTest {
     }
     
     @isTest
-    static void testAllMethods() {
+    static void testDashboardAndCandidateMethods() {
         Test.startTest();
         
-        // Test all main methods to get coverage - Part 1
+        // Test dashboard and candidate methods
         Map<String, Object> dashboardData = RecruiterDashboardController.getDashboardData();
         System.assertNotEquals(null, dashboardData);
         
@@ -43,6 +43,13 @@ public class RecruiterDashboardControllerMinimalTest {
         
         Map<String, Object> activeCandidateAnalytics = RecruiterDashboardController.getActiveCandidateAnalytics();
         System.assertNotEquals(null, activeCandidateAnalytics);
+        
+        Test.stopTest();
+    }
+    
+    @isTest
+    static void testInterviewStatsMethods() {
+        Test.startTest();
         
         Map<String, Object> interviewStatsByType = RecruiterDashboardController.getInterviewStatsByType();
         System.assertNotEquals(null, interviewStatsByType);
@@ -53,20 +60,27 @@ public class RecruiterDashboardControllerMinimalTest {
         Map<String, Object> interviewTypeWithInterviewerStats = RecruiterDashboardController.getInterviewTypeWithInterviewerStats();
         System.assertNotEquals(null, interviewTypeWithInterviewerStats);
         
-        String reassignResult = RecruiterDashboardController.reassignInterviewsToSalesManagers();
-        System.assertNotEquals(null, reassignResult);
-        
         Map<String, Integer> scheduledInterviewStats = RecruiterDashboardController.getScheduledInterviewStats();
         System.assertNotEquals(null, scheduledInterviewStats);
-        
-        List<Map<String, Object>> recentActivity = RecruiterDashboardController.getRecentActivity();
-        System.assertNotEquals(null, recentActivity);
         
         Map<String, Object> detailedInterviewStats = RecruiterDashboardController.getDetailedInterviewStats();
         System.assertNotEquals(null, detailedInterviewStats);
         
         List<Map<String, Object>> interviewsByType = RecruiterDashboardController.getInterviewsByType();
         System.assertNotEquals(null, interviewsByType);
+        
+        Test.stopTest();
+    }
+    
+    @isTest
+    static void testPerformanceAndActivityMethods() {
+        Test.startTest();
+        
+        String reassignResult = RecruiterDashboardController.reassignInterviewsToSalesManagers();
+        System.assertNotEquals(null, reassignResult);
+        
+        List<Map<String, Object>> recentActivity = RecruiterDashboardController.getRecentActivity();
+        System.assertNotEquals(null, recentActivity);
         
         Map<String, Integer> performanceMetrics = RecruiterDashboardController.getPerformanceMetrics();
         System.assertNotEquals(null, performanceMetrics);

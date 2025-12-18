@@ -11,7 +11,6 @@
     <filters>
         <field>Assigned_To__c</field>
         <operation>equals</operation>
-        <value></value>
     </filters>
     <filters>
         <field>Status__c</field>

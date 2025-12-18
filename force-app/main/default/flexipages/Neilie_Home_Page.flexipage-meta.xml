@@ -3,6 +3,36 @@
     <flexiPageRegions>
         <itemInstances>
             <componentInstance>
+                <componentName>portalHeaderNew</componentName>
+                <identifier>c_portalHeaderNew</identifier>
+            </componentInstance>
+        </itemInstances>
+        <itemInstances>
+            <componentInstance>
+                <componentName>recentActivity</componentName>
+                <identifier>c_recentActivity</identifier>
+            </componentInstance>
+        </itemInstances>
+        <itemInstances>
+            <componentInstance>
+                <componentName>interviewLeaderboard</componentName>
+                <identifier>c_interviewLeaderboard</identifier>
+            </componentInstance>
+        </itemInstances>
+        <itemInstances>
+            <componentInstance>
+                <componentName>candidatesInContractingReadOnly</componentName>
+                <identifier>c_candidatesInContractingReadOnly</identifier>
+            </componentInstance>
+        </itemInstances>
+        <itemInstances>
+            <componentInstance>
+                <componentName>serviceDashboard</componentName>
+                <identifier>c_serviceDashboard</identifier>
+            </componentInstance>
+        </itemInstances>
+        <itemInstances>
+            <componentInstance>
                 <componentInstanceProperties>
                     <name>dashboardName</name>
                     <value>zwVmpivTaLEyhWywhKpdvuEQJYJHwy</value>

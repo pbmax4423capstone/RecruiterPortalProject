@@ -3,8 +3,8 @@
     <flexiPageRegions>
         <itemInstances>
             <componentInstance>
-                <componentName>recruiterPortalHeader</componentName>
-                <identifier>c_recruiterPortalHeader</identifier>
+                <componentName>portalHeaderNew</componentName>
+                <identifier>c_portalHeaderNew</identifier>
             </componentInstance>
         </itemInstances>
         <itemInstances>
@@ -19,14 +19,26 @@
         </itemInstances>
         <itemInstances>
             <componentInstance>
+                <componentName>contractingTasksActivity</componentName>
+                <identifier>c_contractingTasksActivity</identifier>
+            </componentInstance>
+        </itemInstances>
+        <itemInstances>
+            <componentInstance>
                 <componentName>recentActivity</componentName>
                 <identifier>c_recentActivity</identifier>
             </componentInstance>
         </itemInstances>
         <itemInstances>
             <componentInstance>
-                <componentName>candidatesInContracting</componentName>
-                <identifier>c_candidatesInContracting</identifier>
+                <componentName>candidatesInContractingReadOnly</componentName>
+                <identifier>c_candidatesInContractingReadOnly</identifier>
+            </componentInstance>
+        </itemInstances>
+        <itemInstances>
+            <componentInstance>
+                <componentName>interviewLeaderboard</componentName>
+                <identifier>c_interviewLeaderboard</identifier>
             </componentInstance>
         </itemInstances>
         <name>region1</name>
@@ -37,12 +49,6 @@
         <type>Region</type>
     </flexiPageRegions>
     <flexiPageRegions>
-        <itemInstances>
-            <componentInstance>
-                <componentName>interviewLeaderboard</componentName>
-                <identifier>c_interviewLeaderboard</identifier>
-            </componentInstance>
-        </itemInstances>
         <name>region3</name>
         <type>Region</type>
     </flexiPageRegions>

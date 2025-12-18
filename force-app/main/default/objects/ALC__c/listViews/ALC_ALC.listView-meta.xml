@@ -2,16 +2,15 @@
 <ListView xmlns="http://soap.sforce.com/2006/04/metadata">
     <fullName>ALC_ALC</fullName>
     <columns>NAME</columns>
-    <columns>Candidate__c</columns>
-    <columns>Candidate_Name__c</columns>
-    <columns>Contract__c</columns>
-    <columns>Contract_Type__c</columns>
-    <columns>CREATED_DATE</columns>
     <filterScope>Everything</filterScope>
     <filters>
         <field>Position__c</field>
         <operation>equals</operation>
         <value>Agent</value>
+    </filters>
+    <filters>
+        <field>RECORDTYPE</field>
+        <operation>equals</operation>
     </filters>
     <label>ALC</label>
     <sharedTo>

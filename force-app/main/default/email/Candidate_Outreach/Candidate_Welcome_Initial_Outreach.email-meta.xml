@@ -5,6 +5,7 @@
     <encodingKey>UTF-8</encodingKey>
     <name>Candidate Welcome - Initial Outreach</name>
     <style>none</style>
-    <subject>Let's Connect - Career Opportunity at Capstone Financial</subject>
+    <subject>Let&apos;s Connect - Career Opportunity at Capstone Financial</subject>
     <type>text</type>
+    <uiType>Aloha</uiType>
 </EmailTemplate>

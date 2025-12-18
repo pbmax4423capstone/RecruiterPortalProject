@@ -28,7 +28,6 @@
     <environments>Default</environments>
     <interviewLabel>GetCasesFOrContact {!$Flow.CurrentDateTime}</interviewLabel>
     <label>GetCasesFOrContact</label>
-    <overriddenFlow>SvcCopilotTmpl__GetCasesForContact</overriddenFlow>
     <processMetadataValues>
         <name>BuilderType</name>
         <value>

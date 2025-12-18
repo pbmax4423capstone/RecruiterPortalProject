@@ -10,17 +10,18 @@ public class RecentActivityControllerTest {
         );
         insert testContact;
         
-        // Create completed task
+        // Create completed task with today's date
         Task completedTask = new Task(
             Subject = 'Completed Call',
             WhoId = testContact.Id,
-            ActivityDate = Date.today().addDays(-1),
-            Status = 'Completed',
+            ActivityDate = Date.today(),
+            Status = 'Not Started',
+            Type = 'Call',
             OwnerId = UserInfo.getUserId()
         );
         insert completedTask;
         
-        // Update to set CompletedDateTime
+        // Update to mark as completed (CompletedDateTime will be set to now)
         completedTask.Status = 'Completed';
         update completedTask;
         
@@ -30,9 +31,21 @@ public class RecentActivityControllerTest {
             WhoId = testContact.Id,
             ActivityDate = Date.today(),
             Status = 'Not Started',
+            Type = 'Call',
             OwnerId = UserInfo.getUserId()
         );
         insert openTask;
+        
+        // Create email task (should not appear)
+        Task emailTask = new Task(
+            Subject = 'Test Email',
+            WhoId = testContact.Id,
+            ActivityDate = Date.today(),
+            Status = 'Completed',
+            TaskSubtype = 'Email',
+            OwnerId = UserInfo.getUserId()
+        );
+        insert emailTask;
         
         // Test the controller
         Test.startTest();
@@ -49,8 +62,9 @@ public class RecentActivityControllerTest {
                 foundCompletedTask = true;
                 System.assertEquals('Completed', t.Status, 'Task status should be Completed');
             }
-            // Should not contain open task
+            // Should not contain open task or email task
             System.assertNotEquals(openTask.Id, t.Id, 'Should not return open tasks');
+            System.assertNotEquals(emailTask.Id, t.Id, 'Should not return email tasks');
         }
         System.assert(foundCompletedTask, 'Should find the completed task');
     }

@@ -3,8 +3,8 @@
     <fullName>A157_Candidates</fullName>
     <columns>NAME</columns>
     <columns>RECORDTYPE</columns>
-    <columns>Candidate__c</columns>
     <columns>Stage__c</columns>
+    <columns>Candidate__c</columns>
     <columns>Tags__c</columns>
     <columns>Notes__c</columns>
     <columns>Start_date__c</columns>
@@ -15,11 +15,6 @@
     <columns>Position__c</columns>
     <filterScope>Everything</filterScope>
     <filters>
-        <field>Agency__c</field>
-        <operation>equals</operation>
-        <value>A157</value>
-    </filters>
-    <filters>
         <field>Stage__c</field>
         <operation>notEqual</operation>
         <value>Candidate Complete,CANCELED,TERMINATED</value>
@@ -27,7 +22,7 @@
     <filters>
         <field>RECORDTYPE</field>
         <operation>equals</operation>
-        <value>ALC__c.Broker,ALC__c.Career,ALC__c.NRF,ALC__c.Registration</value>
+        <value>ALC__c.Career</value>
     </filters>
     <label>A157 Candidates by Record Type</label>
     <sharedTo>

@@ -15,6 +15,29 @@
             </value>
         </inputParameters>
         <inputParameters>
+            <name>ccRecipientAddressList</name>
+        </inputParameters>
+        <inputParameters>
+            <name>bccRecipientAddressList</name>
+            <value>
+                <stringValue>pbaker@capstone.financial, rtenny@capstone.financial</stringValue>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>senderType</name>
+            <value>
+                <inputConfiguratorMode>Custom</inputConfiguratorMode>
+                <stringValue>OrgWideEmailAddress</stringValue>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>senderAddress</name>
+            <value>
+                <inputConfiguratorMode>Custom</inputConfiguratorMode>
+                <stringValue>help@capstonetechsupport.com</stringValue>
+            </value>
+        </inputParameters>
+        <inputParameters>
             <name>emailSubject</name>
             <value>
                 <stringValue>Congratulations! Moving to Alignment Stage</stringValue>
@@ -23,7 +46,8 @@
         <inputParameters>
             <name>emailBody</name>
             <value>
-                <elementReference>AlignStageEmailBody</elementReference>
+                <inputConfiguratorMode>Resource</inputConfiguratorMode>
+                <stringValue></stringValue>
             </value>
         </inputParameters>
         <inputParameters>
@@ -33,15 +57,29 @@
             </value>
         </inputParameters>
         <inputParameters>
-            <name>emailAddressesBcc</name>
+            <name>emailTemplateId</name>
             <value>
-                <stringValue>rtenny@capstone.financial,pbaker@capstone.financial</stringValue>
+                <inputConfiguratorMode>Custom</inputConfiguratorMode>
+                <stringValue>00Xdm00000176EbEAI</stringValue>
             </value>
         </inputParameters>
         <inputParameters>
-            <name>senderAddress</name>
+            <name>recipientId</name>
             <value>
-                <stringValue>rtenny@capstone.financial</stringValue>
+                <elementReference>$Record.Contact__r.Id</elementReference>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>relatedRecordId</name>
+            <value>
+                <elementReference>$Record.Id</elementReference>
+                <inputConfiguratorMode>Resource</inputConfiguratorMode>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>logEmailOnSend</name>
+            <value>
+                <booleanValue>true</booleanValue>
             </value>
         </inputParameters>
         <nameSegment>emailSimple</nameSegment>
@@ -62,6 +100,29 @@
             </value>
         </inputParameters>
         <inputParameters>
+            <name>bccRecipientAddressList</name>
+            <value>
+                <stringValue>pbaker@capstone.financial, rtenny@capstone.financial</stringValue>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>bccRecipientAddressCollection</name>
+        </inputParameters>
+        <inputParameters>
+            <name>senderType</name>
+            <value>
+                <inputConfiguratorMode>Custom</inputConfiguratorMode>
+                <stringValue>OrgWideEmailAddress</stringValue>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>senderAddress</name>
+            <value>
+                <inputConfiguratorMode>Custom</inputConfiguratorMode>
+                <stringValue>help@capstonetechsupport.com</stringValue>
+            </value>
+        </inputParameters>
+        <inputParameters>
             <name>emailSubject</name>
             <value>
                 <stringValue>Next Step: Career Interview at Capstone Financial</stringValue>
@@ -70,7 +131,8 @@
         <inputParameters>
             <name>emailBody</name>
             <value>
-                <elementReference>CiStageEmailBody</elementReference>
+                <inputConfiguratorMode>Resource</inputConfiguratorMode>
+                <stringValue></stringValue>
             </value>
         </inputParameters>
         <inputParameters>
@@ -80,15 +142,29 @@
             </value>
         </inputParameters>
         <inputParameters>
-            <name>emailAddressesBcc</name>
+            <name>emailTemplateId</name>
             <value>
-                <stringValue>rtenny@capstone.financial,pbaker@capstone.financial</stringValue>
+                <inputConfiguratorMode>Custom</inputConfiguratorMode>
+                <stringValue>00Xdm00000176EcEAI</stringValue>
             </value>
         </inputParameters>
         <inputParameters>
-            <name>senderAddress</name>
+            <name>recipientId</name>
             <value>
-                <stringValue>rtenny@capstone.financial</stringValue>
+                <elementReference>$Record.Contact__r.Id</elementReference>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>relatedRecordId</name>
+            <value>
+                <elementReference>$Record.Id</elementReference>
+                <inputConfiguratorMode>Resource</inputConfiguratorMode>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>logEmailOnSend</name>
+            <value>
+                <booleanValue>true</booleanValue>
             </value>
         </inputParameters>
         <nameSegment>emailSimple</nameSegment>
@@ -109,6 +185,26 @@
             </value>
         </inputParameters>
         <inputParameters>
+            <name>bccRecipientAddressList</name>
+            <value>
+                <stringValue>pbaker@capstone.financial, rtenny@capstone.financial</stringValue>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>senderType</name>
+            <value>
+                <inputConfiguratorMode>Custom</inputConfiguratorMode>
+                <stringValue>OrgWideEmailAddress</stringValue>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>senderAddress</name>
+            <value>
+                <inputConfiguratorMode>Custom</inputConfiguratorMode>
+                <stringValue>help@capstonetechsupport.com</stringValue>
+            </value>
+        </inputParameters>
+        <inputParameters>
             <name>emailSubject</name>
             <value>
                 <stringValue>Contracting Complete - You&apos;re Official!</stringValue>
@@ -117,7 +213,8 @@
         <inputParameters>
             <name>emailBody</name>
             <value>
-                <elementReference>ContractedEmailBody</elementReference>
+                <inputConfiguratorMode>Resource</inputConfiguratorMode>
+                <stringValue></stringValue>
             </value>
         </inputParameters>
         <inputParameters>
@@ -127,15 +224,29 @@
             </value>
         </inputParameters>
         <inputParameters>
-            <name>emailAddressesBcc</name>
+            <name>emailTemplateId</name>
             <value>
-                <stringValue>rtenny@capstone.financial,pbaker@capstone.financial</stringValue>
+                <inputConfiguratorMode>Custom</inputConfiguratorMode>
+                <stringValue>00Xdm00000176EdEAI</stringValue>
             </value>
         </inputParameters>
         <inputParameters>
-            <name>senderAddress</name>
+            <name>recipientId</name>
             <value>
-                <stringValue>rtenny@capstone.financial</stringValue>
+                <elementReference>$Record.Contact__r.Id</elementReference>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>relatedRecordId</name>
+            <value>
+                <elementReference>$Record.Id</elementReference>
+                <inputConfiguratorMode>Resource</inputConfiguratorMode>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>logEmailOnSend</name>
+            <value>
+                <booleanValue>true</booleanValue>
             </value>
         </inputParameters>
         <nameSegment>emailSimple</nameSegment>
@@ -156,6 +267,26 @@
             </value>
         </inputParameters>
         <inputParameters>
+            <name>bccRecipientAddressList</name>
+            <value>
+                <stringValue>pbaker@capstone.financial, rtenny@capstone.financial</stringValue>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>senderType</name>
+            <value>
+                <inputConfiguratorMode>Custom</inputConfiguratorMode>
+                <stringValue>OrgWideEmailAddress</stringValue>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>senderAddress</name>
+            <value>
+                <inputConfiguratorMode>Custom</inputConfiguratorMode>
+                <stringValue>help@capstonetechsupport.com</stringValue>
+            </value>
+        </inputParameters>
+        <inputParameters>
             <name>emailSubject</name>
             <value>
                 <stringValue>Welcome to Capstone Financial!</stringValue>
@@ -164,7 +295,8 @@
         <inputParameters>
             <name>emailBody</name>
             <value>
-                <elementReference>OfferAcceptedEmailBody</elementReference>
+                <inputConfiguratorMode>Resource</inputConfiguratorMode>
+                <stringValue></stringValue>
             </value>
         </inputParameters>
         <inputParameters>
@@ -174,15 +306,29 @@
             </value>
         </inputParameters>
         <inputParameters>
-            <name>emailAddressesBcc</name>
+            <name>emailTemplateId</name>
             <value>
-                <stringValue>rtenny@capstone.financial,pbaker@capstone.financial</stringValue>
+                <inputConfiguratorMode>Custom</inputConfiguratorMode>
+                <stringValue>00Xdm00000176EeEAI</stringValue>
             </value>
         </inputParameters>
         <inputParameters>
-            <name>senderAddress</name>
+            <name>recipientId</name>
             <value>
-                <stringValue>rtenny@capstone.financial</stringValue>
+                <elementReference>$Record.Contact__r.Id</elementReference>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>relatedRecordId</name>
+            <value>
+                <elementReference>$Record.Id</elementReference>
+                <inputConfiguratorMode>Resource</inputConfiguratorMode>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>logEmailOnSend</name>
+            <value>
+                <booleanValue>true</booleanValue>
             </value>
         </inputParameters>
         <nameSegment>emailSimple</nameSegment>
@@ -203,6 +349,29 @@
             </value>
         </inputParameters>
         <inputParameters>
+            <name>ccRecipientAddressList</name>
+        </inputParameters>
+        <inputParameters>
+            <name>bccRecipientAddressList</name>
+            <value>
+                <stringValue>pbaker@capstone.financial, rtenny@capstone.financial</stringValue>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>senderType</name>
+            <value>
+                <inputConfiguratorMode>Custom</inputConfiguratorMode>
+                <stringValue>OrgWideEmailAddress</stringValue>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>senderAddress</name>
+            <value>
+                <inputConfiguratorMode>Custom</inputConfiguratorMode>
+                <stringValue>help@capstonetechsupport.com</stringValue>
+            </value>
+        </inputParameters>
+        <inputParameters>
             <name>emailSubject</name>
             <value>
                 <stringValue>Planning Stage - Let&apos;s Map Your Success</stringValue>
@@ -211,7 +380,8 @@
         <inputParameters>
             <name>emailBody</name>
             <value>
-                <elementReference>PlanStageEmailBody</elementReference>
+                <inputConfiguratorMode>Resource</inputConfiguratorMode>
+                <stringValue></stringValue>
             </value>
         </inputParameters>
         <inputParameters>
@@ -221,15 +391,29 @@
             </value>
         </inputParameters>
         <inputParameters>
-            <name>emailAddressesBcc</name>
+            <name>emailTemplateId</name>
             <value>
-                <stringValue>rtenny@capstone.financial,pbaker@capstone.financial</stringValue>
+                <inputConfiguratorMode>Custom</inputConfiguratorMode>
+                <stringValue>00Xdm00000176EfEAI</stringValue>
             </value>
         </inputParameters>
         <inputParameters>
-            <name>senderAddress</name>
+            <name>recipientId</name>
             <value>
-                <stringValue>rtenny@capstone.financial</stringValue>
+                <elementReference>$Record.Contact__r.Id</elementReference>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>relatedRecordId</name>
+            <value>
+                <elementReference>$Record.Id</elementReference>
+                <inputConfiguratorMode>Resource</inputConfiguratorMode>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>logEmailOnSend</name>
+            <value>
+                <booleanValue>true</booleanValue>
             </value>
         </inputParameters>
         <nameSegment>emailSimple</nameSegment>
@@ -250,6 +434,29 @@
             </value>
         </inputParameters>
         <inputParameters>
+            <name>ccRecipientAddressList</name>
+        </inputParameters>
+        <inputParameters>
+            <name>bccRecipientAddressList</name>
+            <value>
+                <stringValue>pbaker@capstone.financial, rtenny@capstone.financial</stringValue>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>senderType</name>
+            <value>
+                <inputConfiguratorMode>Custom</inputConfiguratorMode>
+                <stringValue>OrgWideEmailAddress</stringValue>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>senderAddress</name>
+            <value>
+                <inputConfiguratorMode>Custom</inputConfiguratorMode>
+                <stringValue>help@capstonetechsupport.com</stringValue>
+            </value>
+        </inputParameters>
+        <inputParameters>
             <name>emailSubject</name>
             <value>
                 <stringValue>Presentation Stage - Almost There!</stringValue>
@@ -258,7 +465,8 @@
         <inputParameters>
             <name>emailBody</name>
             <value>
-                <elementReference>PresentStageEmailBody</elementReference>
+                <inputConfiguratorMode>Resource</inputConfiguratorMode>
+                <stringValue></stringValue>
             </value>
         </inputParameters>
         <inputParameters>
@@ -268,15 +476,29 @@
             </value>
         </inputParameters>
         <inputParameters>
-            <name>emailAddressesBcc</name>
+            <name>emailTemplateId</name>
             <value>
-                <stringValue>rtenny@capstone.financial,pbaker@capstone.financial</stringValue>
+                <inputConfiguratorMode>Custom</inputConfiguratorMode>
+                <stringValue>00Xdm00000176EgEAI</stringValue>
             </value>
         </inputParameters>
         <inputParameters>
-            <name>senderAddress</name>
+            <name>recipientId</name>
             <value>
-                <stringValue>rtenny@capstone.financial</stringValue>
+                <elementReference>$Record.Contact__r.Id</elementReference>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>relatedRecordId</name>
+            <value>
+                <elementReference>$Record.Id</elementReference>
+                <inputConfiguratorMode>Resource</inputConfiguratorMode>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>logEmailOnSend</name>
+            <value>
+                <booleanValue>true</booleanValue>
             </value>
         </inputParameters>
         <nameSegment>emailSimple</nameSegment>
@@ -299,7 +521,7 @@
         <inputParameters>
             <name>bccRecipientAddressList</name>
             <value>
-                <stringValue>pbaker@capstone.financial</stringValue>
+                <stringValue>pbaker@capstone.financial, rtenny@capstone.financial</stringValue>
             </value>
         </inputParameters>
         <inputParameters>

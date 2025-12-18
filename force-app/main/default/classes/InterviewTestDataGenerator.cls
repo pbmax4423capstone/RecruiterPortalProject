@@ -33,6 +33,7 @@ public class InterviewTestDataGenerator {
             attraction.Candidate__c = candidates[candidateIndex].Id;
             attraction.Interview_Type__c = 'Attraction';
             attraction.Conducted_By__c = interviewers[Math.mod(i, interviewers.size())].Id;
+            attraction.Date_Time_Scheduled__c = System.now().addDays(-60 + i);
             
             // First 14 proceed to SI1, last 6 get Hold/Decline
             if (i < 14) {
@@ -68,6 +69,7 @@ public class InterviewTestDataGenerator {
                 si1.Candidate__c = attraction.Candidate__c;
                 si1.Interview_Type__c = 'SI1';
                 si1.Conducted_By__c = interviewers[Math.mod(si1Count, interviewers.size())].Id;
+                si1.Date_Time_Scheduled__c = System.now().addDays(-45 + si1Count);
                 
                 // 8 proceed to SI2, 6 get Hold/Decline  
                 if (si1Count < 8) {
@@ -97,6 +99,7 @@ public class InterviewTestDataGenerator {
                 si2.Candidate__c = si1.Candidate__c;
                 si2.Interview_Type__c = 'SI2';
                 si2.Conducted_By__c = interviewers[Math.mod(si2Count, interviewers.size())].Id;
+                si2.Date_Time_Scheduled__c = System.now().addDays(-30 + si2Count);
                 
                 // For now, use existing outcomes until we update the picklist
                 if (si2Count < 3) {
@@ -126,6 +129,7 @@ public class InterviewTestDataGenerator {
                 si3.Candidate__c = si2.Candidate__c;
                 si3.Interview_Type__c = 'SI3';
                 si3.Conducted_By__c = interviewers[Math.mod(si3Count, interviewers.size())].Id;
+                si3.Date_Time_Scheduled__c = System.now().addDays(-15 + si3Count);
                 
                 // All SI3 proceed to Career
                 si3.Outcome__c = 'Proceed';
@@ -154,6 +158,7 @@ public class InterviewTestDataGenerator {
                 career.Interview_Type__c = 'Career';
                 career.Conducted_By__c = interviewers[Math.mod(careerCount, interviewers.size())].Id;
                 career.Outcome__c = 'Proceed';
+                career.Date_Time_Scheduled__c = System.now().addDays(-5 + careerCount);
                 
                 careerInterviews.add(career);
                 careerCount++;
@@ -179,6 +184,7 @@ public class InterviewTestDataGenerator {
                     career.Interview_Type__c = 'Career';
                     career.Conducted_By__c = interviewers[Math.mod(careerCount, interviewers.size())].Id;
                     career.Outcome__c = 'Proceed';
+                    career.Date_Time_Scheduled__c = System.now().addDays(-3 + careerCount);
                     
                     careerInterviews.add(career);
                     careerCount++;

@@ -3,85 +3,34 @@
     <flexiPageRegions>
         <itemInstances>
             <componentInstance>
-                <componentInstanceProperties>
-                    <name>tabs</name>
-                    <valueList>
-                        <valueListItems>
-                            <value>standard-Task</value>
-                        </valueListItems>
-                        <valueListItems>
-                            <value>standard-report</value>
-                        </valueListItems>
-                        <valueListItems>
-                            <value>Candidate__c</value>
-                        </valueListItems>
-                    </valueList>
-                </componentInstanceProperties>
-                <componentInstanceProperties>
-                    <name>title</name>
-                </componentInstanceProperties>
-                <componentName>runtime_mobilesapp:launchPadTileList</componentName>
-                <identifier>runtime_mobilesapp_launchPadTileList</identifier>
+                <componentName>portalHeaderNew</componentName>
+                <identifier>c_portalHeaderNew</identifier>
+            </componentInstance>
+        </itemInstances>
+        <itemInstances>
+            <componentInstance>
+                <componentName>contractingTasksActivity</componentName>
+                <identifier>c_contractingTasksActivity</identifier>
+            </componentInstance>
+        </itemInstances>
+        <itemInstances>
+            <componentInstance>
+                <componentName>candidatesInContracting</componentName>
+                <identifier>c_candidatesInContracting</identifier>
             </componentInstance>
         </itemInstances>
         <name>top</name>
         <type>Region</type>
     </flexiPageRegions>
     <flexiPageRegions>
-        <itemInstances>
-            <componentInstance>
-                <componentInstanceProperties>
-                    <name>enableInlineEdit</name>
-                    <value>true</value>
-                </componentInstanceProperties>
-                <componentInstanceProperties>
-                    <name>entityName</name>
-                    <value>ALC__c</value>
-                </componentInstanceProperties>
-                <componentInstanceProperties>
-                    <name>filterName</name>
-                    <value>All</value>
-                </componentInstanceProperties>
-                <componentInstanceProperties>
-                    <name>hideActionBar</name>
-                    <value>false</value>
-                </componentInstanceProperties>
-                <componentInstanceProperties>
-                    <name>hideSearchBar</name>
-                    <value>false</value>
-                </componentInstanceProperties>
-                <componentInstanceProperties>
-                    <name>pageSize</name>
-                    <value>3</value>
-                </componentInstanceProperties>
-                <componentName>flexipage:filterListCard</componentName>
-                <identifier>flexipage_filterListCard</identifier>
-            </componentInstance>
-        </itemInstances>
         <name>left</name>
         <type>Region</type>
     </flexiPageRegions>
     <flexiPageRegions>
-        <itemInstances>
-            <componentInstance>
-                <componentName>runtime_sales_activities:todayTaskContainer</componentName>
-                <identifier>runtime_sales_activities_todayTaskContainer</identifier>
-            </componentInstance>
-        </itemInstances>
         <name>middle</name>
         <type>Region</type>
     </flexiPageRegions>
     <flexiPageRegions>
-        <itemInstances>
-            <componentInstance>
-                <componentInstanceProperties>
-                    <name>context</name>
-                    <value>BOOKMARKS</value>
-                </componentInstanceProperties>
-                <componentName>forceChatter:exposedFeed</componentName>
-                <identifier>forceChatter_exposedFeed</identifier>
-            </componentInstance>
-        </itemInstances>
         <name>right</name>
         <type>Region</type>
     </flexiPageRegions>

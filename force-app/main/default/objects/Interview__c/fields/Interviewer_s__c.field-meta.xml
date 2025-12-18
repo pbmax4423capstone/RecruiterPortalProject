@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Interviewer_s__c</fullName>
+    <description>This is the multipicklist field that designates the interviewer or interviewers who cunducted this interview. Use this to calculate the interviewer for the Interview Leaderboard.</description>
+    <label>Interviewer/s</label>
+    <required>false</required>
+    <trackTrending>false</trackTrending>
+    <type>MultiselectPicklist</type>
+    <valueSet>
+        <restricted>true</restricted>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>Bradley Sofonia</fullName>
+                <default>false</default>
+                <label>Bradley Sofonia</label>
+            </value>
+            <value>
+                <fullName>Elizabeth Kagele</fullName>
+                <default>false</default>
+                <label>Elizabeth Kagele</label>
+            </value>
+            <value>
+                <fullName>Michael Yang</fullName>
+                <default>false</default>
+                <label>Michael Yang</label>
+            </value>
+            <value>
+                <fullName>Rachyll Tenny</fullName>
+                <default>false</default>
+                <label>Rachyll Tenny</label>
+            </value>
+            <value>
+                <fullName>Scott Grove</fullName>
+                <default>false</default>
+                <label>Scott Grove</label>
+            </value>
+            <value>
+                <fullName>Son Le</fullName>
+                <default>false</default>
+                <label>Son Le</label>
+            </value>
+            <value>
+                <fullName>Tim Denton</fullName>
+                <default>false</default>
+                <label>Tim Denton</label>
+            </value>
+            <value>
+                <fullName>Van Hess</fullName>
+                <default>false</default>
+                <label>Van Hess</label>
+            </value>
+            <value>
+                <fullName>Brooke Ianni</fullName>
+                <default>false</default>
+                <label>Brooke Ianni</label>
+            </value>
+            <value>
+                <fullName>Diljeet Masuda</fullName>
+                <default>false</default>
+                <label>Diljeet Masuda</label>
+            </value>
+            <value>
+                <fullName>Jonathan Gruber</fullName>
+                <default>false</default>
+                <label>Jonathan Gruber</label>
+            </value>
+            <value>
+                <fullName>Scott Primm</fullName>
+                <default>false</default>
+                <label>Scott Primm</label>
+            </value>
+            <value>
+                <fullName>Simon Reyes</fullName>
+                <default>false</default>
+                <label>Simon Reyes</label>
+            </value>
+            <value>
+                <fullName>Brad Sofonia</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>Brad Sofonia</label>
+            </value>
+            <value>
+                <fullName>Bradley Sofronia</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>Bradley Sofronia</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+    <visibleLines>4</visibleLines>
+</CustomField>

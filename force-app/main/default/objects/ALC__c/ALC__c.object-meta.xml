@@ -128,17 +128,17 @@
     </actionOverrides>
     <actionOverrides>
         <actionName>View</actionName>
-        <comment>Action override created by Lightning App Builder during activation.</comment>
-        <content>ALC_Record_Page_Org_Default</content>
-        <formFactor>Small</formFactor>
+        <comment>Action override updated by Lightning App Builder during activation.</comment>
+        <content>ALC_Career_Record_Page</content>
+        <formFactor>Large</formFactor>
         <skipRecordTypeSelect>false</skipRecordTypeSelect>
         <type>Flexipage</type>
     </actionOverrides>
     <actionOverrides>
         <actionName>View</actionName>
-        <comment>Action override created by Lightning App Builder during activation.</comment>
-        <content>ALC_Record_Page_Org_Default</content>
-        <formFactor>Large</formFactor>
+        <comment>Action override updated by Lightning App Builder during activation.</comment>
+        <content>ALC_Career_Record_Page</content>
+        <formFactor>Small</formFactor>
         <skipRecordTypeSelect>false</skipRecordTypeSelect>
         <type>Flexipage</type>
     </actionOverrides>

@@ -56,7 +56,7 @@
         <label>Get Conversation Transcript</label>
         <locationX>50</locationX>
         <locationY>566</locationY>
-        <actionName>getConvTscpForRecord</actionName>
+        <actionName>getConvTscpForRecordNotFound</actionName>
         <actionType>getConvTscpForRecord</actionType>
         <connector>
             <targetReference>CreateCaseDescriptionFromMessagingTranscript</targetReference>
@@ -68,7 +68,6 @@
                 <elementReference>messagingSessionID</elementReference>
             </value>
         </inputParameters>
-        <nameSegment>getConvTscpForRecord</nameSegment>
         <offset>0</offset>
         <storeOutputAutomatically>true</storeOutputAutomatically>
     </actionCalls>
@@ -159,7 +158,6 @@
     <environments>Default</environments>
     <interviewLabel>Create Case with Enhanced Data {!$Flow.CurrentDateTime}</interviewLabel>
     <label>Create Case with Enhanced Data</label>
-    <overriddenFlow>SvcCopilotTmpl__CreateCaseEnhancedData</overriddenFlow>
     <processMetadataValues>
         <name>BuilderType</name>
         <value>

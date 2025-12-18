@@ -15,19 +15,9 @@
     <columns>CREATED_DATE</columns>
     <filterScope>Everything</filterScope>
     <filters>
-        <field>Stage__c</field>
-        <operation>notEqual</operation>
-        <value>,Candidate Complete,Contract A,TERMINATED,CANCELED,Removed from Process,Agent Terminated,Process Cancelled</value>
-    </filters>
-    <filters>
-        <field>Agency__c</field>
-        <operation>equals</operation>
-        <value>A157,A007</value>
-    </filters>
-    <filters>
         <field>RECORDTYPE</field>
         <operation>equals</operation>
-        <value>ALC__c.Broker</value>
+        <value>ALC__c.Career</value>
     </filters>
     <label>All Records</label>
     <sharedTo>

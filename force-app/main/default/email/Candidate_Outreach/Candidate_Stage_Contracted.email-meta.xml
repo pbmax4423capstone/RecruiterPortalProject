@@ -5,6 +5,7 @@
     <encodingKey>UTF-8</encodingKey>
     <name>Candidate Stage - Contracted</name>
     <style>none</style>
-    <subject>Contracting Complete - You're Official!</subject>
+    <subject>Contracting Complete - You&apos;re Official!</subject>
     <type>text</type>
+    <uiType>Aloha</uiType>
 </EmailTemplate>

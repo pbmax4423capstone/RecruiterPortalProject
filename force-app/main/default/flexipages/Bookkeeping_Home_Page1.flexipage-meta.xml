@@ -3,6 +3,12 @@
     <flexiPageRegions>
         <itemInstances>
             <componentInstance>
+                <componentName>portalHeaderNew</componentName>
+                <identifier>c_portalHeaderNew</identifier>
+            </componentInstance>
+        </itemInstances>
+        <itemInstances>
+            <componentInstance>
                 <componentInstanceProperties>
                     <name>dashboardName</name>
                     <value>KciSbpKdMCWRUFQyJpJANkcJDxgufE</value>
@@ -13,12 +19,6 @@
                 </componentInstanceProperties>
                 <componentName>desktopDashboards:embeddedDashboard</componentName>
                 <identifier>desktopDashboards_embeddedDashboard2</identifier>
-            </componentInstance>
-        </itemInstances>
-        <itemInstances>
-            <componentInstance>
-                <componentName>runtime_sales_activities:todayTaskContainer</componentName>
-                <identifier>runtime_sales_activities_todayTaskContainer</identifier>
             </componentInstance>
         </itemInstances>
         <name>main</name>

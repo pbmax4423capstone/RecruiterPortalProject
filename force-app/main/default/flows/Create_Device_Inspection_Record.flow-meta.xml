@@ -13,16 +13,10 @@
             <name>recipientAddresses</name>
             <value>
                 <collectionElements>
-                    <stringValue>rtenny@financialguide.com</stringValue>
+                    <elementReference>Create_Device_Inspection_Record.Contact__r.Candidate__r.Recruiter__r.Email</elementReference>
                 </collectionElements>
                 <collectionElements>
-                    <stringValue>ssignorelli@financialguide.com</stringValue>
-                </collectionElements>
-                <collectionElements>
-                    <stringValue>ajohnston@financialguide.com</stringValue>
-                </collectionElements>
-                <collectionElements>
-                    <elementReference>Get_Related_Contact.Candidate__r.Sales_Manager_User_Lookup__r.Email</elementReference>
+                    <elementReference>Create_Device_Inspection_Record.Contact__r.Candidate__r.Sales_Manager_User_Lookup__r.Email</elementReference>
                 </collectionElements>
             </value>
         </inputParameters>

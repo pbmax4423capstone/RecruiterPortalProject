@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Flow xmlns="http://soap.sforce.com/2006/04/metadata">
     <apiVersion>65.0</apiVersion>
+    <areMetricsLoggedToDataCloud>false</areMetricsLoggedToDataCloud>
     <description>Automatically sets the Date Completed field when Interview Status is changed to Completed</description>
     <environments>Default</environments>
     <interviewLabel>Set Interview Date Completed {!$Flow.CurrentDateTime}</interviewLabel>
@@ -27,8 +28,8 @@
     <recordUpdates>
         <name>Update_Date_Completed</name>
         <label>Update Date Completed</label>
-        <locationX>176</locationX>
-        <locationY>323</locationY>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
         <inputAssignments>
             <field>Date_Completed__c</field>
             <value>
@@ -38,7 +39,7 @@
         <inputReference>$Record</inputReference>
     </recordUpdates>
     <start>
-        <locationX>50</locationX>
+        <locationX>0</locationX>
         <locationY>0</locationY>
         <connector>
             <targetReference>Update_Date_Completed</targetReference>

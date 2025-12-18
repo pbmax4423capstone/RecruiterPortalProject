@@ -180,10 +180,6 @@ export default class ScheduledCallsModal extends LightningElement {
   }
 
   // Load both scheduled and past due calls
-  // ⚠️ CRITICAL: This method calls getCurrentUserCallDetails() in RecruiterDashboardController
-  // That method MUST filter by TaskSubtype = 'Call' ONLY to exclude emails
-  // DO NOT modify the filter to include Type = 'Call' or emails will appear here
-  // See: CRITICAL-DO-NOT-MODIFY-SCHEDULED-CALLS.md in root directory
   async loadAllCalls() {
     this.isLoading = true;
     

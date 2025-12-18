@@ -11,22 +11,27 @@
             <value>
                 <fullName>Proceed</fullName>
                 <default>false</default>
+                <label>Proceed</label>
             </value>
             <value>
                 <fullName>Proceed to SI3</fullName>
                 <default>false</default>
+                <label>Proceed to SI3</label>
             </value>
             <value>
                 <fullName>Proceed to Career</fullName>
                 <default>false</default>
+                <label>Proceed to Career</label>
             </value>
             <value>
                 <fullName>Hold</fullName>
                 <default>false</default>
+                <label>Hold</label>
             </value>
             <value>
                 <fullName>Decline</fullName>
                 <default>false</default>
+                <label>Decline</label>
             </value>
         </valueSetDefinition>
     </valueSet>

@@ -1,4 +1,3 @@
-
 @isTest
 public class RecruiterDashboardControllerTest {
 
@@ -118,7 +117,8 @@ public class RecruiterDashboardControllerTest {
                 Interview_Type__c = interviewType,
                 Interview_Status__c = status,
                 Outcome__c = outcome,
-                Conducted_By__c = UserInfo.getUserId()
+                Date_Time_Scheduled__c = DateTime.now().addDays(-i)
+                // Conducted_By__c removed - has lookup filter that fails in tests
             ));
         }
         insert interviews;

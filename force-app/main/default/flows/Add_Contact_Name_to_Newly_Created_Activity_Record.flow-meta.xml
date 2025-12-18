@@ -2,31 +2,9 @@
 <Flow xmlns="http://soap.sforce.com/2006/04/metadata">
     <apiVersion>58.0</apiVersion>
     <areMetricsLoggedToDataCloud>false</areMetricsLoggedToDataCloud>
-    <decisions>
-        <name>Check_Candidate_Found</name>
-        <label>Check Candidate Found</label>
-        <locationX>176</locationX>
-        <locationY>395</locationY>
-        <defaultConnectorLabel>Not Found - End</defaultConnectorLabel>
-        <rules>
-            <name>Candidate_Found</name>
-            <conditionLogic>and</conditionLogic>
-            <conditions>
-                <leftValueReference>Get_Candidate</leftValueReference>
-                <operator>IsNull</operator>
-                <rightValue>
-                    <booleanValue>false</booleanValue>
-                </rightValue>
-            </conditions>
-            <connector>
-                <targetReference>Update_Contact_Name</targetReference>
-            </connector>
-            <label>Candidate Found</label>
-        </rules>
-    </decisions>
-    <description>Adds Contact Name to Task records when linked to a Candidate</description>
+    <description>AI Generated flow for a flow that will Add Contact Name to Newly Created Activity Record</description>
     <environments>Default</environments>
-    <interviewLabel>Add Contact Name to Activity {!$Flow.CurrentDateTime}</interviewLabel>
+    <interviewLabel>AI Generated Flow for a flow that will be triggered when a new...</interviewLabel>
     <label>Add Contact Name to Newly Created Activity Record</label>
     <processMetadataValues>
         <name>BuilderType</name>
@@ -41,6 +19,18 @@
         </value>
     </processMetadataValues>
     <processMetadataValues>
+        <name>GptId</name>
+        <value>
+            <stringValue>e3883e8b-58ae-4a2b-907c-57a337032472</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>GptLlmIds</name>
+        <value>
+            <stringValue>[&quot;e6630e14-b853-491e-957b-7465c485fd1b&quot;,&quot;b2bb9cca-9200-4516-8df8-fa68564fc63a&quot;]</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
         <name>OriginBuilderType</name>
         <value>
             <stringValue>LightningFlowBuilder</stringValue>
@@ -48,35 +38,35 @@
     </processMetadataValues>
     <processType>AutoLaunchedFlow</processType>
     <recordLookups>
-        <name>Get_Candidate</name>
-        <label>Get Candidate</label>
+        <name>Get_Contact</name>
+        <label>Get Contact</label>
         <locationX>176</locationX>
         <locationY>287</locationY>
-        <assignNullValuesIfNoRecordsFound>true</assignNullValuesIfNoRecordsFound>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
-            <targetReference>Check_Candidate_Found</targetReference>
+            <targetReference>Update_Contact_Name</targetReference>
         </connector>
         <filterLogic>and</filterLogic>
         <filters>
             <field>Id</field>
             <operator>EqualTo</operator>
             <value>
-                <elementReference>$Record.WhatId</elementReference>
+                <elementReference>$Record.WhoId</elementReference>
             </value>
         </filters>
         <getFirstRecordOnly>true</getFirstRecordOnly>
-        <object>Candidate__c</object>
+        <object>Contact</object>
         <storeOutputAutomatically>true</storeOutputAutomatically>
     </recordLookups>
     <recordUpdates>
         <name>Update_Contact_Name</name>
         <label>Update Contact Name</label>
-        <locationX>50</locationX>
-        <locationY>503</locationY>
+        <locationX>176</locationX>
+        <locationY>395</locationY>
         <inputAssignments>
             <field>Contact_Name__c</field>
             <value>
-                <elementReference>Get_Candidate.Name</elementReference>
+                <elementReference>Get_Contact.Name</elementReference>
             </value>
         </inputAssignments>
         <inputReference>$Record</inputReference>
@@ -85,7 +75,7 @@
         <locationX>50</locationX>
         <locationY>0</locationY>
         <connector>
-            <targetReference>Get_Candidate</targetReference>
+            <targetReference>Get_Contact</targetReference>
         </connector>
         <filterLogic>and</filterLogic>
         <filters>
@@ -96,8 +86,8 @@
             </value>
         </filters>
         <object>Task</object>
-        <recordTriggerType>Create</recordTriggerType>
+        <recordTriggerType>CreateAndUpdate</recordTriggerType>
         <triggerType>RecordBeforeSave</triggerType>
     </start>
-    <status>Draft</status>
+    <status>Active</status>
 </Flow>

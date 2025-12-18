@@ -34,7 +34,8 @@ public class RecruiterDashboardControllerTestStub {
             Interview__c interview = new Interview__c(
                 Candidate__c = candidates[Math.mod(i, 20)].Id,
                 Interview_Type__c = types[Math.mod(i, 5)],
-                Interview_Status__c = statuses[Math.mod(i, 3)]
+                Interview_Status__c = statuses[Math.mod(i, 3)],
+                Date_Time_Scheduled__c = System.now().addDays(i - 15)
             );
             if (interview.Interview_Status__c == 'Completed') {
                 interview.Outcome__c = outcomes[Math.mod(i, 3)];

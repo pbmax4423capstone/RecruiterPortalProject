@@ -3,6 +3,18 @@
     <flexiPageRegions>
         <itemInstances>
             <componentInstance>
+                <componentName>newBusinessPortalHeader</componentName>
+                <identifier>c_newBusinessPortalHeader</identifier>
+            </componentInstance>
+        </itemInstances>
+        <itemInstances>
+            <componentInstance>
+                <componentName>reportedFycQuarter</componentName>
+                <identifier>c_reportedFycQuarter</identifier>
+            </componentInstance>
+        </itemInstances>
+        <itemInstances>
+            <componentInstance>
                 <componentInstanceProperties>
                     <name>dashboardName</name>
                     <value>JOYdgGKamKIvzNJhSNidrcifNbRimq</value>

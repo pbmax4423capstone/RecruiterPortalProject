@@ -5,7 +5,7 @@
         <label>Agentforce_Service_Agent Action 1</label>
         <locationX>176</locationX>
         <locationY>242</locationY>
-        <actionName>Agentforce_Service_Agent</actionName>
+        <actionName>agent__Agentforce_Service_AgentNotFound</actionName>
         <actionType>generateAiAgentResponse</actionType>
         <connector>
             <targetReference>Split_Service_Case_with_multiple_items_Action_1</targetReference>
@@ -20,7 +20,6 @@
                 <stringValue>Analyze the {!Get_Parent_Case.Case_Summary__c}, {!Get_Parent_Case.Email_Summary_Field__c}, and {!Get_Parent_Case.Description} to determine if they contain more than a single issue. If there are multuple issues, offer to separate the issues into separate tickets. </stringValue>
             </value>
         </inputParameters>
-        <nameSegment>Agentforce_Service_Agent</nameSegment>
         <offset>0</offset>
         <storeOutputAutomatically>true</storeOutputAutomatically>
     </actionCalls>
@@ -29,7 +28,7 @@
         <label>Split Service Case with multiple items Action 1</label>
         <locationX>176</locationX>
         <locationY>350</locationY>
-        <actionName>Split_Service_Case_with_multiple_items</actionName>
+        <actionName>0hfVo000000HOh3NotFound</actionName>
         <actionType>generatePromptResponse</actionType>
         <flowTransactionModel>CurrentTransaction</flowTransactionModel>
         <inputParameters>
@@ -41,7 +40,6 @@
                 <elementReference>Get_Parent_Case</elementReference>
             </value>
         </inputParameters>
-        <nameSegment>Split_Service_Case_with_multiple_items</nameSegment>
         <offset>0</offset>
         <storeOutputAutomatically>true</storeOutputAutomatically>
     </actionCalls>

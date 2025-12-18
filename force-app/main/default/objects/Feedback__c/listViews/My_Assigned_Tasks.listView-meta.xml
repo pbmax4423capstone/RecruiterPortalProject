@@ -4,14 +4,14 @@
     <columns>NAME</columns>
     <columns>Subject__c</columns>
     <columns>Feedback_Type__c</columns>
-    <columns>Priority__c</columns>
     <columns>Status__c</columns>
     <columns>CREATED_DATE</columns>
+    <columns>OWNER.LAST_NAME</columns>
     <filterScope>Everything</filterScope>
     <filters>
-        <field>Assigned_To__c</field>
+        <field>OWNER.LAST_NAME</field>
         <operation>equals</operation>
-        <value>MY_USER_ID</value>
+        <value>Arnold</value>
     </filters>
     <label>My Assigned Tasks</label>
 </ListView>

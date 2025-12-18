@@ -68,6 +68,12 @@
                 <identifier>RecordInterviewer_s__cField</identifier>
             </fieldInstance>
         </itemInstances>
+        <itemInstances>
+            <fieldInstance>
+                <fieldItem>Record.Date_Completed__c</fieldItem>
+                <identifier>RecordDate_Completed__cField</identifier>
+            </fieldInstance>
+        </itemInstances>
         <name>Facet-1ea808a6-5842-4384-905c-773e2602b743</name>
         <type>Facet</type>
     </flexiPageRegions>

@@ -17,7 +17,8 @@ public class ScheduledCallsControllerTest {
             WhoId = contact.Id,
             ActivityDate = Date.today(),
             Status = 'Open',
-            OwnerId = UserInfo.getUserId()
+            OwnerId = UserInfo.getUserId(),
+            TaskSubtype = 'Call'
         );
         insert task;
         
@@ -45,13 +46,19 @@ public class ScheduledCallsControllerTest {
     @isTest
     static void testGetScheduledCalls() {
         Test.startTest();
-        List<Task> calls = ScheduledCallsController.getScheduledCalls();
+        Map<String, List<Task>> result = ScheduledCallsController.getScheduledCalls();
         Test.stopTest();
         
-        // Should only return 1 task - today's open task for current user
-        System.assertEquals(1, calls.size(), 'Should return exactly 1 scheduled call');
-        System.assertEquals(UserInfo.getUserId(), calls[0].OwnerId, 'Should be for current user');
-        System.assertEquals(Date.today(), calls[0].ActivityDate, 'Should be scheduled for today');
+        List<Task> scheduledCalls = result.get('scheduled');
+        List<Task> pastDueCalls = result.get('pastDue');
+        
+        // Should only return 1 task in scheduled - today's open task for current user
+        System.assertEquals(1, scheduledCalls.size(), 'Should return exactly 1 scheduled call');
+        System.assertEquals(UserInfo.getUserId(), scheduledCalls[0].OwnerId, 'Should be for current user');
+        System.assertEquals(Date.today(), scheduledCalls[0].ActivityDate, 'Should be scheduled for today');
+        
+        // Should have no past due calls
+        System.assertEquals(0, pastDueCalls.size(), 'Should have no past due calls');
     }
     
     @isTest
@@ -60,10 +67,14 @@ public class ScheduledCallsControllerTest {
         delete [SELECT Id FROM Task];
         
         Test.startTest();
-        List<Task> calls = ScheduledCallsController.getScheduledCalls();
+        Map<String, List<Task>> result = ScheduledCallsController.getScheduledCalls();
         Test.stopTest();
         
-        System.assertEquals(0, calls.size(), 'Should return no scheduled calls');
+        List<Task> scheduledCalls = result.get('scheduled');
+        List<Task> pastDueCalls = result.get('pastDue');
+        
+        System.assertEquals(0, scheduledCalls.size(), 'Should return no scheduled calls');
+        System.assertEquals(0, pastDueCalls.size(), 'Should return no past due calls');
     }
     
     @isTest

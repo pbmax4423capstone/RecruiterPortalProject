@@ -2248,4 +2248,255 @@ public without sharing class RecruiterDashboardController {
         
         return notesList;
     }
+    
+    @AuraEnabled(cacheable=false)
+    public static Map<String, Object> getReportedFycThisQuarter() {
+        Map<String, Object> result = new Map<String, Object>();
+        List<Map<String, Object>> chartData = new List<Map<String, Object>>();
+        Decimal totalFyc = 0;
+        
+        try {
+            // Get the current fiscal quarter start and end dates
+            Integer currentMonth = Date.today().month();
+            Integer monthsToSubtract = Math.mod(currentMonth - 1, 3);
+            Date quarterStart = Date.today().toStartOfMonth().addMonths(-monthsToSubtract);
+            Date quarterEnd = quarterStart.addMonths(3).addDays(-1);
+            
+            // Query Opportunities reported this quarter and aggregate by Soliciting Agent
+            // This matches the dashboard table "Reported FYC This Quarter"
+            AggregateResult[] groupedResults = [
+                SELECT Soliciting_Agent__c, Soliciting_Agent__r.Name, SUM(FYC__c) totalFyc
+                FROM Opportunity
+                WHERE Reported_Date__c >= :quarterStart 
+                AND Reported_Date__c <= :quarterEnd
+                AND FYC__c != null
+                AND Soliciting_Agent__c != null
+                GROUP BY Soliciting_Agent__c, Soliciting_Agent__r.Name
+                ORDER BY SUM(FYC__c) DESC
+            ];
+            
+            // Define color palette for the chart
+            List<String> colors = new List<String>{
+                '#5B9BD5', // Blue
+                '#70AD47', // Green
+                '#FFC000', // Yellow
+                '#C55A11', // Orange
+                '#7030A0', // Purple
+                '#44546A', // Dark Blue
+                '#ED7D31', // Light Orange
+                '#A5A5A5'  // Gray
+            };
+            
+            // Only show top 4 agents, group the rest as "Other"
+            Integer maxAgents = 4;
+            Integer colorIndex = 0;
+            Decimal otherTotal = 0;
+            
+            for (Integer i = 0; i < groupedResults.size(); i++) {
+                AggregateResult ar = groupedResults[i];
+                String agentName = (String) ar.get('Name');
+                Decimal fycAmount = (Decimal) ar.get('totalFyc');
+                
+                if (agentName == null) {
+                    agentName = 'Other';
+                }
+                
+                if (fycAmount == null) {
+                    fycAmount = 0;
+                }
+                
+                totalFyc += fycAmount;
+                
+                // Add to top 4, or accumulate in "Other"
+                if (i < maxAgents) {
+                    Integer colorIdx = Math.mod(colorIndex, colors.size());
+                    String color = colors[colorIdx];
+                    
+                    Map<String, Object> agentData = new Map<String, Object>();
+                    agentData.put('name', agentName);
+                    agentData.put('value', fycAmount);
+                    agentData.put('formattedValue', '$' + String.valueOf(fycAmount.setScale(2).format()));
+                    agentData.put('color', color);
+                    agentData.put('colorStyle', 'background-color: ' + color + ';');
+                    
+                    chartData.add(agentData);
+                    colorIndex++;
+                } else {
+                    // Accumulate remaining agents into "Other"
+                    otherTotal += fycAmount;
+                }
+            }
+            
+            // Add "Other" category if there are agents beyond top 4
+            if (otherTotal > 0) {
+                Integer colorIdx = Math.mod(colorIndex, colors.size());
+                String color = colors[colorIdx];
+                
+                Map<String, Object> otherData = new Map<String, Object>();
+                otherData.put('name', 'Other');
+                otherData.put('value', otherTotal);
+                otherData.put('formattedValue', '$' + String.valueOf(otherTotal.setScale(2).format()));
+                otherData.put('color', color);
+                otherData.put('colorStyle', 'background-color: ' + color + ';');
+                
+                chartData.add(otherData);
+            }
+            
+            result.put('data', chartData);
+            result.put('total', totalFyc);
+            result.put('quarterStart', quarterStart);
+            result.put('quarterEnd', quarterEnd);
+            
+        } catch (Exception e) {
+            System.debug('Error in getReportedFycThisQuarter: ' + e.getMessage());
+            throw new AuraHandledException('Error retrieving FYC data: ' + e.getMessage());
+        }
+        
+        return result;
+    }
+    
+    @AuraEnabled(cacheable=false)
+    public static Map<String, Object> getActiveUsersThisMonth() {
+        Map<String, Object> result = new Map<String, Object>();
+        Map<String, Integer> userActivityMap = new Map<String, Integer>();
+        Integer totalRecords = 0;
+        
+        try {
+            // Get current month date range
+            Date monthStart = Date.today().toStartOfMonth();
+            Date monthEnd = monthStart.addMonths(1).addDays(-1);
+            
+            // Query Candidates created this month, grouped by CreatedBy
+            AggregateResult[] candidateResults = [
+                SELECT CreatedBy.Name userName, COUNT(Id) recordCount
+                FROM Candidate__c
+                WHERE CreatedDate >= :monthStart 
+                AND CreatedDate <= :monthEnd
+                AND CreatedBy.IsActive = true
+                GROUP BY CreatedBy.Name
+            ];
+            
+            // Add candidate counts to map
+            for (AggregateResult ar : candidateResults) {
+                String userName = (String) ar.get('userName');
+                Integer count = (Integer) ar.get('recordCount');
+                
+                if (userName != null && count != null) {
+                    userActivityMap.put(userName, count);
+                    totalRecords += count;
+                }
+            }
+            
+            // Query Interviews created this month, grouped by Conducted_By
+            AggregateResult[] interviewResults = [
+                SELECT Conducted_By__r.Name userName, COUNT(Id) recordCount
+                FROM Interview__c
+                WHERE CreatedDate >= :monthStart 
+                AND CreatedDate <= :monthEnd
+                AND Conducted_By__c != null
+                AND Conducted_By__r.IsActive = true
+                GROUP BY Conducted_By__r.Name
+            ];
+            
+            // Add interview counts to map (combine with existing candidate counts)
+            for (AggregateResult ar : interviewResults) {
+                String userName = (String) ar.get('userName');
+                Integer count = (Integer) ar.get('recordCount');
+                
+                if (userName != null && count != null) {
+                    Integer existingCount = userActivityMap.get(userName);
+                    if (existingCount != null) {
+                        userActivityMap.put(userName, existingCount + count);
+                    } else {
+                        userActivityMap.put(userName, count);
+                    }
+                    totalRecords += count;
+                }
+            }
+            
+            // Convert map to list and sort by count descending
+            List<Map<String, Object>> userData = new List<Map<String, Object>>();
+            for (String userName : userActivityMap.keySet()) {
+                Map<String, Object> userRecord = new Map<String, Object>();
+                userRecord.put('name', userName);
+                userRecord.put('count', userActivityMap.get(userName));
+                userData.add(userRecord);
+            }
+            
+            // Sort by count descending
+            userData.sort(new ActivityCountComparator());
+            
+            result.put('data', userData);
+            result.put('total', totalRecords);
+            result.put('monthStart', monthStart);
+            result.put('monthEnd', monthEnd);
+            
+        } catch (Exception e) {
+            System.debug('Error in getActiveUsersThisMonth: ' + e.getMessage());
+            throw new AuraHandledException('Error retrieving active users data: ' + e.getMessage());
+        }
+        
+        return result;
+    }
+    
+    // Comparator class for sorting user activity by count
+    private class ActivityCountComparator implements Comparator<Map<String, Object>> {
+        public Integer compare(Map<String, Object> a, Map<String, Object> b) {
+            Integer countA = (Integer) a.get('count');
+            Integer countB = (Integer) b.get('count');
+            
+            if (countA == null) countA = 0;
+            if (countB == null) countB = 0;
+            
+            // Sort descending (highest count first)
+            return countB - countA;
+        }
+    }
+    
+    @AuraEnabled(cacheable=false)
+    public static Map<String, Object> getOpportunityStages() {
+        Map<String, Object> result = new Map<String, Object>();
+        List<Map<String, Object>> stagesList = new List<Map<String, Object>>();
+        Decimal totalAmount = 0;
+        
+        try {
+            // Query Opportunities grouped by StageName
+            // Filters match the dashboard: open opportunities with amounts
+            AggregateResult[] stageResults = [
+                SELECT StageName, COUNT(Id) oppCount, SUM(Amount) totalAmount
+                FROM Opportunity
+                WHERE IsClosed = false
+                AND Amount != null
+                GROUP BY StageName
+                ORDER BY SUM(Amount) DESC
+            ];
+            
+            // Process results
+            for (AggregateResult ar : stageResults) {
+                String stageName = (String) ar.get('StageName');
+                Integer oppCount = (Integer) ar.get('oppCount');
+                Decimal stageAmount = (Decimal) ar.get('totalAmount');
+                
+                if (stageName != null && stageAmount != null) {
+                    totalAmount += stageAmount;
+                    
+                    Map<String, Object> stageData = new Map<String, Object>();
+                    stageData.put('name', stageName);
+                    stageData.put('count', oppCount);
+                    stageData.put('amount', stageAmount);
+                    
+                    stagesList.add(stageData);
+                }
+            }
+            
+            result.put('stages', stagesList);
+            result.put('total', totalAmount);
+            
+        } catch (Exception e) {
+            System.debug('Error in getOpportunityStages: ' + e.getMessage());
+            throw new AuraHandledException('Error retrieving opportunity stages: ' + e.getMessage());
+        }
+        
+        return result;
+    }
 }
