@@ -1,0 +1,1139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Module 1: Dashboard Navigation - Recruiter Training</title>
+    <style>
+        :root {
+            --primary: #0176d3;
+            --primary-dark: #014486;
+            --primary-light: #e0f2fe;
+            --success: #2e844a;
+            --success-light: #dcfce7;
+            --warning: #fe9339;
+            --warning-light: #fef3c7;
+            --gray-100: #f3f3f3;
+            --gray-200: #e5e5e5;
+            --gray-300: #d1d5db;
+            --gray-500: #6b7280;
+            --gray-700: #444;
+            --gray-900: #181818;
+        }
+        
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: 'Salesforce Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--gray-100);
+            min-height: 100vh;
+            display: flex;
+        }
+        
+        /* Sidebar */
+        .sidebar {
+            width: 280px;
+            background: white;
+            border-right: 1px solid var(--gray-200);
+            padding: 1.5rem;
+            position: fixed;
+            height: 100vh;
+            overflow-y: auto;
+        }
+        
+        .sidebar-header {
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--gray-200);
+            margin-bottom: 1rem;
+        }
+        
+        .sidebar-header a {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--primary);
+            text-decoration: none;
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .sidebar-header a:hover { text-decoration: underline; }
+        
+        .sidebar-header h2 {
+            font-size: 1.1rem;
+            color: var(--gray-900);
+        }
+        
+        .sidebar-header .module-badge {
+            display: inline-block;
+            background: var(--primary-light);
+            color: var(--primary);
+            padding: 0.2rem 0.6rem;
+            border-radius: 10px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin-top: 0.5rem;
+        }
+        
+        .steps-list { list-style: none; }
+        
+        .step-item {
+            padding: 0.75rem;
+            border-radius: 8px;
+            margin-bottom: 0.5rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            transition: all 0.2s;
+        }
+        
+        .step-item:hover { background: var(--gray-100); }
+        .step-item.active { background: var(--primary-light); }
+        .step-item.completed { opacity: 0.7; }
+        
+        .step-number {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            background: var(--gray-200);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--gray-500);
+            flex-shrink: 0;
+        }
+        
+        .step-item.active .step-number {
+            background: var(--primary);
+            color: white;
+        }
+        
+        .step-item.completed .step-number {
+            background: var(--success);
+            color: white;
+        }
+        
+        .step-item.completed .step-number::before {
+            content: "✓";
+        }
+        
+        .step-info { flex-grow: 1; }
+        
+        .step-title {
+            font-size: 0.9rem;
+            color: var(--gray-900);
+            font-weight: 500;
+        }
+        
+        .step-duration {
+            font-size: 0.75rem;
+            color: var(--gray-500);
+        }
+        
+        /* Main Content */
+        .main-content {
+            flex-grow: 1;
+            margin-left: 280px;
+            padding: 2rem;
+        }
+        
+        .step-content {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        
+        .step-header {
+            margin-bottom: 2rem;
+        }
+        
+        .step-header .step-badge {
+            display: inline-block;
+            background: var(--primary);
+            color: white;
+            padding: 0.3rem 1rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-bottom: 0.75rem;
+        }
+        
+        .step-header h1 {
+            font-size: 2rem;
+            color: var(--gray-900);
+            margin-bottom: 0.5rem;
+        }
+        
+        .step-header p {
+            font-size: 1.1rem;
+            color: var(--gray-500);
+        }
+        
+        .content-card {
+            background: white;
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+            margin-bottom: 1.5rem;
+        }
+        
+        .content-card h2 {
+            font-size: 1.3rem;
+            color: var(--gray-900);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .content-card p {
+            color: var(--gray-700);
+            line-height: 1.7;
+            margin-bottom: 1rem;
+        }
+        
+        .content-card ul, .content-card ol {
+            margin-left: 1.5rem;
+            margin-bottom: 1rem;
+            color: var(--gray-700);
+            line-height: 1.8;
+        }
+        
+        .screenshot-placeholder {
+            background: linear-gradient(135deg, var(--gray-100), var(--gray-200));
+            border: 2px dashed var(--gray-300);
+            border-radius: 8px;
+            padding: 3rem;
+            text-align: center;
+            margin: 1.5rem 0;
+        }
+        
+        .screenshot-placeholder .icon { font-size: 3rem; margin-bottom: 0.5rem; }
+        .screenshot-placeholder .label { color: var(--gray-500); font-style: italic; }
+        
+        .info-box {
+            background: var(--primary-light);
+            border-left: 4px solid var(--primary);
+            padding: 1rem 1.25rem;
+            border-radius: 0 8px 8px 0;
+            margin: 1.5rem 0;
+        }
+        
+        .info-box.tip { background: #ecfdf5; border-color: var(--success); }
+        .info-box.warning { background: var(--warning-light); border-color: var(--warning); }
+        
+        .info-box strong {
+            display: block;
+            margin-bottom: 0.25rem;
+            color: var(--gray-900);
+        }
+        
+        .metric-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+        
+        .metric-card {
+            background: var(--gray-100);
+            border-radius: 8px;
+            padding: 1.25rem;
+            text-align: center;
+        }
+        
+        .metric-card .value {
+            font-size: 1.75rem;
+            font-weight: 700;
+            color: var(--primary);
+        }
+        
+        .metric-card .label {
+            font-size: 0.85rem;
+            color: var(--gray-500);
+        }
+        
+        .feature-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+        
+        .feature-item {
+            display: flex;
+            gap: 1rem;
+            padding: 1rem;
+            background: var(--gray-100);
+            border-radius: 8px;
+        }
+        
+        .feature-icon {
+            width: 40px;
+            height: 40px;
+            background: var(--primary);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+            flex-shrink: 0;
+        }
+        
+        .feature-text h4 {
+            font-size: 0.95rem;
+            color: var(--gray-900);
+            margin-bottom: 0.25rem;
+        }
+        
+        .feature-text p {
+            font-size: 0.85rem;
+            color: var(--gray-500);
+            margin: 0;
+        }
+        
+        /* Navigation */
+        .step-navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 2rem;
+            padding-top: 2rem;
+            border-top: 1px solid var(--gray-200);
+        }
+        
+        .nav-btn {
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            cursor: pointer;
+            border: none;
+            font-size: 1rem;
+            transition: all 0.3s;
+        }
+        
+        .nav-btn.prev {
+            background: var(--gray-200);
+            color: var(--gray-700);
+        }
+        
+        .nav-btn.prev:hover { background: var(--gray-300); }
+        
+        .nav-btn.next {
+            background: var(--primary);
+            color: white;
+        }
+        
+        .nav-btn.next:hover { background: var(--primary-dark); }
+        
+        .nav-btn.complete {
+            background: var(--success);
+            color: white;
+        }
+        
+        .nav-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        
+        /* Progress bar */
+        .progress-indicator {
+            background: var(--gray-200);
+            height: 4px;
+            position: fixed;
+            top: 0;
+            left: 280px;
+            right: 0;
+            z-index: 100;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: var(--primary);
+            transition: width 0.3s;
+        }
+        
+        /* Table */
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1rem 0;
+        }
+        
+        .data-table th, .data-table td {
+            padding: 0.75rem;
+            text-align: left;
+            border-bottom: 1px solid var(--gray-200);
+        }
+        
+        .data-table th {
+            background: var(--gray-100);
+            font-weight: 600;
+            color: var(--gray-700);
+        }
+        
+        .badge {
+            display: inline-block;
+            padding: 0.2rem 0.6rem;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+        
+        .badge-success { background: var(--success-light); color: var(--success); }
+        .badge-warning { background: var(--warning-light); color: #92400e; }
+        .badge-danger { background: #fee2e2; color: #dc2626; }
+        
+        /* Hide all steps except active */
+        .step-page { display: none; }
+        .step-page.active { display: block; }
+    </style>
+</head>
+<body>
+    <div class="progress-indicator">
+        <div class="progress-fill" id="progressFill" style="width: 0%"></div>
+    </div>
+    
+    <aside class="sidebar">
+        <div class="sidebar-header">
+            <a href="recruiter-training.html">← Back to Training Program</a>
+            <h2>Module 1: Dashboard Navigation</h2>
+            <span class="module-badge">30-45 minutes</span>
+        </div>
+        
+        <ul class="steps-list" id="stepsList">
+            <li class="step-item active" data-step="1" onclick="goToStep(1)">
+                <span class="step-number">1</span>
+                <div class="step-info">
+                    <div class="step-title">Dashboard Overview</div>
+                    <div class="step-duration">5 min</div>
+                </div>
+            </li>
+            <li class="step-item" data-step="2" onclick="goToStep(2)">
+                <span class="step-number">2</span>
+                <div class="step-info">
+                    <div class="step-title">Summary Cards</div>
+                    <div class="step-duration">7 min</div>
+                </div>
+            </li>
+            <li class="step-item" data-step="3" onclick="goToStep(3)">
+                <span class="step-number">3</span>
+                <div class="step-info">
+                    <div class="step-title">Interview Statistics</div>
+                    <div class="step-duration">7 min</div>
+                </div>
+            </li>
+            <li class="step-item" data-step="4" onclick="goToStep(4)">
+                <span class="step-number">4</span>
+                <div class="step-info">
+                    <div class="step-title">YTD Recruiting Metrics</div>
+                    <div class="step-duration">5 min</div>
+                </div>
+            </li>
+            <li class="step-item" data-step="5" onclick="goToStep(5)">
+                <span class="step-number">5</span>
+                <div class="step-info">
+                    <div class="step-title">Pipeline Details Table</div>
+                    <div class="step-duration">8 min</div>
+                </div>
+            </li>
+            <li class="step-item" data-step="6" onclick="goToStep(6)">
+                <span class="step-number">6</span>
+                <div class="step-info">
+                    <div class="step-title">Status Badges & Indicators</div>
+                    <div class="step-duration">5 min</div>
+                </div>
+            </li>
+            <li class="step-item" data-step="7" onclick="goToStep(7)">
+                <span class="step-number">7</span>
+                <div class="step-info">
+                    <div class="step-title">Action Buttons</div>
+                    <div class="step-duration">5 min</div>
+                </div>
+            </li>
+            <li class="step-item" data-step="8" onclick="goToStep(8)">
+                <span class="step-number">8</span>
+                <div class="step-info">
+                    <div class="step-title">Module Complete</div>
+                    <div class="step-duration">2 min</div>
+                </div>
+            </li>
+        </ul>
+    </aside>
+    
+    <main class="main-content">
+        <!-- Step 1: Dashboard Overview -->
+        <div class="step-page active" id="step1">
+            <div class="step-content">
+                <div class="step-header">
+                    <span class="step-badge">Step 1 of 8</span>
+                    <h1>Dashboard Overview</h1>
+                    <p>Get familiar with the Recruiter Dashboard layout and main sections</p>
+                </div>
+                
+                <div class="content-card">
+                    <h2>🖥️ Welcome to the Recruiter Dashboard</h2>
+                    <p>The Recruiter Dashboard is your central command center for managing candidates and tracking recruiting metrics. It provides a real-time view of your pipeline, upcoming interviews, and performance against goals.</p>
+                    
+                    <div class="screenshot-placeholder">
+                        <div class="icon">📸</div>
+                        <div class="label">Screenshot: Full Recruiter Dashboard View</div>
+                    </div>
+                    
+                    <h3>Main Dashboard Sections</h3>
+                    <div class="feature-list">
+                        <div class="feature-item">
+                            <div class="feature-icon">📊</div>
+                            <div class="feature-text">
+                                <h4>Summary Cards</h4>
+                                <p>Quick metrics for candidates, interviews, and statuses</p>
+                            </div>
+                        </div>
+                        <div class="feature-item">
+                            <div class="feature-icon">📅</div>
+                            <div class="feature-text">
+                                <h4>Interview Statistics</h4>
+                                <p>Track interview completion rates by type</p>
+                            </div>
+                        </div>
+                        <div class="feature-item">
+                            <div class="feature-icon">📈</div>
+                            <div class="feature-text">
+                                <h4>YTD Recruiting Metrics</h4>
+                                <p>Year-to-date performance summary</p>
+                            </div>
+                        </div>
+                        <div class="feature-item">
+                            <div class="feature-icon">📋</div>
+                            <div class="feature-text">
+                                <h4>Pipeline Details</h4>
+                                <p>Detailed table of all candidates in pipeline</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="info-box tip">
+                    <strong>💡 Pro Tip</strong>
+                    The dashboard automatically refreshes every 5 minutes, but you can manually refresh by clicking the refresh button in the header.
+                </div>
+                
+                <div class="step-navigation">
+                    <button class="nav-btn prev" disabled>← Previous</button>
+                    <button class="nav-btn next" onclick="goToStep(2)">Next: Summary Cards →</button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Step 2: Summary Cards -->
+        <div class="step-page" id="step2">
+            <div class="step-content">
+                <div class="step-header">
+                    <span class="step-badge">Step 2 of 8</span>
+                    <h1>Summary Cards</h1>
+                    <p>Understanding the key metrics displayed in the summary cards</p>
+                </div>
+                
+                <div class="content-card">
+                    <h2>📊 Summary Card Metrics</h2>
+                    <p>The top section of the dashboard displays 6 summary cards that provide at-a-glance metrics for your recruiting efforts.</p>
+                    
+                    <div class="screenshot-placeholder">
+                        <div class="icon">📸</div>
+                        <div class="label">Screenshot: Summary Cards Row</div>
+                    </div>
+                    
+                    <div class="metric-grid">
+                        <div class="metric-card">
+                            <div class="value">24</div>
+                            <div class="label">Total Candidates</div>
+                        </div>
+                        <div class="metric-card">
+                            <div class="value">8</div>
+                            <div class="label">Upcoming Interviews</div>
+                        </div>
+                        <div class="metric-card">
+                            <div class="value">12</div>
+                            <div class="label">Active Pipeline</div>
+                        </div>
+                        <div class="metric-card">
+                            <div class="value">3</div>
+                            <div class="label">On Contract B</div>
+                        </div>
+                        <div class="metric-card">
+                            <div class="value">5</div>
+                            <div class="label">Hired This Month</div>
+                        </div>
+                        <div class="metric-card">
+                            <div class="value">85%</div>
+                            <div class="label">Interview Rate</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="content-card">
+                    <h2>📌 What Each Card Means</h2>
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Card</th>
+                                <th>Description</th>
+                                <th>Calculation</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>Total Candidates</strong></td>
+                                <td>All candidates assigned to you</td>
+                                <td>Count of all candidate records</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Upcoming Interviews</strong></td>
+                                <td>Scheduled interviews not yet completed</td>
+                                <td>Interviews with status = Scheduled</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Active Pipeline</strong></td>
+                                <td>Candidates actively in process</td>
+                                <td>Excludes Hired and Inactive</td>
+                            </tr>
+                            <tr>
+                                <td><strong>On Contract B</strong></td>
+                                <td>Agents in probationary period</td>
+                                <td>Contract Type = B</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Hired This Month</strong></td>
+                                <td>Candidates hired in current month</td>
+                                <td>Hire Date in current month</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Interview Rate</strong></td>
+                                <td>Percentage of candidates interviewed</td>
+                                <td>Interviewed / Total Candidates</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                
+                <div class="info-box">
+                    <strong>ℹ️ Note</strong>
+                    Click on any summary card to filter the Pipeline Details table to show only those records.
+                </div>
+                
+                <div class="step-navigation">
+                    <button class="nav-btn prev" onclick="goToStep(1)">← Previous</button>
+                    <button class="nav-btn next" onclick="goToStep(3)">Next: Interview Statistics →</button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Step 3: Interview Statistics -->
+        <div class="step-page" id="step3">
+            <div class="step-content">
+                <div class="step-header">
+                    <span class="step-badge">Step 3 of 8</span>
+                    <h1>Interview Statistics</h1>
+                    <p>Track interview completion rates across different interview types</p>
+                </div>
+                
+                <div class="content-card">
+                    <h2>📅 Interview Statistics Section</h2>
+                    <p>This section shows your interview completion rates broken down by interview type. Use the toggle to switch between monthly and year-to-date views.</p>
+                    
+                    <div class="screenshot-placeholder">
+                        <div class="icon">📸</div>
+                        <div class="label">Screenshot: Interview Statistics with Toggle</div>
+                    </div>
+                    
+                    <h3>Interview Types Tracked</h3>
+                    <ul>
+                        <li><strong>Initial Screen</strong> - First phone/video call with candidate</li>
+                        <li><strong>Manager Interview</strong> - Interview with hiring manager</li>
+                        <li><strong>Final Interview</strong> - Final round interview</li>
+                        <li><strong>Technical Assessment</strong> - Skills evaluation (if applicable)</li>
+                    </ul>
+                </div>
+                
+                <div class="content-card">
+                    <h2>📊 Reading the Statistics</h2>
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Interview Type</th>
+                                <th>Scheduled</th>
+                                <th>Completed</th>
+                                <th>Completion Rate</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Initial Screen</td>
+                                <td>15</td>
+                                <td>12</td>
+                                <td><span class="badge badge-success">80%</span></td>
+                            </tr>
+                            <tr>
+                                <td>Manager Interview</td>
+                                <td>10</td>
+                                <td>8</td>
+                                <td><span class="badge badge-success">80%</span></td>
+                            </tr>
+                            <tr>
+                                <td>Final Interview</td>
+                                <td>6</td>
+                                <td>5</td>
+                                <td><span class="badge badge-success">83%</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                
+                <div class="info-box tip">
+                    <strong>💡 Using the Month/YTD Toggle</strong>
+                    Click the toggle button to switch between viewing current month statistics and year-to-date totals. YTD view helps identify long-term trends.
+                </div>
+                
+                <div class="step-navigation">
+                    <button class="nav-btn prev" onclick="goToStep(2)">← Previous</button>
+                    <button class="nav-btn next" onclick="goToStep(4)">Next: YTD Recruiting Metrics →</button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Step 4: YTD Recruiting Metrics -->
+        <div class="step-page" id="step4">
+            <div class="step-content">
+                <div class="step-header">
+                    <span class="step-badge">Step 4 of 8</span>
+                    <h1>YTD Recruiting Metrics</h1>
+                    <p>Track your year-to-date recruiting performance</p>
+                </div>
+                
+                <div class="content-card">
+                    <h2>📈 Year-to-Date Summary</h2>
+                    <p>The YTD Recruiting Metrics section provides a comprehensive view of your recruiting performance for the entire year. These metrics help you track progress toward annual goals.</p>
+                    
+                    <div class="screenshot-placeholder">
+                        <div class="icon">📸</div>
+                        <div class="label">Screenshot: YTD Recruiting Metrics Section</div>
+                    </div>
+                    
+                    <div class="metric-grid">
+                        <div class="metric-card">
+                            <div class="value">145</div>
+                            <div class="label">Total Candidates YTD</div>
+                        </div>
+                        <div class="metric-card">
+                            <div class="value">42</div>
+                            <div class="label">Hires YTD</div>
+                        </div>
+                        <div class="metric-card">
+                            <div class="value">29%</div>
+                            <div class="label">Conversion Rate</div>
+                        </div>
+                        <div class="metric-card">
+                            <div class="value">18</div>
+                            <div class="label">Days Avg Time-to-Hire</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="content-card">
+                    <h2>📊 Key Performance Indicators</h2>
+                    <ul>
+                        <li><strong>Conversion Rate</strong>: Percentage of candidates who become hires</li>
+                        <li><strong>Time-to-Hire</strong>: Average days from first contact to hire date</li>
+                        <li><strong>Source Effectiveness</strong>: Which channels produce the best candidates</li>
+                        <li><strong>Interview-to-Offer Ratio</strong>: How many interviews result in offers</li>
+                    </ul>
+                </div>
+                
+                <div class="info-box">
+                    <strong>ℹ️ Goal Tracking</strong>
+                    If your organization has set recruiting goals, progress bars will show how you're tracking against those targets.
+                </div>
+                
+                <div class="step-navigation">
+                    <button class="nav-btn prev" onclick="goToStep(3)">← Previous</button>
+                    <button class="nav-btn next" onclick="goToStep(5)">Next: Pipeline Details Table →</button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Step 5: Pipeline Details Table -->
+        <div class="step-page" id="step5">
+            <div class="step-content">
+                <div class="step-header">
+                    <span class="step-badge">Step 5 of 8</span>
+                    <h1>Pipeline Details Table</h1>
+                    <p>Navigate and use the detailed pipeline view</p>
+                </div>
+                
+                <div class="content-card">
+                    <h2>📋 Pipeline Details</h2>
+                    <p>The Pipeline Details table shows all candidates in your pipeline with key information at a glance. This is where you'll spend most of your time managing candidates.</p>
+                    
+                    <div class="screenshot-placeholder">
+                        <div class="icon">📸</div>
+                        <div class="label">Screenshot: Pipeline Details Table</div>
+                    </div>
+                    
+                    <h3>Table Columns</h3>
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Column</th>
+                                <th>Description</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>Candidate Name</strong></td>
+                                <td>Clickable link to candidate record</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Status</strong></td>
+                                <td>Current pipeline stage (New, In Process, Hired, etc.)</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Highest Level</strong></td>
+                                <td>Furthest interview stage reached</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Next Interview</strong></td>
+                                <td>Date/time of next scheduled interview</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Days in Stage</strong></td>
+                                <td>How long in current status</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Source</strong></td>
+                                <td>How candidate was sourced</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Actions</strong></td>
+                                <td>Quick action buttons</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                
+                <div class="content-card">
+                    <h2>🔍 Filtering & Sorting</h2>
+                    <p>Use the table controls to find specific candidates quickly:</p>
+                    <ul>
+                        <li><strong>Search Box</strong>: Type to filter by candidate name</li>
+                        <li><strong>Column Headers</strong>: Click to sort ascending/descending</li>
+                        <li><strong>Status Filter</strong>: Filter by pipeline stage</li>
+                        <li><strong>Date Range</strong>: Filter by date added or interview date</li>
+                    </ul>
+                </div>
+                
+                <div class="info-box tip">
+                    <strong>💡 Quick Actions</strong>
+                    Hover over a row to see quick action buttons: Schedule Interview, Update Status, and View Details.
+                </div>
+                
+                <div class="step-navigation">
+                    <button class="nav-btn prev" onclick="goToStep(4)">← Previous</button>
+                    <button class="nav-btn next" onclick="goToStep(6)">Next: Status Badges →</button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Step 6: Status Badges & Indicators -->
+        <div class="step-page" id="step6">
+            <div class="step-content">
+                <div class="step-header">
+                    <span class="step-badge">Step 6 of 8</span>
+                    <h1>Status Badges & Indicators</h1>
+                    <p>Understanding visual indicators throughout the dashboard</p>
+                </div>
+                
+                <div class="content-card">
+                    <h2>🏷️ Status Badges</h2>
+                    <p>Status badges provide quick visual cues about candidate and Contract B status. Learning to read these badges helps you prioritize your work.</p>
+                    
+                    <div class="screenshot-placeholder">
+                        <div class="icon">📸</div>
+                        <div class="label">Screenshot: Various Status Badges</div>
+                    </div>
+                    
+                    <h3>Pipeline Status Badges</h3>
+                    <div class="feature-list">
+                        <div class="feature-item">
+                            <span class="badge badge-success">New</span>
+                            <div class="feature-text">
+                                <p>Newly created candidate, not yet contacted</p>
+                            </div>
+                        </div>
+                        <div class="feature-item">
+                            <span class="badge" style="background: #dbeafe; color: #1d4ed8;">In Process</span>
+                            <div class="feature-text">
+                                <p>Active candidate with scheduled activities</p>
+                            </div>
+                        </div>
+                        <div class="feature-item">
+                            <span class="badge badge-success">Hired</span>
+                            <div class="feature-text">
+                                <p>Candidate successfully hired</p>
+                            </div>
+                        </div>
+                        <div class="feature-item">
+                            <span class="badge" style="background: #f3f3f3; color: #666;">Inactive</span>
+                            <div class="feature-text">
+                                <p>Candidate withdrawn or disqualified</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="content-card">
+                    <h2>📊 Contract B Status Indicators</h2>
+                    <p>For candidates on Contract B, special badges indicate their progress toward requirements:</p>
+                    
+                    <div class="feature-list">
+                        <div class="feature-item">
+                            <span class="badge badge-success">On Track</span>
+                            <div class="feature-text">
+                                <p>Meeting FYC and submission requirements on pace</p>
+                            </div>
+                        </div>
+                        <div class="feature-item">
+                            <span class="badge badge-warning">At Risk</span>
+                            <div class="feature-text">
+                                <p>Behind on requirements, may need extension</p>
+                            </div>
+                        </div>
+                        <div class="feature-item">
+                            <span class="badge badge-danger">Critical</span>
+                            <div class="feature-text">
+                                <p>Significantly behind, requires immediate attention</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="info-box warning">
+                    <strong>⚠️ Important</strong>
+                    Candidates showing "Critical" status need immediate follow-up to either get back on track or begin termination documentation.
+                </div>
+                
+                <div class="step-navigation">
+                    <button class="nav-btn prev" onclick="goToStep(5)">← Previous</button>
+                    <button class="nav-btn next" onclick="goToStep(7)">Next: Action Buttons →</button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Step 7: Action Buttons -->
+        <div class="step-page" id="step7">
+            <div class="step-content">
+                <div class="step-header">
+                    <span class="step-badge">Step 7 of 8</span>
+                    <h1>Action Buttons</h1>
+                    <p>Using the dashboard action buttons for quick tasks</p>
+                </div>
+                
+                <div class="content-card">
+                    <h2>🔘 Header Action Buttons</h2>
+                    <p>The dashboard header contains 5 action buttons for the most common tasks. These buttons launch guided flows that walk you through each process.</p>
+                    
+                    <div class="screenshot-placeholder">
+                        <div class="icon">📸</div>
+                        <div class="label">Screenshot: Action Buttons in Dashboard Header</div>
+                    </div>
+                    
+                    <h3>Available Actions</h3>
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Button</th>
+                                <th>Purpose</th>
+                                <th>When to Use</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>➕ <strong>Create New Candidate</strong></td>
+                                <td>Add a new candidate to the system</td>
+                                <td>When you have a new prospect to track</td>
+                            </tr>
+                            <tr>
+                                <td>📅 <strong>Schedule Interview</strong></td>
+                                <td>Schedule an interview for any candidate</td>
+                                <td>When setting up interview appointments</td>
+                            </tr>
+                            <tr>
+                                <td>✅ <strong>Log Interview</strong></td>
+                                <td>Record a completed interview</td>
+                                <td>After completing an interview</td>
+                            </tr>
+                            <tr>
+                                <td>📝 <strong>Update Candidate</strong></td>
+                                <td>Modify candidate information</td>
+                                <td>When status or details change</td>
+                            </tr>
+                            <tr>
+                                <td>📊 <strong>View Reports</strong></td>
+                                <td>Access recruiting reports</td>
+                                <td>For detailed analytics</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                
+                <div class="info-box tip">
+                    <strong>💡 Keyboard Shortcuts</strong>
+                    Power users can use keyboard shortcuts: <code>Ctrl+N</code> for new candidate, <code>Ctrl+I</code> for schedule interview.
+                </div>
+                
+                <div class="info-box">
+                    <strong>ℹ️ Quick Start Guides</strong>
+                    For detailed walkthroughs of each action, refer to the Quick Start guides in the Training Center.
+                </div>
+                
+                <div class="step-navigation">
+                    <button class="nav-btn prev" onclick="goToStep(6)">← Previous</button>
+                    <button class="nav-btn next" onclick="goToStep(8)">Complete Module →</button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Step 8: Module Complete -->
+        <div class="step-page" id="step8">
+            <div class="step-content">
+                <div class="step-header">
+                    <span class="step-badge">Step 8 of 8</span>
+                    <h1>🎉 Module Complete!</h1>
+                    <p>You've finished the Dashboard Navigation module</p>
+                </div>
+                
+                <div class="content-card" style="text-align: center; padding: 3rem;">
+                    <div style="font-size: 4rem; margin-bottom: 1rem;">🏆</div>
+                    <h2>Congratulations!</h2>
+                    <p style="font-size: 1.1rem; max-width: 500px; margin: 1rem auto;">You now understand how to navigate the Recruiter Dashboard and interpret all the key metrics and indicators.</p>
+                    
+                    <h3 style="margin-top: 2rem;">What You Learned:</h3>
+                    <ul style="text-align: left; max-width: 400px; margin: 1rem auto;">
+                        <li>Dashboard layout and sections</li>
+                        <li>Summary card metrics and meanings</li>
+                        <li>Interview statistics and toggles</li>
+                        <li>YTD recruiting performance metrics</li>
+                        <li>Pipeline details table navigation</li>
+                        <li>Status badges and visual indicators</li>
+                        <li>Action buttons for common tasks</li>
+                    </ul>
+                </div>
+                
+                <div class="content-card">
+                    <h2>📚 Next Steps</h2>
+                    <p>Continue your training with the next module:</p>
+                    <div class="feature-list">
+                        <a href="module2-candidate-mgmt.html" class="feature-item" style="text-decoration: none; cursor: pointer;">
+                            <div class="feature-icon">👤</div>
+                            <div class="feature-text">
+                                <h4>Module 2: Candidate Management</h4>
+                                <p>Learn to create, update, and manage candidate records</p>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+                
+                <div class="step-navigation">
+                    <button class="nav-btn prev" onclick="goToStep(7)">← Previous</button>
+                    <button class="nav-btn complete" onclick="completeModule()">✓ Mark Complete & Continue</button>
+                </div>
+            </div>
+        </div>
+    </main>
+    
+    <script>
+        const totalSteps = 8;
+        let currentStep = 1;
+        let completedSteps = [];
+        
+        // Load saved progress
+        function loadProgress() {
+            const saved = localStorage.getItem('recruiter-training-module1-step');
+            if (saved) {
+                currentStep = parseInt(saved);
+                for (let i = 1; i < currentStep; i++) {
+                    completedSteps.push(i);
+                }
+            }
+            updateUI();
+        }
+        
+        function saveProgress() {
+            localStorage.setItem('recruiter-training-module1-step', currentStep);
+            if (currentStep > 1) {
+                localStorage.setItem('recruiter-training-module1', 'in-progress');
+            }
+        }
+        
+        function goToStep(step) {
+            // Mark previous steps as completed
+            if (step > currentStep) {
+                for (let i = currentStep; i < step; i++) {
+                    if (!completedSteps.includes(i)) {
+                        completedSteps.push(i);
+                    }
+                }
+            }
+            
+            currentStep = step;
+            saveProgress();
+            updateUI();
+        }
+        
+        function updateUI() {
+            // Update step pages
+            document.querySelectorAll('.step-page').forEach((page, index) => {
+                page.classList.remove('active');
+                if (index + 1 === currentStep) {
+                    page.classList.add('active');
+                }
+            });
+            
+            // Update sidebar
+            document.querySelectorAll('.step-item').forEach((item, index) => {
+                const stepNum = index + 1;
+                item.classList.remove('active', 'completed');
+                
+                if (stepNum === currentStep) {
+                    item.classList.add('active');
+                } else if (completedSteps.includes(stepNum)) {
+                    item.classList.add('completed');
+                }
+            });
+            
+            // Update progress bar
+            const progress = ((currentStep - 1) / (totalSteps - 1)) * 100;
+            document.getElementById('progressFill').style.width = `${progress}%`;
+        }
+        
+        function completeModule() {
+            localStorage.setItem('recruiter-training-module1', 'completed');
+            localStorage.setItem('recruiter-training-module1-step', totalSteps);
+            
+            // Redirect to next module or training hub
+            if (confirm('Module complete! Continue to Module 2: Candidate Management?')) {
+                window.location.href = 'module2-candidate-mgmt.html';
+            } else {
+                window.location.href = 'recruiter-training.html';
+            }
+        }
+        
+        // Initialize
+        loadProgress();
+    </script>
+</body>
+</html>

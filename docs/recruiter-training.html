@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recruiter Training Program - Recruiter Portal ATS</title>
+    <style>
+        :root {
+            --primary: #0176d3;
+            --primary-dark: #014486;
+            --primary-light: #e0f2fe;
+            --success: #2e844a;
+            --success-light: #dcfce7;
+            --warning: #fe9339;
+            --warning-light: #fef3c7;
+            --gray-100: #f3f3f3;
+            --gray-200: #e5e5e5;
+            --gray-300: #d1d5db;
+            --gray-500: #6b7280;
+            --gray-700: #444;
+            --gray-900: #181818;
+        }
+        
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: 'Salesforce Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #0176d3 0%, #014486 100%);
+            min-height: 100vh;
+            padding: 2rem;
+        }
+        
+        .container { max-width: 1200px; margin: 0 auto; }
+        
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            margin-bottom: 1rem;
+            opacity: 0.9;
+        }
+        .back-link:hover { opacity: 1; text-decoration: underline; }
+        
+        header {
+            text-align: center;
+            color: white;
+            margin-bottom: 2rem;
+        }
+        
+        header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+        
+        header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        .progress-section {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+        }
+        
+        .progress-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+        
+        .progress-header h2 {
+            font-size: 1.2rem;
+            color: var(--gray-900);
+        }
+        
+        .progress-stats {
+            display: flex;
+            gap: 1.5rem;
+            font-size: 0.9rem;
+            color: var(--gray-500);
+        }
+        
+        .progress-bar-container {
+            background: var(--gray-200);
+            border-radius: 10px;
+            height: 12px;
+            overflow: hidden;
+        }
+        
+        .progress-bar-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary), #0ea5e9);
+            border-radius: 10px;
+            transition: width 0.5s ease;
+        }
+        
+        .modules-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .module-card {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+            overflow: hidden;
+            transition: transform 0.3s, box-shadow 0.3s;
+            position: relative;
+        }
+        
+        .module-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 30px rgba(0,0,0,0.2);
+        }
+        
+        .module-card.completed { border: 3px solid var(--success); }
+        .module-card.in-progress { border: 3px solid var(--warning); }
+        
+        .module-status {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            z-index: 10;
+        }
+        
+        .module-status.completed { background: var(--success-light); color: var(--success); }
+        .module-status.in-progress { background: var(--warning-light); color: #92400e; }
+        .module-status.not-started { background: var(--gray-200); color: var(--gray-500); }
+        
+        .module-header {
+            padding: 1.5rem;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            position: relative;
+        }
+        
+        .module-number {
+            display: inline-block;
+            background: rgba(255,255,255,0.2);
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .module-header h3 {
+            font-size: 1.3rem;
+            margin-bottom: 0.25rem;
+        }
+        
+        .module-header .duration {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+        
+        .module-header .icon {
+            position: absolute;
+            right: 1.5rem;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 3rem;
+            opacity: 0.3;
+        }
+        
+        .module-body {
+            padding: 1.5rem;
+        }
+        
+        .module-body p {
+            color: var(--gray-700);
+            margin-bottom: 1rem;
+            line-height: 1.6;
+        }
+        
+        .topics-list {
+            list-style: none;
+            margin-bottom: 1.5rem;
+        }
+        
+        .topics-list li {
+            padding: 0.4rem 0;
+            padding-left: 1.5rem;
+            position: relative;
+            color: var(--gray-700);
+            font-size: 0.95rem;
+        }
+        
+        .topics-list li::before {
+            content: "○";
+            position: absolute;
+            left: 0;
+            color: var(--primary);
+        }
+        
+        .module-card.completed .topics-list li::before {
+            content: "✓";
+            color: var(--success);
+        }
+        
+        .btn {
+            display: inline-block;
+            padding: 0.75rem 1.5rem;
+            border-radius: 6px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s;
+            cursor: pointer;
+            border: none;
+            font-size: 1rem;
+            width: 100%;
+            text-align: center;
+        }
+        
+        .btn-primary { background: var(--primary); color: white; }
+        .btn-primary:hover { background: var(--primary-dark); }
+        .btn-success { background: var(--success); color: white; }
+        .btn-disabled { background: var(--gray-300); color: var(--gray-500); cursor: not-allowed; }
+        
+        .training-info {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+        }
+        
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+        }
+        
+        .info-item {
+            text-align: center;
+            padding: 1rem;
+        }
+        
+        .info-item .value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--primary);
+        }
+        
+        .info-item .label {
+            font-size: 0.9rem;
+            color: var(--gray-500);
+        }
+        
+        footer {
+            text-align: center;
+            color: white;
+            opacity: 0.8;
+            padding: 1rem;
+        }
+        
+        .reset-btn {
+            background: none;
+            border: 1px solid rgba(255,255,255,0.5);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            margin-top: 1rem;
+        }
+        
+        .reset-btn:hover {
+            background: rgba(255,255,255,0.1);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="index.html" class="back-link">← Back to Training Center</a>
+        
+        <header>
+            <h1>📋 Recruiter Training Program</h1>
+            <p>Complete training for recruiters covering all aspects of the Recruiter Portal ATS system. Work through each module to master the system.</p>
+        </header>
+        
+        <div class="progress-section">
+            <div class="progress-header">
+                <h2>Your Progress</h2>
+                <div class="progress-stats">
+                    <span><span id="completedCount">0</span> of 5 modules completed</span>
+                    <span>|</span>
+                    <span>Est. <span id="remainingTime">3-4 hours</span> remaining</span>
+                </div>
+            </div>
+            <div class="progress-bar-container">
+                <div class="progress-bar-fill" id="progressBar" style="width: 0%"></div>
+            </div>
+        </div>
+        
+        <div class="training-info">
+            <div class="info-grid">
+                <div class="info-item">
+                    <div class="value">5</div>
+                    <div class="label">Training Modules</div>
+                </div>
+                <div class="info-item">
+                    <div class="value">3-4</div>
+                    <div class="label">Hours to Complete</div>
+                </div>
+                <div class="info-item">
+                    <div class="value">30+</div>
+                    <div class="label">Interactive Steps</div>
+                </div>
+                <div class="info-item">
+                    <div class="value">✓</div>
+                    <div class="label">Certificate on Completion</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="modules-grid">
+            <!-- Module 1: Dashboard Navigation -->
+            <div class="module-card" id="module1" data-module="1">
+                <span class="module-status not-started" id="status1">Not Started</span>
+                <div class="module-header">
+                    <span class="module-number">Module 1</span>
+                    <h3>Dashboard Navigation</h3>
+                    <span class="duration">30-45 minutes</span>
+                    <span class="icon">🖥️</span>
+                </div>
+                <div class="module-body">
+                    <p>Learn to navigate the Recruiter Dashboard and understand all metrics and indicators.</p>
+                    <ul class="topics-list">
+                        <li>Summary Cards & Metrics</li>
+                        <li>Interview Statistics Section</li>
+                        <li>YTD Recruiting Metrics</li>
+                        <li>Pipeline Details Table</li>
+                        <li>Status Badges & Progress Bars</li>
+                    </ul>
+                    <a href="module1-dashboard-nav.html" class="btn btn-primary">Start Module →</a>
+                </div>
+            </div>
+            
+            <!-- Module 2: Candidate Management -->
+            <div class="module-card" id="module2" data-module="2">
+                <span class="module-status not-started" id="status2">Not Started</span>
+                <div class="module-header">
+                    <span class="module-number">Module 2</span>
+                    <h3>Candidate Management</h3>
+                    <span class="duration">45-60 minutes</span>
+                    <span class="icon">👤</span>
+                </div>
+                <div class="module-body">
+                    <p>Master creating, updating, and managing candidate records through the pipeline.</p>
+                    <ul class="topics-list">
+                        <li>Creating New Candidates</li>
+                        <li>Essential Candidate Fields</li>
+                        <li>Candidate Stages Pipeline</li>
+                        <li>Updating Records</li>
+                        <li>Using Action Buttons</li>
+                    </ul>
+                    <a href="module2-candidate-mgmt.html" class="btn btn-primary">Start Module →</a>
+                </div>
+            </div>
+            
+            <!-- Module 3: Interview Tracking -->
+            <div class="module-card" id="module3" data-module="3">
+                <span class="module-status not-started" id="status3">Not Started</span>
+                <div class="module-header">
+                    <span class="module-number">Module 3</span>
+                    <h3>Interview Tracking</h3>
+                    <span class="duration">30-45 minutes</span>
+                    <span class="icon">📅</span>
+                </div>
+                <div class="module-body">
+                    <p>Learn to schedule, track, and record interviews through the recruiting process.</p>
+                    <ul class="topics-list">
+                        <li>Interview Types Explained</li>
+                        <li>Scheduling Interviews</li>
+                        <li>Recording Completion</li>
+                        <li>Interview Metrics</li>
+                        <li>Best Practices</li>
+                    </ul>
+                    <a href="module3-interview-tracking.html" class="btn btn-primary">Start Module →</a>
+                </div>
+            </div>
+            
+            <!-- Module 4: Contract B Lifecycle -->
+            <div class="module-card" id="module4" data-module="4">
+                <span class="module-header" style="background: linear-gradient(135deg, #f59e0b, #d97706);">
+                    <span class="module-number">Module 4</span>
+                    <h3>Contract B Lifecycle</h3>
+                    <span class="duration">45-60 minutes</span>
+                    <span class="icon">📊</span>
+                </div>
+                <span class="module-status not-started" id="status4">Not Started</span>
+                <div class="module-body">
+                    <p>Understand the Contract B probationary period and how to manage agents through it.</p>
+                    <ul class="topics-list">
+                        <li>Contract B Requirements</li>
+                        <li>4-Month Timeline</li>
+                        <li>FYC & Submission Tracking</li>
+                        <li>Processing Extensions</li>
+                        <li>Transitions & Terminations</li>
+                    </ul>
+                    <a href="module4-contract-b.html" class="btn btn-primary">Start Module →</a>
+                </div>
+            </div>
+            
+            <!-- Module 5: LinkedIn Integration -->
+            <div class="module-card" id="module5" data-module="5">
+                <span class="module-status not-started" id="status5">Not Started</span>
+                <div class="module-header" style="background: linear-gradient(135deg, #0077b5, #005885);">
+                    <span class="module-number">Module 5</span>
+                    <h3>LinkedIn Integration</h3>
+                    <span class="duration">20-30 minutes</span>
+                    <span class="icon">🔗</span>
+                </div>
+                <div class="module-body">
+                    <p>Import candidates directly from LinkedIn profiles with our browser extension.</p>
+                    <ul class="topics-list">
+                        <li>Extension Installation</li>
+                        <li>Configuration & Setup</li>
+                        <li>Importing Candidates</li>
+                        <li>Data Mapping</li>
+                        <li>Troubleshooting</li>
+                    </ul>
+                    <a href="module5-linkedin.html" class="btn btn-primary">Start Module →</a>
+                </div>
+            </div>
+        </div>
+        
+        <footer>
+            <p>Recruiter Portal ATS Training Program v1.0 | December 2025</p>
+            <button class="reset-btn" onclick="resetProgress()">Reset All Progress</button>
+        </footer>
+    </div>
+    
+    <script>
+        const modules = ['module1', 'module2', 'module3', 'module4', 'module5'];
+        const timeEstimates = [45, 60, 45, 60, 30]; // minutes per module
+        
+        function loadProgress() {
+            let completed = 0;
+            let remainingMinutes = 0;
+            
+            modules.forEach((mod, index) => {
+                const status = localStorage.getItem(`recruiter-training-${mod}`);
+                const statusEl = document.getElementById(`status${index + 1}`);
+                const cardEl = document.getElementById(mod);
+                
+                if (status === 'completed') {
+                    completed++;
+                    statusEl.textContent = 'Completed';
+                    statusEl.className = 'module-status completed';
+                    cardEl.classList.add('completed');
+                } else if (status === 'in-progress') {
+                    statusEl.textContent = 'In Progress';
+                    statusEl.className = 'module-status in-progress';
+                    cardEl.classList.add('in-progress');
+                    remainingMinutes += timeEstimates[index] / 2; // estimate half remaining
+                } else {
+                    remainingMinutes += timeEstimates[index];
+                }
+            });
+            
+            document.getElementById('completedCount').textContent = completed;
+            document.getElementById('progressBar').style.width = `${(completed / modules.length) * 100}%`;
+            
+            if (remainingMinutes === 0) {
+                document.getElementById('remainingTime').textContent = 'Complete!';
+            } else if (remainingMinutes < 60) {
+                document.getElementById('remainingTime').textContent = `${remainingMinutes} min`;
+            } else {
+                const hours = Math.floor(remainingMinutes / 60);
+                const mins = remainingMinutes % 60;
+                document.getElementById('remainingTime').textContent = mins > 0 ? `${hours}h ${mins}m` : `${hours} hours`;
+            }
+        }
+        
+        function resetProgress() {
+            if (confirm('Are you sure you want to reset all training progress?')) {
+                modules.forEach(mod => {
+                    localStorage.removeItem(`recruiter-training-${mod}`);
+                    localStorage.removeItem(`recruiter-training-${mod}-step`);
+                });
+                location.reload();
+            }
+        }
+        
+        // Load progress on page load
+        loadProgress();
+    </script>
+</body>
+</html>

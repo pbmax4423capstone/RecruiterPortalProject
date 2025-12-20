@@ -1,0 +1,977 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Module 2: Candidate Management - Recruiter Training</title>
+    <style>
+        :root {
+            --primary: #0176d3;
+            --primary-dark: #014486;
+            --primary-light: #e0f2fe;
+            --success: #2e844a;
+            --success-light: #dcfce7;
+            --warning: #fe9339;
+            --warning-light: #fef3c7;
+            --gray-100: #f3f3f3;
+            --gray-200: #e5e5e5;
+            --gray-300: #d1d5db;
+            --gray-500: #6b7280;
+            --gray-700: #444;
+            --gray-900: #181818;
+        }
+        
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: 'Salesforce Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--gray-100);
+            min-height: 100vh;
+            display: flex;
+        }
+        
+        .sidebar {
+            width: 280px;
+            background: white;
+            border-right: 1px solid var(--gray-200);
+            padding: 1.5rem;
+            position: fixed;
+            height: 100vh;
+            overflow-y: auto;
+        }
+        
+        .sidebar-header {
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--gray-200);
+            margin-bottom: 1rem;
+        }
+        
+        .sidebar-header a {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--primary);
+            text-decoration: none;
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .sidebar-header a:hover { text-decoration: underline; }
+        
+        .sidebar-header h2 {
+            font-size: 1.1rem;
+            color: var(--gray-900);
+        }
+        
+        .sidebar-header .module-badge {
+            display: inline-block;
+            background: var(--primary-light);
+            color: var(--primary);
+            padding: 0.2rem 0.6rem;
+            border-radius: 10px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin-top: 0.5rem;
+        }
+        
+        .steps-list { list-style: none; }
+        
+        .step-item {
+            padding: 0.75rem;
+            border-radius: 8px;
+            margin-bottom: 0.5rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            transition: all 0.2s;
+        }
+        
+        .step-item:hover { background: var(--gray-100); }
+        .step-item.active { background: var(--primary-light); }
+        .step-item.completed { opacity: 0.7; }
+        
+        .step-number {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            background: var(--gray-200);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--gray-500);
+            flex-shrink: 0;
+        }
+        
+        .step-item.active .step-number { background: var(--primary); color: white; }
+        .step-item.completed .step-number { background: var(--success); color: white; }
+        .step-item.completed .step-number::before { content: "✓"; }
+        
+        .step-info { flex-grow: 1; }
+        .step-title { font-size: 0.9rem; color: var(--gray-900); font-weight: 500; }
+        .step-duration { font-size: 0.75rem; color: var(--gray-500); }
+        
+        .main-content {
+            flex-grow: 1;
+            margin-left: 280px;
+            padding: 2rem;
+        }
+        
+        .step-content { max-width: 900px; margin: 0 auto; }
+        
+        .step-header { margin-bottom: 2rem; }
+        
+        .step-header .step-badge {
+            display: inline-block;
+            background: var(--primary);
+            color: white;
+            padding: 0.3rem 1rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-bottom: 0.75rem;
+        }
+        
+        .step-header h1 { font-size: 2rem; color: var(--gray-900); margin-bottom: 0.5rem; }
+        .step-header p { font-size: 1.1rem; color: var(--gray-500); }
+        
+        .content-card {
+            background: white;
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+            margin-bottom: 1.5rem;
+        }
+        
+        .content-card h2 {
+            font-size: 1.3rem;
+            color: var(--gray-900);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .content-card p { color: var(--gray-700); line-height: 1.7; margin-bottom: 1rem; }
+        .content-card ul, .content-card ol { margin-left: 1.5rem; margin-bottom: 1rem; color: var(--gray-700); line-height: 1.8; }
+        
+        .screenshot-placeholder {
+            background: linear-gradient(135deg, var(--gray-100), var(--gray-200));
+            border: 2px dashed var(--gray-300);
+            border-radius: 8px;
+            padding: 3rem;
+            text-align: center;
+            margin: 1.5rem 0;
+        }
+        
+        .screenshot-placeholder .icon { font-size: 3rem; margin-bottom: 0.5rem; }
+        .screenshot-placeholder .label { color: var(--gray-500); font-style: italic; }
+        
+        .info-box {
+            background: var(--primary-light);
+            border-left: 4px solid var(--primary);
+            padding: 1rem 1.25rem;
+            border-radius: 0 8px 8px 0;
+            margin: 1.5rem 0;
+        }
+        
+        .info-box.tip { background: #ecfdf5; border-color: var(--success); }
+        .info-box.warning { background: var(--warning-light); border-color: var(--warning); }
+        .info-box strong { display: block; margin-bottom: 0.25rem; color: var(--gray-900); }
+        
+        .field-table { width: 100%; border-collapse: collapse; margin: 1rem 0; }
+        .field-table th, .field-table td { padding: 0.75rem; text-align: left; border-bottom: 1px solid var(--gray-200); }
+        .field-table th { background: var(--gray-100); font-weight: 600; color: var(--gray-700); }
+        
+        .required { color: #dc2626; font-weight: bold; }
+        
+        .step-navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 2rem;
+            padding-top: 2rem;
+            border-top: 1px solid var(--gray-200);
+        }
+        
+        .nav-btn {
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            cursor: pointer;
+            border: none;
+            font-size: 1rem;
+            transition: all 0.3s;
+        }
+        
+        .nav-btn.prev { background: var(--gray-200); color: var(--gray-700); }
+        .nav-btn.prev:hover { background: var(--gray-300); }
+        .nav-btn.next { background: var(--primary); color: white; }
+        .nav-btn.next:hover { background: var(--primary-dark); }
+        .nav-btn.complete { background: var(--success); color: white; }
+        .nav-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+        
+        .progress-indicator {
+            background: var(--gray-200);
+            height: 4px;
+            position: fixed;
+            top: 0;
+            left: 280px;
+            right: 0;
+            z-index: 100;
+        }
+        
+        .progress-fill { height: 100%; background: var(--primary); transition: width 0.3s; }
+        
+        .pipeline-stages {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+            margin: 1rem 0;
+        }
+        
+        .stage-badge {
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
+        
+        .stage-new { background: #dbeafe; color: #1d4ed8; }
+        .stage-inprocess { background: #fef3c7; color: #92400e; }
+        .stage-hired { background: var(--success-light); color: var(--success); }
+        .stage-inactive { background: var(--gray-200); color: var(--gray-500); }
+        
+        .feature-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+        
+        .feature-item {
+            display: flex;
+            gap: 1rem;
+            padding: 1rem;
+            background: var(--gray-100);
+            border-radius: 8px;
+        }
+        
+        .feature-icon {
+            width: 40px;
+            height: 40px;
+            background: var(--primary);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+            flex-shrink: 0;
+        }
+        
+        .feature-text h4 { font-size: 0.95rem; color: var(--gray-900); margin-bottom: 0.25rem; }
+        .feature-text p { font-size: 0.85rem; color: var(--gray-500); margin: 0; }
+        
+        .step-page { display: none; }
+        .step-page.active { display: block; }
+    </style>
+</head>
+<body>
+    <div class="progress-indicator">
+        <div class="progress-fill" id="progressFill" style="width: 0%"></div>
+    </div>
+    
+    <aside class="sidebar">
+        <div class="sidebar-header">
+            <a href="recruiter-training.html">← Back to Training Program</a>
+            <h2>Module 2: Candidate Management</h2>
+            <span class="module-badge">45-60 minutes</span>
+        </div>
+        
+        <ul class="steps-list" id="stepsList">
+            <li class="step-item active" data-step="1" onclick="goToStep(1)">
+                <span class="step-number">1</span>
+                <div class="step-info">
+                    <div class="step-title">Candidate Overview</div>
+                    <div class="step-duration">5 min</div>
+                </div>
+            </li>
+            <li class="step-item" data-step="2" onclick="goToStep(2)">
+                <span class="step-number">2</span>
+                <div class="step-info">
+                    <div class="step-title">Creating Candidates</div>
+                    <div class="step-duration">10 min</div>
+                </div>
+            </li>
+            <li class="step-item" data-step="3" onclick="goToStep(3)">
+                <span class="step-number">3</span>
+                <div class="step-info">
+                    <div class="step-title">Required Fields</div>
+                    <div class="step-duration">8 min</div>
+                </div>
+            </li>
+            <li class="step-item" data-step="4" onclick="goToStep(4)">
+                <span class="step-number">4</span>
+                <div class="step-info">
+                    <div class="step-title">Pipeline Stages</div>
+                    <div class="step-duration">10 min</div>
+                </div>
+            </li>
+            <li class="step-item" data-step="5" onclick="goToStep(5)">
+                <span class="step-number">5</span>
+                <div class="step-info">
+                    <div class="step-title">Updating Records</div>
+                    <div class="step-duration">8 min</div>
+                </div>
+            </li>
+            <li class="step-item" data-step="6" onclick="goToStep(6)">
+                <span class="step-number">6</span>
+                <div class="step-info">
+                    <div class="step-title">Source Tracking</div>
+                    <div class="step-duration">7 min</div>
+                </div>
+            </li>
+            <li class="step-item" data-step="7" onclick="goToStep(7)">
+                <span class="step-number">7</span>
+                <div class="step-info">
+                    <div class="step-title">Best Practices</div>
+                    <div class="step-duration">7 min</div>
+                </div>
+            </li>
+            <li class="step-item" data-step="8" onclick="goToStep(8)">
+                <span class="step-number">8</span>
+                <div class="step-info">
+                    <div class="step-title">Module Complete</div>
+                    <div class="step-duration">2 min</div>
+                </div>
+            </li>
+        </ul>
+    </aside>
+    
+    <main class="main-content">
+        <!-- Step 1: Candidate Overview -->
+        <div class="step-page active" id="step1">
+            <div class="step-content">
+                <div class="step-header">
+                    <span class="step-badge">Step 1 of 8</span>
+                    <h1>Candidate Overview</h1>
+                    <p>Understanding the candidate record and its role in the recruiting process</p>
+                </div>
+                
+                <div class="content-card">
+                    <h2>👤 What is a Candidate Record?</h2>
+                    <p>A Candidate record represents a potential recruit in the Recruiter Portal. It stores all information about the person, their progress through the recruiting pipeline, and their interview history.</p>
+                    
+                    <div class="screenshot-placeholder">
+                        <div class="icon">📸</div>
+                        <div class="label">Screenshot: Candidate Record Detail Page</div>
+                    </div>
+                    
+                    <h3>Key Components of a Candidate Record</h3>
+                    <div class="feature-list">
+                        <div class="feature-item">
+                            <div class="feature-icon">📋</div>
+                            <div class="feature-text">
+                                <h4>Personal Information</h4>
+                                <p>Name, email, phone, address</p>
+                            </div>
+                        </div>
+                        <div class="feature-item">
+                            <div class="feature-icon">📊</div>
+                            <div class="feature-text">
+                                <h4>Pipeline Status</h4>
+                                <p>Current stage in recruiting process</p>
+                            </div>
+                        </div>
+                        <div class="feature-item">
+                            <div class="feature-icon">📅</div>
+                            <div class="feature-text">
+                                <h4>Interview History</h4>
+                                <p>All scheduled and completed interviews</p>
+                            </div>
+                        </div>
+                        <div class="feature-item">
+                            <div class="feature-icon">🔗</div>
+                            <div class="feature-text">
+                                <h4>Source Information</h4>
+                                <p>How and where candidate was found</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="info-box tip">
+                    <strong>💡 Pro Tip</strong>
+                    Keep candidate records updated as they progress through the pipeline. Accurate data helps managers track recruiting effectiveness.
+                </div>
+                
+                <div class="step-navigation">
+                    <button class="nav-btn prev" disabled>← Previous</button>
+                    <button class="nav-btn next" onclick="goToStep(2)">Next: Creating Candidates →</button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Step 2: Creating Candidates -->
+        <div class="step-page" id="step2">
+            <div class="step-content">
+                <div class="step-header">
+                    <span class="step-badge">Step 2 of 8</span>
+                    <h1>Creating Candidates</h1>
+                    <p>Learn the different ways to add new candidates to the system</p>
+                </div>
+                
+                <div class="content-card">
+                    <h2>➕ Methods to Create Candidates</h2>
+                    <p>There are three primary ways to add new candidates to the Recruiter Portal:</p>
+                    
+                    <h3>1. Dashboard Action Button</h3>
+                    <p>The fastest method - click the "Create New Candidate" button in the dashboard header to launch the guided flow.</p>
+                    
+                    <div class="screenshot-placeholder">
+                        <div class="icon">📸</div>
+                        <div class="label">Screenshot: Create New Candidate Button in Dashboard</div>
+                    </div>
+                    
+                    <h3>2. LinkedIn Import Extension</h3>
+                    <p>Import candidates directly from LinkedIn profiles using the browser extension. Covered in detail in Module 5.</p>
+                    
+                    <h3>3. Manual Creation</h3>
+                    <p>Navigate to the Candidates tab and click "New" to manually fill out the candidate form.</p>
+                </div>
+                
+                <div class="content-card">
+                    <h2>📝 Create Candidate Flow Steps</h2>
+                    <p>When using the dashboard action button, you'll be guided through these steps:</p>
+                    <ol>
+                        <li><strong>Basic Information</strong> - First name, last name, email</li>
+                        <li><strong>Contact Details</strong> - Phone number, preferred contact method</li>
+                        <li><strong>Source Information</strong> - How you found the candidate</li>
+                        <li><strong>Additional Notes</strong> - Any relevant information</li>
+                        <li><strong>Review & Save</strong> - Confirm and create the record</li>
+                    </ol>
+                </div>
+                
+                <div class="info-box">
+                    <strong>ℹ️ Duplicate Prevention</strong>
+                    The system will check for existing candidates with the same email address and warn you before creating duplicates.
+                </div>
+                
+                <div class="step-navigation">
+                    <button class="nav-btn prev" onclick="goToStep(1)">← Previous</button>
+                    <button class="nav-btn next" onclick="goToStep(3)">Next: Required Fields →</button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Step 3: Required Fields -->
+        <div class="step-page" id="step3">
+            <div class="step-content">
+                <div class="step-header">
+                    <span class="step-badge">Step 3 of 8</span>
+                    <h1>Required Fields</h1>
+                    <p>Understanding which fields are mandatory and why</p>
+                </div>
+                
+                <div class="content-card">
+                    <h2>📋 Candidate Field Reference</h2>
+                    <p>The following table shows all candidate fields and their requirements:</p>
+                    
+                    <table class="field-table">
+                        <thead>
+                            <tr>
+                                <th>Field Name</th>
+                                <th>Required</th>
+                                <th>Description</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>First Name</strong></td>
+                                <td><span class="required">Yes</span></td>
+                                <td>Candidate's first name</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Last Name</strong></td>
+                                <td><span class="required">Yes</span></td>
+                                <td>Candidate's last name</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Email</strong></td>
+                                <td><span class="required">Yes</span></td>
+                                <td>Primary email address</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Phone</strong></td>
+                                <td>No</td>
+                                <td>Primary phone number</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Source</strong></td>
+                                <td><span class="required">Yes</span></td>
+                                <td>How candidate was sourced</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Status</strong></td>
+                                <td><span class="required">Yes</span></td>
+                                <td>Pipeline stage (auto-set to New)</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Highest Level Achieved</strong></td>
+                                <td>No</td>
+                                <td>Furthest interview stage reached</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Recruiter</strong></td>
+                                <td><span class="required">Yes</span></td>
+                                <td>Assigned recruiter (auto-set to you)</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                
+                <div class="content-card">
+                    <h2>📝 Field Tips</h2>
+                    <ul>
+                        <li><strong>Email</strong> - Must be unique; used for duplicate detection</li>
+                        <li><strong>Phone</strong> - Include area code; used for scheduled call tasks</li>
+                        <li><strong>Source</strong> - Critical for tracking recruiting channel effectiveness</li>
+                        <li><strong>Highest Level</strong> - Updated automatically as interviews complete</li>
+                    </ul>
+                </div>
+                
+                <div class="info-box warning">
+                    <strong>⚠️ Data Quality</strong>
+                    Always verify email addresses before saving. Incorrect emails will cause communication failures.
+                </div>
+                
+                <div class="step-navigation">
+                    <button class="nav-btn prev" onclick="goToStep(2)">← Previous</button>
+                    <button class="nav-btn next" onclick="goToStep(4)">Next: Pipeline Stages →</button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Step 4: Pipeline Stages -->
+        <div class="step-page" id="step4">
+            <div class="step-content">
+                <div class="step-header">
+                    <span class="step-badge">Step 4 of 8</span>
+                    <h1>Pipeline Stages</h1>
+                    <p>Understanding the candidate pipeline and stage progression</p>
+                </div>
+                
+                <div class="content-card">
+                    <h2>📊 Pipeline Stage Overview</h2>
+                    <p>Candidates move through defined stages as they progress through the recruiting process:</p>
+                    
+                    <div class="pipeline-stages">
+                        <span class="stage-badge stage-new">New</span>
+                        <span style="color: var(--gray-500);">→</span>
+                        <span class="stage-badge stage-inprocess">In Process</span>
+                        <span style="color: var(--gray-500);">→</span>
+                        <span class="stage-badge stage-hired">Hired</span>
+                    </div>
+                    <p style="text-align: center; color: var(--gray-500); margin-top: 0.5rem;">
+                        or → <span class="stage-badge stage-inactive">Inactive</span> (at any point)
+                    </p>
+                    
+                    <div class="screenshot-placeholder">
+                        <div class="icon">📸</div>
+                        <div class="label">Screenshot: Pipeline Stage Selection</div>
+                    </div>
+                </div>
+                
+                <div class="content-card">
+                    <h2>🏷️ Stage Definitions</h2>
+                    <table class="field-table">
+                        <thead>
+                            <tr>
+                                <th>Stage</th>
+                                <th>When to Use</th>
+                                <th>Typical Duration</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><span class="stage-badge stage-new">New</span></td>
+                                <td>Candidate just added, not yet contacted</td>
+                                <td>1-3 days</td>
+                            </tr>
+                            <tr>
+                                <td><span class="stage-badge stage-inprocess">In Process</span></td>
+                                <td>Active engagement - interviews scheduled or in progress</td>
+                                <td>2-4 weeks</td>
+                            </tr>
+                            <tr>
+                                <td><span class="stage-badge stage-hired">Hired</span></td>
+                                <td>Candidate accepted offer and hired</td>
+                                <td>Final stage</td>
+                            </tr>
+                            <tr>
+                                <td><span class="stage-badge stage-inactive">Inactive</span></td>
+                                <td>Candidate withdrawn, rejected, or no longer pursuing</td>
+                                <td>Final stage</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                
+                <div class="content-card">
+                    <h2>📈 Highest Level Achieved</h2>
+                    <p>In addition to pipeline stage, track the furthest interview level reached:</p>
+                    <ul>
+                        <li><strong>None</strong> - No interviews completed</li>
+                        <li><strong>Initial Screen</strong> - Completed first phone/video screen</li>
+                        <li><strong>Manager Interview</strong> - Met with hiring manager</li>
+                        <li><strong>Final Interview</strong> - Completed final round</li>
+                        <li><strong>Offer Extended</strong> - Received formal offer</li>
+                    </ul>
+                </div>
+                
+                <div class="info-box tip">
+                    <strong>💡 Best Practice</strong>
+                    Update the pipeline stage immediately when status changes. This ensures accurate dashboard metrics and reporting.
+                </div>
+                
+                <div class="step-navigation">
+                    <button class="nav-btn prev" onclick="goToStep(3)">← Previous</button>
+                    <button class="nav-btn next" onclick="goToStep(5)">Next: Updating Records →</button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Step 5: Updating Records -->
+        <div class="step-page" id="step5">
+            <div class="step-content">
+                <div class="step-header">
+                    <span class="step-badge">Step 5 of 8</span>
+                    <h1>Updating Records</h1>
+                    <p>Learn how to modify candidate information and progress</p>
+                </div>
+                
+                <div class="content-card">
+                    <h2>✏️ Ways to Update Candidates</h2>
+                    
+                    <h3>1. Inline Editing</h3>
+                    <p>Double-click any editable field directly on the record to make quick changes.</p>
+                    
+                    <div class="screenshot-placeholder">
+                        <div class="icon">📸</div>
+                        <div class="label">Screenshot: Inline Edit Example</div>
+                    </div>
+                    
+                    <h3>2. Edit Button</h3>
+                    <p>Click the "Edit" button to open the full edit form for comprehensive changes.</p>
+                    
+                    <h3>3. Dashboard Action</h3>
+                    <p>Use the "Update Candidate" action button to launch the guided update flow.</p>
+                </div>
+                
+                <div class="content-card">
+                    <h2>📝 Common Update Scenarios</h2>
+                    <table class="field-table">
+                        <thead>
+                            <tr>
+                                <th>Scenario</th>
+                                <th>Fields to Update</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Candidate contacted</td>
+                                <td>Status → In Process</td>
+                            </tr>
+                            <tr>
+                                <td>Interview completed</td>
+                                <td>Highest Level Achieved</td>
+                            </tr>
+                            <tr>
+                                <td>Offer accepted</td>
+                                <td>Status → Hired, Hire Date</td>
+                            </tr>
+                            <tr>
+                                <td>Candidate withdrew</td>
+                                <td>Status → Inactive, Inactive Reason</td>
+                            </tr>
+                            <tr>
+                                <td>Contact info changed</td>
+                                <td>Email, Phone as needed</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                
+                <div class="info-box">
+                    <strong>ℹ️ Change History</strong>
+                    All changes are tracked in the record's history. Click "View History" to see who made changes and when.
+                </div>
+                
+                <div class="step-navigation">
+                    <button class="nav-btn prev" onclick="goToStep(4)">← Previous</button>
+                    <button class="nav-btn next" onclick="goToStep(6)">Next: Source Tracking →</button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Step 6: Source Tracking -->
+        <div class="step-page" id="step6">
+            <div class="step-content">
+                <div class="step-header">
+                    <span class="step-badge">Step 6 of 8</span>
+                    <h1>Source Tracking</h1>
+                    <p>Understanding how to track where candidates come from</p>
+                </div>
+                
+                <div class="content-card">
+                    <h2>🔍 Why Source Tracking Matters</h2>
+                    <p>Tracking how candidates are sourced helps the organization understand which recruiting channels are most effective. This data drives budget decisions and recruiting strategy.</p>
+                    
+                    <h3>Available Source Options</h3>
+                    <table class="field-table">
+                        <thead>
+                            <tr>
+                                <th>Source</th>
+                                <th>When to Use</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>LinkedIn</strong></td>
+                                <td>Found via LinkedIn search or imported via extension</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Referral</strong></td>
+                                <td>Referred by current employee or agent</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Job Board</strong></td>
+                                <td>Applied through Indeed, ZipRecruiter, etc.</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Career Fair</strong></td>
+                                <td>Met at recruiting event</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Website</strong></td>
+                                <td>Applied through company career site</td>
+                            </tr>
+                            <tr>
+                                <td><strong>ZoomInfo</strong></td>
+                                <td>Sourced from ZoomInfo database</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Other</strong></td>
+                                <td>Any other source (add details in notes)</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                
+                <div class="content-card">
+                    <h2>📊 Source Metrics</h2>
+                    <p>The system tracks these metrics by source:</p>
+                    <ul>
+                        <li><strong>Volume</strong> - Number of candidates from each source</li>
+                        <li><strong>Conversion Rate</strong> - Percentage that become hires</li>
+                        <li><strong>Time-to-Hire</strong> - Average days to hire by source</li>
+                        <li><strong>Quality Score</strong> - Performance rating of hires by source</li>
+                    </ul>
+                </div>
+                
+                <div class="info-box tip">
+                    <strong>💡 Referral Tracking</strong>
+                    When selecting "Referral" as the source, you can specify who made the referral in the Referred By field for bonus tracking.
+                </div>
+                
+                <div class="step-navigation">
+                    <button class="nav-btn prev" onclick="goToStep(5)">← Previous</button>
+                    <button class="nav-btn next" onclick="goToStep(7)">Next: Best Practices →</button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Step 7: Best Practices -->
+        <div class="step-page" id="step7">
+            <div class="step-content">
+                <div class="step-header">
+                    <span class="step-badge">Step 7 of 8</span>
+                    <h1>Best Practices</h1>
+                    <p>Tips for effective candidate management</p>
+                </div>
+                
+                <div class="content-card">
+                    <h2>✅ Do's</h2>
+                    <ul>
+                        <li><strong>Update records promptly</strong> - Keep status current after each interaction</li>
+                        <li><strong>Use accurate sources</strong> - Select the correct source for reporting accuracy</li>
+                        <li><strong>Add detailed notes</strong> - Document important conversations and observations</li>
+                        <li><strong>Verify contact info</strong> - Confirm email and phone before saving</li>
+                        <li><strong>Schedule follow-ups</strong> - Create tasks for pending actions</li>
+                    </ul>
+                </div>
+                
+                <div class="content-card">
+                    <h2>❌ Don'ts</h2>
+                    <ul>
+                        <li><strong>Don't create duplicates</strong> - Search before creating new candidates</li>
+                        <li><strong>Don't leave status stale</strong> - Inactive candidates should be marked Inactive</li>
+                        <li><strong>Don't skip required fields</strong> - Incomplete records cause reporting issues</li>
+                        <li><strong>Don't use "Other" source excessively</strong> - Be specific when possible</li>
+                        <li><strong>Don't delete records</strong> - Mark as Inactive instead for audit trail</li>
+                    </ul>
+                </div>
+                
+                <div class="content-card">
+                    <h2>🎯 Quality Checklist</h2>
+                    <p>Before considering a candidate record complete, verify:</p>
+                    <ul>
+                        <li>☐ Name spelled correctly</li>
+                        <li>☐ Valid email address</li>
+                        <li>☐ Phone number with area code</li>
+                        <li>☐ Correct source selected</li>
+                        <li>☐ Status reflects current stage</li>
+                        <li>☐ Highest level updated after interviews</li>
+                    </ul>
+                </div>
+                
+                <div class="info-box">
+                    <strong>ℹ️ Data Quality Reports</strong>
+                    Managers run weekly reports to identify incomplete records. Keep your records updated to avoid follow-up requests.
+                </div>
+                
+                <div class="step-navigation">
+                    <button class="nav-btn prev" onclick="goToStep(6)">← Previous</button>
+                    <button class="nav-btn next" onclick="goToStep(8)">Complete Module →</button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Step 8: Module Complete -->
+        <div class="step-page" id="step8">
+            <div class="step-content">
+                <div class="step-header">
+                    <span class="step-badge">Step 8 of 8</span>
+                    <h1>🎉 Module Complete!</h1>
+                    <p>You've finished the Candidate Management module</p>
+                </div>
+                
+                <div class="content-card" style="text-align: center; padding: 3rem;">
+                    <div style="font-size: 4rem; margin-bottom: 1rem;">🏆</div>
+                    <h2>Congratulations!</h2>
+                    <p style="font-size: 1.1rem; max-width: 500px; margin: 1rem auto;">You now know how to create, update, and manage candidate records effectively in the Recruiter Portal.</p>
+                    
+                    <h3 style="margin-top: 2rem;">What You Learned:</h3>
+                    <ul style="text-align: left; max-width: 400px; margin: 1rem auto;">
+                        <li>Candidate record components</li>
+                        <li>Three methods to create candidates</li>
+                        <li>Required vs optional fields</li>
+                        <li>Pipeline stages and progression</li>
+                        <li>Multiple ways to update records</li>
+                        <li>Source tracking importance</li>
+                        <li>Best practices for data quality</li>
+                    </ul>
+                </div>
+                
+                <div class="content-card">
+                    <h2>📚 Next Steps</h2>
+                    <p>Continue your training with the next module:</p>
+                    <div class="feature-list">
+                        <a href="module3-interview-tracking.html" class="feature-item" style="text-decoration: none; cursor: pointer;">
+                            <div class="feature-icon">📅</div>
+                            <div class="feature-text">
+                                <h4>Module 3: Interview Tracking</h4>
+                                <p>Learn to schedule and track interviews throughout the process</p>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+                
+                <div class="step-navigation">
+                    <button class="nav-btn prev" onclick="goToStep(7)">← Previous</button>
+                    <button class="nav-btn complete" onclick="completeModule()">✓ Mark Complete & Continue</button>
+                </div>
+            </div>
+        </div>
+    </main>
+    
+    <script>
+        const totalSteps = 8;
+        let currentStep = 1;
+        let completedSteps = [];
+        
+        function loadProgress() {
+            const saved = localStorage.getItem('recruiter-training-module2-step');
+            if (saved) {
+                currentStep = parseInt(saved);
+                for (let i = 1; i < currentStep; i++) {
+                    completedSteps.push(i);
+                }
+            }
+            updateUI();
+        }
+        
+        function saveProgress() {
+            localStorage.setItem('recruiter-training-module2-step', currentStep);
+            if (currentStep > 1) {
+                localStorage.setItem('recruiter-training-module2', 'in-progress');
+            }
+        }
+        
+        function goToStep(step) {
+            if (step > currentStep) {
+                for (let i = currentStep; i < step; i++) {
+                    if (!completedSteps.includes(i)) {
+                        completedSteps.push(i);
+                    }
+                }
+            }
+            
+            currentStep = step;
+            saveProgress();
+            updateUI();
+        }
+        
+        function updateUI() {
+            document.querySelectorAll('.step-page').forEach((page, index) => {
+                page.classList.remove('active');
+                if (index + 1 === currentStep) {
+                    page.classList.add('active');
+                }
+            });
+            
+            document.querySelectorAll('.step-item').forEach((item, index) => {
+                const stepNum = index + 1;
+                item.classList.remove('active', 'completed');
+                
+                if (stepNum === currentStep) {
+                    item.classList.add('active');
+                } else if (completedSteps.includes(stepNum)) {
+                    item.classList.add('completed');
+                }
+            });
+            
+            const progress = ((currentStep - 1) / (totalSteps - 1)) * 100;
+            document.getElementById('progressFill').style.width = `${progress}%`;
+        }
+        
+        function completeModule() {
+            localStorage.setItem('recruiter-training-module2', 'completed');
+            localStorage.setItem('recruiter-training-module2-step', totalSteps);
+            
+            if (confirm('Module complete! Continue to Module 3: Interview Tracking?')) {
+                window.location.href = 'module3-interview-tracking.html';
+            } else {
+                window.location.href = 'recruiter-training.html';
+            }
+        }
+        
+        loadProgress();
+    </script>
+</body>
+</html>
