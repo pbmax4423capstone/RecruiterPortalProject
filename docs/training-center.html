@@ -1,0 +1,802 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Capstone Salesforce Training Center</title>
+    <style>
+        :root {
+            --primary: #0176d3;
+            --primary-dark: #014486;
+            --primary-light: #e5f2ff;
+            --recruiter: #0b827c;
+            --recruiter-light: #e0f5f4;
+            --manager: #8250df;
+            --manager-light: #f3e8ff;
+            --developer: #238636;
+            --developer-light: #d1fae5;
+            --gray-100: #f3f3f3;
+            --gray-200: #e5e5e5;
+            --gray-300: #c9c9c9;
+            --gray-500: #747474;
+            --gray-700: #444444;
+            --gray-900: #181818;
+            --white: #ffffff;
+            --shadow: 0 2px 8px rgba(0,0,0,0.1);
+            --shadow-lg: 0 4px 20px rgba(0,0,0,0.15);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Salesforce Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--gray-100);
+            color: var(--gray-900);
+            line-height: 1.6;
+        }
+        
+        /* Header & Navigation */
+        .header {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: white;
+            padding: 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: var(--shadow-lg);
+        }
+        
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 2rem;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem 0;
+        }
+        
+        .logo-icon {
+            width: 50px;
+            height: 50px;
+            background: white;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.75rem;
+        }
+        
+        .logo-text h1 {
+            font-size: 1.4rem;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+        }
+        
+        .logo-text span {
+            font-size: 0.85rem;
+            opacity: 0.9;
+        }
+        
+        /* Main Navigation */
+        .main-nav {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .nav-item {
+            position: relative;
+        }
+        
+        .nav-btn {
+            background: rgba(255,255,255,0.1);
+            border: none;
+            color: white;
+            padding: 0.75rem 1.25rem;
+            border-radius: 8px;
+            font-size: 0.95rem;
+            font-weight: 500;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.2s;
+        }
+        
+        .nav-btn:hover {
+            background: rgba(255,255,255,0.2);
+        }
+        
+        .nav-btn.active {
+            background: white;
+            color: var(--primary);
+        }
+        
+        .dropdown {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            background: white;
+            border-radius: 12px;
+            box-shadow: var(--shadow-lg);
+            min-width: 280px;
+            padding: 0.5rem;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(10px);
+            transition: all 0.2s;
+            z-index: 100;
+        }
+        
+        .nav-item:hover .dropdown {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(5px);
+        }
+        
+        .dropdown-item {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.75rem 1rem;
+            color: var(--gray-700);
+            text-decoration: none;
+            border-radius: 8px;
+            transition: all 0.2s;
+        }
+        
+        .dropdown-item:hover {
+            background: var(--gray-100);
+            color: var(--primary);
+        }
+        
+        .dropdown-item .icon {
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+        }
+        
+        .dropdown-item.recruiter .icon { background: var(--recruiter-light); }
+        .dropdown-item.manager .icon { background: var(--manager-light); }
+        .dropdown-item.developer .icon { background: var(--developer-light); }
+        .dropdown-item.quick .icon { background: var(--primary-light); }
+        
+        .dropdown-divider {
+            height: 1px;
+            background: var(--gray-200);
+            margin: 0.5rem 0;
+        }
+        
+        .dropdown-header {
+            padding: 0.5rem 1rem;
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: var(--gray-500);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: white;
+            padding: 4rem 2rem;
+            text-align: center;
+        }
+        
+        .hero h2 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+        
+        .hero p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            max-width: 600px;
+            margin: 0 auto 2rem;
+        }
+        
+        .hero-stats {
+            display: flex;
+            justify-content: center;
+            gap: 3rem;
+            margin-top: 2rem;
+        }
+        
+        .stat {
+            text-align: center;
+        }
+        
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 700;
+        }
+        
+        .stat-label {
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+        
+        /* Main Content */
+        .main-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 3rem 2rem;
+        }
+        
+        .section-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--gray-900);
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+        
+        /* Training Programs Grid */
+        .programs-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+        }
+        
+        .program-card {
+            background: white;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            transition: all 0.3s;
+            text-decoration: none;
+            color: inherit;
+        }
+        
+        .program-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-lg);
+        }
+        
+        .program-header {
+            padding: 1.5rem;
+            color: white;
+        }
+        
+        .program-card.recruiter .program-header { background: linear-gradient(135deg, var(--recruiter), #065f5b); }
+        .program-card.manager .program-header { background: linear-gradient(135deg, var(--manager), #6b3fc7); }
+        .program-card.developer .program-header { background: linear-gradient(135deg, var(--developer), #1a6b2b); }
+        
+        .program-icon {
+            width: 60px;
+            height: 60px;
+            background: rgba(255,255,255,0.2);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+        
+        .program-header h3 {
+            font-size: 1.4rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .program-header p {
+            opacity: 0.9;
+            font-size: 0.95rem;
+        }
+        
+        .program-body {
+            padding: 1.5rem;
+        }
+        
+        .program-modules {
+            list-style: none;
+        }
+        
+        .program-modules li {
+            padding: 0.5rem 0;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            color: var(--gray-700);
+            font-size: 0.95rem;
+        }
+        
+        .program-modules li::before {
+            content: "→";
+            color: var(--gray-400);
+        }
+        
+        .program-footer {
+            padding: 1rem 1.5rem;
+            background: var(--gray-100);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .program-meta {
+            display: flex;
+            gap: 1rem;
+            font-size: 0.85rem;
+            color: var(--gray-500);
+        }
+        
+        .start-btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 0.5rem 1.25rem;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .program-card.recruiter .start-btn { background: var(--recruiter); }
+        .program-card.manager .start-btn { background: var(--manager); }
+        .program-card.developer .start-btn { background: var(--developer); }
+        
+        .start-btn:hover { opacity: 0.9; transform: scale(1.02); }
+        
+        /* Quick Access Section */
+        .quick-access {
+            margin-bottom: 3rem;
+        }
+        
+        .quick-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+        }
+        
+        .quick-card {
+            background: white;
+            border-radius: 12px;
+            padding: 1.25rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            box-shadow: var(--shadow);
+            text-decoration: none;
+            color: inherit;
+            transition: all 0.2s;
+            border-left: 4px solid var(--primary);
+        }
+        
+        .quick-card:hover {
+            transform: translateX(4px);
+            box-shadow: var(--shadow-lg);
+        }
+        
+        .quick-card .icon {
+            width: 48px;
+            height: 48px;
+            background: var(--primary-light);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+        }
+        
+        .quick-card h4 {
+            font-size: 1rem;
+            color: var(--gray-900);
+            margin-bottom: 0.25rem;
+        }
+        
+        .quick-card p {
+            font-size: 0.85rem;
+            color: var(--gray-500);
+        }
+        
+        /* How-To Guides Section */
+        .guides-section {
+            margin-bottom: 3rem;
+        }
+        
+        .guides-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1rem;
+        }
+        
+        .guide-card {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: var(--shadow);
+            text-decoration: none;
+            color: inherit;
+            transition: all 0.2s;
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+        }
+        
+        .guide-card:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+        }
+        
+        .guide-card .icon {
+            width: 44px;
+            height: 44px;
+            background: var(--recruiter-light);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+            flex-shrink: 0;
+        }
+        
+        .guide-card h4 {
+            font-size: 1rem;
+            color: var(--gray-900);
+            margin-bottom: 0.25rem;
+        }
+        
+        .guide-card p {
+            font-size: 0.85rem;
+            color: var(--gray-500);
+            line-height: 1.5;
+        }
+        
+        /* Footer */
+        .footer {
+            background: var(--gray-900);
+            color: white;
+            padding: 2rem;
+            text-align: center;
+        }
+        
+        .footer p {
+            opacity: 0.7;
+            font-size: 0.9rem;
+        }
+        
+        .footer-links {
+            margin-top: 1rem;
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+        }
+        
+        .footer-links a {
+            color: white;
+            opacity: 0.7;
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: opacity 0.2s;
+        }
+        
+        .footer-links a:hover {
+            opacity: 1;
+        }
+        
+        /* Mobile Responsive */
+        @media (max-width: 768px) {
+            .nav-container {
+                flex-direction: column;
+                padding: 1rem;
+            }
+            
+            .main-nav {
+                flex-wrap: wrap;
+                justify-content: center;
+                margin-top: 1rem;
+            }
+            
+            .hero h2 {
+                font-size: 1.75rem;
+            }
+            
+            .hero-stats {
+                flex-direction: column;
+                gap: 1.5rem;
+            }
+            
+            .programs-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header with Navigation -->
+    <header class="header">
+        <div class="nav-container">
+            <div class="logo">
+                <div class="logo-icon">🎓</div>
+                <div class="logo-text">
+                    <h1>Capstone Training Center</h1>
+                    <span>Salesforce Recruiter Portal</span>
+                </div>
+            </div>
+            
+            <nav class="main-nav">
+                <div class="nav-item">
+                    <button class="nav-btn">
+                        📚 Training Programs ▾
+                    </button>
+                    <div class="dropdown">
+                        <div class="dropdown-header">Full Training Programs</div>
+                        <a href="recruiter-training.html" class="dropdown-item recruiter">
+                            <div class="icon">👤</div>
+                            <div>
+                                <strong>Recruiter Training</strong>
+                                <div style="font-size: 0.8rem; color: var(--gray-500);">5 modules • 75 min</div>
+                            </div>
+                        </a>
+                        <a href="sales-manager-training.html" class="dropdown-item manager">
+                            <div class="icon">👔</div>
+                            <div>
+                                <strong>Sales Manager Training</strong>
+                                <div style="font-size: 0.8rem; color: var(--gray-500);">3 modules • 45 min</div>
+                            </div>
+                        </a>
+                        <a href="developer-training.html" class="dropdown-item developer">
+                            <div class="icon">💻</div>
+                            <div>
+                                <strong>Developer Collaboration</strong>
+                                <div style="font-size: 0.8rem; color: var(--gray-500);">6 modules • 90 min</div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+                
+                <div class="nav-item">
+                    <button class="nav-btn">
+                        ⚡ Quick Start ▾
+                    </button>
+                    <div class="dropdown">
+                        <a href="quick-start-interactive.html" class="dropdown-item quick">
+                            <div class="icon">🚀</div>
+                            <div>
+                                <strong>Interactive Quick Start</strong>
+                                <div style="font-size: 0.8rem; color: var(--gray-500);">Get started in 10 min</div>
+                            </div>
+                        </a>
+                        <a href="quick-reference-card.html" class="dropdown-item quick">
+                            <div class="icon">📋</div>
+                            <div>
+                                <strong>Quick Reference Card</strong>
+                                <div style="font-size: 0.8rem; color: var(--gray-500);">Printable cheat sheet</div>
+                            </div>
+                        </a>
+                        <div class="dropdown-divider"></div>
+                        <div class="dropdown-header">How-To Guides</div>
+                        <a href="guide-create-candidate.html" class="dropdown-item recruiter">
+                            <div class="icon">➕</div>
+                            <div><strong>Create a Candidate</strong></div>
+                        </a>
+                        <a href="guide-schedule-interview.html" class="dropdown-item recruiter">
+                            <div class="icon">📅</div>
+                            <div><strong>Schedule Interview</strong></div>
+                        </a>
+                        <a href="guide-contract-b.html" class="dropdown-item recruiter">
+                            <div class="icon">📊</div>
+                            <div><strong>Contract B Pipeline</strong></div>
+                        </a>
+                        <a href="guide-linkedin-extension.html" class="dropdown-item recruiter">
+                            <div class="icon">🔗</div>
+                            <div><strong>LinkedIn Extension</strong></div>
+                        </a>
+                    </div>
+                </div>
+                
+                <div class="nav-item">
+                    <button class="nav-btn">
+                        🧪 QA & Testing ▾
+                    </button>
+                    <div class="dropdown">
+                        <a href="qa-testing-guide.html" class="dropdown-item quick">
+                            <div class="icon">✅</div>
+                            <div>
+                                <strong>QA Testing Guide</strong>
+                                <div style="font-size: 0.8rem; color: var(--gray-500);">Test scenarios & scripts</div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </nav>
+        </div>
+    </header>
+    
+    <!-- Hero Section -->
+    <section class="hero">
+        <h2>Welcome to Capstone Training Center</h2>
+        <p>Your complete learning hub for the Salesforce Recruiter Portal. Choose a training program below or jump straight to a quick start guide.</p>
+        <div class="hero-stats">
+            <div class="stat">
+                <div class="stat-number">14</div>
+                <div class="stat-label">Training Modules</div>
+            </div>
+            <div class="stat">
+                <div class="stat-number">3.5</div>
+                <div class="stat-label">Hours of Content</div>
+            </div>
+            <div class="stat">
+                <div class="stat-number">4</div>
+                <div class="stat-label">How-To Guides</div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Training Programs -->
+        <h2 class="section-title">📚 Training Programs</h2>
+        <div class="programs-grid">
+            <!-- Recruiter Training -->
+            <a href="recruiter-training.html" class="program-card recruiter">
+                <div class="program-header">
+                    <div class="program-icon">👤</div>
+                    <h3>Recruiter Training Program</h3>
+                    <p>Master the complete recruiting workflow</p>
+                </div>
+                <div class="program-body">
+                    <ul class="program-modules">
+                        <li>Dashboard Navigation</li>
+                        <li>Candidate Management</li>
+                        <li>Interview Tracking</li>
+                        <li>Contract B Pipeline</li>
+                        <li>LinkedIn Integration</li>
+                    </ul>
+                </div>
+                <div class="program-footer">
+                    <div class="program-meta">
+                        <span>📚 5 modules</span>
+                        <span>⏱️ 75 min</span>
+                    </div>
+                    <span class="start-btn">Start Training →</span>
+                </div>
+            </a>
+            
+            <!-- Sales Manager Training -->
+            <a href="sales-manager-training.html" class="program-card manager">
+                <div class="program-header">
+                    <div class="program-icon">👔</div>
+                    <h3>Sales Manager Training</h3>
+                    <p>Lead your team with data-driven insights</p>
+                </div>
+                <div class="program-body">
+                    <ul class="program-modules">
+                        <li>Team Overview Dashboard</li>
+                        <li>Reports & Analytics</li>
+                        <li>Contract B Monitoring</li>
+                    </ul>
+                </div>
+                <div class="program-footer">
+                    <div class="program-meta">
+                        <span>📚 3 modules</span>
+                        <span>⏱️ 45 min</span>
+                    </div>
+                    <span class="start-btn">Start Training →</span>
+                </div>
+            </a>
+            
+            <!-- Developer Training -->
+            <a href="developer-training.html" class="program-card developer">
+                <div class="program-header">
+                    <div class="program-icon">💻</div>
+                    <h3>Developer Collaboration</h3>
+                    <p>Git, GitHub, and AI-powered development</p>
+                </div>
+                <div class="program-body">
+                    <ul class="program-modules">
+                        <li>Git Fundamentals</li>
+                        <li>Branch Strategy</li>
+                        <li>Avoiding Merge Conflicts</li>
+                        <li>Pull Request Best Practices</li>
+                        <li>GitHub Copilot Agent</li>
+                        <li>Project Setup</li>
+                    </ul>
+                </div>
+                <div class="program-footer">
+                    <div class="program-meta">
+                        <span>📚 6 modules</span>
+                        <span>⏱️ 90 min</span>
+                    </div>
+                    <span class="start-btn">Start Training →</span>
+                </div>
+            </a>
+        </div>
+        
+        <!-- Quick Access -->
+        <section class="quick-access">
+            <h2 class="section-title">⚡ Quick Access</h2>
+            <div class="quick-grid">
+                <a href="quick-start-interactive.html" class="quick-card">
+                    <div class="icon">🚀</div>
+                    <div>
+                        <h4>Interactive Quick Start</h4>
+                        <p>Get up and running in 10 minutes</p>
+                    </div>
+                </a>
+                <a href="quick-reference-card.html" class="quick-card">
+                    <div class="icon">📋</div>
+                    <div>
+                        <h4>Quick Reference Card</h4>
+                        <p>Printable single-page cheat sheet</p>
+                    </div>
+                </a>
+                <a href="qa-testing-guide.html" class="quick-card">
+                    <div class="icon">✅</div>
+                    <div>
+                        <h4>QA Testing Guide</h4>
+                        <p>Test scenarios and validation scripts</p>
+                    </div>
+                </a>
+            </div>
+        </section>
+        
+        <!-- How-To Guides -->
+        <section class="guides-section">
+            <h2 class="section-title">📖 How-To Guides</h2>
+            <div class="guides-grid">
+                <a href="guide-create-candidate.html" class="guide-card">
+                    <div class="icon">➕</div>
+                    <div>
+                        <h4>Create a Candidate</h4>
+                        <p>Step-by-step guide to adding new candidates to the system</p>
+                    </div>
+                </a>
+                <a href="guide-schedule-interview.html" class="guide-card">
+                    <div class="icon">📅</div>
+                    <div>
+                        <h4>Schedule an Interview</h4>
+                        <p>Book and manage candidate interviews</p>
+                    </div>
+                </a>
+                <a href="guide-contract-b.html" class="guide-card">
+                    <div class="icon">📊</div>
+                    <div>
+                        <h4>Contract B Pipeline</h4>
+                        <p>Track and manage Contract B agents</p>
+                    </div>
+                </a>
+                <a href="guide-linkedin-extension.html" class="guide-card">
+                    <div class="icon">🔗</div>
+                    <div>
+                        <h4>LinkedIn Extension</h4>
+                        <p>Import candidates directly from LinkedIn</p>
+                    </div>
+                </a>
+            </div>
+        </section>
+    </main>
+    
+    <!-- Footer -->
+    <footer class="footer">
+        <p>Capstone Salesforce Training Center • Recruiter Portal Project</p>
+        <div class="footer-links">
+            <a href="https://github.com/pbmax4423capstone/RecruiterPortalProject" target="_blank">GitHub Repository</a>
+            <a href="recruiter-training.html">Recruiter Training</a>
+            <a href="developer-training.html">Developer Training</a>
+        </div>
+    </footer>
+</body>
+</html>
