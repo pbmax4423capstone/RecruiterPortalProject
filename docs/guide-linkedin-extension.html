@@ -1,0 +1,646 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guide 4: LinkedIn Extension - Recruiter Portal ATS</title>
+    <style>
+        :root {
+            --primary: #8b5cf6;
+            --primary-dark: #6d28d9;
+            --primary-light: #ede9fe;
+            --success: #2e844a;
+            --success-light: #dcfce7;
+            --warning: #fe9339;
+            --warning-light: #fef3c7;
+            --danger: #ea001e;
+            --linkedin: #0077b5;
+            --linkedin-light: #e8f4f8;
+            --gray-100: #f3f3f3;
+            --gray-200: #e5e5e5;
+            --gray-300: #d1d5db;
+            --gray-500: #6b7280;
+            --gray-700: #444;
+            --gray-900: #181818;
+        }
+        
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: 'Salesforce Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--gray-100);
+            min-height: 100vh;
+        }
+        
+        .nav {
+            background: white;
+            padding: 1rem 2rem;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .nav-left { display: flex; align-items: center; gap: 1rem; }
+        .nav a { color: var(--primary); text-decoration: none; font-weight: 500; }
+        .nav a:hover { text-decoration: underline; }
+        .nav-title { font-size: 1.1rem; color: var(--gray-900); font-weight: 600; }
+        .nav-progress { display: flex; align-items: center; gap: 0.5rem; font-size: 0.9rem; color: var(--gray-500); }
+        .nav-progress-bar { width: 150px; height: 8px; background: var(--gray-200); border-radius: 4px; overflow: hidden; }
+        .nav-progress-fill { height: 100%; background: var(--primary); border-radius: 4px; transition: width 0.3s; }
+        
+        .main-container { display: flex; max-width: 1400px; margin: 0 auto; gap: 2rem; padding: 2rem; }
+        .sidebar { width: 280px; flex-shrink: 0; }
+        .steps-list { background: white; border-radius: 12px; padding: 1rem; box-shadow: 0 2px 8px rgba(0,0,0,0.1); position: sticky; top: 80px; }
+        .steps-list h3 { font-size: 0.875rem; color: var(--gray-500); text-transform: uppercase; letter-spacing: 0.5px; padding: 0.5rem 1rem; margin-bottom: 0.5rem; }
+        
+        .step-item { display: flex; align-items: center; gap: 0.75rem; padding: 0.75rem 1rem; border-radius: 8px; cursor: pointer; transition: background 0.2s; }
+        .step-item:hover { background: var(--gray-100); }
+        .step-item.active { background: var(--primary-light); }
+        .step-item.completed { opacity: 0.7; }
+        .step-number { width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.8rem; font-weight: 600; background: var(--gray-200); color: var(--gray-500); flex-shrink: 0; }
+        .step-item.active .step-number { background: var(--primary); color: white; }
+        .step-item.completed .step-number { background: var(--success); color: white; }
+        .step-item.completed .step-number::after { content: "✓"; }
+        .step-item.completed .step-number span { display: none; }
+        .step-title { font-size: 0.9rem; color: var(--gray-700); }
+        .step-item.active .step-title { color: var(--primary-dark); font-weight: 600; }
+        
+        .content-area { flex: 1; max-width: 800px; }
+        .step-content { display: none; background: white; border-radius: 12px; padding: 2rem; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
+        .step-content.active { display: block; }
+        .step-header { margin-bottom: 1.5rem; }
+        .step-header h1 { font-size: 1.5rem; color: var(--gray-900); margin-bottom: 0.5rem; }
+        .step-header p { color: var(--gray-500); }
+        
+        .instruction { background: var(--gray-100); border-radius: 8px; padding: 1.5rem; margin-bottom: 1.5rem; }
+        .instruction h3 { font-size: 1rem; color: var(--gray-900); margin-bottom: 0.75rem; display: flex; align-items: center; gap: 0.5rem; }
+        .instruction p { color: var(--gray-700); line-height: 1.6; margin-bottom: 0.75rem; }
+        .instruction ol, .instruction ul { margin-left: 1.5rem; color: var(--gray-700); }
+        .instruction li { margin-bottom: 0.5rem; line-height: 1.5; }
+        
+        .callout { border-radius: 8px; padding: 1rem 1.25rem; margin: 1rem 0; display: flex; gap: 0.75rem; }
+        .callout-icon { font-size: 1.25rem; flex-shrink: 0; }
+        .callout-content { flex: 1; }
+        .callout-content strong { display: block; margin-bottom: 0.25rem; }
+        .callout.tip { background: var(--primary-light); border-left: 4px solid var(--primary); }
+        .callout.warning { background: #fef3c7; border-left: 4px solid var(--warning); }
+        .callout.success { background: var(--success-light); border-left: 4px solid var(--success); }
+        .callout.important { background: #fce7f3; border-left: 4px solid #db2777; }
+        .callout.linkedin { background: var(--linkedin-light); border-left: 4px solid var(--linkedin); }
+        
+        .screenshot { background: linear-gradient(135deg, #e0f2fe, #bae6fd); border-radius: 8px; padding: 3rem; text-align: center; margin: 1rem 0; border: 2px dashed #0284c7; }
+        .screenshot p { color: #0369a1; font-weight: 500; }
+        
+        .extension-visual { background: white; border: 2px solid var(--gray-200); border-radius: 12px; overflow: hidden; margin: 1rem 0; }
+        .extension-header { background: var(--linkedin); color: white; padding: 1rem; display: flex; align-items: center; gap: 0.75rem; }
+        .extension-header .logo { width: 32px; height: 32px; background: white; border-radius: 4px; display: flex; align-items: center; justify-content: center; font-weight: 700; color: var(--linkedin); }
+        .extension-body { padding: 1.5rem; }
+        .extension-field { margin-bottom: 1rem; }
+        .extension-field label { display: block; font-size: 0.8rem; color: var(--gray-500); margin-bottom: 0.25rem; }
+        .extension-field .value { background: var(--gray-100); padding: 0.5rem 0.75rem; border-radius: 4px; color: var(--gray-700); }
+        .extension-btn { display: block; width: 100%; padding: 0.75rem; background: var(--linkedin); color: white; border: none; border-radius: 6px; font-weight: 600; cursor: pointer; margin-top: 1rem; }
+        
+        .field-table { width: 100%; border-collapse: collapse; margin: 1rem 0; }
+        .field-table th, .field-table td { padding: 0.75rem; text-align: left; border-bottom: 1px solid var(--gray-200); }
+        .field-table th { background: var(--gray-100); font-weight: 600; color: var(--gray-700); }
+        .field-table td { color: var(--gray-700); }
+        
+        .browser-icons { display: flex; gap: 1rem; justify-content: center; margin: 1rem 0; }
+        .browser-icon { text-align: center; padding: 1rem; background: var(--gray-100); border-radius: 8px; width: 100px; }
+        .browser-icon .icon { font-size: 2rem; margin-bottom: 0.5rem; }
+        .browser-icon .name { font-size: 0.85rem; color: var(--gray-700); }
+        
+        .checkbox-group { display: flex; align-items: flex-start; gap: 0.75rem; padding: 1rem; background: var(--primary-light); border-radius: 8px; margin: 1.5rem 0; cursor: pointer; }
+        .checkbox-group input[type="checkbox"] { width: 20px; height: 20px; cursor: pointer; margin-top: 2px; }
+        .checkbox-group label { color: var(--gray-700); cursor: pointer; line-height: 1.5; }
+        
+        .step-nav { display: flex; justify-content: space-between; margin-top: 2rem; padding-top: 1.5rem; border-top: 1px solid var(--gray-200); }
+        .btn { padding: 0.75rem 1.5rem; border-radius: 6px; font-weight: 600; cursor: pointer; transition: all 0.2s; text-decoration: none; display: inline-flex; align-items: center; gap: 0.5rem; border: none; font-size: 1rem; }
+        .btn-secondary { background: var(--gray-200); color: var(--gray-700); }
+        .btn-secondary:hover { background: var(--gray-300); }
+        .btn-primary { background: var(--primary); color: white; }
+        .btn-primary:hover { background: var(--primary-dark); }
+        .btn-success { background: var(--success); color: white; }
+        .btn-linkedin { background: var(--linkedin); color: white; }
+        
+        .modal-overlay { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); z-index: 1000; align-items: center; justify-content: center; }
+        .modal-overlay.active { display: flex; }
+        .modal { background: white; border-radius: 16px; padding: 2rem; max-width: 500px; text-align: center; animation: modalIn 0.3s ease; }
+        @keyframes modalIn { from { transform: scale(0.9); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+        .modal-icon { font-size: 4rem; margin-bottom: 1rem; }
+        .modal h2 { color: var(--gray-900); margin-bottom: 0.5rem; }
+        .modal p { color: var(--gray-500); margin-bottom: 1.5rem; }
+        .modal-buttons { display: flex; gap: 1rem; justify-content: center; }
+        
+        .comparison-table { width: 100%; border-collapse: collapse; margin: 1rem 0; }
+        .comparison-table th { background: var(--gray-100); padding: 0.75rem; text-align: center; }
+        .comparison-table td { padding: 0.75rem; text-align: center; border-bottom: 1px solid var(--gray-200); }
+        .comparison-table .method { text-align: left; font-weight: 500; }
+        .comparison-table .time { color: var(--gray-700); }
+        .comparison-table .fast { color: var(--success); font-weight: 600; }
+    </style>
+</head>
+<body>
+    <nav class="nav">
+        <div class="nav-left">
+            <a href="quick-start-interactive.html">← Back to Guides</a>
+            <span class="nav-title">Guide 4: LinkedIn Extension</span>
+        </div>
+        <div class="nav-progress">
+            <span>Step <span id="currentStepNum">1</span> of 7</span>
+            <div class="nav-progress-bar">
+                <div class="nav-progress-fill" id="progressFill" style="width: 14.3%"></div>
+            </div>
+        </div>
+    </nav>
+    
+    <div class="main-container">
+        <aside class="sidebar">
+            <div class="steps-list">
+                <h3>Steps</h3>
+                <div class="step-item active" data-step="1" onclick="goToStep(1)"><div class="step-number"><span>1</span></div><span class="step-title">Introduction</span></div>
+                <div class="step-item" data-step="2" onclick="goToStep(2)"><div class="step-number"><span>2</span></div><span class="step-title">Install the Extension</span></div>
+                <div class="step-item" data-step="3" onclick="goToStep(3)"><div class="step-number"><span>3</span></div><span class="step-title">Configure Settings</span></div>
+                <div class="step-item" data-step="4" onclick="goToStep(4)"><div class="step-number"><span>4</span></div><span class="step-title">Find a Candidate</span></div>
+                <div class="step-item" data-step="5" onclick="goToStep(5)"><div class="step-number"><span>5</span></div><span class="step-title">Import to Salesforce</span></div>
+                <div class="step-item" data-step="6" onclick="goToStep(6)"><div class="step-number"><span>6</span></div><span class="step-title">Verify in Dashboard</span></div>
+                <div class="step-item" data-step="7" onclick="goToStep(7)"><div class="step-number"><span>7</span></div><span class="step-title">Complete!</span></div>
+            </div>
+        </aside>
+        
+        <main class="content-area">
+            <!-- Step 1: Introduction -->
+            <div class="step-content active" data-step="1">
+                <div class="step-header">
+                    <h1>🔗 LinkedIn Import Extension</h1>
+                    <p>Import candidates directly from LinkedIn with one click</p>
+                </div>
+                
+                <div class="callout linkedin">
+                    <span class="callout-icon">💼</span>
+                    <div class="callout-content">
+                        <strong>What is the LinkedIn Extension?</strong>
+                        A browser extension that lets you capture candidate information from LinkedIn profiles and instantly create them in Salesforce - no copy/paste needed!
+                    </div>
+                </div>
+                
+                <div class="instruction">
+                    <h3>⚡ Time Savings</h3>
+                    <table class="comparison-table">
+                        <thead>
+                            <tr><th>Method</th><th>Time per Candidate</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td class="method">Manual Entry</td><td class="time">3-5 minutes</td></tr>
+                            <tr><td class="method">Copy/Paste from LinkedIn</td><td class="time">2-3 minutes</td></tr>
+                            <tr><td class="method"><strong>LinkedIn Extension</strong></td><td class="fast">10 seconds! ⚡</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                
+                <div class="instruction">
+                    <h3>📋 What You'll Learn</h3>
+                    <ul>
+                        <li>Install the extension in your browser</li>
+                        <li>Configure your Salesforce connection</li>
+                        <li>Import candidates with one click</li>
+                        <li>Verify imported records in the dashboard</li>
+                    </ul>
+                </div>
+                
+                <div class="instruction">
+                    <h3>🌐 Supported Browsers</h3>
+                    <div class="browser-icons">
+                        <div class="browser-icon">
+                            <div class="icon">🌐</div>
+                            <div class="name">Edge</div>
+                        </div>
+                        <div class="browser-icon">
+                            <div class="icon">🔵</div>
+                            <div class="name">Chrome</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="checkbox-group">
+                    <input type="checkbox" id="ready1">
+                    <label for="ready1">I have Edge or Chrome and am ready to install the extension</label>
+                </div>
+                
+                <div class="step-nav">
+                    <div></div>
+                    <button class="btn btn-primary" onclick="nextStep()">Let's Get Started →</button>
+                </div>
+            </div>
+            
+            <!-- Step 2: Install the Extension -->
+            <div class="step-content" data-step="2">
+                <div class="step-header">
+                    <h1>📦 Install the Extension</h1>
+                    <p>Add the LinkedIn Import extension to your browser</p>
+                </div>
+                
+                <div class="instruction">
+                    <h3>📍 Installation Steps (Edge)</h3>
+                    <ol>
+                        <li>Open <strong>Microsoft Edge</strong></li>
+                        <li>Go to <strong>edge://extensions</strong></li>
+                        <li>Enable <strong>Developer mode</strong> (toggle in bottom left)</li>
+                        <li>Click <strong>"Load unpacked"</strong></li>
+                        <li>Select the <strong>edge-extension-linkedin</strong> folder</li>
+                        <li>The extension icon appears in your toolbar!</li>
+                    </ol>
+                </div>
+                
+                <div class="screenshot">
+                    <p>📸 Screenshot: Edge extensions page with Developer mode enabled</p>
+                </div>
+                
+                <div class="instruction">
+                    <h3>📍 Installation Steps (Chrome)</h3>
+                    <ol>
+                        <li>Open <strong>Google Chrome</strong></li>
+                        <li>Go to <strong>chrome://extensions</strong></li>
+                        <li>Enable <strong>Developer mode</strong> (toggle in top right)</li>
+                        <li>Click <strong>"Load unpacked"</strong></li>
+                        <li>Select the <strong>chrome-extension-linkedin</strong> folder</li>
+                        <li>The extension icon appears in your toolbar!</li>
+                    </ol>
+                </div>
+                
+                <div class="callout tip">
+                    <span class="callout-icon">📌</span>
+                    <div class="callout-content">
+                        <strong>Pin the Extension</strong>
+                        Click the puzzle piece icon in your toolbar and pin the LinkedIn Import extension for easy access.
+                    </div>
+                </div>
+                
+                <div class="checkbox-group">
+                    <input type="checkbox" id="ready2">
+                    <label for="ready2">The extension is installed and I can see the icon in my toolbar</label>
+                </div>
+                
+                <div class="step-nav">
+                    <button class="btn btn-secondary" onclick="prevStep()">← Previous</button>
+                    <button class="btn btn-primary" onclick="nextStep()">Continue →</button>
+                </div>
+            </div>
+            
+            <!-- Step 3: Configure Settings -->
+            <div class="step-content" data-step="3">
+                <div class="step-header">
+                    <h1>⚙️ Configure Settings</h1>
+                    <p>Connect the extension to your Salesforce org</p>
+                </div>
+                
+                <div class="instruction">
+                    <h3>📍 First-Time Setup</h3>
+                    <ol>
+                        <li>Click the <strong>extension icon</strong> in your toolbar</li>
+                        <li>Click <strong>"Settings"</strong> or the gear icon</li>
+                        <li>Enter your <strong>Salesforce Domain</strong> (e.g., massmutual.my.salesforce.com)</li>
+                        <li>Click <strong>"Connect to Salesforce"</strong></li>
+                        <li>Log in when prompted</li>
+                        <li>Authorize the connection</li>
+                    </ol>
+                </div>
+                
+                <div class="extension-visual">
+                    <div class="extension-header">
+                        <div class="logo">in</div>
+                        <span>LinkedIn Import - Settings</span>
+                    </div>
+                    <div class="extension-body">
+                        <div class="extension-field">
+                            <label>Salesforce Domain</label>
+                            <div class="value">massmutual.my.salesforce.com</div>
+                        </div>
+                        <div class="extension-field">
+                            <label>Status</label>
+                            <div class="value" style="color: var(--success);">✓ Connected</div>
+                        </div>
+                        <button class="extension-btn">Save Settings</button>
+                    </div>
+                </div>
+                
+                <div class="callout warning">
+                    <span class="callout-icon">⚠️</span>
+                    <div class="callout-content">
+                        <strong>One-Time Setup</strong>
+                        You only need to configure this once. The extension will remember your settings.
+                    </div>
+                </div>
+                
+                <div class="checkbox-group">
+                    <input type="checkbox" id="ready3">
+                    <label for="ready3">The extension is connected to Salesforce</label>
+                </div>
+                
+                <div class="step-nav">
+                    <button class="btn btn-secondary" onclick="prevStep()">← Previous</button>
+                    <button class="btn btn-primary" onclick="nextStep()">Continue →</button>
+                </div>
+            </div>
+            
+            <!-- Step 4: Find a Candidate -->
+            <div class="step-content" data-step="4">
+                <div class="step-header">
+                    <h1>🔍 Find a Candidate on LinkedIn</h1>
+                    <p>Navigate to a LinkedIn profile to import</p>
+                </div>
+                
+                <div class="instruction">
+                    <h3>📍 Action Steps</h3>
+                    <ol>
+                        <li>Go to <strong>linkedin.com</strong></li>
+                        <li>Search for a potential candidate</li>
+                        <li>Open their <strong>full profile page</strong></li>
+                        <li>The extension icon should light up when ready!</li>
+                    </ol>
+                </div>
+                
+                <div class="screenshot">
+                    <p>📸 Screenshot: LinkedIn profile page with extension icon highlighted</p>
+                </div>
+                
+                <div class="instruction">
+                    <h3>📊 Data the Extension Captures</h3>
+                    <table class="field-table">
+                        <thead><tr><th>LinkedIn Field</th><th>Salesforce Field</th></tr></thead>
+                        <tbody>
+                            <tr><td>Full Name</td><td>First Name, Last Name</td></tr>
+                            <tr><td>Headline/Title</td><td>Current Title</td></tr>
+                            <tr><td>Company</td><td>Current Company</td></tr>
+                            <tr><td>Location</td><td>City, State</td></tr>
+                            <tr><td>Profile URL</td><td>LinkedIn URL</td></tr>
+                            <tr><td>Email (if visible)</td><td>Email</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                
+                <div class="callout tip">
+                    <span class="callout-icon">💡</span>
+                    <div class="callout-content">
+                        <strong>Pro Tip</strong>
+                        Make sure you're on the person's actual profile page (not search results) for the best data capture.
+                    </div>
+                </div>
+                
+                <div class="checkbox-group">
+                    <input type="checkbox" id="ready4">
+                    <label for="ready4">I have a LinkedIn profile open and ready to import</label>
+                </div>
+                
+                <div class="step-nav">
+                    <button class="btn btn-secondary" onclick="prevStep()">← Previous</button>
+                    <button class="btn btn-primary" onclick="nextStep()">Continue →</button>
+                </div>
+            </div>
+            
+            <!-- Step 5: Import to Salesforce -->
+            <div class="step-content" data-step="5">
+                <div class="step-header">
+                    <h1>🚀 Import to Salesforce</h1>
+                    <p>Create the candidate with one click</p>
+                </div>
+                
+                <div class="instruction">
+                    <h3>📍 Import Steps</h3>
+                    <ol>
+                        <li>Click the <strong>extension icon</strong> in your toolbar</li>
+                        <li>Review the captured information</li>
+                        <li>Select <strong>Lead Source</strong> = "LinkedIn"</li>
+                        <li>Click <strong>"Import to Salesforce"</strong></li>
+                        <li>Wait for the success confirmation!</li>
+                    </ol>
+                </div>
+                
+                <div class="extension-visual">
+                    <div class="extension-header">
+                        <div class="logo">in</div>
+                        <span>LinkedIn Import</span>
+                    </div>
+                    <div class="extension-body">
+                        <div class="extension-field">
+                            <label>Name</label>
+                            <div class="value">John Smith</div>
+                        </div>
+                        <div class="extension-field">
+                            <label>Title</label>
+                            <div class="value">Financial Advisor at ABC Wealth</div>
+                        </div>
+                        <div class="extension-field">
+                            <label>Location</label>
+                            <div class="value">Boston, MA</div>
+                        </div>
+                        <div class="extension-field">
+                            <label>Lead Source</label>
+                            <div class="value">LinkedIn</div>
+                        </div>
+                        <button class="extension-btn">🚀 Import to Salesforce</button>
+                    </div>
+                </div>
+                
+                <div class="callout success">
+                    <span class="callout-icon">✅</span>
+                    <div class="callout-content">
+                        <strong>What Happens Automatically</strong>
+                        <ul style="margin-top: 0.5rem; margin-left: 1rem;">
+                            <li>Creates a new Candidate record</li>
+                            <li>Sets Lead Source to "LinkedIn"</li>
+                            <li>Sets Status to "New"</li>
+                            <li>Links the LinkedIn profile URL</li>
+                            <li>Assigns to your user</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="callout warning">
+                    <span class="callout-icon">⚠️</span>
+                    <div class="callout-content">
+                        <strong>Duplicate Check</strong>
+                        The extension will warn you if a candidate with the same name already exists in Salesforce.
+                    </div>
+                </div>
+                
+                <div class="checkbox-group">
+                    <input type="checkbox" id="ready5">
+                    <label for="ready5">I clicked Import and see the success message</label>
+                </div>
+                
+                <div class="step-nav">
+                    <button class="btn btn-secondary" onclick="prevStep()">← Previous</button>
+                    <button class="btn btn-primary" onclick="nextStep()">Continue →</button>
+                </div>
+            </div>
+            
+            <!-- Step 6: Verify in Dashboard -->
+            <div class="step-content" data-step="6">
+                <div class="step-header">
+                    <h1>✔️ Verify in Dashboard</h1>
+                    <p>Confirm the candidate appears in your Recruiter Portal</p>
+                </div>
+                
+                <div class="instruction">
+                    <h3>📍 Verification Steps</h3>
+                    <ol>
+                        <li>Open <strong>Salesforce</strong> in a new tab</li>
+                        <li>Go to the <strong>Recruiter Dashboard</strong></li>
+                        <li>Look in the <strong>"New"</strong> status column</li>
+                        <li>Find the candidate you just imported</li>
+                        <li>Click to open and review the record</li>
+                    </ol>
+                </div>
+                
+                <div class="screenshot">
+                    <p>📸 Screenshot: Recruiter Dashboard showing new LinkedIn candidate in pipeline</p>
+                </div>
+                
+                <div class="instruction">
+                    <h3>✓ Verify These Items</h3>
+                    <ul>
+                        <li>☐ Candidate appears in the "New" column</li>
+                        <li>☐ Name is correct</li>
+                        <li>☐ Lead Source shows "LinkedIn"</li>
+                        <li>☐ LinkedIn URL is populated</li>
+                        <li>☐ Location information is captured</li>
+                    </ul>
+                </div>
+                
+                <div class="callout tip">
+                    <span class="callout-icon">💡</span>
+                    <div class="callout-content">
+                        <strong>Next Steps for This Candidate</strong>
+                        Use the "Schedule Call" or "Schedule Interview" action buttons to move them through your pipeline!
+                    </div>
+                </div>
+                
+                <div class="checkbox-group">
+                    <input type="checkbox" id="ready6">
+                    <label for="ready6">I can see the imported candidate in my Recruiter Dashboard</label>
+                </div>
+                
+                <div class="step-nav">
+                    <button class="btn btn-secondary" onclick="prevStep()">← Previous</button>
+                    <button class="btn btn-primary" onclick="nextStep()">Continue →</button>
+                </div>
+            </div>
+            
+            <!-- Step 7: Complete -->
+            <div class="step-content" data-step="7">
+                <div class="step-header">
+                    <h1>🎉 You're a LinkedIn Pro!</h1>
+                    <p>You've mastered one-click candidate importing</p>
+                </div>
+                
+                <div class="callout success">
+                    <span class="callout-icon">🏆</span>
+                    <div class="callout-content">
+                        <strong>All Guides Complete!</strong>
+                        You've completed all four Quick Start guides. You're now ready to use the Recruiter Portal ATS like a pro!
+                    </div>
+                </div>
+                
+                <div class="instruction">
+                    <h3>📋 What You Learned</h3>
+                    <ul>
+                        <li>✅ Install and configure the LinkedIn extension</li>
+                        <li>✅ Navigate to LinkedIn profiles</li>
+                        <li>✅ Import candidates with one click</li>
+                        <li>✅ Verify imports in the Recruiter Dashboard</li>
+                    </ul>
+                </div>
+                
+                <div class="instruction">
+                    <h3>⚡ Quick Reference</h3>
+                    <table class="field-table">
+                        <tbody>
+                            <tr><td><strong>Find Candidate</strong></td><td>LinkedIn profile page</td></tr>
+                            <tr><td><strong>Click Extension</strong></td><td>Review captured data</td></tr>
+                            <tr><td><strong>Import</strong></td><td>One-click to Salesforce</td></tr>
+                            <tr><td><strong>Verify</strong></td><td>Check Recruiter Dashboard</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                
+                <div class="instruction">
+                    <h3>🎓 Quick Start Series Complete!</h3>
+                    <ul>
+                        <li>✅ <strong>Guide 1:</strong> Create Your First Candidate</li>
+                        <li>✅ <strong>Guide 2:</strong> Schedule an Interview</li>
+                        <li>✅ <strong>Guide 3:</strong> Contract B Lifecycle</li>
+                        <li>✅ <strong>Guide 4:</strong> LinkedIn Extension</li>
+                    </ul>
+                </div>
+                
+                <div class="callout important">
+                    <span class="callout-icon">🚀</span>
+                    <div class="callout-content">
+                        <strong>You're Ready!</strong>
+                        Start using the Recruiter Portal to manage your recruiting pipeline. Remember to always use the action buttons for proper record linking!
+                    </div>
+                </div>
+                
+                <div class="step-nav">
+                    <button class="btn btn-secondary" onclick="prevStep()">← Review Steps</button>
+                    <button class="btn btn-success" onclick="completeGuide()">Complete All Guides ✓</button>
+                </div>
+            </div>
+        </main>
+    </div>
+    
+    <div class="modal-overlay" id="completionModal">
+        <div class="modal">
+            <div class="modal-icon">🎉</div>
+            <h2>All Guides Complete!</h2>
+            <p>Congratulations! You've mastered the Recruiter Portal ATS. You're ready to start recruiting efficiently!</p>
+            <div class="modal-buttons">
+                <a href="quick-start-interactive.html" class="btn btn-secondary">Back to Guides</a>
+                <a href="index.html" class="btn btn-primary">Training Center Home</a>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        let currentStep = 1;
+        const totalSteps = 7;
+        
+        function updateUI() {
+            document.querySelectorAll('.step-content').forEach(el => el.classList.remove('active'));
+            document.querySelector(`.step-content[data-step="${currentStep}"]`).classList.add('active');
+            
+            document.querySelectorAll('.step-item').forEach(el => {
+                const step = parseInt(el.dataset.step);
+                el.classList.remove('active');
+                if (step === currentStep) el.classList.add('active');
+                if (step < currentStep) el.classList.add('completed');
+                else el.classList.remove('completed');
+            });
+            
+            document.getElementById('currentStepNum').textContent = currentStep;
+            document.getElementById('progressFill').style.width = `${(currentStep / totalSteps) * 100}%`;
+            
+            if (currentStep > 1) {
+                localStorage.setItem('ats-quickstart-guide4', 'in-progress');
+                localStorage.setItem('ats-quickstart-guide4-step', currentStep);
+            }
+            document.querySelector('.content-area').scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+        
+        function nextStep() { if (currentStep < totalSteps) { currentStep++; updateUI(); } }
+        function prevStep() { if (currentStep > 1) { currentStep--; updateUI(); } }
+        function goToStep(step) { currentStep = step; updateUI(); }
+        function completeGuide() { localStorage.setItem('ats-quickstart-guide4', 'completed'); document.getElementById('completionModal').classList.add('active'); }
+        
+        window.onload = function() {
+            const savedStep = localStorage.getItem('ats-quickstart-guide4-step');
+            if (savedStep) { currentStep = parseInt(savedStep); updateUI(); }
+        };
+    </script>
+</body>
+</html>
