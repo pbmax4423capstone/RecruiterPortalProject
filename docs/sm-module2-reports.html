@@ -1,0 +1,752 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Module 2: Reports & Analytics - Sales Manager Training</title>
+    <style>
+        :root {
+            --primary: #0176d3;
+            --manager: #7c3aed;
+            --manager-dark: #5b21b6;
+            --manager-light: #ede9fe;
+            --success: #2e844a;
+            --success-light: #dcfce7;
+            --warning: #fe9339;
+            --warning-light: #fef3c7;
+            --gray-100: #f3f3f3;
+            --gray-200: #e5e5e5;
+            --gray-300: #d1d5db;
+            --gray-500: #6b7280;
+            --gray-700: #444;
+            --gray-900: #181818;
+        }
+        
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: 'Salesforce Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--gray-100);
+            min-height: 100vh;
+            display: flex;
+        }
+        
+        .sidebar {
+            width: 280px;
+            background: white;
+            border-right: 1px solid var(--gray-200);
+            padding: 1.5rem;
+            position: fixed;
+            height: 100vh;
+            overflow-y: auto;
+        }
+        
+        .sidebar-header {
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--gray-200);
+            margin-bottom: 1rem;
+        }
+        
+        .sidebar-header a {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--manager);
+            text-decoration: none;
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .sidebar-header a:hover { text-decoration: underline; }
+        .sidebar-header h2 { font-size: 1.1rem; color: var(--gray-900); }
+        
+        .sidebar-header .module-badge {
+            display: inline-block;
+            background: var(--manager-light);
+            color: var(--manager);
+            padding: 0.2rem 0.6rem;
+            border-radius: 10px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin-top: 0.5rem;
+        }
+        
+        .steps-list { list-style: none; }
+        
+        .step-item {
+            padding: 0.75rem;
+            border-radius: 8px;
+            margin-bottom: 0.5rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            transition: all 0.2s;
+        }
+        
+        .step-item:hover { background: var(--gray-100); }
+        .step-item.active { background: var(--manager-light); }
+        .step-item.completed { opacity: 0.7; }
+        
+        .step-number {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            background: var(--gray-200);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--gray-500);
+            flex-shrink: 0;
+        }
+        
+        .step-item.active .step-number { background: var(--manager); color: white; }
+        .step-item.completed .step-number { background: var(--success); color: white; }
+        .step-item.completed .step-number::before { content: "✓"; }
+        
+        .step-info { flex-grow: 1; }
+        .step-title { font-size: 0.9rem; color: var(--gray-900); font-weight: 500; }
+        .step-duration { font-size: 0.75rem; color: var(--gray-500); }
+        
+        .main-content { flex-grow: 1; margin-left: 280px; padding: 2rem; }
+        .step-content { max-width: 900px; margin: 0 auto; }
+        .step-header { margin-bottom: 2rem; }
+        
+        .step-header .step-badge {
+            display: inline-block;
+            background: var(--manager);
+            color: white;
+            padding: 0.3rem 1rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-bottom: 0.75rem;
+        }
+        
+        .step-header h1 { font-size: 2rem; color: var(--gray-900); margin-bottom: 0.5rem; }
+        .step-header p { font-size: 1.1rem; color: var(--gray-500); }
+        
+        .content-card {
+            background: white;
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+            margin-bottom: 1.5rem;
+        }
+        
+        .content-card h2 { font-size: 1.3rem; color: var(--gray-900); margin-bottom: 1rem; }
+        .content-card h3 { font-size: 1.1rem; color: var(--gray-700); margin: 1.5rem 0 0.75rem; }
+        .content-card p { color: var(--gray-700); line-height: 1.7; margin-bottom: 1rem; }
+        .content-card ul, .content-card ol { margin-left: 1.5rem; margin-bottom: 1rem; color: var(--gray-700); line-height: 1.8; }
+        
+        .screenshot-placeholder {
+            background: linear-gradient(135deg, var(--gray-100), var(--gray-200));
+            border: 2px dashed var(--gray-300);
+            border-radius: 8px;
+            padding: 3rem;
+            text-align: center;
+            margin: 1.5rem 0;
+        }
+        
+        .screenshot-placeholder .icon { font-size: 3rem; margin-bottom: 0.5rem; }
+        .screenshot-placeholder .label { color: var(--gray-500); font-style: italic; }
+        
+        .info-box {
+            background: var(--manager-light);
+            border-left: 4px solid var(--manager);
+            padding: 1rem 1.25rem;
+            border-radius: 0 8px 8px 0;
+            margin: 1.5rem 0;
+        }
+        
+        .info-box.tip { background: #ecfdf5; border-color: var(--success); }
+        .info-box.warning { background: var(--warning-light); border-color: var(--warning); }
+        .info-box strong { display: block; margin-bottom: 0.25rem; color: var(--gray-900); }
+        
+        .report-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+        
+        .report-item {
+            background: var(--gray-100);
+            border-radius: 8px;
+            padding: 1.25rem;
+            border-left: 4px solid var(--manager);
+        }
+        
+        .report-item h4 {
+            color: var(--gray-900);
+            font-size: 1rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .report-item p {
+            color: var(--gray-500);
+            font-size: 0.85rem;
+            margin: 0;
+        }
+        
+        .step-navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 2rem;
+            padding-top: 2rem;
+            border-top: 1px solid var(--gray-200);
+        }
+        
+        .nav-btn {
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            cursor: pointer;
+            border: none;
+            font-size: 1rem;
+            transition: all 0.3s;
+            text-decoration: none;
+        }
+        
+        .nav-btn.prev { background: var(--gray-200); color: var(--gray-700); }
+        .nav-btn.prev:hover { background: var(--gray-300); }
+        .nav-btn.next { background: var(--manager); color: white; }
+        .nav-btn.next:hover { background: var(--manager-dark); }
+        .nav-btn.complete { background: var(--success); color: white; }
+        .nav-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+        
+        .progress-indicator {
+            background: var(--gray-200);
+            height: 4px;
+            position: fixed;
+            top: 0;
+            left: 280px;
+            right: 0;
+            z-index: 100;
+        }
+        
+        .progress-fill { height: 100%; background: var(--manager); transition: width 0.3s; }
+        .step-page { display: none; }
+        .step-page.active { display: block; }
+        
+        .data-table { width: 100%; border-collapse: collapse; margin: 1rem 0; }
+        .data-table th, .data-table td { padding: 0.75rem; text-align: left; border-bottom: 1px solid var(--gray-200); }
+        .data-table th { background: var(--gray-100); font-weight: 600; color: var(--gray-700); }
+        
+        .numbered-steps { counter-reset: step-counter; }
+        
+        .numbered-step {
+            counter-increment: step-counter;
+            display: flex;
+            gap: 1rem;
+            padding: 1rem;
+            background: var(--gray-100);
+            border-radius: 8px;
+            margin-bottom: 1rem;
+        }
+        
+        .numbered-step::before {
+            content: counter(step-counter);
+            background: var(--manager);
+            color: white;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            flex-shrink: 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="progress-indicator">
+        <div class="progress-fill" id="progressFill" style="width: 0%"></div>
+    </div>
+    
+    <aside class="sidebar">
+        <div class="sidebar-header">
+            <a href="sales-manager-training.html">← Back to Manager Training</a>
+            <h2>Module 2: Reports & Analytics</h2>
+            <span class="module-badge">15 minutes</span>
+        </div>
+        
+        <ul class="steps-list" id="stepsList">
+            <li class="step-item active" data-step="1" onclick="goToStep(1)">
+                <span class="step-number">1</span>
+                <div class="step-info">
+                    <div class="step-title">Available Reports</div>
+                    <div class="step-duration">2 min</div>
+                </div>
+            </li>
+            <li class="step-item" data-step="2" onclick="goToStep(2)">
+                <span class="step-number">2</span>
+                <div class="step-info">
+                    <div class="step-title">Running a Report</div>
+                    <div class="step-duration">3 min</div>
+                </div>
+            </li>
+            <li class="step-item" data-step="3" onclick="goToStep(3)">
+                <span class="step-number">3</span>
+                <div class="step-info">
+                    <div class="step-title">Customizing Filters</div>
+                    <div class="step-duration">3 min</div>
+                </div>
+            </li>
+            <li class="step-item" data-step="4" onclick="goToStep(4)">
+                <span class="step-number">4</span>
+                <div class="step-info">
+                    <div class="step-title">Key Metrics to Track</div>
+                    <div class="step-duration">3 min</div>
+                </div>
+            </li>
+            <li class="step-item" data-step="5" onclick="goToStep(5)">
+                <span class="step-number">5</span>
+                <div class="step-info">
+                    <div class="step-title">Exporting Data</div>
+                    <div class="step-duration">2 min</div>
+                </div>
+            </li>
+            <li class="step-item" data-step="6" onclick="goToStep(6)">
+                <span class="step-number">6</span>
+                <div class="step-info">
+                    <div class="step-title">Module Complete</div>
+                    <div class="step-duration">2 min</div>
+                </div>
+            </li>
+        </ul>
+    </aside>
+    
+    <main class="main-content">
+        <!-- Step 1: Available Reports -->
+        <div class="step-page active" id="step1">
+            <div class="step-content">
+                <div class="step-header">
+                    <span class="step-badge">Step 1 of 6</span>
+                    <h1>Available Reports</h1>
+                    <p>Overview of pre-built recruiting reports</p>
+                </div>
+                
+                <div class="content-card">
+                    <h2>📊 Pre-Built Reports</h2>
+                    <p>Several reports have been created to help you monitor your team's recruiting performance:</p>
+                    
+                    <div class="report-grid">
+                        <div class="report-item">
+                            <h4>📈 Pipeline Summary</h4>
+                            <p>Candidates by stage with source breakdown</p>
+                        </div>
+                        <div class="report-item">
+                            <h4>👥 Recruiter Activity</h4>
+                            <p>Interviews and hires by recruiter</p>
+                        </div>
+                        <div class="report-item">
+                            <h4>📅 Monthly Hires</h4>
+                            <p>Hiring trends over time</p>
+                        </div>
+                        <div class="report-item">
+                            <h4>🎯 Source Performance</h4>
+                            <p>Conversion rates by lead source</p>
+                        </div>
+                        <div class="report-item">
+                            <h4>📋 Contract B Status</h4>
+                            <p>Active Contract B advisors and progress</p>
+                        </div>
+                        <div class="report-item">
+                            <h4>⏱️ Time to Hire</h4>
+                            <p>Days from first contact to hire</p>
+                        </div>
+                    </div>
+                    
+                    <div class="screenshot-placeholder">
+                        <div class="icon">📸</div>
+                        <div class="label">Screenshot: Reports Tab in Salesforce</div>
+                    </div>
+                </div>
+                
+                <div class="info-box">
+                    <strong>ℹ️ Finding Reports</strong>
+                    Navigate to the Reports tab in Salesforce. Look for the "Recruiting Reports" folder which contains all pre-built reports for your team.
+                </div>
+                
+                <div class="step-navigation">
+                    <button class="nav-btn prev" disabled>← Previous</button>
+                    <button class="nav-btn next" onclick="goToStep(2)">Next: Running a Report →</button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Step 2: Running a Report -->
+        <div class="step-page" id="step2">
+            <div class="step-content">
+                <div class="step-header">
+                    <span class="step-badge">Step 2 of 6</span>
+                    <h1>Running a Report</h1>
+                    <p>How to run and view report data</p>
+                </div>
+                
+                <div class="content-card">
+                    <h2>▶️ Running a Report</h2>
+                    <p>Follow these steps to run any report:</p>
+                    
+                    <div class="numbered-steps">
+                        <div class="numbered-step">
+                            <div>Navigate to the <strong>Reports</strong> tab in Salesforce</div>
+                        </div>
+                        <div class="numbered-step">
+                            <div>Open the <strong>Recruiting Reports</strong> folder</div>
+                        </div>
+                        <div class="numbered-step">
+                            <div>Click on the report name you want to run</div>
+                        </div>
+                        <div class="numbered-step">
+                            <div>The report will load with default filters applied</div>
+                        </div>
+                        <div class="numbered-step">
+                            <div>View results in the data table or chart view</div>
+                        </div>
+                    </div>
+                    
+                    <div class="screenshot-placeholder">
+                        <div class="icon">📸</div>
+                        <div class="label">Screenshot: Running a Report</div>
+                    </div>
+                </div>
+                
+                <div class="content-card">
+                    <h2>📋 Report Components</h2>
+                    <ul>
+                        <li><strong>Filters Bar</strong> - Top section with date ranges and field filters</li>
+                        <li><strong>Chart/Graph</strong> - Visual representation of data (if configured)</li>
+                        <li><strong>Data Table</strong> - Detailed rows of data matching your filters</li>
+                        <li><strong>Summary Row</strong> - Totals and averages at the bottom</li>
+                    </ul>
+                </div>
+                
+                <div class="info-box tip">
+                    <strong>💡 Subscribe for Automatic Updates</strong>
+                    Click "Subscribe" to receive the report automatically via email on a schedule (daily, weekly, or monthly).
+                </div>
+                
+                <div class="step-navigation">
+                    <button class="nav-btn prev" onclick="goToStep(1)">← Previous</button>
+                    <button class="nav-btn next" onclick="goToStep(3)">Next: Customizing Filters →</button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Step 3: Customizing Filters -->
+        <div class="step-page" id="step3">
+            <div class="step-content">
+                <div class="step-header">
+                    <span class="step-badge">Step 3 of 6</span>
+                    <h1>Customizing Filters</h1>
+                    <p>Filter reports to see exactly what you need</p>
+                </div>
+                
+                <div class="content-card">
+                    <h2>🔍 Applying Filters</h2>
+                    <p>Most reports allow you to filter by various criteria:</p>
+                    
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Filter Type</th>
+                                <th>Examples</th>
+                                <th>Use Case</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>Date Range</strong></td>
+                                <td>This Month, Last Quarter, Custom</td>
+                                <td>Focus on specific time periods</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Recruiter</strong></td>
+                                <td>Select specific team members</td>
+                                <td>Individual performance review</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Status</strong></td>
+                                <td>New, Interview Scheduled, Hired</td>
+                                <td>Pipeline stage analysis</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Source</strong></td>
+                                <td>Referral, LinkedIn, ZoomInfo</td>
+                                <td>Source effectiveness</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    
+                    <div class="screenshot-placeholder">
+                        <div class="icon">📸</div>
+                        <div class="label">Screenshot: Report Filters Panel</div>
+                    </div>
+                </div>
+                
+                <div class="content-card">
+                    <h2>💾 Saving Filter Combinations</h2>
+                    <p>If you frequently use the same filter combination:</p>
+                    <ol>
+                        <li>Apply your desired filters</li>
+                        <li>Click "Save As" to create a new report variant</li>
+                        <li>Give it a descriptive name (e.g., "My Team - This Month")</li>
+                        <li>Save to your personal reports folder</li>
+                    </ol>
+                </div>
+                
+                <div class="info-box warning">
+                    <strong>⚠️ Don't Modify Shared Reports</strong>
+                    If you want to change filters permanently, save a copy to your personal folder rather than modifying shared reports that others rely on.
+                </div>
+                
+                <div class="step-navigation">
+                    <button class="nav-btn prev" onclick="goToStep(2)">← Previous</button>
+                    <button class="nav-btn next" onclick="goToStep(4)">Next: Key Metrics to Track →</button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Step 4: Key Metrics to Track -->
+        <div class="step-page" id="step4">
+            <div class="step-content">
+                <div class="step-header">
+                    <span class="step-badge">Step 4 of 6</span>
+                    <h1>Key Metrics to Track</h1>
+                    <p>Important KPIs for recruiting success</p>
+                </div>
+                
+                <div class="content-card">
+                    <h2>📈 Essential Recruiting Metrics</h2>
+                    
+                    <h3>Conversion Rates</h3>
+                    <ul>
+                        <li><strong>Interview to Hire Rate</strong> - % of interviews resulting in hires (target: 20-30%)</li>
+                        <li><strong>Phone Screen to Interview</strong> - % advancing past initial contact</li>
+                        <li><strong>Source Conversion</strong> - Which sources produce the best candidates</li>
+                    </ul>
+                    
+                    <h3>Volume Metrics</h3>
+                    <ul>
+                        <li><strong>New Candidates/Week</strong> - Pipeline fill rate</li>
+                        <li><strong>Interviews/Week</strong> - Team activity level</li>
+                        <li><strong>Hires/Month</strong> - Ultimate success measure</li>
+                    </ul>
+                    
+                    <h3>Efficiency Metrics</h3>
+                    <ul>
+                        <li><strong>Time to Hire</strong> - Days from first contact to hire date</li>
+                        <li><strong>Pipeline Velocity</strong> - How quickly candidates move through stages</li>
+                    </ul>
+                </div>
+                
+                <div class="content-card">
+                    <h2>🎯 Setting Benchmarks</h2>
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Metric</th>
+                                <th>Good</th>
+                                <th>Great</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Interview to Hire Rate</td>
+                                <td>20%</td>
+                                <td>30%+</td>
+                            </tr>
+                            <tr>
+                                <td>Time to Hire</td>
+                                <td>45 days</td>
+                                <td>30 days</td>
+                            </tr>
+                            <tr>
+                                <td>Interviews per Week (per recruiter)</td>
+                                <td>5</td>
+                                <td>8+</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                
+                <div class="info-box tip">
+                    <strong>💡 Trend Analysis</strong>
+                    Look at metrics over time, not just snapshots. A declining conversion rate is more concerning than a single low month.
+                </div>
+                
+                <div class="step-navigation">
+                    <button class="nav-btn prev" onclick="goToStep(3)">← Previous</button>
+                    <button class="nav-btn next" onclick="goToStep(5)">Next: Exporting Data →</button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Step 5: Exporting Data -->
+        <div class="step-page" id="step5">
+            <div class="step-content">
+                <div class="step-header">
+                    <span class="step-badge">Step 5 of 6</span>
+                    <h1>Exporting Data</h1>
+                    <p>Share report data with others</p>
+                </div>
+                
+                <div class="content-card">
+                    <h2>📤 Export Options</h2>
+                    <p>Reports can be exported in several formats:</p>
+                    
+                    <div class="numbered-steps">
+                        <div class="numbered-step">
+                            <div>Run your report with desired filters</div>
+                        </div>
+                        <div class="numbered-step">
+                            <div>Click the dropdown arrow next to "Edit"</div>
+                        </div>
+                        <div class="numbered-step">
+                            <div>Select "Export"</div>
+                        </div>
+                        <div class="numbered-step">
+                            <div>Choose format: <strong>Excel (.xlsx)</strong> or <strong>CSV</strong></div>
+                        </div>
+                        <div class="numbered-step">
+                            <div>Click "Export" to download the file</div>
+                        </div>
+                    </div>
+                    
+                    <div class="screenshot-placeholder">
+                        <div class="icon">📸</div>
+                        <div class="label">Screenshot: Export Menu</div>
+                    </div>
+                </div>
+                
+                <div class="content-card">
+                    <h2>📧 Sharing Reports</h2>
+                    <p>Other ways to share report data:</p>
+                    <ul>
+                        <li><strong>Subscribe & Send</strong> - Automated email delivery</li>
+                        <li><strong>Dashboard</strong> - Add report charts to a shared dashboard</li>
+                        <li><strong>Print</strong> - Generate a printable PDF version</li>
+                        <li><strong>Screen Share</strong> - Present in meetings directly from Salesforce</li>
+                    </ul>
+                </div>
+                
+                <div class="info-box">
+                    <strong>ℹ️ Data Security</strong>
+                    Exported data maintains the same visibility rules as in Salesforce. You'll only see data you have permission to access.
+                </div>
+                
+                <div class="step-navigation">
+                    <button class="nav-btn prev" onclick="goToStep(4)">← Previous</button>
+                    <button class="nav-btn next" onclick="goToStep(6)">Complete Module →</button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Step 6: Module Complete -->
+        <div class="step-page" id="step6">
+            <div class="step-content">
+                <div class="step-header">
+                    <span class="step-badge">Step 6 of 6</span>
+                    <h1>🎉 Module Complete!</h1>
+                    <p>You've finished Module 2: Reports & Analytics</p>
+                </div>
+                
+                <div class="content-card" style="text-align: center; padding: 3rem;">
+                    <div style="font-size: 4rem; margin-bottom: 1rem;">📈</div>
+                    <h2>Excellent Work!</h2>
+                    <p style="font-size: 1.1rem; max-width: 500px; margin: 1rem auto;">You now know how to run, customize, and export recruiting reports to analyze your team's performance.</p>
+                    
+                    <h3 style="margin-top: 2rem;">Key Takeaways:</h3>
+                    <ul style="text-align: left; max-width: 400px; margin: 1rem auto;">
+                        <li>Pre-built reports available in Recruiting folder</li>
+                        <li>Filter by date, recruiter, status, and source</li>
+                        <li>Track conversion rates and volume metrics</li>
+                        <li>Export to Excel/CSV for further analysis</li>
+                        <li>Subscribe for automated report delivery</li>
+                    </ul>
+                </div>
+                
+                <div class="content-card" style="background: var(--manager-light);">
+                    <h2>📚 Continue Your Training</h2>
+                    <p>Module 3 covers monitoring Contract B advisors and their progress toward requirements.</p>
+                    <a href="sm-module3-contract-b.html" class="nav-btn next" style="margin-top: 1rem;">Start Module 3: Contract B Monitoring →</a>
+                </div>
+                
+                <div class="step-navigation">
+                    <button class="nav-btn prev" onclick="goToStep(5)">← Previous</button>
+                    <button class="nav-btn complete" onclick="completeModule()">✓ Mark Module Complete</button>
+                </div>
+            </div>
+        </div>
+    </main>
+    
+    <script>
+        const totalSteps = 6;
+        let currentStep = 1;
+        let completedSteps = [];
+        
+        function loadProgress() {
+            const saved = localStorage.getItem('sales-manager-sm-module2-step');
+            if (saved) {
+                currentStep = parseInt(saved);
+                for (let i = 1; i < currentStep; i++) {
+                    completedSteps.push(i);
+                }
+            }
+            updateUI();
+        }
+        
+        function saveProgress() {
+            localStorage.setItem('sales-manager-sm-module2-step', currentStep);
+            if (currentStep > 1) {
+                localStorage.setItem('sales-manager-sm-module2', 'in-progress');
+            }
+        }
+        
+        function goToStep(step) {
+            if (step > currentStep) {
+                for (let i = currentStep; i < step; i++) {
+                    if (!completedSteps.includes(i)) completedSteps.push(i);
+                }
+            }
+            currentStep = step;
+            saveProgress();
+            updateUI();
+        }
+        
+        function updateUI() {
+            document.querySelectorAll('.step-page').forEach((page, index) => {
+                page.classList.remove('active');
+                if (index + 1 === currentStep) page.classList.add('active');
+            });
+            
+            document.querySelectorAll('.step-item').forEach((item, index) => {
+                const stepNum = index + 1;
+                item.classList.remove('active', 'completed');
+                if (stepNum === currentStep) item.classList.add('active');
+                else if (completedSteps.includes(stepNum)) item.classList.add('completed');
+            });
+            
+            const progress = ((currentStep - 1) / (totalSteps - 1)) * 100;
+            document.getElementById('progressFill').style.width = `${progress}%`;
+        }
+        
+        function completeModule() {
+            localStorage.setItem('sales-manager-sm-module2', 'completed');
+            localStorage.setItem('sales-manager-sm-module2-step', totalSteps);
+            alert('🎉 Module 2 complete! Moving to Module 3...');
+            window.location.href = 'sm-module3-contract-b.html';
+        }
+        
+        loadProgress();
+    </script>
+</body>
+</html>
