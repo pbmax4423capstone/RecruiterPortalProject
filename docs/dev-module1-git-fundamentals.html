@@ -1,0 +1,818 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Module 1: Git Fundamentals - Developer Training</title>
+    <style>
+        :root {
+            --primary: #238636;
+            --primary-dark: #1a7f37;
+            --primary-light: #d1fae5;
+            --gray-100: #f6f8fa;
+            --gray-200: #e5e5e5;
+            --gray-300: #d0d7de;
+            --gray-500: #6e7781;
+            --gray-700: #444;
+            --gray-900: #1f2328;
+            --code-bg: #161b22;
+            --warning-bg: #fff8c5;
+            --warning-border: #d4a72c;
+            --info-bg: #ddf4ff;
+            --info-border: #54aeff;
+        }
+        
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans', Helvetica, Arial, sans-serif;
+            background: var(--gray-100);
+            min-height: 100vh;
+            display: flex;
+        }
+        
+        /* Sidebar */
+        .sidebar {
+            width: 300px;
+            background: white;
+            border-right: 1px solid var(--gray-300);
+            padding: 1.5rem;
+            position: fixed;
+            height: 100vh;
+            overflow-y: auto;
+        }
+        
+        .sidebar-header {
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--gray-200);
+            margin-bottom: 1rem;
+        }
+        
+        .sidebar-header a {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--primary);
+            text-decoration: none;
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .sidebar-header a:hover { text-decoration: underline; }
+        .sidebar-header h2 { font-size: 1.1rem; color: var(--gray-900); }
+        
+        .sidebar-header .module-badge {
+            display: inline-block;
+            background: #f14e32;
+            color: white;
+            padding: 0.2rem 0.6rem;
+            border-radius: 10px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin-top: 0.5rem;
+        }
+        
+        .steps-list { list-style: none; }
+        
+        .step-item {
+            padding: 0.75rem;
+            border-radius: 8px;
+            margin-bottom: 0.5rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            transition: all 0.2s;
+        }
+        
+        .step-item:hover { background: var(--gray-100); }
+        .step-item.active { background: var(--primary-light); }
+        .step-item.completed { opacity: 0.7; }
+        
+        .step-number {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            background: var(--gray-200);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--gray-500);
+            flex-shrink: 0;
+        }
+        
+        .step-item.active .step-number { background: var(--primary); color: white; }
+        .step-item.completed .step-number { background: var(--primary); color: white; }
+        .step-item.completed .step-number::before { content: "✓"; }
+        
+        .step-info { flex-grow: 1; }
+        .step-title { font-size: 0.9rem; color: var(--gray-900); font-weight: 500; }
+        .step-duration { font-size: 0.75rem; color: var(--gray-500); }
+        
+        /* Main Content */
+        .main-content { flex-grow: 1; margin-left: 300px; padding: 2rem; }
+        .step-content { max-width: 800px; margin: 0 auto; }
+        
+        .step-header { margin-bottom: 2rem; }
+        
+        .step-header .step-badge {
+            display: inline-block;
+            background: var(--primary);
+            color: white;
+            padding: 0.3rem 1rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-bottom: 0.75rem;
+        }
+        
+        .step-header h1 { font-size: 2rem; color: var(--gray-900); margin-bottom: 0.5rem; }
+        .step-header p { font-size: 1.1rem; color: var(--gray-500); }
+        
+        .content-card {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            border: 1px solid var(--gray-300);
+            margin-bottom: 1.5rem;
+        }
+        
+        .content-card h2 { font-size: 1.25rem; color: var(--gray-900); margin-bottom: 1rem; }
+        .content-card h3 { font-size: 1rem; color: var(--gray-700); margin: 1.5rem 0 0.75rem; }
+        .content-card p { color: var(--gray-700); line-height: 1.7; margin-bottom: 1rem; }
+        .content-card ul, .content-card ol { margin-left: 1.5rem; margin-bottom: 1rem; color: var(--gray-700); line-height: 1.8; }
+        
+        /* Code Blocks */
+        .code-block {
+            background: var(--code-bg);
+            color: #e6edf3;
+            border-radius: 8px;
+            padding: 1rem;
+            margin: 1rem 0;
+            overflow-x: auto;
+            font-family: 'Consolas', 'Monaco', monospace;
+            font-size: 0.9rem;
+            line-height: 1.6;
+        }
+        
+        .code-block .comment { color: #8b949e; }
+        .code-block .command { color: #79c0ff; }
+        .code-block .string { color: #a5d6ff; }
+        .code-block .flag { color: #ffa657; }
+        
+        code {
+            background: var(--gray-100);
+            padding: 0.2rem 0.4rem;
+            border-radius: 4px;
+            font-family: 'Consolas', monospace;
+            font-size: 0.9em;
+            color: #cf222e;
+        }
+        
+        /* Info/Warning Boxes */
+        .info-box {
+            background: var(--info-bg);
+            border-left: 4px solid var(--info-border);
+            padding: 1rem 1.25rem;
+            border-radius: 0 8px 8px 0;
+            margin: 1.5rem 0;
+        }
+        
+        .warning-box {
+            background: var(--warning-bg);
+            border-left: 4px solid var(--warning-border);
+            padding: 1rem 1.25rem;
+            border-radius: 0 8px 8px 0;
+            margin: 1.5rem 0;
+        }
+        
+        .info-box strong, .warning-box strong { display: block; margin-bottom: 0.25rem; color: var(--gray-900); }
+        
+        /* Tables */
+        .data-table { width: 100%; border-collapse: collapse; margin: 1rem 0; font-size: 0.9rem; }
+        .data-table th, .data-table td { padding: 0.75rem; text-align: left; border-bottom: 1px solid var(--gray-200); }
+        .data-table th { background: var(--gray-100); font-weight: 600; color: var(--gray-700); }
+        
+        /* Navigation */
+        .step-navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 2rem;
+            padding-top: 2rem;
+            border-top: 1px solid var(--gray-200);
+        }
+        
+        .nav-btn {
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            cursor: pointer;
+            border: none;
+            font-size: 1rem;
+            transition: all 0.3s;
+            text-decoration: none;
+        }
+        
+        .nav-btn.prev { background: var(--gray-200); color: var(--gray-700); }
+        .nav-btn.prev:hover { background: var(--gray-300); }
+        .nav-btn.next { background: var(--primary); color: white; }
+        .nav-btn.next:hover { background: var(--primary-dark); }
+        .nav-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+        
+        /* Progress */
+        .progress-indicator {
+            background: var(--gray-200);
+            height: 4px;
+            position: fixed;
+            top: 0;
+            left: 300px;
+            right: 0;
+            z-index: 100;
+        }
+        
+        .progress-fill { height: 100%; background: var(--primary); transition: width 0.3s; }
+        .step-page { display: none; }
+        .step-page.active { display: block; }
+    </style>
+</head>
+<body>
+    <div class="progress-indicator">
+        <div class="progress-fill" id="progressFill" style="width: 0%"></div>
+    </div>
+    
+    <aside class="sidebar">
+        <div class="sidebar-header">
+            <a href="developer-training.html">← Back to Developer Training</a>
+            <h2>Module 1: Git Fundamentals</h2>
+            <span class="module-badge">15 minutes</span>
+        </div>
+        
+        <ul class="steps-list" id="stepsList">
+            <li class="step-item active" data-step="1" onclick="goToStep(1)">
+                <span class="step-number">1</span>
+                <div class="step-info">
+                    <div class="step-title">Why Git for Teams?</div>
+                    <div class="step-duration">2 min</div>
+                </div>
+            </li>
+            <li class="step-item" data-step="2" onclick="goToStep(2)">
+                <span class="step-number">2</span>
+                <div class="step-info">
+                    <div class="step-title">Repository Basics</div>
+                    <div class="step-duration">3 min</div>
+                </div>
+            </li>
+            <li class="step-item" data-step="3" onclick="goToStep(3)">
+                <span class="step-number">3</span>
+                <div class="step-info">
+                    <div class="step-title">The Commit Workflow</div>
+                    <div class="step-duration">3 min</div>
+                </div>
+            </li>
+            <li class="step-item" data-step="4" onclick="goToStep(4)">
+                <span class="step-number">4</span>
+                <div class="step-info">
+                    <div class="step-title">Branching Basics</div>
+                    <div class="step-duration">3 min</div>
+                </div>
+            </li>
+            <li class="step-item" data-step="5" onclick="goToStep(5)">
+                <span class="step-number">5</span>
+                <div class="step-info">
+                    <div class="step-title">Syncing with Remote</div>
+                    <div class="step-duration">3 min</div>
+                </div>
+            </li>
+            <li class="step-item" data-step="6" onclick="goToStep(6)">
+                <span class="step-number">6</span>
+                <div class="step-info">
+                    <div class="step-title">Module Complete</div>
+                    <div class="step-duration">1 min</div>
+                </div>
+            </li>
+        </ul>
+    </aside>
+    
+    <main class="main-content">
+        <!-- Step 1 -->
+        <div class="step-page active" id="step1">
+            <div class="step-content">
+                <div class="step-header">
+                    <span class="step-badge">Step 1 of 6</span>
+                    <h1>Why Git for Teams?</h1>
+                    <p>Understanding distributed version control</p>
+                </div>
+                
+                <div class="content-card">
+                    <h2>🤝 The Team Collaboration Challenge</h2>
+                    <p>When multiple developers work on the same codebase, chaos can ensue without proper tools:</p>
+                    <ul>
+                        <li><strong>Overwriting work</strong> - Developer A saves over Developer B's changes</li>
+                        <li><strong>Lost history</strong> - No way to see what changed or revert mistakes</li>
+                        <li><strong>Integration nightmares</strong> - Combining everyone's work becomes a guessing game</li>
+                    </ul>
+                    
+                    <h3>Git Solves These Problems</h3>
+                    <p>Git is a <strong>distributed version control system</strong> that tracks every change to your code:</p>
+                    <ul>
+                        <li>✅ Every developer has a complete copy of the project history</li>
+                        <li>✅ Changes are tracked in <strong>commits</strong> with who, what, and when</li>
+                        <li>✅ <strong>Branches</strong> let developers work independently without conflict</li>
+                        <li>✅ <strong>Merging</strong> combines work intelligently</li>
+                    </ul>
+                </div>
+                
+                <div class="content-card">
+                    <h2>🔑 Key Concepts</h2>
+                    <table class="data-table">
+                        <tr>
+                            <th>Term</th>
+                            <th>Definition</th>
+                        </tr>
+                        <tr>
+                            <td><strong>Repository (Repo)</strong></td>
+                            <td>Your project folder with its complete history</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Commit</strong></td>
+                            <td>A snapshot of your code at a point in time</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Branch</strong></td>
+                            <td>An independent line of development</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Remote</strong></td>
+                            <td>A shared copy of the repo (usually GitHub)</td>
+                        </tr>
+                    </table>
+                </div>
+                
+                <div class="step-navigation">
+                    <button class="nav-btn prev" disabled>← Previous</button>
+                    <button class="nav-btn next" onclick="goToStep(2)">Next: Repository Basics →</button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Step 2 -->
+        <div class="step-page" id="step2">
+            <div class="step-content">
+                <div class="step-header">
+                    <span class="step-badge">Step 2 of 6</span>
+                    <h1>Repository Basics</h1>
+                    <p>Setting up and cloning repositories</p>
+                </div>
+                
+                <div class="content-card">
+                    <h2>📦 Getting Started with a Repo</h2>
+                    
+                    <h3>Option 1: Clone an Existing Repository</h3>
+                    <p>When joining a project, clone the remote repository:</p>
+                    <div class="code-block">
+<span class="comment"># Clone a repository from GitHub</span>
+<span class="command">git clone</span> <span class="string">https://github.com/org/project-name.git</span>
+
+<span class="comment"># Navigate into the project</span>
+<span class="command">cd</span> project-name
+                    </div>
+                    
+                    <h3>Option 2: Initialize a New Repository</h3>
+                    <p>Starting a brand new project:</p>
+                    <div class="code-block">
+<span class="comment"># Create project folder and initialize Git</span>
+<span class="command">mkdir</span> my-project
+<span class="command">cd</span> my-project
+<span class="command">git init</span>
+
+<span class="comment"># Connect to a remote repository</span>
+<span class="command">git remote add</span> origin <span class="string">https://github.com/org/my-project.git</span>
+                    </div>
+                </div>
+                
+                <div class="content-card">
+                    <h2>📁 Understanding Git's Structure</h2>
+                    <p>After cloning, your project has a hidden <code>.git</code> folder containing all version history:</p>
+                    <div class="code-block">
+my-project/
+├── .git/              <span class="comment"># Git's database (don't edit!)</span>
+├── src/               <span class="comment"># Your source code</span>
+├── docs/              <span class="comment"># Documentation</span>
+├── .gitignore         <span class="comment"># Files Git should ignore</span>
+└── README.md          <span class="comment"># Project description</span>
+                    </div>
+                    
+                    <div class="warning-box">
+                        <strong>⚠️ Never Delete .git</strong>
+                        The <code>.git</code> folder contains your entire project history. Deleting it means losing all version control data.
+                    </div>
+                </div>
+                
+                <div class="content-card">
+                    <h2>🔧 Essential Configuration</h2>
+                    <p>Set your identity so commits show who made them:</p>
+                    <div class="code-block">
+<span class="comment"># Set your name and email (use your work email)</span>
+<span class="command">git config</span> <span class="flag">--global</span> user.name <span class="string">"Your Name"</span>
+<span class="command">git config</span> <span class="flag">--global</span> user.email <span class="string">"your.email@company.com"</span>
+
+<span class="comment"># Verify your settings</span>
+<span class="command">git config</span> <span class="flag">--list</span>
+                    </div>
+                </div>
+                
+                <div class="step-navigation">
+                    <button class="nav-btn prev" onclick="goToStep(1)">← Previous</button>
+                    <button class="nav-btn next" onclick="goToStep(3)">Next: The Commit Workflow →</button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Step 3 -->
+        <div class="step-page" id="step3">
+            <div class="step-content">
+                <div class="step-header">
+                    <span class="step-badge">Step 3 of 6</span>
+                    <h1>The Commit Workflow</h1>
+                    <p>Staging, committing, and writing good messages</p>
+                </div>
+                
+                <div class="content-card">
+                    <h2>📝 The Three Stages of Git</h2>
+                    <table class="data-table">
+                        <tr>
+                            <th>Stage</th>
+                            <th>Description</th>
+                            <th>Command</th>
+                        </tr>
+                        <tr>
+                            <td><strong>Working Directory</strong></td>
+                            <td>Your actual files on disk</td>
+                            <td>(just edit files)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Staging Area</strong></td>
+                            <td>Changes ready to commit</td>
+                            <td><code>git add</code></td>
+                        </tr>
+                        <tr>
+                            <td><strong>Repository</strong></td>
+                            <td>Committed history</td>
+                            <td><code>git commit</code></td>
+                        </tr>
+                    </table>
+                </div>
+                
+                <div class="content-card">
+                    <h2>🔄 The Commit Workflow</h2>
+                    <div class="code-block">
+<span class="comment"># 1. Check what files have changed</span>
+<span class="command">git status</span>
+
+<span class="comment"># 2. Stage specific files</span>
+<span class="command">git add</span> src/feature.js
+<span class="command">git add</span> tests/feature.test.js
+
+<span class="comment"># Or stage all changes</span>
+<span class="command">git add</span> <span class="flag">.</span>
+
+<span class="comment"># 3. Commit with a descriptive message</span>
+<span class="command">git commit</span> <span class="flag">-m</span> <span class="string">"Add user authentication feature"</span>
+                    </div>
+                </div>
+                
+                <div class="content-card">
+                    <h2>✍️ Writing Good Commit Messages</h2>
+                    <p>Commit messages are crucial for team collaboration. They explain <strong>why</strong> changes were made.</p>
+                    
+                    <h3>✅ Good Messages</h3>
+                    <div class="code-block">
+<span class="string">"Add password validation to signup form"</span>
+<span class="string">"Fix null pointer exception in user service"</span>
+<span class="string">"Update API endpoints for v2 compatibility"</span>
+<span class="string">"Remove deprecated payment gateway code"</span>
+                    </div>
+                    
+                    <h3>❌ Bad Messages</h3>
+                    <div class="code-block">
+<span class="string">"Fixed stuff"</span>
+<span class="string">"WIP"</span>
+<span class="string">"asdfasdf"</span>
+<span class="string">"changes"</span>
+                    </div>
+                    
+                    <div class="info-box">
+                        <strong>💡 Commit Message Format</strong>
+                        Use the imperative mood: "Add feature" not "Added feature" or "Adding feature". Think of it as completing the sentence: "This commit will..."
+                    </div>
+                </div>
+                
+                <div class="step-navigation">
+                    <button class="nav-btn prev" onclick="goToStep(2)">← Previous</button>
+                    <button class="nav-btn next" onclick="goToStep(4)">Next: Branching Basics →</button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Step 4 -->
+        <div class="step-page" id="step4">
+            <div class="step-content">
+                <div class="step-header">
+                    <span class="step-badge">Step 4 of 6</span>
+                    <h1>Branching Basics</h1>
+                    <p>Working on features without affecting others</p>
+                </div>
+                
+                <div class="content-card">
+                    <h2>🌿 Why Branches Matter</h2>
+                    <p>Branches let multiple developers work simultaneously without stepping on each other's toes:</p>
+                    <ul>
+                        <li><strong>main/master</strong> - The stable, production-ready code</li>
+                        <li><strong>Feature branches</strong> - Where new development happens</li>
+                        <li><strong>Each developer</strong> works on their own branch</li>
+                        <li><strong>Changes merge</strong> back to main when ready</li>
+                    </ul>
+                </div>
+                
+                <div class="content-card">
+                    <h2>🔧 Essential Branch Commands</h2>
+                    <div class="code-block">
+<span class="comment"># See all branches (* marks current branch)</span>
+<span class="command">git branch</span>
+
+<span class="comment"># Create a new branch</span>
+<span class="command">git branch</span> feature/user-login
+
+<span class="comment"># Switch to that branch</span>
+<span class="command">git checkout</span> feature/user-login
+
+<span class="comment"># Create AND switch in one command (preferred)</span>
+<span class="command">git checkout</span> <span class="flag">-b</span> feature/user-login
+
+<span class="comment"># Return to main branch</span>
+<span class="command">git checkout</span> main
+                    </div>
+                </div>
+                
+                <div class="content-card">
+                    <h2>📋 Branch Naming Best Practices</h2>
+                    <table class="data-table">
+                        <tr>
+                            <th>Prefix</th>
+                            <th>Use For</th>
+                            <th>Example</th>
+                        </tr>
+                        <tr>
+                            <td><code>feature/</code></td>
+                            <td>New functionality</td>
+                            <td><code>feature/user-dashboard</code></td>
+                        </tr>
+                        <tr>
+                            <td><code>fix/</code></td>
+                            <td>Bug fixes</td>
+                            <td><code>fix/login-error</code></td>
+                        </tr>
+                        <tr>
+                            <td><code>hotfix/</code></td>
+                            <td>Urgent production fixes</td>
+                            <td><code>hotfix/security-patch</code></td>
+                        </tr>
+                        <tr>
+                            <td><code>refactor/</code></td>
+                            <td>Code improvements</td>
+                            <td><code>refactor/api-cleanup</code></td>
+                        </tr>
+                    </table>
+                    
+                    <div class="warning-box">
+                        <strong>⚠️ Never Commit Directly to Main</strong>
+                        Always create a branch for your changes, then merge via pull request. This protects the main branch and enables code review.
+                    </div>
+                </div>
+                
+                <div class="step-navigation">
+                    <button class="nav-btn prev" onclick="goToStep(3)">← Previous</button>
+                    <button class="nav-btn next" onclick="goToStep(5)">Next: Syncing with Remote →</button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Step 5 -->
+        <div class="step-page" id="step5">
+            <div class="step-content">
+                <div class="step-header">
+                    <span class="step-badge">Step 5 of 6</span>
+                    <h1>Syncing with Remote</h1>
+                    <p>Push, pull, and fetch explained</p>
+                </div>
+                
+                <div class="content-card">
+                    <h2>🔄 Keeping in Sync</h2>
+                    <p>Your local repo and the remote (GitHub) need to stay synchronized:</p>
+                    
+                    <table class="data-table">
+                        <tr>
+                            <th>Command</th>
+                            <th>Direction</th>
+                            <th>Purpose</th>
+                        </tr>
+                        <tr>
+                            <td><code>git push</code></td>
+                            <td>Local → Remote</td>
+                            <td>Upload your commits</td>
+                        </tr>
+                        <tr>
+                            <td><code>git pull</code></td>
+                            <td>Remote → Local</td>
+                            <td>Download & merge changes</td>
+                        </tr>
+                        <tr>
+                            <td><code>git fetch</code></td>
+                            <td>Remote → Local</td>
+                            <td>Download without merging</td>
+                        </tr>
+                    </table>
+                </div>
+                
+                <div class="content-card">
+                    <h2>📤 Pushing Your Changes</h2>
+                    <div class="code-block">
+<span class="comment"># Push current branch to remote</span>
+<span class="command">git push</span> origin feature/user-login
+
+<span class="comment"># First push of a new branch (sets upstream)</span>
+<span class="command">git push</span> <span class="flag">-u</span> origin feature/user-login
+
+<span class="comment"># After setting upstream, just use:</span>
+<span class="command">git push</span>
+                    </div>
+                </div>
+                
+                <div class="content-card">
+                    <h2>📥 Pulling Changes</h2>
+                    <div class="code-block">
+<span class="comment"># Get latest changes from remote</span>
+<span class="command">git pull</span> origin main
+
+<span class="comment"># Pull changes into your feature branch</span>
+<span class="command">git checkout</span> feature/user-login
+<span class="command">git pull</span> origin main
+                    </div>
+                    
+                    <div class="info-box">
+                        <strong>💡 Pull Early, Pull Often</strong>
+                        The longer you wait to pull, the more likely you'll have conflicts. Pull from main at least once a day, or before starting new work.
+                    </div>
+                </div>
+                
+                <div class="content-card">
+                    <h2>📋 Daily Workflow Summary</h2>
+                    <div class="code-block">
+<span class="comment"># Start of day: Get latest changes</span>
+<span class="command">git checkout</span> main
+<span class="command">git pull</span>
+
+<span class="comment"># Create or switch to your feature branch</span>
+<span class="command">git checkout</span> <span class="flag">-b</span> feature/my-task
+
+<span class="comment"># Work, commit frequently</span>
+<span class="command">git add</span> <span class="flag">.</span>
+<span class="command">git commit</span> <span class="flag">-m</span> <span class="string">"Add input validation"</span>
+
+<span class="comment"># Push your work</span>
+<span class="command">git push</span> <span class="flag">-u</span> origin feature/my-task
+
+<span class="comment"># End of day: Pull latest main into your branch</span>
+<span class="command">git pull</span> origin main
+                    </div>
+                </div>
+                
+                <div class="step-navigation">
+                    <button class="nav-btn prev" onclick="goToStep(4)">← Previous</button>
+                    <button class="nav-btn next" onclick="goToStep(6)">Complete Module →</button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Step 6 -->
+        <div class="step-page" id="step6">
+            <div class="step-content">
+                <div class="step-header">
+                    <span class="step-badge">Step 6 of 6</span>
+                    <h1>🎉 Module Complete!</h1>
+                    <p>You've learned the Git fundamentals</p>
+                </div>
+                
+                <div class="content-card" style="text-align: center; padding: 2.5rem;">
+                    <div style="font-size: 4rem; margin-bottom: 1rem;">📦</div>
+                    <h2>Git Fundamentals Mastered!</h2>
+                    <p style="font-size: 1.1rem; max-width: 500px; margin: 1rem auto;">You now understand the core Git concepts needed for team collaboration.</p>
+                </div>
+                
+                <div class="content-card">
+                    <h2>📋 Key Takeaways</h2>
+                    <ul>
+                        <li><strong>Repositories</strong> contain your code and its complete history</li>
+                        <li><strong>Commits</strong> are snapshots with meaningful messages</li>
+                        <li><strong>Branches</strong> let developers work independently</li>
+                        <li><strong>Push/Pull</strong> sync your local work with the team</li>
+                        <li><strong>Never commit directly to main</strong> - use feature branches</li>
+                    </ul>
+                </div>
+                
+                <div class="content-card">
+                    <h2>🚀 Quick Reference Commands</h2>
+                    <div class="code-block">
+<span class="command">git clone</span> &lt;url&gt;           <span class="comment"># Copy a repository</span>
+<span class="command">git status</span>                 <span class="comment"># See what's changed</span>
+<span class="command">git add</span> <span class="flag">.</span>                  <span class="comment"># Stage all changes</span>
+<span class="command">git commit</span> <span class="flag">-m</span> <span class="string">"message"</span>   <span class="comment"># Save a snapshot</span>
+<span class="command">git checkout</span> <span class="flag">-b</span> branch    <span class="comment"># Create & switch branch</span>
+<span class="command">git push</span>                   <span class="comment"># Upload to remote</span>
+<span class="command">git pull</span>                   <span class="comment"># Download from remote</span>
+                    </div>
+                </div>
+                
+                <div class="content-card" style="background: linear-gradient(135deg, var(--primary), #22c55e); color: white;">
+                    <h2 style="color: white;">Next Up: Branch Strategy</h2>
+                    <p style="color: rgba(255,255,255,0.9);">Learn how to choose and implement the right branching workflow for your team.</p>
+                    <div style="margin-top: 1rem;">
+                        <a href="dev-module2-branch-strategy.html" class="nav-btn" style="background: white; color: var(--primary);">Start Module 2 →</a>
+                    </div>
+                </div>
+                
+                <div class="step-navigation">
+                    <button class="nav-btn prev" onclick="goToStep(5)">← Previous</button>
+                    <button class="nav-btn next" onclick="completeModule()" style="background: var(--primary);">✓ Complete Module</button>
+                </div>
+            </div>
+        </div>
+    </main>
+    
+    <script>
+        const totalSteps = 6;
+        let currentStep = 1;
+        let completedSteps = [];
+        
+        function loadProgress() {
+            const saved = localStorage.getItem('dev-module1-step');
+            if (saved) {
+                currentStep = parseInt(saved);
+                for (let i = 1; i < currentStep; i++) {
+                    completedSteps.push(i);
+                }
+            }
+            updateUI();
+        }
+        
+        function saveProgress() {
+            localStorage.setItem('dev-module1-step', currentStep);
+            if (currentStep > 1) {
+                localStorage.setItem('dev-module1', 'in-progress');
+            }
+        }
+        
+        function goToStep(step) {
+            if (step > currentStep) {
+                for (let i = currentStep; i < step; i++) {
+                    if (!completedSteps.includes(i)) completedSteps.push(i);
+                }
+            }
+            currentStep = step;
+            saveProgress();
+            updateUI();
+            window.scrollTo(0, 0);
+        }
+        
+        function updateUI() {
+            document.querySelectorAll('.step-page').forEach((page, index) => {
+                page.classList.remove('active');
+                if (index + 1 === currentStep) page.classList.add('active');
+            });
+            
+            document.querySelectorAll('.step-item').forEach((item, index) => {
+                const stepNum = index + 1;
+                item.classList.remove('active', 'completed');
+                if (stepNum === currentStep) item.classList.add('active');
+                else if (completedSteps.includes(stepNum)) item.classList.add('completed');
+            });
+            
+            const progress = ((currentStep - 1) / (totalSteps - 1)) * 100;
+            document.getElementById('progressFill').style.width = `${progress}%`;
+        }
+        
+        function completeModule() {
+            localStorage.setItem('dev-module1', 'completed');
+            localStorage.setItem('dev-module1-step', totalSteps);
+            window.location.href = 'developer-training.html';
+        }
+        
+        loadProgress();
+    </script>
+</body>
+</html>
