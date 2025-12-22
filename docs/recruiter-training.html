@@ -283,6 +283,141 @@
         .reset-btn:hover {
             background: rgba(255,255,255,0.1);
         }
+        
+        /* Feedback Section Styles */
+        .feedback-section {
+            margin-top: 2rem;
+            margin-bottom: 2rem;
+        }
+        
+        .feedback-card {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+            overflow: hidden;
+        }
+        
+        .feedback-header {
+            background: linear-gradient(135deg, #8b5cf6, #6d28d9);
+            padding: 1.5rem;
+            text-align: center;
+            color: white;
+        }
+        
+        .feedback-icon {
+            font-size: 2.5rem;
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+        
+        .feedback-header h2 {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .feedback-header p {
+            opacity: 0.9;
+            font-size: 0.95rem;
+        }
+        
+        .feedback-form {
+            padding: 1.5rem;
+        }
+        
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 1rem;
+        }
+        
+        @media (max-width: 600px) {
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        .form-group {
+            margin-bottom: 1rem;
+        }
+        
+        .form-group label {
+            display: block;
+            font-weight: 600;
+            color: var(--gray-700);
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+        }
+        
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid var(--gray-300);
+            border-radius: 6px;
+            font-size: 1rem;
+            font-family: inherit;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+        
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(1, 118, 211, 0.1);
+        }
+        
+        .form-group textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+        
+        .form-actions {
+            text-align: center;
+            margin-top: 1rem;
+        }
+        
+        .btn-feedback {
+            background: linear-gradient(135deg, #8b5cf6, #6d28d9);
+            color: white;
+            padding: 0.875rem 2rem;
+            border: none;
+            border-radius: 6px;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        
+        .btn-feedback:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(139, 92, 246, 0.4);
+        }
+        
+        .btn-feedback:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .feedback-message {
+            margin-top: 1rem;
+            padding: 1rem;
+            border-radius: 6px;
+            text-align: center;
+            font-weight: 500;
+        }
+        
+        .feedback-message.success {
+            background: var(--success-light);
+            color: var(--success);
+        }
+        
+        .feedback-message.error {
+            background: #fee2e2;
+            color: #dc2626;
+        }
     </style>
 </head>
 <body>
@@ -441,6 +576,49 @@
             </div>
         </div>
         
+        <!-- Feedback Section -->
+        <div class="feedback-section">
+            <div class="feedback-card">
+                <div class="feedback-header">
+                    <span class="feedback-icon">💬</span>
+                    <h2>Share Your Feedback</h2>
+                    <p>Help us improve! Let us know what you think about the training program.</p>
+                </div>
+                
+                <form id="feedbackForm" class="feedback-form">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="feedbackType">Feedback Type *</label>
+                            <select id="feedbackType" required>
+                                <option value="">Select type...</option>
+                                <option value="General Feedback">General Feedback</option>
+                                <option value="Feature Request">Feature Request</option>
+                                <option value="Bug Report">Bug Report</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="feedbackSubject">Subject *</label>
+                            <input type="text" id="feedbackSubject" placeholder="Brief summary of your feedback" required maxlength="255">
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="feedbackDescription">Description *</label>
+                        <textarea id="feedbackDescription" rows="4" placeholder="Please provide details about your feedback, suggestions, or issues..." required></textarea>
+                    </div>
+                    
+                    <div class="form-actions">
+                        <button type="submit" class="btn btn-feedback">
+                            <span class="btn-text">Submit Feedback</span>
+                            <span class="btn-loading" style="display: none;">Submitting...</span>
+                        </button>
+                    </div>
+                    
+                    <div id="feedbackMessage" class="feedback-message" style="display: none;"></div>
+                </form>
+            </div>
+        </div>
+        
         <footer>
             <p>Recruiter Portal ATS Training Program v1.0 | December 2025</p>
             <button class="reset-btn" onclick="resetProgress()">Reset All Progress</button>
@@ -498,6 +676,63 @@
                 location.reload();
             }
         }
+        
+        // Feedback form handling
+        document.getElementById('feedbackForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const feedbackType = document.getElementById('feedbackType').value;
+            const subject = document.getElementById('feedbackSubject').value;
+            const description = document.getElementById('feedbackDescription').value;
+            const submitBtn = this.querySelector('.btn-feedback');
+            const btnText = submitBtn.querySelector('.btn-text');
+            const btnLoading = submitBtn.querySelector('.btn-loading');
+            const messageDiv = document.getElementById('feedbackMessage');
+            
+            // Show loading state
+            btnText.style.display = 'none';
+            btnLoading.style.display = 'inline';
+            submitBtn.disabled = true;
+            
+            // Create email body
+            const emailBody = `Feedback Type: ${feedbackType}
+
+Subject: ${subject}
+
+Description:
+${description}
+
+---
+Submitted from: Recruiter Training Program
+Date: ${new Date().toLocaleString()}`;
+            
+            // Create mailto link
+            const mailtoLink = `mailto:recruiting-ops@massmutual.com?subject=${encodeURIComponent(`[${feedbackType}] ${subject}`)}&body=${encodeURIComponent(emailBody)}`;
+            
+            // Simulate brief delay for UX
+            setTimeout(() => {
+                // Open email client
+                window.location.href = mailtoLink;
+                
+                // Reset button state
+                btnText.style.display = 'inline';
+                btnLoading.style.display = 'none';
+                submitBtn.disabled = false;
+                
+                // Show success message
+                messageDiv.className = 'feedback-message success';
+                messageDiv.innerHTML = '✓ Your default email client should open. If not, please email your feedback to <strong>recruiting-ops@massmutual.com</strong>';
+                messageDiv.style.display = 'block';
+                
+                // Clear form
+                document.getElementById('feedbackForm').reset();
+                
+                // Hide message after 10 seconds
+                setTimeout(() => {
+                    messageDiv.style.display = 'none';
+                }, 10000);
+            }, 500);
+        });
         
         // Load progress on page load
         loadProgress();
