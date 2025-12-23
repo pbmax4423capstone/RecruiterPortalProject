@@ -289,12 +289,21 @@ async function handleCheckDuplicates() {
 function showDuplicateModal(duplicates) {
   pendingDuplicates = duplicates;
   
-  // Helper function to escape HTML
-  function escapeHtml(text) {
-    if (!text) return '';
-    const div = document.createElement('div');
-    div.textContent = text;
-    return div.innerHTML;
+  // Helper function to validate and sanitize URLs
+  function sanitizeUrl(url) {
+    if (!url) return '#';
+    try {
+      // Validate URL structure
+      const validUrl = new URL(url);
+      // Only allow https and http protocols (Salesforce URLs)
+      if (validUrl.protocol === 'https:' || validUrl.protocol === 'http:') {
+        return validUrl.href;
+      }
+      return '#';
+    } catch (e) {
+      // Invalid URL, return safe default
+      return '#';
+    }
   }
   
   // Build duplicate list using DOM manipulation for security
@@ -314,7 +323,7 @@ function showDuplicateModal(duplicates) {
     headerDiv.appendChild(nameSpan);
     
     const link = document.createElement('a');
-    link.href = escapeHtml(dup.url);
+    link.href = sanitizeUrl(dup.url);
     link.target = '_blank';
     link.className = 'duplicate-record-link';
     link.textContent = 'View Record →';
