@@ -10,7 +10,9 @@ This project includes:
 - **Custom Objects**: Interview and candidate management system
 - **Flows**: Automated contract lifecycle tracking
 - **MCP Server**: TypeScript-based Model Context Protocol server
-- **Browser Extensions**: LinkedIn to Salesforce candidate importer (Chrome & Edge)
+- **Browser Extensions**: 
+  - LinkedIn to Salesforce candidate importer (Chrome & Edge)
+  - **NEW**: Business Page to Salesforce importer with duplicate detection (Chrome & Edge)
 
 ## Key Components
 
@@ -49,6 +51,7 @@ This project includes:
 - **[System Design Document](docs/LOXO-ATS-Design.md)**: Technical design and implementation details
 - **[Development Guide](COLE_ARNOLD_DEVELOPMENT_GUIDE.md)**: Guide for developers working on this project
 - **[LinkedIn Extension](chrome-extension-linkedin/README.md)**: Setup for Chrome/Edge LinkedIn importer
+- **[Business Page Extension](BUSINESS_PAGE_EXTENSION_DOCS.md)**: NEW - Universal business page to Salesforce importer with duplicate detection
 
 ## Salesforce DX Setup
 
