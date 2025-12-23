@@ -1,0 +1,137 @@
+/* Universal Candidate Creator - Content Styles */
+/* Styles for FAB and LinkedIn inline button */
+
+/* Floating Action Button (FAB) */
+.universal-sf-fab {
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+  z-index: 9999;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.universal-sf-fab:hover {
+  transform: scale(1.1);
+  box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+}
+
+.universal-sf-fab:active {
+  transform: scale(0.95);
+}
+
+.universal-sf-fab:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: scale(1);
+}
+
+/* LinkedIn Inline Button */
+#universal-sf-save-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px 16px;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1.5;
+  border-radius: 16px;
+  border: 1px solid #667eea;
+  background: white;
+  color: #667eea;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  margin-left: 8px;
+}
+
+#universal-sf-save-button:hover {
+  background: #667eea;
+  color: white;
+  box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3);
+}
+
+#universal-sf-save-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* LinkedIn artdeco button styling override (for better integration) */
+#universal-sf-save-button.artdeco-button {
+  height: auto;
+  min-height: 32px;
+}
+
+/* Mobile responsive adjustments */
+@media (max-width: 768px) {
+  .universal-sf-fab {
+    bottom: 20px;
+    right: 20px;
+    width: 48px;
+    height: 48px;
+    font-size: 20px;
+  }
+}
+
+/* Tooltip for FAB */
+.universal-sf-fab::after {
+  content: attr(title);
+  position: absolute;
+  right: 100%;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(0, 0, 0, 0.8);
+  color: white;
+  padding: 6px 12px;
+  border-radius: 4px;
+  font-size: 12px;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s;
+  margin-right: 10px;
+}
+
+.universal-sf-fab:hover::after {
+  opacity: 1;
+}
+
+/* Animation for button appearance */
+@keyframes slideInUp {
+  from {
+    transform: translateY(100px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.universal-sf-fab {
+  animation: slideInUp 0.4s ease-out;
+}
+
+/* Pulse animation when processing */
+@keyframes pulse {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+}
+
+.universal-sf-fab:disabled {
+  animation: pulse 1.5s ease-in-out infinite;
+}
