@@ -249,8 +249,17 @@ async function handleCreateCandidateWithContact(data) {
   const contactResult = await contactResponse.json();
   
   if (!contactResponse.ok || !contactResult.success) {
-    const errorMsg = contactResult.length ? contactResult.map(e => e.message).join(', ') : 
-                     contactResult.message || 'Contact creation failed';
+    let errorMsg = 'Contact creation failed';
+
+    if (Array.isArray(contactResult) && contactResult.length) {
+      errorMsg =
+        contactResult
+          .map(e => (e && e.message) ? e.message : '')
+          .filter(Boolean)
+          .join(', ') || errorMsg;
+    } else if (contactResult && typeof contactResult === 'object' && contactResult.message) {
+      errorMsg = contactResult.message;
+    }
     throw new Error(errorMsg);
   }
 
