@@ -1,5 +1,7 @@
 # RecruiterPortalProject
 
+[![Salesforce CLI](https://img.shields.io/badge/Salesforce%20CLI-2.x-blue?logo=salesforce)](https://developer.salesforce.com/docs/atlas.en-us.sfdx_setup.meta/sfdx_setup/sfdx_setup_intro.htm)
+
 A Salesforce DX project for the Recruiter Portal application, featuring Lightning Web Component dashboards for managing interviews, candidates, and Contract B lifecycle tracking.
 
 ## Project Overview
