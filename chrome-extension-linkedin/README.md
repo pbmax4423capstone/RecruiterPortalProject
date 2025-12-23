@@ -1,7 +1,9 @@
-# LinkedIn to Salesforce Chrome Extension
+# LinkedIn to Salesforce Edge Extension
 
 ## Overview
-This Chrome extension allows recruiters to import LinkedIn profiles directly as Candidates into Salesforce.
+This Microsoft Edge extension allows recruiters to import LinkedIn profiles directly as Candidates into Salesforce.
+
+> **Note:** This is the Edge version of the Chrome extension. Both share the same Connected App configuration in Salesforce.
 
 ## Features
 - Extract profile data (First Name, Last Name) from LinkedIn profiles
@@ -37,12 +39,12 @@ This Chrome extension allows recruiters to import LinkedIn profiles directly as 
 4. For ProdTest sandbox, keep `salesforceLoginUrl: 'https://test.salesforce.com'`
 5. For Production, change to `salesforceLoginUrl: 'https://login.salesforce.com'`
 
-### Step 3: Load the Extension in Chrome
+### Step 3: Load the Extension in Edge
 
-1. Open Chrome and go to `chrome://extensions/`
-2. Enable **Developer mode** (toggle in top right)
+1. Open Edge and go to `edge://extensions/`
+2. Enable **Developer mode** (toggle in bottom left)
 3. Click **Load unpacked**
-4. Select the `chrome-extension-linkedin` folder
+4. Select the `edge-extension-linkedin` folder
 5. Note the **Extension ID** shown below the extension name
 
 ### Step 4: Update Connected App Callback URL

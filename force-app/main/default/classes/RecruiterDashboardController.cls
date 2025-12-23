@@ -2100,6 +2100,7 @@ public without sharing class RecruiterDashboardController {
         }
     }
     
+    /* Commented out for recruiting sandbox - Feedback__c object not present
     @AuraEnabled
     public static String createFeedbackCase(String submittedById, String feedbackType, String priority, String subject, String description) {
         try {
@@ -2129,6 +2130,7 @@ public without sharing class RecruiterDashboardController {
             throw new AuraHandledException('Failed to create feedback: ' + e.getMessage());
         }
     }
+    */
 
     @AuraEnabled
     public static Task getTaskDetails(String taskId) {

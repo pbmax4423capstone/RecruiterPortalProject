@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>61.0</apiVersion>
+    <areMetricsLoggedToDataCloud>false</areMetricsLoggedToDataCloud>
+    <assignments>
+        <name>Assign_Keywords</name>
+        <label>Assign Keywords</label>
+        <locationX>176</locationX>
+        <locationY>287</locationY>
+        <assignmentItems>
+            <assignToReference>$Record.Keyword_Search__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>for_Keyword</elementReference>
+            </value>
+        </assignmentItems>
+    </assignments>
+    <description>Populate with keywords to make them searchable in global search</description>
+    <environments>Default</environments>
+    <formulas>
+        <name>for_Keyword</name>
+        <dataType>String</dataType>
+        <expression>{!$Record.Brand__c}&amp;&quot;;&quot;&amp;{!$Record.Device_Model__c}&amp;&quot;;&quot;&amp;{!$Record.MM_ID__c}&amp;&quot;;&quot;&amp;{!$Record.Name}&amp;&quot;;&quot;&amp;{!$Record.Personal_Email__c}&amp;&quot;;&quot;&amp;{!$Record.Serial_Number_or_Service_Tag__c}</expression>
+    </formulas>
+    <interviewLabel>Keyword Search for Tickets {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>Keyword Search for Encrypted Devices</label>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>AUTO_LAYOUT_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>OriginBuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>AutoLaunchedFlow</processType>
+    <start>
+        <locationX>50</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>Assign_Keywords</targetReference>
+        </connector>
+        <object>Encrypted_Device__c</object>
+        <recordTriggerType>CreateAndUpdate</recordTriggerType>
+        <triggerType>RecordBeforeSave</triggerType>
+    </start>
+    <status>Active</status>
+</Flow>

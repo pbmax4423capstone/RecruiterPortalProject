@@ -18,6 +18,9 @@
     const data = {
       firstName: '',
       lastName: '',
+      email: '',
+      phone: '',
+      birthday: '',
       headline: '',
       company: '',
       location: '',
@@ -42,8 +45,18 @@
       }
       
       if (nameElement) {
-        const fullName = nameElement.textContent.trim();
-        console.log('Found name:', fullName);
+        let fullName = nameElement.textContent.trim();
+        console.log('Found raw name:', fullName);
+        
+        // Remove designations/credentials after comma (e.g., "CFP®, AIF®, MBA")
+        // Also handles designations without comma but with ® or common credential patterns
+        if (fullName.includes(',')) {
+          fullName = fullName.split(',')[0].trim();
+        }
+        // Remove any remaining credentials that might be space-separated (MBA, PhD, CPA, CFP, etc.)
+        fullName = fullName.replace(/\s+(MBA|PhD|CPA|CFP|AIF|CFA|ChFC|CLU|CRPC|JD|MD|Esq|RIA|CFP®|AIF®|CFA®|ChFC®|CLU®|CRPC®)(\s|$)/gi, ' ').trim();
+        
+        console.log('Cleaned name:', fullName);
         const nameParts = fullName.split(' ').filter(p => p.length > 0);
         
         if (nameParts.length >= 2) {
@@ -70,6 +83,83 @@
       if (locationElement) {
         data.location = locationElement.textContent.trim();
         console.log('Found location:', data.location);
+      }
+      
+      // Extract email from mailto: links
+      const emailLinks = document.querySelectorAll('a[href^="mailto:"]');
+      for (const link of emailLinks) {
+        const href = link.getAttribute('href');
+        if (href) {
+          const email = href.replace('mailto:', '').split('?')[0].trim();
+          if (email && email.includes('@') && !email.toLowerCase().includes('linkedin')) {
+            data.email = email;
+            console.log('Found email:', data.email);
+            break;
+          }
+        }
+      }
+      
+      // Extract phone from tel: links
+      const phoneLinks = document.querySelectorAll('a[href^="tel:"]');
+      for (const link of phoneLinks) {
+        const href = link.getAttribute('href');
+        if (href) {
+          data.phone = href.replace('tel:', '').trim();
+          console.log('Found phone from tel link:', data.phone);
+          break;
+        }
+      }
+      
+      // Get page text for fallback searches
+      const pageText = document.body.innerText || '';
+      
+      // Fallback: look for phone in modal area specifically
+      if (!data.phone) {
+        // Try to find the modal and search within it
+        const modal = document.querySelector('.artdeco-modal, [role="dialog"]');
+        if (modal) {
+          const modalText = modal.innerText || '';
+          // Look near "Phone" label in modal
+          const phoneIdx = modalText.toLowerCase().indexOf('phone');
+          if (phoneIdx !== -1) {
+            const nearbyText = modalText.substring(phoneIdx, phoneIdx + 50);
+            // Match phone with parentheses format like (719) 210-0399 or regular format
+            const phoneMatch = nearbyText.match(/\(?(\d{3})\)?[-.\s]?(\d{3})[-.\s]?(\d{4})/);
+            if (phoneMatch) {
+              data.phone = phoneMatch[0].trim();
+              console.log('Found phone from modal near Phone label:', data.phone);
+            }
+          }
+        }
+        
+        // If still not found, try page text near "Phone" label (but NOT 800 numbers which are usually ads)
+        if (!data.phone) {
+          const phoneIdx = pageText.toLowerCase().indexOf('phone');
+          if (phoneIdx !== -1) {
+            const nearbyText = pageText.substring(phoneIdx, phoneIdx + 50);
+            const phoneMatch = nearbyText.match(/\(?(\d{3})\)?[-.\s]?(\d{3})[-.\s]?(\d{4})/);
+            if (phoneMatch && !phoneMatch[0].startsWith('800') && !phoneMatch[0].startsWith('(800')) {
+              data.phone = phoneMatch[0].trim();
+              console.log('Found phone from text near Phone label:', data.phone);
+            }
+          }
+        }
+      }
+      
+      // Extract birthday - look for text near "Birthday" label
+      const birthdayIdx = pageText.toLowerCase().indexOf('birthday');
+      if (birthdayIdx !== -1) {
+        const nearbyText = pageText.substring(birthdayIdx, birthdayIdx + 50);
+        const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+        for (const month of months) {
+          const pattern = new RegExp(`(${month})\\s+(\\d{1,2})`, 'i');
+          const match = nearbyText.match(pattern);
+          if (match) {
+            data.birthday = match[0];
+            console.log('Found birthday:', data.birthday);
+            break;
+          }
+        }
       }
       
       console.log('Extracted data:', data);
@@ -127,17 +217,35 @@
         btn.style.boxShadow = 'none';
       });
       
-      btn.addEventListener('click', () => {
-        // Open the extension popup programmatically isn't directly possible,
-        // but we can show a notification
-        const data = extractProfileData();
-        chrome.runtime.sendMessage({ action: 'showPopup', data });
+      btn.addEventListener('click', async () => {
+        // First, try to open the Contact Info modal to get email/phone/birthday
+        const contactInfoLink = document.querySelector('a[href*="/overlay/contact-info"]') ||
+                                document.querySelector('#top-card-text-details-contact-info') ||
+                                document.querySelector('a[data-control-name="contact_see_more"]');
         
-        // Show a tooltip
-        btn.innerHTML = '✓ Click extension icon to complete';
-        setTimeout(() => {
-          btn.innerHTML = '☁️ Save to Salesforce';
-        }, 3000);
+        if (contactInfoLink) {
+          // Click to open the contact info modal
+          contactInfoLink.click();
+          
+          // Wait for modal to fully load
+          await new Promise(resolve => setTimeout(resolve, 2500));
+        }
+        
+        // Now extract data (modal should be open if link was found)
+        const data = extractProfileData();
+        
+        // Close the modal if we opened it (click the X or press escape)
+        const closeBtn = document.querySelector('button[aria-label="Dismiss"]') ||
+                         document.querySelector('.artdeco-modal__dismiss');
+        if (closeBtn) {
+          closeBtn.click();
+        }
+        
+        // Send data to background to open popup
+        chrome.runtime.sendMessage({ 
+          action: 'openPopup',
+          profileData: data 
+        });
       });
       
       actionsArea.appendChild(btn);

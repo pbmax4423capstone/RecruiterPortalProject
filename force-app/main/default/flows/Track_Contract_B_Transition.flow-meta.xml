@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>59.0</apiVersion>
+    <description>When Contract Type changes from Contract B to another type, automatically sets Transition_to_A_Date and Contract_Outcome to Transitioned to A.</description>
+    <environments>Default</environments>
+    <interviewLabel>Track Contract B Transition {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>Track Contract B Transition</label>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>AUTO_LAYOUT_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>OriginBuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>AutoLaunchedFlow</processType>
+    <start>
+        <locationX>50</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>Check_If_Transitioned_From_B</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Contract_Type__c</field>
+            <operator>IsChanged</operator>
+            <value>
+                <booleanValue>true</booleanValue>
+            </value>
+        </filters>
+        <object>Candidate__c</object>
+        <recordTriggerType>Update</recordTriggerType>
+        <triggerType>RecordBeforeSave</triggerType>
+    </start>
+    <decisions>
+        <name>Check_If_Transitioned_From_B</name>
+        <label>Check If Transitioned From B</label>
+        <locationX>176</locationX>
+        <locationY>134</locationY>
+        <defaultConnectorLabel>Not a B Transition</defaultConnectorLabel>
+        <rules>
+            <name>Was_Contract_B_Now_Different</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record__Prior.Contract_Type__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Contract B</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.Contract_Type__c</leftValueReference>
+                <operator>NotEqualTo</operator>
+                <rightValue>
+                    <stringValue>Contract B</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Set_Transition_Fields</targetReference>
+            </connector>
+            <label>Was Contract B, Now Different</label>
+        </rules>
+    </decisions>
+    <assignments>
+        <name>Set_Transition_Fields</name>
+        <label>Set Transition Fields</label>
+        <locationX>264</locationX>
+        <locationY>242</locationY>
+        <assignmentItems>
+            <assignToReference>$Record.Transition_to_A_Date__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>$Flow.CurrentDate</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>$Record.Contract_Outcome__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <stringValue>Transitioned to A</stringValue>
+            </value>
+        </assignmentItems>
+    </assignments>
+    <status>Active</status>
+</Flow>

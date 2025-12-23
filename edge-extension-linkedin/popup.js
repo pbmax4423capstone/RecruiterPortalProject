@@ -32,7 +32,7 @@ let loginSection, mainSection, notLinkedInSection;
 let loginBtn, createBtn, logoutBtn;
 let statusBar, statusIcon, statusText;
 let profileAvatar, profileName, profileHeadline;
-let firstNameInput, lastNameInput, linkedinUrlInput;
+let firstNameInput, lastNameInput, linkedinUrlInput, emailInput, phoneInput, birthdayInput;
 let agencySelect, positionSelect, statusSelect, nextStepSelect;
 
 // Initialize
@@ -43,6 +43,8 @@ document.addEventListener('DOMContentLoaded', async () => {
 });
 
 function initializeElements() {
+  console.log('[Popup] Initializing elements...');
+  
   loginSection = document.getElementById('loginSection');
   mainSection = document.getElementById('mainSection');
   notLinkedInSection = document.getElementById('notLinkedInSection');
@@ -50,6 +52,8 @@ function initializeElements() {
   loginBtn = document.getElementById('loginBtn');
   createBtn = document.getElementById('createBtn');
   logoutBtn = document.getElementById('logoutBtn');
+  
+  console.log('[Popup] createBtn found:', createBtn);
   
   statusBar = document.getElementById('statusBar');
   statusIcon = statusBar.querySelector('.status-icon');
@@ -62,6 +66,9 @@ function initializeElements() {
   firstNameInput = document.getElementById('firstName');
   lastNameInput = document.getElementById('lastName');
   linkedinUrlInput = document.getElementById('linkedinUrl');
+  emailInput = document.getElementById('email');
+  phoneInput = document.getElementById('phone');
+  birthdayInput = document.getElementById('birthday');
   
   agencySelect = document.getElementById('agency');
   positionSelect = document.getElementById('position');
@@ -69,9 +76,18 @@ function initializeElements() {
   nextStepSelect = document.getElementById('nextStep');
   
   // Event listeners
-  loginBtn.addEventListener('click', handleLogin);
-  createBtn.addEventListener('click', handleCreateCandidate);
-  logoutBtn.addEventListener('click', handleLogout);
+  if (loginBtn) loginBtn.addEventListener('click', handleLogin);
+  if (createBtn) {
+    console.log('[Popup] Adding click listener to createBtn');
+    createBtn.addEventListener('click', function(e) {
+      console.log('[Popup] Create button clicked!');
+      e.preventDefault();
+      handleCreateCandidate();
+    });
+  }
+  if (logoutBtn) logoutBtn.addEventListener('click', handleLogout);
+  
+  console.log('[Popup] Elements initialized');
 }
 
 async function checkAuth() {
@@ -105,7 +121,51 @@ async function checkAuth() {
 }
 
 async function checkCurrentTab() {
-  const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
+  let tab = null;
+  
+  // First, check if we have captured profile data from the button click
+  const stored = await chrome.storage.local.get(['sourceTabId', 'sourceTabUrl', 'capturedProfileData']);
+  console.log('Stored data:', stored);
+  
+  // If we have captured profile data, use it directly!
+  if (stored.capturedProfileData) {
+    console.log('Using captured profile data:', stored.capturedProfileData);
+    updateProfilePreview(stored.capturedProfileData);
+    // Clear the stored data
+    chrome.storage.local.remove(['sourceTabId', 'sourceTabUrl', 'capturedProfileData']);
+    return;
+  }
+  
+  // Otherwise, try to get data from the tab
+  if (stored.sourceTabId) {
+    try {
+      tab = await chrome.tabs.get(stored.sourceTabId);
+      console.log('Using source tab:', tab.url);
+      chrome.storage.local.remove(['sourceTabId', 'sourceTabUrl', 'capturedProfileData']);
+    } catch (e) {
+      console.log('Source tab no longer exists:', e);
+    }
+  }
+  
+  // Fallback: try current active tab (when clicking extension icon directly)
+  if (!tab) {
+    const tabs = await chrome.tabs.query({ active: true, currentWindow: true });
+    tab = tabs[0];
+    
+    // If current tab isn't LinkedIn, search for a LinkedIn tab
+    if (!tab || !tab.url || !tab.url.includes('linkedin.com/in/')) {
+      const linkedinTabs = await chrome.tabs.query({ url: '*://*.linkedin.com/in/*' });
+      if (linkedinTabs.length > 0) {
+        tab = linkedinTabs[0];
+        console.log('Found LinkedIn tab:', tab.url);
+      }
+    }
+  }
+  
+  if (!tab) {
+    showStatus('Please navigate to a LinkedIn profile page', 'error');
+    return;
+  }
   
   console.log('Current tab URL:', tab.url);
   
@@ -185,6 +245,17 @@ function updateProfilePreview(data) {
     firstNameInput.value = data.firstName;
     lastNameInput.value = data.lastName;
     linkedinUrlInput.value = data.profileUrl || '';
+    
+    // Populate email, phone, and birthday if available
+    if (data.email) {
+      emailInput.value = data.email;
+    }
+    if (data.phone) {
+      phoneInput.value = data.phone;
+    }
+    if (data.birthday) {
+      birthdayInput.value = data.birthday;
+    }
   }
 }
 
@@ -270,6 +341,11 @@ async function handleCreateCandidate() {
   const firstName = firstNameInput.value.trim();
   const lastName = lastNameInput.value.trim();
   const linkedinUrl = linkedinUrlInput.value.trim();
+  const email = emailInput.value.trim();
+  const phone = phoneInput.value.trim();
+  const birthday = birthdayInput.value.trim();
+  
+  console.log('[Popup] Form values - email:', email, 'phone:', phone, 'birthday:', birthday);
   
   if (!firstName || !lastName) {
     showStatus('Please enter first and last name', 'error');
@@ -280,124 +356,172 @@ async function handleCreateCandidate() {
   createBtn.innerHTML = '<span class="loading"><span class="spinner"></span> Creating...</span>';
   
   try {
-    // Validate we have auth
-    if (!instanceUrl || !accessToken) {
-      throw new Error('Not authenticated. Please reconnect to Salesforce.');
+    // Check if we have stored auth - the popup window may need to read from storage
+    const stored = await chrome.storage.local.get(['accessToken', 'instanceUrl']);
+    if (!stored.accessToken) {
+      throw new Error('Not authenticated. Please click the extension icon to connect to Salesforce first.');
     }
     
-    console.log('Instance URL:', instanceUrl);
-    console.log('Access Token exists:', !!accessToken);
+    console.log('Creating candidate via background script...');
+    console.log('With email:', email, 'phone:', phone, 'birthday:', birthday);
     
-    // Step 1: Create the Contact first
-    const contact = {
-      FirstName: firstName,
-      LastName: lastName
-    };
-    
-    console.log('Creating contact:', contact);
-    
-    const contactResponse = await fetch(`${instanceUrl}/services/data/v59.0/sobjects/Contact`, {
-      method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${accessToken}`,
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(contact)
+    // Route through background script to avoid CORS issues
+    const response = await chrome.runtime.sendMessage({
+      action: 'createCandidateWithContact',
+      data: {
+        firstName,
+        lastName,
+        email,
+        phone,
+        birthday,
+        linkedinUrl,
+        agency: agencySelect.value,
+        position: positionSelect.value,
+        status: statusSelect.value,
+        nextStep: nextStepSelect.value
+      }
     });
     
-    const contactResponseText = await contactResponse.text();
-    console.log('Contact response status:', contactResponse.status);
-    console.log('Contact response body:', contactResponseText);
+    console.log('Background response:', response);
     
-    let contactResult;
-    try {
-      contactResult = JSON.parse(contactResponseText);
-    } catch (e) {
-      throw new Error(`Invalid contact response: ${contactResponseText}`);
-    }
-    
-    if (!contactResponse.ok || !contactResult.success) {
-      const errorMsg = contactResult.length ? contactResult.map(e => e.message).join(', ') : 
-                       contactResult.message || JSON.stringify(contactResult);
-      throw new Error(`Failed to create Contact: ${errorMsg}`);
-    }
-    
-    const contactId = contactResult.id;
-    console.log('Contact created with ID:', contactId);
-    
-    // Step 2: Create the Candidate linked to the Contact
-    // TESTING: Using hardcoded Rachyll Tenny's ID instead of currentUserId
-    // For production, change back to: Recruiter__c: currentUserId
-    const candidate = {
-      Name: `${firstName} ${lastName}`, // Concatenate first and last name
-      First_Name__c: firstName,
-      Last_Name__c: lastName,
-      Agency__c: agencySelect.value,
-      Position__c: positionSelect.value,
-      Status__c: statusSelect.value,
-      Next_Step__c: nextStepSelect.value,
-      Type__c: 'Candidate', // Default type for LinkedIn imports
-      Recruiter__c: CONFIG.testRecruiterId, // Using Rachyll Tenny for testing
-      RecordTypeId: CONFIG.defaults.recordTypeId,
-      Contact__c: contactId // Link to the Contact we just created
-    };
-    
-    // Note: LinkedIn_Profile__c field is not accessible via API
-    // Storing LinkedIn URL in a different way or skipping for now
-    // TODO: Add LinkedIn URL once field permissions are fixed
-    
-    console.log('Creating candidate:', candidate);
-    console.log('LinkedIn URL (not saved):', linkedinUrl);
-    
-    // Create candidate via REST API
-    const response = await fetch(`${instanceUrl}/services/data/v59.0/sobjects/Candidate__c`, {
-      method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${accessToken}`,
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(candidate)
-    });
-    
-    const responseText = await response.text();
-    console.log('Candidate response status:', response.status);
-    console.log('Candidate response body:', responseText);
-    
-    let result;
-    try {
-      result = JSON.parse(responseText);
-    } catch (e) {
-      throw new Error(`Invalid response: ${responseText}`);
-    }
-    
-    console.log('Response OK:', response.ok);
-    console.log('Result success:', result.success);
-    console.log('Result ID:', result.id);
-    
-    if (response.ok && result.success) {
+    if (response && response.success) {
       showStatus(`✅ Candidate & Contact created!`, 'success');
       
       // Open the record in Salesforce
-      const recordUrl = `${instanceUrl}/lightning/r/Candidate__c/${result.id}/view`;
-      console.log('Opening record URL:', recordUrl);
-      chrome.tabs.create({ url: recordUrl });
-      
-    } else if (result.length && result[0].message) {
-      // Salesforce returns array of errors
-      throw new Error(result.map(e => e.message).join(', '));
-    } else if (result.message) {
-      throw new Error(result.message);
-    } else if (result.error) {
-      throw new Error(result.error_description || result.error);
+      if (response.recordUrl) {
+        console.log('Opening record URL:', response.recordUrl);
+        chrome.tabs.create({ url: response.recordUrl });
+      }
     } else {
-      throw new Error(`HTTP ${response.status}: ${JSON.stringify(result)}`);
+      throw new Error(response?.error || 'Unknown error occurred');
     }
     
   } catch (error) {
     console.error('Create error:', error);
-    showStatus('Failed: ' + error.message, 'error');
+    
+    // Check for common errors and provide user-friendly messages
+    const errorMsg = error.message || '';
+    
+    if (errorMsg.includes('duplicate value found') || errorMsg.includes('DUPLICATE')) {
+      showStatus('⚠️ This person already exists in Salesforce (duplicate email found).', 'error');
+    } else if (errorMsg.includes('Session expired') || errorMsg.includes('invalid') || errorMsg.includes('INVALID_SESSION')) {
+      // Clear stored credentials
+      await chrome.storage.local.remove(['accessToken', 'instanceUrl', 'userId']);
+      showStatus('Session expired. Please click "Disconnect" then reconnect to Salesforce.', 'error');
+    } else if (errorMsg.includes('REQUIRED_FIELD_MISSING')) {
+      showStatus('⚠️ Missing required field. Please fill in all required information.', 'error');
+    } else if (errorMsg.includes('No such column')) {
+      showStatus('⚠️ Field configuration error. Please contact your administrator.', 'error');
+    } else {
+      showStatus('Failed: ' + errorMsg, 'error');
+    }
   } finally {
     createBtn.disabled = false;
     createBtn.innerHTML = '✨ Create Candidate in Salesforce';
   }
+}
+
+// ============================================
+// FEEDBACK FUNCTIONALITY
+// ============================================
+
+let selectedFeedbackType = null;
+
+function toggleFeedback() {
+  const feedbackSection = document.getElementById('feedbackSection');
+  const arrow = document.getElementById('feedbackArrow');
+  
+  if (feedbackSection.classList.contains('hidden')) {
+    feedbackSection.classList.remove('hidden');
+    arrow.textContent = '▲';
+  } else {
+    feedbackSection.classList.add('hidden');
+    arrow.textContent = '▼';
+  }
+}
+
+function selectFbType(button) {
+  // Remove selected from all buttons
+  document.querySelectorAll('.fb-type-btn').forEach(btn => btn.classList.remove('selected'));
+  
+  // Select this button
+  button.classList.add('selected');
+  selectedFeedbackType = button.dataset.type;
+  
+  // Show the form
+  document.getElementById('feedbackForm').classList.remove('hidden');
+}
+
+async function submitFeedback() {
+  const subject = document.getElementById('fbSubject').value.trim();
+  const description = document.getElementById('fbDescription').value.trim();
+  const submitBtn = document.getElementById('submitFbBtn');
+  const statusDiv = document.getElementById('fbStatus');
+  
+  if (!selectedFeedbackType) {
+    showFbStatus('Please select a feedback type', 'error');
+    return;
+  }
+  
+  if (!subject) {
+    showFbStatus('Please enter a subject', 'error');
+    return;
+  }
+  
+  if (!description) {
+    showFbStatus('Please enter a description', 'error');
+    return;
+  }
+  
+  // Disable button
+  submitBtn.disabled = true;
+  submitBtn.textContent = 'Submitting...';
+  
+  try {
+    // Get current user info for submitted by
+    const userInfo = currentUserId ? `User ID: ${currentUserId}` : 'Unknown';
+    
+    // Build description with user info
+    const fullDescription = `${description}\n\n--- Submitted via LinkedIn Extension ---\n${userInfo}`;
+    
+    // Create Feedback record via background script
+    const response = await chrome.runtime.sendMessage({
+      type: 'CREATE_FEEDBACK',
+      data: {
+        Subject__c: subject.substring(0, 255),
+        Feedback_Type__c: selectedFeedbackType,
+        Description__c: fullDescription,
+        Status__c: 'New'
+      }
+    });
+    
+    if (response && response.success) {
+      showFbStatus('✅ Feedback submitted! Thank you.', 'success');
+      
+      // Reset form
+      setTimeout(() => {
+        document.getElementById('fbSubject').value = '';
+        document.getElementById('fbDescription').value = '';
+        document.querySelectorAll('.fb-type-btn').forEach(btn => btn.classList.remove('selected'));
+        document.getElementById('feedbackForm').classList.add('hidden');
+        selectedFeedbackType = null;
+        statusDiv.classList.add('hidden');
+      }, 2000);
+    } else {
+      throw new Error(response?.error || 'Failed to submit feedback');
+    }
+  } catch (error) {
+    console.error('Feedback submission error:', error);
+    showFbStatus('❌ Error: ' + error.message, 'error');
+  } finally {
+    submitBtn.disabled = false;
+    submitBtn.textContent = 'Submit Feedback';
+  }
+}
+
+function showFbStatus(message, type) {
+  const statusDiv = document.getElementById('fbStatus');
+  statusDiv.textContent = message;
+  statusDiv.className = 'fb-status ' + type;
+  statusDiv.classList.remove('hidden');
 }

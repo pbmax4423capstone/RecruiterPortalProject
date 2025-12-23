@@ -1,0 +1,1 @@
+ContractBDailyRollupScheduler.scheduleDailyJob();

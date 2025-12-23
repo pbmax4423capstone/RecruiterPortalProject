@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Submissions_Progress_Percent__c</fullName>
+    <description>Percentage of submission requirement met (toward 5 opportunities).</description>
+    <externalId>false</externalId>
+    <formula>IF(
+    Opportunity_Count__c &gt; 0,
+    MIN(Opportunity_Count__c / 5, 1),
+    0
+)</formula>
+    <inlineHelpText>Progress toward 5 submission requirement (capped at 100%).</inlineHelpText>
+    <label>Submissions Progress</label>
+    <precision>18</precision>
+    <required>false</required>
+    <scale>0</scale>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Percent</type>
+</CustomField>

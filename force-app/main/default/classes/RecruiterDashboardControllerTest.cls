@@ -1293,4 +1293,149 @@ public class RecruiterDashboardControllerTest {
             System.assert(firstActivity.containsKey('timeAgo'), 'Activity should have timeAgo');
         }
     }
+    
+    // ==================== CONTRACT B PIPELINE TESTS ====================
+    
+    @isTest
+    static void testGetContractBPipelineData() {
+        // Create test Contact
+        Contact testContact = new Contact(
+            FirstName = 'Contract B',
+            LastName = 'Test Contact',
+            Email = 'contractb@test.com'
+        );
+        insert testContact;
+        
+        // Create Contract B candidates with various states
+        List<Candidate__c> contractBCandidates = new List<Candidate__c>();
+        
+        // At-risk candidate (less than 30 days remaining, requirements not met)
+        contractBCandidates.add(new Candidate__c(
+            Email__c = 'contractb1@test.com',
+            Contract_Type__c = 'Contract B',
+            Status__c = 'Active/In Process',
+            Start_Date__c = Date.today().addMonths(-3).addDays(-15),
+            Contact__c = testContact.Id,
+            Sales_Manager__c = 'Tim Denton'
+        ));
+        
+        // On track candidate (requirements met)
+        contractBCandidates.add(new Candidate__c(
+            Email__c = 'contractb2@test.com',
+            Contract_Type__c = 'Contract B',
+            Status__c = 'Active/In Process',
+            Start_Date__c = Date.today().addMonths(-2),
+            Contact__c = testContact.Id,
+            Sales_Manager__c = 'Elizabeth Kagele'
+        ));
+        
+        // New candidate (plenty of time)
+        contractBCandidates.add(new Candidate__c(
+            Email__c = 'contractb3@test.com',
+            Contract_Type__c = 'Contract B',
+            Status__c = 'Active/In Process',
+            Start_Date__c = Date.today().addDays(-30),
+            Contact__c = testContact.Id,
+            Sales_Manager__c = 'Van Hess'
+        ));
+        
+        insert contractBCandidates;
+        
+        Test.startTest();
+        Map<String, Object> result = RecruiterDashboardController.getContractBPipelineData();
+        Test.stopTest();
+        
+        // Verify result structure
+        System.assertNotEquals(null, result, 'Result should not be null');
+        System.assert(result.containsKey('pipeline'), 'Result should contain pipeline');
+        System.assert(result.containsKey('summary'), 'Result should contain summary');
+        System.assert(result.containsKey('atRiskCandidates'), 'Result should contain atRiskCandidates');
+        
+        // Verify summary
+        Map<String, Object> summary = (Map<String, Object>)result.get('summary');
+        System.assertNotEquals(null, summary, 'Summary should not be null');
+        System.assert(summary.containsKey('totalActive'), 'Summary should have totalActive');
+    }
+    
+    @isTest
+    static void testGetInterviewStatsByPeriod() {
+        // Test with current month
+        Test.startTest();
+        Map<String, Object> monthResult = RecruiterDashboardController.getInterviewStatsByPeriod('currentMonth');
+        Map<String, Object> ytdResult = RecruiterDashboardController.getInterviewStatsByPeriod('yearToDate');
+        Test.stopTest();
+        
+        // Verify current month result
+        System.assertNotEquals(null, monthResult, 'Month result should not be null');
+        System.assertEquals('currentMonth', monthResult.get('period'), 'Period should be currentMonth');
+        System.assertEquals('Current Month', monthResult.get('periodLabel'), 'Period label should be Current Month');
+        System.assert(monthResult.containsKey('attraction'), 'Should have attraction count');
+        System.assert(monthResult.containsKey('total'), 'Should have total count');
+        
+        // Verify YTD result
+        System.assertNotEquals(null, ytdResult, 'YTD result should not be null');
+        System.assertEquals('yearToDate', ytdResult.get('period'), 'Period should be yearToDate');
+        System.assertEquals('Year to Date', ytdResult.get('periodLabel'), 'Period label should be Year to Date');
+    }
+    
+    @isTest
+    static void testGetRecruitingMetrics() {
+        // Create candidates with various contract types and dates
+        List<Candidate__c> testCandidates = new List<Candidate__c>();
+        
+        // Contract A started this year
+        testCandidates.add(new Candidate__c(
+            Email__c = 'recruita1@test.com',
+            Contract_Type__c = 'Contract A',
+            Status__c = 'Active/In Process',
+            Start_Date__c = Date.today().addMonths(-2)
+        ));
+        
+        // Contract B started this year
+        testCandidates.add(new Candidate__c(
+            Email__c = 'recruitb1@test.com',
+            Contract_Type__c = 'Contract B',
+            Status__c = 'Active/In Process',
+            Start_Date__c = Date.today().addMonths(-3)
+        ));
+        
+        // Contract B that transitioned to A
+        testCandidates.add(new Candidate__c(
+            Email__c = 'recruitb2@test.com',
+            Contract_Type__c = 'Contract A', // Now Contract A
+            Status__c = 'Active/In Process',
+            Start_Date__c = Date.today().addMonths(-5),
+            Transition_to_A_Date__c = Date.today().addMonths(-1)
+        ));
+        
+        // Terminated candidate
+        testCandidates.add(new Candidate__c(
+            Email__c = 'recruitterm@test.com',
+            Contract_Type__c = 'Contract B',
+            Status__c = 'Terminated',
+            Start_Date__c = Date.today().addMonths(-4),
+            Termination_Date__c = Date.today().addDays(-15),
+            Termination_Reason__c = 'Did Not Meet Requirements'
+        ));
+        
+        insert testCandidates;
+        
+        Test.startTest();
+        Map<String, Object> result = RecruiterDashboardController.getRecruitingMetrics();
+        Test.stopTest();
+        
+        // Verify result structure
+        System.assertNotEquals(null, result, 'Result should not be null');
+        System.assert(result.containsKey('monthlyRecruiting'), 'Should have monthlyRecruiting');
+        System.assert(result.containsKey('terminationReasons'), 'Should have terminationReasons');
+        System.assert(result.containsKey('ytdTotals'), 'Should have ytdTotals');
+        
+        // Verify YTD totals structure
+        Map<String, Object> ytdTotals = (Map<String, Object>)result.get('ytdTotals');
+        System.assertNotEquals(null, ytdTotals, 'YTD totals should not be null');
+        System.assert(ytdTotals.containsKey('contractA'), 'Should have contractA count');
+        System.assert(ytdTotals.containsKey('contractB'), 'Should have contractB count');
+        System.assert(ytdTotals.containsKey('transitions'), 'Should have transitions count');
+        System.assert(ytdTotals.containsKey('transitionRate'), 'Should have transitionRate');
+    }
 }

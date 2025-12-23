@@ -29,7 +29,8 @@ The following components have been actively modified by Pat Baker. Coordinate be
 | Component | Description | Last Modified |
 |-----------|-------------|---------------|
 | `candidateRecordView` | Main candidate record page with auto-refresh | Dec 18, 2025 |
-| `recruiterDashboard` | Main recruiter dashboard | Recent |
+| `recruiterDashboard` | Main recruiter dashboard | Dec 2025 |
+| `contractBPipelineDashboard` | Contract B lifecycle tracking & YTD metrics | Dec 19, 2025 |
 
 ### Email Templates (Candidate_Outreach folder)
 All 7 templates were updated Dec 18, 2025 - merge fields changed to `{!Contact.FirstName}`:
@@ -135,6 +136,8 @@ The `candidateRecordView` component uses:
 - `CandidateRecordViewController.cls` - Data for candidate record view
 - `RecruiterDashboardController.cls` - Dashboard data
 - `CandidateNotesController.cls` - Notes functionality
+- `ContractBDashboardController.cls` - Contract B pipeline & recruiting metrics
+- `CandidateFYCRollupService.cls` - FYC rollup calculations
 
 ### Objects
 - `Candidate__c` - Main candidate object

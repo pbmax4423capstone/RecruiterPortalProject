@@ -1,3 +1,14 @@
+/* Filter Toggle */
+.filter-toggle {
+    margin-bottom: 0;
+}
+
+.filter-toggle label {
+    font-size: 12px;
+    font-weight: 600;
+    color: #706e6b;
+}
+
 /* Summary Cards */
 .summary-cards {
     display: flex;
@@ -248,5 +259,268 @@
     .legend {
         flex-direction: column;
         align-items: flex-start;
+    }
+}
+
+/* Area Chart Visualization Styles */
+.area-chart-container {
+    background: linear-gradient(180deg, #003366 0%, #004d99 100%);
+    border-radius: 8px;
+    padding: 32px;
+    min-height: 600px;
+    position: relative;
+}
+
+.echarts-container {
+    width: 100%;
+    height: 550px;
+    min-height: 450px;
+    position: relative;
+}
+
+.area-chart-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 32px;
+}
+
+.area-chart-header-with-stats {
+    margin-bottom: 24px;
+}
+
+.chart-title-section {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.chart-title {
+    font-size: 18px;
+    font-weight: 700;
+    color: #ffffff;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.inline-stats {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    font-size: 13px;
+    color: rgba(255, 255, 255, 0.9);
+}
+
+.stat-item {
+    font-weight: 600;
+}
+
+.stat-success {
+    color: #4caf50;
+}
+
+.stat-warning {
+    color: #ff9800;
+}
+
+.stat-divider {
+    color: rgba(255, 255, 255, 0.3);
+}
+
+.chart-total {
+    text-align: right;
+}
+
+.total-number {
+    font-size: 48px;
+    font-weight: 800;
+    color: #ffffff;
+    line-height: 1;
+}
+
+.total-label {
+    font-size: 12px;
+    color: rgba(255, 255, 255, 0.6);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-top: 4px;
+}
+
+.area-chart-svg-container {
+    position: relative;
+    width: 100%;
+    height: 400px;
+    margin-top: 20px;
+}
+
+.echarts-container {
+    width: 100%;
+    height: 400px;
+    position: relative;
+}
+
+.stage-label-overlay {
+    position: absolute;
+    transform: translate(-50%, -50%);
+    color: white;
+    font-weight: 700;
+    text-align: center;
+    pointer-events: none;
+    z-index: 10;
+}
+
+.stage-percent-label {
+    font-size: 24px;
+    font-weight: 800;
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.8);
+    margin-bottom: 2px;
+}
+
+.stage-name-small {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    opacity: 0.9;
+    text-shadow: 0 1px 4px rgba(0, 0, 0, 0.8);
+}
+
+/* Conversion Info Panel */
+.conversion-info-panel {
+    position: absolute;
+    right: 20px;
+    bottom: 20px;
+    border-radius: 12px;
+    padding: 16px;
+    min-width: 160px;
+    max-height: 300px;
+    overflow-y: auto;
+}
+
+.conversion-panel-dark {
+    background: rgba(255, 255, 255, 0.08);
+    backdrop-filter: blur(15px);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+}
+
+.conversion-panel-light {
+    background: #ffffff;
+    border: 1px solid #d8dde6;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.conversion-panel-dark .panel-title {
+    color: rgba(255, 255, 255, 0.95);
+}
+
+.conversion-panel-light .panel-title {
+    color: #003366;
+}
+
+.panel-title {
+    font-size: 13px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 12px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.conversion-row {
+    padding: 8px 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.conversion-row:last-of-type {
+    border-bottom: none;
+    margin-bottom: 12px;
+}
+
+.conversion-row > div:first-child {
+    font-size: 16px;
+    font-weight: 700;
+    margin-bottom: 2px;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.conversion-detail {
+    font-size: 11px;
+    color: rgba(255, 255, 255, 0.7);
+    padding-left: 16px;
+}
+
+.panel-legend {
+    margin-top: 12px;
+    padding-top: 12px;
+    border-top: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.legend-title {
+    font-size: 11px;
+    font-weight: 600;
+    color: rgba(255, 255, 255, 0.8);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 8px;
+}
+
+.panel-legend .legend-item {
+    font-size: 11px;
+    padding: 3px 0;
+    font-weight: 600;
+}
+
+/* Responsive for Area Chart */
+@media (max-width: 768px) {
+    .area-chart-container {
+        padding: 20px;
+        min-height: 500px;
+    }
+    
+    .echarts-container {
+        height: 450px;
+        min-height: 350px;
+    }
+    
+    .chart-title {
+        font-size: 14px;
+    }
+    
+    .inline-stats {
+        flex-wrap: wrap;
+        font-size: 11px;
+    }
+    
+    .total-number {
+        font-size: 32px;
+    }
+    
+    .area-chart-svg-container {
+        height: 300px;
+    }
+    
+    .stage-percent-label {
+        font-size: 16px;
+    }
+    
+    .stage-name-small {
+        font-size: 9px;
+    }
+    
+    .conversion-info-panel {
+        position: static;
+        margin-top: 20px;
+        max-width: 100%;
+    }
+    
+    .conversion-percent {
+        font-size: 24px;
+    }
+    
+    .conversion-label {
+        font-size: 9px;
     }
 }

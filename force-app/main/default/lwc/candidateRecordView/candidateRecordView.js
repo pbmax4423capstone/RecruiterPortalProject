@@ -160,7 +160,7 @@ export default class CandidateRecordView extends NavigationMixin(LightningElemen
 
     // Contact Info Getters
     get email() {
-        return this.candidateData?.Email__c;
+        return this.candidateData?.Personal_Email_Formula__c;
     }
 
     get emailLink() {
@@ -169,7 +169,8 @@ export default class CandidateRecordView extends NavigationMixin(LightningElemen
     }
 
     get phone() {
-        return this.candidateData?.Phone__c;
+        // Try Mobile__c first, then fall back to Contact's Phone
+        return this.candidateData?.Mobile__c || this.candidateData?.Contact__r?.Phone;
     }
 
     get phoneLink() {

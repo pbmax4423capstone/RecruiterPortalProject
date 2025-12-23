@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomApplication xmlns="http://soap.sforce.com/2006/04/metadata">
+    <brand>
+        <headerColor>#0070D2</headerColor>
+        <shouldOverrideOrgTheme>false</shouldOverrideOrgTheme>
+    </brand>
+    <formFactors>Small</formFactors>
+    <isNavAutoTempTabsDisabled>false</isNavAutoTempTabsDisabled>
+    <isNavPersonalizationDisabled>false</isNavPersonalizationDisabled>
+    <isNavTabPersistenceDisabled>false</isNavTabPersistenceDisabled>
+    <isOmniPinnedViewEnabled>true</isOmniPinnedViewEnabled>
+    <label>Mobile Support Chat</label>
+    <navType>Standard</navType>
+    <tabs>DGR__DataGroomr</tabs>
+    <tabs>standard-CmsAuthorHome</tabs>
+    <tabs>standard-EinsteinStudio</tabs>
+    <tabs>standard-MessagingSession</tabs>
+    <tabs>standard-MessagingEndUser</tabs>
+    <tabs>standard-OmniSupervisorLightning</tabs>
+    <uiType>Lightning</uiType>
+    <utilityBar>Mobile_Support_Chat_UtilityBar</utilityBar>
+</CustomApplication>

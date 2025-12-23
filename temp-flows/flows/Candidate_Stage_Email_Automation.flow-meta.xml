@@ -1,0 +1,992 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <actionCalls>
+        <name>Send_Align_Stage_Email</name>
+        <label>Send Align Stage Email</label>
+        <locationX>578</locationX>
+        <locationY>431</locationY>
+        <actionName>emailSimple</actionName>
+        <actionType>emailSimple</actionType>
+        <flowTransactionModel>CurrentTransaction</flowTransactionModel>
+        <inputParameters>
+            <name>emailAddresses</name>
+            <value>
+                <elementReference>$Record.Email__c</elementReference>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>ccRecipientAddressList</name>
+        </inputParameters>
+        <inputParameters>
+            <name>bccRecipientAddressList</name>
+            <value>
+                <stringValue>pbaker@capstone.financial, rtenny@capstone.financial</stringValue>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>senderType</name>
+            <value>
+                <inputConfiguratorMode>Custom</inputConfiguratorMode>
+                <stringValue>OrgWideEmailAddress</stringValue>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>senderAddress</name>
+            <value>
+                <inputConfiguratorMode>Custom</inputConfiguratorMode>
+                <stringValue>help@capstonetechsupport.com</stringValue>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>emailSubject</name>
+            <value>
+                <stringValue>Congratulations! Moving to Alignment Stage</stringValue>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>emailBody</name>
+            <value>
+                <inputConfiguratorMode>Resource</inputConfiguratorMode>
+                <stringValue></stringValue>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>sendRichBody</name>
+            <value>
+                <booleanValue>false</booleanValue>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>emailTemplateId</name>
+            <value>
+                <inputConfiguratorMode>Custom</inputConfiguratorMode>
+                <stringValue>00Xdm00000176EbEAI</stringValue>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>recipientId</name>
+            <value>
+                <elementReference>$Record.Contact__r.Id</elementReference>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>relatedRecordId</name>
+            <value>
+                <elementReference>$Record.Id</elementReference>
+                <inputConfiguratorMode>Resource</inputConfiguratorMode>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>logEmailOnSend</name>
+            <value>
+                <booleanValue>true</booleanValue>
+            </value>
+        </inputParameters>
+        <nameSegment>emailSimple</nameSegment>
+        <offset>0</offset>
+    </actionCalls>
+    <actionCalls>
+        <name>Send_Ci_Stage_Email</name>
+        <label>Send Ci Stage Email</label>
+        <locationX>314</locationX>
+        <locationY>431</locationY>
+        <actionName>emailSimple</actionName>
+        <actionType>emailSimple</actionType>
+        <flowTransactionModel>CurrentTransaction</flowTransactionModel>
+        <inputParameters>
+            <name>emailAddresses</name>
+            <value>
+                <elementReference>$Record.Email__c</elementReference>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>bccRecipientAddressList</name>
+            <value>
+                <stringValue>pbaker@capstone.financial, rtenny@capstone.financial</stringValue>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>bccRecipientAddressCollection</name>
+        </inputParameters>
+        <inputParameters>
+            <name>senderType</name>
+            <value>
+                <inputConfiguratorMode>Custom</inputConfiguratorMode>
+                <stringValue>OrgWideEmailAddress</stringValue>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>senderAddress</name>
+            <value>
+                <inputConfiguratorMode>Custom</inputConfiguratorMode>
+                <stringValue>help@capstonetechsupport.com</stringValue>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>emailSubject</name>
+            <value>
+                <stringValue>Next Step: Career Interview at Capstone Financial</stringValue>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>emailBody</name>
+            <value>
+                <inputConfiguratorMode>Resource</inputConfiguratorMode>
+                <stringValue></stringValue>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>sendRichBody</name>
+            <value>
+                <booleanValue>false</booleanValue>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>emailTemplateId</name>
+            <value>
+                <inputConfiguratorMode>Custom</inputConfiguratorMode>
+                <stringValue>00Xdm00000176EcEAI</stringValue>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>recipientId</name>
+            <value>
+                <elementReference>$Record.Contact__r.Id</elementReference>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>relatedRecordId</name>
+            <value>
+                <elementReference>$Record.Id</elementReference>
+                <inputConfiguratorMode>Resource</inputConfiguratorMode>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>logEmailOnSend</name>
+            <value>
+                <booleanValue>true</booleanValue>
+            </value>
+        </inputParameters>
+        <nameSegment>emailSimple</nameSegment>
+        <offset>0</offset>
+    </actionCalls>
+    <actionCalls>
+        <name>Send_Contracted_Email</name>
+        <label>Send Contracted Email</label>
+        <locationX>1634</locationX>
+        <locationY>431</locationY>
+        <actionName>emailSimple</actionName>
+        <actionType>emailSimple</actionType>
+        <flowTransactionModel>CurrentTransaction</flowTransactionModel>
+        <inputParameters>
+            <name>emailAddresses</name>
+            <value>
+                <elementReference>$Record.Email__c</elementReference>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>bccRecipientAddressList</name>
+            <value>
+                <stringValue>pbaker@capstone.financial, rtenny@capstone.financial</stringValue>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>senderType</name>
+            <value>
+                <inputConfiguratorMode>Custom</inputConfiguratorMode>
+                <stringValue>OrgWideEmailAddress</stringValue>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>senderAddress</name>
+            <value>
+                <inputConfiguratorMode>Custom</inputConfiguratorMode>
+                <stringValue>help@capstonetechsupport.com</stringValue>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>emailSubject</name>
+            <value>
+                <stringValue>Contracting Complete - You&apos;re Official!</stringValue>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>emailBody</name>
+            <value>
+                <inputConfiguratorMode>Resource</inputConfiguratorMode>
+                <stringValue></stringValue>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>sendRichBody</name>
+            <value>
+                <booleanValue>false</booleanValue>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>emailTemplateId</name>
+            <value>
+                <inputConfiguratorMode>Custom</inputConfiguratorMode>
+                <stringValue>00Xdm00000176EdEAI</stringValue>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>recipientId</name>
+            <value>
+                <elementReference>$Record.Contact__r.Id</elementReference>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>relatedRecordId</name>
+            <value>
+                <elementReference>$Record.Id</elementReference>
+                <inputConfiguratorMode>Resource</inputConfiguratorMode>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>logEmailOnSend</name>
+            <value>
+                <booleanValue>true</booleanValue>
+            </value>
+        </inputParameters>
+        <nameSegment>emailSimple</nameSegment>
+        <offset>0</offset>
+    </actionCalls>
+    <actionCalls>
+        <name>Send_Offer_Accepted_Email</name>
+        <label>Send Offer Accepted Email</label>
+        <locationX>1370</locationX>
+        <locationY>431</locationY>
+        <actionName>emailSimple</actionName>
+        <actionType>emailSimple</actionType>
+        <flowTransactionModel>CurrentTransaction</flowTransactionModel>
+        <inputParameters>
+            <name>emailAddresses</name>
+            <value>
+                <elementReference>$Record.Email__c</elementReference>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>bccRecipientAddressList</name>
+            <value>
+                <stringValue>pbaker@capstone.financial, rtenny@capstone.financial</stringValue>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>senderType</name>
+            <value>
+                <inputConfiguratorMode>Custom</inputConfiguratorMode>
+                <stringValue>OrgWideEmailAddress</stringValue>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>senderAddress</name>
+            <value>
+                <inputConfiguratorMode>Custom</inputConfiguratorMode>
+                <stringValue>help@capstonetechsupport.com</stringValue>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>emailSubject</name>
+            <value>
+                <stringValue>Welcome to Capstone Financial!</stringValue>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>emailBody</name>
+            <value>
+                <inputConfiguratorMode>Resource</inputConfiguratorMode>
+                <stringValue></stringValue>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>sendRichBody</name>
+            <value>
+                <booleanValue>false</booleanValue>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>emailTemplateId</name>
+            <value>
+                <inputConfiguratorMode>Custom</inputConfiguratorMode>
+                <stringValue>00Xdm00000176EeEAI</stringValue>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>recipientId</name>
+            <value>
+                <elementReference>$Record.Contact__r.Id</elementReference>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>relatedRecordId</name>
+            <value>
+                <elementReference>$Record.Id</elementReference>
+                <inputConfiguratorMode>Resource</inputConfiguratorMode>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>logEmailOnSend</name>
+            <value>
+                <booleanValue>true</booleanValue>
+            </value>
+        </inputParameters>
+        <nameSegment>emailSimple</nameSegment>
+        <offset>0</offset>
+    </actionCalls>
+    <actionCalls>
+        <name>Send_Plan_Stage_Email</name>
+        <label>Send Plan Stage Email</label>
+        <locationX>842</locationX>
+        <locationY>431</locationY>
+        <actionName>emailSimple</actionName>
+        <actionType>emailSimple</actionType>
+        <flowTransactionModel>CurrentTransaction</flowTransactionModel>
+        <inputParameters>
+            <name>emailAddresses</name>
+            <value>
+                <elementReference>$Record.Email__c</elementReference>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>ccRecipientAddressList</name>
+        </inputParameters>
+        <inputParameters>
+            <name>bccRecipientAddressList</name>
+            <value>
+                <stringValue>pbaker@capstone.financial, rtenny@capstone.financial</stringValue>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>senderType</name>
+            <value>
+                <inputConfiguratorMode>Custom</inputConfiguratorMode>
+                <stringValue>OrgWideEmailAddress</stringValue>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>senderAddress</name>
+            <value>
+                <inputConfiguratorMode>Custom</inputConfiguratorMode>
+                <stringValue>help@capstonetechsupport.com</stringValue>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>emailSubject</name>
+            <value>
+                <stringValue>Planning Stage - Let&apos;s Map Your Success</stringValue>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>emailBody</name>
+            <value>
+                <inputConfiguratorMode>Resource</inputConfiguratorMode>
+                <stringValue></stringValue>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>sendRichBody</name>
+            <value>
+                <booleanValue>false</booleanValue>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>emailTemplateId</name>
+            <value>
+                <inputConfiguratorMode>Custom</inputConfiguratorMode>
+                <stringValue>00Xdm00000176EfEAI</stringValue>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>recipientId</name>
+            <value>
+                <elementReference>$Record.Contact__r.Id</elementReference>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>relatedRecordId</name>
+            <value>
+                <elementReference>$Record.Id</elementReference>
+                <inputConfiguratorMode>Resource</inputConfiguratorMode>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>logEmailOnSend</name>
+            <value>
+                <booleanValue>true</booleanValue>
+            </value>
+        </inputParameters>
+        <nameSegment>emailSimple</nameSegment>
+        <offset>0</offset>
+    </actionCalls>
+    <actionCalls>
+        <name>Send_Present_Stage_Email</name>
+        <label>Send Present Stage Email</label>
+        <locationX>1106</locationX>
+        <locationY>431</locationY>
+        <actionName>emailSimple</actionName>
+        <actionType>emailSimple</actionType>
+        <flowTransactionModel>CurrentTransaction</flowTransactionModel>
+        <inputParameters>
+            <name>emailAddresses</name>
+            <value>
+                <elementReference>$Record.Email__c</elementReference>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>ccRecipientAddressList</name>
+        </inputParameters>
+        <inputParameters>
+            <name>bccRecipientAddressList</name>
+            <value>
+                <stringValue>pbaker@capstone.financial, rtenny@capstone.financial</stringValue>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>senderType</name>
+            <value>
+                <inputConfiguratorMode>Custom</inputConfiguratorMode>
+                <stringValue>OrgWideEmailAddress</stringValue>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>senderAddress</name>
+            <value>
+                <inputConfiguratorMode>Custom</inputConfiguratorMode>
+                <stringValue>help@capstonetechsupport.com</stringValue>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>emailSubject</name>
+            <value>
+                <stringValue>Presentation Stage - Almost There!</stringValue>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>emailBody</name>
+            <value>
+                <inputConfiguratorMode>Resource</inputConfiguratorMode>
+                <stringValue></stringValue>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>sendRichBody</name>
+            <value>
+                <booleanValue>false</booleanValue>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>emailTemplateId</name>
+            <value>
+                <inputConfiguratorMode>Custom</inputConfiguratorMode>
+                <stringValue>00Xdm00000176EgEAI</stringValue>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>recipientId</name>
+            <value>
+                <elementReference>$Record.Contact__r.Id</elementReference>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>relatedRecordId</name>
+            <value>
+                <elementReference>$Record.Id</elementReference>
+                <inputConfiguratorMode>Resource</inputConfiguratorMode>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>logEmailOnSend</name>
+            <value>
+                <booleanValue>true</booleanValue>
+            </value>
+        </inputParameters>
+        <nameSegment>emailSimple</nameSegment>
+        <offset>0</offset>
+    </actionCalls>
+    <actionCalls>
+        <name>Send_Welcome_Email</name>
+        <label>Send Welcome Email</label>
+        <locationX>50</locationX>
+        <locationY>431</locationY>
+        <actionName>emailSimple</actionName>
+        <actionType>emailSimple</actionType>
+        <flowTransactionModel>CurrentTransaction</flowTransactionModel>
+        <inputParameters>
+            <name>emailAddresses</name>
+            <value>
+                <elementReference>$Record.Email__c</elementReference>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>bccRecipientAddressList</name>
+            <value>
+                <stringValue>pbaker@capstone.financial, rtenny@capstone.financial</stringValue>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>senderType</name>
+            <value>
+                <inputConfiguratorMode>Custom</inputConfiguratorMode>
+                <stringValue>OrgWideEmailAddress</stringValue>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>senderAddress</name>
+            <value>
+                <inputConfiguratorMode>Custom</inputConfiguratorMode>
+                <stringValue>help@capstonetechsupport.com</stringValue>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>emailSubject</name>
+            <value>
+                <stringValue>Let&apos;s Connect - Career Opportunity at Capstone Financial</stringValue>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>emailBody</name>
+            <value>
+                <inputConfiguratorMode>Resource</inputConfiguratorMode>
+                <stringValue></stringValue>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>sendRichBody</name>
+            <value>
+                <booleanValue>false</booleanValue>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>emailTemplateId</name>
+            <value>
+                <inputConfiguratorMode>Custom</inputConfiguratorMode>
+                <stringValue>00Xdm00000176EhEAI</stringValue>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>recipientId</name>
+            <value>
+                <elementReference>$Record.Contact__r.Id</elementReference>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>relatedRecordId</name>
+            <value>
+                <elementReference>$Record.Id</elementReference>
+                <inputConfiguratorMode>Resource</inputConfiguratorMode>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>logEmailOnSend</name>
+            <value>
+                <booleanValue>true</booleanValue>
+            </value>
+        </inputParameters>
+        <nameSegment>emailSimple</nameSegment>
+        <offset>0</offset>
+    </actionCalls>
+    <apiVersion>62.0</apiVersion>
+    <areMetricsLoggedToDataCloud>false</areMetricsLoggedToDataCloud>
+    <decisions>
+        <name>Check_If_New_Or_Stage_Changed</name>
+        <label>Check If New Or Stage Changed</label>
+        <locationX>974</locationX>
+        <locationY>323</locationY>
+        <defaultConnectorLabel>No Email Needed</defaultConnectorLabel>
+        <rules>
+            <name>Is_New_Record</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record__Prior</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Send_Welcome_Email</targetReference>
+            </connector>
+            <label>Is New Record</label>
+        </rules>
+        <rules>
+            <name>Stage_Changed_to_Ci</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.Highest_Level_Achieved__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Ci_1st</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record__Prior.Highest_Level_Achieved__c</leftValueReference>
+                <operator>NotEqualTo</operator>
+                <rightValue>
+                    <stringValue>Ci_1st</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Send_Ci_Stage_Email</targetReference>
+            </connector>
+            <label>Stage Changed to Ci</label>
+        </rules>
+        <rules>
+            <name>Stage_Changed_to_Align</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.Highest_Level_Achieved__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Align (2nd)</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record__Prior.Highest_Level_Achieved__c</leftValueReference>
+                <operator>NotEqualTo</operator>
+                <rightValue>
+                    <stringValue>Align (2nd)</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Send_Align_Stage_Email</targetReference>
+            </connector>
+            <label>Stage Changed to Align</label>
+        </rules>
+        <rules>
+            <name>Stage_Changed_to_Plan</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.Highest_Level_Achieved__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Plan_3rd</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record__Prior.Highest_Level_Achieved__c</leftValueReference>
+                <operator>NotEqualTo</operator>
+                <rightValue>
+                    <stringValue>Plan_3rd</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Send_Plan_Stage_Email</targetReference>
+            </connector>
+            <label>Stage Changed to Plan</label>
+        </rules>
+        <rules>
+            <name>Stage_Changed_to_Present</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.Highest_Level_Achieved__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Present-4th</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record__Prior.Highest_Level_Achieved__c</leftValueReference>
+                <operator>NotEqualTo</operator>
+                <rightValue>
+                    <stringValue>Present-4th</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Send_Present_Stage_Email</targetReference>
+            </connector>
+            <label>Stage Changed to Present</label>
+        </rules>
+        <rules>
+            <name>Stage_Changed_to_Offer_Accepted</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.Highest_Level_Achieved__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>6-Offer Acc</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record__Prior.Highest_Level_Achieved__c</leftValueReference>
+                <operator>NotEqualTo</operator>
+                <rightValue>
+                    <stringValue>6-Offer Acc</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Send_Offer_Accepted_Email</targetReference>
+            </connector>
+            <label>Stage Changed to Offer Accepted</label>
+        </rules>
+        <rules>
+            <name>Stage_Changed_to_Contracted</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.Highest_Level_Achieved__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>7-Contracted</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record__Prior.Highest_Level_Achieved__c</leftValueReference>
+                <operator>NotEqualTo</operator>
+                <rightValue>
+                    <stringValue>7-Contracted</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Send_Contracted_Email</targetReference>
+            </connector>
+            <label>Stage Changed to Contracted</label>
+        </rules>
+    </decisions>
+    <description>Sends automated outreach emails to candidates when they are created and as they progress through stages. Emails are sent from Rachyll Tenny (Chief Talent Officer) with BCC to rtenny@capstone.financial and pbaker@capstone.financial.</description>
+    <environments>Default</environments>
+    <interviewLabel>Candidate Stage Email Automation {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>Candidate Stage Email Automation</label>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>AUTO_LAYOUT_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>OriginBuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>AutoLaunchedFlow</processType>
+    <start>
+        <locationX>848</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>Check_If_New_Or_Stage_Changed</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Email__c</field>
+            <operator>IsNull</operator>
+            <value>
+                <booleanValue>false</booleanValue>
+            </value>
+        </filters>
+        <object>Candidate__c</object>
+        <recordTriggerType>CreateAndUpdate</recordTriggerType>
+        <triggerType>RecordAfterSave</triggerType>
+    </start>
+    <status>Draft</status>
+    <textTemplates>
+        <name>AlignStageEmailBody</name>
+        <isViewedAsPlainText>true</isViewedAsPlainText>
+        <text>Hi {!$Record.First_Name__c},
+
+Congratulations on completing your Career Interview! I&apos;m pleased to let you know that you&apos;ve advanced to the Alignment stage.
+
+The Alignment interview is designed to:
+• Ensure mutual fit between you and Capstone
+• Discuss compensation structure and earning potential
+• Review our training and development programs
+• Address any remaining questions or concerns
+
+This is a great opportunity to see if our values, culture, and business model align with what you&apos;re looking for in your career.
+
+I&apos;ll be in touch soon to schedule your Alignment meeting. Please come prepared with any questions about compensation, training, or day-to-day operations.
+
+We&apos;re excited about your progress!
+
+Best regards,
+
+Rachyll Tenny
+Chief Talent Officer
+Capstone Financial
+rtenny@capstone.financial</text>
+    </textTemplates>
+    <textTemplates>
+        <name>CiStageEmailBody</name>
+        <isViewedAsPlainText>true</isViewedAsPlainText>
+        <text>Hi {!$Record.First_Name__c},
+
+Great news! You&apos;ve been selected to move forward to our Career Interview (Ci) stage. This is an exciting step in your journey with Capstone Financial.
+
+During the Career Interview, we&apos;ll dive deeper into:
+• Your professional experience and accomplishments
+• Your career goals and what you&apos;re looking for in your next role
+• How Capstone&apos;s opportunity aligns with your aspirations
+• Details about our business model and support systems
+
+To prepare for this conversation, I encourage you to:
+• Review our company website and recent news
+• Prepare questions about the role and opportunity
+• Think about your short and long-term career goals
+
+I&apos;ll be reaching out shortly to schedule your Career Interview. In the meantime, please let me know if you have any questions.
+
+Best regards,
+
+Rachyll Tenny
+Chief Talent Officer
+Capstone Financial
+rtenny@capstone.financial</text>
+    </textTemplates>
+    <textTemplates>
+        <name>ContractedEmailBody</name>
+        <isViewedAsPlainText>true</isViewedAsPlainText>
+        <text>Hi {!$Record.First_Name__c},
+
+Great news - your contracting is complete! You are now officially part of the Capstone Financial team.
+
+YOUR CONTRACTING STATUS: COMPLETE
+
+WHAT THIS MEANS:
+• All paperwork has been processed
+• Your licenses are in order
+• You&apos;re ready to begin your training and career
+
+NEXT STEPS:
+• Watch for communication from your training coordinator
+• Complete any remaining compliance requirements
+• Prepare for your first day of training
+
+RESOURCES AVAILABLE TO YOU:
+• Training materials and study guides
+• Technology setup and access credentials
+• Mentor assignment and support team contacts
+
+If you have any questions during this transition, don&apos;t hesitate to reach out. We&apos;re here to support you every step of the way.
+
+Here&apos;s to your success!
+
+Rachyll Tenny
+Chief Talent Officer
+Capstone Financial
+rtenny@capstone.financial</text>
+    </textTemplates>
+    <textTemplates>
+        <name>OfferAcceptedEmailBody</name>
+        <isViewedAsPlainText>true</isViewedAsPlainText>
+        <text>Hi {!$Record.First_Name__c},
+
+CONGRATULATIONS!
+
+I am thrilled to officially welcome you to the Capstone Financial family! Your acceptance of our offer marks the beginning of an exciting new chapter in your career.
+
+Here&apos;s what happens next:
+
+IMMEDIATE NEXT STEPS:
+• Our contracting team will reach out within 24-48 hours
+• You&apos;ll receive onboarding paperwork and licensing information
+• We&apos;ll schedule your orientation and training dates
+
+WHAT TO EXPECT:
+• Comprehensive training program to set you up for success
+• Mentorship and ongoing support from experienced advisors
+• Access to our resources, tools, and technology platform
+
+IMPORTANT CONTACTS:
+• For contracting questions: Our ALC team will be your primary contact
+• For general questions: Feel free to reach out to me anytime
+
+We&apos;re excited to have you on the team and can&apos;t wait to see you succeed!
+
+Welcome aboard!
+
+Rachyll Tenny
+Chief Talent Officer
+Capstone Financial
+rtenny@capstone.financial</text>
+    </textTemplates>
+    <textTemplates>
+        <name>PlanStageEmailBody</name>
+        <isViewedAsPlainText>true</isViewedAsPlainText>
+        <text>Hi {!$Record.First_Name__c},
+
+Excellent progress! You&apos;ve advanced to the Planning stage of our interview process.
+
+In this stage, we&apos;ll work together on:
+• Creating your personalized business plan
+• Identifying your natural market and networking opportunities
+• Setting realistic goals for your first year
+• Understanding the licensing and onboarding process
+
+The Planning stage helps ensure you have a clear roadmap for success at Capstone. It&apos;s also a great opportunity for you to visualize what your career could look like.
+
+Please start thinking about:
+• Your professional and personal network
+• Your income goals and timeline
+• Questions about building a book of business
+
+I&apos;ll reach out soon to schedule our Planning session.
+
+Best regards,
+
+Rachyll Tenny
+Chief Talent Officer
+Capstone Financial
+rtenny@capstone.financial</text>
+    </textTemplates>
+    <textTemplates>
+        <name>PresentStageEmailBody</name>
+        <isViewedAsPlainText>true</isViewedAsPlainText>
+        <text>Hi {!$Record.First_Name__c},
+
+You&apos;re doing great! You&apos;ve reached the Presentation stage - one of the final steps before joining our team.
+
+During the Presentation stage:
+• You&apos;ll present your business plan to our leadership team
+• We&apos;ll discuss your vision and goals in detail
+• You&apos;ll have the opportunity to demonstrate your commitment and preparation
+• Our team will provide feedback and answer final questions
+
+This is your chance to showcase your potential and solidify the mutual decision to move forward.
+
+To prepare:
+• Review and refine your business plan
+• Practice presenting your goals and strategy
+• Prepare thoughtful questions for leadership
+• Be ready to discuss your timeline for getting started
+
+I&apos;ll send calendar details shortly. You&apos;ve come a long way - let&apos;s finish strong!
+
+Best regards,
+
+Rachyll Tenny
+Chief Talent Officer
+Capstone Financial
+rtenny@capstone.financial</text>
+    </textTemplates>
+    <textTemplates>
+        <name>WelcomeEmailBody</name>
+        <isViewedAsPlainText>true</isViewedAsPlainText>
+        <text>Hi {!$Record.First_Name__c},
+
+Thank you for your interest in exploring a career opportunity with Capstone Financial. I&apos;m Rachyll Tenny, Chief Talent Officer, and I&apos;d love to learn more about your background and discuss how Capstone might be the right fit for your career goals.
+
+I&apos;d like to schedule a brief introductory call at your convenience. During this call, we&apos;ll discuss:
+• Your professional background and career aspirations
+• An overview of the opportunity at Capstone Financial
+• Answer any initial questions you may have
+
+Please click the link below to schedule a time that works best for you:
+[CALENDLY LINK TO BE ADDED]
+
+If you have any questions before our call, please don&apos;t hesitate to reach out.
+
+I look forward to connecting with you soon!
+
+Best regards,
+
+Rachyll Tenny
+Chief Talent Officer
+Capstone Financial
+rtenny@capstone.financial</text>
+    </textTemplates>
+</Flow>

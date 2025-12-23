@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomApplication xmlns="http://soap.sforce.com/2006/04/metadata">
+    <actionOverrides>
+        <actionName>View</actionName>
+        <comment>Action override created by Lightning App Builder during activation.</comment>
+        <content>Account_Record_Page</content>
+        <formFactor>Large</formFactor>
+        <skipRecordTypeSelect>false</skipRecordTypeSelect>
+        <type>Flexipage</type>
+        <pageOrSobjectType>Account</pageOrSobjectType>
+    </actionOverrides>
+    <brand>
+        <headerColor>#0070D2</headerColor>
+        <logoVersion>1</logoVersion>
+        <shouldOverrideOrgTheme>false</shouldOverrideOrgTheme>
+    </brand>
+    <description>Generate leads faster, and qualify and nurture prospects using best practices.</description>
+    <formFactors>Small</formFactors>
+    <formFactors>Large</formFactors>
+    <isNavAutoTempTabsDisabled>false</isNavAutoTempTabsDisabled>
+    <isNavPersonalizationDisabled>false</isNavPersonalizationDisabled>
+    <isNavTabPersistenceDisabled>false</isNavTabPersistenceDisabled>
+    <isOmniPinnedViewEnabled>false</isOmniPinnedViewEnabled>
+    <label>Lead Generation</label>
+    <navType>Standard</navType>
+    <tabs>standard-home</tabs>
+    <tabs>standard-Account</tabs>
+    <tabs>standard-Contact</tabs>
+    <tabs>standard-Lead</tabs>
+    <tabs>standard-Campaign</tabs>
+    <tabs>standard-CollaborationGroup</tabs>
+    <tabs>Note_Data__c</tabs>
+    <tabs>Agents_Staff__c</tabs>
+    <tabs>Recruit__c</tabs>
+    <tabs>OppSnap__c</tabs>
+    <tabs>Job_Posting_SIte__c</tabs>
+    <tabs>Review__c</tabs>
+    <tabs>Enhancement_Request__c</tabs>
+    <tabs>Training_Attendance__c</tabs>
+    <tabs>Training_Session__c</tabs>
+    <tabs>Scheduled_Agent__c</tabs>
+    <tabs>Pending_Termination_c__c</tabs>
+    <tabs>Contract_Qualification__c</tabs>
+    <uiType>Lightning</uiType>
+    <utilityBar>Lead_Generation_UtilityBar</utilityBar>
+</CustomApplication>

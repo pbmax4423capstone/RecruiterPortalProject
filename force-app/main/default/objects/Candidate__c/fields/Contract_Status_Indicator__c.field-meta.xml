@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Contract_Status_Indicator__c</fullName>
+    <description>Visual indicator of contract status. Green = on track or met, Yellow = approaching deadline, Red = at risk.</description>
+    <externalId>false</externalId>
+    <formula>IF(
+    NOT(ISPICKVAL(Contract_Type__c, 'Contract B')),
+    'N/A',
+    IF(
+        ISPICKVAL(Contract_Outcome__c, 'Transitioned to A'),
+        '✓ Transitioned',
+        IF(
+            ISPICKVAL(Contract_Outcome__c, 'Terminated'),
+            '✗ Terminated',
+            IF(
+                Requirements_Met__c = TRUE,
+                '🟢 Met Requirements',
+                IF(
+                    Days_Until_Contract_End__c &lt;= 30,
+                    '🔴 At Risk (' &amp; TEXT(Days_Until_Contract_End__c) &amp; ' days)',
+                    IF(
+                        Days_Until_Contract_End__c &lt;= 60,
+                        '🟡 Approaching (' &amp; TEXT(Days_Until_Contract_End__c) &amp; ' days)',
+                        '🟢 Active (' &amp; TEXT(Days_Until_Contract_End__c) &amp; ' days)'
+                    )
+                )
+            )
+        )
+    )
+)</formula>
+    <inlineHelpText>Quick status indicator: Green=OK, Yellow=Approaching Deadline, Red=At Risk</inlineHelpText>
+    <label>Contract Status</label>
+    <required>false</required>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Text</type>
+    <unique>false</unique>
+</CustomField>

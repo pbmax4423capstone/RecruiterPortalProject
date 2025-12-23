@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PermissionSet xmlns="http://soap.sforce.com/2006/04/metadata">
+    <description>Access to presence statuses to indicate availability to work with Messaging on Omni-Channel.</description>
+    <hasActivationRequired>false</hasActivationRequired>
+    <label>Omni Presence Status for Service Messaging with Messaging for In-App and Web</label>
+    <servicePresenceStatusAccesses>
+        <enabled>true</enabled>
+        <servicePresenceStatus>Busy</servicePresenceStatus>
+    </servicePresenceStatusAccesses>
+    <servicePresenceStatusAccesses>
+        <enabled>true</enabled>
+        <servicePresenceStatus>Messaging_Available</servicePresenceStatus>
+    </servicePresenceStatusAccesses>
+</PermissionSet>

@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PermissionSet xmlns="http://soap.sforce.com/2006/04/metadata">
+    <description>Complete access to Insurance Data object and ALL fields for dataloader.io integration</description>
+    <hasActivationRequired>false</hasActivationRequired>
+    <label>Insurance Data Complete Access</label>
+</PermissionSet>

@@ -13,6 +13,5 @@
     <label>Recruiter Portal</label>
     <navType>Standard</navType>
     <tabs>Recruiter_Dashboard</tabs>
-    <tabs>Feedback__c</tabs>
     <uiType>Lightning</uiType>
 </CustomApplication>

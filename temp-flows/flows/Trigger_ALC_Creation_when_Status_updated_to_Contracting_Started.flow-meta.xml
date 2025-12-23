@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>63.0</apiVersion>
+    <areMetricsLoggedToDataCloud>false</areMetricsLoggedToDataCloud>
+    <description>This is a Record-Triggered Flow. It is designed to trigger the ALC Record Creation flow when a user drags a record to contracting started group in kanban view.
+This flow is triggered after a record is saved on the &apos;Candidate__c&apos; object. It checks if the &apos;Status__c&apos; field has been updated to &apos;Contracting Started&apos;. If true, it updates the &apos;Offer_Accepted__c&apos; field to &apos;True&apos;. There are no subflows involved in this process.
+
+Several objects and their fields worth mentioning. Below are the details (the format is given as: object_name - field_name: interaction)
+  * Candidate__c - Status__c : The flow checks if this field is updated to &apos;Contracting Started&apos;.
+  * Candidate__c - Offer_Accepted__c : The flow updates this field to &apos;True&apos; if the &apos;Status__c&apos; condition is met.</description>
+    <environments>Default</environments>
+    <interviewLabel>Trigger ALC Creation when Status updated to Contracting Started {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>Trigger ALC Creation when Status updated to Contracting Started</label>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>AUTO_LAYOUT_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>OriginBuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>AutoLaunchedFlow</processType>
+    <recordUpdates>
+        <name>Update_record_to_Offer_Accepted</name>
+        <label>Update record to Offer Accepted</label>
+        <locationX>176</locationX>
+        <locationY>323</locationY>
+        <inputAssignments>
+            <field>Offer_Accepted__c</field>
+            <value>
+                <booleanValue>true</booleanValue>
+            </value>
+        </inputAssignments>
+        <inputReference>$Record</inputReference>
+    </recordUpdates>
+    <start>
+        <locationX>50</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>Update_record_to_Offer_Accepted</targetReference>
+        </connector>
+        <doesRequireRecordChangedToMeetCriteria>true</doesRequireRecordChangedToMeetCriteria>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Status__c</field>
+            <operator>EqualTo</operator>
+            <value>
+                <stringValue>Contracting Started</stringValue>
+            </value>
+        </filters>
+        <object>Candidate__c</object>
+        <recordTriggerType>CreateAndUpdate</recordTriggerType>
+        <triggerType>RecordAfterSave</triggerType>
+    </start>
+    <status>Active</status>
+</Flow>

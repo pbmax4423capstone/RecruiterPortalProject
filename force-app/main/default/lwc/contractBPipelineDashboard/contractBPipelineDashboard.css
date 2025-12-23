@@ -1,0 +1,201 @@
+.summary-card {
+    border-radius: 8px;
+    padding: 1rem;
+    text-align: center;
+    color: white;
+}
+
+.summary-value {
+    font-size: 2rem;
+    font-weight: bold;
+}
+
+.summary-label {
+    font-size: 0.75rem;
+    opacity: 0.9;
+}
+
+.summary-total {
+    background: linear-gradient(135deg, #0176d3, #032d60);
+}
+
+.summary-success {
+    background: linear-gradient(135deg, #2e844a, #194e2e);
+}
+
+.summary-ontrack {
+    background: linear-gradient(135deg, #06a59a, #014d48);
+}
+
+.summary-atrisk {
+    background: linear-gradient(135deg, #e74c3c, #a72d20);
+}
+
+.summary-fyc {
+    background: linear-gradient(135deg, #f39c12, #b37209);
+}
+
+.summary-avg {
+    background: linear-gradient(135deg, #9b59b6, #6c3483);
+}
+
+/* Interview Stats */
+.interview-stat {
+    border-radius: 8px;
+    padding: 0.75rem;
+    text-align: center;
+    color: white;
+}
+
+.stat-value {
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+.stat-label {
+    font-size: 0.7rem;
+}
+
+.interview-attraction {
+    background: #0176d3;
+}
+
+.interview-si1 {
+    background: #06a59a;
+}
+
+.interview-si2 {
+    background: #e74c3c;
+}
+
+.interview-si3 {
+    background: #f39c12;
+}
+
+.interview-career {
+    background: #9b59b6;
+}
+
+.interview-total {
+    background: #3e3e3c;
+}
+
+/* Recruiting Metrics */
+.metric-card {
+    border-radius: 8px;
+    padding: 0.75rem;
+    text-align: center;
+    color: white;
+}
+
+.metric-value {
+    font-size: 1.25rem;
+    font-weight: bold;
+}
+
+.metric-label {
+    font-size: 0.65rem;
+}
+
+.metric-a {
+    background: #0176d3;
+}
+
+.metric-b {
+    background: #06a59a;
+}
+
+.metric-transition {
+    background: #2e844a;
+}
+
+.metric-terminations {
+    background: #e74c3c;
+}
+
+.metric-rate-good {
+    background: #2e844a;
+}
+
+.metric-rate-bad {
+    background: #ba0517;
+}
+
+/* Progress indicators */
+.progress-on-track {
+    color: #2e844a;
+    font-weight: bold;
+}
+
+.progress-at-risk {
+    color: #f39c12;
+    font-weight: bold;
+}
+
+.progress-critical {
+    color: #e74c3c;
+    font-weight: bold;
+}
+
+.progress-complete {
+    color: #0176d3;
+    font-weight: bold;
+}
+
+/* Progress bars */
+.progress-bar-container {
+    background: #e5e5e5;
+    border-radius: 4px;
+    height: 8px;
+    width: 100%;
+    overflow: hidden;
+    margin-top: 4px;
+}
+
+.progress-bar {
+    height: 100%;
+    border-radius: 4px;
+    transition: width 0.3s ease;
+}
+
+.progress-bar-fyc {
+    background: linear-gradient(90deg, #f39c12, #2e844a);
+}
+
+.progress-bar-subs {
+    background: linear-gradient(90deg, #0176d3, #06a59a);
+}
+
+.progress-text {
+    font-size: 0.7rem;
+    color: #706e6b;
+}
+
+/* Table row highlighting */
+tr.at-risk-row {
+    background-color: rgba(231, 76, 60, 0.1) !important;
+}
+
+/* Period toggle */
+.period-toggle {
+    width: 150px;
+}
+
+/* Contract A Progress Status Classes */
+.progress-met {
+    background-color: rgba(46, 132, 74, 0.1) !important;
+}
+
+.progress-not-on-target {
+    background-color: rgba(243, 156, 18, 0.1) !important;
+}
+
+.progress-na {
+    background-color: rgba(112, 110, 107, 0.05) !important;
+}
+
+/* Status badge styling */
+.slds-theme_warning {
+    background-color: #f39c12 !important;
+    color: white !important;
+}

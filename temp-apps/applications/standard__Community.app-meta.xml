@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomApplication xmlns="http://soap.sforce.com/2006/04/metadata">
+    <defaultLandingTab>standard-home</defaultLandingTab>
+    <isNavAutoTempTabsDisabled>false</isNavAutoTempTabsDisabled>
+    <isNavPersonalizationDisabled>false</isNavPersonalizationDisabled>
+    <isNavTabPersistenceDisabled>false</isNavTabPersistenceDisabled>
+    <isOmniPinnedViewEnabled>false</isOmniPinnedViewEnabled>
+    <tabs>standard-Chatter</tabs>
+    <tabs>standard-Contact</tabs>
+    <tabs>standard-Account</tabs>
+    <tabs>standard-Idea</tabs>
+    <tabs>standard-report</tabs>
+    <tabs>standard-Dashboard</tabs>
+    <tabs>Note_Data__c</tabs>
+    <tabs>Agents_Staff__c</tabs>
+    <tabs>Recruit__c</tabs>
+    <tabs>OppSnap__c</tabs>
+    <tabs>Job_Posting_SIte__c</tabs>
+    <tabs>Review__c</tabs>
+    <tabs>Enhancement_Request__c</tabs>
+    <tabs>Training_Attendance__c</tabs>
+    <tabs>Training_Session__c</tabs>
+    <tabs>Scheduled_Agent__c</tabs>
+    <tabs>Pending_Termination_c__c</tabs>
+    <tabs>Contract_Qualification__c</tabs>
+</CustomApplication>

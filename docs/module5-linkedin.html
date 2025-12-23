@@ -1087,52 +1087,18 @@
                 </div>
                 
                 <!-- Feedback Section -->
-                <div class="content-card feedback-section">
-                    <div class="feedback-header" style="background: linear-gradient(135deg, #8b5cf6, #a78bfa); color: white; margin: -2rem -2rem 1.5rem -2rem; padding: 1.5rem 2rem; border-radius: 12px 12px 0 0;">
-                        <h2 style="color: white; margin: 0;">📣 Share Your Feedback</h2>
-                        <p style="margin: 0.5rem 0 0 0; opacity: 0.9;">Help us improve the training and extension</p>
-                    </div>
-                    
-                    <p style="text-align: center; color: var(--gray-500); margin-bottom: 1.5rem;">What type of feedback do you have?</p>
-                    
-                    <div class="feedback-type-buttons">
-                        <button class="type-btn" data-type="General Feedback" onclick="selectFeedbackType(this)">
-                            <span class="type-icon">💬</span>
-                            <span class="type-label">General Feedback</span>
-                            <span class="type-desc">Comments & suggestions</span>
-                        </button>
-                        <button class="type-btn" data-type="Feature Request" onclick="selectFeedbackType(this)">
-                            <span class="type-icon">✨</span>
-                            <span class="type-label">Feature Request</span>
-                            <span class="type-desc">New ideas & enhancements</span>
-                        </button>
-                        <button class="type-btn" data-type="Bug Report" onclick="selectFeedbackType(this)">
-                            <span class="type-icon">🐛</span>
-                            <span class="type-label">Bug Report</span>
-                            <span class="type-desc">Report an issue</span>
-                        </button>
-                    </div>
-                    
-                    <div class="feedback-form" id="feedbackForm">
-                        <div style="margin-bottom: 1rem;">
-                            <span class="selected-type-badge" id="selectedTypeBadge"></span>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="feedbackSubject">Subject</label>
-                            <input type="text" id="feedbackSubject" placeholder="Brief summary of your feedback">
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="feedbackDescription">Description</label>
-                            <textarea id="feedbackDescription" placeholder="Please describe your feedback in detail..."></textarea>
-                        </div>
-                        
-                        <button class="btn-submit-feedback" id="submitFeedbackBtn" onclick="submitFeedback()">
-                            Submit Feedback
-                        </button>
-                        
-                        <div id="feedbackStatus" style="margin-top: 1rem; text-align: center; display: none;"></div>
+                <div class="content-card" style="background: linear-gradient(135deg, #8b5cf6, #a78bfa); color: white;">
+                    <h2 style="color: white;">📣 Share Your Feedback</h2>
+                    <p style="color: rgba(255,255,255,0.9);">Have ideas or found an issue? You can submit feedback directly from the LinkedIn extension!</p>
+                    <div style="margin-top: 1rem; padding: 1rem; background: rgba(255,255,255,0.2); border-radius: 8px;">
+                        <p style="margin: 0; color: white;"><strong>To submit feedback:</strong></p>
+                        <ol style="margin: 0.5rem 0 0 1.5rem; color: rgba(255,255,255,0.9);">
+                            <li>Open the LinkedIn extension popup</li>
+                            <li>Click "📣 Send Feedback" at the bottom</li>
+                            <li>Select feedback type (General, Feature, or Bug)</li>
+                            <li>Fill in the subject and description</li>
+                            <li>Click Submit - it goes directly to Salesforce!</li>
+                        </ol>
                     </div>
                 </div>
                 
@@ -1209,87 +1175,6 @@
             
             alert('🎉 Congratulations! You have completed the entire Recruiter Training Program!');
             window.location.href = 'recruiter-training.html';
-        }
-        
-        // Feedback functionality
-        let selectedFeedbackType = null;
-        
-        function selectFeedbackType(button) {
-            // Remove selected from all buttons
-            document.querySelectorAll('.type-btn').forEach(btn => btn.classList.remove('selected'));
-            
-            // Select this button
-            button.classList.add('selected');
-            selectedFeedbackType = button.dataset.type;
-            
-            // Show form and update badge
-            document.getElementById('feedbackForm').classList.add('visible');
-            document.getElementById('selectedTypeBadge').textContent = selectedFeedbackType;
-        }
-        
-        async function submitFeedback() {
-            const subject = document.getElementById('feedbackSubject').value.trim();
-            const description = document.getElementById('feedbackDescription').value.trim();
-            const statusDiv = document.getElementById('feedbackStatus');
-            const submitBtn = document.getElementById('submitFeedbackBtn');
-            
-            if (!selectedFeedbackType) {
-                showStatus('Please select a feedback type', 'error');
-                return;
-            }
-            
-            if (!subject) {
-                showStatus('Please enter a subject', 'error');
-                return;
-            }
-            
-            if (!description) {
-                showStatus('Please enter a description', 'error');
-                return;
-            }
-            
-            // Disable button and show loading
-            submitBtn.disabled = true;
-            submitBtn.textContent = 'Submitting...';
-            
-            // For now, send via email (Salesforce API requires authentication)
-            const feedbackData = {
-                type: selectedFeedbackType,
-                subject: subject,
-                description: description,
-                source: 'LinkedIn Training Module',
-                timestamp: new Date().toISOString()
-            };
-            
-            // Create mailto link as fallback
-            const emailBody = `Feedback Type: ${feedbackData.type}%0D%0ASource: ${feedbackData.source}%0D%0A%0D%0ASubject: ${feedbackData.subject}%0D%0A%0D%0ADescription:%0D%0A${encodeURIComponent(description)}`;
-            const mailtoLink = `mailto:patrick.baker@massmutual.com?subject=${encodeURIComponent('[Recruiter Portal Feedback] ' + subject)}&body=${emailBody}`;
-            
-            // Open email client
-            window.location.href = mailtoLink;
-            
-            // Show success
-            showStatus('✅ Opening email client to submit feedback...', 'success');
-            
-            // Reset form after delay
-            setTimeout(() => {
-                submitBtn.disabled = false;
-                submitBtn.textContent = 'Submit Feedback';
-                document.getElementById('feedbackSubject').value = '';
-                document.getElementById('feedbackDescription').value = '';
-                document.querySelectorAll('.type-btn').forEach(btn => btn.classList.remove('selected'));
-                document.getElementById('feedbackForm').classList.remove('visible');
-                selectedFeedbackType = null;
-                statusDiv.style.display = 'none';
-            }, 3000);
-        }
-        
-        function showStatus(message, type) {
-            const statusDiv = document.getElementById('feedbackStatus');
-            statusDiv.style.display = 'block';
-            statusDiv.textContent = message;
-            statusDiv.style.color = type === 'error' ? '#dc2626' : '#16a34a';
-            statusDiv.style.fontWeight = '500';
         }
         
         loadProgress();

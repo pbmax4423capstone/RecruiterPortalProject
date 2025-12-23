@@ -6,7 +6,10 @@ public with sharing class CandidateRecordViewController {
             // Get only accessible fields dynamically
             List<String> accessibleFields = getAccessibleCandidateFields();
             
-            String query = 'SELECT ' + String.join(accessibleFields, ', ') + 
+            // Add relationship fields that aren't in the field map
+            List<String> relationshipFields = new List<String>{'Contact__r.Phone', 'Contact__r.Email', 'Contact__r.MobilePhone'};
+            
+            String query = 'SELECT ' + String.join(accessibleFields, ', ') + ', ' + String.join(relationshipFields, ', ') +
                           ' FROM Candidate__c WHERE Id = :recordId LIMIT 1';
             
             List<Candidate__c> candidates = Database.query(query);
@@ -24,6 +27,18 @@ public with sharing class CandidateRecordViewController {
             result.putAll(populatedFields);
             result.put('Id', candidate.Id);
             
+            // Explicitly add formula field with correct casing for LWC
+            result.put('Personal_Email_Formula__c', candidate.Personal_Email_Formula__c);
+            
+            // Add Contact relationship data if available
+            if (candidate.Contact__r != null) {
+                Map<String, Object> contactData = new Map<String, Object>();
+                contactData.put('Phone', candidate.Contact__r.Phone);
+                contactData.put('Email', candidate.Contact__r.Email);
+                contactData.put('MobilePhone', candidate.Contact__r.MobilePhone);
+                result.put('Contact__r', contactData);
+            }
+            
             return result;
             
         } catch (Exception e) {
@@ -35,10 +50,11 @@ public with sharing class CandidateRecordViewController {
         // Get field describe info to check accessibility
         Map<String, Schema.SObjectField> fieldMap = Schema.SObjectType.Candidate__c.fields.getMap();
         
-        // List of fields we want to query
+        // List of fields we want to query (excluding relationship fields which are handled separately)
         List<String> desiredFields = new List<String>{
             'Id', 'Name', 'Type__c', 'First_Name__c', 'Nickname__c', 'Middle_Name_or_Initial__c',
-            'Last_Name__c', 'Suffix__c', 'Status__c', 'Email__c', 'Phone__c', 'Contact__c',
+            'Last_Name__c', 'Suffix__c', 'Status__c', 'Email__c', 'Phone__c', 'Mobile__c', 'Contact__c',
+            'Personal_Email_Formula__c',
             'Position__c', 'Sales_Manager__c', 'RecruiterPicklist__c', 'Office_Location_Picklist__c',
             'Highest_Level_Achieved__c', 'Agency__c', 'Target_Market__c', 'Recruiting_Source__c',
             'Recruiting_Sub_Source__c', 'Gender__c', 'Website__c', 'MDE200__c', 'MS_10__c',

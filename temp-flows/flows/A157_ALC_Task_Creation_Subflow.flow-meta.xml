@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <actionCalls>
+        <name>Add_tags_157</name>
+        <label>Add tags- 157</label>
+        <locationX>176</locationX>
+        <locationY>242</locationY>
+        <actionName>NewTask</actionName>
+        <actionType>quickAction</actionType>
+        <connector>
+            <targetReference>Send_CLXP_link_157</targetReference>
+        </connector>
+        <flowTransactionModel>CurrentTransaction</flowTransactionModel>
+        <inputParameters>
+            <name>Subject</name>
+            <value>
+                <stringValue>Add tags- 157</stringValue>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>OwnerId</name>
+            <value>
+                <elementReference>AnnaUserIdVar</elementReference>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>WhatId</name>
+            <value>
+                <elementReference>RecordId</elementReference>
+            </value>
+        </inputParameters>
+        <nameSegment>NewTask</nameSegment>
+        <offset>0</offset>
+    </actionCalls>
+    <actionCalls>
+        <name>Received_Copy_of_Drivers_License_157</name>
+        <label>Received Copy of Drivers License 157</label>
+        <locationX>176</locationX>
+        <locationY>458</locationY>
+        <actionName>NewTask</actionName>
+        <actionType>quickAction</actionType>
+        <flowTransactionModel>CurrentTransaction</flowTransactionModel>
+        <inputParameters>
+            <name>Subject</name>
+            <value>
+                <stringValue>Received Copy of Drivers License 157</stringValue>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>OwnerId</name>
+            <value>
+                <elementReference>AnnaUserIdVar</elementReference>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>WhatId</name>
+            <value>
+                <elementReference>RecordId</elementReference>
+            </value>
+        </inputParameters>
+        <nameSegment>NewTask</nameSegment>
+        <offset>0</offset>
+    </actionCalls>
+    <actionCalls>
+        <name>Send_CLXP_link_157</name>
+        <label>Send CLXP link 157</label>
+        <locationX>176</locationX>
+        <locationY>350</locationY>
+        <actionName>NewTask</actionName>
+        <actionType>quickAction</actionType>
+        <connector>
+            <targetReference>Received_Copy_of_Drivers_License_157</targetReference>
+        </connector>
+        <flowTransactionModel>CurrentTransaction</flowTransactionModel>
+        <inputParameters>
+            <name>Subject</name>
+            <value>
+                <stringValue>Send CLXP link 157</stringValue>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>OwnerId</name>
+            <value>
+                <elementReference>AnnaUserIdVar</elementReference>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>WhatId</name>
+            <value>
+                <elementReference>RecordId</elementReference>
+            </value>
+        </inputParameters>
+        <nameSegment>NewTask</nameSegment>
+        <offset>0</offset>
+    </actionCalls>
+    <actionCalls>
+        <name>Send_NPR_and_BIG_auth_via_DocuSign_157</name>
+        <label>Send NPR and BIG auth via DocuSign 157</label>
+        <locationX>176</locationX>
+        <locationY>134</locationY>
+        <actionName>NewTask</actionName>
+        <actionType>quickAction</actionType>
+        <connector>
+            <targetReference>Add_tags_157</targetReference>
+        </connector>
+        <flowTransactionModel>CurrentTransaction</flowTransactionModel>
+        <inputParameters>
+            <name>Subject</name>
+            <value>
+                <stringValue>Send NPR and BIG auth via DocuSign 157</stringValue>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>OwnerId</name>
+            <value>
+                <elementReference>AnnaUserIdVar</elementReference>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>WhatId</name>
+            <value>
+                <elementReference>RecordId</elementReference>
+            </value>
+        </inputParameters>
+        <nameSegment>NewTask</nameSegment>
+        <offset>0</offset>
+    </actionCalls>
+    <apiVersion>62.0</apiVersion>
+    <areMetricsLoggedToDataCloud>false</areMetricsLoggedToDataCloud>
+    <description>This is a Auto-Launched Flow.
+Upon initiation, this flow creates a new task titled &apos;Send NPR and BIG auth via DocuSign 157&apos; with the owner set as &apos;Anna&apos; and the record ID as the related record. It then creates another task named &apos;Add tags- 157&apos; with the same owner and record ID. Following this, it creates tasks for &apos;Send CLXP link 157&apos; and &apos;Received Copy of Drivers License 157&apos; with the same owner and record ID. The flow uses two variables: &apos;AnnaUserIdVar&apos; and &apos;RecordId&apos;.
+
+Several objects and their fields worth mentioning. Below are the details (the format is given as: object_name - field_name: interaction)
+  * [&apos;Task&apos;, &apos;Subject, OwnerId, WhatId, flowTransactionModel&apos;]
+  * [&apos;Record&apos;, &apos;Id&apos;]</description>
+    <environments>Default</environments>
+    <interviewLabel>A157 ALC Task Creation Subflow {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>A157 ALC Task Creation Subflow</label>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>AUTO_LAYOUT_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>OriginBuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>AutoLaunchedFlow</processType>
+    <start>
+        <locationX>50</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>Send_NPR_and_BIG_auth_via_DocuSign_157</targetReference>
+        </connector>
+    </start>
+    <status>Draft</status>
+    <variables>
+        <name>AnnaUserIdVar</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>true</isOutput>
+        <value>
+            <stringValue>0055f00000A72Vu</stringValue>
+        </value>
+    </variables>
+    <variables>
+        <name>RecordId</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>true</isInput>
+        <isOutput>true</isOutput>
+    </variables>
+</Flow>

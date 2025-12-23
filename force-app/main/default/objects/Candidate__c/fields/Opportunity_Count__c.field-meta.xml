@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Opportunity_Count__c</fullName>
+    <defaultValue>0</defaultValue>
+    <description>Count of submitted Opportunities linked to this candidate's Contact. Updated via Flow.</description>
+    <externalId>false</externalId>
+    <inlineHelpText>Number of submitted opportunities. Contract B requirement: 5</inlineHelpText>
+    <label>Opportunity Count</label>
+    <precision>4</precision>
+    <required>false</required>
+    <scale>0</scale>
+    <trackFeedHistory>false</trackFeedHistory>
+    <trackHistory>true</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Number</type>
+    <unique>false</unique>
+</CustomField>

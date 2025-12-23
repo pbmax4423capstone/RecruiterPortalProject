@@ -1,29 +1,54 @@
 # RecruiterPortalProject
 
-A Salesforce DX project for the Recruiter Portal application, featuring a Lightning Web Component dashboard for managing interviews and candidates.
+A Salesforce DX project for the Recruiter Portal application, featuring Lightning Web Component dashboards for managing interviews, candidates, and Contract B lifecycle tracking.
 
 ## Project Overview
 
 This project includes:
-- **Lightning Web Components**: Interactive recruiter dashboard
-- **Apex Classes**: Controllers and test data generators
-- **Custom Objects**: Interview management system
+- **Lightning Web Components**: Interactive recruiter dashboards and candidate management
+- **Apex Classes**: Controllers for dashboards, FYC rollups, and test data generators
+- **Custom Objects**: Interview and candidate management system
+- **Flows**: Automated contract lifecycle tracking
 - **MCP Server**: TypeScript-based Model Context Protocol server
-- **Test Data Scripts**: Apex scripts for generating test interview data
+- **Browser Extensions**: LinkedIn to Salesforce candidate importer (Chrome & Edge)
 
 ## Key Components
 
 ### Lightning Web Components
-- `recruiterDashboard`: Main dashboard component with interview statistics and candidate management
+- `recruiterDashboard`: Main dashboard with interview statistics and candidate management
+- `contractBPipelineDashboard`: Contract B lifecycle tracking with:
+  - Summary cards (Active, Requirements Met, At Risk, Total FYC)
+  - Interview statistics with Current Month / YTD toggle
+  - YTD Recruiting Metrics (Contract A/B recruited, transitions, terminations)
+  - Contract A Progress section
+  - Pipeline details table with progress bars
+- `candidateRecordView`: Candidate record page with auto-refresh
 
 ### Apex Classes
-- `RecruiterDashboardController`: Main controller for dashboard data
-- `InterviewTestDataGenerator`: Generates test interview data
-- `TestDataGenerator`: General test data utilities
-- `RecruiterRescheduleHelper`: Helper for interview rescheduling
+- `RecruiterDashboardController`: Main recruiter dashboard data
+- `ContractBDashboardController`: Contract B pipeline and YTD metrics
+- `CandidateFYCRollupService`: FYC and opportunity rollup calculations
+- `ContractBDailyRollupScheduler`: Daily scheduled job for FYC updates
+- `CandidateRecordViewController`: Candidate record view data
+- `InterviewTestDataGenerator`: Test data generation utilities
 
 ### Custom Objects
-- `Interview__c`: Custom object for managing interview records
+- `Candidate__c`: Main candidate profiles with contract lifecycle fields
+- `Interview__c`: Interview scheduling and tracking
+- `ALC__c`: Agent Licensing & Contracting
+
+## Documentation
+
+### Training Materials
+- **[ATS Training Program](docs/ATS-Training-Program.md)**: Complete guided training for recruiters and sales managers
+- **[Quick Start Guide](docs/ATS-Quick-Start-Guide.md)**: One-page reference card for daily use
+- **[Sales Manager Guide](docs/Sales-Manager-Dashboard-Guide.md)**: Dashboard guide for sales managers
+
+### Technical Documentation
+- **[Contract B Lifecycle Training](docs/Contract-B-Lifecycle-Training.md)**: Detailed Contract B tracking system guide
+- **[System Design Document](docs/LOXO-ATS-Design.md)**: Technical design and implementation details
+- **[Development Guide](COLE_ARNOLD_DEVELOPMENT_GUIDE.md)**: Guide for developers working on this project
+- **[LinkedIn Extension](chrome-extension-linkedin/README.md)**: Setup for Chrome/Edge LinkedIn importer
 
 ## Salesforce DX Setup
 

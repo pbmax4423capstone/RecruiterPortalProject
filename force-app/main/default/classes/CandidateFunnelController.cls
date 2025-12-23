@@ -5,65 +5,101 @@
 public with sharing class CandidateFunnelController {
     
     /**
-     * Get funnel data with counts and conversion rates for each interview stage
-     * @return FunnelData wrapper with all metrics
+     * Get active candidates funnel data (Status = 'Active/In Process')
+     * This method is cacheable for use with @wire
+     * @return FunnelData wrapper with all metrics for active candidates only
      */
     @AuraEnabled(cacheable=true)
-    public static FunnelData getFunnelData() {
+    public static FunnelData getActiveFunnelData() {
+        return getFunnelData(true);
+    }
+    
+    /**
+     * Get funnel data with counts and conversion rates for each interview stage
+     * @param activeOnly If true, only includes candidates with Status 'Active/In Process'
+     * @return FunnelData wrapper with all metrics
+     */
+    @AuraEnabled
+    public static FunnelData getFunnelData(Boolean activeOnly) {
         FunnelData result = new FunnelData();
         
-        // Define interview types in order (the funnel stages)
+        // Set default if null
+        if (activeOnly == null) {
+            activeOnly = false;
+        }
+        
+        // Define interview types in order (the funnel stages) - matching Kanban board
         List<String> stageOrder = new List<String>{
-            'Ci-First',
-            'Align-2nd',
-            'Plan-3rd',
+            '0-Prequal',
+            'Ci_1st',
+            'Align (2nd)',
+            'Plan_3rd',
             'Present-4th',
-            'Optional-5th'
+            'Optional_5th',
+            '6-Offer Acc'
         };
         
         Map<String, String> stageLabels = new Map<String, String>{
-            'Ci-First' => 'Ci (1st Interview)',
-            'Align-2nd' => 'Align (2nd)',
-            'Plan-3rd' => 'Plan (3rd)',
+            '0-Prequal' => 'Prequal',
+            'Ci_1st' => 'Ci (1st)',
+            'Align (2nd)' => 'Align (2nd)',
+            'Plan_3rd' => 'Plan (3rd)',
             'Present-4th' => 'Present (4th)',
-            'Optional-5th' => 'Optional (5th)'
+            'Optional_5th' => 'Optional (5th)',
+            '6-Offer Acc' => 'Offer Accepted'
         };
         
-        // Get total unique candidates who have had ANY interview scheduled
-        Set<Id> allCandidatesWithInterviews = new Set<Id>();
-        for (Interview__c i : [SELECT Candidate__c FROM Interview__c WHERE Candidate__c != null]) {
-            allCandidatesWithInterviews.add(i.Candidate__c);
-        }
-        Integer totalCandidatesInFunnel = allCandidatesWithInterviews.size();
+        // Query active candidates in pipeline - matching Kanban board filters
+        // Add optional filter for Active/In Process status only
+        String query = 'SELECT Id, Name, Highest_Level_Achieved__c ' +
+                      'FROM Candidate__c ' +
+                      'WHERE Status__c NOT IN (\'Closed Lost\', \'Not Interested\', \'Hired\', \'Terminated\') ' +
+                      'AND Highest_Level_Achieved__c != \'7-Contracted\' ';
         
-        // Query COMPLETED interviews by type - count unique candidates
-        Map<String, Set<Id>> candidatesByCompletedStage = new Map<String, Set<Id>>();
+        if (activeOnly) {
+            query += 'AND Status__c = \'Active/In Process\' ';
+        }
+        
+        query += 'ORDER BY Name, Highest_Level_Achieved__c DESC';
+        
+        List<Candidate__c> candidates = Database.query(query);
+        
+        // Deduplicate by Name - keep only the highest level achieved for each person
+        Map<String, Candidate__c> uniqueCandidatesByName = new Map<String, Candidate__c>();
+        for (Candidate__c c : candidates) {
+            String candidateName = c.Name;
+            if (!uniqueCandidatesByName.containsKey(candidateName)) {
+                uniqueCandidatesByName.put(candidateName, c);
+            }
+            // If duplicate exists, the ORDER BY ensures we already have the higher stage
+        }
+        
+        // Count candidates by stage (using deduplicated list)
+        Map<String, Integer> candidateCountByStage = new Map<String, Integer>();
         for (String stage : stageOrder) {
-            candidatesByCompletedStage.put(stage, new Set<Id>());
+            candidateCountByStage.put(stage, 0);
         }
         
-        List<Interview__c> completedInterviews = [
-            SELECT Interview_Type__c, Candidate__c
-            FROM Interview__c
-            WHERE Interview_Status__c = 'Completed'
-            AND Candidate__c != null
-        ];
-        
-        for (Interview__c interview : completedInterviews) {
-            String interviewType = interview.Interview_Type__c;
-            if (candidatesByCompletedStage.containsKey(interviewType)) {
-                candidatesByCompletedStage.get(interviewType).add(interview.Candidate__c);
+        for (Candidate__c c : uniqueCandidatesByName.values()) {
+            String stage = c.Highest_Level_Achieved__c;
+            if (stage == null) {
+                stage = '0-Prequal';
+            }
+            if (candidateCountByStage.containsKey(stage)) {
+                candidateCountByStage.put(stage, candidateCountByStage.get(stage) + 1);
             }
         }
         
-        // Query SCHEDULED interviews by type - count unique candidates
-        Map<String, Set<Id>> candidatesByScheduledStage = new Map<String, Set<Id>>();
+        Integer totalCandidatesInFunnel = uniqueCandidatesByName.size();
+        
+        // Query SCHEDULED interviews for display
+        Map<String, Integer> scheduledCountByStage = new Map<String, Integer>();
         for (String stage : stageOrder) {
-            candidatesByScheduledStage.put(stage, new Set<Id>());
+            scheduledCountByStage.put(stage, 0);
         }
         
         List<Interview__c> scheduledInterviews = [
-            SELECT Interview_Type__c, Candidate__c
+            SELECT Interview_Type__c
             FROM Interview__c
             WHERE Interview_Status__c = 'Scheduled'
             AND Candidate__c != null
@@ -71,57 +107,62 @@ public with sharing class CandidateFunnelController {
         
         for (Interview__c interview : scheduledInterviews) {
             String interviewType = interview.Interview_Type__c;
-            if (candidatesByScheduledStage.containsKey(interviewType)) {
-                candidatesByScheduledStage.get(interviewType).add(interview.Candidate__c);
+            if (interviewType == 'Ci-First') {
+                scheduledCountByStage.put('Ci_1st', scheduledCountByStage.get('Ci_1st') + 1);
+            } else if (interviewType == 'Align-2nd') {
+                scheduledCountByStage.put('Align (2nd)', scheduledCountByStage.get('Align (2nd)') + 1);
+            } else if (interviewType == 'Plan-3rd') {
+                scheduledCountByStage.put('Plan_3rd', scheduledCountByStage.get('Plan_3rd') + 1);
+            } else if (interviewType == 'Present-4th') {
+                scheduledCountByStage.put('Present-4th', scheduledCountByStage.get('Present-4th') + 1);
+            } else if (interviewType == 'Optional-5th') {
+                scheduledCountByStage.put('Optional_5th', scheduledCountByStage.get('Optional_5th') + 1);
             }
         }
         
         // Build funnel stages with metrics
         result.stages = new List<FunnelStage>();
-        Integer previousCompletedCount = totalCandidatesInFunnel; // Start with all candidates
+        Integer previousCount = totalCandidatesInFunnel;
         
         for (Integer i = 0; i < stageOrder.size(); i++) {
             String stageValue = stageOrder[i];
             String stageLabel = stageLabels.get(stageValue);
             
-            Integer completedCount = candidatesByCompletedStage.get(stageValue).size();
-            Integer scheduledCount = candidatesByScheduledStage.get(stageValue).size();
+            Integer stageCount = candidateCountByStage.get(stageValue);
+            Integer scheduledCount = scheduledCountByStage.get(stageValue);
             
             FunnelStage fs = new FunnelStage();
             fs.value = stageValue;
             fs.label = stageLabel;
-            fs.count = completedCount; // Completed interviews
-            fs.scheduledCount = scheduledCount; // Scheduled interviews
+            fs.count = stageCount;
+            fs.scheduledCount = scheduledCount;
             fs.order = i;
             
             // Calculate percentage of total candidates in funnel
             fs.percentOfTotal = totalCandidatesInFunnel > 0 ? 
-                ((Decimal)completedCount / totalCandidatesInFunnel * 100).setScale(1) : 0;
+                ((Decimal)stageCount / totalCandidatesInFunnel * 100).setScale(1) : 0;
             
-            // Cumulative is just the completed count for this stage
-            fs.cumulativeCount = completedCount;
+            // Cumulative is just the count for this stage
+            fs.cumulativeCount = stageCount;
             
             // Calculate conversion rate from previous stage
             if (i == 0) {
-                // First stage - conversion from total candidates in funnel
-                fs.conversionRate = totalCandidatesInFunnel > 0 ? 
-                    ((Decimal)completedCount / totalCandidatesInFunnel * 100).setScale(1) : 0;
-                fs.dropOffRate = 100 - fs.conversionRate;
-                fs.dropOffCount = totalCandidatesInFunnel - completedCount;
+                fs.conversionRate = 100.0;
+                fs.dropOffRate = 0;
+                fs.dropOffCount = 0;
             } else {
-                // Conversion from previous stage's completed count
-                fs.conversionRate = previousCompletedCount > 0 ? 
-                    ((Decimal)completedCount / previousCompletedCount * 100).setScale(1) : 0;
+                fs.conversionRate = previousCount > 0 ? 
+                    ((Decimal)stageCount / previousCount * 100).setScale(1) : 0;
                 fs.dropOffRate = 100 - fs.conversionRate;
-                fs.dropOffCount = previousCompletedCount - completedCount;
+                fs.dropOffCount = previousCount - stageCount;
             }
             
             // Visual width for funnel
             fs.widthPercent = totalCandidatesInFunnel > 0 ? 
-                Math.max(15, ((Decimal)completedCount / totalCandidatesInFunnel * 100).setScale(0).intValue()) : 15;
+                Math.max(15, ((Decimal)stageCount / totalCandidatesInFunnel * 100).setScale(0).intValue()) : 15;
             
             result.stages.add(fs);
-            previousCompletedCount = completedCount;
+            previousCount = stageCount;
         }
         
         // Calculate summary metrics
@@ -130,14 +171,14 @@ public with sharing class CandidateFunnelController {
         // Total scheduled interviews across all stages
         Integer totalScheduled = 0;
         for (String stage : stageOrder) {
-            totalScheduled += candidatesByScheduledStage.get(stage).size();
+            totalScheduled += scheduledCountByStage.get(stage);
         }
         result.totalScheduledInterviews = totalScheduled;
         
-        // Calculate overall progression rate (Ci-First completed / total candidates)
-        Integer ciCompleted = candidatesByCompletedStage.get('Ci-First').size();
+        // Calculate overall progression rate
+        Integer firstStageCount = candidateCountByStage.get('0-Prequal');
         result.overallConversionRate = totalCandidatesInFunnel > 0 ? 
-            ((Decimal)ciCompleted / totalCandidatesInFunnel * 100).setScale(1) : 0;
+            ((Decimal)firstStageCount / totalCandidatesInFunnel * 100).setScale(1) : 0;
         
         // Find biggest drop-off stage
         Decimal maxDropOff = 0;

@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <actionCalls>
+        <name>Send_Email_Message_Action</name>
+        <label>Send Email Message Action</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <actionName>sendEmailMessage</actionName>
+        <actionType>sendEmailMessage</actionType>
+        <flowTransactionModel>CurrentTransaction</flowTransactionModel>
+        <inputParameters>
+            <name>clickTracking</name>
+            <value>
+                <booleanValue>true</booleanValue>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>openTracking</name>
+            <value>
+                <booleanValue>true</booleanValue>
+            </value>
+        </inputParameters>
+        <nameSegment>sendEmailMessage</nameSegment>
+    </actionCalls>
+    <apiVersion>63.0</apiVersion>
+    <areMetricsLoggedToDataCloud>false</areMetricsLoggedToDataCloud>
+    <environments>Default</environments>
+    <interviewLabel>Test- Ethan Barnes Introduction Flow {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>Test- Ethan Barnes Introduction Flow</label>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>AUTO_LAYOUT_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>OriginBuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>Journey</processType>
+    <start>
+        <locationX>50</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>Send_Email_Message_Action</targetReference>
+        </connector>
+        <object>UnifiedssotIndividualUfid__dlm</object>
+        <segment>1sgVo0000000FyL</segment>
+        <triggerType>Segment</triggerType>
+    </start>
+    <status>InvalidDraft</status>
+</Flow>

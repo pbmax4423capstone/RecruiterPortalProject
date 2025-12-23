@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Total_FYC__c</fullName>
+    <description>Total First Year Commission from all Opportunities linked to this candidate's Contact. Updated via Flow.</description>
+    <externalId>false</externalId>
+    <inlineHelpText>Total FYC from submitted opportunities. Contract B requirement: $2,500</inlineHelpText>
+    <label>Total FYC</label>
+    <precision>18</precision>
+    <required>false</required>
+    <scale>2</scale>
+    <trackFeedHistory>false</trackFeedHistory>
+    <trackHistory>true</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Currency</type>
+</CustomField>

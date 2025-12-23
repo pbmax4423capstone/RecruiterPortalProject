@@ -1,0 +1,410 @@
+<template>
+    <div class="slds-card">
+        <!-- Header -->
+        <div class="slds-card__header slds-grid">
+            <header class="slds-media slds-media_center slds-has-flexi-truncate">
+                <div class="slds-media__figure">
+                    <lightning-icon icon-name="standard:contract_line_item" size="medium"></lightning-icon>
+                </div>
+                <div class="slds-media__body">
+                    <h2 class="slds-card__header-title">
+                        <span class="slds-text-heading_medium">Contract B Pipeline Dashboard</span>
+                    </h2>
+                </div>
+            </header>
+            <div class="slds-no-flex">
+                <lightning-button-icon 
+                    icon-name="utility:refresh" 
+                    alternative-text="Refresh"
+                    onclick={handleRefresh}
+                    class="slds-m-right_small">
+                </lightning-button-icon>
+            </div>
+        </div>
+        
+        <div class="slds-card__body slds-card__body_inner">
+            <template if:true={isLoading}>
+                <div class="slds-align_absolute-center slds-p-around_large">
+                    <lightning-spinner alternative-text="Loading" size="medium"></lightning-spinner>
+                </div>
+            </template>
+            
+            <template if:false={isLoading}>
+                <!-- Summary Cards -->
+                <div class="slds-grid slds-wrap slds-gutters slds-m-bottom_medium">
+                    <!-- Total Active -->
+                    <div class="slds-col slds-size_1-of-6">
+                        <div class="summary-card summary-total">
+                            <div class="summary-value">{summary.totalActive}</div>
+                            <div class="summary-label">Active Contract B</div>
+                        </div>
+                    </div>
+                    
+                    <!-- Requirements Met -->
+                    <div class="slds-col slds-size_1-of-6">
+                        <div class="summary-card summary-success">
+                            <div class="summary-value">{summary.requirementsMet}</div>
+                            <div class="summary-label">Requirements Met</div>
+                        </div>
+                    </div>
+                    
+                    <!-- On Track -->
+                    <div class="slds-col slds-size_1-of-6">
+                        <div class="summary-card summary-ontrack">
+                            <div class="summary-value">{summary.onTrackCount}</div>
+                            <div class="summary-label">On Track</div>
+                        </div>
+                    </div>
+                    
+                    <!-- At Risk -->
+                    <div class="slds-col slds-size_1-of-6">
+                        <div class="summary-card summary-atrisk">
+                            <div class="summary-value">{summary.atRiskCount}</div>
+                            <div class="summary-label">At Risk</div>
+                        </div>
+                    </div>
+                    
+                    <!-- Total FYC -->
+                    <div class="slds-col slds-size_1-of-6">
+                        <div class="summary-card summary-fyc">
+                            <div class="summary-value">{totalFYCFormatted}</div>
+                            <div class="summary-label">Total FYC</div>
+                        </div>
+                    </div>
+                    
+                    <!-- Average FYC -->
+                    <div class="slds-col slds-size_1-of-6">
+                        <div class="summary-card summary-avg">
+                            <div class="summary-value">{avgFYCFormatted}</div>
+                            <div class="summary-label">Avg FYC</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- At Risk Alert Section -->
+                <template if:true={hasAtRiskCandidates}>
+                    <div class="slds-notify slds-notify_alert slds-theme_alert-texture slds-theme_warning slds-m-bottom_medium" role="alert">
+                        <lightning-icon icon-name="utility:warning" alternative-text="Warning" size="small" class="slds-m-right_x-small"></lightning-icon>
+                        <h2>{summary.atRiskCount} Contract B candidate(s) are at risk - less than 30 days remaining and requirements not met</h2>
+                    </div>
+                </template>
+                
+                <!-- Interview Stats with Toggle -->
+                <div class="slds-box slds-m-bottom_medium">
+                    <div class="slds-grid slds-grid_align-spread slds-m-bottom_small">
+                        <h3 class="slds-text-heading_small">Interview Statistics - {interviewStats.periodLabel}</h3>
+                        <lightning-combobox
+                            name="period"
+                            value={interviewPeriod}
+                            options={periodOptions}
+                            onchange={handlePeriodChange}
+                            variant="label-hidden"
+                            class="period-toggle">
+                        </lightning-combobox>
+                    </div>
+                    
+                    <div class="slds-grid slds-wrap slds-gutters">
+                        <div class="slds-col slds-size_1-of-6">
+                            <div class="interview-stat interview-attraction">
+                                <div class="stat-value">{interviewStats.attraction}</div>
+                                <div class="stat-label">Attraction</div>
+                            </div>
+                        </div>
+                        <div class="slds-col slds-size_1-of-6">
+                            <div class="interview-stat interview-si1">
+                                <div class="stat-value">{interviewStats.si1}</div>
+                                <div class="stat-label">SI 1</div>
+                            </div>
+                        </div>
+                        <div class="slds-col slds-size_1-of-6">
+                            <div class="interview-stat interview-si2">
+                                <div class="stat-value">{interviewStats.si2}</div>
+                                <div class="stat-label">SI 2</div>
+                            </div>
+                        </div>
+                        <div class="slds-col slds-size_1-of-6">
+                            <div class="interview-stat interview-si3">
+                                <div class="stat-value">{interviewStats.si3}</div>
+                                <div class="stat-label">SI 3</div>
+                            </div>
+                        </div>
+                        <div class="slds-col slds-size_1-of-6">
+                            <div class="interview-stat interview-career">
+                                <div class="stat-value">{interviewStats.career}</div>
+                                <div class="stat-label">Career</div>
+                            </div>
+                        </div>
+                        <div class="slds-col slds-size_1-of-6">
+                            <div class="interview-stat interview-total">
+                                <div class="stat-value">{interviewStats.total}</div>
+                                <div class="stat-label">Total</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Recruiting Metrics -->
+                <div class="slds-box slds-m-bottom_medium">
+                    <h3 class="slds-text-heading_small slds-m-bottom_small">YTD Recruiting Metrics</h3>
+                    
+                    <div class="slds-grid slds-wrap slds-gutters slds-m-bottom_medium">
+                        <div class="slds-col slds-size_1-of-6">
+                            <div class="metric-card metric-a">
+                                <div class="metric-value">{ytdTotals.contractA}</div>
+                                <div class="metric-label">Contract A</div>
+                            </div>
+                        </div>
+                        <div class="slds-col slds-size_1-of-6">
+                            <div class="metric-card metric-b">
+                                <div class="metric-value">{ytdTotals.contractB}</div>
+                                <div class="metric-label">Contract B</div>
+                            </div>
+                        </div>
+                        <div class="slds-col slds-size_1-of-6">
+                            <div class="metric-card metric-transition">
+                                <div class="metric-value">{ytdTotals.transitions}</div>
+                                <div class="metric-label">B→A Transitions</div>
+                            </div>
+                        </div>
+                        <div class="slds-col slds-size_1-of-6">
+                            <div class="metric-card metric-terminations">
+                                <div class="metric-value">{ytdTotals.terminations}</div>
+                                <div class="metric-label">Terminations</div>
+                            </div>
+                        </div>
+                        <div class="slds-col slds-size_1-of-6">
+                            <div class="metric-card metric-rate-good">
+                                <div class="metric-value">{transitionRateFormatted}</div>
+                                <div class="metric-label">Transition Rate</div>
+                            </div>
+                        </div>
+                        <div class="slds-col slds-size_1-of-6">
+                            <div class="metric-card metric-rate-bad">
+                                <div class="metric-value">{terminationRateFormatted}</div>
+                                <div class="metric-label">Termination Rate</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Pipeline Table -->
+                <div class="slds-box">
+                    <h3 class="slds-text-heading_small slds-m-bottom_small">Active Contract B Progress</h3>
+                    
+                    <template if:true={hasPipelineData}>
+                        <table class="slds-table slds-table_cell-buffer slds-table_bordered slds-table_striped">
+                            <thead>
+                                <tr class="slds-line-height_reset">
+                                    <th scope="col"><div class="slds-truncate" title="Candidate">Candidate</div></th>
+                                    <th scope="col"><div class="slds-truncate" title="Sales Manager">Manager</div></th>
+                                    <th scope="col"><div class="slds-truncate" title="Start Date">Start</div></th>
+                                    <th scope="col"><div class="slds-truncate" title="Days Left">Days Left</div></th>
+                                    <th scope="col"><div class="slds-truncate" title="FYC">FYC</div></th>
+                                    <th scope="col"><div class="slds-truncate" title="FYC Progress">FYC Progress</div></th>
+                                    <th scope="col"><div class="slds-truncate" title="Submissions">Submissions</div></th>
+                                    <th scope="col"><div class="slds-truncate" title="Status">Status</div></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <template for:each={formattedPipelineData} for:item="cand">
+                                    <tr key={cand.id} class={cand.isAtRisk}>
+                                        <td>
+                                            <a href="javascript:void(0);" 
+                                               data-id={cand.id}
+                                               onclick={navigateToCandidate}>
+                                                {cand.name}
+                                            </a>
+                                        </td>
+                                        <td>{cand.salesManager}</td>
+                                        <td><lightning-formatted-date-time value={cand.startDate}></lightning-formatted-date-time></td>
+                                        <td>
+                                            <span class={cand.progressClass}>{cand.daysRemaining}</span>
+                                        </td>
+                                        <td>{cand.fycFormatted}</td>
+                                        <td>
+                                            <div class="progress-bar-container">
+                                                <div class="progress-bar progress-bar-fyc" style={cand.fycProgressStyle}></div>
+                                            </div>
+                                            <span class="progress-text">{cand.fycProgress}%</span>
+                                        </td>
+                                        <td>
+                                            {cand.opportunityCount}/5
+                                            <div class="progress-bar-container">
+                                                <div class="progress-bar progress-bar-subs" style={cand.submissionsProgressStyle}></div>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <lightning-badge label={cand.statusIndicator} class={cand.progressClass}></lightning-badge>
+                                        </td>
+                                    </tr>
+                                </template>
+                            </tbody>
+                        </table>
+                    </template>
+                    
+                    <template if:false={hasPipelineData}>
+                        <div class="slds-illustration slds-illustration_small slds-p-around_medium">
+                            <div class="slds-text-align_center">
+                                <lightning-icon icon-name="utility:success" size="large" variant="success"></lightning-icon>
+                                <h3 class="slds-text-heading_medium slds-m-top_small">No Active Contract B Candidates</h3>
+                                <p class="slds-text-body_regular slds-m-top_x-small">There are currently no active Contract B candidates in the pipeline.</p>
+                            </div>
+                        </div>
+                    </template>
+                </div>
+                
+                <!-- Contract A Progress Section -->
+                <div class="slds-box slds-m-top_medium">
+                    <div class="slds-grid slds-grid_align-spread slds-m-bottom_small">
+                        <h3 class="slds-text-heading_small">Active Contract A Progress</h3>
+                        <div class="slds-grid slds-grid_vertical-align-center">
+                            <span class="slds-badge slds-badge_lightest slds-m-right_small">{contractASummary.totalAgents} Agents</span>
+                            <span class="slds-badge slds-theme_success slds-m-right_small">{contractASummary.metCount} Qualified</span>
+                            <span class="slds-badge slds-theme_warning">{contractASummary.notOnTargetCount} Not On Target</span>
+                        </div>
+                    </div>
+                    
+                    <!-- Contract A Summary Cards -->
+                    <div class="slds-grid slds-wrap slds-gutters slds-m-bottom_small">
+                        <div class="slds-col slds-size_1-of-4">
+                            <div class="summary-card summary-total">
+                                <div class="summary-value">{contractASummary.totalAgents}</div>
+                                <div class="summary-label">Total Contract A</div>
+                            </div>
+                        </div>
+                        <div class="slds-col slds-size_1-of-4">
+                            <div class="summary-card summary-success">
+                                <div class="summary-value">{contractATotalFYCFormatted}</div>
+                                <div class="summary-label">Total YTD FYC</div>
+                            </div>
+                        </div>
+                        <div class="slds-col slds-size_1-of-4">
+                            <div class="summary-card summary-fyc">
+                                <div class="summary-value">{contractATotalWLADLFormatted}</div>
+                                <div class="summary-label">Total YTD WLADL</div>
+                            </div>
+                        </div>
+                        <div class="slds-col slds-size_1-of-4">
+                            <div class="summary-card summary-avg">
+                                <div class="summary-value">{contractAAvgFYCFormatted}</div>
+                                <div class="summary-label">Avg YTD FYC</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <template if:true={hasContractAData}>
+                        <!-- Qualified Agents Section -->
+                        <template if:true={hasQualifiedData}>
+                            <div class="slds-section slds-is-open slds-m-bottom_small">
+                                <h4 class="slds-section__title slds-theme_shade">
+                                    <span class="slds-truncate slds-p-horizontal_small" title="Qualified">
+                                        <lightning-icon icon-name="utility:success" size="x-small" variant="success" class="slds-m-right_x-small"></lightning-icon>
+                                        Qualified ({qualifiedCount})
+                                    </span>
+                                </h4>
+                                <table class="slds-table slds-table_cell-buffer slds-table_bordered slds-table_striped">
+                                    <thead>
+                                        <tr class="slds-line-height_reset">
+                                            <th scope="col"><div class="slds-truncate" title="Agent">Agent</div></th>
+                                            <th scope="col"><div class="slds-truncate" title="Contract Date">Contract Date</div></th>
+                                            <th scope="col"><div class="slds-truncate" title="YTD FYC">YTD FYC</div></th>
+                                            <th scope="col"><div class="slds-truncate" title="YTD WLADL">YTD WLADL</div></th>
+                                            <th scope="col"><div class="slds-truncate" title="WLADL Goal">WLADL Goal</div></th>
+                                            <th scope="col"><div class="slds-truncate" title="Progress">Progress</div></th>
+                                            <th scope="col"><div class="slds-truncate" title="1-in-5">1-in-5</div></th>
+                                            <th scope="col"><div class="slds-truncate" title="Status">Status</div></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <template for:each={qualifiedContractAData} for:item="agent">
+                                            <tr key={agent.id} class={agent.progressClass}>
+                                                <td>{agent.name}</td>
+                                                <td><lightning-formatted-date-time value={agent.contractDate}></lightning-formatted-date-time></td>
+                                                <td>{agent.ytdFYCFormatted}</td>
+                                                <td>{agent.ytdWLADLFormatted}</td>
+                                                <td>{agent.wladlMinFormatted}</td>
+                                                <td>
+                                                    <div class="progress-bar-container">
+                                                        <div class="progress-bar progress-bar-fyc" style={agent.progressStyle}></div>
+                                                    </div>
+                                                    <span class="progress-text">{agent.wladlProgress}%</span>
+                                                </td>
+                                                <td>
+                                                    <template if:true={agent.hasOneInFive}>
+                                                        <lightning-icon icon-name="utility:check" size="x-small" variant="success" title="Using 1-in-5"></lightning-icon>
+                                                        <span class="slds-m-left_xx-small">{agent.oneInFiveYear}</span>
+                                                    </template>
+                                                </td>
+                                                <td>
+                                                    <span class={agent.statusBadgeClass}>{agent.qualStatus}</span>
+                                                </td>
+                                            </tr>
+                                        </template>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </template>
+                        
+                        <!-- Not Qualified Agents Section -->
+                        <template if:true={hasNotQualifiedData}>
+                            <div class="slds-section slds-is-open">
+                                <h4 class="slds-section__title slds-theme_shade">
+                                    <span class="slds-truncate slds-p-horizontal_small" title="Not Yet Qualified">
+                                        <lightning-icon icon-name="utility:warning" size="x-small" variant="warning" class="slds-m-right_x-small"></lightning-icon>
+                                        Not Yet Qualified ({notQualifiedCount})
+                                    </span>
+                                </h4>
+                                <table class="slds-table slds-table_cell-buffer slds-table_bordered slds-table_striped">
+                                    <thead>
+                                        <tr class="slds-line-height_reset">
+                                            <th scope="col"><div class="slds-truncate" title="Agent">Agent</div></th>
+                                            <th scope="col"><div class="slds-truncate" title="Contract Date">Contract Date</div></th>
+                                            <th scope="col"><div class="slds-truncate" title="YTD FYC">YTD FYC</div></th>
+                                            <th scope="col"><div class="slds-truncate" title="YTD WLADL">YTD WLADL</div></th>
+                                            <th scope="col"><div class="slds-truncate" title="WLADL Goal">WLADL Goal</div></th>
+                                            <th scope="col"><div class="slds-truncate" title="Progress">Progress</div></th>
+                                            <th scope="col"><div class="slds-truncate" title="1-in-5">1-in-5</div></th>
+                                            <th scope="col"><div class="slds-truncate" title="Status">Status</div></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <template for:each={notQualifiedContractAData} for:item="agent">
+                                            <tr key={agent.id} class={agent.progressClass}>
+                                                <td>{agent.name}</td>
+                                                <td><lightning-formatted-date-time value={agent.contractDate}></lightning-formatted-date-time></td>
+                                                <td>{agent.ytdFYCFormatted}</td>
+                                                <td>{agent.ytdWLADLFormatted}</td>
+                                                <td>{agent.wladlMinFormatted}</td>
+                                                <td>
+                                                    <div class="progress-bar-container">
+                                                        <div class="progress-bar progress-bar-fyc" style={agent.progressStyle}></div>
+                                                    </div>
+                                                    <span class="progress-text">{agent.wladlProgress}%</span>
+                                                </td>
+                                                <td>
+                                                    <template if:true={agent.hasOneInFive}>
+                                                        <lightning-icon icon-name="utility:check" size="x-small" variant="success" title="Using 1-in-5"></lightning-icon>
+                                                        <span class="slds-m-left_xx-small">{agent.oneInFiveYear}</span>
+                                                    </template>
+                                                </td>
+                                                <td>
+                                                    <span class={agent.statusBadgeClass}>{agent.qualStatus}</span>
+                                                </td>
+                                            </tr>
+                                        </template>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </template>
+                    </template>
+                    
+                    <template if:false={hasContractAData}>
+                        <div class="slds-text-align_center slds-p-around_medium">
+                            <p class="slds-text-body_regular">No Contract A progress data available.</p>
+                        </div>
+                    </template>
+                </div>
+            </template>
+        </div>
+    </div>
+</template>

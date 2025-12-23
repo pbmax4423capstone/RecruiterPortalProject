@@ -1,0 +1,70 @@
+/* Contact Importer - Content Script Styles */
+/* Styles for elements injected into web pages */
+
+/* Floating Action Button */
+#contact-importer-fab {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  width: 56px;
+  height: 56px;
+  background: linear-gradient(135deg, #0176d3 0%, #014486 100%);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+  z-index: 999999;
+  transition: transform 0.2s, box-shadow 0.2s;
+  border: none;
+  outline: none;
+}
+
+#contact-importer-fab:hover {
+  transform: scale(1.1);
+  box-shadow: 0 6px 20px rgba(0,0,0,0.4);
+}
+
+/* Selection highlight */
+.contact-importer-highlight {
+  background-color: rgba(1, 118, 211, 0.2);
+  border: 2px dashed #0176d3;
+  border-radius: 4px;
+}
+
+/* Toast notification */
+.contact-importer-toast {
+  position: fixed;
+  bottom: 90px;
+  right: 20px;
+  padding: 12px 20px;
+  background: #333;
+  color: white;
+  border-radius: 8px;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-size: 14px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+  z-index: 999998;
+  animation: slideIn 0.3s ease-out;
+}
+
+.contact-importer-toast.success {
+  background: #2e7d32;
+}
+
+.contact-importer-toast.error {
+  background: #c62828;
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateX(100px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}

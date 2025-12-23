@@ -1,6 +1,13 @@
 <template>
     <lightning-card title="Candidate Pipeline Funnel" icon-name="standard:opportunity">
         <div slot="actions">
+            <lightning-button 
+                label={toggleButtonLabel}
+                icon-name={toggleButtonIcon}
+                onclick={handleToggleView}
+                variant="neutral"
+                class="slds-m-right_small">
+            </lightning-button>
             <lightning-badge label={totalCandidates} class="slds-badge_inverse"></lightning-badge>
         </div>
 
@@ -17,8 +24,10 @@
         </template>
 
         <template if:false={isLoading}>
-            <!-- Summary Cards -->
-            <div class="summary-cards slds-p-horizontal_medium slds-p-bottom_medium">
+            <!-- Table/List View (Original) -->
+            <template if:false={showFunnelView}>
+                <!-- Summary Cards -->
+                <div class="summary-cards slds-p-horizontal_medium slds-p-bottom_medium">
                 <div class="summary-card">
                     <div class="summary-value">{totalCandidates}</div>
                     <div class="summary-label">Candidates in Pipeline</div>
@@ -117,6 +126,53 @@
                     <span>&lt;40% Conversion</span>
                 </div>
             </div>
+            </template>
+            <!-- End Table View -->
+
+            <!-- Funnel Visualization View (New) -->
+            <template if:true={showFunnelView}>
+                <div class="area-chart-container slds-p-around_medium">
+                    <!-- Header with Inline Stats -->
+                    <div class="area-chart-header-with-stats">
+                        <div class="chart-title-section">
+                            <div class="chart-title">Candidate Pipeline Analytics</div>
+                            <div class="inline-stats">
+                                <span class="stat-item">{totalCandidates} Total Current in Pipeline</span>
+                                <span class="stat-divider">|</span>
+                                <span class="stat-item stat-success">{totalScheduledInterviews} Scheduled</span>
+                                <span class="stat-divider">|</span>
+                                <span class="stat-item">{completedThisMonth} Completed this Month ({currentMonthAbbr})</span>
+                                <span class="stat-divider">|</span>
+                                <span class="stat-item stat-warning">{biggestDropOffRate}% Max Drop-off</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Echarts Container -->
+                    <div class="echarts-container"></div>
+                    
+                    <!-- Conversion Info Panel on Right -->
+                    <div class={conversionPanelClass}>
+                        <div class="panel-title">Stage Conversion</div>
+                        
+                        <template for:each={stages} for:item="stage" for:index="index">
+                            <template if:false={stage.isFirst}>
+                                <div key={stage.value} class="conversion-row">
+                                    <div class={stage.conversionClass}>
+                                        <lightning-icon icon-name="utility:arrowdown" size="xx-small"></lightning-icon>
+                                        {stage.conversionRate}%
+                                    </div>
+                                    <div class="conversion-detail">
+                                        -{stage.dropOffCount} ({stage.dropOffRate}%)
+                                    </div>
+                                </div>
+                            </template>
+                        </template>
+                    </div>
+                </div>
+            </template>
+            <!-- End Funnel View -->
+
         </template>
     </lightning-card>
 </template>

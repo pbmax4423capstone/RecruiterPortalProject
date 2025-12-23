@@ -1,0 +1,224 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>58.0</apiVersion>
+    <areMetricsLoggedToDataCloud>false</areMetricsLoggedToDataCloud>
+    <assignments>
+        <name>Assign_to_Compliance_Issue_Collection</name>
+        <label>Assign to Compliance Issue Collection</label>
+        <locationX>264</locationX>
+        <locationY>468</locationY>
+        <assignmentItems>
+            <assignToReference>$Record.Compliance_Issue__c</assignToReference>
+            <operator>Add</operator>
+            <value>
+                <elementReference>ComplianceIssues</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Loop_1</targetReference>
+        </connector>
+    </assignments>
+    <description>This is a Schedule-Triggered Flow.
+The flow starts with a scheduled trigger, running every week on October 3, 2024, at 1:00 PM. It checks Device Compliance records for seven conditions, including statuses like &apos;noncompliant&apos;, &apos;Not Compatible&apos;, &apos;Not Encrypted&apos;, and &apos;false&apos;. If the record meets these criteria, it&apos;s added to a compliance issue collection. The flow then loops through each record in the collection, updating the Compliance_Issue__c field with the collected issues.
+
+Several objects and their fields worth mentioning. Below are the details (the format is given as: object_name - field_name: interaction)
+  * [&apos;Device_Compliance__c&apos;, &apos;WS1_Device_Compliance_Status__c, Windows_11_Readiness_Status__c, WS1_BitLocker_Encryption_Status__c, WS1_Device_Enrollment_Status__c, WS1_Encryption_Status__c, WS1_Aging__c&apos;]
+  * [&apos;Device_Compliance__c&apos;, &apos;ReportDate__c&apos;]</description>
+    <environments>Default</environments>
+    <formulas>
+        <name>ComplianceIssues</name>
+        <dataType>String</dataType>
+        <expression>IF(
+    {!$Record.WS1_Device_Compliance_Status__c} = &apos;Noncompliant&apos;,
+    &apos;Noncompliant&apos;,
+    &apos;&apos;
+) &amp;
+
+IF(
+    AND(
+        {!$Record.WS1_Device_Compliance_Status__c} = &apos;Noncompliant&apos;,
+        OR(
+            {!$Record.Windows_11_Readiness_Status__c} = &apos;Not Compatible&apos;,
+            {!$Record.WS1_BitLocker_Encryption_Status__c} = &apos;Not Encrypted&apos;,
+            {!$Record.WS1_Device_Enrollment_Status__c} != &apos;Enrolled&apos;,
+            {!$Record.WS1_Encryption_Status__c} = &apos;Not Encrypted&apos;,
+            {!$Record.WS1_Aging__c} &gt;= 90
+        )
+    ),
+    &apos;; &apos;,
+    &apos;&apos;
+) &amp;
+
+IF(
+    {!$Record.WS1_Bitlocker_Encryption_Method__c} = &apos;XTS-AES 128 bit&apos;,
+    &apos;Bitlocker Encryption Method&apos;,
+    &apos;&apos;
+)</expression>
+    </formulas>
+    <formulas>
+        <name>WeekAgoDate</name>
+        <dataType>Date</dataType>
+        <expression>TODAY() - 7</expression>
+    </formulas>
+    <interviewLabel>AI Generated Flow for a flow on the device compliance object that will...</interviewLabel>
+    <label>Device Compliance</label>
+    <loops>
+        <name>Loop_1</name>
+        <label>Loop 1</label>
+        <locationX>176</locationX>
+        <locationY>360</locationY>
+        <collectionReference>Get_Latest_Report</collectionReference>
+        <iterationOrder>Asc</iterationOrder>
+        <nextValueConnector>
+            <targetReference>Assign_to_Compliance_Issue_Collection</targetReference>
+        </nextValueConnector>
+        <noMoreValuesConnector>
+            <targetReference>Update_Compliance_Issues</targetReference>
+        </noMoreValuesConnector>
+    </loops>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>AUTO_LAYOUT_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>GptId</name>
+        <value>
+            <stringValue>bbaa8208-34af-4522-8934-d9c72d836d1c</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>GptLlmIds</name>
+        <value>
+            <stringValue>[&quot;fb859918-1129-4b23-a328-8536cef4566d&quot;]</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>OriginBuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>AutoLaunchedFlow</processType>
+    <recordLookups>
+        <name>Get_Latest_Report</name>
+        <label>Get Latest Report</label>
+        <locationX>176</locationX>
+        <locationY>252</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Loop_1</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>ReportDate__c</field>
+            <operator>GreaterThanOrEqualTo</operator>
+            <value>
+                <elementReference>WeekAgoDate</elementReference>
+            </value>
+        </filters>
+        <getFirstRecordOnly>false</getFirstRecordOnly>
+        <object>Device_Compliance__c</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <recordUpdates>
+        <name>Update_Compliance_Issues</name>
+        <label>Update Compliance Issues</label>
+        <locationX>176</locationX>
+        <locationY>660</locationY>
+        <inputAssignments>
+            <field>Compliance_Issue__c</field>
+            <value>
+                <elementReference>ComplianceIssues</elementReference>
+            </value>
+        </inputAssignments>
+        <inputReference>$Record</inputReference>
+    </recordUpdates>
+    <start>
+        <locationX>50</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>Get_Latest_Report</targetReference>
+        </connector>
+        <filterLogic>or</filterLogic>
+        <filters>
+            <field>WS1_Device_Compliance_Status__c</field>
+            <operator>EqualTo</operator>
+            <value>
+                <stringValue>noncompliant</stringValue>
+            </value>
+        </filters>
+        <filters>
+            <field>Windows_11_Readiness_Status__c</field>
+            <operator>EqualTo</operator>
+            <value>
+                <stringValue>Not Compatible</stringValue>
+            </value>
+        </filters>
+        <filters>
+            <field>WS1_BitLocker_Encryption_Status__c</field>
+            <operator>EqualTo</operator>
+            <value>
+                <stringValue>Not Encrypted</stringValue>
+            </value>
+        </filters>
+        <filters>
+            <field>WS1_Device_Enrollment_Status__c</field>
+            <operator>NotEqualTo</operator>
+            <value>
+                <stringValue>Enrolled</stringValue>
+            </value>
+        </filters>
+        <filters>
+            <field>WS1_Encryption_Status__c</field>
+            <operator>EqualTo</operator>
+            <value>
+                <stringValue>false</stringValue>
+            </value>
+        </filters>
+        <filters>
+            <field>WS1_Aging__c</field>
+            <operator>GreaterThanOrEqualTo</operator>
+            <value>
+                <numberValue>90.0</numberValue>
+            </value>
+        </filters>
+        <filters>
+            <field>WS1_BitLocker_Encryption_Method__c</field>
+            <operator>EqualTo</operator>
+            <value>
+                <stringValue>XTS-AES 128 bit</stringValue>
+            </value>
+        </filters>
+        <object>Device_Compliance__c</object>
+        <schedule>
+            <frequency>Weekly</frequency>
+            <startDate>2024-10-03</startDate>
+            <startTime>13:00:00.000Z</startTime>
+        </schedule>
+        <triggerType>Scheduled</triggerType>
+    </start>
+    <status>Active</status>
+    <variables>
+        <name>EncryptionVar</name>
+        <dataType>Multipicklist</dataType>
+        <isCollection>true</isCollection>
+        <isInput>true</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <name>NonCompliantVar</name>
+        <dataType>SObject</dataType>
+        <isCollection>true</isCollection>
+        <isInput>true</isInput>
+        <isOutput>false</isOutput>
+        <objectType>Device_Compliance__c</objectType>
+    </variables>
+</Flow>

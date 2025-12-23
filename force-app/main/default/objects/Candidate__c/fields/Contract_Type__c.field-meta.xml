@@ -17,9 +17,9 @@
                 <label>Broker</label>
             </value>
             <value>
-                <fullName>Career Contract</fullName>
+                <fullName>Contract A</fullName>
                 <default>false</default>
-                <label>Career Contract</label>
+                <label>Contract A</label>
             </value>
             <value>
                 <fullName>College Intern</fullName>
@@ -30,6 +30,12 @@
                 <fullName>Contract B</fullName>
                 <default>false</default>
                 <label>Contract B</label>
+            </value>
+            <value>
+                <fullName>Career Contract</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>Career Contract</label>
             </value>
         </valueSetDefinition>
     </valueSet>

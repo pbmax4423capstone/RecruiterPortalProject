@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Contract_End_Date__c</fullName>
+    <description>Contract expiration date. For Contract B, this is Start_Date__c + 4 months.</description>
+    <externalId>false</externalId>
+    <inlineHelpText>The date this contract expires. For Contract B agents, this is 4 months from start date.</inlineHelpText>
+    <label>Contract End Date</label>
+    <required>false</required>
+    <trackFeedHistory>false</trackFeedHistory>
+    <trackHistory>true</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Date</type>
+</CustomField>
