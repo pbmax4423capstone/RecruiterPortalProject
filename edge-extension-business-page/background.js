@@ -96,6 +96,18 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   return true;
 });
 
+// Helper function to properly escape SOQL string literals
+function escapeSoql(value) {
+  if (!value) return '';
+  // Escape single quotes, backslashes, and other special characters
+  return value
+    .replace(/\\/g, '\\\\')  // Escape backslashes first
+    .replace(/'/g, "\\'")     // Escape single quotes
+    .replace(/\n/g, '\\n')    // Escape newlines
+    .replace(/\r/g, '\\r')    // Escape carriage returns
+    .replace(/\t/g, '\\t');   // Escape tabs
+}
+
 // Check for duplicate candidates by email, phone, or name
 async function handleCheckDuplicates(data) {
   console.log('[SF Background] handleCheckDuplicates called with data:', JSON.stringify(data));
@@ -114,21 +126,25 @@ async function handleCheckDuplicates(data) {
   
   // Check by email (on both Candidate and Contact)
   if (email) {
-    conditions.push(`Email__c = '${email.replace(/'/g, "\\'")}'`);
-    conditions.push(`Personal_Email__c = '${email.replace(/'/g, "\\'")}'`);
+    const escapedEmail = escapeSoql(email);
+    conditions.push(`Email__c = '${escapedEmail}'`);
+    conditions.push(`Personal_Email__c = '${escapedEmail}'`);
   }
   
   // Check by phone
   if (phone) {
     const cleanPhone = phone.replace(/\D/g, ''); // Remove non-digits
     if (cleanPhone.length >= 10) {
+      // Only use digits in LIKE query, no escaping needed for numbers
       conditions.push(`Mobile__c LIKE '%${cleanPhone.slice(-10)}%'`);
     }
   }
   
   // Check by exact name match
   if (firstName && lastName) {
-    conditions.push(`(First_Name__c = '${firstName.replace(/'/g, "\\'")}' AND Last_Name__c = '${lastName.replace(/'/g, "\\'")}')`);
+    const escapedFirstName = escapeSoql(firstName);
+    const escapedLastName = escapeSoql(lastName);
+    conditions.push(`(First_Name__c = '${escapedFirstName}' AND Last_Name__c = '${escapedLastName}')`);
   }
 
   if (conditions.length === 0) {

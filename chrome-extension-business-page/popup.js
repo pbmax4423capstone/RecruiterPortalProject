@@ -289,26 +289,87 @@ async function handleCheckDuplicates() {
 function showDuplicateModal(duplicates) {
   pendingDuplicates = duplicates;
   
-  // Build duplicate list HTML
-  let html = '';
-  for (const dup of duplicates) {
-    html += `
-      <div class="duplicate-record">
-        <div class="duplicate-record-header">
-          <span class="duplicate-record-name">${dup.name || 'Unknown'}</span>
-          <a href="${dup.url}" target="_blank" class="duplicate-record-link">View Record →</a>
-        </div>
-        <div class="duplicate-record-details">
-          ${dup.email ? `<div class="duplicate-detail"><strong>Email</strong>${dup.email}</div>` : ''}
-          ${dup.phone ? `<div class="duplicate-detail"><strong>Phone</strong>${dup.phone}</div>` : ''}
-          ${dup.status ? `<div class="duplicate-detail"><strong>Status</strong>${dup.status}</div>` : ''}
-          ${dup.agency ? `<div class="duplicate-detail"><strong>Agency</strong>${dup.agency}</div>` : ''}
-        </div>
-      </div>
-    `;
+  // Helper function to escape HTML
+  function escapeHtml(text) {
+    if (!text) return '';
+    const div = document.createElement('div');
+    div.textContent = text;
+    return div.innerHTML;
   }
   
-  duplicateList.innerHTML = html;
+  // Build duplicate list using DOM manipulation for security
+  duplicateList.innerHTML = ''; // Clear existing content
+  
+  for (const dup of duplicates) {
+    const recordDiv = document.createElement('div');
+    recordDiv.className = 'duplicate-record';
+    
+    // Header
+    const headerDiv = document.createElement('div');
+    headerDiv.className = 'duplicate-record-header';
+    
+    const nameSpan = document.createElement('span');
+    nameSpan.className = 'duplicate-record-name';
+    nameSpan.textContent = dup.name || 'Unknown';
+    headerDiv.appendChild(nameSpan);
+    
+    const link = document.createElement('a');
+    link.href = escapeHtml(dup.url);
+    link.target = '_blank';
+    link.className = 'duplicate-record-link';
+    link.textContent = 'View Record →';
+    headerDiv.appendChild(link);
+    
+    recordDiv.appendChild(headerDiv);
+    
+    // Details
+    const detailsDiv = document.createElement('div');
+    detailsDiv.className = 'duplicate-record-details';
+    
+    if (dup.email) {
+      const emailDiv = document.createElement('div');
+      emailDiv.className = 'duplicate-detail';
+      const strong = document.createElement('strong');
+      strong.textContent = 'Email';
+      emailDiv.appendChild(strong);
+      emailDiv.appendChild(document.createTextNode(dup.email));
+      detailsDiv.appendChild(emailDiv);
+    }
+    
+    if (dup.phone) {
+      const phoneDiv = document.createElement('div');
+      phoneDiv.className = 'duplicate-detail';
+      const strong = document.createElement('strong');
+      strong.textContent = 'Phone';
+      phoneDiv.appendChild(strong);
+      phoneDiv.appendChild(document.createTextNode(dup.phone));
+      detailsDiv.appendChild(phoneDiv);
+    }
+    
+    if (dup.status) {
+      const statusDiv = document.createElement('div');
+      statusDiv.className = 'duplicate-detail';
+      const strong = document.createElement('strong');
+      strong.textContent = 'Status';
+      statusDiv.appendChild(strong);
+      statusDiv.appendChild(document.createTextNode(dup.status));
+      detailsDiv.appendChild(statusDiv);
+    }
+    
+    if (dup.agency) {
+      const agencyDiv = document.createElement('div');
+      agencyDiv.className = 'duplicate-detail';
+      const strong = document.createElement('strong');
+      strong.textContent = 'Agency';
+      agencyDiv.appendChild(strong);
+      agencyDiv.appendChild(document.createTextNode(dup.agency));
+      detailsDiv.appendChild(agencyDiv);
+    }
+    
+    recordDiv.appendChild(detailsDiv);
+    duplicateList.appendChild(recordDiv);
+  }
+  
   duplicateModal.classList.remove('hidden');
 }
 
