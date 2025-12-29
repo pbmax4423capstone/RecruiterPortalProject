@@ -1,0 +1,136 @@
+<template>
+    <div class="slds-card">
+        <!-- Summary Cards Row -->
+        <div class="slds-card__body slds-card__body_inner">
+            <!-- Loading Spinner -->
+            <template if:true={isLoading}>
+                <div class="slds-align_absolute-center slds-p-around_medium">
+                    <lightning-spinner alternative-text="Loading metrics" size="medium"></lightning-spinner>
+                </div>
+            </template>
+            
+            <!-- Metrics Display -->
+            <template if:false={isLoading}>
+                <div class="slds-grid slds-wrap slds-gutters slds-m-bottom_medium">
+                    <!-- Total Candidates -->
+                    <div class="slds-col slds-size_1-of-6 slds-medium-size_1-of-3 slds-small-size_1-of-1">
+                        <div class="summary-card summary-total" 
+                             data-label="Total Candidates" 
+                             data-value={totalCandidates}
+                             onclick={handleCardClick}>
+                            <div class="summary-value">{totalCandidates}</div>
+                            <div class="summary-label">Total Candidates</div>
+                        </div>
+                    </div>
+                    
+                    <!-- Upcoming Interviews -->
+                    <div class="slds-col slds-size_1-of-6 slds-medium-size_1-of-3 slds-small-size_1-of-1">
+                        <div class="summary-card summary-warning" 
+                             data-label="Upcoming Interviews" 
+                             data-value={upcomingInterviews}
+                             onclick={handleCardClick}>
+                            <div class="summary-value">{upcomingInterviews}</div>
+                            <div class="summary-label">Upcoming Interviews</div>
+                        </div>
+                    </div>
+                    
+                    <!-- Active Pipeline -->
+                    <div class="slds-col slds-size_1-of-6 slds-medium-size_1-of-3 slds-small-size_1-of-1">
+                        <div class="summary-card summary-info" 
+                             data-label="Active Pipeline" 
+                             data-value={activePipeline}
+                             onclick={handleCardClick}>
+                            <div class="summary-value">{activePipeline}</div>
+                            <div class="summary-label">Active Pipeline</div>
+                        </div>
+                    </div>
+                    
+                    <!-- On Contract B -->
+                    <div class="slds-col slds-size_1-of-6 slds-medium-size_1-of-3 slds-small-size_1-of-1">
+                        <div class="summary-card summary-purple" 
+                             data-label="On Contract B" 
+                             data-value={onContractB}
+                             onclick={handleCardClick}>
+                            <div class="summary-value">{onContractB}</div>
+                            <div class="summary-label">On Contract B</div>
+                        </div>
+                    </div>
+                    
+                    <!-- Hired This Month -->
+                    <div class="slds-col slds-size_1-of-6 slds-medium-size_1-of-3 slds-small-size_1-of-1">
+                        <div class="summary-card summary-success" 
+                             data-label="Hired This Month" 
+                             data-value={hiredThisMonth}
+                             onclick={handleCardClick}>
+                            <div class="summary-value">{hiredThisMonth}</div>
+                            <div class="summary-label">Hired This Month</div>
+                        </div>
+                    </div>
+                    
+                    <!-- Interview Rate -->
+                    <div class="slds-col slds-size_1-of-6 slds-medium-size_1-of-3 slds-small-size_1-of-1">
+                        <div class="summary-card summary-rate" 
+                             data-label="Interview Rate" 
+                             data-value={interviewRate}
+                             onclick={handleCardClick}>
+                            <div class="summary-value">{interviewRateDisplay}</div>
+                            <div class="summary-label">Interview Rate</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Definitions Table -->
+                <div class="slds-m-bottom_medium">
+                <h3 class="slds-text-heading_small slds-m-bottom_small">What Each Card Means</h3>
+                <table class="definitions-table">
+                    <thead>
+                        <tr>
+                            <th>Card</th>
+                            <th>Description</th>
+                            <th>Calculation</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Total Candidates</strong></td>
+                            <td>All candidates assigned to you</td>
+                            <td>Count of all candidate records</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Upcoming Interviews</strong></td>
+                            <td>Scheduled interviews not yet completed</td>
+                            <td>Interviews with status = Scheduled</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Active Pipeline</strong></td>
+                            <td>Candidates actively in process</td>
+                            <td>Excludes Hired and Inactive</td>
+                        </tr>
+                        <tr>
+                            <td><strong>On Contract B</strong></td>
+                            <td>Agents in probationary period</td>
+                            <td>Contract Type = B</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Hired This Month</strong></td>
+                            <td>Candidates hired in current month</td>
+                            <td>Hire Date in current month</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Interview Rate</strong></td>
+                            <td>Percentage of candidates interviewed</td>
+                            <td>Interviewed / Total Candidates</td>
+                        </tr>
+                    </tbody>
+                </table>
+                </div>
+                
+                <!-- Informational Note -->
+                <div class="info-note">
+                    <lightning-icon icon-name="utility:info" size="x-small" class="info-icon"></lightning-icon>
+                    <span class="info-text">Click on any summary card to filter the Pipeline Details table to show only those records.</span>
+                </div>
+            </template>
+        </div>
+    </div>
+</template>

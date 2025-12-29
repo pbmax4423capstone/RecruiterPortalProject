@@ -1,0 +1,16 @@
+.sales-manager-dashboard {
+    width: 100%;
+    padding: 0;
+}
+
+.metrics-section {
+    margin-bottom: 20px;
+}
+
+.pipeline-section {
+    width: 100%;
+}
+
+.pipeline-section lightning-card {
+    border: none;
+}

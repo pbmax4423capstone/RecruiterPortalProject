@@ -1,0 +1,40 @@
+<template>
+    <!-- Sales Manager Dashboard Container -->
+    <div class="sales-manager-dashboard">
+        
+        <!-- Sales Manager Key Metrics Component -->
+        <div class="metrics-section">
+            <c-sales-manager-key-metrics oncardclick={handleMetricsCardClick}></c-sales-manager-key-metrics>
+        </div>
+
+        <!-- Pipeline Details Section -->
+        <div class="pipeline-section">
+            <lightning-card>
+                <h3 slot="title">
+                    <lightning-icon icon-name="standard:lead" size="small"></lightning-icon>
+                    <span class="slds-m-left_x-small">Candidate Pipeline{filterLabel}</span>
+                </h3>
+                
+                <!-- Clear Filter Button -->
+                <div slot="actions" if:true={isFiltered}>
+                    <lightning-button
+                        label="Clear Filter"
+                        title="Clear Filter"
+                        onclick={clearFilter}
+                        icon-name="utility:clear"
+                        variant="neutral">
+                    </lightning-button>
+                </div>
+
+                <!-- Candidate Kanban Component -->
+                <div class="slds-p-around_medium">
+                    <c-candidate-kanban 
+                        filter-type={filterType}
+                        filter-value={filterValue}>
+                    </c-candidate-kanban>
+                </div>
+            </lightning-card>
+        </div>
+
+    </div>
+</template>

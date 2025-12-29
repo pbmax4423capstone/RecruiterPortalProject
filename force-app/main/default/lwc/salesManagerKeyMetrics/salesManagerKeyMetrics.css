@@ -1,0 +1,139 @@
+/* Summary Card Styles - Based on contractBPipelineDashboard pattern */
+
+.summary-card {
+    border-radius: 8px;
+    padding: 1rem;
+    text-align: center;
+    color: white;
+    cursor: pointer;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.summary-card:hover {
+    transform: scale(1.02);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.summary-value {
+    font-size: 2rem;
+    font-weight: bold;
+    margin-bottom: 0.25rem;
+}
+
+.summary-label {
+    font-size: 0.75rem;
+    opacity: 0.9;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+/* Color Variants - Matching contractBPipelineDashboard gradients */
+
+.summary-total {
+    background: linear-gradient(135deg, #0176d3, #032d60);
+}
+
+.summary-warning {
+    background: linear-gradient(135deg, #f39c12, #b37209);
+}
+
+.summary-info {
+    background: linear-gradient(135deg, #06a59a, #014d48);
+}
+
+.summary-purple {
+    background: linear-gradient(135deg, #9b59b6, #6c3483);
+}
+
+.summary-success {
+    background: linear-gradient(135deg, #2e844a, #194e2e);
+}
+
+.summary-rate {
+    background: linear-gradient(135deg, #0176d3, #9b59b6);
+}
+
+/* Definitions Table Styles */
+
+.definitions-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.875rem;
+    background: white;
+    border: 1px solid #dddbda;
+}
+
+.definitions-table thead {
+    background: #f3f2f2;
+}
+
+.definitions-table th {
+    padding: 0.75rem;
+    text-align: left;
+    font-weight: bold;
+    border-bottom: 2px solid #dddbda;
+    color: #3e3e3c;
+}
+
+.definitions-table td {
+    padding: 0.75rem;
+    border-bottom: 1px solid #dddbda;
+    color: #3e3e3c;
+}
+
+.definitions-table tbody tr:nth-child(even) {
+    background: #fafaf9;
+}
+
+.definitions-table tbody tr:hover {
+    background: #f3f2f2;
+}
+
+/* Informational Note Styles */
+
+.info-note {
+    display: flex;
+    align-items: center;
+    padding: 0.75rem 1rem;
+    background: #d8edff;
+    border-left: 3px solid #0176d3;
+    border-radius: 4px;
+    font-size: 0.875rem;
+    color: #032d60;
+}
+
+.info-icon {
+    margin-right: 0.5rem;
+    flex-shrink: 0;
+}
+
+.info-text {
+    line-height: 1.5;
+}
+
+/* Responsive Design */
+
+@media (max-width: 1023px) {
+    .summary-card {
+        margin-bottom: 1rem;
+    }
+}
+
+@media (max-width: 767px) {
+    .summary-value {
+        font-size: 1.75rem;
+    }
+    
+    .summary-label {
+        font-size: 0.7rem;
+    }
+    
+    .definitions-table {
+        font-size: 0.8rem;
+    }
+    
+    .definitions-table th,
+    .definitions-table td {
+        padding: 0.5rem;
+    }
+}
