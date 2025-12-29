@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Business Page to Salesforce</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      width: 480px;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: #f4f6f9;
+      color: #16325c;
+    }
+    .header {
+      background: linear-gradient(135deg, #0176d3 0%, #014486 100%);
+      color: white;
+      padding: 16px;
+      text-align: center;
+    }
+    .header h1 {
+      font-size: 16px;
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+    .header p {
+      font-size: 12px;
+      opacity: 0.9;
+    }
+    .content {
+      padding: 16px;
+    }
+    .status-bar {
+      background: #e8f4fd;
+      border: 1px solid #0176d3;
+      border-radius: 6px;
+      padding: 10px 12px;
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .status-bar.error {
+      background: #fef0f0;
+      border-color: #ea001e;
+    }
+    .status-bar.success {
+      background: #e8f5e9;
+      border-color: #2e844a;
+    }
+    .status-bar.warning {
+      background: #fff4e5;
+      border-color: #fe9339;
+    }
+    .status-icon {
+      font-size: 18px;
+    }
+    .status-text {
+      font-size: 13px;
+      flex: 1;
+    }
+    .form-group {
+      margin-bottom: 14px;
+    }
+    .form-group label {
+      display: block;
+      font-size: 12px;
+      font-weight: 600;
+      color: #3e3e3c;
+      margin-bottom: 4px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .form-group input,
+    .form-group select {
+      width: 100%;
+      padding: 10px 12px;
+      border: 1px solid #d8dde6;
+      border-radius: 6px;
+      font-size: 14px;
+      color: #16325c;
+      background: white;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    .form-group input:focus,
+    .form-group select:focus {
+      outline: none;
+      border-color: #0176d3;
+      box-shadow: 0 0 0 3px rgba(1, 118, 211, 0.15);
+    }
+    .form-group input:disabled,
+    .form-group select:disabled {
+      background: #f4f6f9;
+      color: #706e6b;
+    }
+    .form-row {
+      display: flex;
+      gap: 12px;
+    }
+    .form-row .form-group {
+      flex: 1;
+    }
+    .divider {
+      height: 1px;
+      background: #d8dde6;
+      margin: 16px 0;
+    }
+    .section-title {
+      font-size: 11px;
+      font-weight: 700;
+      color: #706e6b;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 12px;
+    }
+    .btn {
+      width: 100%;
+      padding: 12px 16px;
+      border: none;
+      border-radius: 6px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .btn-primary {
+      background: linear-gradient(135deg, #0176d3 0%, #014486 100%);
+      color: white;
+    }
+    .btn-primary:hover {
+      background: linear-gradient(135deg, #014486 0%, #012b5c 100%);
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(1, 118, 211, 0.3);
+    }
+    .btn-primary:disabled {
+      background: #c9c7c5;
+      cursor: not-allowed;
+      transform: none;
+      box-shadow: none;
+    }
+    .btn-secondary {
+      background: white;
+      color: #0176d3;
+      border: 1px solid #0176d3;
+      margin-top: 8px;
+    }
+    .btn-secondary:hover {
+      background: #e8f4fd;
+    }
+    .login-section {
+      text-align: center;
+      padding: 24px 16px;
+    }
+    .login-section p {
+      font-size: 13px;
+      color: #706e6b;
+      margin-bottom: 16px;
+    }
+    .footer {
+      padding: 12px 16px;
+      background: white;
+      border-top: 1px solid #d8dde6;
+      text-align: center;
+      font-size: 11px;
+      color: #969492;
+    }
+    .hidden {
+      display: none !important;
+    }
+    .loading {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+    .spinner {
+      width: 16px;
+      height: 16px;
+      border: 2px solid rgba(255,255,255,0.3);
+      border-top-color: white;
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+    
+    /* Duplicate Detection Modal */
+    .duplicate-modal {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.5);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 10000;
+    }
+    .duplicate-modal-content {
+      background: white;
+      border-radius: 8px;
+      width: 460px;
+      max-height: 600px;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+    }
+    .duplicate-modal-header {
+      padding: 8px 16px;
+      border-bottom: 1px solid #e8e8e8;
+      background: #fff4e5;
+    }
+    .duplicate-modal-header h2 {
+      font-size: 14px;
+      margin: 0;
+      color: #c05600;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .duplicate-modal-body {
+      padding: 12px;
+      overflow-y: auto;
+      max-height: 450px;
+    }
+    .duplicate-message {
+      font-size: 12px;
+      color: #3e3e3c;
+      margin-bottom: 12px;
+      line-height: 1.5;
+      background: #fff9f4;
+      padding: 8px 12px;
+      border-radius: 6px;
+      border-left: 3px solid #fe9339;
+    }
+    .duplicate-record {
+      background: #ffffff;
+      border: 1px solid #d8dde6;
+      border-radius: 6px;
+      padding: 10px 12px;
+      margin-bottom: 8px;
+      transition: all 0.2s;
+    }
+    .duplicate-record:hover {
+      border-color: #0176d3;
+      box-shadow: 0 2px 8px rgba(1, 118, 211, 0.15);
+    }
+    .duplicate-record-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 6px;
+    }
+    .duplicate-record-name {
+      font-size: 13px;
+      font-weight: 600;
+      color: #0176d3;
+    }
+    .duplicate-record-link {
+      font-size: 11px;
+      color: #0176d3;
+      text-decoration: none;
+      padding: 4px 8px;
+      border: 1px solid #0176d3;
+      border-radius: 4px;
+      transition: all 0.2s;
+    }
+    .duplicate-record-link:hover {
+      background: #0176d3;
+      color: white;
+    }
+    .duplicate-record-details {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 6px;
+      font-size: 11px;
+    }
+    .duplicate-detail {
+      color: #706e6b;
+    }
+    .duplicate-detail strong {
+      color: #3e3e3c;
+      display: block;
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 2px;
+    }
+    .duplicate-modal-footer {
+      padding: 8px 12px;
+      border-top: 1px solid #e8e8e8;
+      display: flex;
+      gap: 8px;
+    }
+    .duplicate-modal-footer .btn {
+      flex: 1;
+      padding: 10px 16px;
+      font-size: 13px;
+    }
+    .btn-cancel {
+      background: white;
+      color: #706e6b;
+      border: 1px solid #d8dde6;
+    }
+    .btn-cancel:hover {
+      background: #f4f6f9;
+    }
+    .btn-create-anyway {
+      background: #fe9339;
+      color: white;
+      border: none;
+    }
+    .btn-create-anyway:hover {
+      background: #c05600;
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <h1>🌐 Business Page to Salesforce</h1>
+    <p>Capstone Recruiter Portal</p>
+  </div>
+
+  <!-- Login Section (shown when not authenticated) -->
+  <div id="loginSection" class="login-section hidden">
+    <p>Connect to Salesforce to import candidates from business pages.</p>
+    <button id="loginBtn" class="btn btn-primary">
+      🔐 Connect to Salesforce
+    </button>
+  </div>
+
+  <!-- Main Form (shown when authenticated) -->
+  <div id="mainSection" class="content hidden">
+    <div id="statusBar" class="status-bar hidden">
+      <span class="status-icon">ℹ️</span>
+      <span class="status-text">Ready to import</span>
+    </div>
+
+    <div class="section-title">Candidate Information</div>
+    
+    <div class="form-row">
+      <div class="form-group">
+        <label>First Name *</label>
+        <input type="text" id="firstName" placeholder="First Name" required>
+      </div>
+      <div class="form-group">
+        <label>Last Name *</label>
+        <input type="text" id="lastName" placeholder="Last Name" required>
+      </div>
+    </div>
+
+    <div class="form-row">
+      <div class="form-group">
+        <label>Email</label>
+        <input type="email" id="email" placeholder="email@example.com">
+      </div>
+      <div class="form-group">
+        <label>Phone</label>
+        <input type="tel" id="phone" placeholder="(555) 123-4567">
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label>Company</label>
+      <input type="text" id="company" placeholder="Company name">
+    </div>
+
+    <div class="form-group">
+      <label>Page URL</label>
+      <input type="text" id="pageUrl" placeholder="https://..." disabled>
+    </div>
+
+    <div class="divider"></div>
+    <div class="section-title">Salesforce Fields</div>
+
+    <div class="form-row">
+      <div class="form-group">
+        <label>Agency</label>
+        <select id="agency">
+          <option value="A157">A157</option>
+          <option value="A007">A007</option>
+          <option value="A026">A026</option>
+          <option value="A255">A255</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Position</label>
+        <select id="position">
+          <option value="Agent">Agent</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="form-row">
+      <div class="form-group">
+        <label>Status</label>
+        <select id="status">
+          <option value="Lead">Lead</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Next Step</label>
+        <select id="nextStep">
+          <option value="F/up to schedule AI">F/up to schedule AI</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <button id="checkDuplicatesBtn" class="btn btn-primary">
+      🔍 Check for Duplicates & Create
+    </button>
+    
+    <button id="logoutBtn" class="btn btn-secondary">
+      Disconnect from Salesforce
+    </button>
+  </div>
+
+  <!-- Duplicate Detection Modal -->
+  <div id="duplicateModal" class="duplicate-modal hidden">
+    <div class="duplicate-modal-content">
+      <div class="duplicate-modal-header">
+        <h2>⚠️ Potential Duplicates Found</h2>
+      </div>
+      <div class="duplicate-modal-body">
+        <div class="duplicate-message">
+          <strong>We found existing candidates that may match this person.</strong><br>
+          Please review the records below and decide if you want to create a new candidate anyway, or cancel to avoid duplicates.
+        </div>
+        <div id="duplicateList"></div>
+      </div>
+      <div class="duplicate-modal-footer">
+        <button id="cancelDuplicateBtn" class="btn btn-cancel">
+          Cancel
+        </button>
+        <button id="createAnywayBtn" class="btn btn-create-anyway">
+          Create Anyway
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer">
+    Capstone Financial Group Recruiting
+  </div>
+
+  <script src="popup.js"></script>
+</body>
+</html>
