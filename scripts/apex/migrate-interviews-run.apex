@@ -5,11 +5,11 @@
  *
  * Optionally scope to a subset of Candidate Ids by populating candidateIds below.
  */
-Set<Id> candidateIds = new Set<Id>();
+List<Id> candidateIds = new List<Id>();
 // Example: candidateIds.add('a051x00000ABCDEFG'); // leave empty to process all
 
-Time defaultStart = Time.newInstance(9, 0, 0, 0);
-Integer durationMins = 60;
+Time defaultStart = null; // ignored (date-only migration)
+Integer durationMins = null; // ignored (all-day events)
 
 CandidateToEventInterviewMigration.Result r =
     CandidateToEventInterviewMigration.migrate(candidateIds, false, defaultStart, durationMins);

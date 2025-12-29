@@ -1,5 +1,12 @@
 # Copilot Instructions for Cole Arnold - RecruiterPortal Project
 
+## NEW: Dashboard Metrics + Extension Sync (December 29, 2025)
+- Review the shared overview at `docs/dashboard-metrics-and-extension-overview.md` before touching recruiter metrics or the LinkedIn extensions so code + docs stay aligned for Patrick and Cole.
+- Personal briefing: `docs/Cole-Arnold-Dashboard-Extension-Notes.md` explains the rationale, deployment steps, and talking points you’ll use with stakeholders.
+- All `InterviewLeaderboard*` Apex methods must continue filtering on **completed** interviews (Status = Completed and Completed_Date__c within the requested window).
+- When updating Chrome/Edge extensions, edit both folders in lockstep and keep the IIFE guard (`window.__linkedinToSalesforceLoaded`) intact.
+- Keep this file dedicated to Cole-specific guidance; Patrick’s base rules live in `.github/copilot-instructions.md`. Load both instruction files in Copilot so neither set overrides the other.
+
 ## CRITICAL: Recent Changes (December 18, 2025)
 
 Before making any modifications, be aware of these recent updates that MUST be preserved:

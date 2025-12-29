@@ -25,6 +25,28 @@
         </rules>
     </decisions>
     <decisions>
+        <name>Is_This_a_Service_User</name>
+        <label>Is This a Service User?</label>
+        <locationX>380</locationX>
+        <locationY>755</locationY>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>Yes</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>ServiceUserMatchVar</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Is_Email_Extracted</targetReference>
+            </connector>
+            <label>Yes</label>
+        </rules>
+    </decisions>
+    <decisions>
         <name>Is_Email_Extracted</name>
         <label>Is Email Extracted?</label>
         <locationX>182</locationX>
@@ -56,28 +78,6 @@
                 <targetReference>Get_Actual_Sender_Contact</targetReference>
             </connector>
             <label>Valid Email</label>
-        </rules>
-    </decisions>
-    <decisions>
-        <name>Is_This_a_Service_User</name>
-        <label>Is This a Service User?</label>
-        <locationX>380</locationX>
-        <locationY>755</locationY>
-        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
-        <rules>
-            <name>Yes</name>
-            <conditionLogic>and</conditionLogic>
-            <conditions>
-                <leftValueReference>ServiceUserMatchVar</leftValueReference>
-                <operator>IsNull</operator>
-                <rightValue>
-                    <booleanValue>false</booleanValue>
-                </rightValue>
-            </conditions>
-            <connector>
-                <targetReference>Is_Email_Extracted</targetReference>
-            </connector>
-            <label>Yes</label>
         </rules>
     </decisions>
     <environments>Default</environments>
@@ -324,7 +324,7 @@
         <recordTriggerType>CreateAndUpdate</recordTriggerType>
         <triggerType>RecordAfterSave</triggerType>
     </start>
-    <status>Draft</status>
+    <status>Active</status>
     <variables>
         <name>ActualSenderContact</name>
         <dataType>String</dataType>

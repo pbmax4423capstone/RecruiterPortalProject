@@ -25,19 +25,14 @@ export default class InterviewLeaderboard extends LightningElement {
 
     loadLeaderboard() {
         this.isLoading = true;
-        console.log('=== loadLeaderboard START ===');
         getCurrentMonthLeaderboard()
             .then(data => {
-                console.log('Data received from Apex:', JSON.stringify(data));
-                console.log('Data length:', data ? data.length : 'null/undefined');
                 this.leaderboardData = data.map((entry, index) => {
                     return {
                         ...entry,
                         rank: index + 1
                     };
                 });
-                console.log('leaderboardData after mapping:', JSON.stringify(this.leaderboardData));
-                console.log('leaderboardData length:', this.leaderboardData.length);
                 this.error = undefined;
                 this.isLoading = false;
             })
@@ -63,15 +58,11 @@ export default class InterviewLeaderboard extends LightningElement {
 
     // Calculate totals across all users
     get totalInterviewsThisWeek() {
-        const total = this.leaderboardData.reduce((sum, entry) => sum + (entry.interviewsThisWeek || 0), 0);
-        console.log('totalInterviewsThisWeek calculated:', total, 'from', this.leaderboardData.length, 'entries');
-        return total;
+        return this.leaderboardData.reduce((sum, entry) => sum + (entry.interviewsThisWeek || 0), 0);
     }
 
     get totalInterviewsThisMonth() {
-        const total = this.leaderboardData.reduce((sum, entry) => sum + (entry.totalInterviews || 0), 0);
-        console.log('totalInterviewsThisMonth calculated:', total, 'from', this.leaderboardData.length, 'entries');
-        return total;
+        return this.leaderboardData.reduce((sum, entry) => sum + (entry.totalInterviews || 0), 0);
     }
 
     get totalCiFirst() {
@@ -218,4 +209,5 @@ export default class InterviewLeaderboard extends LightningElement {
     get typeModalCount() {
         return this.typeInterviews.length;
     }
+}
 }

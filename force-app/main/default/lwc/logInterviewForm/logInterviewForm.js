@@ -19,3 +19,4 @@ export default class LogInterviewForm extends LightningElement {
         this.dispatchEvent(new CloseActionScreenEvent());
     }
 }
+}

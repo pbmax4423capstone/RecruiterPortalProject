@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Outcome__c</fullName>
+    <label>Outcome</label>
+    <required>false</required>
+    <trackTrending>false</trackTrending>
+    <type>Picklist</type>
+    <valueSet>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>Proceed</fullName>
+                <default>false</default>
+                <label>Proceed</label>
+            </value>
+            <value>
+                <fullName>Proceed to SI3</fullName>
+                <default>false</default>
+                <label>Proceed to SI3</label>
+            </value>
+            <value>
+                <fullName>Proceed to Career</fullName>
+                <default>false</default>
+                <label>Proceed to Career</label>
+            </value>
+            <value>
+                <fullName>Hold</fullName>
+                <default>false</default>
+                <label>Hold</label>
+            </value>
+            <value>
+                <fullName>Decline</fullName>
+                <default>false</default>
+                <label>Decline</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

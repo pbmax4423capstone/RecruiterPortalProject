@@ -187,7 +187,28 @@
                   </lightning-combobox>
                 </div>
               </div>
-
+              <div class="slds-grid slds-wrap slds-gutters_small slds-m-bottom_small">
+                <div class="slds-col slds-size_1-of-1">
+                  <fieldset class="slds-form-element">
+                    <legend class="slds-form-element__label slds-form-element__legend">Call Result</legend>
+                    <div class="slds-form-element__control">
+                      <div class="slds-grid slds-wrap slds-gutters_x-small">
+                        <template for:each={callResultOptions} for:item="option">
+                          <div key={option.value} class="slds-col slds-size_1-of-2 slds-medium-size_1-of-3">
+                            <lightning-input 
+                              type="checkbox" 
+                              label={option.label} 
+                              value={option.value}
+                              checked={option.checked}
+                              onchange={handleCallResultChange}>
+                            </lightning-input>
+                          </div>
+                        </template>
+                      </div>
+                    </div>
+                  </fieldset>
+                </div>
+              </div>
               <div class="slds-grid slds-wrap slds-gutters_small">
                 <div class="slds-col slds-size_1-of-1">
                   <lightning-textarea 

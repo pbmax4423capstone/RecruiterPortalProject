@@ -3,9 +3,9 @@
     <fullName>Copy_of_Newport_ACTIVE</fullName>
     <columns>NAME</columns>
     <columns>Next_Meeting_Date__c</columns>
-    <columns>Notes__c</columns>
     <columns>Mobile__c</columns>
     <columns>Email__c</columns>
+    <columns>Notes__c</columns>
     <columns>Website__c</columns>
     <columns>Gender__c</columns>
     <columns>CREATED_DATE</columns>

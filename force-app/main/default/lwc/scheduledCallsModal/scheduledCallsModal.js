@@ -16,6 +16,7 @@ export default class ScheduledCallsModal extends LightningElement {
   @track showFollowUpModal = false;
   @track followUpSubject = '';
   @track followUpDate = null;
+  @track selectedCallResults = [];
 
   statusOptions = [
     { label: 'Not Started', value: 'Not Started' },
@@ -31,6 +32,15 @@ export default class ScheduledCallsModal extends LightningElement {
     { label: 'Low', value: 'Low' }
   ];
 
+  @track callResultOptions = [
+    { label: 'Left Voicemail', value: 'Left Voicemail', checked: false },
+    { label: 'No Answer', value: 'No Answer', checked: false },
+    { label: 'Busy', value: 'Busy', checked: false },
+    { label: 'Wrong Number', value: 'Wrong Number', checked: false },
+    { label: 'Not Interested', value: 'Not Interested', checked: false },
+    { label: 'Interested - Follow Up', value: 'Interested - Follow Up', checked: false },
+    { label: 'Meeting Scheduled', value: 'Meeting Scheduled', checked: false }
+  ];
   // Computed properties for counts
   get scheduledCallsCount() {
     return this.scheduledCalls.length;
@@ -66,6 +76,23 @@ export default class ScheduledCallsModal extends LightningElement {
       this.showRecordModal = true;
       try {
         this.taskRecord = await getTaskDetails({ taskId: taskId });
+        
+        // Initialize checkbox states based on existing CallDisposition
+        if (this.taskRecord.CallDisposition) {
+          const existingResults = this.taskRecord.CallDisposition.split(';').map(r => r.trim());
+          this.selectedCallResults = existingResults;
+          this.callResultOptions = this.callResultOptions.map(option => ({
+            ...option,
+            checked: existingResults.includes(option.value)
+          }));
+        } else {
+          // Reset all checkboxes
+          this.selectedCallResults = [];
+          this.callResultOptions = this.callResultOptions.map(option => ({
+            ...option,
+            checked: false
+          }));
+        }
       } catch (error) {
         console.error('Error loading task:', error);
         this.showToast('Error', 'Failed to load task details', 'error');
@@ -88,11 +115,37 @@ export default class ScheduledCallsModal extends LightningElement {
     this.taskRecord = { ...this.taskRecord, [field]: value };
   }
 
+  // Handle call result checkbox changes
+  handleCallResultChange(event) {
+    const value = event.target.value;
+    const checked = event.target.checked;
+    
+    this.callResultOptions = this.callResultOptions.map(option => {
+      if (option.value === value) {
+        return { ...option, checked: checked };
+      }
+      return option;
+    });
+
+    // Update selected results array
+    if (checked) {
+      this.selectedCallResults = [...this.selectedCallResults, value];
+    } else {
+      this.selectedCallResults = this.selectedCallResults.filter(r => r !== value);
+    }
+
+    // Update task record with comma-separated values
+    this.taskRecord = { 
+      ...this.taskRecord, 
+      CallDisposition: this.selectedCallResults.join('; ') 
+    };
+  }
+
   // Handle Schedule Follow Up button click
   handleScheduleFollowUp() {
-    // Set default subject using the original call subject
-    const originalSubject = this.taskRecord?.Subject || 'Call';
-    this.followUpSubject = `Follow up to ${originalSubject}`;
+    // Set default subject
+    const contactName = this.taskRecord?.Who?.Name || '';
+    this.followUpSubject = `Follow up with ${contactName}`.trim();
     this.followUpDate = null;
     this.showFollowUpModal = true;
   }
@@ -124,7 +177,8 @@ export default class ScheduledCallsModal extends LightningElement {
         status: this.taskRecord.Status,
         activityDate: this.taskRecord.ActivityDate,
         priority: this.taskRecord.Priority,
-        description: this.taskRecord.Description
+        description: this.taskRecord.Description,
+        callDisposition: this.taskRecord.CallDisposition
       });
       this.showToast('Success', 'Call updated successfully', 'success');
       this.closeRecordModal();

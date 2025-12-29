@@ -1177,6 +1177,7 @@ public without sharing class RecruiterDashboardController {
                            'WHERE OwnerId = \'' + String.escapeSingleQuotes(UserInfo.getUserId()) + '\' ' +
                            'AND TaskSubtype = \'Call\' ' +
                            'AND IsClosed = false ' +
+                           'AND TaskSubtype = \'Call\' ' +
                            whereClause + ' ' +
                            'ORDER BY ActivityDate ASC LIMIT 1000';
             
@@ -2172,7 +2173,6 @@ public without sharing class RecruiterDashboardController {
             throw new AuraHandledException('Failed to update task: ' + e.getMessage());
         }
     }
-
     @AuraEnabled(cacheable=false)
     public static List<Map<String, Object>> getRecentNotes() {
         List<Map<String, Object>> notesList = new List<Map<String, Object>>();
@@ -2196,8 +2196,6 @@ public without sharing class RecruiterDashboardController {
             
             System.debug('Found ' + contentVersions.size() + ' notes');
             
-            // Get ContentDocumentIds to query for related records
-            Set<Id> contentDocumentIds = new Set<Id>();
             for (ContentVersion cv : contentVersions) {
                 contentDocumentIds.add(cv.ContentDocumentId);
             }
@@ -2502,3 +2500,6 @@ public without sharing class RecruiterDashboardController {
         return result;
     }
 }
+=======
+}
+>>>>>>> dae1b7b (Add recruiter portal migration tooling and dashboards)

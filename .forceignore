@@ -16,6 +16,9 @@ package.xml
 # Exclude migration class (depends on Event fields)
 **/classes/CandidateToEventInterviewMigration.*
 
+# Exclude permission set references to Event fields
+**/permissionsets/Recruiter_Portal_User.permissionset-meta.xml
+
 # Exclude tabs and flexipages with issues
 **/tabs/Interview_Dashboard.tab-meta.xml
 **/tabs/Recruiter_Portal_LWC.tab-meta.xml
