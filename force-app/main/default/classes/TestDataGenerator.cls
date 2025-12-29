@@ -87,7 +87,8 @@ public class TestDataGenerator {
                     Interview_Type__c = 'Attraction',
                     Interview_Status__c = 'Scheduled',
                     Conducted_By__c = userMap.get('Rachyll Tenny') != null ? userMap.get('Rachyll Tenny') : defaultUserId,
-                    Notes__c = 'Test scheduled interview ' + (i + 1)
+                    Notes__c = 'Test scheduled interview ' + (i + 1),
+                    Date_Time_Scheduled__c = System.now().addDays(i + 1)
                 );
                 interviews.add(interview);
             }
@@ -100,7 +101,8 @@ public class TestDataGenerator {
                     Interview_Status__c = 'Completed',
                     Conducted_By__c = userMap.get('Timothy Denton') != null ? userMap.get('Timothy Denton') : defaultUserId,
                     Outcome__c = 'Proceed',
-                    Notes__c = 'Test past due interview ' + (i + 1)
+                    Notes__c = 'Test past due interview ' + (i + 1),
+                    Date_Time_Scheduled__c = System.now().addDays(-30 - i)
                 );
                 interviews.add(interview);
             }
@@ -112,7 +114,8 @@ public class TestDataGenerator {
                     Interview_Type__c = 'SI3',
                     Interview_Status__c = 'Scheduled',
                     Conducted_By__c = userMap.get('Elizabeth Kagele') != null ? userMap.get('Elizabeth Kagele') : defaultUserId,
-                    Notes__c = 'Test AI interview ' + (i + 1)
+                    Notes__c = 'Test AI interview ' + (i + 1),
+                    Date_Time_Scheduled__c = System.now().addDays(10 + i)
                 );
                 interviews.add(interview);
             }
@@ -124,7 +127,8 @@ public class TestDataGenerator {
                     Interview_Type__c = 'SI1',
                     Interview_Status__c = 'Scheduled',
                     Conducted_By__c = userMap.get('Bradley Sofonia') != null ? userMap.get('Bradley Sofonia') : defaultUserId,
-                    Notes__c = 'Test SI1 interview ' + (i + 1)
+                    Notes__c = 'Test SI1 interview ' + (i + 1),
+                    Date_Time_Scheduled__c = System.now().addDays(15 + i)
                 );
                 interviews.add(interview);
             }
@@ -136,7 +140,8 @@ public class TestDataGenerator {
                     Interview_Type__c = 'SI2',
                     Interview_Status__c = 'Scheduled',
                     Conducted_By__c = userMap.get('Rachyll Tenny') != null ? userMap.get('Rachyll Tenny') : defaultUserId,
-                    Notes__c = 'Test SI2 interview ' + (i + 1)
+                    Notes__c = 'Test SI2 interview ' + (i + 1),
+                    Date_Time_Scheduled__c = System.now().addDays(20 + i)
                 );
                 interviews.add(interview);
             }
@@ -147,7 +152,8 @@ public class TestDataGenerator {
                 Interview_Type__c = 'Career',
                 Interview_Status__c = 'Scheduled',
                 Conducted_By__c = userMap.get('Timothy Denton') != null ? userMap.get('Timothy Denton') : defaultUserId,
-                Notes__c = 'Test Career interview 1'
+                Notes__c = 'Test Career interview 1',
+                Date_Time_Scheduled__c = System.now().addDays(25)
             );
             interviews.add(careerInterview);
             

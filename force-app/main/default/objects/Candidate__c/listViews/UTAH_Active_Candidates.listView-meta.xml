@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ListView xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>UTAH_Active_Candidates</fullName>
+    <columns>NAME</columns>
+    <columns>Next_Meeting_Date__c</columns>
+    <columns>Notes__c</columns>
+    <columns>Next_Step__c</columns>
+    <columns>Mobile__c</columns>
+    <columns>Email__c</columns>
+    <columns>Status__c</columns>
+    <columns>Website__c</columns>
+    <columns>Attraction_Interview_Date_Completed__c</columns>
+    <filterScope>Everything</filterScope>
+    <filters>
+        <field>Status__c</field>
+        <operation>equals</operation>
+        <value>Active/In Process</value>
+    </filters>
+    <filters>
+        <field>Sales_Manager__c</field>
+        <operation>contains</operation>
+        <value>Brad Sofonia,Scott Primm</value>
+    </filters>
+    <filters>
+        <field>Office_Location_Picklist__c</field>
+        <operation>contains</operation>
+        <value>Utah</value>
+    </filters>
+    <label>UTAH Active Candidates MASTER</label>
+</ListView>

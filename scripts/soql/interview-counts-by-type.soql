@@ -1,0 +1,180 @@
+// Interview Count Queries by Type
+// Based on Candidate__c object fields tracking completed interviews
+
+// =============================================================================
+// 1. CIT (1st) - Attraction Interview
+// Completed Fields: AI_Completed_Date_Time__c OR Attraction_Interview_Date_Completed__c
+// Conducted By Field: AI_Conducted_by__c
+// NOTE: Two different completed date fields are in use - checking both
+// =============================================================================
+
+// CIT - This Week
+SELECT COUNT() 
+FROM Candidate__c 
+WHERE AI_Completed_Date_Time__c = THIS_WEEK 
+   OR Attraction_Interview_Date_Completed__c = THIS_WEEK
+
+// CIT - This Month
+SELECT COUNT() 
+FROM Candidate__c 
+WHERE AI_Completed_Date_Time__c = THIS_MONTH 
+   OR Attraction_Interview_Date_Completed__c = THIS_MONTH
+
+// CIT - This Year
+SELECT COUNT() 
+FROM Candidate__c 
+WHERE AI_Completed_Date_Time__c = THIS_YEAR 
+   OR Attraction_Interview_Date_Completed__c = THIS_YEAR
+
+
+// =============================================================================
+// 2. Align (2nd) - Second Interview
+// Completed Field: SI_1_Date_Completed__c
+// Conducted By Field: SI_1_Conducted_By__c
+// =============================================================================
+
+// Align - This Week
+SELECT COUNT() 
+FROM Candidate__c 
+WHERE SI_1_Date_Completed__c = THIS_WEEK
+
+// Align - This Month
+SELECT COUNT() 
+FROM Candidate__c 
+WHERE SI_1_Date_Completed__c = THIS_MONTH
+
+// Align - This Year
+SELECT COUNT() 
+FROM Candidate__c 
+WHERE SI_1_Date_Completed__c = THIS_YEAR
+
+
+// =============================================================================
+// 3. Plan (3rd) - Third Interview
+// Completed Field: SI_2_Date_Completed__c
+// Conducted By Field: SI_2_Interviewer__c, SI2_Conducted_By__c
+// Note: Two different "Conducted By" fields used - may need data cleanup
+// =============================================================================
+
+// Plan - This Week
+SELECT COUNT() 
+FROM Candidate__c 
+WHERE SI_2_Date_Completed__c = THIS_WEEK
+
+// Plan - This Month
+SELECT COUNT() 
+FROM Candidate__c 
+WHERE SI_2_Date_Completed__c = THIS_MONTH
+
+// Plan - This Year
+SELECT COUNT() 
+FROM Candidate__c 
+WHERE SI_2_Date_Completed__c = THIS_YEAR
+
+
+// =============================================================================
+// 4. Present (4th) - Fourth Interview
+// Completed Field: SI_3_Completed__c
+// Conducted By Field: SI_3_Conducted_By__c, SI_3_Interviewer__c, SI3_Conducted_By__c
+// Note: Three different "Conducted By" fields used - needs data cleanup
+// =============================================================================
+
+// Present - This Week
+SELECT COUNT() 
+FROM Candidate__c 
+WHERE SI_3_Completed__c = THIS_WEEK
+
+// Present - This Month
+SELECT COUNT() 
+FROM Candidate__c 
+WHERE SI_3_Completed__c = THIS_MONTH
+
+// Present - This Year
+SELECT COUNT() 
+FROM Candidate__c 
+WHERE SI_3_Completed__c = THIS_YEAR
+
+
+// =============================================================================
+// 5. Optional (5th) - Career Presentation
+// Completed Field: Career_Presentation_Date_Completed__c
+// Conducted By Field: Career_Presentation_Conducted_By__c, CP_Conducted_By__c, CP_Interviewer__c
+// Note: Three different "Conducted By" fields used - needs data cleanup
+// =============================================================================
+
+// Optional - This Week
+SELECT COUNT() 
+FROM Candidate__c 
+WHERE Career_Presentation_Date_Completed__c = THIS_WEEK
+
+// Optional - This Month
+SELECT COUNT() 
+FROM Candidate__c 
+WHERE Career_Presentation_Date_Completed__c = THIS_MONTH
+
+// Optional - This Year
+SELECT COUNT() 
+FROM Candidate__c 
+WHERE Career_Presentation_Date_Completed__c = THIS_YEAR
+
+
+// =============================================================================
+// COMBINED QUERY - All Interview Types with Details
+// =============================================================================
+
+// Get detailed breakdown by interview type for this week
+SELECT 
+    COUNT_DISTINCT(Id) total_candidates,
+    COUNT(CASE WHEN AI_Completed_Date_Time__c = THIS_WEEK THEN 1 END) cit_this_week,
+    COUNT(CASE WHEN SI_1_Date_Completed__c = THIS_WEEK THEN 1 END) align_this_week,
+    COUNT(CASE WHEN SI_2_Date_Completed__c = THIS_WEEK THEN 1 END) plan_this_week,
+    COUNT(CASE WHEN SI_3_Completed__c = THIS_WEEK THEN 1 END) present_this_week,
+    COUNT(CASE WHEN Career_Presentation_Date_Completed__c = THIS_WEEK THEN 1 END) optional_this_week
+FROM Candidate__c
+WHERE AI_Completed_Date_Time__c = THIS_WEEK
+    OR SI_1_Date_Completed__c = THIS_WEEK
+    OR SI_2_Date_Completed__c = THIS_WEEK
+    OR SI_3_Completed__c = THIS_WEEK
+    OR Career_Presentation_Date_Completed__c = THIS_WEEK
+
+
+// =============================================================================
+// SUMMARY REPORT QUERY - All Time Periods
+// Returns counts for each interview type across all time periods
+// =============================================================================
+
+// Note: This would need to be run as separate queries or through Apex
+// to get the exact counts. The following shows the structure:
+
+/*
+Interview Type | This Week | This Month | This Year
+CIT (1st)      | [count]   | [count]    | [count]
+Align (2nd)    | [count]   | [count]    | [count]
+Plan (3rd)     | [count]   | [count]    | [count]
+Present (4th)  | [count]   | [count]    | [count]
+Optional (5th) | [count]   | [count]    | [count]
+*/
+
+
+// =============================================================================
+// DATA QUALITY NOTES
+// =============================================================================
+/*
+INCONSISTENCIES IDENTIFIED:
+1. Plan (3rd): Uses 2 different "Conducted By" fields
+   - SI_2_Interviewer__c
+   - SI2_Conducted_By__c
+
+2. Present (4th): Uses 3 different "Conducted By" fields
+   - SI_3_Conducted_By__c
+   - SI_3_Interviewer__c
+   - SI3_Conducted_By__c
+
+3. Optional (5th): Uses 3 different "Conducted By" fields
+   - Career_Presentation_Conducted_By__c
+   - CP_Conducted_By__c
+   - CP_Interviewer__c
+
+RECOMMENDATION:
+Standardize "Conducted By" field usage and migrate data to single field per interview type.
+*/

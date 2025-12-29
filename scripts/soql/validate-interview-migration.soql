@@ -1,0 +1,109 @@
+// Validation SOQL for Interview Migration to Event (date-only, all-day)
+// Use these queries after running the migration to validate counts per stage
+// and to spot-check sample Events. Adjust LIMITs as needed.
+
+// 1) Counts by Stage from source (Candidate__c)
+//// CIT (AI) completed count
+SELECT COUNT()
+FROM Candidate__c
+WHERE AI_Completed_Date_Time__c != NULL
+   OR Attraction_Interview_Date_Completed__c != NULL
+
+//// SI1 completed count
+SELECT COUNT()
+FROM Candidate__c
+WHERE SI_1_Date_Completed__c != NULL
+
+//// SI2 completed count
+SELECT COUNT()
+FROM Candidate__c
+WHERE SI_2_Date_Completed__c != NULL
+
+//// SI3 completed count
+SELECT COUNT()
+FROM Candidate__c
+WHERE SI_3_Completed__c != NULL
+
+//// Career Presentation (CP) completed count
+SELECT COUNT()
+FROM Candidate__c
+WHERE Career_Presentation_Date_Completed__c != NULL
+
+
+// 2) Counts by Stage from target (Event) using deterministic External_Id__c
+//// CIT
+SELECT COUNT()
+FROM Event
+WHERE External_Id__c LIKE 'Candidate:%:Stage:AI'
+AND IsAllDayEvent = true
+
+//// SI1
+SELECT COUNT()
+FROM Event
+WHERE External_Id__c LIKE 'Candidate:%:Stage:SI1'
+AND IsAllDayEvent = true
+
+//// SI2
+SELECT COUNT()
+FROM Event
+WHERE External_Id__c LIKE 'Candidate:%:Stage:SI2'
+AND IsAllDayEvent = true
+
+//// SI3
+SELECT COUNT()
+FROM Event
+WHERE External_Id__c LIKE 'Candidate:%:Stage:SI3'
+AND IsAllDayEvent = true
+
+//// CP
+SELECT COUNT()
+FROM Event
+WHERE External_Id__c LIKE 'Candidate:%:Stage:CP'
+AND IsAllDayEvent = true
+
+
+// 3) Sample records per stage for spot-checking critical fields
+//// CIT samples
+SELECT Id, Subject, ActivityDate, IsAllDayEvent, OwnerId, WhoId,
+       Interview_Type__c, Interview_Status__c, Interviewer__c,
+       External_Id__c, Candidate__c, Notes__c
+FROM Event
+WHERE External_Id__c LIKE 'Candidate:%:Stage:AI'
+ORDER BY CreatedDate DESC
+LIMIT 20
+
+//// SI1 samples
+SELECT Id, Subject, ActivityDate, IsAllDayEvent, OwnerId, WhoId,
+       Interview_Type__c, Interview_Status__c, Interviewer__c,
+       External_Id__c, Candidate__c, Notes__c
+FROM Event
+WHERE External_Id__c LIKE 'Candidate:%:Stage:SI1'
+ORDER BY CreatedDate DESC
+LIMIT 20
+
+//// SI2 samples
+SELECT Id, Subject, ActivityDate, IsAllDayEvent, OwnerId, WhoId,
+       Interview_Type__c, Interview_Status__c, Interviewer__c,
+       External_Id__c, Candidate__c, Notes__c
+FROM Event
+WHERE External_Id__c LIKE 'Candidate:%:Stage:SI2'
+ORDER BY CreatedDate DESC
+LIMIT 20
+
+//// SI3 samples
+SELECT Id, Subject, ActivityDate, IsAllDayEvent, OwnerId, WhoId,
+       Interview_Type__c, Interview_Status__c, Interviewer__c,
+       External_Id__c, Candidate__c, Notes__c
+FROM Event
+WHERE External_Id__c LIKE 'Candidate:%:Stage:SI3'
+ORDER BY CreatedDate DESC
+LIMIT 20
+
+//// CP samples
+SELECT Id, Subject, ActivityDate, IsAllDayEvent, OwnerId, WhoId,
+       Interview_Type__c, Interview_Status__c, Interviewer__c,
+       External_Id__c, Candidate__c, Notes__c
+FROM Event
+WHERE External_Id__c LIKE 'Candidate:%:Stage:CP'
+ORDER BY CreatedDate DESC
+LIMIT 20

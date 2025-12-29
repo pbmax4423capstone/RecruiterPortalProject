@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Next_Step__c</fullName>
+    <label>Next Step</label>
+    <required>false</required>
+    <trackFeedHistory>true</trackFeedHistory>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Picklist</type>
+    <valueSet>
+        <restricted>true</restricted>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>Close Record</fullName>
+                <default>false</default>
+                <label>Close Record</label>
+            </value>
+            <value>
+                <fullName>Keep In Touch</fullName>
+                <default>false</default>
+                <label>Keep In Touch</label>
+            </value>
+            <value>
+                <fullName>F/up to schedule AI</fullName>
+                <default>false</default>
+                <label>F/up to schedule AI</label>
+            </value>
+            <value>
+                <fullName>F/up to schedule SI 1</fullName>
+                <default>false</default>
+                <label>F/up to schedule SI 1</label>
+            </value>
+            <value>
+                <fullName>F/up to schedule SI 2</fullName>
+                <default>false</default>
+                <label>F/up to schedule SI 2</label>
+            </value>
+            <value>
+                <fullName>F/up to schedule CP</fullName>
+                <default>false</default>
+                <label>F/up to schedule CP</label>
+            </value>
+            <value>
+                <fullName>F/up of MDE - P200</fullName>
+                <default>false</default>
+                <label>F/up of MDE - P200</label>
+            </value>
+            <value>
+                <fullName>F/up of MS</fullName>
+                <default>false</default>
+                <label>F/up of MS</label>
+            </value>
+            <value>
+                <fullName>Contracted_A</fullName>
+                <default>false</default>
+                <label>Contracted A</label>
+            </value>
+            <value>
+                <fullName>F/up to schedule Pre-Launch Meeting</fullName>
+                <default>false</default>
+                <label>F/up to schedule Pre-Launch Meeting</label>
+            </value>
+            <value>
+                <fullName>In Background Check</fullName>
+                <default>false</default>
+                <label>In Background Check</label>
+            </value>
+            <value>
+                <fullName>Post Background Check</fullName>
+                <default>false</default>
+                <label>Post Background Check</label>
+            </value>
+            <value>
+                <fullName>SOE / Financial / Crim</fullName>
+                <default>false</default>
+                <label>SOE / Financial / Crim</label>
+            </value>
+            <value>
+                <fullName>Sent to ASO</fullName>
+                <default>false</default>
+                <label>Sent to ASO</label>
+            </value>
+            <value>
+                <fullName>Sent B Codes</fullName>
+                <default>false</default>
+                <label>Sent B Codes</label>
+            </value>
+            <value>
+                <fullName>Sent A Codes</fullName>
+                <default>false</default>
+                <label>Sent A Codes</label>
+            </value>
+            <value>
+                <fullName>Attend Pre-Launch</fullName>
+                <default>false</default>
+                <label>Attend Pre-Launch</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

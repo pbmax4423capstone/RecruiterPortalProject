@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<GlobalValueSet xmlns="http://soap.sforce.com/2006/04/metadata">
+    <customValue>
+        <fullName>Bradley Sofonia</fullName>
+        <default>false</default>
+        <label>Bradley Sofonia</label>
+    </customValue>
+    <customValue>
+        <fullName>Brooke Ianni</fullName>
+        <default>false</default>
+        <label>Brooke Ianni</label>
+    </customValue>
+    <customValue>
+        <fullName>Diljeet Masuda</fullName>
+        <default>false</default>
+        <label>Diljeet Masuda</label>
+    </customValue>
+    <customValue>
+        <fullName>Elizabeth Kagele</fullName>
+        <default>false</default>
+        <label>Elizabeth Kagele</label>
+    </customValue>
+    <customValue>
+        <fullName>Jonathan Gruber</fullName>
+        <default>false</default>
+        <label>Jonathan Gruber</label>
+    </customValue>
+    <customValue>
+        <fullName>Manuel Hernandez</fullName>
+        <default>false</default>
+        <label>Manuel Hernandez</label>
+    </customValue>
+    <customValue>
+        <fullName>Michael Yang</fullName>
+        <default>false</default>
+        <label>Michael Yang</label>
+    </customValue>
+    <customValue>
+        <fullName>Rachyll Tenny</fullName>
+        <default>false</default>
+        <label>Rachyll Tenny</label>
+    </customValue>
+    <customValue>
+        <fullName>Scott Grove</fullName>
+        <default>false</default>
+        <label>Scott Grove</label>
+    </customValue>
+    <customValue>
+        <fullName>Scott Primm</fullName>
+        <default>false</default>
+        <label>Scott Primm</label>
+    </customValue>
+    <customValue>
+        <fullName>Simon Reyes</fullName>
+        <default>false</default>
+        <label>Simon Reyes</label>
+    </customValue>
+    <customValue>
+        <fullName>Son Le</fullName>
+        <default>false</default>
+        <label>Son Le</label>
+    </customValue>
+    <customValue>
+        <fullName>Tim Denton</fullName>
+        <default>false</default>
+        <label>Tim Denton</label>
+    </customValue>
+    <customValue>
+        <fullName>Van Hess</fullName>
+        <default>false</default>
+        <label>Van Hess</label>
+    </customValue>
+    <description>Interviewers of candidates</description>
+    <masterLabel>Interviewers</masterLabel>
+    <sorted>false</sorted>
+</GlobalValueSet>

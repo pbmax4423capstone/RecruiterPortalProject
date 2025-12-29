@@ -3152,9 +3152,8 @@ export default class RecruiterDashboard extends NavigationMixin(LightningElement
   }
 
   openCreateNewCandidateFlow() {
-    console.log('Create New Candidate button clicked - opening modal');
+    console.log('Create New Candidate button clicked - opening Flow in modal');
     this.showCreateCandidateModal = true;
-    this.resetCandidateForm();
   }
 
   // Method to navigate to Contact creation (immediate working solution)
@@ -3218,6 +3217,16 @@ export default class RecruiterDashboard extends NavigationMixin(LightningElement
   closeCreateCandidateModal() {
     this.showCreateCandidateModal = false;
     this.resetCandidateForm();
+  }
+
+  handleFlowStatusChange(event) {
+    console.log('Flow status changed:', event.detail.status);
+    if (event.detail.status === 'FINISHED' || event.detail.status === 'FINISHED_SCREEN') {
+      // Flow completed successfully
+      this.showToast('Success', 'Candidate created successfully!', 'success');
+      this.closeCreateCandidateModal();
+      this.refreshDashboard();
+    }
   }
 
   resetCandidateForm() {

@@ -1,5 +1,5 @@
-public inherited sharing class RecruiterDashboardController {
-    
+public without sharing class RecruiterDashboardController {
+
     @AuraEnabled
     public static Map<String, Object> getDashboardData() {
         Map<String, Object> dashboardData = new Map<String, Object>();
@@ -309,6 +309,8 @@ public inherited sharing class RecruiterDashboardController {
             // Get current month date range
             Date monthStart = Date.today().toStartOfMonth();
             Date monthEnd = monthStart.addMonths(1).addDays(-1);
+            DateTime monthStartDT = DateTime.newInstance(monthStart.year(), monthStart.month(), monthStart.day(), 0, 0, 0);
+            DateTime monthEndDT = DateTime.newInstance(monthEnd.year(), monthEnd.month(), monthEnd.day(), 23, 59, 59);
             
             // Initialize structure for each interview type
             List<Map<String, Object>> attractionByInterviewer = new List<Map<String, Object>>();
@@ -317,63 +319,37 @@ public inherited sharing class RecruiterDashboardController {
             List<Map<String, Object>> si3ByInterviewer = new List<Map<String, Object>>();
             List<Map<String, Object>> careerByInterviewer = new List<Map<String, Object>>();
             
-            // Get Attraction interviews by AI_Conducted_By - THIS MONTH ONLY
-            // AI_Conducted_By__c is a multi-select picklist, so we need to manually process
-            List<Candidate__c> attractionCandidates = [
-                SELECT AI_Conducted_By__c
-                FROM Candidate__c 
-                WHERE Attraction_Interview_Date_Completed__c >= :monthStart
-                AND Attraction_Interview_Date_Completed__c <= :monthEnd
+            // Query Interview__c records grouped by Interview_Type__c and Conducted_By
+            // Get Attraction interviews (Interview_Type__c = 'Attraction')
+            List<AggregateResult> attractionResults = [
+                SELECT Conducted_By__r.Name interviewer, COUNT(Id) cnt
+                FROM Interview__c 
+                WHERE Interview_Type__c = 'Attraction'
+                AND Interview_Status__c = 'Completed'
+                AND CreatedDate >= :monthStartDT
+                AND CreatedDate <= :monthEndDT
+                AND Conducted_By__c != null
+                GROUP BY Conducted_By__r.Name
+                ORDER BY COUNT(Id) DESC
             ];
             
-            Map<String, Integer> attractionCounts = new Map<String, Integer>();
-            Integer unassignedCount = 0;
-            
-            for (Candidate__c cand : attractionCandidates) {
-                if (String.isNotBlank(cand.AI_Conducted_By__c)) {
-                    // Split multi-select picklist values
-                    List<String> interviewers = cand.AI_Conducted_By__c.split(';');
-                    for (String interviewer : interviewers) {
-                        interviewer = interviewer.trim();
-                        if (!attractionCounts.containsKey(interviewer)) {
-                            attractionCounts.put(interviewer, 0);
-                        }
-                        attractionCounts.put(interviewer, attractionCounts.get(interviewer) + 1);
-                    }
-                } else {
-                    unassignedCount++;
-                }
-            }
-            
-            // Convert attraction counts to list format, sorted by count
-            List<Map<String, Object>> attractionList = new List<Map<String, Object>>();
-            for (String interviewer : attractionCounts.keySet()) {
-                attractionList.add(new Map<String, Object>{
-                    'interviewer' => interviewer,
-                    'count' => attractionCounts.get(interviewer)
+            for (AggregateResult ar : attractionResults) {
+                attractionByInterviewer.add(new Map<String, Object>{
+                    'interviewer' => (String)ar.get('interviewer'),
+                    'count' => (Integer)ar.get('cnt')
                 });
             }
             
-            // Add unassigned if any
-            if (unassignedCount > 0) {
-                attractionList.add(new Map<String, Object>{
-                    'interviewer' => 'Unassigned',
-                    'count' => unassignedCount
-                });
-            }
-            
-            // Sort by count descending
-            attractionList.sort(new InterviewCountComparator());
-            attractionByInterviewer = attractionList;
-            
-            // Get SI1 interviews by interviewer - THIS MONTH ONLY
+            // Get SI1 interviews (Interview_Type__c = 'SI1')
             List<AggregateResult> si1Results = [
-                SELECT Sales_Manager__c interviewer, COUNT(Id) cnt
-                FROM Candidate__c 
-                WHERE SI_1_Date_Completed__c >= :monthStart
-                AND SI_1_Date_Completed__c <= :monthEnd
-                AND Sales_Manager__c != null
-                GROUP BY Sales_Manager__c
+                SELECT Conducted_By__r.Name interviewer, COUNT(Id) cnt
+                FROM Interview__c 
+                WHERE Interview_Type__c = 'SI1'
+                AND Interview_Status__c = 'Completed'
+                AND CreatedDate >= :monthStartDT
+                AND CreatedDate <= :monthEndDT
+                AND Conducted_By__c != null
+                GROUP BY Conducted_By__r.Name
                 ORDER BY COUNT(Id) DESC
             ];
             
@@ -384,14 +360,16 @@ public inherited sharing class RecruiterDashboardController {
                 });
             }
             
-            // Get SI2 interviews by Sales Manager - THIS MONTH ONLY
+            // Get SI2 interviews (Interview_Type__c = 'SI2')
             List<AggregateResult> si2Results = [
-                SELECT Sales_Manager__c interviewer, COUNT(Id) cnt
-                FROM Candidate__c 
-                WHERE SI_2_Date_Completed__c >= :monthStart
-                AND SI_2_Date_Completed__c <= :monthEnd
-                AND Sales_Manager__c != null
-                GROUP BY Sales_Manager__c
+                SELECT Conducted_By__r.Name interviewer, COUNT(Id) cnt
+                FROM Interview__c 
+                WHERE Interview_Type__c = 'SI2'
+                AND Interview_Status__c = 'Completed'
+                AND CreatedDate >= :monthStartDT
+                AND CreatedDate <= :monthEndDT
+                AND Conducted_By__c != null
+                GROUP BY Conducted_By__r.Name
                 ORDER BY COUNT(Id) DESC
             ];
             
@@ -402,14 +380,16 @@ public inherited sharing class RecruiterDashboardController {
                 });
             }
             
-            // Get SI3 interviews by Sales Manager - THIS MONTH ONLY
+            // Get SI3 interviews (Interview_Type__c = 'SI3')
             List<AggregateResult> si3Results = [
-                SELECT Sales_Manager__c interviewer, COUNT(Id) cnt
-                FROM Candidate__c 
-                WHERE SI_3_Completed__c >= :monthStart
-                AND SI_3_Completed__c <= :monthEnd
-                AND Sales_Manager__c != null
-                GROUP BY Sales_Manager__c
+                SELECT Conducted_By__r.Name interviewer, COUNT(Id) cnt
+                FROM Interview__c 
+                WHERE Interview_Type__c = 'SI3'
+                AND Interview_Status__c = 'Completed'
+                AND CreatedDate >= :monthStartDT
+                AND CreatedDate <= :monthEndDT
+                AND Conducted_By__c != null
+                GROUP BY Conducted_By__r.Name
                 ORDER BY COUNT(Id) DESC
             ];
             
@@ -420,35 +400,23 @@ public inherited sharing class RecruiterDashboardController {
                 });
             }
             
-            // Get Career interviews by CP_Conducted_by__c (multi-select picklist) - THIS MONTH ONLY
-            List<Candidate__c> careerCandidates = [
-                SELECT CP_Conducted_by__c
-                FROM Candidate__c 
-                WHERE Career_Presentation_Date_Completed__c >= :monthStart
-                AND Career_Presentation_Date_Completed__c <= :monthEnd
-                AND CP_Conducted_by__c != null
+            // Get Career interviews (Interview_Type__c = 'Career')
+            List<AggregateResult> careerResults = [
+                SELECT Conducted_By__r.Name interviewer, COUNT(Id) cnt
+                FROM Interview__c 
+                WHERE Interview_Type__c = 'Career'
+                AND Interview_Status__c = 'Completed'
+                AND CreatedDate >= :monthStartDT
+                AND CreatedDate <= :monthEndDT
+                AND Conducted_By__c != null
+                GROUP BY Conducted_By__r.Name
+                ORDER BY COUNT(Id) DESC
             ];
             
-            Map<String, Integer> careerCounts = new Map<String, Integer>();
-            for (Candidate__c cand : careerCandidates) {
-                if (String.isNotBlank(cand.CP_Conducted_by__c)) {
-                    // Split multi-select picklist values
-                    List<String> interviewers = cand.CP_Conducted_by__c.split(';');
-                    for (String interviewer : interviewers) {
-                        interviewer = interviewer.trim();
-                        if (!careerCounts.containsKey(interviewer)) {
-                            careerCounts.put(interviewer, 0);
-                        }
-                        careerCounts.put(interviewer, careerCounts.get(interviewer) + 1);
-                    }
-                }
-            }
-            
-            // Convert career counts to list format
-            for (String interviewer : careerCounts.keySet()) {
+            for (AggregateResult ar : careerResults) {
                 careerByInterviewer.add(new Map<String, Object>{
-                    'interviewer' => interviewer,
-                    'count' => careerCounts.get(interviewer)
+                    'interviewer' => (String)ar.get('interviewer'),
+                    'count' => (Integer)ar.get('cnt')
                 });
             }
             
@@ -481,123 +449,44 @@ public inherited sharing class RecruiterDashboardController {
             // Get current month date range
             Date monthStart = Date.today().toStartOfMonth();
             Date monthEnd = monthStart.addMonths(1).addDays(-1);
+            DateTime monthStartDT = DateTime.newInstance(monthStart.year(), monthStart.month(), monthStart.day(), 0, 0, 0);
+            DateTime monthEndDT = DateTime.newInstance(monthEnd.year(), monthEnd.month(), monthEnd.day(), 23, 59, 59);
             
-            List<Candidate__c> candidates = new List<Candidate__c>();
-            
-            // Query based on interview type
+            // Map interview type names to Interview__c picklist values
+            String interviewTypeValue = '';
             if (interviewType == 'Ci-First' || interviewType == 'Attraction') {
-                // Query Attraction interviews - check multi-select picklist
-                candidates = [
-                    SELECT Id, Name, AI_Conducted_By__c, 
-                           Attraction_Interview_Date_Completed__c
-                    FROM Candidate__c 
-                    WHERE Attraction_Interview_Date_Completed__c >= :monthStart
-                    AND Attraction_Interview_Date_Completed__c <= :monthEnd
-                    AND AI_Conducted_By__c != null
-                    ORDER BY Attraction_Interview_Date_Completed__c DESC
-                ];
-                
-                // Filter by interviewer (multi-select picklist)
-                for (Candidate__c cand : candidates) {
-                    if (String.isNotBlank(cand.AI_Conducted_By__c) && 
-                        cand.AI_Conducted_By__c.contains(interviewer)) {
-                        interviewDetails.add(new Map<String, Object>{
-                            'id' => cand.Id,
-                            'candidateName' => cand.Name,
-                            'interviewDate' => cand.Attraction_Interview_Date_Completed__c,
-                            'status' => 'Completed',
-                            'notes' => ''
-                        });
-                    }
-                }
-                
+                interviewTypeValue = 'Attraction';
             } else if (interviewType == 'Align-2nd' || interviewType == 'Structured Interview 1') {
-                candidates = [
-                    SELECT Id, Name, Sales_Manager__c,
-                           SI_1_Date_Completed__c
-                    FROM Candidate__c 
-                    WHERE SI_1_Date_Completed__c >= :monthStart
-                    AND SI_1_Date_Completed__c <= :monthEnd
-                    AND Sales_Manager__c = :interviewer
-                    ORDER BY SI_1_Date_Completed__c DESC
-                ];
-                
-                for (Candidate__c cand : candidates) {
-                    interviewDetails.add(new Map<String, Object>{
-                        'id' => cand.Id,
-                        'candidateName' => cand.Name,
-                        'interviewDate' => cand.SI_1_Date_Completed__c,
-                        'status' => 'Completed',
-                        'notes' => ''
-                    });
-                }
-                
+                interviewTypeValue = 'SI1';
             } else if (interviewType == 'Plan-3rd' || interviewType == 'Structured Interview 2') {
-                candidates = [
-                    SELECT Id, Name, Sales_Manager__c,
-                           SI_2_Date_Completed__c
-                    FROM Candidate__c 
-                    WHERE SI_2_Date_Completed__c >= :monthStart
-                    AND SI_2_Date_Completed__c <= :monthEnd
-                    AND Sales_Manager__c = :interviewer
-                    ORDER BY SI_2_Date_Completed__c DESC
-                ];
-                
-                for (Candidate__c cand : candidates) {
-                    interviewDetails.add(new Map<String, Object>{
-                        'id' => cand.Id,
-                        'candidateName' => cand.Name,
-                        'interviewDate' => cand.SI_2_Date_Completed__c,
-                        'status' => 'Completed',
-                        'notes' => ''
-                    });
-                }
-                
+                interviewTypeValue = 'SI2';
             } else if (interviewType == 'Present-4th' || interviewType == 'Structured Interview 3') {
-                candidates = [
-                    SELECT Id, Name, Sales_Manager__c,
-                           SI_3_Completed__c
-                    FROM Candidate__c 
-                    WHERE SI_3_Completed__c >= :monthStart
-                    AND SI_3_Completed__c <= :monthEnd
-                    AND Sales_Manager__c = :interviewer
-                    ORDER BY SI_3_Completed__c DESC
-                ];
-                
-                for (Candidate__c cand : candidates) {
-                    interviewDetails.add(new Map<String, Object>{
-                        'id' => cand.Id,
-                        'candidateName' => cand.Name,
-                        'interviewDate' => cand.SI_3_Completed__c,
-                        'status' => 'Completed',
-                        'notes' => ''
-                    });
-                }
-                
+                interviewTypeValue = 'SI3';
             } else if (interviewType == 'Optional-5th' || interviewType == 'Career') {
-                // Query Career interviews - check multi-select picklist
-                candidates = [
-                    SELECT Id, Name, CP_Conducted_by__c,
-                           Career_Presentation_Date_Completed__c
-                    FROM Candidate__c 
-                    WHERE Career_Presentation_Date_Completed__c >= :monthStart
-                    AND Career_Presentation_Date_Completed__c <= :monthEnd
-                    AND CP_Conducted_by__c != null
-                    ORDER BY Career_Presentation_Date_Completed__c DESC
-                ];
-                
-                for (Candidate__c cand : candidates) {
-                    if (String.isNotBlank(cand.CP_Conducted_by__c) && 
-                        cand.CP_Conducted_by__c.contains(interviewer)) {
-                        interviewDetails.add(new Map<String, Object>{
-                            'id' => cand.Id,
-                            'candidateName' => cand.Name,
-                            'interviewDate' => cand.Career_Presentation_Date_Completed__c,
-                            'status' => 'Completed',
-                            'notes' => ''
-                        });
-                    }
-                }
+                interviewTypeValue = 'Career';
+            }
+            
+            // Query Interview__c records
+            List<Interview__c> interviews = [
+                SELECT Id, Name, Candidate__r.Name, Conducted_By__r.Name, 
+                       Interview_Type__c, Interview_Status__c, CreatedDate, Notes__c
+                FROM Interview__c
+                WHERE Interview_Type__c = :interviewTypeValue
+                AND Interview_Status__c = 'Completed'
+                AND Conducted_By__r.Name = :interviewer
+                AND CreatedDate >= :monthStartDT
+                AND CreatedDate <= :monthEndDT
+                ORDER BY CreatedDate DESC
+            ];
+            
+            for (Interview__c interview : interviews) {
+                interviewDetails.add(new Map<String, Object>{
+                    'id' => interview.Id,
+                    'candidateName' => interview.Candidate__r?.Name != null ? interview.Candidate__r.Name : 'N/A',
+                    'interviewDate' => interview.CreatedDate,
+                    'status' => interview.Interview_Status__c,
+                    'notes' => interview.Notes__c != null ? interview.Notes__c : ''
+                });
             }
             
             System.debug('Retrieved ' + interviewDetails.size() + ' interview details for ' + interviewer + ' - ' + interviewType);
@@ -1279,12 +1168,13 @@ public inherited sharing class RecruiterDashboardController {
                 }
             }
             
-            // Query open tasks assigned to current user
+            // Query open tasks assigned to current user - ONLY Calls (TaskSubtype = 'Call')
             String query = 'SELECT Id, Subject, ActivityDate, Status, Description, WhatId, WhoId, ' +
                            'What.Name, Who.Name ' +
                            'FROM Task ' +
                            'WHERE OwnerId = \'' + String.escapeSingleQuotes(UserInfo.getUserId()) + '\' ' +
                            'AND IsClosed = false ' +
+                           'AND TaskSubtype = \'Call\' ' +
                            whereClause + ' ' +
                            'ORDER BY ActivityDate ASC LIMIT 1000';
             
@@ -2228,6 +2118,47 @@ public inherited sharing class RecruiterDashboardController {
         } catch (Exception e) {
             System.debug('Error creating feedback: ' + e.getMessage());
             throw new AuraHandledException('Failed to create feedback: ' + e.getMessage());
+        }
+    }
+
+    @AuraEnabled
+    public static Task getTaskDetails(String taskId) {
+        try {
+            return [
+                SELECT Id, Subject, Status, ActivityDate, Priority, Description,
+                       CallDisposition, WhoId, Who.Name, WhatId, What.Name
+                FROM Task
+                WHERE Id = :taskId
+                LIMIT 1
+            ];
+        } catch (Exception e) {
+            throw new AuraHandledException('Failed to get task details: ' + e.getMessage());
+        }
+    }
+
+    @AuraEnabled
+    public static void updateTaskRecord(String taskId, String subject, String status, Date activityDate, String priority, String description) {
+        try {
+            Task taskToUpdate = [SELECT Id FROM Task WHERE Id = :taskId LIMIT 1];
+            
+            if (String.isNotBlank(subject)) {
+                taskToUpdate.Subject = subject;
+            }
+            if (String.isNotBlank(status)) {
+                taskToUpdate.Status = status;
+            }
+            if (activityDate != null) {
+                taskToUpdate.ActivityDate = activityDate;
+            }
+            if (String.isNotBlank(priority)) {
+                taskToUpdate.Priority = priority;
+            }
+            // Allow setting description to null to clear it
+            taskToUpdate.Description = description;
+            
+            update taskToUpdate;
+        } catch (Exception e) {
+            throw new AuraHandledException('Failed to update task: ' + e.getMessage());
         }
     }
 }

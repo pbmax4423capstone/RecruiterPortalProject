@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ListView xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Newport_KIT</fullName>
+    <columns>NAME</columns>
+    <columns>Mobile__c</columns>
+    <columns>Email__c</columns>
+    <columns>Notes__c</columns>
+    <columns>Website__c</columns>
+    <columns>Gender__c</columns>
+    <columns>CREATED_DATE</columns>
+    <columns>OWNER.FIRST_NAME</columns>
+    <filterScope>Everything</filterScope>
+    <filters>
+        <field>Status__c</field>
+        <operation>equals</operation>
+        <value>Keep In Touch</value>
+    </filters>
+    <filters>
+        <field>Office_Location__c</field>
+        <operation>equals</operation>
+        <value>Newport Beach</value>
+    </filters>
+    <label>Newport KIT candidate MASTER</label>
+</ListView>

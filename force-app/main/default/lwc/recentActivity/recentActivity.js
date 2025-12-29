@@ -8,37 +8,6 @@ export default class RecentActivity extends LightningElement {
     @track isLoading = true;
     @track lastRefreshed = '';
 
-    columns = [
-        { 
-            label: 'Related To', 
-            fieldName: 'relatedName', 
-            type: 'text'
-        },
-        { 
-            label: 'Subject', 
-            fieldName: 'Subject', 
-            type: 'text'
-        },
-        { 
-            label: 'Date', 
-            fieldName: 'ActivityDate', 
-            type: 'date-local'
-        },
-        { 
-            label: 'Status', 
-            fieldName: 'Status', 
-            type: 'text'
-        },
-        {
-            type: 'action',
-            typeAttributes: {
-                rowActions: [
-                    { label: 'View', name: 'view' }
-                ]
-            }
-        }
-    ];
-
     connectedCallback() {
         this.loadActivities();
     }
@@ -53,7 +22,14 @@ export default class RecentActivity extends LightningElement {
                 this.activities = data.map(task => {
                     return {
                         ...task,
-                        relatedName: task.What?.Name || task.Who?.Name || 'N/A'
+                        contactName: task.Who?.Name || '',
+                        relatedToName: task.What?.Name || '',
+                        formattedTime: task.CompletedDateTime ? 
+                            new Date(task.CompletedDateTime).toLocaleTimeString('en-US', { 
+                                hour: 'numeric', 
+                                minute: '2-digit',
+                                hour12: true 
+                            }) : ''
                     };
                 });
                 this.error = undefined;
@@ -88,24 +64,11 @@ export default class RecentActivity extends LightningElement {
         this.loadActivities();
     }
 
-    handleRowAction(event) {
-        const actionName = event.detail.action.name;
-        const row = event.detail.row;
-        
-        if (actionName === 'view') {
-            this.viewTask(row);
-        }
-    }
-
-    handleCellClick(event) {
-        const taskId = event.detail.row.Id;
+    handleCardClick(event) {
+        const taskId = event.currentTarget.dataset.id;
         if (taskId) {
             window.open(`/lightning/r/Task/${taskId}/view`, '_blank');
         }
-    }
-
-    viewTask(row) {
-        window.open(`/lightning/r/Task/${row.Id}/view`, '_blank');
     }
 
     showToast(title, message, variant) {

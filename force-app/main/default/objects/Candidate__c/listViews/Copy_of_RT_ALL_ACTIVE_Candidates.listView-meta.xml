@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ListView xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Copy_of_RT_ALL_ACTIVE_Candidates</fullName>
+    <columns>NAME</columns>
+    <columns>Status__c</columns>
+    <columns>Next_Step__c</columns>
+    <columns>Mobile__c</columns>
+    <columns>Email__c</columns>
+    <columns>Website__c</columns>
+    <columns>Attraction_Interview_Date_Completed__c</columns>
+    <columns>Notes__c</columns>
+    <filterScope>Everything</filterScope>
+    <filters>
+        <field>Status__c</field>
+        <operation>contains</operation>
+        <value>Active/In Process,Lead</value>
+    </filters>
+    <filters>
+        <field>Sales_Manager__c</field>
+        <operation>contains</operation>
+        <value>Van Hess</value>
+    </filters>
+    <label>VAN - ALL ACTIVE Candidates</label>
+</ListView>

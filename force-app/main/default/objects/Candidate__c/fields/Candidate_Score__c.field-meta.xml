@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Candidate_Score__c</fullName>
+    <externalId>false</externalId>
+    <formula>IF(NOT(ISBLANK(Degree_Earned__c)), 1, 0) +
+
+IF(
+  AND(
+    NOT(ISBLANK(Date_of_Birth__c)),
+    (TODAY() - Date_of_Birth__c) / 365 &gt;= 27,
+    (TODAY() - Date_of_Birth__c) / 365 &lt;= 50
+  ),
+  1,
+  0
+) +
+
+IF(
+  OR(
+    ISPICKVAL(RELATIONSHIPS__c, &quot;Married&quot;),
+    ISPICKVAL(RELATIONSHIPS__c, &quot;In A Relationship with Kids&quot;)
+  ),
+  1,
+  0
+) +
+
+IF(
+  OR(
+    Series_6_License__c,
+    Series_24_License__c,
+    Series_63_License__c,
+    Series_65_License__c,
+    Series_66_License__c,
+    Series_7_License__c,
+    Insurance_Licensed__c
+  ),
+  1,
+  0
+) +
+
+IF(
+  AND(
+    OR(
+      State_Province__c = &quot;Nevada&quot;,
+      State_Province__c = &quot;Utah&quot;
+    ),
+    Income_Greater_than_75K__c
+  ),
+  1,
+  0
+) +
+
+IF(
+  AND(
+    State_Province__c = &quot;California&quot;,
+    Greater_than_120K__c
+  ),
+  1,
+  0
+)</formula>
+    <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+    <label>Candidate Score</label>
+    <precision>18</precision>
+    <required>false</required>
+    <scale>0</scale>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Number</type>
+    <unique>false</unique>
+</CustomField>

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
     <fullName>Interview_Type__c</fullName>
+    <businessStatus>Active</businessStatus>
     <label>Interview Type</label>
     <required>false</required>
     <trackTrending>false</trackTrending>
@@ -9,24 +10,29 @@
         <valueSetDefinition>
             <sorted>false</sorted>
             <value>
-                <fullName>Attraction</fullName>
+                <fullName>Ci-First</fullName>
                 <default>false</default>
+                <label>Ci-First</label>
             </value>
             <value>
-                <fullName>SI1</fullName>
+                <fullName>Align-2nd</fullName>
                 <default>false</default>
+                <label>Align-2nd</label>
             </value>
             <value>
-                <fullName>SI2</fullName>
+                <fullName>Plan-3rd</fullName>
                 <default>false</default>
+                <label>Plan-3rd</label>
             </value>
             <value>
-                <fullName>SI3</fullName>
+                <fullName>Present-4th</fullName>
                 <default>false</default>
+                <label>Present-4th</label>
             </value>
             <value>
-                <fullName>Career</fullName>
+                <fullName>Optional-5th</fullName>
                 <default>false</default>
+                <label>Optional-5th</label>
             </value>
         </valueSetDefinition>
     </valueSet>

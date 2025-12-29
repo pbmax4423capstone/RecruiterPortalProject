@@ -1,0 +1,283 @@
+<template>
+  <!-- Main Component View - Always Visible -->
+  <div class="calls-component-container">
+    <template if:true={isLoading}>
+      <div class="slds-align_absolute-center slds-p-around_large">
+        <lightning-spinner alternative-text="Loading calls..." size="medium"></lightning-spinner>
+      </div>
+    </template>
+
+    <template if:false={isLoading}>
+      <!-- Two Column Layout -->
+      <div class="slds-grid slds-wrap slds-gutters">
+        
+        <!-- Scheduled Calls Column (Left) -->
+        <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2">
+          <div class="calls-section">
+            <div class="section-header">
+              <lightning-icon icon-name="standard:event" size="small" class="slds-m-right_x-small"></lightning-icon>
+              <h3 class="slds-text-heading_small">Scheduled Calls</h3>
+              <span class="call-count">{scheduledCallsCount}</span>
+            </div>
+            
+            <template if:true={hasScheduledCalls}>
+              <div class="calls-list">
+                <template for:each={scheduledCalls} for:item="call">
+                  <div key={call.id} class="call-card scheduled-card" data-task-id={call.id} onclick={handleCallClick}>
+                    <div class="call-header">
+                      <lightning-icon icon-name="standard:contact" size="x-small"></lightning-icon>
+                      <span class="candidate-name">{call.candidateName}</span>
+                    </div>
+                    
+                    <div class="call-details">
+                      <div class="detail-row">
+                        <lightning-icon icon-name="utility:clock" size="xx-small"></lightning-icon>
+                        <span class="detail-text">{call.formattedDate} at {call.formattedTime}</span>
+                      </div>
+                      
+                      <template if:true={call.subject}>
+                        <div class="detail-row">
+                          <lightning-icon icon-name="utility:info" size="xx-small"></lightning-icon>
+                          <span class="detail-text">{call.subject}</span>
+                        </div>
+                      </template>
+                    </div>
+                  </div>
+                </template>
+              </div>
+            </template>
+            
+            <template if:false={hasScheduledCalls}>
+              <div class="empty-state">
+                <lightning-icon icon-name="utility:success" size="large" class="success-icon"></lightning-icon>
+                <p class="slds-text-heading_small slds-m-top_small">No scheduled calls</p>
+                <p class="slds-text-color_weak">All caught up!</p>
+              </div>
+            </template>
+          </div>
+        </div>
+
+        <!-- Past Due Calls Column (Right) -->
+        <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2">
+          <div class="calls-section">
+            <div class="section-header pastdue-header">
+              <lightning-icon icon-name="standard:event" size="small" class="slds-m-right_x-small"></lightning-icon>
+              <h3 class="slds-text-heading_small">Past Due Calls</h3>
+              <span class="call-count pastdue-count">{pastDueCallsCount}</span>
+            </div>
+            
+            <template if:true={hasPastDueCalls}>
+              <div class="calls-list">
+                <template for:each={pastDueCalls} for:item="call">
+                  <div key={call.id} class="call-card pastdue-card" data-task-id={call.id} onclick={handleCallClick}>
+                    <div class="call-header">
+                      <lightning-icon icon-name="standard:contact" size="x-small"></lightning-icon>
+                      <span class="candidate-name">{call.candidateName}</span>
+                    </div>
+                    
+                    <div class="call-details">
+                      <div class="detail-row">
+                        <lightning-icon icon-name="utility:warning" size="xx-small" class="warning-icon"></lightning-icon>
+                        <span class="detail-text pastdue-text">{call.formattedDate} - {call.daysOverdue} days overdue</span>
+                      </div>
+                      
+                      <template if:true={call.subject}>
+                        <div class="detail-row">
+                          <lightning-icon icon-name="utility:info" size="xx-small"></lightning-icon>
+                          <span class="detail-text">{call.subject}</span>
+                        </div>
+                      </template>
+                    </div>
+                  </div>
+                </template>
+              </div>
+            </template>
+            
+            <template if:false={hasPastDueCalls}>
+              <div class="empty-state">
+                <lightning-icon icon-name="utility:success" size="large" class="success-icon"></lightning-icon>
+                <p class="slds-text-heading_small slds-m-top_small">No past due calls</p>
+                <p class="slds-text-color_weak">Great job staying on top of things!</p>
+              </div>
+            </template>
+          </div>
+        </div>
+      </div>
+    </template>
+  </div>
+
+  <!-- Record Page Modal -->
+  <template if:true={showRecordModal}>
+    <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" 
+             class="slds-modal slds-fade-in-open slds-modal_large">
+      <div class="slds-modal__container">
+        <header class="slds-modal__header">
+          <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" 
+                  title="Close" onclick={closeRecordModal}>
+            <lightning-icon icon-name="utility:close" alternative-text="close" size="small"></lightning-icon>
+            <span class="slds-assistive-text">Close</span>
+          </button>
+          <h2 id="modal-heading-01" class="slds-modal__title slds-hyphenate">
+            Call Details
+          </h2>
+        </header>
+
+        <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+          <template if:true={taskRecord}>
+            <!-- Call Information Card -->
+            <template if:true={hasContactOrRelated}>
+              <div class="slds-box slds-box_x-small slds-theme_shade slds-m-bottom_medium">
+                <div class="slds-grid slds-wrap slds-gutters_small">
+                  <template if:true={taskRecord.Who}>
+                    <div class="slds-col slds-size_1-of-2">
+                      <div class="slds-text-title slds-m-bottom_xx-small">Contact</div>
+                      <div class="slds-text-body_regular">{taskRecord.Who.Name}</div>
+                    </div>
+                  </template>
+                  <template if:true={taskRecord.What}>
+                    <div class="slds-col slds-size_1-of-2">
+                      <div class="slds-text-title slds-m-bottom_xx-small">Related To</div>
+                      <div class="slds-text-body_regular">{taskRecord.What.Name}</div>
+                    </div>
+                  </template>
+                </div>
+              </div>
+            </template>
+
+            <!-- Form Fields -->
+            <div class="slds-form" role="list">
+              <div class="slds-grid slds-wrap slds-gutters_small slds-m-bottom_small">
+                <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2">
+                  <lightning-input 
+                    label="Subject" 
+                    name="Subject" 
+                    value={taskRecord.Subject} 
+                    onchange={handleFieldChange} 
+                    required>
+                  </lightning-input>
+                </div>
+                <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2">
+                  <lightning-combobox 
+                    label="Status" 
+                    name="Status" 
+                    value={taskRecord.Status} 
+                    options={statusOptions} 
+                    onchange={handleFieldChange}>
+                  </lightning-combobox>
+                </div>
+              </div>
+
+              <div class="slds-grid slds-wrap slds-gutters_small slds-m-bottom_small">
+                <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2">
+                  <lightning-input 
+                    type="date" 
+                    label="Due Date" 
+                    name="ActivityDate" 
+                    value={taskRecord.ActivityDate} 
+                    onchange={handleFieldChange}>
+                  </lightning-input>
+                </div>
+                <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2">
+                  <lightning-combobox 
+                    label="Priority" 
+                    name="Priority" 
+                    value={taskRecord.Priority} 
+                    options={priorityOptions} 
+                    onchange={handleFieldChange}>
+                  </lightning-combobox>
+                </div>
+              </div>
+
+              <div class="slds-grid slds-wrap slds-gutters_small slds-m-bottom_small">
+                <div class="slds-col slds-size_1-of-1">
+                  <fieldset class="slds-form-element">
+                    <legend class="slds-form-element__label slds-form-element__legend">Call Result</legend>
+                    <div class="slds-form-element__control">
+                      <div class="slds-grid slds-wrap slds-gutters_x-small">
+                        <template for:each={callResultOptions} for:item="option">
+                          <div key={option.value} class="slds-col slds-size_1-of-2 slds-medium-size_1-of-3">
+                            <lightning-input 
+                              type="checkbox" 
+                              label={option.label} 
+                              value={option.value}
+                              checked={option.checked}
+                              onchange={handleCallResultChange}>
+                            </lightning-input>
+                          </div>
+                        </template>
+                      </div>
+                    </div>
+                  </fieldset>
+                </div>
+              </div>
+
+              <div class="slds-grid slds-wrap slds-gutters_small">
+                <div class="slds-col slds-size_1-of-1">
+                  <lightning-textarea 
+                    label="Comments" 
+                    name="Description" 
+                    value={taskRecord.Description} 
+                    onchange={handleFieldChange}
+                    placeholder="Add call notes and comments..."
+                    rows="4">
+                  </lightning-textarea>
+                </div>
+              </div>
+            </div>
+          </template>
+        </div>
+        
+        <footer class="slds-modal__footer">
+          <div>
+            <lightning-button variant="neutral" label="Cancel" onclick={closeRecordModal}></lightning-button>
+          </div>
+          <div>
+            <lightning-button variant="outline-brand" label="Schedule Follow Up Call" onclick={handleScheduleFollowUp} class="slds-m-right_x-small"></lightning-button>
+            <lightning-button variant="brand" label="Save" onclick={handleSaveTask}></lightning-button>
+          </div>
+        </footer>
+      </div>
+    </section>
+    <div class="slds-backdrop slds-backdrop_open"></div>
+  </template>
+
+  <!-- Schedule Follow Up Modal -->
+  <template if:true={showFollowUpModal}>
+    <section role="dialog" tabindex="-1" class="slds-modal slds-fade-in-open slds-modal_medium" aria-labelledby="followup-modal-heading">
+      <div class="slds-modal__container">
+        <header class="slds-modal__header">
+          <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" title="Close" onclick={closeFollowUpModal}>
+            <lightning-icon icon-name="utility:close" alternative-text="close" size="small"></lightning-icon>
+            <span class="slds-assistive-text">Close</span>
+          </button>
+          <h2 id="followup-modal-heading" class="slds-modal__title slds-hyphenate">Schedule Follow Up Call</h2>
+        </header>
+        <div class="slds-modal__content slds-p-around_medium">
+          <div class="slds-form">
+            <lightning-input 
+              label="Subject" 
+              name="followUpSubject" 
+              value={followUpSubject} 
+              onchange={handleFollowUpFieldChange}
+              required>
+            </lightning-input>
+            <lightning-input 
+              type="date" 
+              label="Due Date" 
+              name="followUpDate" 
+              value={followUpDate} 
+              onchange={handleFollowUpFieldChange}
+              required
+              class="slds-m-top_small">
+            </lightning-input>
+          </div>
+        </div>
+        <footer class="slds-modal__footer">
+          <lightning-button variant="neutral" label="Cancel" onclick={closeFollowUpModal}></lightning-button>
+          <lightning-button variant="brand" label="Schedule Call" onclick={handleSaveFollowUp}></lightning-button>
+        </footer>
+      </div>
+    </section>
+    <div class="slds-backdrop slds-backdrop_open"></div>
+  </template>
+</template>

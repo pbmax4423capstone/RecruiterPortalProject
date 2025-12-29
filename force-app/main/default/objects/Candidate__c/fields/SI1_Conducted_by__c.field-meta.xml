@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>SI1_Conducted_by__c</fullName>
+    <label>SI1 Conducted by</label>
+    <required>false</required>
+    <trackFeedHistory>false</trackFeedHistory>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>MultiselectPicklist</type>
+    <valueSet>
+        <restricted>true</restricted>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>Diljeet Masuda</fullName>
+                <default>false</default>
+                <label>Diljeet Masuda</label>
+            </value>
+            <value>
+                <fullName>Joy Avedesian</fullName>
+                <default>false</default>
+                <label>Joy Avedesian</label>
+            </value>
+            <value>
+                <fullName>Scott Grove</fullName>
+                <default>false</default>
+                <label>Scott Grove</label>
+            </value>
+            <value>
+                <fullName>Scott Primm</fullName>
+                <default>false</default>
+                <label>Scott Primm</label>
+            </value>
+            <value>
+                <fullName>Tim Denton</fullName>
+                <default>false</default>
+                <label>Tim Denton</label>
+            </value>
+            <value>
+                <fullName>Van Hess</fullName>
+                <default>false</default>
+                <label>Van Hess</label>
+            </value>
+            <value>
+                <fullName>Rachyll Tenny</fullName>
+                <default>false</default>
+                <label>Rachyll Tenny</label>
+            </value>
+            <value>
+                <fullName>Brooke Ianni</fullName>
+                <default>false</default>
+                <label>Brooke Ianni</label>
+            </value>
+            <value>
+                <fullName>Brad Sofonia</fullName>
+                <default>false</default>
+                <label>Brad Sofonia</label>
+            </value>
+            <value>
+                <fullName>Andrew Moore</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>Andrew Moore</label>
+            </value>
+            <value>
+                <fullName>Brady Murray</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>Brady Murray</label>
+            </value>
+            <value>
+                <fullName>Jonathan Gruber</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>Jonathan Gruber</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+    <visibleLines>4</visibleLines>
+</CustomField>

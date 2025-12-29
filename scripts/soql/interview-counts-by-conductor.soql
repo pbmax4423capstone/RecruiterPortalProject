@@ -1,0 +1,201 @@
+// Interview Counts by Conductor
+// Shows who conducted interviews and how many, grouped by interview type
+
+// =============================================================================
+// 1. CIT (1st) - Attraction Interview
+// Conducted By Field: AI_Conducted_by__c
+// Completed Fields: AI_Completed_Date_Time__c OR Attraction_Interview_Date_Completed__c
+// =============================================================================
+
+// CIT - This Month by Conductor
+SELECT AI_Conducted_by__c, COUNT(Id) interview_count
+FROM Candidate__c 
+WHERE (AI_Completed_Date_Time__c = THIS_MONTH 
+       OR Attraction_Interview_Date_Completed__c = THIS_MONTH)
+AND AI_Conducted_by__c != null
+GROUP BY AI_Conducted_by__c
+ORDER BY COUNT(Id) DESC
+
+// CIT - This Year by Conductor
+SELECT AI_Conducted_by__c, COUNT(Id) interview_count
+FROM Candidate__c 
+WHERE (AI_Completed_Date_Time__c = THIS_YEAR 
+       OR Attraction_Interview_Date_Completed__c = THIS_YEAR)
+AND AI_Conducted_by__c != null
+GROUP BY AI_Conducted_by__c
+ORDER BY COUNT(Id) DESC
+
+
+// =============================================================================
+// 2. Align (2nd) - Second Interview
+// Conducted By Field: SI_1_Conducted_By__c
+// Completed Field: SI_1_Date_Completed__c
+// =============================================================================
+
+// Align - This Month by Conductor
+SELECT SI_1_Conducted_By__c, COUNT(Id) interview_count
+FROM Candidate__c 
+WHERE SI_1_Date_Completed__c = THIS_MONTH
+AND SI_1_Conducted_By__c != null
+GROUP BY SI_1_Conducted_By__c
+ORDER BY COUNT(Id) DESC
+
+// Align - This Year by Conductor
+SELECT SI_1_Conducted_By__c, COUNT(Id) interview_count
+FROM Candidate__c 
+WHERE SI_1_Date_Completed__c = THIS_YEAR
+AND SI_1_Conducted_By__c != null
+GROUP BY SI_1_Conducted_By__c
+ORDER BY COUNT(Id) DESC
+
+
+// =============================================================================
+// 3. Plan (3rd) - Third Interview
+// Conducted By Fields: SI_2_Interviewer__c, SI2_Conducted_By__c
+// Completed Field: SI_2_Date_Completed__c
+// NOTE: Two different "Conducted By" fields - need to check both
+// =============================================================================
+
+// Plan - This Month by Conductor (checking SI_2_Interviewer__c)
+SELECT SI_2_Interviewer__c, COUNT(Id) interview_count
+FROM Candidate__c 
+WHERE SI_2_Date_Completed__c = THIS_MONTH
+AND SI_2_Interviewer__c != null
+GROUP BY SI_2_Interviewer__c
+ORDER BY COUNT(Id) DESC
+
+// Plan - This Month by Conductor (checking SI2_Conducted_By__c)
+SELECT SI2_Conducted_By__c, COUNT(Id) interview_count
+FROM Candidate__c 
+WHERE SI_2_Date_Completed__c = THIS_MONTH
+AND SI2_Conducted_By__c != null
+GROUP BY SI2_Conducted_By__c
+ORDER BY COUNT(Id) DESC
+
+// Plan - This Year by Conductor (checking SI_2_Interviewer__c)
+SELECT SI_2_Interviewer__c, COUNT(Id) interview_count
+FROM Candidate__c 
+WHERE SI_2_Date_Completed__c = THIS_YEAR
+AND SI_2_Interviewer__c != null
+GROUP BY SI_2_Interviewer__c
+ORDER BY COUNT(Id) DESC
+
+// Plan - This Year by Conductor (checking SI2_Conducted_By__c)
+SELECT SI2_Conducted_By__c, COUNT(Id) interview_count
+FROM Candidate__c 
+WHERE SI_2_Date_Completed__c = THIS_YEAR
+AND SI2_Conducted_By__c != null
+GROUP BY SI2_Conducted_By__c
+ORDER BY COUNT(Id) DESC
+
+
+// =============================================================================
+// 4. Present (4th) - Fourth Interview
+// Conducted By Fields: SI_3_Conducted_By__c, SI_3_Interviewer__c, SI3_Conducted_By__c
+// Completed Field: SI_3_Completed__c
+// NOTE: Three different "Conducted By" fields - need to check all
+// =============================================================================
+
+// Present - This Month by Conductor (checking SI_3_Conducted_By__c)
+SELECT SI_3_Conducted_By__c, COUNT(Id) interview_count
+FROM Candidate__c 
+WHERE SI_3_Completed__c = THIS_MONTH
+AND SI_3_Conducted_By__c != null
+GROUP BY SI_3_Conducted_By__c
+ORDER BY COUNT(Id) DESC
+
+// Present - This Month by Conductor (checking SI_3_Interviewer__c)
+SELECT SI_3_Interviewer__c, COUNT(Id) interview_count
+FROM Candidate__c 
+WHERE SI_3_Completed__c = THIS_MONTH
+AND SI_3_Interviewer__c != null
+GROUP BY SI_3_Interviewer__c
+ORDER BY COUNT(Id) DESC
+
+// Present - This Month by Conductor (checking SI3_Conducted_By__c)
+SELECT SI3_Conducted_By__c, COUNT(Id) interview_count
+FROM Candidate__c 
+WHERE SI_3_Completed__c = THIS_MONTH
+AND SI3_Conducted_By__c != null
+GROUP BY SI3_Conducted_By__c
+ORDER BY COUNT(Id) DESC
+
+// Present - This Year by Conductor (checking SI_3_Conducted_By__c)
+SELECT SI_3_Conducted_By__c, COUNT(Id) interview_count
+FROM Candidate__c 
+WHERE SI_3_Completed__c = THIS_YEAR
+AND SI_3_Conducted_By__c != null
+GROUP BY SI_3_Conducted_By__c
+ORDER BY COUNT(Id) DESC
+
+// Present - This Year by Conductor (checking SI_3_Interviewer__c)
+SELECT SI_3_Interviewer__c, COUNT(Id) interview_count
+FROM Candidate__c 
+WHERE SI_3_Completed__c = THIS_YEAR
+AND SI_3_Interviewer__c != null
+GROUP BY SI_3_Interviewer__c
+ORDER BY COUNT(Id) DESC
+
+// Present - This Year by Conductor (checking SI3_Conducted_By__c)
+SELECT SI3_Conducted_By__c, COUNT(Id) interview_count
+FROM Candidate__c 
+WHERE SI_3_Completed__c = THIS_YEAR
+AND SI3_Conducted_By__c != null
+GROUP BY SI3_Conducted_By__c
+ORDER BY COUNT(Id) DESC
+
+
+// =============================================================================
+// 5. Optional (5th) - Career Presentation
+// Conducted By Fields: Career_Presentation_Conducted_By__c, CP_Conducted_By__c, CP_Interviewer__c
+// Completed Field: Career_Presentation_Date_Completed__c
+// NOTE: Three different "Conducted By" fields - need to check all
+// =============================================================================
+
+// Optional - This Month by Conductor (checking Career_Presentation_Conducted_By__c)
+SELECT Career_Presentation_Conducted_By__c, COUNT(Id) interview_count
+FROM Candidate__c 
+WHERE Career_Presentation_Date_Completed__c = THIS_MONTH
+AND Career_Presentation_Conducted_By__c != null
+GROUP BY Career_Presentation_Conducted_By__c
+ORDER BY COUNT(Id) DESC
+
+// Optional - This Month by Conductor (checking CP_Conducted_By__c)
+SELECT CP_Conducted_By__c, COUNT(Id) interview_count
+FROM Candidate__c 
+WHERE Career_Presentation_Date_Completed__c = THIS_MONTH
+AND CP_Conducted_By__c != null
+GROUP BY CP_Conducted_By__c
+ORDER BY COUNT(Id) DESC
+
+// Optional - This Month by Conductor (checking CP_Interviewer__c)
+SELECT CP_Interviewer__c, COUNT(Id) interview_count
+FROM Candidate__c 
+WHERE Career_Presentation_Date_Completed__c = THIS_MONTH
+AND CP_Interviewer__c != null
+GROUP BY CP_Interviewer__c
+ORDER BY COUNT(Id) DESC
+
+// Optional - This Year by Conductor (checking Career_Presentation_Conducted_By__c)
+SELECT Career_Presentation_Conducted_By__c, COUNT(Id) interview_count
+FROM Candidate__c 
+WHERE Career_Presentation_Date_Completed__c = THIS_YEAR
+AND Career_Presentation_Conducted_By__c != null
+GROUP BY Career_Presentation_Conducted_By__c
+ORDER BY COUNT(Id) DESC
+
+// Optional - This Year by Conductor (checking CP_Conducted_By__c)
+SELECT CP_Conducted_By__c, COUNT(Id) interview_count
+FROM Candidate__c 
+WHERE Career_Presentation_Date_Completed__c = THIS_YEAR
+AND CP_Conducted_By__c != null
+GROUP BY CP_Conducted_By__c
+ORDER BY COUNT(Id) DESC
+
+// Optional - This Year by Conductor (checking CP_Interviewer__c)
+SELECT CP_Interviewer__c, COUNT(Id) interview_count
+FROM Candidate__c 
+WHERE Career_Presentation_Date_Completed__c = THIS_YEAR
+AND CP_Interviewer__c != null
+GROUP BY CP_Interviewer__c
+ORDER BY COUNT(Id) DESC

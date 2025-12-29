@@ -1,0 +1,49 @@
+<template>
+    <lightning-card title="Log Interview">
+        <div class="slds-p-around_medium">
+            <lightning-record-edit-form
+                object-api-name="Interview__c"
+                onsuccess={handleSuccess}>
+                
+                <!-- Hidden field to link to Candidate -->
+                <lightning-input-field
+                    field-name="Candidate__c"
+                    value={recordId}
+                    class="slds-hide">
+                </lightning-input-field>
+
+                <lightning-input-field
+                    field-name="Interview_Type__c"
+                    required>
+                </lightning-input-field>
+
+                <lightning-input-field
+                    field-name="Conducted_By__c"
+                    required>
+                </lightning-input-field>
+
+                <lightning-input-field
+                    field-name="Interview_Status__c">
+                </lightning-input-field>
+
+                <lightning-input-field
+                    field-name="Notes__c">
+                </lightning-input-field>
+
+                <div class="slds-m-top_medium">
+                    <lightning-button
+                        variant="brand"
+                        type="submit"
+                        label="Save">
+                    </lightning-button>
+                    <lightning-button
+                        variant="neutral"
+                        label="Cancel"
+                        onclick={handleCancel}
+                        class="slds-m-left_x-small">
+                    </lightning-button>
+                </div>
+            </lightning-record-edit-form>
+        </div>
+    </lightning-card>
+</template>

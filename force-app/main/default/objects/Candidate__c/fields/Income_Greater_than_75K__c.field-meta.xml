@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Income_Greater_than_75K__c</fullName>
+    <defaultValue>false</defaultValue>
+    <inlineHelpText>Does candidate currently live in either Nevada or Utah and earn more than $75000?</inlineHelpText>
+    <label>Income Greater than 75K</label>
+    <trackFeedHistory>false</trackFeedHistory>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Checkbox</type>
+</CustomField>

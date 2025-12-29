@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>RELATIONSHIPS__c</fullName>
+    <label>Relationships</label>
+    <required>false</required>
+    <trackFeedHistory>false</trackFeedHistory>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Picklist</type>
+    <valueSet>
+        <restricted>true</restricted>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>Single</fullName>
+                <default>false</default>
+                <label>Single</label>
+            </value>
+            <value>
+                <fullName>Married</fullName>
+                <default>false</default>
+                <label>Married</label>
+            </value>
+            <value>
+                <fullName>In A Relationship- No Kids</fullName>
+                <default>false</default>
+                <label>In A Relationship- No Kids</label>
+            </value>
+            <value>
+                <fullName>In A Relaionship with Kids</fullName>
+                <default>false</default>
+                <label>In A Relaionship with Kids</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

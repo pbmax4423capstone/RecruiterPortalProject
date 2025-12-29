@@ -9,7 +9,7 @@
                 </div>
                 <div class="slds-media__body">
                     <h2 class="slds-card__header-title">
-                        <span>Recent Activity</span>
+                        <span>Recent Activity (Today)</span>
                     </h2>
                 </div>
             </header>
@@ -26,15 +26,29 @@
 
             <template if:false={isLoading}>
                 <template if:true={hasData}>
-                    <lightning-datatable
-                        key-field="Id"
-                        data={activities}
-                        columns={columns}
-                        hide-checkbox-column
-                        show-row-number-column
-                        onrowaction={handleRowAction}
-                        oncellclick={handleCellClick}>
-                    </lightning-datatable>
+                    <div class="horizontal-scroll-container">
+                        <template for:each={activities} for:item="activity">
+                            <div key={activity.Id} class="activity-card" data-id={activity.Id} onclick={handleCardClick}>
+                                <div class="card-header">
+                                    <lightning-icon icon-name="standard:task" size="small"></lightning-icon>
+                                    <span class="card-time">{activity.formattedTime}</span>
+                                </div>
+                                <div class="card-subject">{activity.Subject}</div>
+                                <template if:true={activity.contactName}>
+                                    <div class="card-detail">
+                                        <lightning-icon icon-name="standard:contact" size="x-small"></lightning-icon>
+                                        <span>{activity.contactName}</span>
+                                    </div>
+                                </template>
+                                <template if:true={activity.relatedToName}>
+                                    <div class="card-detail">
+                                        <lightning-icon icon-name="standard:account" size="x-small"></lightning-icon>
+                                        <span>{activity.relatedToName}</span>
+                                    </div>
+                                </template>
+                            </div>
+                        </template>
+                    </div>
                 </template>
 
                 <template if:false={hasData}>
@@ -45,7 +59,7 @@
                                 No recent activity
                             </div>
                             <div class="slds-text-body_regular slds-text-color_weak slds-m-top_small">
-                                Your completed tasks will appear here
+                                Your completed tasks for today will appear here
                             </div>
                         </div>
                     </div>

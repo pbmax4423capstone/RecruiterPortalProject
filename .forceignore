@@ -13,9 +13,6 @@ package.xml
 # Exclude Event custom fields (not in production yet)
 **/objects/Event/**
 
-# Exclude migration class (depends on Event fields)
-**/classes/CandidateToEventInterviewMigration.*
-
 # Exclude permission set references to Event fields
 **/permissionsets/Recruiter_Portal_User.permissionset-meta.xml
 
