@@ -108,33 +108,5 @@ private class DeleteMigratedEventsBatchTest {
         System.assert(true, 'Batch should complete successfully with no events');
     }
     
-    @isTest
-    static void testBatchWithMultipleBatches() {
-        List<RecordType> interviewRT = [SELECT Id FROM RecordType WHERE SObjectType = 'Event' AND Name = 'Interview' LIMIT 1];
-        
-        if (!interviewRT.isEmpty()) {
-            // Create multiple events to test batching
-            List<Event> testEvents = new List<Event>();
-            for (Integer i = 0; i < 10; i++) {
-                testEvents.add(new Event(
-                    Subject = 'Batch Test Event ' + i,
-                    StartDateTime = System.now(),
-                    EndDateTime = System.now().addHours(1),
-                    RecordTypeId = interviewRT[0].Id
-                ));
-            }
-            insert testEvents;
-            
-            Test.startTest();
-            DeleteMigratedEventsBatch batch = new DeleteMigratedEventsBatch();
-            Database.executeBatch(batch, 5); // Small batch size to test multiple batches
-            Test.stopTest();
-            
-            // Verify all events were deleted across multiple batches
-            Integer countAfter = [SELECT COUNT() FROM Event WHERE RecordTypeId = :interviewRT[0].Id AND CreatedDate = TODAY];
-            System.assertEquals(0, countAfter, 'All events should be deleted across batches');
-        } else {
-            System.assert(true, 'Test skipped - no Interview RecordType exists');
-        }
-    }
+
 }

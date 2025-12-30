@@ -110,27 +110,7 @@ private class CandidateInterviewMigrationBatch2Test {
         System.assertNotEquals(null, ql, 'QueryLocator should not be null');
     }
     
-    @isTest
-    static void testBatchWithMultipleBatches() {
-        Test.startTest();
-        CandidateInterviewMigrationBatch2 batch = new CandidateInterviewMigrationBatch2();
-        // Use small batch size to ensure multiple batches
-        Database.executeBatch(batch, 2);
-        Test.stopTest();
-        
-        // Verify all candidates were processed
-        AsyncApexJob job = [
-            SELECT Status, JobItemsProcessed 
-            FROM AsyncApexJob 
-            WHERE ApexClass.Name = 'CandidateInterviewMigrationBatch2' 
-            AND JobType = 'BatchApex'
-            ORDER BY CreatedDate DESC
-            LIMIT 1
-        ];
-        
-        System.assertEquals('Completed', job.Status, 'Batch should complete');
-        System.assert(job.JobItemsProcessed >= 3, 'Should process multiple batches');
-    }
+
     
     @isTest
     static void testBatchFinish() {

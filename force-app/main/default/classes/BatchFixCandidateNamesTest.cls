@@ -150,18 +150,19 @@ private class BatchFixCandidateNamesTest {
         );
         insert candidate;
         
-        // Manually set Name to null
-        candidate.Name = null;
-        update candidate;
+        // Get the auto-generated name
+        Candidate__c insertedCandidate = [SELECT Name FROM Candidate__c WHERE Email__c = 'nullnames@batchtest.com'];
+        String originalName = insertedCandidate.Name;
         
         Test.startTest();
         BatchFixCandidateNames batch = new BatchFixCandidateNames();
         Database.executeBatch(batch, 200);
         Test.stopTest();
         
-        // Candidate with no First or Last name should not be updated by batch
+        // Candidate with no First or Last name should be excluded from batch query
+        // The batch WHERE clause requires: (First_Name__c != null OR Last_Name__c != null)
+        // So this candidate won't be processed, and Name should remain unchanged
         Candidate__c result = [SELECT Name FROM Candidate__c WHERE Email__c = 'nullnames@batchtest.com'];
-        // Name will still be null since batch requires First_Name__c != null OR Last_Name__c != null in query
-        System.assert(result.Name == null || result.Name == '', 'Candidate without names should not be processed');
+        System.assertEquals(originalName, result.Name, 'Candidate without names should not be processed');
     }
 }

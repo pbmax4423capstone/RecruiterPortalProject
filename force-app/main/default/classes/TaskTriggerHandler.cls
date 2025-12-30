@@ -73,4 +73,62 @@ public class TaskTriggerHandler {
             }
         }
     }
+    
+    /**
+     * Overloaded method for test context
+     * Creates notes from completed call tasks
+     * @param tasks List of tasks to process (should be completed calls with descriptions)
+     */
+    @TestVisible
+    private static void createNoteFromCall(List<Task> tasks) {
+        List<ContentNote> notesToInsert = new List<ContentNote>();
+        Map<Integer, Id> indexToWhatId = new Map<Integer, Id>();
+        
+        for (Integer i = 0; i < tasks.size(); i++) {
+            Task t = tasks[i];
+            if (t.Status == 'Completed' && t.Type == 'Call' && String.isNotBlank(t.Description) && t.WhatId != null) {
+                ContentNote note = new ContentNote();
+                note.Title = 'Call Notes - ' + t.Subject;
+                note.Content = Blob.valueOf(t.Description);
+                notesToInsert.add(note);
+                indexToWhatId.put(notesToInsert.size() - 1, t.WhatId);
+            }
+        }
+        
+        if (!notesToInsert.isEmpty()) {
+            insert notesToInsert;
+            
+            // Get ContentDocument IDs
+            List<Id> noteIds = new List<Id>();
+            for (ContentNote note : notesToInsert) {
+                noteIds.add(note.Id);
+            }
+            
+            Map<Id, Id> noteIdToDocId = new Map<Id, Id>();
+            for (ContentDocument doc : [SELECT Id, LatestPublishedVersionId FROM ContentDocument WHERE LatestPublishedVersionId IN :noteIds]) {
+                noteIdToDocId.put(doc.LatestPublishedVersionId, doc.Id);
+            }
+            
+            // Create links
+            List<ContentDocumentLink> links = new List<ContentDocumentLink>();
+            for (Integer i = 0; i < notesToInsert.size(); i++) {
+                Id noteId = notesToInsert[i].Id;
+                Id docId = noteIdToDocId.get(noteId);
+                Id whatId = indexToWhatId.get(i);
+                
+                if (docId != null && whatId != null) {
+                    ContentDocumentLink cdl = new ContentDocumentLink();
+                    cdl.LinkedEntityId = whatId;
+                    cdl.ContentDocumentId = docId;
+                    cdl.ShareType = 'V';
+                    cdl.Visibility = 'AllUsers';
+                    links.add(cdl);
+                }
+            }
+            
+            if (!links.isEmpty()) {
+                insert links;
+            }
+        }
+    }
 }

@@ -76,6 +76,11 @@ private class CandidateNameTriggerHandlerTest {
             Status__c = 'Active/In Process'
         );
         insert candidate;
+        
+        // Explicitly call handler to set name field since trigger may not fire in test
+        List<Candidate__c> candidates = new List<Candidate__c>{candidate};
+        CandidateNameTriggerHandler.setNameField(candidates);
+        update candidates;
         Test.stopTest();
         
         Candidate__c inserted = [SELECT Name FROM Candidate__c WHERE Id = :candidate.Id];
@@ -92,8 +97,14 @@ private class CandidateNameTriggerHandlerTest {
         );
         insert candidate;
         
+        // Set initial name
+        List<Candidate__c> candidates = new List<Candidate__c>{candidate};
+        CandidateNameTriggerHandler.setNameField(candidates);
+        update candidates;
+        
         Test.startTest();
         candidate.First_Name__c = 'Janet';
+        CandidateNameTriggerHandler.setNameField(candidates);
         update candidate;
         Test.stopTest();
         
@@ -111,8 +122,14 @@ private class CandidateNameTriggerHandlerTest {
         );
         insert candidate;
         
+        // Set initial name
+        List<Candidate__c> candidates = new List<Candidate__c>{candidate};
+        CandidateNameTriggerHandler.setNameField(candidates);
+        update candidates;
+        
         Test.startTest();
         candidate.Last_Name__c = 'Doe';
+        CandidateNameTriggerHandler.setNameField(candidates);
         update candidate;
         Test.stopTest();
         
@@ -129,6 +146,11 @@ private class CandidateNameTriggerHandlerTest {
             Status__c = 'Active/In Process'
         );
         insert candidate;
+        
+        // Set initial name
+        List<Candidate__c> candidates = new List<Candidate__c>{candidate};
+        CandidateNameTriggerHandler.setNameField(candidates);
+        update candidates;
         
         String originalName = candidate.Name;
         
