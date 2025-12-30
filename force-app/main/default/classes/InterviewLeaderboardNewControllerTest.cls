@@ -283,15 +283,19 @@ private class InterviewLeaderboardNewControllerTest {
     // Create interviews for this week (completed)
     Candidate__c candidate = [SELECT Id FROM Candidate__c LIMIT 1];
     List<Interview__c> weeklyInterviews = new List<Interview__c>();
+    // Anchor all interview dates within the current week to avoid flakiness
+    Date weekStart = Date.today().toStartOfWeek();
     for (Integer i = 0; i < 10; i++) {
+      Integer dayOffset = Math.mod(i, 7);
+      Date interviewDate = weekStart.addDays(dayOffset);
       weeklyInterviews.add(
         new Interview__c(
           Candidate__c = candidate.Id,
           Interviewer_s__c = 'Tim Denton',
           Interview_Type__c = 'SI1',
           Interview_Status__c = 'Completed',
-          Date_Time_Scheduled__c = DateTime.now().addDays(-i),
-          Date_Completed__c = Date.today().addDays(-i)
+          Date_Time_Scheduled__c = DateTime.newInstance(interviewDate, Time.now()),
+          Date_Completed__c = interviewDate
         )
       );
     }
