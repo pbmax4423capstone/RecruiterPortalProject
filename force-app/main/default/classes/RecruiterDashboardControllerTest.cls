@@ -150,7 +150,8 @@ public class RecruiterDashboardControllerTest {
 
     @isTest
     static void testCandidateStatsEmpty() {
-        delete [SELECT Id FROM Candidate__c];
+        // Delete only test data created in @TestSetup, not production data
+        delete [SELECT Id FROM Candidate__c WHERE Email__c LIKE 'candidate%@example.com'];
         Test.startTest();
         Map<String, Integer> stats = RecruiterDashboardController.getCandidateStats();
         Test.stopTest();

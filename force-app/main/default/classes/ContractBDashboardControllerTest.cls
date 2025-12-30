@@ -84,7 +84,8 @@ public class ContractBDashboardControllerTest {
             interviews.add(new Interview__c(
                 Interview_Type__c = 'Attraction',
                 Interview_Status__c = 'Completed',
-                Candidate__c = contractBCandidates[0].Id
+                Candidate__c = contractBCandidates[0].Id,
+                Date_Time_Scheduled__c = System.now().addDays(-i)
             ));
         }
         
@@ -92,7 +93,8 @@ public class ContractBDashboardControllerTest {
             interviews.add(new Interview__c(
                 Interview_Type__c = 'SI1',
                 Interview_Status__c = 'Completed',
-                Candidate__c = contractBCandidates[1].Id
+                Candidate__c = contractBCandidates[1].Id,
+                Date_Time_Scheduled__c = System.now().addDays(-i)
             ));
         }
         
@@ -100,21 +102,24 @@ public class ContractBDashboardControllerTest {
             interviews.add(new Interview__c(
                 Interview_Type__c = 'SI2',
                 Interview_Status__c = 'Completed',
-                Candidate__c = contractBCandidates[2].Id
+                Candidate__c = contractBCandidates[2].Id,
+                Date_Time_Scheduled__c = System.now().addDays(-i)
             ));
         }
         
         interviews.add(new Interview__c(
             Interview_Type__c = 'Career',
             Interview_Status__c = 'Completed',
-            Candidate__c = contractBCandidates[0].Id
+            Candidate__c = contractBCandidates[0].Id,
+            Date_Time_Scheduled__c = System.now().addDays(-1)
         ));
         
         // Some scheduled (not completed) interviews
         interviews.add(new Interview__c(
             Interview_Type__c = 'SI3',
             Interview_Status__c = 'Scheduled',
-            Candidate__c = contractBCandidates[1].Id
+            Candidate__c = contractBCandidates[1].Id,
+            Date_Time_Scheduled__c = System.now().addDays(1)
         ));
         
         insert interviews;
@@ -213,8 +218,8 @@ public class ContractBDashboardControllerTest {
     
     @isTest
     static void testGetContractBPipelineDataNoData() {
-        // Delete all Contract B candidates to test empty state
-        delete [SELECT Id FROM Candidate__c WHERE Contract_Type__c = 'Contract B' AND Status__c = 'Active/In Process'];
+        // Delete only test data created in @TestSetup to test empty state
+        delete [SELECT Id FROM Candidate__c WHERE Email__c LIKE 'contractb%@test.com' OR Email__c LIKE '%@test.com'];
         
         Test.startTest();
         Map<String, Object> result = ContractBDashboardController.getContractBPipelineData();
