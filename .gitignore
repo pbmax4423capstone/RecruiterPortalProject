@@ -46,3 +46,11 @@ $RECYCLE.BIN/
 **/__pycache__/
 **/.venv/
 **/venv/
+
+# Temporary Salesforce metadata retrieval folders
+temp/
+temp-apps/
+temp-flows/
+temp-perms/
+temp-retrieve/
+retrieved-metadata/

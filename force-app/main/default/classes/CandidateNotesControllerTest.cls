@@ -24,8 +24,7 @@ private class CandidateNotesControllerTest {
         ContentVersion cv = new ContentVersion(
             Title = 'Test Note',
             PathOnClient = 'TestNote.snote',
-            VersionData = Blob.valueOf('Test note content'),
-            FileType = 'SNOTE'
+            VersionData = Blob.valueOf('Test note content')
         );
         insert cv;
         

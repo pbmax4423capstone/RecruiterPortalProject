@@ -18,7 +18,7 @@ public class ContractBDashboardControllerTest {
         contractBCandidates.add(new Candidate__c(
             Email__c = 'contractb1@test.com',
             Contract_Type__c = 'Contract B',
-            Status__c = 'Active/In Process',
+            Status__c = 'Contracted- Contract B',
             Start_Date__c = Date.today().addMonths(-3).addDays(-15),
             Contact__c = testContact.Id,
             Sales_Manager__c = 'Tim Denton'
@@ -28,7 +28,7 @@ public class ContractBDashboardControllerTest {
         contractBCandidates.add(new Candidate__c(
             Email__c = 'contractb2@test.com',
             Contract_Type__c = 'Contract B',
-            Status__c = 'Active/In Process',
+            Status__c = 'Contracted- Contract B',
             Start_Date__c = Date.today().addMonths(-2),
             Contact__c = testContact.Id,
             Sales_Manager__c = 'Elizabeth Kagele'
@@ -38,7 +38,7 @@ public class ContractBDashboardControllerTest {
         contractBCandidates.add(new Candidate__c(
             Email__c = 'contractb3@test.com',
             Contract_Type__c = 'Contract B',
-            Status__c = 'Active/In Process',
+            Status__c = 'Contracted- Contract B',
             Start_Date__c = Date.today().addDays(-30),
             Contact__c = testContact.Id,
             Sales_Manager__c = 'Van Hess'
