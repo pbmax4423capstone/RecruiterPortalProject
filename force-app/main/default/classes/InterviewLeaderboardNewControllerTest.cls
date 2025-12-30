@@ -16,17 +16,19 @@ private class InterviewLeaderboardNewControllerTest {
         );
         insert candidate;
         
-        // Create interviews for this month with different types
+        // Create COMPLETED interviews for this month with different types
+        // Controller filters by Date_Completed__c = THIS_MONTH and Interview_Status__c = 'Completed'
         List<Interview__c> interviews = new List<Interview__c>();
         
-        // Interviewer 1: 25 CI-First (SI1)
+        // Interviewer 1: 25 SI1 interviews (completed this month)
         for (Integer i = 0; i < 25; i++) {
             interviews.add(new Interview__c(
                 Candidate__c = candidate.Id,
                 Interviewer_s__c = testInterviewer1,
                 Interview_Type__c = 'SI1',
-                Interview_Status__c = 'Scheduled',
-                Date_Time_Scheduled__c = DateTime.now().addDays(i)
+                Interview_Status__c = 'Completed',
+                Date_Time_Scheduled__c = DateTime.now().addDays(-i-1),
+                Date_Completed__c = Date.today().addDays(-i-1)
             ));
         }
         
@@ -36,19 +38,21 @@ private class InterviewLeaderboardNewControllerTest {
                 Candidate__c = candidate.Id,
                 Interviewer_s__c = testInterviewer1,
                 Interview_Type__c = 'SI1',
-                Interview_Status__c = 'Scheduled',
-                Date_Time_Scheduled__c = DateTime.now().addDays(i + 25)
+                Interview_Status__c = 'Completed',
+                Date_Time_Scheduled__c = DateTime.now().addDays(-i-2),
+                Date_Completed__c = Date.today().addDays(-i-2)
             ));
         }
         
-        // Interviewer 2: 9 Align-2nd (SI2)
+        // Interviewer 2: 9 SI2 interviews
         for (Integer i = 0; i < 9; i++) {
             interviews.add(new Interview__c(
                 Candidate__c = candidate.Id,
                 Interviewer_s__c = testInterviewer2,
                 Interview_Type__c = 'SI2',
-                Interview_Status__c = 'Scheduled',
-                Date_Time_Scheduled__c = DateTime.now().addDays(i)
+                Interview_Status__c = 'Completed',
+                Date_Time_Scheduled__c = DateTime.now().addDays(-i-1),
+                Date_Completed__c = Date.today().addDays(-i-1)
             ));
         }
         
@@ -58,39 +62,43 @@ private class InterviewLeaderboardNewControllerTest {
                 Candidate__c = candidate.Id,
                 Interviewer_s__c = testInterviewer2,
                 Interview_Type__c = 'SI2',
-                Interview_Status__c = 'Scheduled',
-                Date_Time_Scheduled__c = DateTime.now().addDays(i + 9)
+                Interview_Status__c = 'Completed',
+                Date_Time_Scheduled__c = DateTime.now().addDays(-i-2),
+                Date_Completed__c = Date.today().addDays(-i-2)
             ));
         }
         
-        // Interviewer 1: 5 Plan-3rd (SI3)
+        // Interviewer 1: 5 SI3 interviews
         for (Integer i = 0; i < 5; i++) {
             interviews.add(new Interview__c(
                 Candidate__c = candidate.Id,
                 Interviewer_s__c = testInterviewer1,
                 Interview_Type__c = 'SI3',
-                Interview_Status__c = 'Scheduled',
-                Date_Time_Scheduled__c = DateTime.now().addDays(i)
+                Interview_Status__c = 'Completed',
+                Date_Time_Scheduled__c = DateTime.now().addDays(-i-1),
+                Date_Completed__c = Date.today().addDays(-i-1)
             ));
         }
         
-        // Interviewer 2: 1 Present-4th (Career)
+        // Interviewer 2: 1 Career interview
         interviews.add(new Interview__c(
             Candidate__c = candidate.Id,
             Interviewer_s__c = testInterviewer2,
             Interview_Type__c = 'Career',
-            Interview_Status__c = 'Scheduled',
-            Date_Time_Scheduled__c = DateTime.now().addDays(1)
+            Interview_Status__c = 'Completed',
+            Date_Time_Scheduled__c = DateTime.now().addDays(-1),
+            Date_Completed__c = Date.today().addDays(-1)
         ));
         
-        // Unassigned interviews (no Interviewer_s__c)
+        // Unassigned interviews (no Interviewer_s__c) - Completed
         for (Integer i = 0; i < 2; i++) {
             interviews.add(new Interview__c(
                 Candidate__c = candidate.Id,
                 Interviewer_s__c = null,
                 Interview_Type__c = 'SI1',
-                Interview_Status__c = 'Scheduled',
-                Date_Time_Scheduled__c = DateTime.now().addDays(i)
+                Interview_Status__c = 'Completed',
+                Date_Time_Scheduled__c = DateTime.now().addDays(-i-1),
+                Date_Completed__c = Date.today().addDays(-i-1)
             ));
         }
         
@@ -187,8 +195,9 @@ private class InterviewLeaderboardNewControllerTest {
                 Candidate__c = candidate.Id,
                 Interviewer_s__c = null,
                 Interview_Type__c = 'SI1',
-                Interview_Status__c = 'Scheduled',
-                Date_Time_Scheduled__c = DateTime.now().addDays(i)
+                Interview_Status__c = 'Completed',
+                Date_Time_Scheduled__c = DateTime.now().addDays(-i-1),
+                Date_Completed__c = Date.today().addDays(-i-1)
             ));
         }
         insert unassignedInterviews;
@@ -205,7 +214,7 @@ private class InterviewLeaderboardNewControllerTest {
     
     @isTest
     static void testGetThisWeekInterviews() {
-        // Create interviews for this week
+        // Create interviews for this week (completed)
         Candidate__c candidate = [SELECT Id FROM Candidate__c LIMIT 1];
         List<Interview__c> weeklyInterviews = new List<Interview__c>();
         for (Integer i = 0; i < 10; i++) {
@@ -213,8 +222,9 @@ private class InterviewLeaderboardNewControllerTest {
                 Candidate__c = candidate.Id,
                 Interviewer_s__c = 'Tim Denton',
                 Interview_Type__c = 'SI1',
-                Interview_Status__c = 'Scheduled',
-                Date_Time_Scheduled__c = DateTime.now()
+                Interview_Status__c = 'Completed',
+                Date_Time_Scheduled__c = DateTime.now().addDays(-i),
+                Date_Completed__c = Date.today().addDays(-i)
             ));
         }
         insert weeklyInterviews;
@@ -331,14 +341,15 @@ private class InterviewLeaderboardNewControllerTest {
     
     @isTest
     static void testInterviewDetailWithUnassigned() {
-        // Create interview with no interviewer
+        // Create interview with no interviewer (completed)
         Candidate__c candidate = [SELECT Id FROM Candidate__c LIMIT 1];
         Interview__c unassigned = new Interview__c(
             Candidate__c = candidate.Id,
             Interviewer_s__c = null,
             Interview_Type__c = 'SI1',
-            Interview_Status__c = 'Scheduled',
-            Date_Time_Scheduled__c = DateTime.now()
+            Interview_Status__c = 'Completed',
+            Date_Time_Scheduled__c = DateTime.now().addDays(-1),
+            Date_Completed__c = Date.today().addDays(-1)
         );
         insert unassigned;
         

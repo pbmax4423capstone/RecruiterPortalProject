@@ -85,7 +85,8 @@ public class ContractBDashboardControllerTest {
                 Interview_Type__c = 'Attraction',
                 Interview_Status__c = 'Completed',
                 Candidate__c = contractBCandidates[0].Id,
-                Date_Time_Scheduled__c = System.now().addDays(-i)
+                Date_Time_Scheduled__c = System.now().addDays(-i),
+                Date_Completed__c = System.now().addDays(-i).date()
             ));
         }
         
@@ -94,7 +95,8 @@ public class ContractBDashboardControllerTest {
                 Interview_Type__c = 'SI1',
                 Interview_Status__c = 'Completed',
                 Candidate__c = contractBCandidates[1].Id,
-                Date_Time_Scheduled__c = System.now().addDays(-i)
+                Date_Time_Scheduled__c = System.now().addDays(-i),
+                Date_Completed__c = System.now().addDays(-i).date()
             ));
         }
         
@@ -103,7 +105,8 @@ public class ContractBDashboardControllerTest {
                 Interview_Type__c = 'SI2',
                 Interview_Status__c = 'Completed',
                 Candidate__c = contractBCandidates[2].Id,
-                Date_Time_Scheduled__c = System.now().addDays(-i)
+                Date_Time_Scheduled__c = System.now().addDays(-i),
+                Date_Completed__c = System.now().addDays(-i).date()
             ));
         }
         
@@ -111,7 +114,8 @@ public class ContractBDashboardControllerTest {
             Interview_Type__c = 'Career',
             Interview_Status__c = 'Completed',
             Candidate__c = contractBCandidates[0].Id,
-            Date_Time_Scheduled__c = System.now().addDays(-1)
+            Date_Time_Scheduled__c = System.now().addDays(-1),
+            Date_Completed__c = System.now().addDays(-1).date()
         ));
         
         // Some scheduled (not completed) interviews
