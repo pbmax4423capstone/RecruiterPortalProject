@@ -1,9 +1,22 @@
 # Copilot Instructions for Cole Arnold - RecruiterPortal Project
 
-## NEW: Dashboard Metrics + Extension Sync (December 29, 2025)
+## NEW: Unified Dark Mode Implementation (December 29, 2025)
+- **Lightning Message Service:** Created `DarkModeChannel__c` for centralized dark mode state management across all Recruiter Portal components
+- **Publisher:** `portalHeaderNew` has dark mode toggle button (sun/moon icons) that publishes dark mode state via LMS
+- **Subscribers:** All components subscribe to `DarkModeChannel__c`: candidateFunnelDashboard, candidateKanban, recentActivity, candidatesInContractingReadOnly, interviewLeaderboard, scheduledCallsModal
+- **Color Scheme:** Consistent across all components:
+  - Backgrounds: `#16325c`, `#1a3a52`, `#243649`, `#2c4460`
+  - Text: `#ffffff` (headings), `#e8f4fd` (body), `#b0c4de` (secondary)
+  - Borders: `#3e5771`, Accents: `#5ea3f2`
+- **Pattern:** Each component has `@wire(MessageContext)`, `subscribeToMessageChannel()`, `handleDarkModeChange()`, and `containerClass` getter
+- **Lightning Base Components:** Cannot style `<lightning-card>` directly - use wrapper divs with dark mode classes instead
+- **Testing Org:** All dark mode changes deployed to `choujifan90@gmail.com.prodtest`
+
+## Dashboard Metrics + Extension Sync (December 29, 2025)
 - Review the shared overview at `docs/dashboard-metrics-and-extension-overview.md` before touching recruiter metrics or the LinkedIn extensions so code + docs stay aligned for Patrick and Cole.
-- Personal briefing: `docs/Cole-Arnold-Dashboard-Extension-Notes.md` explains the rationale, deployment steps, and talking points you’ll use with stakeholders.
-- All `InterviewLeaderboard*` Apex methods must continue filtering on **completed** interviews (Status = Completed and Completed_Date__c within the requested window).
+- Personal briefing: `docs/Cole-Arnold-Dashboard-Extension-Notes.md` explains the rationale, deployment steps, and talking points you'll use with stakeholders.
+- **Interview Leaderboard:** Located at `docs/cole-dashboard-extension.html` - now linked from training-center.html under "Cole Resources" section
+- All `InterviewLeaderboard*` Apex methods must continue filtering on **completed** interviews (Status = Completed and Date_Completed__c within the requested window).
 - When updating Chrome/Edge extensions, edit both folders in lockstep and keep the IIFE guard (`window.__linkedinToSalesforceLoaded`) intact.
 - Keep this file dedicated to Cole-specific guidance; Patrick’s base rules live in `.github/copilot-instructions.md`. Load both instruction files in Copilot so neither set overrides the other.
 
