@@ -63,8 +63,8 @@ public class ScheduledCallsControllerTest {
     
     @isTest
     static void testGetScheduledCallsNoResults() {
-        // Delete all test tasks
-        delete [SELECT Id FROM Task];
+        // Delete only test tasks created in @TestSetup
+        delete [SELECT Id FROM Task WHERE OwnerId = :UserInfo.getUserId()];
         
         Test.startTest();
         Map<String, List<Task>> result = ScheduledCallsController.getScheduledCalls();

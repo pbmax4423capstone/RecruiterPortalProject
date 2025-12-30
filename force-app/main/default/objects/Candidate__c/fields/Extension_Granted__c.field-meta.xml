@@ -3,7 +3,6 @@
     <fullName>Extension_Granted__c</fullName>
     <defaultValue>false</defaultValue>
     <description>Indicates if Contract B agent has been granted an extension due to pipeline in progress.</description>
-    <externalId>false</externalId>
     <inlineHelpText>Check this box when granting a 4-month extension to a Contract B agent who has opportunities in the pipeline.</inlineHelpText>
     <label>Extension Granted</label>
     <trackFeedHistory>false</trackFeedHistory>

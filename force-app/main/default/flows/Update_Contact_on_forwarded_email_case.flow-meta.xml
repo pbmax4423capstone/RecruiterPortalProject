@@ -41,43 +41,9 @@
                 </rightValue>
             </conditions>
             <connector>
-                <targetReference>Is_Email_Extracted</targetReference>
-            </connector>
-            <label>Yes</label>
-        </rules>
-    </decisions>
-    <decisions>
-        <name>Is_Email_Extracted</name>
-        <label>Is Email Extracted?</label>
-        <locationX>182</locationX>
-        <locationY>815</locationY>
-        <defaultConnectorLabel>No Email Found</defaultConnectorLabel>
-        <rules>
-            <name>Email_Found</name>
-            <conditionLogic>and</conditionLogic>
-            <conditions>
-                <leftValueReference>ExtractedSenderEmail</leftValueReference>
-                <operator>IsNull</operator>
-                <rightValue>
-                    <booleanValue>true</booleanValue>
-                </rightValue>
-            </conditions>
-            <label>Email is Blank</label>
-        </rules>
-        <rules>
-            <name>Valid_Email</name>
-            <conditionLogic>and</conditionLogic>
-            <conditions>
-                <leftValueReference>ExtractedSenderEmail</leftValueReference>
-                <operator>IsNull</operator>
-                <rightValue>
-                    <booleanValue>false</booleanValue>
-                </rightValue>
-            </conditions>
-            <connector>
                 <targetReference>Get_Actual_Sender_Contact</targetReference>
             </connector>
-            <label>Valid Email</label>
+            <label>Yes</label>
         </rules>
     </decisions>
     <environments>Default</environments>
@@ -298,7 +264,7 @@
         <connector>
             <targetReference>Get_Case</targetReference>
         </connector>
-        <filterLogic>((1 OR 2) AND 3)</filterLogic>
+        <filterLogic>or</filterLogic>
         <filters>
             <field>Subject</field>
             <operator>Contains</operator>
@@ -311,6 +277,13 @@
             <operator>Contains</operator>
             <value>
                 <stringValue>FWD:</stringValue>
+            </value>
+        </filters>
+        <filters>
+            <field>ContactId</field>
+            <operator>IsChanged</operator>
+            <value>
+                <booleanValue>true</booleanValue>
             </value>
         </filters>
         <filters>

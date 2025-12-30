@@ -25,14 +25,14 @@
                 <label>Plan-3rd</label>
             </value>
             <value>
-                <fullName>Present-4th</fullName>
-                <default>false</default>
-                <label>Present-4th</label>
-            </value>
-            <value>
                 <fullName>Optional-5th</fullName>
                 <default>false</default>
                 <label>Optional-5th</label>
+            </value>
+            <value>
+                <fullName>Present-4th</fullName>
+                <default>false</default>
+                <label>Present-4th</label>
             </value>
         </valueSetDefinition>
     </valueSet>

@@ -4,47 +4,6 @@
     <businessStatus>Active</businessStatus>
     <deleteConstraint>SetNull</deleteConstraint>
     <label>Conducted By</label>
-    <lookupFilter>
-        <active>true</active>
-        <booleanFilter>1 OR 2 OR 3 OR 4 OR 5 OR 6 OR 7</booleanFilter>
-        <filterItems>
-            <field>User.Id</field>
-            <operation>equals</operation>
-            <value>0055f00000EXvFGAA1</value>
-        </filterItems>
-        <filterItems>
-            <field>User.Id</field>
-            <operation>equals</operation>
-            <value>0055f00000EXakXAAT</value>
-        </filterItems>
-        <filterItems>
-            <field>User.Id</field>
-            <operation>equals</operation>
-            <value>0055f00000DqpnpAAB</value>
-        </filterItems>
-        <filterItems>
-            <field>User.Id</field>
-            <operation>equals</operation>
-            <value>0055f0000081I14AAE</value>
-        </filterItems>
-        <filterItems>
-            <field>User.Id</field>
-            <operation>equals</operation>
-            <value>0055f00000A7BFWAA3</value>
-        </filterItems>
-        <filterItems>
-            <field>User.Id</field>
-            <operation>equals</operation>
-            <value>005Vo00000ktgovIAA</value>
-        </filterItems>
-        <filterItems>
-            <field>User.Id</field>
-            <operation>equals</operation>
-            <value>005Vo00000fcekpIAA</value>
-        </filterItems>
-        <infoMessage>Only SF Sales Managers who conduct interviews are shown.</infoMessage>
-        <isOptional>false</isOptional>
-    </lookupFilter>
     <referenceTo>User</referenceTo>
     <relationshipLabel>Interviews Conducted</relationshipLabel>
     <relationshipName>Interviews_Conducted</relationshipName>

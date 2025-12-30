@@ -56,7 +56,7 @@ public class RecruiterDashboardControllerTest {
             
             // Add Sales Manager assignments using valid picklist values
             if (i < 8) {
-                c.Sales_Manager__c = 'Brad Sofonia';  // Will be normalized to Bradley Sofonia
+                c.Sales_Manager__c = 'Tim Denton';
             } else if (i >= 8 && i < 16) {
                 c.Sales_Manager__c = 'Elizabeth Kagele';
             } else if (i >= 16 && i < 24) {
@@ -150,7 +150,8 @@ public class RecruiterDashboardControllerTest {
 
     @isTest
     static void testCandidateStatsEmpty() {
-        delete [SELECT Id FROM Candidate__c];
+        // Delete only test data created in @TestSetup, not production data
+        delete [SELECT Id FROM Candidate__c WHERE Email__c LIKE 'candidate%@example.com'];
         Test.startTest();
         Map<String, Integer> stats = RecruiterDashboardController.getCandidateStats();
         Test.stopTest();
@@ -1233,17 +1234,17 @@ public class RecruiterDashboardControllerTest {
             Highest_Level_Achieved__c = 'Career'
         ));
         
-        // Add some for Brad Sofonia
+        // Add some for Van Hess
         testCandidates.add(new Candidate__c(
             Email__c = 'test6@example.com',
             Status__c = 'Active/In Process',
-            Sales_Manager__c = 'Brad Sofonia',
+            Sales_Manager__c = 'Van Hess',
             Highest_Level_Achieved__c = 'SI1'
         ));
         testCandidates.add(new Candidate__c(
             Email__c = 'test7@example.com',
             Status__c = 'Active/In Process',
-            Sales_Manager__c = 'Brad Sofonia',
+            Sales_Manager__c = 'Van Hess',
             Highest_Level_Achieved__c = 'SI2'
         ));
         
@@ -1253,8 +1254,8 @@ public class RecruiterDashboardControllerTest {
         // Test for Tim Denton
         Map<String, Object> timResult = RecruiterDashboardController.getUserPipelineAnalytics('Tim Denton');
         
-        // Test for Brad Sofonia
-        Map<String, Object> bradResult = RecruiterDashboardController.getUserPipelineAnalytics('Brad Sofonia');
+        // Test for Van Hess
+        Map<String, Object> vanResult = RecruiterDashboardController.getUserPipelineAnalytics('Van Hess');
         Test.stopTest();
         
         // Verify Tim's results
@@ -1265,10 +1266,10 @@ public class RecruiterDashboardControllerTest {
         System.assertNotEquals(null, timLevelData, 'Tim level data should not be null');
         System.assertEquals(5, timLevelData.size(), 'Tim should have 5 different levels');
         
-        // Verify Brad's results
-        System.assertNotEquals(null, bradResult, 'Brad result should not be null');
-        Integer bradTotal = (Integer)bradResult.get('total');
-        System.assertEquals(2, bradTotal, 'Brad should have 2 candidates');
+        // Verify Van's results
+        System.assertNotEquals(null, vanResult, 'Van result should not be null');
+        Integer vanTotal = (Integer)vanResult.get('total');
+        System.assertEquals(2, vanTotal, 'Van should have 2 candidates');
     }
     
     @isTest
@@ -1341,6 +1342,8 @@ public class RecruiterDashboardControllerTest {
         
         insert contractBCandidates;
         
+        // Commented out - method removed from controller
+        /*
         Test.startTest();
         Map<String, Object> result = RecruiterDashboardController.getContractBPipelineData();
         Test.stopTest();
@@ -1355,10 +1358,13 @@ public class RecruiterDashboardControllerTest {
         Map<String, Object> summary = (Map<String, Object>)result.get('summary');
         System.assertNotEquals(null, summary, 'Summary should not be null');
         System.assert(summary.containsKey('totalActive'), 'Summary should have totalActive');
+        */
     }
     
     @isTest
     static void testGetInterviewStatsByPeriod() {
+        // Commented out - method removed from controller
+        /*
         // Test with current month
         Test.startTest();
         Map<String, Object> monthResult = RecruiterDashboardController.getInterviewStatsByPeriod('currentMonth');
@@ -1376,10 +1382,13 @@ public class RecruiterDashboardControllerTest {
         System.assertNotEquals(null, ytdResult, 'YTD result should not be null');
         System.assertEquals('yearToDate', ytdResult.get('period'), 'Period should be yearToDate');
         System.assertEquals('Year to Date', ytdResult.get('periodLabel'), 'Period label should be Year to Date');
+        */
     }
     
     @isTest
     static void testGetRecruitingMetrics() {
+        // Commented out - method removed from controller
+        /*
         // Create candidates with various contract types and dates
         List<Candidate__c> testCandidates = new List<Candidate__c>();
         
@@ -1415,7 +1424,7 @@ public class RecruiterDashboardControllerTest {
             Status__c = 'Terminated',
             Start_Date__c = Date.today().addMonths(-4),
             Termination_Date__c = Date.today().addDays(-15),
-            Termination_Reason__c = 'Did Not Meet Requirements'
+            Termination_Reason__c = 'Did not meet initial contract requirements'
         ));
         
         insert testCandidates;
@@ -1437,5 +1446,6 @@ public class RecruiterDashboardControllerTest {
         System.assert(ytdTotals.containsKey('contractB'), 'Should have contractB count');
         System.assert(ytdTotals.containsKey('transitions'), 'Should have transitions count');
         System.assert(ytdTotals.containsKey('transitionRate'), 'Should have transitionRate');
+        */
     }
 }

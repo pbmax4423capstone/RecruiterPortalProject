@@ -160,8 +160,9 @@ private class InterviewLeaderboardNewControllerTest {
     
     @isTest
     static void testEmptyLeaderboard() {
-        // Delete all interviews
-        delete [SELECT Id FROM Interview__c];
+        // Delete only test interviews (related to test candidate)
+        Candidate__c candidate = [SELECT Id FROM Candidate__c WHERE Email__c = 'testcandidate@test.com' LIMIT 1];
+        delete [SELECT Id FROM Interview__c WHERE Candidate__c = :candidate.Id];
         
         Test.startTest();
         List<InterviewLeaderboardNewController.LeaderboardEntry> results = 
@@ -174,10 +175,11 @@ private class InterviewLeaderboardNewControllerTest {
     
     @isTest
     static void testOnlyUnassignedInterviews() {
-        // Delete all interviews and create only unassigned ones
-        delete [SELECT Id FROM Interview__c];
+        // Get test candidate
+        Candidate__c candidate = [SELECT Id FROM Candidate__c WHERE Email__c = 'testcandidate@test.com' LIMIT 1];
         
-        Candidate__c candidate = [SELECT Id FROM Candidate__c LIMIT 1];
+        // Delete only test interviews (related to test candidate) and create only unassigned ones
+        delete [SELECT Id FROM Interview__c WHERE Candidate__c = :candidate.Id];
         
         List<Interview__c> unassignedInterviews = new List<Interview__c>();
         for (Integer i = 0; i < 5; i++) {
