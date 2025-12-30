@@ -27,7 +27,7 @@ private class InterviewLeaderboardNewControllerTest {
                 Interview_Type__c = 'SI1',
                 Interview_Status__c = 'Completed',
                 Date_Time_Scheduled__c = DateTime.now().addDays(-i),
-                Date_Completed__c = DateTime.now().addDays(-i)
+                Date_Completed__c = Date.today().addDays(-i)
             ));
         }
         
@@ -39,7 +39,7 @@ private class InterviewLeaderboardNewControllerTest {
                 Interview_Type__c = 'SI1',
                 Interview_Status__c = 'Completed',
                 Date_Time_Scheduled__c = DateTime.now().addDays(-i - 1),
-                Date_Completed__c = DateTime.now().addDays(-i - 1)
+                Date_Completed__c = Date.today().addDays(-i - 1)
             ));
         }
         
@@ -51,7 +51,7 @@ private class InterviewLeaderboardNewControllerTest {
                 Interview_Type__c = 'SI2',
                 Interview_Status__c = 'Completed',
                 Date_Time_Scheduled__c = DateTime.now().addDays(-i),
-                Date_Completed__c = DateTime.now().addDays(-i)
+                Date_Completed__c = Date.today().addDays(-i)
             ));
         }
         
@@ -63,7 +63,7 @@ private class InterviewLeaderboardNewControllerTest {
                 Interview_Type__c = 'SI2',
                 Interview_Status__c = 'Completed',
                 Date_Time_Scheduled__c = DateTime.now().addDays(-i - 1),
-                Date_Completed__c = DateTime.now().addDays(-i - 1)
+                Date_Completed__c = Date.today().addDays(-i - 1)
             ));
         }
         
@@ -75,7 +75,7 @@ private class InterviewLeaderboardNewControllerTest {
                 Interview_Type__c = 'SI3',
                 Interview_Status__c = 'Completed',
                 Date_Time_Scheduled__c = DateTime.now().addDays(-i),
-                Date_Completed__c = DateTime.now().addDays(-i)
+                Date_Completed__c = Date.today().addDays(-i)
             ));
         }
         
@@ -86,7 +86,7 @@ private class InterviewLeaderboardNewControllerTest {
             Interview_Type__c = 'Career',
             Interview_Status__c = 'Completed',
             Date_Time_Scheduled__c = DateTime.now().addDays(-1),
-            Date_Completed__c = DateTime.now().addDays(-1)
+            Date_Completed__c = Date.today().addDays(-1)
         ));
         
         // Unassigned interviews (no Interviewer_s__c) - COMPLETED this month
@@ -97,7 +97,7 @@ private class InterviewLeaderboardNewControllerTest {
                 Interview_Type__c = 'SI1',
                 Interview_Status__c = 'Completed',
                 Date_Time_Scheduled__c = DateTime.now().addDays(-i),
-                Date_Completed__c = DateTime.now().addDays(-i)
+                Date_Completed__c = Date.today().addDays(-i)
             ));
         }
         
@@ -196,7 +196,7 @@ private class InterviewLeaderboardNewControllerTest {
                 Interview_Type__c = 'SI1',
                 Interview_Status__c = 'Completed',
                 Date_Time_Scheduled__c = DateTime.now().addDays(-i),
-                Date_Completed__c = DateTime.now().addDays(-i)
+                Date_Completed__c = Date.today().addDays(-i)
             ));
         }
         insert unassignedInterviews;
@@ -223,7 +223,7 @@ private class InterviewLeaderboardNewControllerTest {
                 Interview_Type__c = 'SI1',
                 Interview_Status__c = 'Completed',
                 Date_Time_Scheduled__c = DateTime.now(),
-                Date_Completed__c = DateTime.now()
+                Date_Completed__c = Date.today()
             ));
         }
         insert weeklyInterviews;
@@ -348,7 +348,7 @@ private class InterviewLeaderboardNewControllerTest {
             Interview_Type__c = 'SI1',
             Interview_Status__c = 'Completed',
             Date_Time_Scheduled__c = DateTime.now(),
-            Date_Completed__c = DateTime.now()
+            Date_Completed__c = Date.today()
         );
         insert unassigned;
         
@@ -369,3 +369,4 @@ private class InterviewLeaderboardNewControllerTest {
         System.assert(foundUnassigned, 'Should find the unassigned interview');
     }
 }
+
