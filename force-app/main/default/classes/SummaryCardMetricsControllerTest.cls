@@ -14,7 +14,7 @@ private class SummaryCardMetricsControllerTest {
    * Returns map with 6 metrics
    */
   @isTest
-  static void testGetMetricsPhase1ReturnsEmptyMap() {
+  static void testGetMetricsReturnsExpectedMetrics() {
     // Setup
     Test.startTest();
 
