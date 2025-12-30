@@ -13,8 +13,11 @@
             <name>Does_Not_Exist</name>
             <conditionLogic>and</conditionLogic>
             <conditions>
-                <leftValueReference>$Record.Contact__r.Agents_Staff__r.Id</leftValueReference>
-                <operator>EqualTo</operator>
+                <leftValueReference>Get_Agent_Staff_Record.Id</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
             </conditions>
             <connector>
                 <targetReference>Create_Agents_Staff_Record</targetReference>
@@ -184,7 +187,6 @@
         <connector>
             <targetReference>Get_Triggering_ALC_Record</targetReference>
         </connector>
-        <doesRequireRecordChangedToMeetCriteria>true</doesRequireRecordChangedToMeetCriteria>
         <filterLogic>or</filterLogic>
         <filters>
             <field>Stage__c</field>
@@ -204,5 +206,5 @@
         <recordTriggerType>Update</recordTriggerType>
         <triggerType>RecordAfterSave</triggerType>
     </start>
-    <status>Active</status>
+    <status>Draft</status>
 </Flow>

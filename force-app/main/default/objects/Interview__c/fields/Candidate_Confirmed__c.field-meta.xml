@@ -3,7 +3,6 @@
     <fullName>Candidate_Confirmed__c</fullName>
     <defaultValue>false</defaultValue>
     <description>Indicates whether the candidate has confirmed their attendance for the interview</description>
-    <externalId>false</externalId>
     <label>Candidate Confirmed</label>
     <trackTrending>false</trackTrending>
     <type>Checkbox</type>

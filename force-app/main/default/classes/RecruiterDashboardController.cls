@@ -2181,6 +2181,9 @@ public without sharing class RecruiterDashboardController {
             String currentUserId = UserInfo.getUserId();
             System.debug('Getting recent notes for user: ' + currentUserId);
             
+            // Set to collect ContentDocument IDs
+            Set<Id> contentDocumentIds = new Set<Id>();
+            
             // Query ContentVersion to get note data with ContentDocument info
             // ContentVersion stores the actual content, ContentDocument is the container
             // Filter by current user's notes (OwnerId = current user)
@@ -2500,6 +2503,3 @@ public without sharing class RecruiterDashboardController {
         return result;
     }
 }
-=======
-}
->>>>>>> dae1b7b (Add recruiter portal migration tooling and dashboards)

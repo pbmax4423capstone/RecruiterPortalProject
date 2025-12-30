@@ -155,21 +155,6 @@
                 <default>false</default>
                 <label>CANCELED</label>
             </value>
-            <value>
-                <fullName>Submit to HO (Registration)</fullName>
-                <default>false</default>
-                <label>Submit to HO (Registration)</label>
-            </value>
-            <value>
-                <fullName>Received Approval Letter-Registration</fullName>
-                <default>false</default>
-                <label>Received Approval Letter-(Registration)</label>
-            </value>
-            <value>
-                <fullName>CANCELED-(Registrations)</fullName>
-                <default>false</default>
-                <label>CANCELED-(Registrations)</label>
-            </value>
         </valueSetDefinition>
     </valueSet>
 </CustomField>

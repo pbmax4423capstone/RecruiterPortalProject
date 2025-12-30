@@ -60,7 +60,7 @@ public class ContractBDashboardControllerTest {
             Status__c = 'Terminated',
             Start_Date__c = Date.today().addMonths(-5),
             Termination_Date__c = Date.today().addDays(-10),
-            Termination_Reason__c = 'Did Not Meet Requirements',
+            Termination_Reason__c = 'Did not meet initial contract requirements',
             Sales_Manager__c = 'Elizabeth Kagele'
         ));
         

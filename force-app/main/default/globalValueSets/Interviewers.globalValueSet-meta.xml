@@ -70,6 +70,12 @@
         <default>false</default>
         <label>Van Hess</label>
     </customValue>
+    <customValue>
+        <fullName>Brad Sofonia</fullName>
+        <default>false</default>
+        <isActive>false</isActive>
+        <label>Brad Sofonia</label>
+    </customValue>
     <description>Interviewers of candidates</description>
     <masterLabel>Interviewers</masterLabel>
     <sorted>false</sorted>

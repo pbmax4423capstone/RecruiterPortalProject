@@ -71,7 +71,7 @@
     <formulas>
         <name>DaysSinceInBackground</name>
         <dataType>Number</dataType>
-        <expression>TODAY() - DATEVALUE({!Loop_ALC_Records.In_Background_Since__c})</expression>
+        <expression>TODAY() - {!Loop_ALC_Records.In_Background_Since__c}</expression>
         <scale>0</scale>
     </formulas>
     <interviewLabel>Background Check Follow-Up Tasks {!$Flow.CurrentDateTime}</interviewLabel>

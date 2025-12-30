@@ -2,7 +2,6 @@
 <CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
     <fullName>Termination_Reason__c</fullName>
     <description>Reason for contract termination.</description>
-    <externalId>false</externalId>
     <inlineHelpText>Select the reason for termination.</inlineHelpText>
     <label>Termination Reason</label>
     <required>false</required>

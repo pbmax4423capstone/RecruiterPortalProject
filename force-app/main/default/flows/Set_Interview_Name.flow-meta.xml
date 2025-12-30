@@ -136,7 +136,7 @@
     <formulas>
         <name>InterviewNameFormula</name>
         <dataType>String</dataType>
-        <expression>{!Get_Candidate_Info.First_Name__c} &amp; &quot; &quot; &amp; {!Get_Candidate_Info.Last_Name__c} &amp; &quot; - &quot; &amp; {!$Record.Interview_Type__c}</expression>
+        <expression>{!Get_Candidate_Info.First_Name__c} &amp; &quot; &quot; &amp; {!Get_Candidate_Info.Last_Name__c} &amp; &quot; - &quot; &amp; TEXT({!$Record.Interview_Type__c})</expression>
     </formulas>
     <interviewLabel>Set Interview Name {!$Flow.CurrentDateTime}</interviewLabel>
     <label>Set Interview Name</label>

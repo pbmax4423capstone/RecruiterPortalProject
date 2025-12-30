@@ -1,54 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Flow xmlns="http://soap.sforce.com/2006/04/metadata">
     <apiVersion>59.0</apiVersion>
-    <description>Automatically calculates Contract End Date when Start Date is set for Contract B candidates. Sets end date to Start Date + 4 months.</description>
-    <environments>Default</environments>
-    <interviewLabel>Calculate Contract End Date {!$Flow.CurrentDateTime}</interviewLabel>
-    <label>Calculate Contract End Date</label>
-    <processMetadataValues>
-        <name>BuilderType</name>
-        <value>
-            <stringValue>LightningFlowBuilder</stringValue>
-        </value>
-    </processMetadataValues>
-    <processMetadataValues>
-        <name>CanvasMode</name>
-        <value>
-            <stringValue>AUTO_LAYOUT_CANVAS</stringValue>
-        </value>
-    </processMetadataValues>
-    <processMetadataValues>
-        <name>OriginBuilderType</name>
-        <value>
-            <stringValue>LightningFlowBuilder</stringValue>
-        </value>
-    </processMetadataValues>
-    <processType>AutoLaunchedFlow</processType>
-    <start>
-        <locationX>50</locationX>
-        <locationY>0</locationY>
-        <connector>
-            <targetReference>Check_Contract_Type</targetReference>
-        </connector>
-        <filterLogic>and</filterLogic>
-        <filters>
-            <field>Start_Date__c</field>
-            <operator>IsNull</operator>
+    <areMetricsLoggedToDataCloud>false</areMetricsLoggedToDataCloud>
+    <assignments>
+        <name>Set_Contract_End_Date</name>
+        <label>Set Contract End Date</label>
+        <locationX>264</locationX>
+        <locationY>350</locationY>
+        <assignmentItems>
+            <assignToReference>$Record.Contract_End_Date__c</assignToReference>
+            <operator>Assign</operator>
             <value>
-                <booleanValue>false</booleanValue>
+                <elementReference>formula_ContractEndDate</elementReference>
             </value>
-        </filters>
-        <filters>
-            <field>Contract_Type__c</field>
-            <operator>EqualTo</operator>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>$Record.Contract_Outcome__c</assignToReference>
+            <operator>Assign</operator>
             <value>
-                <stringValue>Contract B</stringValue>
+                <stringValue>Active</stringValue>
             </value>
-        </filters>
-        <object>Candidate__c</object>
-        <recordTriggerType>CreateAndUpdate</recordTriggerType>
-        <triggerType>RecordBeforeSave</triggerType>
-    </start>
+        </assignmentItems>
+    </assignments>
     <decisions>
         <name>Check_Contract_Type</name>
         <label>Check Contract Type</label>
@@ -107,30 +80,58 @@
             <label>End Date Empty Or Start Changed</label>
         </rules>
     </decisions>
+    <description>Automatically calculates Contract End Date when Start Date is set for Contract B candidates. Sets end date to Start Date + 4 months.</description>
+    <environments>Default</environments>
     <formulas>
         <name>formula_ContractEndDate</name>
         <dataType>Date</dataType>
         <expression>ADDMONTHS({!$Record.Start_Date__c}, 4)</expression>
     </formulas>
-    <assignments>
-        <name>Set_Contract_End_Date</name>
-        <label>Set Contract End Date</label>
-        <locationX>264</locationX>
-        <locationY>350</locationY>
-        <assignmentItems>
-            <assignToReference>$Record.Contract_End_Date__c</assignToReference>
-            <operator>Assign</operator>
+    <interviewLabel>Calculate Contract End Date {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>Calculate Contract End Date</label>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>AUTO_LAYOUT_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>OriginBuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>AutoLaunchedFlow</processType>
+    <start>
+        <locationX>50</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>Check_Contract_Type</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Start_Date__c</field>
+            <operator>IsNull</operator>
             <value>
-                <elementReference>formula_ContractEndDate</elementReference>
+                <booleanValue>false</booleanValue>
             </value>
-        </assignmentItems>
-        <assignmentItems>
-            <assignToReference>$Record.Contract_Outcome__c</assignToReference>
-            <operator>Assign</operator>
+        </filters>
+        <filters>
+            <field>Contract_Type__c</field>
+            <operator>EqualTo</operator>
             <value>
-                <stringValue>Active</stringValue>
+                <stringValue>Contract B</stringValue>
             </value>
-        </assignmentItems>
-    </assignments>
+        </filters>
+        <object>Candidate__c</object>
+        <recordTriggerType>CreateAndUpdate</recordTriggerType>
+        <triggerType>RecordBeforeSave</triggerType>
+    </start>
     <status>Active</status>
 </Flow>
