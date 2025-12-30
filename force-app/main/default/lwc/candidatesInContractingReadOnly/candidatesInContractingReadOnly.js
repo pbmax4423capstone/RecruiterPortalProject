@@ -1,13 +1,48 @@
-import { LightningElement, wire } from 'lwc';
+import { LightningElement, wire, api } from 'lwc';
 import { refreshApex } from '@salesforce/apex';
 import { ShowToastEvent } from 'lightning/platformShowToastEvent';
+import { subscribe, MessageContext } from 'lightning/messageService';
+import DARK_MODE_CHANNEL from '@salesforce/messageChannel/DarkModeChannel__c';
 import getCandidatesInContracting from '@salesforce/apex/CandidatesInContractingController.getCandidatesInContracting';
 
 export default class CandidatesInContractingReadOnly extends LightningElement {
+    @wire(MessageContext)
+    messageContext;
+    
+    @api darkMode = false;
     stageGroups = [];
     error;
     isLoading = true;
     wiredResult;
+    subscription = null;
+
+    connectedCallback() {
+        this.subscribeToMessageChannel();
+    }
+
+    subscribeToMessageChannel() {
+        this.subscription = subscribe(
+            this.messageContext,
+            DARK_MODE_CHANNEL,
+            (message) => this.handleDarkModeChange(message)
+        );
+    }
+
+    handleDarkModeChange(message) {
+        this.darkMode = message.darkModeEnabled;
+    }
+
+    get containerClass() {
+        return this.darkMode ? 'contracting-container dark-mode' : 'contracting-container';
+    }
+
+    get stageColumnClass() {
+        return this.darkMode ? 'stage-column dark-mode' : 'stage-column';
+    }
+
+    get candidateItemClass() {
+        return this.darkMode ? 'candidate-item dark-mode' : 'candidate-item';
+    }
 
     // Define stage order for Kanban - contracting stages
     stageOrder = [

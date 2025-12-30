@@ -1,0 +1,36 @@
+.activities-container {
+    background-color: #f3f3f3;
+    padding: 0;
+}
+
+.custom-activities-card {
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    margin: 0;
+}
+
+.custom-card-header {
+    background: linear-gradient(135deg, #032d60 0%, #055199 100%);
+    color: white;
+    padding: 1rem 1.5rem;
+    border-radius: 8px 8px 0 0;
+}
+
+.custom-card-header h2 {
+    color: white;
+    font-weight: 600;
+    font-size: 1.125rem;
+    margin: 0;
+}
+
+.custom-card-body {
+    padding: 0;
+    background: white;
+}
+
+/* Override standard activity timeline styles */
+.custom-card-body lightning-activity-timeline {
+    display: block;
+}

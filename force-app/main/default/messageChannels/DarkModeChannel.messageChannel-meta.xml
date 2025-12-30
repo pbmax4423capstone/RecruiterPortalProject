@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LightningMessageChannel xmlns="http://soap.sforce.com/2006/04/metadata">
+    <description>Message channel for communicating dark mode state changes across components</description>
+    <isExposed>true</isExposed>
+    <lightningMessageFields>
+        <description>Boolean indicating if dark mode is enabled</description>
+        <fieldName>darkModeEnabled</fieldName>
+    </lightningMessageFields>
+    <masterLabel>Dark Mode Channel</masterLabel>
+</LightningMessageChannel>

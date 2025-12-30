@@ -10,7 +10,7 @@ export default class ServiceHomeVibe extends NavigationMixin(LightningElement) {
   @track darkMode = false;
   @track greetingMessage = '';
   @track themeLabel = 'Enable Dark Mode';
-  @track themeIcon = 'utility:brightness';
+  @track themeIcon = 'utility:light';
   @track userName = '';
   @track upcomingTasks = [];
   @track pastDueTasks = [];
@@ -131,7 +131,7 @@ export default class ServiceHomeVibe extends NavigationMixin(LightningElement) {
       this.themeIcon = 'utility:moon';
     } else {
       this.themeLabel = 'Enable Dark Mode';
-      this.themeIcon = 'utility:brightness';
+      this.themeIcon = 'utility:light';
     }
   }
 

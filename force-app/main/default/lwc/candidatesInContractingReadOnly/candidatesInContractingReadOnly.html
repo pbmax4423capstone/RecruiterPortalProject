@@ -14,7 +14,7 @@
             </template>
 
             <template if:true={hasData}>
-                <div class="kanban-container">
+                <div class={containerClass}>
                     <template for:each={stageGroups} for:item="stageGroup">
                         <div key={stageGroup.stageKey} class="kanban-column">
                             

@@ -473,6 +473,105 @@
     font-weight: 600;
 }
 
+/* Lightning Card Dark Mode */
+lightning-card.dark-mode {
+    background-color: #1a3a52;
+    border-color: #3e5771;
+}
+
+/* Dark Mode Styles */
+.funnel-view.dark-mode {
+    background-color: #16325c;
+}
+
+.funnel-view.dark-mode .area-chart-container {
+    background-color: #1a3a52;
+    border-color: #3e5771;
+}
+
+.funnel-view.dark-mode .chart-header {
+    border-bottom-color: #3e5771;
+}
+
+.funnel-view.dark-mode .chart-title {
+    color: #ffffff;
+}
+
+.funnel-view.dark-mode .inline-stats {
+    color: #e8f4fd;
+}
+
+.funnel-view.dark-mode .total-number {
+    color: #ffffff;
+}
+
+.funnel-view.dark-mode .total-label {
+    color: #b0c4de;
+}
+
+.funnel-view.dark-mode .stat-item {
+    background-color: #243649;
+    border-color: #3e5771;
+    color: #e8f4fd;
+}
+
+.funnel-view.dark-mode .stat-label {
+    color: #b0c4de;
+}
+
+.funnel-view.dark-mode .stat-value {
+    color: #ffffff;
+}
+
+.funnel-view.dark-mode .conversion-info-panel {
+    background-color: #2c4460;
+    border-color: #3e5771;
+}
+
+.funnel-view.dark-mode .panel-title {
+    color: #ffffff;
+}
+
+.funnel-view.dark-mode .conversion-row {
+    border-bottom-color: rgba(255, 255, 255, 0.15);
+}
+
+.funnel-view.dark-mode .conversion-row > div:first-child {
+    color: #ffffff;
+}
+
+.funnel-view.dark-mode .conversion-detail {
+    color: #b0c4de;
+}
+
+.funnel-view.dark-mode .legend-title {
+    color: #e8f4fd;
+}
+
+.funnel-view.dark-mode .panel-legend .legend-item {
+    color: #b0c4de;
+}
+
+.funnel-view.dark-mode .conversion-percent {
+    color: #ffffff;
+}
+
+.funnel-view.dark-mode .conversion-label {
+    color: #b0c4de;
+}
+
+.funnel-view.dark-mode .stage-percent-label {
+    color: #ffffff;
+}
+
+.funnel-view.dark-mode .stage-name-small {
+    color: #b0c4de;
+}
+
+.funnel-view.dark-mode .echarts-container {
+    background-color: #1a3a52;
+}
+
 /* Responsive for Area Chart */
 @media (max-width: 768px) {
     .area-chart-container {

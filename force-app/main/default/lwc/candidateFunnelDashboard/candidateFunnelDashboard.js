@@ -1,10 +1,15 @@
 import { LightningElement, wire, track } from 'lwc';
 import { NavigationMixin } from 'lightning/navigation';
+import { subscribe, MessageContext } from 'lightning/messageService';
+import DARK_MODE_CHANNEL from '@salesforce/messageChannel/DarkModeChannel__c';
 import getActiveFunnelData from '@salesforce/apex/CandidateFunnelController.getActiveFunnelData';
 import { loadScript } from 'lightning/platformResourceLoader';
 import echarts from '@salesforce/resourceUrl/echarts';
 
 export default class CandidateFunnelDashboard extends NavigationMixin(LightningElement) {
+    @wire(MessageContext)
+    messageContext;
+    
     @track funnelData;
     @track stages = [];
     @track error;
@@ -13,6 +18,7 @@ export default class CandidateFunnelDashboard extends NavigationMixin(LightningE
     chartRendered = false;
     echartsInitialized = false;
     chartInstance = null;
+    subscription = null;
 
     @wire(getActiveFunnelData)
     wiredFunnelData({ error, data }) {
@@ -42,6 +48,14 @@ export default class CandidateFunnelDashboard extends NavigationMixin(LightningE
         return !this.funnelData && !this.error;
     }
 
+    get containerClass() {
+        return this.isDarkMode ? 'funnel-view dark-mode' : 'funnel-view';
+    }
+
+    get cardClass() {
+        return this.isDarkMode ? 'dark-mode' : '';
+    }
+
     get darkModeIcon() {
         return this.isDarkMode ? 'utility:light_bulb' : 'utility:contrast';
     }
@@ -50,7 +64,31 @@ export default class CandidateFunnelDashboard extends NavigationMixin(LightningE
         return this.isDarkMode ? 'conversion-info-panel conversion-panel-dark' : 'conversion-info-panel conversion-panel-light';
     }
 
+    connectedCallback() {
+        this.subscribeToMessageChannel();
+    }
+
+    subscribeToMessageChannel() {
+        this.subscription = subscribe(
+            this.messageContext,
+            DARK_MODE_CHANNEL,
+            (message) => this.handleDarkModeChange(message)
+        );
+    }
+
+    handleDarkModeChange(message) {
+        this.isDarkMode = message.darkModeEnabled;
+        if (this.showFunnelView && this.chartRendered) {
+            this.chartRendered = false;
+            requestAnimationFrame(() => {
+                this.drawCanvasFunnel();
+            });
+        }
+    }
+
     handleDarkModeToggle() {
+        // This method is no longer needed but kept for backward compatibility
+        // Dark mode is now controlled via LMS from portalHeaderNew
         this.isDarkMode = !this.isDarkMode;
         if (this.showFunnelView) {
             this.chartRendered = false;

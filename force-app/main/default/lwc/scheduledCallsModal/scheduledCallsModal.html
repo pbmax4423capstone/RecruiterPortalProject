@@ -1,6 +1,6 @@
 <template>
   <!-- Main Component View - Always Visible -->
-  <div class="calls-component-container">
+  <div class={containerClass}>
     <template if:true={isLoading}>
       <div class="slds-align_absolute-center slds-p-around_large">
         <lightning-spinner alternative-text="Loading calls..." size="medium"></lightning-spinner>

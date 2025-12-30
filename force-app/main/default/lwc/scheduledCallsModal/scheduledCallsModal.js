@@ -1,11 +1,16 @@
-import { LightningElement, track, api } from 'lwc';
+import { LightningElement, track, api, wire } from 'lwc';
 import { ShowToastEvent } from 'lightning/platformShowToastEvent';
+import { subscribe, MessageContext } from 'lightning/messageService';
+import DARK_MODE_CHANNEL from '@salesforce/messageChannel/DarkModeChannel__c';
 import getCurrentUserCallDetails from '@salesforce/apex/RecruiterDashboardController.getCurrentUserCallDetails';
 import getTaskDetails from '@salesforce/apex/RecruiterDashboardController.getTaskDetails';
 import updateTaskRecord from '@salesforce/apex/RecruiterDashboardController.updateTaskRecord';
 import createScheduledCall from '@salesforce/apex/RecruiterDashboardController.createScheduledCall';
 
 export default class ScheduledCallsModal extends LightningElement {
+  @wire(MessageContext)
+  messageContext;
+  
   @track scheduledCalls = [];
   @track pastDueCalls = [];
   @track isLoading = false;
@@ -13,10 +18,12 @@ export default class ScheduledCallsModal extends LightningElement {
   @track selectedTaskId = null;
   @track taskRecord = null;
   @api isOpen = false; // Legacy property for backward compatibility
+  @api darkMode = false;
   @track showFollowUpModal = false;
   @track followUpSubject = '';
   @track followUpDate = null;
   @track selectedCallResults = [];
+  subscription = null;
 
   statusOptions = [
     { label: 'Not Started', value: 'Not Started' },
@@ -62,9 +69,30 @@ export default class ScheduledCallsModal extends LightningElement {
     return this.taskRecord && (this.taskRecord.Who || this.taskRecord.What);
   }
 
+  get modalClass() {
+    return this.darkMode ? 'slds-modal slds-fade-in-open slds-modal_large dark-mode' : 'slds-modal slds-fade-in-open slds-modal_large';
+  }
+
+  get containerClass() {
+    return this.darkMode ? 'calls-component-container dark-mode' : 'calls-component-container';
+  }
+
   // Load calls when component renders
   connectedCallback() {
+    this.subscribeToMessageChannel();
     this.loadAllCalls();
+  }
+
+  subscribeToMessageChannel() {
+    this.subscription = subscribe(
+      this.messageContext,
+      DARK_MODE_CHANNEL,
+      (message) => this.handleDarkModeChange(message)
+    );
+  }
+
+  handleDarkModeChange(message) {
+    this.darkMode = message.darkModeEnabled;
   }
 
   // Handle call card click to open record modal

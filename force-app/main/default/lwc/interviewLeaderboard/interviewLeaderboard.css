@@ -1,3 +1,13 @@
+/* Component Wrapper */
+.interview-leaderboard-wrapper {
+    display: block;
+}
+
+/* Dark Mode - Wrapper Level */
+.interview-leaderboard-wrapper.dark-mode .card-title {
+    color: #ffffff !important;
+}
+
 /* Summary Cards */
 .summary-card {
     padding: 2rem;
@@ -167,4 +177,71 @@
 .interview-type-badge {
     font-weight: 600;
 }
+
+/* Dark Mode Styles */
+.leaderboard-container.dark-mode {
+    background: #16325c;
+}
+
+.leaderboard-container.dark-mode .summary-card-week {
+    background: linear-gradient(135deg, #2c4460 0%, #1a3a52 100%);
+}
+
+.leaderboard-container.dark-mode .summary-card-month {
+    background: linear-gradient(135deg, #0d5770 0%, #0a4356 100%);
+}
+
+.leaderboard-container.dark-mode .breakdown-section {
+    background-color: #1a3a52;
+    border-color: #3e5771;
+}
+
+.leaderboard-container.dark-mode .breakdown-section h3 {
+    color: #e8f4fd;
+}
+
+.leaderboard-container.dark-mode .leader-row {
+    background-color: #243649;
+    border-left-color: #5ea3f2;
+}
+
+.leaderboard-container.dark-mode .leader-row:hover {
+    background-color: #2c4460;
+    box-shadow: 0 2px 4px rgba(94, 163, 242, 0.3);
+}
+
+.leaderboard-container.dark-mode .leader-name {
+    color: #e8f4fd;
+}
+
+.leaderboard-container.dark-mode .weekly-interview-item {
+    background-color: #1a3a52;
+    border-left-color: #5ea3f2;
+}
+
+.leaderboard-container.dark-mode .weekly-interview-item:hover {
+    background-color: #243649;
+}
+
+.leaderboard-container.dark-mode .slds-text-color_weak,
+.leaderboard-container.dark-mode p {
+    color: #b0c4de !important;
+}
+
+.leaderboard-container.dark-mode .slds-text-color_error {
+    color: #ff9999 !important;
+}
+
+.leaderboard-container.dark-mode div,
+.leaderboard-container.dark-mode span,
+.leaderboard-container.dark-mode .summary-label,
+.leaderboard-container.dark-mode .category-label {
+    color: #e8f4fd;
+}
+
+.leaderboard-container.dark-mode .slds-text-heading_medium,
+.leaderboard-container.dark-mode .slds-text-heading_small,
+.leaderboard-container.dark-mode h2,
+.leaderboard-container.dark-mode h3 {
+    color: #ffffff !important;
 }

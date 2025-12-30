@@ -1,4 +1,4 @@
-.kanban-container {
+.contracting-container {
     display: flex;
     gap: 12px;
     overflow-x: auto;
@@ -57,11 +57,54 @@
 
 /* Responsive adjustments */
 @media (max-width: 768px) {
-    .kanban-container {
+    .contracting-container {
         flex-direction: column;
     }
     
     .kanban-column {
         max-width: 100%;
     }
+}
+
+/* Dark Mode Styles */
+.contracting-container.dark-mode {
+    background: #16325c;
+}
+
+.contracting-container.dark-mode .kanban-column {
+    background-color: #1a3a52;
+    border: 1px solid #3e5771;
+}
+
+.contracting-container.dark-mode .kanban-card {
+    background-color: #243649;
+    border-color: #3e5771;
+    color: #e8f4fd;
+}
+
+.contracting-container.dark-mode .kanban-card:hover {
+    background-color: #2c4460;
+    border-color: #5ea3f2;
+    box-shadow: 0 2px 8px rgba(94, 163, 242, 0.3);
+}
+
+.contracting-container.dark-mode h3,
+.contracting-container.dark-mode .slds-text-heading_small {
+    color: #ffffff !important;
+}
+
+.contracting-container.dark-mode div,
+.contracting-container.dark-mode p,
+.contracting-container.dark-mode span,
+.contracting-container.dark-mode .kanban-card {
+    color: #e8f4fd;
+}
+
+.contracting-container.dark-mode .slds-text-color_weak {
+    color: #b0c4de !important;
+}
+
+.contracting-container.dark-mode .slds-text-heading_medium,
+.contracting-container.dark-mode h2 {
+    color: #ffffff !important;
 }

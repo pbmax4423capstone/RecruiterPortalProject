@@ -1,15 +1,43 @@
-import { LightningElement, track } from 'lwc';
+import { LightningElement, track, api, wire } from 'lwc';
+import { subscribe, MessageContext } from 'lightning/messageService';
+import DARK_MODE_CHANNEL from '@salesforce/messageChannel/DarkModeChannel__c';
 import getRecentActivity from '@salesforce/apex/RecentActivityController.getRecentActivity';
 import { ShowToastEvent } from 'lightning/platformShowToastEvent';
 
 export default class RecentActivity extends LightningElement {
+    @wire(MessageContext)
+    messageContext;
+    
+    @api darkMode = false;
     @track activities = [];
     @track error;
     @track isLoading = true;
     @track lastRefreshed = '';
+    subscription = null;
+
+    get containerClass() {
+        return this.darkMode ? 'activity-container dark-mode' : 'activity-container';
+    }
+
+    get activityCardClass() {
+        return this.darkMode ? 'activity-card dark-mode' : 'activity-card';
+    }
 
     connectedCallback() {
+        this.subscribeToMessageChannel();
         this.loadActivities();
+    }
+
+    subscribeToMessageChannel() {
+        this.subscription = subscribe(
+            this.messageContext,
+            DARK_MODE_CHANNEL,
+            (message) => this.handleDarkModeChange(message)
+        );
+    }
+
+    handleDarkModeChange(message) {
+        this.darkMode = message.darkModeEnabled;
     }
 
     loadActivities() {
