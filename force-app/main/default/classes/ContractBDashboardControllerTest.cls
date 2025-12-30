@@ -44,10 +44,10 @@ public class ContractBDashboardControllerTest {
             Sales_Manager__c = 'Van Hess'
         ));
         
-        // Contract A candidate for metrics
+        // Career Contract candidate for metrics
         contractBCandidates.add(new Candidate__c(
             Email__c = 'contracta1@test.com',
-            Contract_Type__c = 'Contract A',
+            Contract_Type__c = 'Career Contract',
             Status__c = 'Active/In Process',
             Start_Date__c = Date.today().addMonths(-2),
             Sales_Manager__c = 'Tim Denton'
@@ -67,7 +67,7 @@ public class ContractBDashboardControllerTest {
         // Transitioned candidate
         contractBCandidates.add(new Candidate__c(
             Email__c = 'transitioned1@test.com',
-            Contract_Type__c = 'Contract A', // Transitioned to A
+            Contract_Type__c = 'Career Contract', // Transitioned to Career Contract
             Status__c = 'Active/In Process',
             Start_Date__c = Date.today().addMonths(-6),
             Transition_to_A_Date__c = Date.today().addMonths(-1),
