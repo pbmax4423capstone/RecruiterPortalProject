@@ -413,6 +413,25 @@
     line-height: 1.5;
 }
 
+/* Legacy Notes Section */
+.legacy-notes-content {
+    background: #fef5e7;
+    padding: 1.25rem;
+    border-radius: 8px;
+    border-left: 4px solid #f39c12;
+    line-height: 1.6;
+    color: #181818;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    max-height: 600px;
+    overflow-y: auto;
+    font-family: 'Salesforce Sans', Arial, sans-serif;
+}
+
+.legacy-notes-content lightning-formatted-text {
+    display: block;
+}
+
 @media (max-width: 480px) {
     .hero-header {
         padding: 1.5rem 1rem;

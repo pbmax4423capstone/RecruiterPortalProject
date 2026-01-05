@@ -324,6 +324,14 @@ export default class CandidateRecordView extends NavigationMixin(LightningElemen
         return this.candidateData?.Candidate_Summary__c;
     }
 
+    get legacyNotes() {
+        return this.candidateData?.Notes__c;
+    }
+
+    get hasLegacyNotes() {
+        return this.legacyNotes && this.legacyNotes.trim().length > 0;
+    }
+
     // Action Button Handlers
     handleEdit() {
         this[NavigationMixin.Navigate]({

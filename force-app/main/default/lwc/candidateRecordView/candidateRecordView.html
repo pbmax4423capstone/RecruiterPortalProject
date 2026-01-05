@@ -320,6 +320,24 @@
                                     </template>
                                 </div>
                             </div>
+
+                            <!-- Legacy Notes Section -->
+                            <template if:true={hasLegacyNotes}>
+                                <div class="info-card full-width-card">
+                                    <div class="card-header">
+                                        <lightning-icon icon-name="standard:file" size="small"></lightning-icon>
+                                        <h2>Legacy Notes</h2>
+                                        <div class="header-note">
+                                            <span class="utility-bar-hint">Historical notes with dates - migrating to new enhanced notes system</span>
+                                        </div>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="legacy-notes-content">
+                                            <lightning-formatted-text value={legacyNotes}></lightning-formatted-text>
+                                        </div>
+                                    </div>
+                                </div>
+                            </template>
                         </div>
                     </lightning-tab>
 
