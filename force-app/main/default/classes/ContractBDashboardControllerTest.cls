@@ -18,7 +18,7 @@ public class ContractBDashboardControllerTest {
         contractBCandidates.add(new Candidate__c(
             Email__c = 'contractb1@test.com',
             Contract_Type__c = 'Contract B',
-            Status__c = 'Active/In Process',
+            Status__c = 'Contracted- Contract B',
             Start_Date__c = Date.today().addMonths(-3).addDays(-15),
             Contact__c = testContact.Id,
             Sales_Manager__c = 'Tim Denton'
@@ -28,7 +28,7 @@ public class ContractBDashboardControllerTest {
         contractBCandidates.add(new Candidate__c(
             Email__c = 'contractb2@test.com',
             Contract_Type__c = 'Contract B',
-            Status__c = 'Active/In Process',
+            Status__c = 'Contracted- Contract B',
             Start_Date__c = Date.today().addMonths(-2),
             Contact__c = testContact.Id,
             Sales_Manager__c = 'Elizabeth Kagele'
@@ -38,16 +38,16 @@ public class ContractBDashboardControllerTest {
         contractBCandidates.add(new Candidate__c(
             Email__c = 'contractb3@test.com',
             Contract_Type__c = 'Contract B',
-            Status__c = 'Active/In Process',
+            Status__c = 'Contracted- Contract B',
             Start_Date__c = Date.today().addDays(-30),
             Contact__c = testContact.Id,
             Sales_Manager__c = 'Van Hess'
         ));
         
-        // Contract A candidate for metrics
+        // Career Contract candidate for metrics
         contractBCandidates.add(new Candidate__c(
             Email__c = 'contracta1@test.com',
-            Contract_Type__c = 'Contract A',
+            Contract_Type__c = 'Career Contract',
             Status__c = 'Active/In Process',
             Start_Date__c = Date.today().addMonths(-2),
             Sales_Manager__c = 'Tim Denton'
@@ -60,14 +60,14 @@ public class ContractBDashboardControllerTest {
             Status__c = 'Terminated',
             Start_Date__c = Date.today().addMonths(-5),
             Termination_Date__c = Date.today().addDays(-10),
-            Termination_Reason__c = 'Did Not Meet Requirements',
+            Termination_Reason__c = 'Did not meet initial contract requirements',
             Sales_Manager__c = 'Elizabeth Kagele'
         ));
         
         // Transitioned candidate
         contractBCandidates.add(new Candidate__c(
             Email__c = 'transitioned1@test.com',
-            Contract_Type__c = 'Contract A', // Transitioned to A
+            Contract_Type__c = 'Career Contract', // Transitioned to Career Contract
             Status__c = 'Active/In Process',
             Start_Date__c = Date.today().addMonths(-6),
             Transition_to_A_Date__c = Date.today().addMonths(-1),
@@ -84,7 +84,8 @@ public class ContractBDashboardControllerTest {
             interviews.add(new Interview__c(
                 Interview_Type__c = 'Attraction',
                 Interview_Status__c = 'Completed',
-                Candidate__c = contractBCandidates[0].Id
+                Candidate__c = contractBCandidates[0].Id,
+                Date_Time_Scheduled__c = System.now().addDays(-i)
             ));
         }
         
@@ -92,7 +93,8 @@ public class ContractBDashboardControllerTest {
             interviews.add(new Interview__c(
                 Interview_Type__c = 'SI1',
                 Interview_Status__c = 'Completed',
-                Candidate__c = contractBCandidates[1].Id
+                Candidate__c = contractBCandidates[1].Id,
+                Date_Time_Scheduled__c = System.now().addDays(-i)
             ));
         }
         
@@ -100,21 +102,24 @@ public class ContractBDashboardControllerTest {
             interviews.add(new Interview__c(
                 Interview_Type__c = 'SI2',
                 Interview_Status__c = 'Completed',
-                Candidate__c = contractBCandidates[2].Id
+                Candidate__c = contractBCandidates[2].Id,
+                Date_Time_Scheduled__c = System.now().addDays(-i)
             ));
         }
         
         interviews.add(new Interview__c(
             Interview_Type__c = 'Career',
             Interview_Status__c = 'Completed',
-            Candidate__c = contractBCandidates[0].Id
+            Candidate__c = contractBCandidates[0].Id,
+            Date_Time_Scheduled__c = System.now().addDays(-1)
         ));
         
         // Some scheduled (not completed) interviews
         interviews.add(new Interview__c(
             Interview_Type__c = 'SI3',
             Interview_Status__c = 'Scheduled',
-            Candidate__c = contractBCandidates[1].Id
+            Candidate__c = contractBCandidates[1].Id,
+            Date_Time_Scheduled__c = System.now().addDays(1)
         ));
         
         insert interviews;
@@ -213,8 +218,8 @@ public class ContractBDashboardControllerTest {
     
     @isTest
     static void testGetContractBPipelineDataNoData() {
-        // Delete all Contract B candidates to test empty state
-        delete [SELECT Id FROM Candidate__c WHERE Contract_Type__c = 'Contract B' AND Status__c = 'Active/In Process'];
+        // Delete only test data created in @TestSetup to test empty state
+        delete [SELECT Id FROM Candidate__c WHERE Email__c LIKE 'contractb%@test.com' OR Email__c LIKE '%@test.com'];
         
         Test.startTest();
         Map<String, Object> result = ContractBDashboardController.getContractBPipelineData();
@@ -225,5 +230,74 @@ public class ContractBDashboardControllerTest {
         
         Map<String, Object> summary = (Map<String, Object>)result.get('summary');
         System.assertEquals(0, summary.get('totalActive'), 'Should have 0 total active');
+    }
+    
+    @isTest
+    static void testGetContractAProgressData() {
+        // Create Contract_Qualification__c test data
+        List<Contract_Qualification__c> cqRecords = new List<Contract_Qualification__c>();
+        
+        cqRecords.add(new Contract_Qualification__c(
+            Name = 'Test Agent 1',
+            Advisor_Active_Indicator__c = true,
+            Contract_Status__c = 'Active',
+            All_YTD_FYC__c = 50000,
+            YTD_WLADL__c = 40000,
+            WLADL_Contract_Minimum__c = 38000,
+            WLADL_GDC_Qual_Status__c = 'Met WLADL',
+            All_MTD_FYC__c = 5000,
+            MTD_WLADL__c = 4000
+        ));
+        
+        cqRecords.add(new Contract_Qualification__c(
+            Name = 'Test Agent 2',
+            Advisor_Active_Indicator__c = true,
+            Contract_Status__c = 'Active',
+            All_YTD_FYC__c = 30000,
+            YTD_WLADL__c = 25000,
+            WLADL_Contract_Minimum__c = 38000,
+            WLADL_GDC_Qual_Status__c = 'Not On Target',
+            All_MTD_FYC__c = 3000,
+            MTD_WLADL__c = 2500
+        ));
+        
+        insert cqRecords;
+        
+        Test.startTest();
+        Map<String, Object> result = ContractBDashboardController.getContractAProgressData();
+        Test.stopTest();
+        
+        // Verify result structure
+        System.assertNotEquals(null, result, 'Result should not be null');
+        System.assert(result.containsKey('contractAData'), 'Should contain contractAData');
+        System.assert(result.containsKey('summary'), 'Should contain summary');
+        
+        // Verify data
+        List<Object> contractAData = (List<Object>)result.get('contractAData');
+        System.assertNotEquals(null, contractAData, 'Contract A data should not be null');
+        System.assertEquals(2, contractAData.size(), 'Should have 2 agents');
+        
+        // Verify summary
+        Map<String, Object> summary = (Map<String, Object>)result.get('summary');
+        System.assertEquals(2, summary.get('totalAgents'), 'Should have 2 total agents');
+        System.assertEquals(1, summary.get('metCount'), 'Should have 1 agent who met requirements');
+        System.assertEquals(1, summary.get('notOnTargetCount'), 'Should have 1 agent not on target');
+        System.assertEquals(80000, summary.get('totalYTDFYC'), 'Total YTD FYC should be 80000');
+    }
+    
+    @isTest
+    static void testGetContractAProgressDataNoData() {
+        // Test with no Contract_Qualification__c records
+        Test.startTest();
+        Map<String, Object> result = ContractBDashboardController.getContractAProgressData();
+        Test.stopTest();
+        
+        System.assertNotEquals(null, result, 'Result should not be null');
+        
+        List<Object> contractAData = (List<Object>)result.get('contractAData');
+        System.assertEquals(0, contractAData.size(), 'Should have no agents');
+        
+        Map<String, Object> summary = (Map<String, Object>)result.get('summary');
+        System.assertEquals(0, summary.get('totalAgents'), 'Should have 0 total agents');
     }
 }

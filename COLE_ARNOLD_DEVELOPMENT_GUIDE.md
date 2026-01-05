@@ -9,14 +9,23 @@ Before starting any work, always pull the latest changes from the main branch:
 git pull origin main
 ```
 
-### 2. Target Org
-The development org is:
-- **Alias:** `patrickbakeradmin2@financialguide.com.prodtest`
-- **Org Type:** ProdTest Sandbox
+### 2. Target Orgs
+
+**Production (Primary Working Org):**
+- **Alias:** `ProductionCapstone` or `production`
+- **Username:** `patrickbakeradmin2@financialguide.com`
+- **Org Type:** Production - Live data org for daily work
+- **Set as default:** `sf config set target-org=ProductionCapstone`
+
+**ProdTest Sandbox (Testing Only):**
+- **Alias:** `ProdTest` or `prodtest`
+- **Username:** `patrickbakeradmin2@financialguide.com.prodtest`
+- **Org Type:** Partial Data Sandbox - For testing before production deployment
 
 Verify your connection:
 ```bash
 sf org list
+sf org display  # Should show 'ProductionCapstone' as target
 ```
 
 ---
@@ -59,24 +68,38 @@ All 7 templates were updated Dec 18, 2025 - merge fields changed to `{!Contact.F
 
 ## Deployment Commands
 
-### Deploy a Single Component
+**Note:** Production is set as the default target org. Commands without `--target-org` flag deploy to production.
+
+### Deploy to Production (Default)
+
+#### Deploy a Single Component
 ```bash
-sf project deploy start --source-dir "force-app/main/default/lwc/COMPONENT_NAME" --target-org patrickbakeradmin2@financialguide.com.prodtest
+sf project deploy start --source-dir "force-app/main/default/lwc/COMPONENT_NAME"
 ```
 
-### Deploy a Folder
+#### Deploy a Folder
 ```bash
-sf project deploy start --source-dir "force-app/main/default/classes" --target-org patrickbakeradmin2@financialguide.com.prodtest
+sf project deploy start --source-dir "force-app/main/default/classes"
 ```
 
-### Deploy Everything (Use Caution)
+#### Deploy Everything (Use Caution)
 ```bash
-sf project deploy start --source-dir force-app --target-org patrickbakeradmin2@financialguide.com.prodtest
+sf project deploy start --source-dir force-app
 ```
 
-### Retrieve Changes from Org
+#### Retrieve Changes from Production
 ```bash
-sf project retrieve start --source-dir "force-app/main/default/lwc/COMPONENT_NAME" --target-org patrickbakeradmin2@financialguide.com.prodtest
+sf project retrieve start --source-dir "force-app/main/default/lwc/COMPONENT_NAME"
+```
+
+### Test in ProdTest Sandbox (Before Production)
+
+```bash
+# Deploy to sandbox for testing (explicit target required)
+sf project deploy start --source-dir "force-app/main/default/lwc/COMPONENT_NAME" --target-org ProdTest
+
+# Retrieve from sandbox
+sf project retrieve start --source-dir "force-app/main/default/lwc/COMPONENT_NAME" --target-org ProdTest
 ```
 
 ---

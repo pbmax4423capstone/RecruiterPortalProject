@@ -17,11 +17,20 @@ This is a Salesforce DX project for a Recruiter Portal application built on the 
 - Browser extensions (Chrome & Edge) for LinkedIn candidate importing
 - Automated email workflows for candidate stage transitions
 
-## Target Org
+## Target Orgs
 
-- **Org Alias:** `patrickbakeradmin2@financialguide.com.prodtest`
-- **Org Type:** ProdTest Sandbox
+### Production (Primary)
+- **Org Alias:** `ProductionCapstone` or `production`
+- **Username:** `patrickbakeradmin2@financialguide.com`
+- **Org Type:** Production - Live data org for daily work
 - **Org-Wide Email:** help@capstonetechsupport.com
+- **Set as Default:** `sf config set target-org=ProductionCapstone`
+
+### ProdTest Sandbox (Testing)
+- **Org Alias:** `ProdTest` or `prodtest`
+- **Username:** `patrickbakeradmin2@financialguide.com.prodtest`
+- **Org Type:** Partial Data Sandbox - For testing before production deployment
+- **Use When:** Testing changes with subset of production data before deploying to production
 
 ## Build, Test & Deploy
 
@@ -40,18 +49,31 @@ npm run test:unit:coverage     # Run tests with coverage report
 ```
 
 ### Deployment
+
+**Note:** Production is set as the default target org, so `--target-org` flag is not required for production deployments.
+
+#### Deploy to Production (Default)
 ```bash
 # Deploy a single component
-sf project deploy start --source-dir "force-app/main/default/lwc/COMPONENT_NAME" --target-org patrickbakeradmin2@financialguide.com.prodtest
+sf project deploy start --source-dir "force-app/main/default/lwc/COMPONENT_NAME"
 
 # Deploy a folder (e.g., all classes)
-sf project deploy start --source-dir "force-app/main/default/classes" --target-org patrickbakeradmin2@financialguide.com.prodtest
+sf project deploy start --source-dir "force-app/main/default/classes"
 
 # Deploy everything (use caution)
-sf project deploy start --source-dir force-app --target-org patrickbakeradmin2@financialguide.com.prodtest
+sf project deploy start --source-dir force-app
 
-# Retrieve changes from org
-sf project retrieve start --source-dir "force-app/main/default/lwc/COMPONENT_NAME" --target-org patrickbakeradmin2@financialguide.com.prodtest
+# Retrieve changes from production
+sf project retrieve start --source-dir "force-app/main/default/lwc/COMPONENT_NAME"
+```
+
+#### Test in ProdTest Sandbox
+```bash
+# Deploy to sandbox for testing (explicit target required)
+sf project deploy start --source-dir "force-app/main/default/lwc/COMPONENT_NAME" --target-org ProdTest
+
+# Retrieve from sandbox
+sf project retrieve start --source-dir "force-app/main/default/lwc/COMPONENT_NAME" --target-org ProdTest
 ```
 
 ## Project Structure
@@ -163,7 +185,7 @@ All 7 templates use `{!Contact.FirstName}` merge field syntax:
 
 ### Before Starting Work
 1. Pull latest changes: `git pull origin main`
-2. Verify org connection: `sf org list`
+2. Verify org connection: `sf org list` and `sf org display` (ensure ProductionCapstone is set as default)
 3. Review recently modified files listed above
 
 ### Making Changes
@@ -197,7 +219,7 @@ The `candidateRecordView` uses multiple refresh mechanisms:
 Don't remove these mechanisms when modifying the component.
 
 ### Deployment failures
-- Check that you're deploying to the correct org
+- Check that you're deploying to the correct org (production by default, use `--target-org ProdTest` for sandbox)
 - Verify all metadata dependencies are included
 - Review deployment output for specific error messages
 

@@ -16,7 +16,7 @@ public class RecruiterDashboardControllerTestStub {
         
         // Create 20 Candidates
         List<Candidate__c> candidates = new List<Candidate__c>();
-        List<String> managers = new List<String>{'Brad Sofonia', 'Elizabeth Kagele', 'Tim Denton', 'Van Hess'};
+        List<String> managers = new List<String>{'Tim Denton', 'Van Hess', 'Tim Denton', 'Van Hess'};
         for (Integer i = 0; i < 20; i++) {
             candidates.add(new Candidate__c(
                 Contact__c = contacts[Math.mod(i, 5)].Id,
