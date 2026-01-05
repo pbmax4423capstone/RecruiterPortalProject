@@ -27,7 +27,9 @@ public with sharing class CandidateRecordViewController {
             result.putAll(populatedFields);
             result.put('Id', candidate.Id);
             
-            // Explicitly add formula field with correct casing for LWC
+            // Explicitly add fields with correct casing for LWC
+            result.put('First_Name__c', candidate.First_Name__c);
+            result.put('Last_Name__c', candidate.Last_Name__c);
             result.put('Personal_Email_Formula__c', candidate.Personal_Email_Formula__c);
             
             // Add Contact relationship data if available
