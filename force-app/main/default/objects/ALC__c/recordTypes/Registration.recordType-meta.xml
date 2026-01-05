@@ -234,7 +234,7 @@
             <default>false</default>
         </values>
         <values>
-            <fullName>CANCELED-%28Registrations%29</fullName>
+            <fullName>CANCELED</fullName>
             <default>false</default>
         </values>
         <values>
@@ -254,11 +254,11 @@
             <default>false</default>
         </values>
         <values>
-            <fullName>Received Approval Letter-Registration</fullName>
+            <fullName>Received Approval Letter</fullName>
             <default>false</default>
         </values>
         <values>
-            <fullName>Submit to HO %28Registration%29</fullName>
+            <fullName>Submit to HO</fullName>
             <default>false</default>
         </values>
     </picklistValues>

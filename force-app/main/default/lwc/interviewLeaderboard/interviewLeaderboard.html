@@ -1,17 +1,18 @@
 <template>
-    <lightning-card icon-name="custom:custom63">
-        <h2 slot="title" class="slds-text-heading_medium">
-            <lightning-icon icon-name="custom:custom63" size="small" class="slds-m-right_x-small"></lightning-icon>
-            Interview Leaderboard - Current Month
-        </h2>
-        <div slot="actions">
-            <lightning-button 
-                label="Refresh" 
-                icon-name="utility:refresh" 
-                onclick={handleRefresh}
-                variant="neutral">
-            </lightning-button>
-        </div>
+    <div class={componentWrapperClass}>
+        <lightning-card icon-name="custom:custom63">
+            <h2 slot="title" class="slds-text-heading_medium card-title">
+                <lightning-icon icon-name="custom:custom63" size="small" class="slds-m-right_x-small"></lightning-icon>
+                Interview Leaderboard - Current Month
+            </h2>
+            <div slot="actions">
+                <lightning-button 
+                    label="Refresh" 
+                    icon-name="utility:refresh" 
+                    onclick={handleRefresh}
+                    variant="neutral">
+                </lightning-button>
+            </div>
 
         <!-- Loading Spinner -->
         <template if:true={isLoading}>
@@ -32,7 +33,8 @@
 
         <!-- Main Content -->
         <template if:true={hasData}>
-            <div class="slds-p-around_medium">
+            <div class={containerClass}>
+                <div class="slds-p-around_medium">
                 
                 <!-- Top Summary Cards -->
                 <div class="slds-grid slds-gutters slds-m-bottom_medium">
@@ -213,6 +215,7 @@
 
                 </div>
             </div>
+            </div>
         </template>
 
         <!-- No Data Message -->
@@ -310,5 +313,6 @@
             <div class="slds-backdrop slds-backdrop_open"></div>
         </template>
 
-    </lightning-card>
+        </lightning-card>
+    </div>
 </template>

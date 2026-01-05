@@ -7,10 +7,6 @@
     <picklistValues>
         <picklist>AI_Conducted_By__c</picklist>
         <values>
-            <fullName>Brad Sofonia</fullName>
-            <default>false</default>
-        </values>
-        <values>
             <fullName>Brooke Ianni</fullName>
             <default>false</default>
         </values>
@@ -85,10 +81,6 @@
     <picklistValues>
         <picklist>Attraction_Conducted_by__c</picklist>
         <values>
-            <fullName>Brad Sofonia</fullName>
-            <default>false</default>
-        </values>
-        <values>
             <fullName>Brooke Ianni</fullName>
             <default>false</default>
         </values>
@@ -119,10 +111,6 @@
     </picklistValues>
     <picklistValues>
         <picklist>CP_Conducted_By__c</picklist>
-        <values>
-            <fullName>Brad Sofonia</fullName>
-            <default>false</default>
-        </values>
         <values>
             <fullName>Brooke Ianni</fullName>
             <default>false</default>
@@ -178,10 +166,6 @@
     </picklistValues>
     <picklistValues>
         <picklist>CP_Interviewer__c</picklist>
-        <values>
-            <fullName>Brad Sofonia</fullName>
-            <default>false</default>
-        </values>
         <values>
             <fullName>Diljeet Masuda</fullName>
             <default>false</default>
@@ -310,15 +294,11 @@
             <default>false</default>
         </values>
         <values>
-            <fullName>Contract A</fullName>
-            <default>false</default>
-        </values>
-        <values>
-            <fullName>Career Contract</fullName>
-            <default>false</default>
-        </values>
-        <values>
             <fullName>College Intern</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Contract A</fullName>
             <default>false</default>
         </values>
         <values>
@@ -395,26 +375,6 @@
         </values>
         <values>
             <fullName>7-Contracted</fullName>
-            <default>false</default>
-        </values>
-        <values>
-            <fullName>Align %282nd%29</fullName>
-            <default>false</default>
-        </values>
-        <values>
-            <fullName>Ci_1st</fullName>
-            <default>false</default>
-        </values>
-        <values>
-            <fullName>Optional_5th</fullName>
-            <default>false</default>
-        </values>
-        <values>
-            <fullName>Plan_3rd</fullName>
-            <default>false</default>
-        </values>
-        <values>
-            <fullName>Present-4th</fullName>
             <default>false</default>
         </values>
     </picklistValues>
@@ -683,10 +643,6 @@
     <picklistValues>
         <picklist>SI1_Conducted_by__c</picklist>
         <values>
-            <fullName>Brad Sofonia</fullName>
-            <default>false</default>
-        </values>
-        <values>
             <fullName>Brooke Ianni</fullName>
             <default>false</default>
         </values>
@@ -722,10 +678,6 @@
     <picklistValues>
         <picklist>SI2_Conducted_by__c</picklist>
         <values>
-            <fullName>Brad Sofonia</fullName>
-            <default>false</default>
-        </values>
-        <values>
             <fullName>Brooke Ianni</fullName>
             <default>false</default>
         </values>
@@ -757,10 +709,6 @@
     <picklistValues>
         <picklist>SI3_Conducted_by__c</picklist>
         <values>
-            <fullName>Brad Sofonia</fullName>
-            <default>false</default>
-        </values>
-        <values>
             <fullName>Brooke Ianni</fullName>
             <default>false</default>
         </values>
@@ -787,10 +735,6 @@
     </picklistValues>
     <picklistValues>
         <picklist>SI_1_Conducted_By__c</picklist>
-        <values>
-            <fullName>Brad Sofonia</fullName>
-            <default>false</default>
-        </values>
         <values>
             <fullName>Brooke Ianni</fullName>
             <default>false</default>
@@ -847,10 +791,6 @@
     <picklistValues>
         <picklist>SI_2_Conducted_By__c</picklist>
         <values>
-            <fullName>Brad Sofonia</fullName>
-            <default>false</default>
-        </values>
-        <values>
             <fullName>Brooke Ianni</fullName>
             <default>false</default>
         </values>
@@ -905,10 +845,6 @@
     </picklistValues>
     <picklistValues>
         <picklist>SI_3_Conducted_By__c</picklist>
-        <values>
-            <fullName>Brad Sofonia</fullName>
-            <default>false</default>
-        </values>
         <values>
             <fullName>Brooke Ianni</fullName>
             <default>false</default>
@@ -991,10 +927,6 @@
     </picklistValues>
     <picklistValues>
         <picklist>Sales_Manager__c</picklist>
-        <values>
-            <fullName>Brad Sofonia</fullName>
-            <default>false</default>
-        </values>
         <values>
             <fullName>Elizabeth Kagele</fullName>
             <default>false</default>

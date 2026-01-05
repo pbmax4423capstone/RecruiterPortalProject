@@ -1,14 +1,37 @@
-import { LightningElement, track } from 'lwc';
+import { LightningElement, track, api, wire } from 'lwc';
+import { subscribe, MessageContext } from 'lightning/messageService';
+import DARK_MODE_CHANNEL from '@salesforce/messageChannel/DarkModeChannel__c';
 import getCurrentMonthLeaderboard from '@salesforce/apex/InterviewLeaderboardNewController.getCurrentMonthLeaderboard';
 import getThisWeekInterviews from '@salesforce/apex/InterviewLeaderboardNewController.getThisWeekInterviews';
 import getThisMonthInterviews from '@salesforce/apex/InterviewLeaderboardNewController.getThisMonthInterviews';
 import getInterviewsByType from '@salesforce/apex/InterviewLeaderboardNewController.getInterviewsByType';
 
 export default class InterviewLeaderboard extends LightningElement {
+    @wire(MessageContext)
+    messageContext;
+    
+    @api darkMode = false;
     @track leaderboardData = [];
     @track error;
     @track isLoading = true;
     @track showWeeklyModal = false;
+    subscription = null;
+
+    get containerClass() {
+        return this.darkMode ? 'leaderboard-container dark-mode' : 'leaderboard-container';
+    }
+
+    get componentWrapperClass() {
+        return this.darkMode ? 'interview-leaderboard-wrapper dark-mode' : 'interview-leaderboard-wrapper';
+    }
+
+    get leaderboardRowClass() {
+        return this.darkMode ? 'leaderboard-row dark-mode' : 'leaderboard-row';
+    }
+
+    get modalClass() {
+        return this.darkMode ? 'slds-modal slds-fade-in-open dark-mode' : 'slds-modal slds-fade-in-open';
+    }
     @track weeklyInterviews = [];
     @track isLoadingWeekly = false;
     @track showMonthlyModal = false;
@@ -20,7 +43,20 @@ export default class InterviewLeaderboard extends LightningElement {
     @track currentModalTitle = '';
 
     connectedCallback() {
+        this.subscribeToMessageChannel();
         this.loadLeaderboard();
+    }
+
+    subscribeToMessageChannel() {
+        this.subscription = subscribe(
+            this.messageContext,
+            DARK_MODE_CHANNEL,
+            (message) => this.handleDarkModeChange(message)
+        );
+    }
+
+    handleDarkModeChange(message) {
+        this.darkMode = message.darkModeEnabled;
     }
 
     loadLeaderboard() {
@@ -209,5 +245,4 @@ export default class InterviewLeaderboard extends LightningElement {
     get typeModalCount() {
         return this.typeInterviews.length;
     }
-}
 }

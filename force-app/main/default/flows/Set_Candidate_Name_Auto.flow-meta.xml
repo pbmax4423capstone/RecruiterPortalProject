@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Flow xmlns="http://soap.sforce.com/2006/04/metadata">
     <apiVersion>65.0</apiVersion>
+    <areMetricsLoggedToDataCloud>false</areMetricsLoggedToDataCloud>
     <description>Automatically sets the Candidate Name field to First_Name__c + &apos; &apos; + Last_Name__c when a candidate is created or updated.</description>
     <environments>Default</environments>
     <formulas>
@@ -42,8 +43,8 @@
     <recordUpdates>
         <name>Update_Candidate_Name</name>
         <label>Update Candidate Name</label>
-        <locationX>176</locationX>
-        <locationY>335</locationY>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
         <inputAssignments>
             <field>Name</field>
             <value>
@@ -53,7 +54,7 @@
         <inputReference>$Record</inputReference>
     </recordUpdates>
     <start>
-        <locationX>50</locationX>
+        <locationX>0</locationX>
         <locationY>0</locationY>
         <connector>
             <targetReference>Update_Candidate_Name</targetReference>

@@ -2,7 +2,6 @@
 <CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
     <fullName>Extended_End_Date__c</fullName>
     <description>New contract end date after extension is granted. Extension_Granted_Date + 4 months.</description>
-    <externalId>false</externalId>
     <inlineHelpText>The new contract end date after extension (4 months from extension grant date).</inlineHelpText>
     <label>Extended End Date</label>
     <required>false</required>

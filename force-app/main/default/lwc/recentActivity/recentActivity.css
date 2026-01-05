@@ -93,3 +93,70 @@
     text-overflow: ellipsis;
     white-space: nowrap;
 }
+
+/* Dark Mode Styles */
+.activity-container.dark-mode .slds-card {
+    background: #1a3a52;
+    border-color: #3e5771;
+}
+
+.activity-container.dark-mode .slds-card__header {
+    background: linear-gradient(135deg, #0d2137 0%, #16325c 100%);
+    border-bottom-color: #5ea3f2;
+}
+
+.activity-container.dark-mode .slds-card__header .slds-card__header-title,
+.activity-container.dark-mode .slds-card__header .slds-text-body_small {
+    color: #e8f4fd;
+}
+
+.activity-container.dark-mode .horizontal-scroll-container::-webkit-scrollbar-track {
+    background: #243649;
+}
+
+.activity-container.dark-mode .horizontal-scroll-container::-webkit-scrollbar-thumb {
+    background: #5ea3f2;
+}
+
+.activity-container.dark-mode .activity-card {
+    background: #243649;
+    border-color: #3e5771;
+    color: #e8f4fd;
+}
+
+.activity-container.dark-mode .activity-card:hover {
+    background: #2c4460;
+    border-color: #5ea3f2;
+    box-shadow: 0 4px 8px rgba(94, 163, 242, 0.3);
+}
+
+.activity-container.dark-mode .card-subject {
+    color: #ffffff;
+}
+
+.activity-container.dark-mode .card-time,
+.activity-container.dark-mode .card-detail {
+    color: #b0c4de;
+}
+
+.activity-container.dark-mode .card-header {
+    border-bottom-color: #3e5771;
+}
+
+/* Dark mode empty states and all text */
+.activity-container.dark-mode .slds-text-color_weak,
+.activity-container.dark-mode .slds-text-body_regular {
+    color: #b0c4de !important;
+}
+
+.activity-container.dark-mode p,
+.activity-container.dark-mode div,
+.activity-container.dark-mode span {
+    color: #e8f4fd;
+}
+
+.activity-container.dark-mode .slds-text-heading_medium,
+.activity-container.dark-mode h2,
+.activity-container.dark-mode h3 {
+    color: #ffffff !important;
+}

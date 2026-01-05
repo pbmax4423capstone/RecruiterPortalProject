@@ -578,12 +578,6 @@ Several objects and their fields worth mentioning. Below are the details (the fo
             </value>
         </inputAssignments>
         <inputAssignments>
-            <field>TaskSubtype</field>
-            <value>
-                <stringValue>Call</stringValue>
-            </value>
-        </inputAssignments>
-        <inputAssignments>
             <field>WhatId</field>
             <value>
                 <elementReference>CanRecVar.Id</elementReference>

@@ -2,7 +2,6 @@
 <CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
     <fullName>Contract_Outcome__c</fullName>
     <description>Final outcome of the contract. Tracks whether agent is active, transitioned to Contract A, or was terminated.</description>
-    <externalId>false</externalId>
     <inlineHelpText>Select the current contract status or final outcome.</inlineHelpText>
     <label>Contract Outcome</label>
     <required>false</required>

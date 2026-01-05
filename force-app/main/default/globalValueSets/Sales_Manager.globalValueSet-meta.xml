@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<GlobalValueSet xmlns="http://soap.sforce.com/2006/04/metadata">
+    <customValue>
+        <fullName>Tim Denton</fullName>
+        <default>false</default>
+        <label>Tim Denton</label>
+    </customValue>
+    <customValue>
+        <fullName>Rachyll Tenny</fullName>
+        <default>false</default>
+        <label>Rachyll Tenny</label>
+    </customValue>
+    <customValue>
+        <fullName>Van Hess</fullName>
+        <default>false</default>
+        <label>Van Hess</label>
+    </customValue>
+    <customValue>
+        <fullName>House</fullName>
+        <default>false</default>
+        <label>House</label>
+    </customValue>
+    <customValue>
+        <fullName>Michael Yang</fullName>
+        <default>false</default>
+        <label>Michael Yang</label>
+    </customValue>
+    <customValue>
+        <fullName>Son Le</fullName>
+        <default>false</default>
+        <label>Son Le</label>
+    </customValue>
+    <customValue>
+        <fullName>Brad Sofonia</fullName>
+        <default>false</default>
+        <label>Brad Sofonia</label>
+    </customValue>
+    <customValue>
+        <fullName>Bradley Sofonia</fullName>
+        <default>false</default>
+        <label>Bradley Sofonia</label>
+    </customValue>
+    <customValue>
+        <fullName>Elizabeth Kagele</fullName>
+        <default>false</default>
+        <label>Elizabeth Kagele</label>
+    </customValue>
+    <customValue>
+        <fullName>Jonathan Gruber</fullName>
+        <default>false</default>
+        <isActive>false</isActive>
+        <label>Jonathan Gruber</label>
+    </customValue>
+    <customValue>
+        <fullName>Scott Primm</fullName>
+        <default>false</default>
+        <isActive>false</isActive>
+        <label>Scott Primm</label>
+    </customValue>
+    <customValue>
+        <fullName>Diljeet Masuda</fullName>
+        <default>false</default>
+        <isActive>false</isActive>
+        <label>Diljeet Masuda</label>
+    </customValue>
+    <masterLabel>Sales Manager</masterLabel>
+    <sorted>false</sorted>
+</GlobalValueSet>

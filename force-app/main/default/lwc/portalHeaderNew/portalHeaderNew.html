@@ -28,6 +28,15 @@
         <!-- Action Buttons Row -->
         <div class="action-buttons-container">
           <lightning-button-group>
+            <!-- Dark Mode Toggle Button -->
+            <lightning-button 
+              variant="neutral" 
+              label={darkModeLabel}
+              icon-name={darkModeIcon}
+              onclick={handleToggleDarkMode}
+              class="action-button dark-mode-toggle">
+            </lightning-button>
+            
             <!-- Contracting App Buttons -->
             <template if:true={isContractingApp}>
               <lightning-button 

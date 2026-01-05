@@ -23,7 +23,7 @@
         </template>
 
         <template if:false={isLoading}>
-            <div class="kanban-container">
+            <div class={containerClass}>
                 <template for:each={stagesWithCandidates} for:item="stage">
                     <div key={stage.value} 
                          class="kanban-column"

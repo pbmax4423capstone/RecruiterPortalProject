@@ -1,11 +1,17 @@
-import { LightningElement, wire, track } from 'lwc';
+import { LightningElement, wire, track, api } from 'lwc';
 import { NavigationMixin } from 'lightning/navigation';
 import { ShowToastEvent } from 'lightning/platformShowToastEvent';
 import { refreshApex } from '@salesforce/apex';
+import { subscribe, MessageContext } from 'lightning/messageService';
+import DARK_MODE_CHANNEL from '@salesforce/messageChannel/DarkModeChannel__c';
 import getKanbanData from '@salesforce/apex/CandidateKanbanController.getKanbanData';
 import updateCandidateStage from '@salesforce/apex/CandidateKanbanController.updateCandidateStage';
 
 export default class CandidateKanban extends NavigationMixin(LightningElement) {
+    @wire(MessageContext)
+    messageContext;
+    
+    @api darkMode = false;
     @track stagesWithCandidates = [];
     @track isLoading = true;
     @track error;
@@ -13,6 +19,35 @@ export default class CandidateKanban extends NavigationMixin(LightningElement) {
     wiredKanbanResult;
     draggedCandidateId;
     draggedFromStage;
+    subscription = null;
+
+    connectedCallback() {
+        this.subscribeToMessageChannel();
+    }
+
+    subscribeToMessageChannel() {
+        this.subscription = subscribe(
+            this.messageContext,
+            DARK_MODE_CHANNEL,
+            (message) => this.handleDarkModeChange(message)
+        );
+    }
+
+    handleDarkModeChange(message) {
+        this.darkMode = message.darkModeEnabled;
+    }
+
+    get containerClass() {
+        return this.darkMode ? 'kanban-container dark-mode' : 'kanban-container';
+    }
+
+    get stageClass() {
+        return this.darkMode ? 'kanban-stage dark-mode' : 'kanban-stage';
+    }
+
+    get candidateCardClass() {
+        return this.darkMode ? 'candidate-card dark-mode' : 'candidate-card';
+    }
 
     @wire(getKanbanData)
     wiredKanban(result) {

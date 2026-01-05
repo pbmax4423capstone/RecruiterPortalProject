@@ -323,6 +323,66 @@
     background: #969492;
 }
 
+/* Dark Mode Styles */
+.kanban-container.dark-mode {
+    background: #16325c;
+}
+
+.kanban-container.dark-mode .kanban-column {
+    background: #1a3a52;
+    border: 1px solid #3e5771;
+}
+
+.kanban-container.dark-mode .column-header {
+    background: #0d2137;
+    border-bottom-color: #3e5771;
+}
+
+.kanban-container.dark-mode .column-title {
+    color: #e8f4fd;
+}
+
+.kanban-container.dark-mode .candidate-card {
+    background: #243649;
+    border-color: #3e5771;
+    color: #e8f4fd;
+}
+
+.kanban-container.dark-mode .candidate-card:hover {
+    background: #2c4460;
+    border-color: #5ea3f2;
+    box-shadow: 0 4px 12px rgba(94, 163, 242, 0.3);
+}
+
+.kanban-container.dark-mode .candidate-name {
+    color: #ffffff;
+}
+
+.kanban-container.dark-mode .candidate-stage,
+.kanban-container.dark-mode .candidate-date,
+.kanban-container.dark-mode .candidate-phone,
+.kanban-container.dark-mode .candidate-email {
+    color: #b0c4de;
+}
+
+.kanban-container.dark-mode .slds-text-color_error,
+.kanban-container.dark-mode .slds-text-color_weak {
+    color: #ff9999 !important;
+}
+
+.kanban-container.dark-mode div,
+.kanban-container.dark-mode p,
+.kanban-container.dark-mode span {
+    color: #e8f4fd;
+}
+
+.kanban-container.dark-mode .slds-text-heading_medium,
+.kanban-container.dark-mode .slds-text-heading_small,
+.kanban-container.dark-mode h2,
+.kanban-container.dark-mode h3 {
+    color: #ffffff !important;
+}
+
 /* Responsive */
 @media (max-width: 768px) {
     .kanban-column {

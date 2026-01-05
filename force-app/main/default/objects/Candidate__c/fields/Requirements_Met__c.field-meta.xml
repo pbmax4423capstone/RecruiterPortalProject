@@ -2,9 +2,8 @@
 <CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
     <fullName>Requirements_Met__c</fullName>
     <description>Indicates if Contract B agent has met the FYC and submission requirements.</description>
-    <externalId>false</externalId>
     <formula>IF(
-    ISPICKVAL(Contract_Type__c, 'Contract B'),
+    ISPICKVAL(Contract_Type__c, &apos;Contract B&apos;),
     Total_FYC__c &gt;= 2500 &amp;&amp; Opportunity_Count__c &gt;= 5,
     FALSE
 )</formula>

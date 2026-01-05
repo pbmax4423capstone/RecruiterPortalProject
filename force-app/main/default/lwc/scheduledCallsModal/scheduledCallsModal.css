@@ -263,3 +263,131 @@ lightning-textarea {
 .slds-align_absolute-center {
   min-height: 400px;
 }
+
+/* Dark Mode Styles */
+.calls-component-container.dark-mode {
+  background: #16325c;
+}
+
+.calls-component-container.dark-mode .calls-section {
+  background: #243649;
+  border-color: #3e5771;
+}
+
+.calls-component-container.dark-mode .section-header h3 {
+  color: #ffffff;
+}
+
+.calls-component-container.dark-mode .call-count {
+  color: #ffffff;
+}
+
+.calls-component-container.dark-mode .calls-list::-webkit-scrollbar-track {
+  background: #1a3a52;
+}
+
+.calls-component-container.dark-mode .calls-list::-webkit-scrollbar-thumb {
+  background: #5ea3f2;
+}
+
+.calls-component-container.dark-mode .call-card {
+  background: #2c4460;
+  border-left-color: #5ea3f2;
+  color: #e8f4fd;
+}
+
+.calls-component-container.dark-mode .call-card:hover {
+  background: #345273;
+  box-shadow: 0 4px 8px rgba(94, 163, 242, 0.3);
+}
+
+.calls-component-container.dark-mode .pastdue-call-card {
+  border-left-color: #ff9999;
+}
+
+.calls-component-container.dark-mode .call-subject,
+.calls-component-container.dark-mode .call-contact,
+.calls-component-container.dark-mode .candidate-name {
+  color: #ffffff;
+}
+
+.calls-component-container.dark-mode .call-date,
+.calls-component-container.dark-mode .call-status,
+.calls-component-container.dark-mode .call-meta,
+.calls-component-container.dark-mode .detail-text {
+  color: #e8f4fd;
+}
+
+.calls-component-container.dark-mode .empty-state-text,
+.calls-component-container.dark-mode .slds-text-color_weak {
+  color: #b0c4de !important;
+}
+
+.calls-component-container.dark-mode .slds-text-heading_medium,
+.calls-component-container.dark-mode .slds-text-heading_small,
+.calls-component-container.dark-mode h2,
+.calls-component-container.dark-mode h3,
+.calls-component-container.dark-mode p {
+  color: #ffffff !important;
+}
+
+.calls-component-container.dark-mode .empty-state p {
+  color: #e8f4fd !important;
+}
+
+.calls-component-container.dark-mode .empty-state .slds-text-color_weak {
+  color: #b0c4de !important;
+}
+
+.dark-mode.slds-modal .slds-modal__container {
+  background: #243649;
+  border-color: #3e5771;
+}
+
+.dark-mode.slds-modal .slds-modal__header {
+  background: #1a3a52;
+  border-bottom-color: #3e5771;
+}
+
+.dark-mode.slds-modal .slds-modal__header h2 {
+  color: #ffffff !important;
+}
+
+.dark-mode.slds-modal .slds-modal__content {
+  background: #243649;
+  color: #e8f4fd;
+}
+
+.dark-mode.slds-modal .slds-modal__footer {
+  background: #1a3a52;
+  border-top-color: #3e5771;
+}
+
+.dark-mode.slds-modal div,
+.dark-mode.slds-modal p,
+.dark-mode.slds-modal span,
+.dark-mode.slds-modal label {
+  color: #e8f4fd;
+}
+
+.dark-mode.slds-modal .slds-form-element__label,
+.dark-mode.slds-modal .slds-checkbox__label {
+  color: #ffffff;
+}
+
+.dark-mode.slds-modal input,
+.dark-mode.slds-modal textarea,
+.dark-mode.slds-modal select {
+  background-color: #2c4460;
+  color: #ffffff;
+  border-color: #3e5771;
+}
+
+.dark-mode.slds-modal .slds-select,
+.dark-mode.slds-modal .slds-input,
+.dark-mode.slds-modal .slds-textarea {
+  background-color: #2c4460;
+  color: #ffffff;
+  border-color: #3e5771;
+}
+

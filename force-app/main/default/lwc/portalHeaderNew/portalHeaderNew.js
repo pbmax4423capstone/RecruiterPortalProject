@@ -1,7 +1,9 @@
-import { LightningElement, track } from 'lwc';
+import { LightningElement, track, wire } from 'lwc';
 import { ShowToastEvent } from 'lightning/platformShowToastEvent';
 import { NavigationMixin } from 'lightning/navigation';
 import { createRecord, deleteRecord } from 'lightning/uiRecordApi';
+import { publish, MessageContext } from 'lightning/messageService';
+import DARK_MODE_CHANNEL from '@salesforce/messageChannel/DarkModeChannel__c';
 import getCurrentUserInfo from '@salesforce/apex/RecruiterDashboardController.getCurrentUserInfo';
 import createScheduledCall from '@salesforce/apex/RecruiterDashboardController.createScheduledCall';
 import getRecentNotes from '@salesforce/apex/RecruiterDashboardController.getRecentNotes';
@@ -10,6 +12,12 @@ import TITLE_FIELD from '@salesforce/schema/ContentNote.Title';
 import CONTENT_FIELD from '@salesforce/schema/ContentNote.Content';
 
 export default class PortalHeaderNew extends NavigationMixin(LightningElement) {
+  @wire(MessageContext)
+  messageContext;
+  
+  // Dark Mode
+  @track darkMode = false;
+  
   // User Information
   @track userName = '';
   @track userFirstName = '';
@@ -291,6 +299,19 @@ export default class PortalHeaderNew extends NavigationMixin(LightningElement) {
 
   get hasSharedUsers() {
     return this.sharedUsers && this.sharedUsers.length > 0;
+  }
+
+  get darkModeIcon() {
+    return this.darkMode ? 'utility:moon' : 'utility:light';
+  }
+
+  get darkModeLabel() {
+    return this.darkMode ? 'Disable Dark Mode' : 'Enable Dark Mode';
+  }
+
+  handleToggleDarkMode() {
+    this.darkMode = !this.darkMode;
+    publish(this.messageContext, DARK_MODE_CHANNEL, { darkModeEnabled: this.darkMode });
   }
 
   get noteSortOptions() {

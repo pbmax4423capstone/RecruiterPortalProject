@@ -3,13 +3,13 @@
     <fullName>All_Interviews</fullName>
     <columns>NAME</columns>
     <columns>Candidate__c</columns>
-    <columns>Conducted_By__c</columns>
+    <columns>Candidate_Confirmed__c</columns>
+    <columns>Date_Completed__c</columns>
     <columns>Date_Time_Scheduled__c</columns>
     <columns>Interview_Status__c</columns>
     <columns>Interview_Type__c</columns>
-    <columns>Notes__c</columns>
-    <columns>Outcome__c</columns>
     <columns>Interviewer_s__c</columns>
+    <columns>Outcome__c</columns>
     <filterScope>Everything</filterScope>
     <label>All Interviews</label>
 </ListView>

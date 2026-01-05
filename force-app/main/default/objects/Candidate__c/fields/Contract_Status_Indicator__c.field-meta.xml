@@ -4,24 +4,24 @@
     <description>Visual indicator of contract status. Green = on track or met, Yellow = approaching deadline, Red = at risk.</description>
     <externalId>false</externalId>
     <formula>IF(
-    NOT(ISPICKVAL(Contract_Type__c, 'Contract B')),
-    'N/A',
+    NOT(ISPICKVAL(Contract_Type__c, &apos;Contract B&apos;)),
+    &apos;N/A&apos;,
     IF(
-        ISPICKVAL(Contract_Outcome__c, 'Transitioned to A'),
-        '✓ Transitioned',
+        ISPICKVAL(Contract_Outcome__c, &apos;Transitioned to A&apos;),
+        &apos;✓ Transitioned&apos;,
         IF(
-            ISPICKVAL(Contract_Outcome__c, 'Terminated'),
-            '✗ Terminated',
+            ISPICKVAL(Contract_Outcome__c, &apos;Terminated&apos;),
+            &apos;✗ Terminated&apos;,
             IF(
                 Requirements_Met__c = TRUE,
-                '🟢 Met Requirements',
+                &apos;🟢 Met Requirements&apos;,
                 IF(
                     Days_Until_Contract_End__c &lt;= 30,
-                    '🔴 At Risk (' &amp; TEXT(Days_Until_Contract_End__c) &amp; ' days)',
+                    &apos;🔴 At Risk (&apos; &amp; TEXT(Days_Until_Contract_End__c) &amp; &apos; days)&apos;,
                     IF(
                         Days_Until_Contract_End__c &lt;= 60,
-                        '🟡 Approaching (' &amp; TEXT(Days_Until_Contract_End__c) &amp; ' days)',
-                        '🟢 Active (' &amp; TEXT(Days_Until_Contract_End__c) &amp; ' days)'
+                        &apos;🟡 Approaching (&apos; &amp; TEXT(Days_Until_Contract_End__c) &amp; &apos; days)&apos;,
+                        &apos;🟢 Active (&apos; &amp; TEXT(Days_Until_Contract_End__c) &amp; &apos; days)&apos;
                     )
                 )
             )
