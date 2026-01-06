@@ -60,8 +60,6 @@ public with sharing class CandidateRecordViewController {
             result.put('Date_of_Birth__c', candidate.Date_of_Birth__c);
             result.put('RELATIONSHIPS__c', candidate.RELATIONSHIPS__c);
             result.put('Offer_Accepted__c', candidate.Offer_Accepted__c);
-            result.put('Device_Inspection__c', candidate.Device_Inspection__c);
-            result.put('Device_Inspection_Status__c', candidate.Device_Inspection_Status__c);
             result.put('Candidate_Summary__c', candidate.Candidate_Summary__c);
             result.put('Notes__c', candidate.Notes__c);
             
@@ -96,7 +94,7 @@ public with sharing class CandidateRecordViewController {
             'Career_Presentation_ppt__c', 'Next_Step__c', 'Next_Meeting_Date__c',
             'Studying_for_Life_Health__c', 'Registered__c', 'Insurance_Licensed__c',
             'Date_of_Birth__c', 'RELATIONSHIPS__c', 'Offer_Accepted__c',
-            'Device_Inspection__c', 'Device_Inspection_Status__c', 'Candidate_Summary__c', 'Notes__c'
+            'Candidate_Summary__c', 'Notes__c'
         };
         
         List<String> accessibleFields = new List<String>();

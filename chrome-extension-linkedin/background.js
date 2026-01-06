@@ -3,9 +3,8 @@
 
 const CONFIG = {
   defaults: {
-    recordTypeId: '0125f000000a5IlAAI'
-  },
-  testRecruiterId: '0055f00000DqpnpAAB'
+    recordTypeId: '0125f000000a5IlAAI' // Production Candidate Record Type ID
+  }
 };
 
 // Helper function to convert "July 23" or "Jul 23" format to YYYY-MM-DD
@@ -203,6 +202,12 @@ async function handleCreateCandidateWithContact(data) {
   console.log('[SF Import] Contact created:', contactResult.id);
 
   // Step 2: Create Candidate with LinkedIn URL
+  // Get current user ID for Recruiter field
+  const userInfo = await chrome.storage.local.get(['userId']);
+  if (!userInfo.userId) {
+    throw new Error('Unable to create candidate: User authentication incomplete. Please reconnect to Salesforce.');
+  }
+  
   const candidateBody = {
     Name: `${firstName} ${lastName}`,
     First_Name__c: firstName,
@@ -212,7 +217,7 @@ async function handleCreateCandidateWithContact(data) {
     Status__c: status || 'Lead',
     Next_Step__c: nextStep || 'F/up to schedule AI',
     Type__c: 'Candidate',
-    Recruiter__c: CONFIG.testRecruiterId,
+    Recruiter__c: userInfo.userId,
     RecordTypeId: CONFIG.defaults.recordTypeId,
     Contact__c: contactResult.id
   };
@@ -269,6 +274,12 @@ async function handleCreateCandidate(data) {
 
   const { firstName, lastName, agency, position, status, nextStep } = data;
 
+  // Get current user ID for Recruiter field
+  const userInfo = await chrome.storage.local.get(['userId']);
+  if (!userInfo.userId) {
+    throw new Error('Unable to create candidate: User authentication incomplete. Please reconnect to Salesforce.');
+  }
+
   // Step 1: Create Contact
   const contactResponse = await fetch(`${stored.instanceUrl}/services/data/v59.0/sobjects/Contact`, {
     method: 'POST',
@@ -303,7 +314,7 @@ async function handleCreateCandidate(data) {
       Status__c: status,
       Next_Step__c: nextStep,
       Type__c: 'Candidate',
-      Recruiter__c: CONFIG.testRecruiterId,
+      Recruiter__c: userInfo.userId,
       RecordTypeId: CONFIG.defaults.recordTypeId,
       Contact__c: contactResult.id
     })

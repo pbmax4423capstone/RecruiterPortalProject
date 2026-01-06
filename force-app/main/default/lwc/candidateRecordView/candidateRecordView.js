@@ -288,37 +288,6 @@ export default class CandidateRecordView extends NavigationMixin(LightningElemen
         return this.candidateData?.Offer_Accepted__c;
     }
 
-    // Device Inspection
-    get deviceInspection() {
-        return this.candidateData?.Device_Inspection__c;
-    }
-
-    get deviceInspectionStatus() {
-        return this.candidateData?.Device_Inspection_Status__c;
-    }
-
-    get hasDeviceInspectionResult() {
-        const status = this.deviceInspectionStatus;
-        return status === 'Passed' || status === 'Failed';
-    }
-
-    get isDeviceInspectionPassed() {
-        return this.deviceInspectionStatus === 'Passed';
-    }
-
-    get isDeviceInspectionFailed() {
-        return this.deviceInspectionStatus === 'Failed';
-    }
-
-    get deviceInspectionBadgeClass() {
-        if (this.isDeviceInspectionPassed) {
-            return 'device-inspection-badge passed';
-        } else if (this.isDeviceInspectionFailed) {
-            return 'device-inspection-badge failed';
-        }
-        return 'device-inspection-badge';
-    }
-
     // Notes
     get summary() {
         return this.candidateData?.Candidate_Summary__c;

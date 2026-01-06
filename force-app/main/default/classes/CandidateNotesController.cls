@@ -1,4 +1,4 @@
-public with sharing class CandidateNotesController {
+public without sharing class CandidateNotesController {
     
     public class NoteWrapper {
         @AuraEnabled public String Id;
