@@ -9,7 +9,7 @@ The `TestDataFactory` Apex class generates comprehensive test data for the Recru
 | Object Type | Count | Details |
 |------------|-------|---------|
 | **Candidates** | 500 | Linked to Contacts, distributed across sales managers |
-| **Contacts** | 500 | One per candidate, linked to Capstone Partners account |
+| **Contacts** | 500 | One per candidate, linked to capstone account |
 | **Interviews** | 800 | Distributed: 500 Ci-First, 150 Plan-3rd, 100 Present-4th, 50 Optional-5th |
 | **ALC Records** | 300 | For first 300 candidates (contracting scenarios) |
 | **Opportunities** | 1000 | Linked to agent Contacts for FYC rollup testing |
@@ -38,10 +38,18 @@ sf apex run --target-org ProdTest --file scripts\TestDataFactoryInvoker.apex
 
 1. Open Developer Console in your sandbox
 2. Go to **Debug → Open Execute Anonymous Window**
-3. Paste this code:
+3. Paste this code (choose version based on your environment):
+   
+   **For Production or properly configured sandboxes:**
    ```apex
    TestDataFactory.generateCompleteTestData();
    ```
+   
+   **For sandboxes with Flow automation issues:**
+   ```apex
+   TestDataFactory.generateSandboxSafeTestData();
+   ```
+   
 4. Check **"Open Log"** checkbox
 5. Click **Execute**
 6. Review debug logs for execution progress
@@ -69,12 +77,12 @@ TestDataFactory.deleteAllTestData();
 ```
 
 **What Gets Deleted:**
-- All Opportunities linked to Capstone Partners account
+- All Opportunities linked to capstone account
 - All ALC records
 - All Interview records
 - All Candidate records
 - All Contacts with email containing "testfactory"
-- **Preserves** the Capstone Partners account for reuse
+- **Preserves** the capstone account for reuse
 
 ## Important Considerations
 
@@ -96,9 +104,12 @@ TestDataFactory.deleteAllTestData();
 2. Verify org-wide email address is configured (`help@capstonetechsupport.com`)
 3. Update flow to use sandbox-safe email settings
 
-**Option C: Modify Factory for Partial Success** (Advanced)
-- Change `insert` statements to `Database.insert(records, false)` to allow partial success
-- This is not currently implemented but can be added if needed
+**Option C: Use Sandbox-Safe Method** (Recommended for sandboxes)
+```apex
+TestDataFactory.generateSandboxSafeTestData();
+```
+
+This method uses `Database.insert(records, false)` with `allOrNone=false` to allow partial success. If some candidates fail due to flow issues, the rest will still be created. You'll see debug logs showing which records succeeded.
 
 ### 2. Governor Limits
 
@@ -116,7 +127,7 @@ The factory is designed to work within Salesforce governor limits:
 The factory creates proper relationship chains:
 
 ```
-Account (Capstone Partners)
+Account (capstone)
     ↓
 Contact (500 contacts)
     ↓

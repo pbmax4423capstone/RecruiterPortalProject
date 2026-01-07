@@ -27,12 +27,19 @@
 
 ## Reading the Dashboard
 
+> 📊 **Note:** The Current Month / YTD toggle in the Interview Statistics section only affects interview counts. All Contract B Pipeline data (FYC, submissions, days left) always shows current real-time data.
+
 ### Step 1: Check Summary Cards
 
 Look at these numbers first:
 - **Active Contract B** - How many agents are you tracking?
-- **At Risk** - ⚠️ These need immediate attention
+- **At Risk** - ⚠️ These need immediate attention (should ideally be zero)
 - **Requirements Met** - Ready for transition celebration!
+
+**Interactive Features:**
+- **Click any summary card** to open a detailed modal showing filtered candidates
+- **Auto-refresh:** Dashboard automatically updates with real-time data
+- **Priority Focus:** Monitor "At Risk" count daily - take action immediately when it's above zero
 
 ### Step 2: Review Pipeline Table
 
@@ -60,12 +67,15 @@ Focus on these columns:
 
 For each Contract B agent on your team:
 
-- [ ] Check FYC progress vs. previous week
-- [ ] Review submission count
-- [ ] Identify pipeline opportunities
-- [ ] Discuss obstacles/challenges
-- [ ] Set weekly activity goals
-- [ ] Document coaching notes
+- [ ] Check FYC progress vs. previous week (look for consistent growth)
+- [ ] Review submission count (should increase steadily)
+- [ ] Identify pipeline opportunities (help find prospects)
+- [ ] Discuss obstacles/challenges (remove barriers)
+- [ ] Set weekly activity goals (specific and measurable)
+- [ ] Document coaching notes (in Salesforce or your system)
+- [ ] Verify interview completion (ensure interviews marked "Completed" for accurate metrics)
+
+> 📝 **Tip:** Interview statistics on the dashboard only count interviews with Status = "Completed". Remind recruiters to update interview statuses promptly.
 
 ---
 

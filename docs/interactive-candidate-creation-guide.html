@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How to Create a Candidate - Interactive Guide</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 20px;
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            overflow: hidden;
+        }
+        
+        header {
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+        
+        header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+        
+        header p {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+        
+        .content {
+            padding: 40px;
+        }
+        
+        .step {
+            margin-bottom: 40px;
+            padding: 25px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            border-left: 5px solid #667eea;
+        }
+        
+        .step-number {
+            display: inline-block;
+            background: #667eea;
+            color: white;
+            width: 40px;
+            height: 40px;
+            line-height: 40px;
+            text-align: center;
+            border-radius: 50%;
+            font-weight: bold;
+            font-size: 1.3em;
+            margin-right: 15px;
+        }
+        
+        .step h2 {
+            display: inline;
+            font-size: 1.8em;
+            color: #2c3e50;
+        }
+        
+        .step-description {
+            margin: 20px 0;
+            font-size: 1.1em;
+            color: #555;
+        }
+        
+        .screenshot-placeholder {
+            background: linear-gradient(135deg, #e0e7ff 0%, #f3e7e9 100%);
+            border: 2px dashed #667eea;
+            border-radius: 8px;
+            padding: 80px 20px;
+            text-align: center;
+            color: #667eea;
+            font-size: 1.2em;
+            margin: 20px 0;
+        }
+        
+        .field-card {
+            background: white;
+            border: 2px solid #e1e8ed;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 15px 0;
+            transition: all 0.3s ease;
+        }
+        
+        .field-card:hover {
+            border-color: #667eea;
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.2);
+        }
+        
+        .field-name {
+            font-weight: bold;
+            color: #1e3c72;
+            font-size: 1.2em;
+            margin-bottom: 10px;
+        }
+        
+        .required-badge {
+            display: inline-block;
+            background: #e74c3c;
+            color: white;
+            padding: 3px 10px;
+            border-radius: 12px;
+            font-size: 0.75em;
+            margin-left: 10px;
+            vertical-align: middle;
+        }
+        
+        .optional-badge {
+            display: inline-block;
+            background: #95a5a6;
+            color: white;
+            padding: 3px 10px;
+            border-radius: 12px;
+            font-size: 0.75em;
+            margin-left: 10px;
+            vertical-align: middle;
+        }
+        
+        .field-type {
+            color: #7f8c8d;
+            font-style: italic;
+            margin-bottom: 8px;
+        }
+        
+        .field-description {
+            color: #555;
+            line-height: 1.8;
+        }
+        
+        .dropdown-options {
+            background: #f1f3f5;
+            padding: 15px;
+            border-radius: 6px;
+            margin-top: 10px;
+        }
+        
+        .dropdown-options ul {
+            list-style-position: inside;
+            color: #2c3e50;
+        }
+        
+        .dropdown-options ul li {
+            padding: 5px 0;
+        }
+        
+        .tip-box {
+            background: #e8f5e9;
+            border-left: 4px solid #4caf50;
+            padding: 15px 20px;
+            margin: 20px 0;
+            border-radius: 4px;
+        }
+        
+        .tip-box strong {
+            color: #2e7d32;
+        }
+        
+        .warning-box {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 15px 20px;
+            margin: 20px 0;
+            border-radius: 4px;
+        }
+        
+        .warning-box strong {
+            color: #856404;
+        }
+        
+        .error-box {
+            background: #f8d7da;
+            border-left: 4px solid #dc3545;
+            padding: 15px 20px;
+            margin: 20px 0;
+            border-radius: 4px;
+        }
+        
+        .error-box strong {
+            color: #721c24;
+        }
+        
+        .action-button {
+            background: #667eea;
+            color: white;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 6px;
+            font-size: 1.1em;
+            cursor: pointer;
+            transition: background 0.3s ease;
+            display: inline-block;
+            margin: 10px 5px;
+        }
+        
+        .action-button:hover {
+            background: #5568d3;
+        }
+        
+        footer {
+            background: #2c3e50;
+            color: white;
+            text-align: center;
+            padding: 20px;
+            margin-top: 40px;
+        }
+        
+        .back-link {
+            color: #667eea;
+            text-decoration: none;
+            font-weight: bold;
+            display: inline-block;
+            margin: 20px 0;
+        }
+        
+        .back-link:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🎯 How to Create a Candidate</h1>
+            <p>Step-by-Step Interactive Guide</p>
+        </header>
+        
+        <div class="content">
+            <a href="training-portal.html" class="back-link">← Back to Training Portal</a>
+            
+            <!-- STEP 1 -->
+            <div class="step">
+                <span class="step-number">1</span>
+                <h2>Navigate to the Dashboard</h2>
+                <div class="step-description">
+                    Log into Salesforce and open the <strong>Recruiter Portal</strong> application. You should see the dashboard home page with action buttons in the header.
+                </div>
+                <div class="screenshot-placeholder">
+                    📸 Screenshot: Dashboard Home Page View
+                </div>
+                <div class="tip-box">
+                    <strong>💡 Tip:</strong> If you don't see the Recruiter Portal, click the App Launcher (⋮⋮⋮ grid icon) in the top left and search for "Recruiter Portal".
+                </div>
+            </div>
+            
+            <!-- STEP 2 -->
+            <div class="step">
+                <span class="step-number">2</span>
+                <h2>Click "Create New Candidate" Button</h2>
+                <div class="step-description">
+                    In the dashboard header, locate the <strong>"Create New Candidate"</strong> button. This is the 4th button from the left in the action button row.
+                </div>
+                <div class="screenshot-placeholder">
+                    📸 Screenshot: Dashboard Header with "Create New Candidate" Button Highlighted
+                </div>
+                <div class="warning-box">
+                    <strong>⚠️ Note:</strong> You cannot schedule a call from within this modal. Candidate creation and call scheduling are two separate steps.
+                </div>
+            </div>
+            
+            <!-- STEP 3 -->
+            <div class="step">
+                <span class="step-number">3</span>
+                <h2>The Create Candidate Modal Opens</h2>
+                <div class="step-description">
+                    A modal window will appear with the candidate creation form. You'll see 6 fields total—2 required and 4 optional.
+                </div>
+                <div class="screenshot-placeholder">
+                    📸 Screenshot: Create Candidate Modal with All Fields Visible
+                </div>
+            </div>
+            
+            <!-- STEP 4: FIELD DETAILS -->
+            <div class="step">
+                <span class="step-number">4</span>
+                <h2>Fill Out the Form Fields</h2>
+                <div class="step-description">
+                    Let's go through each field in detail:
+                </div>
+                
+                <!-- Field 1: Full Name -->
+                <div class="field-card">
+                    <div class="field-name">
+                        Full Name
+                        <span class="required-badge">REQUIRED</span>
+                    </div>
+                    <div class="field-type">Type: Text</div>
+                    <div class="field-description">
+                        <p><strong>Purpose:</strong> Enter the candidate's complete legal name (first and last). The system will automatically create a Contact record using this name.</p>
+                        <p><strong>Example:</strong> John Michael Smith</p>
+                        <p><strong>Validation:</strong> Must not be empty.</p>
+                    </div>
+                </div>
+                
+                <!-- Field 2: Email Address -->
+                <div class="field-card">
+                    <div class="field-name">
+                        Email Address
+                        <span class="required-badge">REQUIRED</span>
+                    </div>
+                    <div class="field-type">Type: Email</div>
+                    <div class="field-description">
+                        <p><strong>Purpose:</strong> The candidate's primary email address. This is used for communication and serves as the unique identifier to prevent duplicates.</p>
+                        <p><strong>Example:</strong> john.smith@email.com</p>
+                        <p><strong>Validation:</strong> Must be a valid email format. System automatically checks if this email already exists in your Contacts.</p>
+                    </div>
+                    <div class="error-box">
+                        <strong>🚫 Duplicate Check:</strong> If this email already exists, you'll see a warning message preventing duplicate candidate creation. Update the existing record instead.
+                    </div>
+                </div>
+                
+                <!-- Field 3: Phone Number -->
+                <div class="field-card">
+                    <div class="field-name">
+                        Phone Number
+                        <span class="optional-badge">OPTIONAL</span>
+                    </div>
+                    <div class="field-type">Type: Phone</div>
+                    <div class="field-description">
+                        <p><strong>Purpose:</strong> The candidate's primary contact phone number. Becomes the main phone number on the Contact record.</p>
+                        <p><strong>Example:</strong> (555) 123-4567</p>
+                        <p><strong>Recommendation:</strong> Strongly recommended to fill this in for easy calling from Salesforce.</p>
+                    </div>
+                </div>
+                
+                <!-- Field 4: Position -->
+                <div class="field-card">
+                    <div class="field-name">
+                        Position
+                        <span class="optional-badge">OPTIONAL</span>
+                    </div>
+                    <div class="field-type">Type: Dropdown (Picklist)</div>
+                    <div class="field-description">
+                        <p><strong>Purpose:</strong> Specifies what role this candidate is being recruited for. Used for filtering and reporting.</p>
+                        <p><strong>Default:</strong> Insurance Agent</p>
+                    </div>
+                    <div class="dropdown-options">
+                        <strong>Available Options:</strong>
+                        <ul>
+                            <li><strong>Insurance Agent</strong> (default) - Entry-level insurance sales position</li>
+                            <li><strong>Senior Insurance Agent</strong> - Experienced agent with track record</li>
+                            <li><strong>Insurance Sales Representative</strong> - Sales-focused role</li>
+                            <li><strong>Account Manager</strong> - Client relationship management</li>
+                            <li><strong>Team Lead</strong> - Leadership position managing agents</li>
+                            <li><strong>Sales Manager</strong> - Management role</li>
+                            <li><strong>Other</strong> - Any role not listed above</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <!-- Field 5: Lead Source -->
+                <div class="field-card">
+                    <div class="field-name">
+                        Lead Source
+                        <span class="optional-badge">OPTIONAL</span>
+                    </div>
+                    <div class="field-type">Type: Dropdown (Picklist)</div>
+                    <div class="field-description">
+                        <p><strong>Purpose:</strong> Tracks where this candidate was found. Critical for measuring recruiting channel effectiveness.</p>
+                        <p><strong>Default:</strong> Recruiter Portal</p>
+                    </div>
+                    <div class="dropdown-options">
+                        <strong>Available Options:</strong>
+                        <ul>
+                            <li><strong>Recruiter Portal</strong> (default) - Manually entered in system</li>
+                            <li><strong>LinkedIn</strong> - Imported from LinkedIn via browser extension</li>
+                            <li><strong>Indeed</strong> - Job board applicant</li>
+                            <li><strong>Monster</strong> - Job board applicant</li>
+                            <li><strong>Employee Referral</strong> - Referred by current employee</li>
+                            <li><strong>Company Website</strong> - Applied via careers page</li>
+                            <li><strong>Job Fair</strong> - Met at recruiting event</li>
+                            <li><strong>Other</strong> - Any source not listed above</li>
+                        </ul>
+                    </div>
+                    <div class="tip-box">
+                        <strong>💡 Best Practice:</strong> Always select the true source to help measure which recruiting channels generate the best candidates.
+                    </div>
+                </div>
+                
+                <!-- Field 6: Initial Notes -->
+                <div class="field-card">
+                    <div class="field-name">
+                        Initial Notes
+                        <span class="optional-badge">OPTIONAL</span>
+                    </div>
+                    <div class="field-type">Type: Text Area (Long Text)</div>
+                    <div class="field-description">
+                        <p><strong>Purpose:</strong> Capture any important context, first impressions, or relevant background about the candidate.</p>
+                        <p><strong>Example:</strong> "Strong communication skills during initial phone screen. Has 5 years experience in financial services. Interested in insurance sales career transition."</p>
+                        <p><strong>Recommendation:</strong> Use this field to document anything you might forget later—first impressions matter!</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- STEP 5 -->
+            <div class="step">
+                <span class="step-number">5</span>
+                <h2>Click "Create Candidate" Button</h2>
+                <div class="step-description">
+                    After filling out all required fields (and optional ones as needed), click the <strong>"Create Candidate"</strong> button at the bottom of the modal.
+                </div>
+                <div class="screenshot-placeholder">
+                    📸 Screenshot: "Create Candidate" Button at Bottom of Modal
+                </div>
+                <div class="tip-box">
+                    <strong>⏱️ What Happens Next:</strong> The system will create both a Contact record and a Candidate record, link them together, and set the candidate status to "New". You'll see a brief loading indicator.
+                </div>
+            </div>
+            
+            <!-- STEP 6 -->
+            <div class="step">
+                <span class="step-number">6</span>
+                <h2>Verify Candidate Creation</h2>
+                <div class="step-description">
+                    The modal will close automatically. Your dashboard metrics will update to reflect the new candidate count.
+                </div>
+                <div class="screenshot-placeholder">
+                    📸 Screenshot: Dashboard with Updated Candidate Count
+                </div>
+                <div class="tip-box">
+                    <strong>✅ Success!</strong> Your candidate has been created. You can now find them in the Candidates list or by searching their name.
+                </div>
+            </div>
+            
+            <!-- NEXT STEPS -->
+            <div class="step">
+                <span class="step-number">7</span>
+                <h2>Next Steps: Schedule an Interview</h2>
+                <div class="step-description">
+                    Now that your candidate is created, you'll want to schedule their first interview. This is a <strong>separate process</strong> using the "Schedule Interview" button (5th button in the header).
+                </div>
+                <div class="warning-box">
+                    <strong>⚠️ Important:</strong> There is NO "Schedule a Call" checkbox in the Create Candidate modal. You must use the separate "Schedule Interview" button to book meetings.
+                </div>
+                <button class="action-button" onclick="window.location.href='interactive-interview-scheduling-guide.html'">
+                    Learn How to Schedule Interviews →
+                </button>
+            </div>
+            
+            <!-- COMMON MISTAKES -->
+            <div class="step">
+                <h2 style="color: #e74c3c;">❌ Common Mistakes to Avoid</h2>
+                
+                <div class="error-box">
+                    <strong>Mistake #1:</strong> Not checking for duplicate emails before creating a candidate.
+                    <br><strong>Solution:</strong> The system handles this automatically—if the email exists, you'll get a warning.
+                </div>
+                
+                <div class="error-box">
+                    <strong>Mistake #2:</strong> Entering a nickname instead of full legal name.
+                    <br><strong>Solution:</strong> Always use the candidate's complete legal name (first and last).
+                </div>
+                
+                <div class="error-box">
+                    <strong>Mistake #3:</strong> Skipping Position and Lead Source fields.
+                    <br><strong>Solution:</strong> Fill these in! They're critical for reporting and tracking channel effectiveness.
+                </div>
+                
+                <div class="error-box">
+                    <strong>Mistake #4:</strong> Expecting to schedule a call from the same modal.
+                    <br><strong>Solution:</strong> Candidate creation and interview scheduling are two separate steps with two separate buttons.
+                </div>
+            </div>
+            
+            <!-- QUICK REFERENCE -->
+            <div class="step">
+                <h2>📋 Quick Reference Summary</h2>
+                <div class="field-description">
+                    <ol style="line-height: 2.5; font-size: 1.1em;">
+                        <li>Click <strong>"Create New Candidate"</strong> button (4th button in header)</li>
+                        <li>Enter <strong>Full Name</strong> (required)</li>
+                        <li>Enter <strong>Email Address</strong> (required, checked for duplicates)</li>
+                        <li>Add <strong>Phone Number</strong> (optional but recommended)</li>
+                        <li>Select <strong>Position</strong> from dropdown (optional, defaults to Insurance Agent)</li>
+                        <li>Select <strong>Lead Source</strong> from dropdown (optional, defaults to Recruiter Portal)</li>
+                        <li>Add <strong>Initial Notes</strong> (optional but helpful)</li>
+                        <li>Click <strong>"Create Candidate"</strong> button</li>
+                        <li>Verify candidate appears in dashboard metrics</li>
+                    </ol>
+                </div>
+            </div>
+            
+            <a href="training-portal.html" class="back-link">← Back to Training Portal</a>
+        </div>
+        
+        <footer>
+            <p>&copy; 2026 Recruiter Portal Training | Updated January 7, 2026</p>
+            <p><a href="training-portal.html" style="color: white;">Back to Training Portal</a></p>
+        </footer>
+    </div>
+</body>
+</html>

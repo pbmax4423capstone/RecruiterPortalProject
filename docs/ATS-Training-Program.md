@@ -147,16 +147,21 @@ The top of the dashboard displays six key metrics:
 | **Total FYC** | Combined FYC of all active Contract B | Revenue indicator |
 | **Avg FYC** | Average FYC per candidate | Performance benchmark |
 
+**Interactive Features:**
+- **Clickable Cards:** Click any summary card to open a detailed modal with filtered candidates
+- **Auto-Refresh:** The dashboard automatically refreshes data to show real-time updates
+- **Priority Focus:** The "At Risk" count should ideally be zero - prioritize these candidates for immediate attention
+
 ### 1.2 Interview Statistics Section
 
 This section shows completed interviews by type:
 
 **Interview Types:**
-- **Attraction** - Initial attraction interview
-- **SI 1** - Structured Interview 1
-- **SI 2** - Structured Interview 2
-- **SI 3** - Structured Interview 3
-- **Career** - Career presentation
+- **Attraction** - Initial attraction interview (Ci-First)
+- **SI 1** - Structured Interview 1 (Align-2nd)
+- **SI 2** - Structured Interview 2 (Plan-3rd)
+- **SI 3** - Structured Interview 3 (Present-4th)
+- **Career** - Career presentation (Optional-5th)
 - **Total** - Sum of all interviews
 
 **Period Toggle:**
@@ -164,6 +169,8 @@ This section shows completed interviews by type:
 - **Year to Date** - Shows all interviews completed this calendar year
 
 > 💡 **Pro Tip:** Click the toggle button to switch between views. Use YTD for performance reviews and Current Month for weekly planning.
+
+> 📊 **Important:** The Current Month / YTD toggle **only affects the Interview Statistics section**. All other dashboard sections (Contract B Pipeline, YTD Recruiting Metrics, etc.) always show year-to-date data.
 
 ### 1.3 YTD Recruiting Metrics
 
@@ -223,7 +230,42 @@ The bottom table shows individual Contract B candidates:
 
 ### 2.1 Creating a New Candidate
 
-**Method 1: Manual Entry**
+**Method 1: From Dashboard (Recommended)**
+
+1. Navigate to the Recruiter Dashboard
+2. Click **Create New Candidate** button (4th button in dashboard header)
+3. Fill in the modal form:
+   - **Required Fields:**
+     - Full Name
+     - Email Address
+   - **Optional Fields:**
+     - Phone Number
+     - Position (dropdown)
+     - Lead Source (dropdown)
+     - Initial Notes (textarea)
+4. Click **Create Candidate**
+5. Modal closes and candidate is created
+
+**Position Options:**
+- Insurance Agent (default)
+- Senior Insurance Agent
+- Insurance Sales Representative
+- Account Manager
+- Team Lead
+- Sales Manager
+- Other
+
+**Lead Source Options:**
+- Recruiter Portal (default)
+- LinkedIn
+- Indeed
+- Monster
+- Employee Referral
+- Company Website
+- Job Fair
+- Other
+
+**Method 2: From Candidates Tab**
 
 1. Click **Candidates** tab
 2. Click **New** button
@@ -236,7 +278,7 @@ The bottom table shows individual Contract B candidates:
    - Recruiter (defaults to you)
 5. Click **Save**
 
-**Method 2: LinkedIn Extension** (See Module 5)
+**Method 3: LinkedIn Extension** (See Module 5)
 
 ### 2.2 Essential Candidate Fields
 
@@ -300,7 +342,31 @@ Track candidates through the recruiting pipeline:
 | **Present-4th** | Final presentation | 60 min |
 | **Optional-5th** | Additional if needed | 30-60 min |
 
-### 3.2 Creating an Interview
+### 3.2 Scheduling an Interview
+
+**Method 1: From Dashboard (Recommended)**
+
+1. Navigate to the Recruiter Dashboard
+2. Click **Schedule Interview** button (5th button in dashboard header)
+3. Fill in the modal form:
+   - **Required Fields:**
+     - Candidate (lookup field - search and select)
+     - Interview Type (picklist)
+     - Scheduled Date/Time (datetime field)
+   - **Optional Fields:**
+     - Interviewer(s)
+     - Notes
+4. Click **Schedule Interview**
+5. Modal closes and interview is created
+
+**Interview Type Options:**
+- **Attraction Interview (Ci-First)** - Initial contact to assess interest
+- **SI1 (Align-2nd)** - First structured interview to discuss alignment
+- **SI2 (Plan-3rd)** - Second structured interview for career planning
+- **SI3 (Present-4th)** - Third structured interview with final presentation
+- **Career (Optional-5th)** - Optional career presentation if needed
+
+**Method 2: From Candidate Record**
 
 1. Navigate to the Candidate record
 2. Find the **Interviews** related list
@@ -312,15 +378,18 @@ Track candidates through the recruiting pipeline:
    - Location/Meeting Link
 5. Click **Save**
 
+> ⚠️ **Important:** Candidate creation and interview scheduling are **separate steps**. You cannot schedule an interview from within the Create Candidate modal.
+
 ### 3.3 Recording Interview Completion
 
 After conducting an interview:
 
 1. Open the Interview record
 2. Update **Status** to "Completed"
-3. Update **Completed Date** to interview date
-4. Add any notes in the Notes field
-5. Click **Save**
+3. Add any notes in the Notes field
+4. Click **Save**
+
+> 📝 **Note:** The system automatically tracks the completion date when you change the status to "Completed". No manual date entry is needed.
 
 ### 3.4 Interview Best Practices
 
@@ -521,18 +590,20 @@ When you create a candidate via the extension:
 ### For Recruiters
 
 **Primary Responsibilities:**
-- Source and create candidate records
-- Schedule and track interviews
+- Source and create candidate records using "Create New Candidate" button
+- Schedule interviews using "Schedule Interview" button (separate from candidate creation)
 - Monitor candidate pipeline progress
 - Use LinkedIn extension for efficient sourcing
+- Update interview statuses to "Completed" after conducting interviews
 - Update candidate stages as they progress
 
 **Daily Workflow:**
 1. Check Dashboard for new at-risk candidates
 2. Follow up on scheduled interviews
-3. Update completed interview statuses
-4. Source new candidates via LinkedIn
-5. Review and update candidate stages
+3. **Update completed interview statuses** (change Status to "Completed" - system tracks date automatically)
+4. Source new candidates via LinkedIn or "Create New Candidate" button
+5. Schedule follow-up interviews using "Schedule Interview" button
+6. Review and update candidate stages
 
 **Weekly Review:**
 - Review YTD interview counts vs goals
@@ -580,9 +651,9 @@ When you create a candidate via the extension:
 
 | Task | Steps |
 |------|-------|
-| Create Candidate | Candidates → New → Fill form → Save |
-| Schedule Interview | Candidate → Interviews → New → Fill form → Save |
-| Complete Interview | Interview → Edit → Status = Completed → Save |
+| Create Candidate | Dashboard → "Create New Candidate" button → Fill required fields (Name, Email) → Click "Create Candidate" |
+| Schedule Interview | Dashboard → "Schedule Interview" button → Select candidate → Choose type → Set date/time → Click "Schedule Interview" |
+| Complete Interview | Open interview record → Status = "Completed" → Save (date tracked automatically) |
 | Grant Extension | Candidate → Check Extension Granted → Save |
 | Record Termination | Candidate → Status = Terminated → Fill dates/reason → Save |
 
