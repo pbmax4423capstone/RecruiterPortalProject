@@ -25,15 +25,16 @@ private class SummaryCardMetricsControllerTest {
         
         // Verify
         System.assertNotEquals(null, result, 'Result should not be null');
-        System.assertEquals(6, result.size(), 'Should return 6 metric keys');
+        System.assertEquals(7, result.size(), 'Should return 7 metric keys');
         
         // Verify all expected keys exist
         System.assert(result.containsKey('totalCandidates'), 'Should have totalCandidates');
         System.assert(result.containsKey('upcomingInterviews'), 'Should have upcomingInterviews');
         System.assert(result.containsKey('activePipeline'), 'Should have activePipeline');
         System.assert(result.containsKey('onContractB'), 'Should have onContractB');
+        System.assert(result.containsKey('onContractA'), 'Should have onContractA');
         System.assert(result.containsKey('hiredThisMonth'), 'Should have hiredThisMonth');
-        System.assert(result.containsKey('interviewRate'), 'Should have interviewRate');
+        System.assert(result.containsKey('completedInterviewsThisMonth'), 'Should have completedInterviewsThisMonth');
     }
     
     /**

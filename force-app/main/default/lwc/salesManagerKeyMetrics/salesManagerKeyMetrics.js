@@ -8,8 +8,9 @@ export default class SalesManagerKeyMetrics extends LightningElement {
     @track upcomingInterviews = 0;
     @track activePipeline = 0;
     @track onContractB = 0;
+    @track onContractA = 0;
     @track hiredThisMonth = 0;
-    @track interviewRate = 0;
+    @track completedInterviewsThisMonth = 0;
     
     @track isLoading = true;
     @track error;
@@ -26,8 +27,9 @@ export default class SalesManagerKeyMetrics extends LightningElement {
             this.upcomingInterviews = data.upcomingInterviews || 0;
             this.activePipeline = data.activePipeline || 0;
             this.onContractB = data.onContractB || 0;
+            this.onContractA = data.onContractA || 0;
             this.hiredThisMonth = data.hiredThisMonth || 0;
-            this.interviewRate = data.interviewRate || 0;
+            this.completedInterviewsThisMonth = data.completedInterviewsThisMonth || 0;
             
             this.isLoading = false;
             this.error = undefined;
@@ -47,11 +49,6 @@ export default class SalesManagerKeyMetrics extends LightningElement {
                 })
             );
         }
-    }
-    
-    // Computed properties for display
-    get interviewRateDisplay() {
-        return this.interviewRate + '%';
     }
     
     /**

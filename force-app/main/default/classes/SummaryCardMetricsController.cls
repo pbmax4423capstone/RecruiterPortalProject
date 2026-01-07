@@ -39,60 +39,65 @@ public without sharing class SummaryCardMetricsController {
             ];
             metrics.put('totalCandidates', totalCandidates);
             
-            // Upcoming Interviews - Scheduled interviews for current user's candidates
+            // Upcoming Interviews - Scheduled interviews with future dates for current user's candidates
             Integer upcomingInterviews = [
                 SELECT COUNT() 
                 FROM Interview__c 
                 WHERE Interview_Status__c = 'Scheduled' 
+                AND Date_Time_Scheduled__c >= TODAY
                 AND Candidate__r.OwnerId = :currentUserId
             ];
             metrics.put('upcomingInterviews', upcomingInterviews);
             
-            // Active Pipeline - Candidates actively in process (excluding Hired and Inactive)
+            // Active Pipeline - Candidates with status Active/In Process, excluding hired
             Integer activePipeline = [
                 SELECT COUNT() 
                 FROM Candidate__c 
                 WHERE OwnerId = :currentUserId 
-                AND Status__c NOT IN ('Hired', 'Inactive')
+                AND Status__c = 'Active/In Process'
             ];
             metrics.put('activePipeline', activePipeline);
             
-            // On Contract B - Candidates with ALC records showing Contract Type B
+            // On Contract B - Active ALC records with Contract Type B for user's candidates
             Integer onContractB = [
                 SELECT COUNT() 
                 FROM ALC__c 
                 WHERE Candidate__r.OwnerId = :currentUserId 
                 AND Contract_Type__c = 'B'
-                AND Stage__c NOT IN ('Contracted', 'COMPLETE', 'TERMINATED', 'CANCELED')
+                AND Stage__c NOT IN ('COMPLETE', 'TERMINATED', 'CANCELED')
             ];
             metrics.put('onContractB', onContractB);
             
-            // Hired This Month - Candidates with ALC Stage = 'Contracted' this month
+            // On Contract A - Active ALC records with Contract Type A for user's candidates
+            Integer onContractA = [
+                SELECT COUNT() 
+                FROM ALC__c 
+                WHERE Candidate__r.OwnerId = :currentUserId 
+                AND Contract_Type__c = 'A'
+                AND Stage__c NOT IN ('COMPLETE', 'TERMINATED', 'CANCELED')
+            ];
+            metrics.put('onContractA', onContractA);
+            
+            // Hired This Month - Candidates hired during current calendar month
+            // Using ALC Stage change to 'Contracted' or 'COMPLETE' this month
             Integer hiredThisMonth = [
                 SELECT COUNT() 
                 FROM ALC__c 
                 WHERE Candidate__r.OwnerId = :currentUserId 
-                AND Stage__c = 'Contracted'
+                AND Stage__c IN ('Contracted', 'COMPLETE')
                 AND LastModifiedDate = THIS_MONTH
             ];
             metrics.put('hiredThisMonth', hiredThisMonth);
             
-            // Interview Rate - Conversion rate from 4th meeting (Present-4th) to Contracted this month
-            // Denominator: Candidates who had a Present-4th interview this month
-            Integer presentationMeetingsThisMonth = [
+            // Completed Interviews This Month - All completed interviews in current month
+            Integer completedInterviewsThisMonth = [
                 SELECT COUNT() 
                 FROM Interview__c 
                 WHERE Candidate__r.OwnerId = :currentUserId 
-                AND Interview_Type__c = 'Present-4th'
-                AND (Date_Completed__c = THIS_MONTH OR Date_Time_Scheduled__c = THIS_MONTH)
+                AND Interview_Status__c = 'Completed'
+                AND Date_Completed__c = THIS_MONTH
             ];
-            
-            // Numerator: hiredThisMonth (already calculated above)
-            Decimal interviewRate = 0;
-            if (presentationMeetingsThisMonth > 0) {
-                interviewRate = (Decimal.valueOf(hiredThisMonth) / Decimal.valueOf(presentationMeetingsThisMonth) * 100).setScale(0);
-            }
-            metrics.put('interviewRate', interviewRate);
+            metrics.put('completedInterviewsThisMonth', completedInterviewsThisMonth);
             
         } catch (Exception e) {
             System.debug('Error in getMetrics: ' + e.getMessage());
@@ -101,8 +106,9 @@ public without sharing class SummaryCardMetricsController {
             metrics.put('upcomingInterviews', 0);
             metrics.put('activePipeline', 0);
             metrics.put('onContractB', 0);
+            metrics.put('onContractA', 0);
             metrics.put('hiredThisMonth', 0);
-            metrics.put('interviewRate', 0);
+            metrics.put('completedInterviewsThisMonth', 0);
         }
         
         return metrics;

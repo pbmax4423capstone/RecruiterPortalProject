@@ -56,6 +56,17 @@
                         </div>
                     </div>
                     
+                    <!-- On Contract A -->
+                    <div class="slds-col slds-size_1-of-6 slds-medium-size_1-of-3 slds-small-size_1-of-1">
+                        <div class="summary-card summary-purple" 
+                             data-label="On Contract A" 
+                             data-value={onContractA}
+                             onclick={handleCardClick}>
+                            <div class="summary-value">{onContractA}</div>
+                            <div class="summary-label">On Contract A</div>
+                        </div>
+                    </div>
+                    
                     <!-- Hired This Month -->
                     <div class="slds-col slds-size_1-of-6 slds-medium-size_1-of-3 slds-small-size_1-of-1">
                         <div class="summary-card summary-success" 
@@ -67,14 +78,14 @@
                         </div>
                     </div>
                     
-                    <!-- Interview Rate -->
+                    <!-- Completed Interviews This Month -->
                     <div class="slds-col slds-size_1-of-6 slds-medium-size_1-of-3 slds-small-size_1-of-1">
-                        <div class="summary-card summary-rate" 
-                             data-label="Interview Rate" 
-                             data-value={interviewRate}
+                        <div class="summary-card summary-warning" 
+                             data-label="Completed Interviews This Month" 
+                             data-value={completedInterviewsThisMonth}
                              onclick={handleCardClick}>
-                            <div class="summary-value">{interviewRateDisplay}</div>
-                            <div class="summary-label">Interview Rate</div>
+                            <div class="summary-value">{completedInterviewsThisMonth}</div>
+                            <div class="summary-label">Completed Interviews</div>
                         </div>
                     </div>
                 </div>
@@ -93,33 +104,38 @@
                     <tbody>
                         <tr>
                             <td><strong>Total Candidates</strong></td>
-                            <td>All candidates assigned to you</td>
-                            <td>Count of all candidate records</td>
+                            <td>All candidates owned by you</td>
+                            <td>Count of all candidate records where Owner equals logged-in user</td>
                         </tr>
                         <tr>
                             <td><strong>Upcoming Interviews</strong></td>
-                            <td>Scheduled interviews not yet completed</td>
-                            <td>Interviews with status = Scheduled</td>
+                            <td>Scheduled interviews with future dates</td>
+                            <td>Interviews with status = Scheduled AND date in the future</td>
                         </tr>
                         <tr>
                             <td><strong>Active Pipeline</strong></td>
                             <td>Candidates actively in process</td>
-                            <td>Excludes Hired and Inactive</td>
+                            <td>Candidates with status Active/In Process, excluding Hired/Terminated</td>
                         </tr>
                         <tr>
                             <td><strong>On Contract B</strong></td>
-                            <td>Agents in probationary period</td>
-                            <td>Contract Type = B</td>
+                            <td>Agents in 4-month probationary contract (must submit 5 apps & $2500 FYC)</td>
+                            <td>Active ALC records with Contract Type B for your candidates</td>
+                        </tr>
+                        <tr>
+                            <td><strong>On Contract A</strong></td>
+                            <td>Agents on career contract (validated Contract B or direct hire)</td>
+                            <td>Active ALC records with Contract Type A for your candidates</td>
                         </tr>
                         <tr>
                             <td><strong>Hired This Month</strong></td>
-                            <td>Candidates hired in current month</td>
-                            <td>Hire Date in current month</td>
+                            <td>Candidates who completed contracting in current month</td>
+                            <td>ALC records reaching Contracted/Complete stage during current calendar month</td>
                         </tr>
                         <tr>
-                            <td><strong>Interview Rate</strong></td>
-                            <td>Percentage of candidates interviewed</td>
-                            <td>Interviewed / Total Candidates</td>
+                            <td><strong>Completed Interviews</strong></td>
+                            <td>All interview types completed this month</td>
+                            <td>Interviews with status = Completed AND completion date in current month</td>
                         </tr>
                     </tbody>
                 </table>

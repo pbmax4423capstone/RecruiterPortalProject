@@ -22,8 +22,9 @@ export default class SalesManagerDashboard extends LightningElement {
             'Upcoming Interviews': { type: 'upcoming', label: ' - Upcoming Interviews' },
             'Active Pipeline': { type: 'active', label: ' - Active Pipeline' },
             'On Contract B': { type: 'contractB', label: ' - On Contract B' },
+            'On Contract A': { type: 'contractA', label: ' - On Contract A' },
             'Hired This Month': { type: 'hired', label: ' - Hired This Month' },
-            'Interview Rate': { type: 'presentations', label: ' - Presentation Meetings' }
+            'Completed Interviews This Month': { type: 'completedInterviews', label: ' - Completed Interviews This Month' }
         };
 
         const filter = filterMapping[label];
