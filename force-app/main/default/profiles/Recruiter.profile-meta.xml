@@ -23,7 +23,7 @@
     </classAccesses>
     <classAccesses>
         <apexClass>CandidatesInContractingController</apexClass>
-        <enabled>false</enabled>
+        <enabled>true</enabled>
     </classAccesses>
     <classAccesses>
         <apexClass>CaseEmailSummaryServiceExtraTest</apexClass>
@@ -712,11 +712,6 @@
     </fieldPermissions>
     <fieldPermissions>
         <editable>true</editable>
-        <field>Candidate__c.LinkedIn_Profile__c</field>
-        <readable>true</readable>
-    </fieldPermissions>
-    <fieldPermissions>
-        <editable>true</editable>
         <field>Candidate__c.MDE200__c</field>
         <readable>true</readable>
     </fieldPermissions>
@@ -1236,9 +1231,9 @@
         <readable>true</readable>
     </fieldPermissions>
     <objectPermissions>
-        <allowCreate>false</allowCreate>
+        <allowCreate>true</allowCreate>
         <allowDelete>false</allowDelete>
-        <allowEdit>false</allowEdit>
+        <allowEdit>true</allowEdit>
         <allowRead>true</allowRead>
         <modifyAllRecords>false</modifyAllRecords>
         <object>ALC__c</object>
