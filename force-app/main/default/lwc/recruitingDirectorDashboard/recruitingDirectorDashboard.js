@@ -224,20 +224,20 @@ export default class RecruitingDirectorDashboard extends LightningElement {
         this.isDrillDownLoading = true;
         this.drillDownData = [];
 
-        const salesManager = this.selectedManager === 'All' ? null : this.selectedManager;
+        const salesManager = this.selectedManager;
         let dataPromise;
 
         switch(metricType) {
             case 'totalCandidates':
-                dataPromise = getCandidatesList({ salesManager });
+                dataPromise = getCandidatesList({ managerName: salesManager, dateRange: this.selectedDateRange });
                 this.drillDownColumns = [
                     { label: 'Name', fieldName: 'recordUrl', type: 'url', typeAttributes: { label: { fieldName: 'name' }, target: '_blank' } },
-                    { label: 'Sales Manager', fieldName: 'salesManager', type: 'text' },
-                    { label: 'Stage', fieldName: 'stage', type: 'text' }
+                    { label: 'Sales Manager', fieldName: 'salesManagerName', type: 'text' },
+                    { label: 'Stage', fieldName: 'status', type: 'text' }
                 ];
                 break;
             case 'upcomingInterviews':
-                dataPromise = getUpcomingInterviewsList({ salesManager });
+                dataPromise = getUpcomingInterviewsList({ managerName: salesManager, dateRange: this.selectedDateRange });
                 this.drillDownColumns = [
                     { label: 'Candidate', fieldName: 'candidateName', type: 'text' },
                     { label: 'Interview Date', fieldName: 'interviewDate', type: 'date-local', typeAttributes: { month: 'short', day: 'numeric', year: 'numeric', hour: '2-digit', minute: '2-digit' } },
@@ -246,42 +246,42 @@ export default class RecruitingDirectorDashboard extends LightningElement {
                 ];
                 break;
             case 'activePipeline':
-                dataPromise = getActivePipelineList({ salesManager });
+                dataPromise = getActivePipelineList({ managerName: salesManager, dateRange: this.selectedDateRange });
                 this.drillDownColumns = [
                     { label: 'Name', fieldName: 'recordUrl', type: 'url', typeAttributes: { label: { fieldName: 'name' }, target: '_blank' } },
-                    { label: 'Sales Manager', fieldName: 'salesManager', type: 'text' },
-                    { label: 'Stage', fieldName: 'stage', type: 'text' },
+                    { label: 'Sales Manager', fieldName: 'salesManagerName', type: 'text' },
+                    { label: 'Stage', fieldName: 'status', type: 'text' },
                     { label: 'Last Modified', fieldName: 'lastModified', type: 'date', typeAttributes: { month: 'short', day: 'numeric', year: 'numeric' } }
                 ];
                 break;
             case 'contractB':
-                dataPromise = getContractBList({ salesManager });
+                dataPromise = getContractBList({ managerName: salesManager, dateRange: this.selectedDateRange });
                 this.drillDownColumns = [
                     { label: 'Name', fieldName: 'recordUrl', type: 'url', typeAttributes: { label: { fieldName: 'name' }, target: '_blank' } },
-                    { label: 'Sales Manager', fieldName: 'salesManager', type: 'text' },
+                    { label: 'Sales Manager', fieldName: 'salesManagerName', type: 'text' },
                     { label: 'Stage', fieldName: 'stage', type: 'text' },
-                    { label: 'Contract Date', fieldName: 'contractDate', type: 'date', typeAttributes: { month: 'short', day: 'numeric', year: 'numeric' } }
+                    { label: 'Contract Date', fieldName: 'contractEffective', type: 'date', typeAttributes: { month: 'short', day: 'numeric', year: 'numeric' } }
                 ];
                 break;
             case 'contractA':
-                dataPromise = getContractAList({ salesManager });
+                dataPromise = getContractAList({ managerName: salesManager, dateRange: this.selectedDateRange });
                 this.drillDownColumns = [
                     { label: 'Name', fieldName: 'recordUrl', type: 'url', typeAttributes: { label: { fieldName: 'name' }, target: '_blank' } },
-                    { label: 'Sales Manager', fieldName: 'salesManager', type: 'text' },
+                    { label: 'Sales Manager', fieldName: 'salesManagerName', type: 'text' },
                     { label: 'Stage', fieldName: 'stage', type: 'text' },
-                    { label: 'Contract Date', fieldName: 'contractDate', type: 'date', typeAttributes: { month: 'short', day: 'numeric', year: 'numeric' } }
+                    { label: 'Contract Date', fieldName: 'contractEffective', type: 'date', typeAttributes: { month: 'short', day: 'numeric', year: 'numeric' } }
                 ];
                 break;
             case 'hired':
-                dataPromise = getHiredList({ salesManager, dateRange: this.selectedDateRange });
+                dataPromise = getHiredList({ managerName: salesManager, dateRange: this.selectedDateRange });
                 this.drillDownColumns = [
                     { label: 'Name', fieldName: 'recordUrl', type: 'url', typeAttributes: { label: { fieldName: 'name' }, target: '_blank' } },
-                    { label: 'Sales Manager', fieldName: 'salesManager', type: 'text' },
-                    { label: 'Hire Date', fieldName: 'hireDate', type: 'date', typeAttributes: { month: 'short', day: 'numeric', year: 'numeric' } }
+                    { label: 'Sales Manager', fieldName: 'salesManagerName', type: 'text' },
+                    { label: 'Hire Date', fieldName: 'contractEffective', type: 'date', typeAttributes: { month: 'short', day: 'numeric', year: 'numeric' } }
                 ];
                 break;
             case 'completedInterviews':
-                dataPromise = getCompletedInterviewsList({ salesManager, dateRange: this.selectedDateRange });
+                dataPromise = getCompletedInterviewsList({ managerName: salesManager, dateRange: this.selectedDateRange });
                 this.drillDownColumns = [
                     { label: 'Candidate', fieldName: 'candidateName', type: 'text' },
                     { label: 'Completion Date', fieldName: 'completionDate', type: 'date', typeAttributes: { month: 'short', day: 'numeric', year: 'numeric' } },
@@ -311,7 +311,7 @@ export default class RecruitingDirectorDashboard extends LightningElement {
 
     // Handle CSV export
     handleExportCsv() {
-        const salesManager = this.selectedManager === 'All' ? null : this.selectedManager;
+        const salesManager = this.selectedManager;
         
         exportToCsv({ 
             metricType: this.currentDrillDownMetric,

@@ -4,6 +4,18 @@
         <apexClass>RecruiterDashboardController</apexClass>
         <enabled>true</enabled>
     </classAccesses>
+    <classAccesses>
+        <apexClass>InterviewSequenceHelper</apexClass>
+        <enabled>true</enabled>
+    </classAccesses>
+    <classAccesses>
+        <apexClass>CandidateRecordViewController</apexClass>
+        <enabled>true</enabled>
+    </classAccesses>
+    <classAccesses>
+        <apexClass>SummaryCardMetricsController</apexClass>
+        <enabled>true</enabled>
+    </classAccesses>
     <description>Grants access to Recruiter Dashboard Apex controller for Sales Managers and Recruiters</description>
     <hasActivationRequired>false</hasActivationRequired>
     <label>Recruiter Dashboard Access</label>

@@ -615,16 +615,44 @@
             <lightning-messages></lightning-messages>
             <div class="slds-grid slds-wrap slds-gutters">
               <div class="slds-col slds-size_1-of-1">
-                <lightning-input-field field-name="Candidate__c" required></lightning-input-field>
+                <lightning-input-field field-name="Candidate__c" required onchange={handleCandidateChange}></lightning-input-field>
               </div>
+              <template if:true={interviewSummary.hasCompletedInterviews}>
+                <div class="slds-col slds-size_1-of-1">
+                  <div class="slds-box slds-box_x-small slds-theme_info slds-m-bottom_small">
+                    <p class="slds-text-body_small">
+                      <lightning-icon icon-name="utility:info" size="xx-small" class="slds-m-right_x-small"></lightning-icon>
+                      <strong>Interview History:</strong> {interviewSummary.summary}
+                    </p>
+                  </div>
+                </div>
+              </template>
               <div class="slds-col slds-size_1-of-2">
-                <lightning-input-field field-name="Interview_Type__c" required></lightning-input-field>
+                <lightning-input-field field-name="Interview_Type__c" value={suggestedInterviewType} required></lightning-input-field>
               </div>
               <div class="slds-col slds-size_1-of-2">
                 <lightning-input-field field-name="Date_Time_Scheduled__c" required></lightning-input-field>
               </div>
               <div class="slds-col slds-size_1-of-1">
-                <lightning-input-field field-name="Interviewer_s__c"></lightning-input-field>
+                <template if:false={showInterviewerField}>
+                  <div class="slds-form-element">
+                    <label class="slds-form-element__label">Interviewer(s)</label>
+                    <div class="slds-form-element__control">
+                      <div class="slds-box slds-box_x-small">
+                        <p class="slds-text-body_small">{currentUserName}</p>
+                      </div>
+                      <lightning-button 
+                        variant="base" 
+                        label="Add Additional Interviewers" 
+                        onclick={toggleInterviewerField}
+                        class="slds-m-top_x-small">
+                      </lightning-button>
+                    </div>
+                  </div>
+                </template>
+                <template if:true={showInterviewerField}>
+                  <lightning-input-field field-name="Interviewer_s__c"></lightning-input-field>
+                </template>
               </div>
               <div class="slds-col slds-size_1-of-2">
                 <lightning-input-field field-name="Interview_Status__c"></lightning-input-field>

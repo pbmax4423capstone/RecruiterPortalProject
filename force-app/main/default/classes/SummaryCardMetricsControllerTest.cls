@@ -103,4 +103,111 @@ private class SummaryCardMetricsControllerTest {
     //     
     //     // Verify only current user's candidates counted
     // }
+    
+    /**
+     * Test getCandidatesList returns valid list structure
+     */
+    @isTest
+    static void testGetCandidatesListReturnsValidStructure() {
+        Test.startTest();
+        List<Map<String, Object>> result = SummaryCardMetricsController.getCandidatesList();
+        Test.stopTest();
+        
+        System.assertNotEquals(null, result, 'Result should not be null');
+    }
+    
+    /**
+     * Test getUpcomingInterviewsList returns valid list structure
+     */
+    @isTest
+    static void testGetUpcomingInterviewsListReturnsValidStructure() {
+        // Create test candidate
+        Candidate__c testCandidate = new Candidate__c(
+            First_Name__c = 'Test',
+            Last_Name__c = 'Candidate',
+            Email__c = 'test@example.com'
+        );
+        insert testCandidate;
+        
+        // Create test interview
+        Interview__c testInterview = new Interview__c(
+            Candidate__c = testCandidate.Id,
+            Interview_Status__c = 'Scheduled',
+            Date_Time_Scheduled__c = System.now().addDays(1)
+        );
+        insert testInterview;
+        
+        Test.startTest();
+        List<Map<String, Object>> result = SummaryCardMetricsController.getUpcomingInterviewsList();
+        Test.stopTest();
+        
+        System.assertNotEquals(null, result, 'Result should not be null');
+        System.assert(result.size() > 0, 'Should return at least one interview');
+        
+        // Verify map structure
+        Map<String, Object> firstRecord = result[0];
+        System.assert(firstRecord.containsKey('id'), 'Should have id field');
+        System.assert(firstRecord.containsKey('candidateName'), 'Should have candidateName field');
+        System.assert(firstRecord.containsKey('recordUrl'), 'Should have recordUrl field');
+    }
+    
+    /**
+     * Test getActivePipelineList returns valid list structure
+     */
+    @isTest
+    static void testGetActivePipelineListReturnsValidStructure() {
+        Test.startTest();
+        List<Map<String, Object>> result = SummaryCardMetricsController.getActivePipelineList();
+        Test.stopTest();
+        
+        System.assertNotEquals(null, result, 'Result should not be null');
+    }
+    
+    /**
+     * Test getOnContractBList returns valid list structure
+     */
+    @isTest
+    static void testGetOnContractBListReturnsValidStructure() {
+        Test.startTest();
+        List<Map<String, Object>> result = SummaryCardMetricsController.getOnContractBList();
+        Test.stopTest();
+        
+        System.assertNotEquals(null, result, 'Result should not be null');
+    }
+    
+    /**
+     * Test getOnContractAList returns valid list structure
+     */
+    @isTest
+    static void testGetOnContractAListReturnsValidStructure() {
+        Test.startTest();
+        List<Map<String, Object>> result = SummaryCardMetricsController.getOnContractAList();
+        Test.stopTest();
+        
+        System.assertNotEquals(null, result, 'Result should not be null');
+    }
+    
+    /**
+     * Test getHiredThisMonthList returns valid list structure
+     */
+    @isTest
+    static void testGetHiredThisMonthListReturnsValidStructure() {
+        Test.startTest();
+        List<Map<String, Object>> result = SummaryCardMetricsController.getHiredThisMonthList();
+        Test.stopTest();
+        
+        System.assertNotEquals(null, result, 'Result should not be null');
+    }
+    
+    /**
+     * Test getCompletedInterviewsList returns valid list structure
+     */
+    @isTest
+    static void testGetCompletedInterviewsListReturnsValidStructure() {
+        Test.startTest();
+        List<Map<String, Object>> result = SummaryCardMetricsController.getCompletedInterviewsList();
+        Test.stopTest();
+        
+        System.assertNotEquals(null, result, 'Result should not be null');
+    }
 }

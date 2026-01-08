@@ -14,5 +14,6 @@
     "**/Thumbs.db": true,
     ".mule": true
   },
-  "gitflow.disableOnRepo": true
+  "gitflow.disableOnRepo": true,
+  "gitflow.showAllCommands": true
 }

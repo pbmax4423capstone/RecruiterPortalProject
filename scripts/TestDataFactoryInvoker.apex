@@ -29,8 +29,13 @@
  */
 
 // === GENERATE TEST DATA ===
-// Uncomment the line below to generate all test data:
-TestDataFactory.generateCompleteTestData();
+// Uncomment ONE of the lines below:
+
+// Option 1: Standard generation (may trigger flow automation)
+// TestDataFactory.generateCompleteTestData();
+
+// Option 2: Sandbox-safe generation (bypasses flow issues with partial success)
+TestDataFactory.generateSandboxSafeTestData();
 
 // === CLEAN UP TEST DATA ===
 // Uncomment the line below to delete all test data:

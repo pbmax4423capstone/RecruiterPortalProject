@@ -1,0 +1,294 @@
+/**
+ * ADD THESE METHODS TO SummaryCardMetricsController.cls
+ * Insert before the closing brace of the class
+ * Replace the commented-out helper methods at the end
+ */
+
+    /**
+     * Retrieves detailed list of all candidates owned by current user
+     * Used for drill-down modal display
+     * 
+     * @return List<Map<String, Object>> list of candidate records with relevant fields
+     */
+    @AuraEnabled(cacheable=false)
+    public static List<Map<String, Object>> getCandidatesList() {
+        List<Map<String, Object>> candidateList = new List<Map<String, Object>>();
+        Id currentUserId = UserInfo.getUserId();
+        
+        try {
+            List<Candidate__c> candidates = [
+                SELECT Id, Name, First_Name__c, Last_Name__c, Status__c,
+                       Highest_Level_Achieved__c, Email__c, Phone__c,
+                       Office_Location__c, Sales_Manager__c, CreatedDate
+                FROM Candidate__c
+                WHERE OwnerId = :currentUserId
+                ORDER BY CreatedDate DESC
+            ];
+            
+            for (Candidate__c candidate : candidates) {
+                Map<String, Object> candidateMap = new Map<String, Object>();
+                candidateMap.put('id', candidate.Id);
+                candidateMap.put('name', candidate.Name);
+                candidateMap.put('status', candidate.Status__c);
+                candidateMap.put('highestLevel', candidate.Highest_Level_Achieved__c);
+                candidateMap.put('email', candidate.Email__c);
+                candidateMap.put('phone', candidate.Phone__c);
+                candidateMap.put('officeLocation', candidate.Office_Location__c);
+                candidateMap.put('recordUrl', '/' + candidate.Id);
+                candidateList.add(candidateMap);
+            }
+        } catch (Exception e) {
+            System.debug('Error in getCandidatesList: ' + e.getMessage());
+        }
+        
+        return candidateList;
+    }
+    
+    /**
+     * Retrieves detailed list of upcoming interviews for current user's candidates
+     * 
+     * @return List<Map<String, Object>> list of scheduled interviews
+     */
+    @AuraEnabled(cacheable=false)
+    public static List<Map<String, Object>> getUpcomingInterviewsList() {
+        List<Map<String, Object>> interviewList = new List<Map<String, Object>>();
+        Id currentUserId = UserInfo.getUserId();
+        
+        try {
+            List<Interview__c> interviews = [
+                SELECT Id, Name, Candidate__r.Name, Candidate__c,
+                       Interview_Type__c, Date_Time_Scheduled__c,
+                       Conducted_By__r.Name, Interview_Status__c
+                FROM Interview__c
+                WHERE Interview_Status__c = 'Scheduled'
+                AND Date_Time_Scheduled__c >= TODAY
+                AND Candidate__r.OwnerId = :currentUserId
+                ORDER BY Date_Time_Scheduled__c ASC
+            ];
+            
+            for (Interview__c interview : interviews) {
+                Map<String, Object> interviewMap = new Map<String, Object>();
+                interviewMap.put('id', interview.Id);
+                interviewMap.put('candidateName', interview.Candidate__r.Name);
+                interviewMap.put('candidateId', interview.Candidate__c);
+                interviewMap.put('interviewType', interview.Interview_Type__c);
+                interviewMap.put('scheduledDate', interview.Date_Time_Scheduled__c);
+                interviewMap.put('interviewer', interview.Conducted_By__r != null ? interview.Conducted_By__r.Name : '');
+                interviewMap.put('status', interview.Interview_Status__c);
+                interviewMap.put('recordUrl', '/' + interview.Id);
+                interviewMap.put('candidateUrl', '/' + interview.Candidate__c);
+                interviewList.add(interviewMap);
+            }
+        } catch (Exception e) {
+            System.debug('Error in getUpcomingInterviewsList: ' + e.getMessage());
+        }
+        
+        return interviewList;
+    }
+    
+    /**
+     * Retrieves detailed list of active pipeline candidates
+     * 
+     * @return List<Map<String, Object>> list of active candidates
+     */
+    @AuraEnabled(cacheable=false)
+    public static List<Map<String, Object>> getActivePipelineList() {
+        List<Map<String, Object>> candidateList = new List<Map<String, Object>>();
+        Id currentUserId = UserInfo.getUserId();
+        
+        try {
+            List<Candidate__c> candidates = [
+                SELECT Id, Name, Status__c, Highest_Level_Achieved__c,
+                       Email__c, Phone__c, Next_Meeting_Date__c,
+                       Office_Location__c, LastModifiedDate
+                FROM Candidate__c
+                WHERE OwnerId = :currentUserId
+                AND Status__c = 'Active/In Process'
+                ORDER BY Next_Meeting_Date__c ASC NULLS LAST
+            ];
+            
+            for (Candidate__c candidate : candidates) {
+                Map<String, Object> candidateMap = new Map<String, Object>();
+                candidateMap.put('id', candidate.Id);
+                candidateMap.put('name', candidate.Name);
+                candidateMap.put('status', candidate.Status__c);
+                candidateMap.put('highestLevel', candidate.Highest_Level_Achieved__c);
+                candidateMap.put('nextMeeting', candidate.Next_Meeting_Date__c);
+                candidateMap.put('email', candidate.Email__c);
+                candidateMap.put('phone', candidate.Phone__c);
+                candidateMap.put('recordUrl', '/' + candidate.Id);
+                candidateList.add(candidateMap);
+            }
+        } catch (Exception e) {
+            System.debug('Error in getActivePipelineList: ' + e.getMessage());
+        }
+        
+        return candidateList;
+    }
+    
+    /**
+     * Retrieves detailed list of Contract B agents
+     * 
+     * @return List<Map<String, Object>> list of Contract B ALC records
+     */
+    @AuraEnabled(cacheable=false)
+    public static List<Map<String, Object>> getOnContractBList() {
+        List<Map<String, Object>> alcList = new List<Map<String, Object>>();
+        Id currentUserId = UserInfo.getUserId();
+        
+        try {
+            List<ALC__c> alcRecords = [
+                SELECT Id, Name, Candidate__r.Name, Candidate__c,
+                       Contract_Type__c, Stage__c, Contract_Effective__c,
+                       Contract_B_Expiration_Date__c, CreatedDate
+                FROM ALC__c
+                WHERE Candidate__r.OwnerId = :currentUserId
+                AND Contract_Type__c = 'B'
+                AND Stage__c NOT IN ('COMPLETE', 'TERMINATED', 'CANCELED')
+                ORDER BY CreatedDate DESC
+            ];
+            
+            for (ALC__c alc : alcRecords) {
+                Map<String, Object> alcMap = new Map<String, Object>();
+                alcMap.put('id', alc.Id);
+                alcMap.put('candidateName', alc.Candidate__r.Name);
+                alcMap.put('candidateId', alc.Candidate__c);
+                alcMap.put('contractType', alc.Contract_Type__c);
+                alcMap.put('stage', alc.Stage__c);
+                alcMap.put('effectiveDate', alc.Contract_Effective__c);
+                alcMap.put('expirationDate', alc.Contract_B_Expiration_Date__c);
+                alcMap.put('recordUrl', '/' + alc.Id);
+                alcMap.put('candidateUrl', '/' + alc.Candidate__c);
+                alcList.add(alcMap);
+            }
+        } catch (Exception e) {
+            System.debug('Error in getOnContractBList: ' + e.getMessage());
+        }
+        
+        return alcList;
+    }
+    
+    /**
+     * Retrieves detailed list of Contract A agents
+     * 
+     * @return List<Map<String, Object>> list of Contract A ALC records
+     */
+    @AuraEnabled(cacheable=false)
+    public static List<Map<String, Object>> getOnContractAList() {
+        List<Map<String, Object>> alcList = new List<Map<String, Object>>();
+        Id currentUserId = UserInfo.getUserId();
+        
+        try {
+            List<ALC__c> alcRecords = [
+                SELECT Id, Name, Candidate__r.Name, Candidate__c,
+                       Contract_Type__c, Stage__c, Contract_Effective__c,
+                       CreatedDate
+                FROM ALC__c
+                WHERE Candidate__r.OwnerId = :currentUserId
+                AND Contract_Type__c = 'A'
+                AND Stage__c NOT IN ('COMPLETE', 'TERMINATED', 'CANCELED')
+                ORDER BY CreatedDate DESC
+            ];
+            
+            for (ALC__c alc : alcRecords) {
+                Map<String, Object> alcMap = new Map<String, Object>();
+                alcMap.put('id', alc.Id);
+                alcMap.put('candidateName', alc.Candidate__r.Name);
+                alcMap.put('candidateId', alc.Candidate__c);
+                alcMap.put('contractType', alc.Contract_Type__c);
+                alcMap.put('stage', alc.Stage__c);
+                alcMap.put('effectiveDate', alc.Contract_Effective__c);
+                alcMap.put('recordUrl', '/' + alc.Id);
+                alcMap.put('candidateUrl', '/' + alc.Candidate__c);
+                alcList.add(alcMap);
+            }
+        } catch (Exception e) {
+            System.debug('Error in getOnContractAList: ' + e.getMessage());
+        }
+        
+        return alcList;
+    }
+    
+    /**
+     * Retrieves detailed list of candidates hired this month
+     * 
+     * @return List<Map<String, Object>> list of recently hired candidates
+     */
+    @AuraEnabled(cacheable=false)
+    public static List<Map<String, Object>> getHiredThisMonthList() {
+        List<Map<String, Object>> hiredList = new List<Map<String, Object>>();
+        Id currentUserId = UserInfo.getUserId();
+        
+        try {
+            List<ALC__c> alcRecords = [
+                SELECT Id, Name, Candidate__r.Name, Candidate__c,
+                       Contract_Type__c, Stage__c, LastModifiedDate,
+                       Contract_Effective__c
+                FROM ALC__c
+                WHERE Candidate__r.OwnerId = :currentUserId
+                AND Stage__c IN ('Contracted', 'COMPLETE')
+                AND LastModifiedDate = THIS_MONTH
+                ORDER BY LastModifiedDate DESC
+            ];
+            
+            for (ALC__c alc : alcRecords) {
+                Map<String, Object> hiredMap = new Map<String, Object>();
+                hiredMap.put('id', alc.Id);
+                hiredMap.put('candidateName', alc.Candidate__r.Name);
+                hiredMap.put('candidateId', alc.Candidate__c);
+                hiredMap.put('contractType', alc.Contract_Type__c);
+                hiredMap.put('stage', alc.Stage__c);
+                hiredMap.put('hireDate', alc.LastModifiedDate);
+                hiredMap.put('effectiveDate', alc.Contract_Effective__c);
+                hiredMap.put('recordUrl', '/' + alc.Id);
+                hiredMap.put('candidateUrl', '/' + alc.Candidate__c);
+                hiredList.add(hiredMap);
+            }
+        } catch (Exception e) {
+            System.debug('Error in getHiredThisMonthList: ' + e.getMessage());
+        }
+        
+        return hiredList;
+    }
+    
+    /**
+     * Retrieves detailed list of completed interviews this month
+     * 
+     * @return List<Map<String, Object>> list of completed interviews
+     */
+    @AuraEnabled(cacheable=false)
+    public static List<Map<String, Object>> getCompletedInterviewsList() {
+        List<Map<String, Object>> interviewList = new List<Map<String, Object>>();
+        Id currentUserId = UserInfo.getUserId();
+        
+        try {
+            List<Interview__c> interviews = [
+                SELECT Id, Name, Candidate__r.Name, Candidate__c,
+                       Interview_Type__c, Date_Completed__c, Outcome__c,
+                       Conducted_By__r.Name, Interview_Status__c
+                FROM Interview__c
+                WHERE Candidate__r.OwnerId = :currentUserId
+                AND Interview_Status__c = 'Completed'
+                AND Date_Completed__c = THIS_MONTH
+                ORDER BY Date_Completed__c DESC
+            ];
+            
+            for (Interview__c interview : interviews) {
+                Map<String, Object> interviewMap = new Map<String, Object>();
+                interviewMap.put('id', interview.Id);
+                interviewMap.put('candidateName', interview.Candidate__r.Name);
+                interviewMap.put('candidateId', interview.Candidate__c);
+                interviewMap.put('interviewType', interview.Interview_Type__c);
+                interviewMap.put('completedDate', interview.Date_Completed__c);
+                interviewMap.put('outcome', interview.Outcome__c);
+                interviewMap.put('interviewer', interview.Conducted_By__r != null ? interview.Conducted_By__r.Name : '');
+                interviewMap.put('recordUrl', '/' + interview.Id);
+                interviewMap.put('candidateUrl', '/' + interview.Candidate__c);
+                interviewList.add(interviewMap);
+            }
+        } catch (Exception e) {
+            System.debug('Error in getCompletedInterviewsList: ' + e.getMessage());
+        }
+        
+        return interviewList;
+    }

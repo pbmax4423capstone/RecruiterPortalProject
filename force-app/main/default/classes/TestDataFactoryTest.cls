@@ -20,9 +20,9 @@ private class TestDataFactoryTest {
         
         Test.stopTest();
         
-        // Verify Capstone Partners account was created
-        List<Account> accounts = [SELECT Id, Name FROM Account WHERE Name = 'Capstone Partners'];
-        System.assertEquals(1, accounts.size(), 'Should have created Capstone Partners account');
+        // Verify capstone account was created
+        List<Account> accounts = [SELECT Id, Name FROM Account WHERE Name = 'capstone'];
+        System.assertEquals(1, accounts.size(), 'Should have created capstone account');
         
         // Verify Contacts were created
         List<Contact> contacts = [SELECT Id, Email FROM Contact WHERE Email LIKE '%testfactory%'];
@@ -32,6 +32,36 @@ private class TestDataFactoryTest {
         List<Candidate__c> candidates = [SELECT Id, Contact__c FROM Candidate__c];
         System.assertEquals(500, candidates.size(), 'Should have created 500 Candidates');
         System.assertNotEquals(null, candidates[0].Contact__c, 'Candidate should be linked to Contact');
+    }
+    
+    /**
+     * @description Test the sandbox-safe data generation with automation bypass
+     * Verifies that data is created even with potential flow failures
+     */
+    @isTest
+    static void testGenerateSandboxSafeTestData() {
+        Test.startTest();
+        
+        // Execute the sandbox-safe data generation method
+        TestDataFactory.generateSandboxSafeTestData();
+        
+        Test.stopTest();
+        
+        // Verify capstone account was created
+        List<Account> accounts = [SELECT Id, Name FROM Account WHERE Name = 'capstone'];
+        System.assertEquals(1, accounts.size(), 'Should have created capstone account');
+        
+        // Verify Contacts were created
+        List<Contact> contacts = [SELECT Id, Email FROM Contact WHERE Email LIKE '%testfactory%'];
+        System.assertEquals(500, contacts.size(), 'Should have created 500 Contacts');
+        
+        // Verify Candidates were created (allowing for partial success)
+        List<Candidate__c> candidates = [SELECT Id, Contact__c FROM Candidate__c];
+        System.assert(candidates.size() > 0, 'Should have created at least some Candidates');
+        System.assert(candidates.size() <= 500, 'Should not exceed 500 Candidates');
+        if (!candidates.isEmpty()) {
+            System.assertNotEquals(null, candidates[0].Contact__c, 'Candidate should be linked to Contact');
+        }
         
         // Verify Interviews were created with proper distribution
         List<Interview__c> interviews = [SELECT Id, Interview_Type__c FROM Interview__c];
@@ -95,9 +125,9 @@ private class TestDataFactoryTest {
         System.assertEquals(0, [SELECT COUNT() FROM ALC__c], 'Should have 0 ALCs after cleanup');
         System.assertEquals(0, [SELECT COUNT() FROM Opportunity], 'Should have 0 Opportunities after cleanup');
         
-        // Verify Capstone Partners account still exists (not deleted)
-        List<Account> accounts = [SELECT Id FROM Account WHERE Name = 'Capstone Partners'];
-        System.assertEquals(1, accounts.size(), 'Capstone Partners account should still exist');
+        // Verify capstone account still exists (not deleted)
+        List<Account> accounts = [SELECT Id FROM Account WHERE Name = 'capstone'];
+        System.assertEquals(1, accounts.size(), 'capstone account should still exist');
     }
     
     /**
@@ -211,11 +241,15 @@ private class TestDataFactoryTest {
         System.assertNotEquals(null, alcsWithRelationships[0].Contact__c, 'ALC should have Contact');
         
         // Test Opportunity → Contact relationship (for FYC rollup)
-        List<Opportunity> oppsWithContact = [SELECT Id, ContactId, Contact.Email 
+        List<Opportunity> oppsWithContact = [SELECT Id, ContactId 
                                              FROM Opportunity 
                                              LIMIT 1];
         System.assertNotEquals(null, oppsWithContact[0].ContactId, 'Opportunity should have Contact');
-        System.assert(oppsWithContact[0].Contact.Email.contains('testfactory'), 
+        
+        // Verify the Contact exists
+        Id contactId = oppsWithContact[0].ContactId;
+        Contact oppContact = [SELECT Email FROM Contact WHERE Id = :contactId LIMIT 1];
+        System.assert(oppContact.Email.contains('testfactory'), 
                      'Opportunity Contact should be test factory contact');
     }
 }

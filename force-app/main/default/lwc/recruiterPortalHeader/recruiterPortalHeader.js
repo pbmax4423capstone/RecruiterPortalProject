@@ -3,6 +3,9 @@ import { ShowToastEvent } from 'lightning/platformShowToastEvent';
 import { NavigationMixin } from 'lightning/navigation';
 import getCurrentUserInfo from '@salesforce/apex/RecruiterDashboardController.getCurrentUserInfo';
 import createScheduledCall from '@salesforce/apex/RecruiterDashboardController.createScheduledCall';
+import getNextInterviewType from '@salesforce/apex/InterviewSequenceHelper.getNextInterviewType';
+import getCurrentUserName from '@salesforce/apex/InterviewSequenceHelper.getCurrentUserName';
+import getCandidateInterviewSummary from '@salesforce/apex/InterviewSequenceHelper.getCandidateInterviewSummary';
 
 export default class RecruiterPortalHeader extends NavigationMixin(LightningElement) {
   // User Information
@@ -19,6 +22,13 @@ export default class RecruiterPortalHeader extends NavigationMixin(LightningElem
   @track showScheduleCallModal = false;
   @track showRescheduleFlowModal = false;
   @track showRescheduleFlowModal = false;
+  
+  // Interview suggestion properties
+  @track suggestedInterviewType = '';
+  @track currentUserName = '';
+  @track interviewSummary = null;
+  @track showInterviewerField = false;
+  @track selectedCandidateId = null;
 
   // Schedule Call form fields
   @track callSubject = '';
@@ -280,13 +290,58 @@ export default class RecruiterPortalHeader extends NavigationMixin(LightningElem
     }
   }
 
-  handleScheduleInterview() {
+  async handleScheduleInterview() {
     console.log('Schedule Interview clicked');
     this.showScheduleInterviewModal = true;
+    this.showInterviewerField = false;
+    this.selectedCandidateId = null;
+    this.suggestedInterviewType = '';
+    this.interviewSummary = null;
+    
+    // Fetch current user name for default interviewer
+    try {
+      this.currentUserName = await getCurrentUserName();
+    } catch (error) {
+      console.error('Error fetching current user name:', error);
+      this.currentUserName = this.userFirstName || 'Current User';
+    }
   }
 
   closeScheduleInterviewModal() {
     this.showScheduleInterviewModal = false;
+    this.showInterviewerField = false;
+    this.selectedCandidateId = null;
+    this.suggestedInterviewType = '';
+    this.currentUserName = '';
+    this.interviewSummary = null;
+  }
+  
+  toggleInterviewerField() {
+    this.showInterviewerField = !this.showInterviewerField;
+  }
+  
+  async handleCandidateChange(event) {
+    const candidateId = event.target.value;
+    this.selectedCandidateId = candidateId;
+    
+    if (candidateId) {
+      try {
+        const [suggestedType, summary] = await Promise.all([
+          getNextInterviewType({ candidateId: candidateId }),
+          getCandidateInterviewSummary({ candidateId: candidateId })
+        ]);
+        
+        this.suggestedInterviewType = suggestedType;
+        this.interviewSummary = summary;
+      } catch (error) {
+        console.error('Error fetching interview suggestions:', error);
+        this.suggestedInterviewType = 'Ci-First';
+        this.interviewSummary = null;
+      }
+    } else {
+      this.suggestedInterviewType = '';
+      this.interviewSummary = null;
+    }
   }
 
   handleInterviewSuccess(event) {

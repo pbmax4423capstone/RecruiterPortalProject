@@ -5,6 +5,9 @@ import { createRecord, deleteRecord } from 'lightning/uiRecordApi';
 import { publish, MessageContext } from 'lightning/messageService';
 import DARK_MODE_CHANNEL from '@salesforce/messageChannel/DarkModeChannel__c';
 import getCurrentUserInfo from '@salesforce/apex/RecruiterDashboardController.getCurrentUserInfo';
+import getNextInterviewType from '@salesforce/apex/InterviewSequenceHelper.getNextInterviewType';
+import getCurrentUserName from '@salesforce/apex/InterviewSequenceHelper.getCurrentUserName';
+import getCandidateInterviewSummary from '@salesforce/apex/InterviewSequenceHelper.getCandidateInterviewSummary';
 import createScheduledCall from '@salesforce/apex/RecruiterDashboardController.createScheduledCall';
 import getRecentNotes from '@salesforce/apex/RecruiterDashboardController.getRecentNotes';
 import CONTENT_NOTE_OBJECT from '@salesforce/schema/ContentNote';
@@ -48,6 +51,13 @@ export default class PortalHeaderNew extends NavigationMixin(LightningElement) {
   @track newNoteBody = '';
   @track recentNotes = [];
   @track isNoteSaving = false;
+
+  // Interview suggestion properties
+  @track suggestedInterviewType = '';
+  @track currentUserName = '';
+  @track interviewSummary = { hasCompletedInterviews: false, summary: '' };
+  @track showInterviewerField = false;
+  @track selectedCandidateId = null;
   @track noteSortBy = 'recent';
   @track recordSearchTerm = '';
   @track recordSearchResults = [];
@@ -859,9 +869,42 @@ export default class PortalHeaderNew extends NavigationMixin(LightningElement) {
     }
   }
 
-  handleScheduleInterview() {
+  async handleScheduleInterview() {
     console.log('Schedule Interview clicked');
+    try {
+      this.currentUserName = await getCurrentUserName();
+    } catch (error) {
+      console.error('Error fetching user name:', error);
+      this.currentUserName = 'Current User';
+    }
     this.showScheduleInterviewModal = true;
+  }
+
+  async handleCandidateChange(event) {
+    const candidateId = event.target.value;
+    this.selectedCandidateId = candidateId;
+
+    if (candidateId) {
+      try {
+        const [suggestion, summary] = await Promise.all([
+          getNextInterviewType({ candidateId }),
+          getCandidateInterviewSummary({ candidateId })
+        ]);
+        this.suggestedInterviewType = suggestion || '';
+        this.interviewSummary = summary || { hasCompletedInterviews: false, summary: '' };
+      } catch (error) {
+        console.error('Error fetching interview suggestions:', error);
+        this.suggestedInterviewType = '';
+        this.interviewSummary = { hasCompletedInterviews: false, summary: '' };
+      }
+    } else {
+      this.suggestedInterviewType = '';
+      this.interviewSummary = { hasCompletedInterviews: false, summary: '' };
+    }
+  }
+
+  toggleInterviewerField() {
+    this.showInterviewerField = !this.showInterviewerField;
   }
 
   closeScheduleInterviewModal() {

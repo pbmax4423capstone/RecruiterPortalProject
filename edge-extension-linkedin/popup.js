@@ -1,11 +1,11 @@
-// Configuration - UPDATE THESE VALUES
+// Configuration - Production Setup
 const CONFIG = {
-  // ProdTest Sandbox - Change these for Production later
-  salesforceLoginUrl: 'https://test.salesforce.com', // Use 'https://login.salesforce.com' for Production
+  // Production Salesforce Login
+  salesforceLoginUrl: 'https://login.salesforce.com',
   salesforceInstanceUrl: '', // Will be set after login
   
   // Connected App credentials (create in Salesforce Setup)
-  clientId: '3MVG9AR068fT4usyVQdDlbJ3XVwtPbfdsuFVEcup3mEwR.dQlnrkDltgNCeCXb6bRrC.uTfLjhvHaFkrn7bWd', // ProdTest Consumer Key
+  clientId: '3MVG9p1Q1BCe9GmCK.2GT3FP11uBOviHb5qJPJvlkCtUE52LJ_ODY9s2ea_B5E3Fw3xVeiYH3bxLOESNXIMHF', // Production Consumer Key
   redirectUri: chrome.identity.getRedirectURL(),
   
   // Default field values
@@ -14,12 +14,8 @@ const CONFIG = {
     position: 'Agent',
     status: 'Lead',
     nextStep: 'F/up to schedule AI',
-    recordTypeId: '0125f000000a5IlAAI' // Candidate record type
-  },
-  
-  // TESTING: Hardcoded recruiter ID for Rachyll Tenny
-  // Remove this when going to production and use currentUserId instead
-  testRecruiterId: '0055f00000DqpnpAAB' // Rachyll Tenny's User ID
+    recordTypeId: '0125f000000a5IlAAI' // Production Candidate Record Type ID
+  }
 };
 
 // State

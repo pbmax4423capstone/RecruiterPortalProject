@@ -16,29 +16,29 @@
                 <label>0-Prequal</label>
             </value>
             <value>
-                <fullName>Ci_1st</fullName>
+                <fullName>Ci-First</fullName>
                 <default>false</default>
-                <label>Ci(1st)</label>
+                <label>Ci-First</label>
             </value>
             <value>
-                <fullName>Align (2nd)</fullName>
+                <fullName>Align-2nd</fullName>
                 <default>false</default>
-                <label>Align (2nd)</label>
+                <label>Align-2nd</label>
             </value>
             <value>
-                <fullName>Plan_3rd</fullName>
+                <fullName>Plan-3rd</fullName>
                 <default>false</default>
-                <label>Plan (3rd)</label>
+                <label>Plan-3rd</label>
             </value>
             <value>
                 <fullName>Present-4th</fullName>
                 <default>false</default>
-                <label>Present(4th)</label>
+                <label>Present-4th</label>
             </value>
             <value>
-                <fullName>Optional_5th</fullName>
+                <fullName>Optional-5th</fullName>
                 <default>false</default>
-                <label>Optional (5th)</label>
+                <label>Optional-5th</label>
             </value>
             <value>
                 <fullName>6-Offer Acc</fullName>
