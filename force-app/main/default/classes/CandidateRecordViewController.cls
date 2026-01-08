@@ -118,4 +118,20 @@ public with sharing class CandidateRecordViewController {
         
         return accessibleFields;
     }
+    
+    @AuraEnabled(cacheable=true)
+    public static List<Interview__c> getInterviews(Id candidateId) {
+        try {
+            return [
+                SELECT Id, Name, Interview_Type__c, Interview_Status__c,
+                       Date_Time_Scheduled__c, Date_Completed__c, Outcome__c,
+                       Interviewer_s__c, Conducted_By__r.Name, Notes__c
+                FROM Interview__c
+                WHERE Candidate__c = :candidateId
+                ORDER BY Date_Time_Scheduled__c DESC
+            ];
+        } catch (Exception e) {
+            throw new AuraHandledException('Error loading interviews: ' + e.getMessage());
+        }
+    }
 }

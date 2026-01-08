@@ -4,8 +4,10 @@ import { encodeDefaultFieldValues } from 'lightning/pageReferenceUtils';
 import { getRecord, getFieldValue } from 'lightning/uiRecordApi';
 import { refreshApex } from '@salesforce/apex';
 import { subscribe, unsubscribe, onError } from 'lightning/empApi';
+import { ShowToastEvent } from 'lightning/platformShowToastEvent';
 import getCandidateData from '@salesforce/apex/CandidateRecordViewController.getCandidateData';
 import getNotes from '@salesforce/apex/CandidateNotesController.getNotes';
+import getInterviews from '@salesforce/apex/CandidateRecordViewController.getInterviews';
 
 // Import a field to wire getRecord for automatic refresh detection
 import ID_FIELD from '@salesforce/schema/Candidate__c.Id';
@@ -14,12 +16,17 @@ export default class CandidateRecordView extends NavigationMixin(LightningElemen
     @api recordId;
     @track activeTab = 'candidate';
     @track notes = [];
+    @track interviews = [];
     @track candidateData;
     @track error;
     @track isLoading = true;
+    @track isLoadingInterviews = false;
+    @track showCreateInterviewModal = false;
     refreshInterval;
     subscription = null;
     channelName = '/data/Candidate__ChangeEvent';
+    interviewSubscription = null;
+    interviewChannelName = '/data/Interview__ChangeEvent';
 
     // Wire getRecord to detect standard edit saves
     @wire(getRecord, { recordId: '$recordId', fields: [ID_FIELD] })
@@ -33,6 +40,7 @@ export default class CandidateRecordView extends NavigationMixin(LightningElemen
     connectedCallback() {
         this.loadCandidateData();
         this.loadNotes();
+        this.loadInterviews();
         // Set up auto-refresh every 5 seconds to check for new notes
         this.refreshInterval = setInterval(() => {
             this.loadNotes();
@@ -66,16 +74,36 @@ export default class CandidateRecordView extends NavigationMixin(LightningElemen
             }
         }).then(response => {
             this.subscription = response;
-            console.log('Successfully subscribed to CDC channel');
+            console.log('Successfully subscribed to Candidate CDC channel');
         }).catch(error => {
-            console.error('CDC subscription error:', JSON.stringify(error));
+            console.error('Candidate CDC subscription error:', JSON.stringify(error));
+        });
+        
+        // Subscribe to Interview__c change events
+        subscribe(this.interviewChannelName, -1, (message) => {
+            console.log('Interview CDC Event received:', JSON.stringify(message));
+            const payload = message.data.payload;
+            // Check if this interview is related to our candidate
+            if (payload.Candidate__c === this.recordId) {
+                this.loadInterviews();
+            }
+        }).then(response => {
+            this.interviewSubscription = response;
+            console.log('Successfully subscribed to Interview CDC channel');
+        }).catch(error => {
+            console.error('Interview CDC subscription error:', JSON.stringify(error));
         });
     }
 
     unsubscribeFromChangeEvents() {
         if (this.subscription) {
             unsubscribe(this.subscription, response => {
-                console.log('Unsubscribed from CDC channel');
+                console.log('Unsubscribed from Candidate CDC channel');
+            });
+        }
+        if (this.interviewSubscription) {
+            unsubscribe(this.interviewSubscription, response => {
+                console.log('Unsubscribed from Interview CDC channel');
             });
         }
     }
@@ -85,6 +113,7 @@ export default class CandidateRecordView extends NavigationMixin(LightningElemen
     refreshData() {
         this.loadCandidateData();
         this.loadNotes();
+        this.loadInterviews();
     }
 
     loadCandidateData() {
@@ -113,6 +142,22 @@ export default class CandidateRecordView extends NavigationMixin(LightningElemen
                 .catch(error => {
                     console.error('Error loading notes:', error);
                     this.notes = [];
+                });
+        }
+    }
+    
+    loadInterviews() {
+        if (this.recordId) {
+            this.isLoadingInterviews = true;
+            getInterviews({ candidateId: this.recordId })
+                .then(data => {
+                    this.interviews = data || [];
+                    this.isLoadingInterviews = false;
+                })
+                .catch(error => {
+                    console.error('Error loading interviews:', error);
+                    this.interviews = [];
+                    this.isLoadingInterviews = false;
                 });
         }
     }
@@ -345,22 +390,41 @@ export default class CandidateRecordView extends NavigationMixin(LightningElemen
     }
 
     handleCreateInterview() {
-        // Launch Create Interview quick action
-        const defaultValues = encodeDefaultFieldValues({
-            Candidate__c: this.recordId
-        });
+        // Open modal instead of navigating to standard new page
+        this.showCreateInterviewModal = true;
+    }
 
-        this[NavigationMixin.Navigate]({
-            type: 'standard__objectPage',
-            attributes: {
-                objectApiName: 'Interview__c',
-                actionName: 'new'
-            },
-            state: {
-                defaultFieldValues: defaultValues,
-                useRecordTypeCheck: 1
-            }
-        });
+    closeCreateInterviewModal() {
+        this.showCreateInterviewModal = false;
+    }
+
+    handleInterviewSuccess(event) {
+        const interviewId = event.detail.id;
+        console.log('Interview created successfully with ID:', interviewId);
+        this.showCreateInterviewModal = false;
+        
+        this.dispatchEvent(
+            new ShowToastEvent({
+                title: 'Success',
+                message: 'Interview created successfully!',
+                variant: 'success'
+            })
+        );
+        
+        // Refresh the candidate data and interviews
+        this.loadCandidateData();
+        this.loadInterviews();
+    }
+
+    handleInterviewError(event) {
+        console.error('Error creating interview:', JSON.stringify(event.detail));
+        this.dispatchEvent(
+            new ShowToastEvent({
+                title: 'Error',
+                message: 'Error creating interview. Please try again.',
+                variant: 'error'
+            })
+        );
     }
 
     handleStartContracting() {
@@ -416,5 +480,79 @@ export default class CandidateRecordView extends NavigationMixin(LightningElemen
 
     handleRefreshNotes() {
         this.loadNotes();
+    }
+    
+    get hasInterviews() {
+        return this.interviews && this.interviews.length > 0;
+    }
+    
+    get interviewColumns() {
+        return [
+            { label: 'Interview Name', fieldName: 'Name', type: 'text' },
+            { label: 'Type', fieldName: 'Interview_Type__c', type: 'text' },
+            { label: 'Status', fieldName: 'Interview_Status__c', type: 'text' },
+            { 
+                label: 'Scheduled', 
+                fieldName: 'Date_Time_Scheduled__c', 
+                type: 'date',
+                typeAttributes: {
+                    year: 'numeric',
+                    month: 'short',
+                    day: '2-digit',
+                    hour: '2-digit',
+                    minute: '2-digit'
+                }
+            },
+            { 
+                label: 'Completed', 
+                fieldName: 'Date_Completed__c', 
+                type: 'date',
+                typeAttributes: {
+                    year: 'numeric',
+                    month: 'short',
+                    day: '2-digit'
+                }
+            },
+            { label: 'Outcome', fieldName: 'Outcome__c', type: 'text' },
+            { label: 'Interviewers', fieldName: 'Interviewer_s__c', type: 'text' },
+            {
+                type: 'action',
+                typeAttributes: {
+                    rowActions: [
+                        { label: 'View Details', name: 'view' },
+                        { label: 'Edit', name: 'edit' }
+                    ]
+                }
+            }
+        ];
+    }
+    
+    handleInterviewRowAction(event) {
+        const actionName = event.detail.action.name;
+        const row = event.detail.row;
+        
+        if (actionName === 'view') {
+            this[NavigationMixin.Navigate]({
+                type: 'standard__recordPage',
+                attributes: {
+                    recordId: row.Id,
+                    objectApiName: 'Interview__c',
+                    actionName: 'view'
+                }
+            });
+        } else if (actionName === 'edit') {
+            this[NavigationMixin.Navigate]({
+                type: 'standard__recordPage',
+                attributes: {
+                    recordId: row.Id,
+                    objectApiName: 'Interview__c',
+                    actionName: 'edit'
+                }
+            });
+        }
+    }
+    
+    handleRefreshInterviews() {
+        this.loadInterviews();
     }
 }
