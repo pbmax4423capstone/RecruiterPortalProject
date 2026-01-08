@@ -15,7 +15,7 @@ import exportToCsv from '@salesforce/apex/RecruitingDirectorController.exportToC
 
 export default class RecruitingDirectorDashboard extends LightningElement {
     @track salesManagerOptions = [];
-    @track selectedManager = 'All';
+    @track selectedManager = 'All Sales Managers';  // Fixed: was 'All', should match dropdown value
     @track selectedDateRange = 'THIS_MONTH';
     @track metrics = {
         totalCandidates: 0,
@@ -61,16 +61,17 @@ export default class RecruitingDirectorDashboard extends LightningElement {
     loadMetrics() {
         this.isLoading = true;
         
-        const isAllManagers = this.selectedManager === 'All';
+        const isAllManagers = this.selectedManager === 'All Sales Managers';
         const metricsPromise = isAllManagers 
             ? getGlobalMetrics({ dateRange: this.selectedDateRange })
             : getMetricsForManager({ 
-                salesManager: this.selectedManager, 
+                managerName: this.selectedManager,  // Fixed: was 'salesManager', should be 'managerName'
                 dateRange: this.selectedDateRange 
             });
 
         metricsPromise
             .then(result => {
+                console.log('Metrics loaded for manager:', this.selectedManager, result);
                 this.metrics = {
                     totalCandidates: result.totalCandidates || 0,
                     upcomingInterviews: result.upcomingInterviews || 0,
@@ -83,6 +84,7 @@ export default class RecruitingDirectorDashboard extends LightningElement {
                 this.loadChartData();
             })
             .catch(error => {
+                console.error('Error loading metrics:', error);
                 this.showError('Error loading metrics', error);
                 this.isLoading = false;
             });
