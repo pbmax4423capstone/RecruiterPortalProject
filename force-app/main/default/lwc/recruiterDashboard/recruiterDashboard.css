@@ -217,19 +217,19 @@
 }
 
 .metric-primary {
-  border-left-color: #1589ee;
+  border-left-color: #0066cc; /* Capstone Action Blue */
 }
 
 .metric-secondary {
-  border-left-color: #ff6b35;
+  border-left-color: #fe9339; /* Capstone Warning Orange */
 }
 
 .metric-success {
-  border-left-color: #4bca81;
+  border-left-color: #2e844a; /* Capstone Success Green */
 }
 
 .metric-info {
-  border-left-color: #9f42ff;
+  border-left-color: #f39c12; /* Capstone Warning Gold */
 }
 
 .metric-number {
@@ -301,23 +301,23 @@
 
 /* Interview Type Colors */
 .status-si1 {
-  color: #5867e8; /* Purple for SI1 */
+  color: #0070d2; /* Capstone Action Blue Alt for SI1 (Align - 2nd) */
 }
 
 .status-si2 {
-  color: #e3abec; /* Light purple for SI2 */
+  color: #2e844a; /* Capstone Success Green for SI2 (Plan - 3rd) */
 }
 
 .status-si3 {
-  color: #8b63d6; /* Medium purple for SI3 */
+  color: #f39c12; /* Capstone Warning Gold for SI3 (Optional - 5th) */
 }
 
 .status-career {
-  color: #00a651; /* Dark green for career */
+  color: #003366; /* Capstone Blue for Career (Present - 4th) */
 }
 
 .status-thisweek {
-  color: #0070d2; /* Blue for this week */
+  color: #0066cc; /* Capstone Action Blue for this week */
 }
 
 /* Clickable Interview Items */
@@ -829,7 +829,7 @@ lightning-card {
 .activity-number {
   font-size: 2rem;
   font-weight: 700;
-  color: #1589ee;
+  color: #0066cc; /* Capstone Action Blue */
 }
 
 /* Interview Metrics */
@@ -839,7 +839,7 @@ lightning-card {
   background-color: #f8f9fa;
   border-radius: 4px;
   margin: 0.25rem;
-  border-left: 3px solid #1589ee;
+  border-left: 3px solid #0066cc; /* Capstone Action Blue */
 }
 
 .interview-period {

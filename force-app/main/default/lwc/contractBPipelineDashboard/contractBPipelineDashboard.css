@@ -57,23 +57,23 @@
 }
 
 .interview-attraction {
-    background: #0176d3;
+    background: #0066cc; /* Capstone Action Blue */
 }
 
 .interview-si1 {
-    background: #06a59a;
+    background: #0070d2; /* Capstone Action Blue Alt */
 }
 
 .interview-si2 {
-    background: #e74c3c;
+    background: #2e844a; /* Capstone Success Green */
 }
 
 .interview-si3 {
-    background: #f39c12;
+    background: #f39c12; /* Capstone Warning Gold (keep existing) */
 }
 
 .interview-career {
-    background: #9b59b6;
+    background: #003366; /* Capstone Blue */
 }
 
 .interview-total {
@@ -98,19 +98,19 @@
 }
 
 .metric-a {
-    background: #0176d3;
+    background: #0066cc; /* Capstone Action Blue for Contract A */
 }
 
 .metric-b {
-    background: #06a59a;
+    background: #2e844a; /* Capstone Success Green for Contract B */
 }
 
 .metric-transition {
-    background: #2e844a;
+    background: #fe9339; /* Capstone Warning Orange for Transitions */
 }
 
 .metric-terminations {
-    background: #e74c3c;
+    background: #c23934; /* Capstone Error Red for Terminations */
 }
 
 .metric-rate-good {
@@ -118,7 +118,7 @@
 }
 
 .metric-rate-bad {
-    background: #ba0517;
+    background: #ea001e; /* Capstone Error Dark */
 }
 
 /* Progress indicators */
@@ -159,11 +159,11 @@
 }
 
 .progress-bar-fyc {
-    background: linear-gradient(90deg, #f39c12, #2e844a);
+    background: linear-gradient(90deg, #f39c12, #2e844a); /* Capstone Warning Gold to Success Green */
 }
 
 .progress-bar-subs {
-    background: linear-gradient(90deg, #0176d3, #06a59a);
+    background: linear-gradient(90deg, #0066cc, #0070d2); /* Capstone Action Blues */
 }
 
 .progress-text {
