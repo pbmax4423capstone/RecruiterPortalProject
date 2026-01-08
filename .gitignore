@@ -46,3 +46,29 @@ $RECYCLE.BIN/
 **/__pycache__/
 **/.venv/
 **/venv/
+
+# Deployment artifacts and data files
+# CSV files from bulk operations (keep in root)
+/*.csv
+# Backup JSON files
+/*.json
+!package.json
+!package-lock.json
+!sfdx-project.json
+!jest.config.js
+!eslint.config.js
+# Temporary apex scripts (keep specific ones)
+/*.apex
+# Temporary directories
+/temp/
+/temp-*/
+# Test results
+/test-results/
+# Retrieved metadata (temporary)
+/retrieved-metadata/
+
+# Task status files
+.task-status/
+
+# Agent logs (optional - keep if needed)
+# docs/agent-logs/

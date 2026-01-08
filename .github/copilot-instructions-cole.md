@@ -1,5 +1,19 @@
 # Copilot Instructions for Cole Arnold - RecruiterPortal Project
 
+## 🤝 Collaborative Work Notice
+
+**IMPORTANT:** This repository is shared between Patrick Baker and Cole Arnold with their respective Copilot agents.
+
+**Before starting any work:**
+1. Check [WORK_COORDINATION.md](../WORK_COORDINATION.md) for active work and protected files
+2. Review [SHARED_PLANNING.md](../SHARED_PLANNING.md) for current tasks
+3. See [AGENT_COORDINATION.md](../AGENT_COORDINATION.md) for agent handoff patterns
+
+**When handing off work:**
+- Create handoff documentation using templates in WORK_COORDINATION.md
+- Update task status in SHARED_PLANNING.md
+- Provide full context for the next agent/person
+
 ## NEW: Unified Dark Mode Implementation (December 29, 2025)
 - **Lightning Message Service:** Created `DarkModeChannel__c` for centralized dark mode state management across all Recruiter Portal components
 - **Publisher:** `portalHeaderNew` has dark mode toggle button (sun/moon icons) that publishes dark mode state via LMS

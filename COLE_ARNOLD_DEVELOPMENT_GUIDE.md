@@ -1,5 +1,28 @@
 # Development Guide for Cole Arnold
 
+## 🤝 NEW: Collaborative Work Framework
+
+**Before starting any work, check these coordination documents:**
+
+1. **[QUICK_COORDINATION.md](QUICK_COORDINATION.md)** - ⚡ Fast reference guide
+2. **[WORK_COORDINATION.md](WORK_COORDINATION.md)** - 🤝 Full coordination protocols
+3. **[SHARED_PLANNING.md](SHARED_PLANNING.md)** - 📋 Current task board
+4. **[AGENT_COORDINATION.md](AGENT_COORDINATION.md)** - 🤖 Agent handoff patterns
+
+**Quick Coordination Check:**
+```bash
+# Check active work
+cat SHARED_PLANNING.md | grep "🔵 In Progress"
+
+# Check protected files
+cat WORK_COORDINATION.md | grep -A 30 "Protected Files"
+
+# Pull latest
+git pull origin main
+```
+
+---
+
 ## Getting Started
 
 ### 1. Pull Latest Changes
