@@ -24,11 +24,11 @@
 }
 
 .summary-card-week {
-    background: linear-gradient(135deg, #4a5568 0%, #2d3748 100%);
+    background: linear-gradient(135deg, #3e3e3c 0%, #2d3748 100%); /* Keep neutral for week */
 }
 
 .summary-card-month {
-    background: linear-gradient(135deg, #0891b2 0%, #0e7490 100%);
+    background: linear-gradient(135deg, #0066cc 0%, #003366 100%); /* Capstone Action Blue to Capstone Blue */
 }
 
 .summary-number {
@@ -60,23 +60,23 @@
 }
 
 .category-ci-first {
-    background: linear-gradient(135deg, #2563eb 0%, #1e40af 100%);
+    background: linear-gradient(135deg, #0066cc 0%, #003366 100%); /* Capstone Action Blue (Attraction/CI First) */
 }
 
 .category-align {
-    background: linear-gradient(135deg, #059669 0%, #047857 100%);
+    background: linear-gradient(135deg, #0070d2 0%, #0066cc 100%); /* Capstone Action Blue Alt (SI1/Align 2nd) */
 }
 
 .category-plan {
-    background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
+    background: linear-gradient(135deg, #2e844a 0%, #194e2e 100%); /* Capstone Success Green (SI2/Plan 3rd) */
 }
 
 .category-present {
-    background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+    background: linear-gradient(135deg, #003366 0%, #032d60 100%); /* Capstone Blue (Career/Present 4th) */
 }
 
 .category-optional {
-    background: linear-gradient(135deg, #9333ea 0%, #7e22ce 100%);
+    background: linear-gradient(135deg, #f39c12 0%, #b37209 100%); /* Capstone Warning Gold (SI3/Optional 5th) */
 }
 
 .category-number {
@@ -139,23 +139,23 @@
 }
 
 .badge-ci-first {
-    background: linear-gradient(135deg, #2563eb 0%, #1e40af 100%);
+    background: linear-gradient(135deg, #0066cc 0%, #003366 100%); /* Capstone Action Blue */
 }
 
 .badge-align {
-    background: linear-gradient(135deg, #059669 0%, #047857 100%);
+    background: linear-gradient(135deg, #0070d2 0%, #0066cc 100%); /* Capstone Action Blue Alt */
 }
 
 .badge-plan {
-    background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
+    background: linear-gradient(135deg, #2e844a 0%, #194e2e 100%); /* Capstone Success Green */
 }
 
 .badge-present {
-    background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+    background: linear-gradient(135deg, #003366 0%, #032d60 100%); /* Capstone Blue */
 }
 
 .badge-optional {
-    background: linear-gradient(135deg, #9333ea 0%, #7e22ce 100%);
+    background: linear-gradient(135deg, #f39c12 0%, #b37209 100%); /* Capstone Warning Gold */
 }
 
 /* Weekly Interviews Modal */
@@ -166,7 +166,7 @@
 
 .weekly-interview-item {
     padding: 0.75rem;
-    border-left: 3px solid #0891b2;
+    border-left: 3px solid #0066cc; /* Capstone Action Blue */
     background-color: #f9fafb;
 }
 
@@ -188,7 +188,7 @@
 }
 
 .leaderboard-container.dark-mode .summary-card-month {
-    background: linear-gradient(135deg, #0d5770 0%, #0a4356 100%);
+    background: linear-gradient(135deg, #0066cc 0%, #003366 100%); /* Capstone blues for dark mode */
 }
 
 .leaderboard-container.dark-mode .breakdown-section {

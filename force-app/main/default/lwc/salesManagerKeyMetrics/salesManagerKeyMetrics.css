@@ -27,30 +27,30 @@
     letter-spacing: 0.5px;
 }
 
-/* Color Variants - Matching contractBPipelineDashboard gradients */
+/* Color Variants - Matching Capstone brand colors */
 
 .summary-total {
-    background: linear-gradient(135deg, #0176d3, #032d60);
+    background: linear-gradient(135deg, #0066cc, #032d60); /* Capstone Action Blue to Dark Blue */
 }
 
 .summary-warning {
-    background: linear-gradient(135deg, #f39c12, #b37209);
+    background: linear-gradient(135deg, #f39c12, #b37209); /* Capstone Warning Gold (keep existing) */
 }
 
 .summary-info {
-    background: linear-gradient(135deg, #06a59a, #014d48);
+    background: linear-gradient(135deg, #0070d2, #0066cc); /* Capstone Action Blue Alt */
 }
 
 .summary-purple {
-    background: linear-gradient(135deg, #9b59b6, #6c3483);
+    background: linear-gradient(135deg, #003366, #032d60); /* Capstone Blues */
 }
 
 .summary-success {
-    background: linear-gradient(135deg, #2e844a, #194e2e);
+    background: linear-gradient(135deg, #2e844a, #194e2e); /* Capstone Success Green (keep existing) */
 }
 
 .summary-rate {
-    background: linear-gradient(135deg, #0176d3, #9b59b6);
+    background: linear-gradient(135deg, #0066cc, #f39c12); /* Capstone Action Blue to Warning Gold */
 }
 
 /* Definitions Table Styles */
@@ -96,7 +96,7 @@
     align-items: center;
     padding: 0.75rem 1rem;
     background: #d8edff;
-    border-left: 3px solid #0176d3;
+    border-left: 3px solid #0066cc; /* Capstone Action Blue */
     border-radius: 4px;
     font-size: 0.875rem;
     color: #032d60;
