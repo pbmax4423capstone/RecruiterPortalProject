@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Package xmlns="http://soap.sforce.com/2006/04/metadata">
+    <types>
+        <members>InterviewSequenceHelper</members>
+        <members>InterviewSequenceHelperTest</members>
+        <members>InterviewTriggerHandler</members>
+        <members>InterviewTriggerHandlerTest</members>
+        <name>ApexClass</name>
+    </types>
+    <types>
+        <members>InterviewTrigger</members>
+        <name>ApexTrigger</name>
+    </types>
+    <types>
+        <members>candidateRecordView</members>
+        <members>recruiterPortalHeader</members>
+        <members>portalHeaderNew</members>
+        <name>LightningComponentBundle</name>
+    </types>
+    <types>
+        <members>Recruiter_Dashboard_Access</members>
+        <name>PermissionSet</name>
+    </types>
+    <types>
+        <members>Interview__c-Interview Layout</members>
+        <name>Layout</name>
+    </types>
+    <version>65.0</version>
+</Package>
