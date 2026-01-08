@@ -1,5 +1,19 @@
 # Copilot Instructions for RecruiterPortal Project
 
+## 🤝 Collaborative Work Notice
+
+**IMPORTANT:** This repository is shared between Patrick Baker and Cole Arnold with their respective Copilot agents.
+
+**Before starting any work:**
+1. Check [WORK_COORDINATION.md](../WORK_COORDINATION.md) for active work and protected files
+2. Review [SHARED_PLANNING.md](../SHARED_PLANNING.md) for current tasks
+3. See [AGENT_COORDINATION.md](../AGENT_COORDINATION.md) for agent handoff patterns
+
+**When handing off work:**
+- Create handoff documentation using templates in WORK_COORDINATION.md
+- Update task status in SHARED_PLANNING.md
+- Provide full context for the next agent/person
+
 ## Project Overview
 
 This is a Salesforce DX project for a Recruiter Portal application built on the Salesforce platform. The application manages candidate recruitment, interviews, and contract lifecycle tracking.

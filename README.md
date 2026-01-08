@@ -43,6 +43,12 @@ This project includes:
 
 ## Documentation
 
+### Collaboration & Coordination (NEW!)
+- **[Quick Coordination Reference](QUICK_COORDINATION.md)**: ⚡ Fast reference for coordinating work
+- **[Work Coordination Guide](WORK_COORDINATION.md)**: 🤝 Protocols, patterns, and handoff procedures
+- **[Shared Planning & Task Board](SHARED_PLANNING.md)**: 📋 Active task tracking and sprint planning
+- **[Agent Coordination Guide](AGENT_COORDINATION.md)**: 🤖 Using Copilot agents collaboratively
+
 ### Training Materials
 - **[ATS Training Program](docs/ATS-Training-Program.md)**: Complete guided training for recruiters and sales managers
 - **[Quick Start Guide](docs/ATS-Quick-Start-Guide.md)**: One-page reference card for daily use
