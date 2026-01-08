@@ -122,16 +122,31 @@ public with sharing class CandidateRecordViewController {
     @AuraEnabled(cacheable=true)
     public static List<Interview__c> getInterviews(Id candidateId) {
         try {
-            return [
+            // Check object access
+            if (!Schema.sObjectType.Interview__c.isAccessible()) {
+                return new List<Interview__c>();
+            }
+            
+            List<Interview__c> interviews = [
                 SELECT Id, Name, Interview_Type__c, Interview_Status__c,
                        Date_Time_Scheduled__c, Date_Completed__c, Outcome__c,
-                       Interviewer_s__c, Conducted_By__r.Name, Notes__c
+                       Interviewer_s__c, Notes__c
                 FROM Interview__c
                 WHERE Candidate__c = :candidateId
                 ORDER BY Date_Time_Scheduled__c DESC
             ];
+            
+            // Strip inaccessible fields
+            SObjectAccessDecision decision = Security.stripInaccessible(
+                AccessType.READABLE, 
+                interviews
+            );
+            
+            return decision.getRecords();
         } catch (Exception e) {
-            throw new AuraHandledException('Error loading interviews: ' + e.getMessage());
+            System.debug('Error loading interviews: ' + e.getMessage());
+            // Return empty list instead of throwing to prevent page from breaking
+            return new List<Interview__c>();
         }
     }
 }
