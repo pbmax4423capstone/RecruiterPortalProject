@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Operation_Type__c</fullName>
+    <externalId>false</externalId>
+    <label>Operation Type</label>
+    <required>false</required>
+    <trackTrending>false</trackTrending>
+    <type>Picklist</type>
+    <valueSet>
+        <restricted>true</restricted>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>Contact Created</fullName>
+                <default>false</default>
+                <label>Contact Created</label>
+            </value>
+            <value>
+                <fullName>Candidate Created</fullName>
+                <default>false</default>
+                <label>Candidate Created</label>
+            </value>
+            <value>
+                <fullName>Contact Linked</fullName>
+                <default>false</default>
+                <label>Contact Linked</label>
+            </value>
+            <value>
+                <fullName>Candidate Linked</fullName>
+                <default>false</default>
+                <label>Candidate Linked</label>
+            </value>
+            <value>
+                <fullName>Error</fullName>
+                <default>false</default>
+                <label>Error</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Error_Type__c</fullName>
+    <externalId>false</externalId>
+    <label>Error Type</label>
+    <required>false</required>
+    <trackTrending>false</trackTrending>
+    <type>Picklist</type>
+    <valueSet>
+        <restricted>true</restricted>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>Contact Creation Failed</fullName>
+                <default>false</default>
+                <label>Contact Creation Failed</label>
+            </value>
+            <value>
+                <fullName>Candidate Creation Failed</fullName>
+                <default>false</default>
+                <label>Candidate Creation Failed</label>
+            </value>
+            <value>
+                <fullName>Matching Failed</fullName>
+                <default>false</default>
+                <label>Matching Failed</label>
+            </value>
+            <value>
+                <fullName>Validation Error</fullName>
+                <default>false</default>
+                <label>Validation Error</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

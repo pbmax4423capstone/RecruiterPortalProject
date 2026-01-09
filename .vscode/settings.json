@@ -6,14 +6,30 @@
     "**/.sfdx": true
   },
   "xml.preferences.showSchemaDocumentationType": "none",
+  "xml.server.vmargs": [
+    "-Xmx1024m",
+    "-XX:+UseG1GC",
+    "-XX:+UseStringDeduplication"
+  ],
+  "xml.server.binary.path": "",
+  "xml.validation.enabled": true,
   "files.exclude": {
     "**/.git": true,
     "**/.svn": true,
     "**/.hg": true,
     "**/.DS_Store": true,
     "**/Thumbs.db": true,
-    ".mule": true
+    ".mule": true,
+    "**/*.csv": true
   },
+  "git.enabled": true,
+  "git.path": "C:\\Program Files\\Git\\cmd\\git.exe",
   "gitflow.disableOnRepo": true,
-  "gitflow.showAllCommands": true
+  "gitflow.showAllCommands": false,
+  "gitflow.enable": false,
+  "extensions.ignoreRecommendations": false,
+  "java.jdt.ls.vmargs": "-XX:+UseParallelGC -XX:GCTimeRatio=4 -XX:AdaptiveSizePolicyWeight=90 -Dsun.zip.disableMemoryMapping=true -Xmx1G -Xms100m -Xlog:disable",
+  "java.configuration.updateBuildConfiguration": "automatic",
+  "salesforcedx-vscode-core.show-cli-success-msg": false,
+  "salesforcedx-vscode-lightning.activationMode": "autodetect"
 }

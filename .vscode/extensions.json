@@ -5,5 +5,8 @@
     "dbaeumer.vscode-eslint",
     "esbenp.prettier-vscode",
     "financialforce.lana"
+  ],
+  "unwantedRecommendations": [
+    "vector-of-bool.gitflow"
   ]
 }

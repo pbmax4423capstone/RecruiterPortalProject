@@ -106,9 +106,10 @@ private class InterviewLeaderboardNewControllerTest {
     
     @isTest
     static void testGetCurrentMonthLeaderboard() {
+        String currentMonth = String.valueOf(Date.today().year()) + '-' + String.valueOf(Date.today().month()).leftPad(2, '0');
         Test.startTest();
         List<InterviewLeaderboardNewController.LeaderboardEntry> results = 
-            InterviewLeaderboardNewController.getCurrentMonthLeaderboard();
+            InterviewLeaderboardNewController.getLeaderboardByMonth(currentMonth);
         Test.stopTest();
         
         System.assertNotEquals(null, results, 'Results should not be null');
@@ -128,9 +129,10 @@ private class InterviewLeaderboardNewControllerTest {
     
     @isTest
     static void testLeaderboardBreakdown() {
+        String currentMonth = String.valueOf(Date.today().year()) + '-' + String.valueOf(Date.today().month()).leftPad(2, '0');
         Test.startTest();
         List<InterviewLeaderboardNewController.LeaderboardEntry> results = 
-            InterviewLeaderboardNewController.getCurrentMonthLeaderboard();
+            InterviewLeaderboardNewController.getLeaderboardByMonth(currentMonth);
         Test.stopTest();
         
         // Verify results exist and basic structure
@@ -151,9 +153,10 @@ private class InterviewLeaderboardNewControllerTest {
     
     @isTest
     static void testLeaderboardSorting() {
+        String currentMonth = String.valueOf(Date.today().year()) + '-' + String.valueOf(Date.today().month()).leftPad(2, '0');
         Test.startTest();
         List<InterviewLeaderboardNewController.LeaderboardEntry> results = 
-            InterviewLeaderboardNewController.getCurrentMonthLeaderboard();
+            InterviewLeaderboardNewController.getLeaderboardByMonth(currentMonth);
         Test.stopTest();
         
         // Verify sorted by total descending
@@ -171,9 +174,10 @@ private class InterviewLeaderboardNewControllerTest {
         Candidate__c candidate = [SELECT Id FROM Candidate__c WHERE Email__c = 'testcandidate@test.com' LIMIT 1];
         delete [SELECT Id FROM Interview__c WHERE Candidate__c = :candidate.Id];
         
+        String currentMonth = String.valueOf(Date.today().year()) + '-' + String.valueOf(Date.today().month()).leftPad(2, '0');
         Test.startTest();
         List<InterviewLeaderboardNewController.LeaderboardEntry> results = 
-            InterviewLeaderboardNewController.getCurrentMonthLeaderboard();
+            InterviewLeaderboardNewController.getLeaderboardByMonth(currentMonth);
         Test.stopTest();
         
         System.assertNotEquals(null, results, 'Results should not be null');
@@ -201,9 +205,10 @@ private class InterviewLeaderboardNewControllerTest {
         }
         insert unassignedInterviews;
         
+        String currentMonth = String.valueOf(Date.today().year()) + '-' + String.valueOf(Date.today().month()).leftPad(2, '0');
         Test.startTest();
         List<InterviewLeaderboardNewController.LeaderboardEntry> results = 
-            InterviewLeaderboardNewController.getCurrentMonthLeaderboard();
+            InterviewLeaderboardNewController.getLeaderboardByMonth(currentMonth);
         Test.stopTest();
         
         System.assertEquals(1, results.size(), 'Should have 1 entry for unassigned');

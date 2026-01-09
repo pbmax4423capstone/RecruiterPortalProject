@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Package xmlns="http://soap.sforce.com/2006/04/metadata">
+    <types>
+        <members>ALC_Stage_Config.Broker_Stage_02A</members>
+        <members>ALC_Stage_Config.Broker_Stage_03A</members>
+        <members>ALC_Stage_Config.Broker_Stage_03B</members>
+        <members>ALC_Stage_Config.Broker_Stage_06</members>
+        <members>ALC_Stage_Config.Broker_Stage_07A</members>
+        <members>ALC_Stage_Config.Broker_Stage_10</members>
+        <name>CustomMetadata</name>
+    </types>
+    <version>65.0</version>
+</Package>

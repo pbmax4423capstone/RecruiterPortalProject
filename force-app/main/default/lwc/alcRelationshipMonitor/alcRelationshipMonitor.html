@@ -1,0 +1,307 @@
+<template>
+    <!-- Main Container -->
+    <lightning-card title="ALC Relationship Monitor" icon-name="custom:custom63">
+        <div slot="actions">
+            <lightning-button-icon
+                icon-name="utility:refresh"
+                variant="border-filled"
+                alternative-text="Refresh"
+                title="Refresh"
+                onclick={handleRefresh}
+                disabled={isRefreshing}
+            ></lightning-button-icon>
+            <div class="slds-m-left_small auto-refresh-toggle">
+                <lightning-input
+                    type="checkbox"
+                    label="Auto-refresh (5 min)"
+                    checked={autoRefreshEnabled}
+                    onchange={handleAutoRefreshToggle}
+                ></lightning-input>
+            </div>
+        </div>
+
+        <!-- Loading Spinner -->
+        <div if:true={isRefreshing} class="slds-is-relative">
+            <lightning-spinner
+                alternative-text="Loading..."
+                size="small"
+            ></lightning-spinner>
+        </div>
+
+        <!-- Summary Cards Section -->
+        <div class="slds-p-around_medium">
+            <h2 class="slds-text-heading_small slds-m-bottom_medium">
+                Relationship Gaps Summary
+            </h2>
+            <div class="summary-cards-grid">
+                <template for:each={relationshipGaps} for:item="gap">
+                    <div key={gap.recordType} class="summary-card">
+                        <div class="card-header">
+                            <h3 class="slds-text-heading_small">{gap.recordType}</h3>
+                        </div>
+                        <div class="card-body">
+                            <div class="stat-item">
+                                <span class="stat-label">Without Contact:</span>
+                                <lightning-badge
+                                    label={gap.withoutContact}
+                                    class={gap.withoutContactClass}
+                                ></lightning-badge>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-label">Without Candidate:</span>
+                                <lightning-badge
+                                    label={gap.withoutCandidate}
+                                    class={gap.withoutCandidateClass}
+                                ></lightning-badge>
+                            </div>
+                        </div>
+                        <div class="card-footer">
+                            <a href={gap.listViewUrl} target="_blank" class="view-records-link">
+                                View Records →
+                            </a>
+                        </div>
+                    </div>
+                </template>
+            </div>
+        </div>
+
+        <!-- Candidates Without Contacts Section -->
+        <div class="slds-p-around_medium">
+            <lightning-card title="Candidates Without Contacts" icon-name="standard:contact">
+                <div class="slds-p-around_medium">
+                    <template if:true={hasCandidatesWithoutContacts}>
+                        <div class="slds-m-bottom_small">
+                            <lightning-badge
+                                label={candidateCount}
+                                class="badge-warning"
+                            ></lightning-badge>
+                            <span class="slds-m-left_x-small">
+                                candidates need contact creation
+                            </span>
+                        </div>
+                        <lightning-datatable
+                            key-field="Id"
+                            data={candidatesWithoutContacts}
+                            columns={candidateColumns}
+                            onrowaction={handleCandidateRowAction}
+                            hide-checkbox-column
+                        ></lightning-datatable>
+                    </template>
+                    <template if:false={hasCandidatesWithoutContacts}>
+                        <div class="empty-state">
+                            <lightning-icon
+                                icon-name="utility:success"
+                                size="large"
+                                alternative-text="Success"
+                            ></lightning-icon>
+                            <p class="slds-text-heading_small slds-m-top_medium">
+                                All candidates have contacts!
+                            </p>
+                        </div>
+                    </template>
+                </div>
+            </lightning-card>
+        </div>
+
+        <!-- Audit Log Section -->
+        <div class="slds-p-around_medium">
+            <lightning-card title="Recent Automation Logs" icon-name="standard:logging">
+                <div class="slds-p-around_medium">
+                    <!-- Filter Buttons -->
+                    <div class="slds-m-bottom_medium">
+                        <lightning-button-group>
+                            <lightning-button
+                                label="All"
+                                variant={allButtonVariant}
+                                onclick={handleFilterAll}
+                            ></lightning-button>
+                            <lightning-button
+                                label="Errors Only"
+                                variant={errorsButtonVariant}
+                                onclick={handleFilterErrors}
+                            ></lightning-button>
+                            <lightning-button
+                                label="Last 7 Days"
+                                variant={last7ButtonVariant}
+                                onclick={handleFilterLast7Days}
+                            ></lightning-button>
+                            <lightning-button
+                                label="Last 30 Days"
+                                variant={last30ButtonVariant}
+                                onclick={handleFilterLast30Days}
+                            ></lightning-button>
+                        </lightning-button-group>
+                    </div>
+
+                    <!-- Audit Log Table -->
+                    <template if:true={hasAuditLogs}>
+                        <lightning-datatable
+                            key-field="Id"
+                            data={filteredAuditLogs}
+                            columns={auditLogColumns}
+                            onrowaction={handleAuditLogRowAction}
+                            hide-checkbox-column
+                        ></lightning-datatable>
+
+                        <!-- Pagination -->
+                        <div class="pagination-controls slds-m-top_medium">
+                            <lightning-button
+                                label="Previous"
+                                icon-name="utility:chevronleft"
+                                onclick={handlePreviousPage}
+                                disabled={isFirstPage}
+                            ></lightning-button>
+                            <span class="page-info slds-m-horizontal_medium">
+                                Page {currentPage} of {totalPages}
+                            </span>
+                            <lightning-button
+                                label="Next"
+                                icon-name="utility:chevronright"
+                                icon-position="right"
+                                onclick={handleNextPage}
+                                disabled={isLastPage}
+                            ></lightning-button>
+                        </div>
+                    </template>
+                    <template if:false={hasAuditLogs}>
+                        <div class="empty-state">
+                            <lightning-icon
+                                icon-name="utility:info"
+                                size="large"
+                                alternative-text="Info"
+                            ></lightning-icon>
+                            <p class="slds-text-heading_small slds-m-top_medium">
+                                No audit logs found
+                            </p>
+                        </div>
+                    </template>
+                </div>
+            </lightning-card>
+        </div>
+    </lightning-card>
+
+    <!-- Mark Resolved Modal -->
+    <template if:true={showResolveModal}>
+        <section role="dialog" tabindex="-1" class="slds-modal slds-fade-in-open">
+            <div class="slds-modal__container">
+                <header class="slds-modal__header">
+                    <button
+                        class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse"
+                        title="Close"
+                        onclick={handleCancelResolution}
+                    >
+                        <lightning-icon
+                            icon-name="utility:close"
+                            alternative-text="close"
+                            size="small"
+                        ></lightning-icon>
+                    </button>
+                    <h2 class="slds-text-heading_medium">Mark Log as Resolved</h2>
+                </header>
+                <div class="slds-modal__content slds-p-around_medium">
+                    <lightning-textarea
+                        label="Resolution Notes"
+                        placeholder="Enter notes about how this issue was resolved..."
+                        value={resolutionNotes}
+                        onchange={handleResolutionNotesChange}
+                        required
+                    ></lightning-textarea>
+                </div>
+                <footer class="slds-modal__footer">
+                    <lightning-button
+                        label="Cancel"
+                        onclick={handleCancelResolution}
+                    ></lightning-button>
+                    <lightning-button
+                        variant="brand"
+                        label="Save Resolution"
+                        onclick={handleSaveResolution}
+                        disabled={isSaving}
+                    ></lightning-button>
+                </footer>
+            </div>
+        </section>
+        <div class="slds-backdrop slds-backdrop_open"></div>
+    </template>
+
+    <!-- Log Detail Modal -->
+    <template if:true={showLogDetailModal}>
+        <section role="dialog" tabindex="-1" class="slds-modal slds-fade-in-open slds-modal_large">
+            <div class="slds-modal__container">
+                <header class="slds-modal__header">
+                    <button
+                        class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse"
+                        title="Close"
+                        onclick={handleCloseLogDetail}
+                    >
+                        <lightning-icon
+                            icon-name="utility:close"
+                            alternative-text="close"
+                            size="small"
+                        ></lightning-icon>
+                    </button>
+                    <h2 class="slds-text-heading_medium">Audit Log Details</h2>
+                </header>
+                <div class="slds-modal__content slds-p-around_medium">
+                    <template if:true={selectedLog}>
+                        <div class="log-detail-container">
+                            <dl class="slds-list_horizontal slds-wrap">
+                                <dt class="slds-item_label slds-text-color_weak">Operation:</dt>
+                                <dd class="slds-item_detail">{selectedLog.Operation_Type__c}</dd>
+                                
+                                <dt class="slds-item_label slds-text-color_weak">Status:</dt>
+                                <dd class="slds-item_detail">
+                                    <lightning-icon
+                                        icon-name={selectedLog.statusIcon}
+                                        size="small"
+                                        alternative-text={selectedLog.statusText}
+                                    ></lightning-icon>
+                                    {selectedLog.statusText}
+                                </dd>
+                                
+                                <dt class="slds-item_label slds-text-color_weak">Created:</dt>
+                                <dd class="slds-item_detail">
+                                    <lightning-formatted-date-time
+                                        value={selectedLog.CreatedDate}
+                                        year="numeric"
+                                        month="short"
+                                        day="2-digit"
+                                        hour="2-digit"
+                                        minute="2-digit"
+                                    ></lightning-formatted-date-time>
+                                </dd>
+                            </dl>
+
+                            <template if:true={selectedLog.Error_Message__c}>
+                                <div class="slds-m-top_medium">
+                                    <h3 class="slds-text-heading_small slds-m-bottom_x-small">
+                                        Error Message
+                                    </h3>
+                                    <div class="error-box">
+                                        {selectedLog.Error_Message__c}
+                                    </div>
+                                </div>
+                            </template>
+
+                            <template if:true={selectedLog.Stack_Trace__c}>
+                                <div class="slds-m-top_medium">
+                                    <h3 class="slds-text-heading_small slds-m-bottom_x-small">
+                                        Stack Trace
+                                    </h3>
+                                    <pre class="stack-trace-box">{selectedLog.Stack_Trace__c}</pre>
+                                </div>
+                            </template>
+                        </div>
+                    </template>
+                </div>
+                <footer class="slds-modal__footer">
+                    <lightning-button
+                        label="Close"
+                        onclick={handleCloseLogDetail}
+                    ></lightning-button>
+                </footer>
+            </div>
+        </section>
+        <div class="slds-backdrop slds-backdrop_open"></div>
+    </template>
+</template>

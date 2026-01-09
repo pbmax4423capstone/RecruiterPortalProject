@@ -77,7 +77,10 @@ Implement dark mode support for the candidateRecordView LWC component following 
 - [ ] Implement subscribeToMessageChannel()
 - [ ] Add handleDarkModeChange() method
 - [ ] Update CSS with dark mode classes
+- [ ] Write Jest tests for dark mode toggle
+- [ ] Run local tests: `npm run test:unit`
 - [ ] Test in ProdTest org
+- [ ] Verify test coverage >= 80%
 
 #### Technical Notes
 - Reference: `portalHeaderNew` (publisher), `candidateKanban` (subscriber)
@@ -118,6 +121,9 @@ Change `{{{Recipient.FirstName}}}` to `{!Contact.FirstName}`
 #### Testing
 - Send test email from Salesforce
 - Verify name appears correctly
+
+#### Notes
+No Jest tests needed (email template only)
 ```
 
 ### Template: Research Task
@@ -147,6 +153,180 @@ Investigate how to implement Change Data Capture for Interview__c object to enab
 Patrick's Agent - for implementation phase
 ```
 
+### Template: LWC Component with Tests
+
+```markdown
+### Task 045: Create new Interview Summary LWC component
+**Type:** New Feature
+**Priority:** Medium
+**Owner:** Cole Arnold
+**Agent:** Cole's Copilot Agent
+**Estimated Effort:** 4 hours
+
+#### Description
+Create a new Lightning Web Component to display interview summary data with filtering and sorting capabilities.
+
+#### Acceptance Criteria
+- [ ] Component displays interview data from Apex controller
+- [ ] Includes filter by date range
+- [ ] Supports sorting by multiple columns
+- [ ] Shows loading spinner during data fetch
+- [ ] Handles errors gracefully
+- [ ] Jest tests pass with >= 80% coverage
+- [ ] Works in ProdTest sandbox
+
+#### Development Steps
+**Phase 1: Local Development (No Deployment)**
+- [ ] Create component structure (HTML, JS, CSS, XML)
+- [ ] Write Jest test file (`__tests__/interviewSummary.test.js`)
+- [ ] Implement basic rendering logic
+- [ ] Run: `npm run test:unit:watch` (keep running)
+- [ ] Add @wire mock for controller method
+- [ ] Test data rendering with mock data
+- [ ] Test filter functionality
+- [ ] Test sort functionality
+- [ ] Test loading states
+- [ ] Test error handling
+- [ ] Verify coverage: `npm run test:unit:coverage`
+- [ ] Commit with tests: `git commit -m "Add interviewSummary component + tests"`
+
+**Phase 2: Sandbox Integration**
+- [ ] Deploy to ProdTest: `sf project deploy start --source-dir "force-app/main/default/lwc/interviewSummary" --target-org ProdTest`
+- [ ] Test with real Apex controller
+- [ ] Verify @wire integration
+- [ ] Test with real user permissions
+- [ ] Fix any integration issues
+- [ ] Re-run Jest tests: `npm run test:unit`
+- [ ] Deploy to Production when ready
+
+#### Files to Create/Modify
+- `force-app/main/default/lwc/interviewSummary/interviewSummary.html` (new)
+- `force-app/main/default/lwc/interviewSummary/interviewSummary.js` (new)
+- `force-app/main/default/lwc/interviewSummary/interviewSummary.css` (new)
+- `force-app/main/default/lwc/interviewSummary/interviewSummary.js-meta.xml` (new)
+- `force-app/main/default/lwc/interviewSummary/__tests__/interviewSummary.test.js` (new)
+
+#### Testing Strategy
+**Jest Unit Tests (Local - Fast):**
+- Component renders correctly with mock data
+- Filter logic works as expected
+- Sort logic works as expected
+- Loading spinner shows/hides correctly
+- Error messages display properly
+- User interactions trigger correct behaviors
+
+**Sandbox Tests (Integration - Slower):**
+- Real Apex data displays correctly
+- @wire adapters work with actual org data
+- Permissions enforced correctly
+- Performance acceptable with large datasets
+
+#### Technical Notes
+- Use `@wire(getInterviews)` for data fetching
+- Mock wire adapter in tests using `@salesforce/sfdx-lwc-jest`
+- Reference existing test patterns in `recruiterDashboard/__tests__/`
+
+#### Success Metrics
+- Jest tests: >= 80% code coverage
+- All tests passing locally before deployment
+- Zero console errors in ProdTest
+- Response time < 2 seconds for typical data load
+```
+
+---
+
+## 🧪 Testing Best Practices
+
+### Jest Testing Workflow
+
+**1. Test-Driven Development (TDD)**
+```bash
+# Start watch mode
+npm run test:unit:watch
+
+# Write test first (it will fail - RED)
+# Implement feature (test passes - GREEN)
+# Refactor code (test still passes - REFACTOR)
+```
+
+**2. What to Test Locally with Jest**
+✅ Component rendering
+✅ User interactions (clicks, input changes)
+✅ Conditional logic (if/else, ternary operators)
+✅ Event handlers
+✅ @api property behavior
+✅ Error handling
+✅ Loading states
+✅ Data transformation logic
+
+**3. What Requires Sandbox Testing**
+⚠️ @wire with real Salesforce data
+⚠️ Apex controller integration
+⚠️ User permissions and sharing rules
+⚠️ Lightning Message Service (real-time)
+⚠️ Navigation between pages
+⚠️ Platform Events
+⚠️ Record edits/creates
+
+**4. Quick Test Commands**
+```bash
+# Run all tests once
+npm run test
+
+# Watch mode (auto-run on file changes)
+npm run test:unit:watch
+
+# Check coverage
+npm run test:unit:coverage
+
+# Run tests for specific component
+npm test -- interviewSummary
+
+# Debug mode
+npm run test:unit:debug
+```
+
+**5. Coverage Standards**
+- **Target:** >= 80% code coverage for all LWC components
+- **Minimum:** >= 60% for complex components with extensive Apex integration
+- **Goal:** >= 90% for components with heavy business logic
+
+**6. Typical Test Structure**
+```javascript
+import { createElement } from 'lwc';
+import MyComponent from 'c/myComponent';
+
+describe('c-my-component', () => {
+    afterEach(() => {
+        // Clean up DOM after each test
+        while (document.body.firstChild) {
+            document.body.removeChild(document.body.firstChild);
+        }
+    });
+
+    it('renders correctly', () => {
+        const element = createElement('c-my-component', {
+            is: MyComponent
+        });
+        document.body.appendChild(element);
+        
+        expect(element).toBeTruthy();
+    });
+
+    it('handles user click', () => {
+        const element = createElement('c-my-component', {
+            is: MyComponent
+        });
+        document.body.appendChild(element);
+        
+        const button = element.shadowRoot.querySelector('button');
+        button.click();
+        
+        // Assert expected behavior
+    });
+});
+```
+
 ---
 
 ## 🔄 Coordination Examples
@@ -166,10 +346,13 @@ Phase 2 - Backend (Patrick's Agent)
 ├─ Modify CandidateFYCRollupService
 ├─ Update scheduled job
 ├─ Write Apex tests
+├─ Deploy to ProdTest
 └─ HANDOFF → Cole's Agent
 
 Phase 3 - Frontend (Cole's Agent)
 ├─ Update contractBPipelineDashboard
+├─ Write Jest tests for FYC display
+├─ Run: npm run test:unit
 ├─ Modify display logic
 └─ Test in ProdTest
 
@@ -187,14 +370,18 @@ Task: Update all dashboards for Q1 metrics
 Team A (Patrick's Agent)
 ├─ Update RecruiterDashboardController
 ├─ Update ContractBDashboardController
+├─ Write/update Apex tests
 └─ Deploy Apex controllers
 
 Team B (Cole's Agent) [Independent]
 ├─ Update recruiterDashboard LWC
 ├─ Update contractBPipelineDashboard LWC
+├─ Write/update Jest tests
+├─ Run: npm run test:unit:coverage
 └─ Deploy LWC components
 
 Integration Point: After both complete
+├─ Verify all tests pass
 └─ Joint testing in ProdTest
 ```
 

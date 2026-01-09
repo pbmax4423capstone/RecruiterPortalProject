@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PermissionSet xmlns="http://soap.sforce.com/2006/04/metadata">
+    <description>Grants access to Candidates in Contracting dashboard component for ALC team</description>
+    <hasActivationRequired>false</hasActivationRequired>
+    <label>ALC Contracting Dashboard Access</label>
+    
+    <!-- Apex Class Access -->
+    <classAccesses>
+        <apexClass>CandidatesInContractingController</apexClass>
+        <enabled>true</enabled>
+    </classAccesses>
+    
+    <!-- Custom Metadata Type Access -->
+    <customMetadataTypeAccesses>
+        <enabled>true</enabled>
+        <name>ALC_Stage_Config__mdt</name>
+    </customMetadataTypeAccesses>
+    
+    <!-- ALC Object Field Permissions -->
+    <fieldPermissions>
+        <editable>false</editable>
+        <field>ALC__c.Agency__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>true</editable>
+        <field>ALC__c.Stage__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>false</editable>
+        <field>ALC__c.Candidate__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>false</editable>
+        <field>ALC__c.Contract_Type__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    
+    <!-- Candidate Object Field Permissions -->
+    <fieldPermissions>
+        <editable>false</editable>
+        <field>Candidate__c.First_Name__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>false</editable>
+        <field>Candidate__c.Last_Name__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    
+    <!-- Object Permissions -->
+    <objectPermissions>
+        <allowCreate>false</allowCreate>
+        <allowDelete>false</allowDelete>
+        <allowEdit>true</allowEdit>
+        <allowRead>true</allowRead>
+        <modifyAllRecords>false</modifyAllRecords>
+        <object>ALC__c</object>
+        <viewAllRecords>false</viewAllRecords>
+    </objectPermissions>
+    <objectPermissions>
+        <allowCreate>false</allowCreate>
+        <allowDelete>false</allowDelete>
+        <allowEdit>false</allowEdit>
+        <allowRead>true</allowRead>
+        <modifyAllRecords>false</modifyAllRecords>
+        <object>Candidate__c</object>
+        <viewAllRecords>false</viewAllRecords>
+    </objectPermissions>
+</PermissionSet>

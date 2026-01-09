@@ -37,6 +37,52 @@
 
 ---
 
+## 🔗 ALC Contact/Candidate Automation
+
+### What It Does
+Automatically creates Contact and Candidate records when you create an ALC (Agent Licensing & Contracting) record.
+
+### Requirements Checklist
+- ✅ **Required:** First Name + Last Name
+- ✅ **Required:** Email OR Phone (both recommended)
+- ✅ **Record Type:** Career, Broker, NRF, or Registration
+- ✅ **Stage:** NOT Cancelled or Terminated
+
+### What Gets Created
+
+| ALC Type | Contact? | Candidate Contract Type |
+|----------|----------|-------------------------|
+| Career | ✅ | Career Contract |
+| Broker | ✅ | Broker |
+| NRF | ✅ | (blank) |
+| Registration | ✅ | (blank) |
+
+### If Contact/Candidate Missing
+
+**Step 1:** Check ALC has email or phone  
+**Step 2:** Go to **ALC Relationship Monitor** dashboard  
+**Step 3:** Click **Fix** button next to the ALC  
+**Step 4:** System will create missing records
+
+### Common Errors
+
+| Error | Fix |
+|-------|-----|
+| No Email/Phone | Add to ALC → Save → Click Fix |
+| Missing First/Last Name | Add to ALC → Save → Click Fix |
+| Duplicate Contacts | Merge Contacts → Click Fix |
+
+### Quick Link
+**Monitor Dashboard:** App Launcher → Recruiter Portal → ALC Relationship Monitor
+
+### Phone Format
+All these work:
+- `(555) 123-4567`
+- `555-123-4567`
+- `1-555-123-4567`
+
+---
+
 ## ✅ Contract B Requirements
 
 | Requirement | Target | Timeline |

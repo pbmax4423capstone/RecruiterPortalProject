@@ -1,3 +1,14 @@
+/* Agency Filter Buttons */
+.agency-filter-group {
+    display: inline-flex;
+    margin-right: 8px;
+}
+
+.agency-filter-button {
+    font-size: 0.875rem;
+}
+
+/* Kanban Layout */
 .kanban-container {
     display: flex;
     gap: 12px;
@@ -41,6 +52,12 @@
     padding: 8px;
     overflow-y: auto;
     min-height: 200px;
+}
+
+.empty-column-message {
+    padding: 20px;
+    color: #706e6b;
+    font-style: italic;
 }
 
 .kanban-card {

@@ -22,10 +22,27 @@ public with sharing class InterviewLeaderboardNewController {
     
     @AuraEnabled
     public static List<LeaderboardEntry> getCurrentMonthLeaderboard() {
+        // Get current month in YYYY-MM format
+        Date today = Date.today();
+        String currentMonth = String.valueOf(today.year()) + '-' + 
+                            String.valueOf(today.month()).leftPad(2, '0');
+        return getLeaderboardByMonth(currentMonth);
+    }
+    
+    @AuraEnabled
+    public static List<LeaderboardEntry> getLeaderboardByMonth(String selectedMonth) {
         Map<String, LeaderboardEntry> leaderboardMap = new Map<String, LeaderboardEntry>();
         
         try {
-            // Query all interviews completed in the current month
+            // Parse the selected month (format: YYYY-MM)
+            Integer selectedYear = Integer.valueOf(selectedMonth.substring(0, 4));
+            Integer selectedMonthNum = Integer.valueOf(selectedMonth.substring(5, 7));
+            
+            // Calculate start and end dates for the selected month
+            Date startDate = Date.newInstance(selectedYear, selectedMonthNum, 1);
+            Date endDate = startDate.addMonths(1).addDays(-1);
+            
+            // Query all interviews completed in the selected month
             // Cannot use GROUP BY with multipicklist, so we'll process individually
             List<Interview__c> monthInterviews = [
                 SELECT 
@@ -35,7 +52,8 @@ public with sharing class InterviewLeaderboardNewController {
                     Date_Time_Scheduled__c,
                     Date_Completed__c
                 FROM Interview__c
-                WHERE Date_Completed__c = THIS_MONTH
+                WHERE Date_Completed__c >= :startDate
+                AND Date_Completed__c <= :endDate
                 AND Interview_Status__c = 'Completed'
                 AND Interview_Type__c != null
             ];

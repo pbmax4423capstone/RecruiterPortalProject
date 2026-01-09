@@ -1,0 +1,148 @@
+/* Modal Styling */
+.match-modal {
+    min-width: 600px;
+    max-width: 800px;
+}
+
+@media (max-width: 768px) {
+    .match-modal {
+        min-width: 90vw;
+        max-width: 95vw;
+    }
+}
+
+/* ALC Info Card */
+.alc-info-card {
+    background-color: #f3f3f3;
+    border: 1px solid #dddbda;
+    border-radius: 4px;
+    padding: 12px;
+}
+
+/* Match Options - Highlight High Similarity */
+lightning-radio-group::part(option) {
+    padding: 8px;
+    margin-bottom: 4px;
+    border-radius: 4px;
+}
+
+/* Green highlight for high similarity matches (≥80%) */
+.high-similarity {
+    background-color: #d0f0c0;
+    border-left: 4px solid #2e844a;
+}
+
+/* Results Card Styling */
+.results-card {
+    border: 2px solid #2e844a;
+    border-radius: 8px;
+}
+
+.metric-card {
+    padding: 16px;
+    background-color: #f9f9f9;
+    border-radius: 4px;
+    border: 1px solid #dddbda;
+}
+
+.metric-card .slds-text-heading_large {
+    font-size: 2rem;
+    font-weight: bold;
+    color: #080707;
+}
+
+/* Progress Bar */
+lightning-progress-bar {
+    width: 100%;
+}
+
+/* Mobile Responsiveness */
+@media (max-width: 768px) {
+    .slds-col {
+        margin-bottom: 8px;
+    }
+
+    .metric-card {
+        padding: 12px;
+    }
+
+    .metric-card .slds-text-heading_large {
+        font-size: 1.5rem;
+    }
+}
+
+/* Data Table Scrolling on Mobile */
+@media (max-width: 768px) {
+    lightning-datatable {
+        overflow-x: auto;
+        display: block;
+    }
+}
+
+/* Match Selection Radio Options */
+lightning-radio-group {
+    display: block;
+    max-height: 400px;
+    overflow-y: auto;
+    border: 1px solid #dddbda;
+    border-radius: 4px;
+    padding: 12px;
+    background-color: #fafaf9;
+}
+
+/* Create New Contact Option Styling */
+lightning-radio-group .slds-radio:last-child {
+    margin-top: 16px;
+    padding-top: 16px;
+    border-top: 2px solid #dddbda;
+}
+
+/* Success Icon Styling */
+.slds-text-align_center lightning-icon[icon-name="utility:success"] {
+    color: #2e844a;
+}
+
+/* Error Text */
+.slds-text-color_error {
+    color: #ea001e;
+}
+
+/* Instructions */
+.slds-formatted-rich-text p {
+    margin-bottom: 0;
+}
+
+/* Tab Labels */
+lightning-tab {
+    font-weight: 500;
+}
+
+/* Loading State */
+.slds-m-vertical_large {
+    margin-top: 2rem;
+    margin-bottom: 2rem;
+}
+
+/* Detail Lists */
+.slds-list_dotted {
+    padding-left: 20px;
+}
+
+.slds-list_dotted li {
+    margin-bottom: 4px;
+}
+
+/* Button Groups */
+.slds-m-right_small {
+    margin-right: 8px;
+}
+
+/* Modal Backdrop */
+.slds-backdrop {
+    background-color: rgba(0, 0, 0, 0.6);
+}
+
+/* Card Body Padding */
+.slds-card__body_inner {
+    padding: 16px;
+}

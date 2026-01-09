@@ -35,8 +35,10 @@ This document enables collaborative planning and coordination between Patrick Ba
 
 1. **Update progress** - Change status emoji and add notes regularly
 2. **Flag blockers** - Use 🔴 Blocked status if stuck, explain in Notes
-3. **Commit often** - Make small commits with clear messages
-4. **Coordinate handoffs** - Update this file when handing off to another agent/person
+3. **Write tests first** - For LWC work, write Jest tests before or alongside implementation
+4. **Run tests locally** - Use `npm run test:unit:watch` for instant feedback
+5. **Commit often** - Make small commits with clear messages (include tests)
+6. **Coordinate handoffs** - Update this file when handing off to another agent/person
 
 ### After Completing Work
 
@@ -55,9 +57,10 @@ One agent completes work, documents findings, hands off to next agent.
 **Example:**
 ```
 Task: Implement new dashboard feature
-1. Patrick's Agent: Creates Apex controller → Documents in handoff notes
-2. Cole's Agent: Creates LWC component → Uses controller from step 1
-3. Patrick: Reviews and deploys to production
+1. Patrick's Agent: Creates Apex controller + Apex tests → Documents in handoff notes
+2. Cole's Agent: Creates LWC component + Jest tests → Uses controller from step 1
+3. Both: Run all tests (Jest + Apex) → Verify coverage
+4. Patrick: Reviews and deploys to production
 ```
 
 **Handoff Template:**
@@ -81,6 +84,12 @@ Task: Implement new dashboard feature
 - Dependencies
 
 ### Testing Done
+#### Jest Unit Tests (Local)
+- Test 1 ✅
+- Test 2 ✅
+- Coverage: [X%]
+
+#### Sandbox Integration Tests
 - Test 1 ✅
 - Test 2 ✅
 ```

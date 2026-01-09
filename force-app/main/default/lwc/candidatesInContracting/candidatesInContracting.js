@@ -2,11 +2,23 @@ import { LightningElement, wire } from 'lwc';
 import { refreshApex } from '@salesforce/apex';
 import { ShowToastEvent } from 'lightning/platformShowToastEvent';
 import { NavigationMixin } from 'lightning/navigation';
-import getCandidatesInContracting from '@salesforce/apex/CandidatesInContractingController.getCandidatesInContracting';
+import getALCDataWithConfig from '@salesforce/apex/CandidatesInContractingController.getALCDataWithConfig';
+import getAgencyPicklistValues from '@salesforce/apex/CandidatesInContractingController.getAgencyPicklistValues';
 import updateCandidateStage from '@salesforce/apex/CandidatesInContractingController.updateCandidateStage';
 
+const STORAGE_KEY_AGENCY = 'candidatesInContracting_selectedAgency';
+const RECORD_TYPE_ORDER = ['Broker', 'Career', 'NRF', 'Registration', 'Financing'];
+const AGENCY_LABELS = {
+    'A157': 'Agency 157',
+    'A007': 'Agency 007',
+    'All': 'All Agencies'
+};
+
 export default class CandidatesInContracting extends NavigationMixin(LightningElement) {
-    stageGroups = [];
+    recordTypeTabs = [];
+    agencyFilters = [];
+    selectedAgency = 'A157';
+    activeRecordType = 'Broker';
     error;
     isLoading = true;
     wiredResult;
@@ -14,56 +26,133 @@ export default class CandidatesInContracting extends NavigationMixin(LightningEl
     draggedAlcId;
     draggedFromStage;
 
-    // Define stage order for Kanban - contracting stages
-    stageOrder = [
-        'Initial Form Sent',
-        'MM ONX sent',
-        'In Background',
-        'Post Background - Pending Rachyll',
-        'Pending SM',
-        'Contract Codes (A/B) & DocuSign',
-        'Submit to HO',
-        'AA Received'
-    ];
-
-    getStageColor(stage) {
-        const colorMap = {
-            'Initial Form Sent': '#1589EE',
-            'MM ONX sent': '#0D47A1',
-            'In Background': '#9C27B0',
-            'Post Background - Pending Rachyll': '#E83A86',
-            'Pending SM': '#FF5722',
-            'Contract Codes (A/B) & DocuSign': '#673AB7',
-            'Submit to HO': '#009688',
-            'AA Received': '#E37C06'
-        };
-        return colorMap[stage] || '#706E6B';
+    connectedCallback() {
+        // Restore agency filter from localStorage
+        const storedAgency = localStorage.getItem(STORAGE_KEY_AGENCY);
+        if (storedAgency) {
+            this.selectedAgency = storedAgency;
+        } else {
+            // Default to A157
+            this.selectedAgency = 'A157';
+        }
     }
 
-    @wire(getCandidatesInContracting)
-    wiredCandidates(result) {
+    @wire(getAgencyPicklistValues)
+    wiredAgencies({ error, data }) {
+        if (data) {
+            // Build agency filter buttons
+            this.agencyFilters = data.map(agency => ({
+                value: agency,
+                label: AGENCY_LABELS[agency] || agency,
+                variant: agency === this.selectedAgency ? 'brand' : 'neutral',
+                title: `Filter by ${AGENCY_LABELS[agency] || agency}`
+            }));
+        } else if (error) {
+            console.error('Error loading agency picklist:', error);
+        }
+    }
+
+    @wire(getALCDataWithConfig, { agencyFilter: '$selectedAgency' })
+    wiredALCData(result) {
         this.wiredResult = result;
         const { error, data } = result;
         this.isLoading = false;
+        
         if (data) {
-            // Convert map to array and sort by stage order
-            const stages = this.stageOrder.map(stage => {
-                const candidates = data[stage] || [];
-                return {
-                    stage: stage,
-                    candidates: candidates,
-                    count: candidates.length,
-                    stageKey: stage.replace(/\s+/g, '_'),
-                    stageColor: this.getStageColor(stage),
-                    headerStyle: `background-color: ${this.getStageColor(stage)}; padding: 12px; border-radius: 4px;`
-                };
-            });
-            this.stageGroups = stages;
             this.error = undefined;
+            this.buildRecordTypeTabs(data);
         } else if (error) {
             this.error = error;
-            this.stageGroups = [];
+            this.recordTypeTabs = [];
+            this.errorMessage = this.reduceErrors(error).join(', ');
+            console.error('Error loading ALC data:', error);
         }
+    }
+
+    buildRecordTypeTabs(data) {
+        const { alcsByStage, stageConfigs, recordTypeCounts } = data;
+        
+        // Flatten all candidates from alcsByStage map into a single array
+        // Need to create copies because @wire data is read-only
+        const allCandidates = [];
+        if (alcsByStage) {
+            Object.keys(alcsByStage).forEach(stageKey => {
+                const candidateList = alcsByStage[stageKey];
+                if (Array.isArray(candidateList)) {
+                    candidateList.forEach(candidate => {
+                        allCandidates.push({...candidate});
+                    });
+                }
+            });
+        }
+
+        // Build tabs in the specified order
+        this.recordTypeTabs = RECORD_TYPE_ORDER.map(recordType => {
+            // Get configs for this record type and create copies
+            const configList = stageConfigs[recordType] || [];
+            const configs = Array.isArray(configList) ? configList.map(c => ({...c})) : [];
+            const recordTypeCandidates = allCandidates.filter(c => c.recordTypeName === recordType);
+            
+            // Build stage columns for this record type
+            const stageColumns = configs
+                .sort((a, b) => a.sortOrder - b.sortOrder)
+                .map(config => {
+                    const stageCandidates = recordTypeCandidates.filter(
+                        c => c.alcStage === config.stageApiValue
+                    );
+                    
+                    return {
+                        stageApiValue: config.stageApiValue,
+                        stageDisplayLabel: config.stageDisplayLabel,
+                        stageKey: `${recordType}_${config.stageApiValue}`.replace(/[\s\W]/g, '_'),
+                        columnColor: config.columnColor,
+                        headerStyle: `background-color: ${config.columnColor}; padding: 12px; border-radius: 4px;`,
+                        candidates: stageCandidates,
+                        count: stageCandidates.length,
+                        formattedCount: this.formatCount(stageCandidates.length),
+                        isEmpty: stageCandidates.length === 0
+                    };
+                });
+
+            const totalCount = recordTypeCounts ? (recordTypeCounts[recordType] || 0) : recordTypeCandidates.length;
+            const formattedTotal = this.formatCount(totalCount);
+
+            return {
+                value: recordType,
+                label: recordType,
+                tabLabelWithCount: `${recordType} (${formattedTotal})`,
+                title: `${recordType} contracting workflow - ${formattedTotal} records`,
+                stageColumns: stageColumns,
+                hasData: stageColumns.length > 0,
+                candidateCount: totalCount
+            };
+        });
+    }
+
+    formatCount(count) {
+        return count.toLocaleString();
+    }
+
+    handleAgencyFilterChange(event) {
+        const agency = event.target.dataset.agency;
+        this.selectedAgency = agency;
+        localStorage.setItem(STORAGE_KEY_AGENCY, agency);
+        
+        // Update button variants
+        this.agencyFilters = this.agencyFilters.map(filter => ({
+            ...filter,
+            variant: filter.value === agency ? 'brand' : 'neutral'
+        }));
+        
+        this.isLoading = true;
+    }
+
+    handleTabChange(event) {
+        this.activeRecordType = event.target.value;
+    }
+
+    get selectedAgencyLabel() {
+        return AGENCY_LABELS[this.selectedAgency] || this.selectedAgency;
     }
 
     handleDragStart(event) {
@@ -136,11 +225,33 @@ export default class CandidatesInContracting extends NavigationMixin(LightningEl
         );
     }
 
-    get hasData() {
-        return this.stageGroups && this.stageGroups.length > 0;
+    reduceErrors(errors) {
+        if (!Array.isArray(errors)) {
+            errors = [errors];
+        }
+        return (
+            errors
+                .filter(error => !!error)
+                .map(error => {
+                    if (Array.isArray(error.body)) {
+                        return error.body.map(e => e.message);
+                    } else if (error.body && typeof error.body.message === 'string') {
+                        return error.body.message;
+                    } else if (typeof error.message === 'string') {
+                        return error.message;
+                    }
+                    return 'Unknown error';
+                })
+                .reduce((prev, curr) => prev.concat(curr), [])
+                .filter((message, index, self) => self.indexOf(message) === index)
+        );
     }
 
-    get noDataMessage() {
-        return 'No candidates in contracting at this time.';
+    get errorMessage() {
+        return this._errorMessage || 'Unknown error occurred';
+    }
+
+    set errorMessage(value) {
+        this._errorMessage = value;
     }
 }

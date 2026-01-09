@@ -1,0 +1,228 @@
+<template>
+    <lightning-card title="ALC Relationship Backfill Wizard" icon-name="custom:custom63">
+        <div class="slds-card__body slds-card__body_inner">
+            
+            <!-- Record Type Filter Tabs -->
+            <lightning-tabset active-tab-value={activeTab} onselect={handleTabChange}>
+                <lightning-tab label={allTabLabel} value="All"></lightning-tab>
+                <lightning-tab label={careerTabLabel} value="Career"></lightning-tab>
+                <lightning-tab label={brokerTabLabel} value="Broker"></lightning-tab>
+                <lightning-tab label={nrfTabLabel} value="NRF"></lightning-tab>
+                <lightning-tab label={registrationTabLabel} value="Registration"></lightning-tab>
+            </lightning-tabset>
+
+            <!-- Instructions -->
+            <div class="slds-m-top_medium slds-m-bottom_medium">
+                <lightning-formatted-rich-text 
+                    value="<p><strong>Instructions:</strong> Select ALCs that need Contact or Candidate relationships. Click 'Find Matches' to review potential matches, then 'Process Selected' to apply changes in batch.</p>">
+                </lightning-formatted-rich-text>
+            </div>
+
+            <!-- Data Table -->
+            <template if:true={hasUnlinkedAlcs}>
+                <div class="slds-m-bottom_medium">
+                    <lightning-datatable
+                        key-field="Id"
+                        data={filteredAlcs}
+                        columns={columns}
+                        onrowselection={handleRowSelection}
+                        hide-checkbox-column={processing}
+                        show-row-number-column>
+                    </lightning-datatable>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="slds-m-bottom_medium">
+                    <lightning-button
+                        label="Find Matches"
+                        variant="brand"
+                        onclick={handleShowMatches}
+                        disabled={disableFindMatches}
+                        class="slds-m-right_small">
+                    </lightning-button>
+                    <lightning-button
+                        label="Process Selected"
+                        variant="success"
+                        onclick={handleProcessBatch}
+                        disabled={disableProcessButton}>
+                    </lightning-button>
+                </div>
+            </template>
+
+            <!-- No Data Message -->
+            <template if:false={hasUnlinkedAlcs}>
+                <div class="slds-text-align_center slds-m-vertical_xx-large">
+                    <lightning-icon icon-name="utility:success" size="large" variant="success"></lightning-icon>
+                    <p class="slds-text-heading_medium slds-m-top_medium">All ALCs Have Relationships!</p>
+                    <p class="slds-text-color_weak">No unlinked ALCs found for the selected record type.</p>
+                </div>
+            </template>
+
+            <!-- Processing Progress -->
+            <template if:true={processing}>
+                <div class="slds-m-bottom_medium">
+                    <lightning-progress-bar value={progressValue} variant="circular"></lightning-progress-bar>
+                    <p class="slds-text-align_center slds-m-top_small">{progressMessage}</p>
+                </div>
+            </template>
+
+            <!-- Results Summary -->
+            <template if:true={showResults}>
+                <div class="results-card slds-m-top_medium">
+                    <lightning-card title="Processing Results" icon-name="utility:metrics">
+                        <div class="slds-card__body slds-card__body_inner">
+                            <div class="slds-grid slds-wrap slds-gutters_small">
+                                <div class="slds-col slds-size_1-of-2 slds-medium-size_1-of-4">
+                                    <div class="slds-text-align_center metric-card">
+                                        <div class="slds-text-heading_large">{results.contactsCreated}</div>
+                                        <div class="slds-text-color_weak">Contacts Created</div>
+                                    </div>
+                                </div>
+                                <div class="slds-col slds-size_1-of-2 slds-medium-size_1-of-4">
+                                    <div class="slds-text-align_center metric-card">
+                                        <div class="slds-text-heading_large">{results.candidatesCreated}</div>
+                                        <div class="slds-text-color_weak">Candidates Created</div>
+                                    </div>
+                                </div>
+                                <div class="slds-col slds-size_1-of-2 slds-medium-size_1-of-4">
+                                    <div class="slds-text-align_center metric-card">
+                                        <div class="slds-text-heading_large">{results.alcsUpdated}</div>
+                                        <div class="slds-text-color_weak">ALCs Updated</div>
+                                    </div>
+                                </div>
+                                <div class="slds-col slds-size_1-of-2 slds-medium-size_1-of-4">
+                                    <div class="slds-text-align_center metric-card">
+                                        <div class="slds-text-heading_large slds-text-color_error">{results.errors}</div>
+                                        <div class="slds-text-color_weak">Errors</div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <template if:true={hasResultDetails}>
+                                <div class="slds-m-top_medium">
+                                    <h3 class="slds-text-heading_small slds-m-bottom_small">Details:</h3>
+                                    <ul class="slds-list_dotted">
+                                        <template for:each={results.details} for:item="detail">
+                                            <li key={detail}>{detail}</li>
+                                        </template>
+                                    </ul>
+                                </div>
+                            </template>
+
+                            <template if:true={hasErrorMessages}>
+                                <div class="slds-m-top_medium">
+                                    <h3 class="slds-text-heading_small slds-m-bottom_small slds-text-color_error">Errors:</h3>
+                                    <ul class="slds-list_dotted">
+                                        <template for:each={results.errorMessages} for:item="error">
+                                            <li key={error} class="slds-text-color_error">{error}</li>
+                                        </template>
+                                    </ul>
+                                </div>
+                            </template>
+
+                            <div class="slds-m-top_medium slds-text-align_center">
+                                <lightning-button
+                                    label="Export Results as CSV"
+                                    variant="neutral"
+                                    icon-name="utility:download"
+                                    onclick={handleExportResults}>
+                                </lightning-button>
+                            </div>
+                        </div>
+                    </lightning-card>
+                </div>
+            </template>
+
+        </div>
+    </lightning-card>
+
+    <!-- Match Selection Modal -->
+    <template if:true={showMatchModal}>
+        <section role="dialog" tabindex="-1" class="slds-modal slds-fade-in-open">
+            <div class="slds-modal__container match-modal">
+                
+                <!-- Modal Header -->
+                <header class="slds-modal__header">
+                    <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" 
+                            title="Close" onclick={closeModal}>
+                        <lightning-icon icon-name="utility:close" alternative-text="close" size="small"></lightning-icon>
+                        <span class="slds-assistive-text">Close</span>
+                    </button>
+                    <h2 class="slds-text-heading_medium">Select Contact Match</h2>
+                </header>
+
+                <!-- Modal Body -->
+                <div class="slds-modal__content slds-p-around_medium">
+                    
+                    <!-- Current ALC Info -->
+                    <template if:true={currentAlc}>
+                        <div class="alc-info-card slds-m-bottom_medium">
+                            <h3 class="slds-text-heading_small slds-m-bottom_x-small">ALC Record:</h3>
+                            <div class="slds-grid slds-gutters_small">
+                                <div class="slds-col slds-size_1-of-2">
+                                    <strong>Name:</strong> {currentAlc.Name}
+                                </div>
+                                <div class="slds-col slds-size_1-of-2">
+                                    <strong>Email:</strong> {currentAlc.Email__c}
+                                </div>
+                                <div class="slds-col slds-size_1-of-2">
+                                    <strong>Phone:</strong> {currentAlc.Phone__c}
+                                </div>
+                                <div class="slds-col slds-size_1-of-2">
+                                    <strong>Record Type:</strong> {currentAlc.RecordTypeName}
+                                </div>
+                            </div>
+                        </div>
+                    </template>
+
+                    <!-- Loading Spinner -->
+                    <template if:true={loadingMatches}>
+                        <div class="slds-text-align_center slds-m-vertical_large">
+                            <lightning-spinner alternative-text="Loading matches..." size="medium"></lightning-spinner>
+                            <p class="slds-m-top_small">Finding matching contacts...</p>
+                        </div>
+                    </template>
+
+                    <!-- Match Results -->
+                    <template if:false={loadingMatches}>
+                        <template if:true={hasMatches}>
+                            <h3 class="slds-text-heading_small slds-m-bottom_small">
+                                Found {matchCount} potential matches:
+                            </h3>
+                            <lightning-radio-group
+                                name="contactMatch"
+                                label="Select a contact or create new"
+                                options={matchOptions}
+                                value={selectedContactId}
+                                onchange={handleMatchSelection}
+                                type="radio">
+                            </lightning-radio-group>
+                        </template>
+
+                        <template if:false={hasMatches}>
+                            <div class="slds-text-align_center slds-m-vertical_medium">
+                                <lightning-icon icon-name="utility:info" size="small"></lightning-icon>
+                                <p class="slds-m-top_small">No matching contacts found. A new contact will be created.</p>
+                            </div>
+                        </template>
+                    </template>
+
+                </div>
+
+                <!-- Modal Footer -->
+                <footer class="slds-modal__footer">
+                    <lightning-button label="Cancel" onclick={closeModal}></lightning-button>
+                    <lightning-button 
+                        label="Confirm Selection" 
+                        variant="brand" 
+                        onclick={handleConfirmMatch}
+                        disabled={confirmDisabled}>
+                    </lightning-button>
+                </footer>
+
+            </div>
+        </section>
+        <div class="slds-backdrop slds-backdrop_open"></div>
+    </template>
+
+</template>

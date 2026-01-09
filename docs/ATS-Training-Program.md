@@ -18,10 +18,11 @@
 6. [Module 3: Interview Tracking](#module-3-interview-tracking)
 7. [Module 4: Contract B Lifecycle](#module-4-contract-b-lifecycle)
 8. [Module 5: LinkedIn Integration](#module-5-linkedin-integration)
-9. [Role-Specific Training](#role-specific-training)
-10. [Quick Reference Cards](#quick-reference-cards)
-11. [Assessment & Certification](#assessment--certification)
-12. [Support Resources](#support-resources)
+9. [Module 6: ALC Contact/Candidate Automation](#module-6-alc-contactcandidate-automation)
+10. [Role-Specific Training](#role-specific-training)
+11. [Quick Reference Cards](#quick-reference-cards)
+12. [Assessment & Certification](#assessment--certification)
+13. [Support Resources](#support-resources)
 
 ---
 
@@ -42,9 +43,9 @@ By completing this training program, you will be able to:
 ### Training Paths
 
 | Role | Required Modules | Estimated Time |
-|------|------------------|----------------|
-| **Recruiter** | All Modules (1-5) | 3-4 hours |
-| **Sales Manager** | Modules 1, 2, 4 | 2 hours |
+|------|------------------|------6) | 4-5 hours |
+| **Sales Manager** | Modules 1, 2, 4, 6 | 2.5 hours |
+| **Recruiting Leadership** | Modules 1, 4, 6 (monitoring focus) | 1.5 hours
 | **Recruiting Leadership** | Modules 1, 4 (metrics focus) | 1 hour |
 
 ### Prerequisites
@@ -582,6 +583,338 @@ When you create a candidate via the extension:
 | Name not extracted | Manually enter the name |
 | "Access token expired" | Click "Disconnect" then reconnect |
 | Extension not working | Refresh the LinkedIn page |
+
+---
+
+## Module 6: ALC Contact/Candidate Automation
+
+**Learning Objectives:**
+- Understand how the ALC automation system works
+- Know what happens when an ALC record is created
+- Learn to use the monitoring dashboard
+- Resolve automation errors
+- Understand Contact/Candidate relationship requirements
+
+**Time Required:** 30 minutes
+
+---
+
+### 6.1 What is ALC Automation?
+
+The **ALC Contact/Candidate Automation** system automatically creates and links Contact and Candidate records whenever a new ALC (Agent Licensing & Contracting) record is created in Salesforce.
+
+**Benefits:**
+- ✅ **No Manual Entry** - Contact and Candidate records are created automatically
+- ✅ **Data Consistency** - Single source of truth from ALC data
+- ✅ **No Duplicates** - System matches existing Contacts by email/phone
+- ✅ **Faster Onboarding** - Agents enter the system immediately
+
+### 6.2 How It Works
+
+#### Automatic Processing Flow
+
+```
+1. ALC Created → 2. System Checks → 3. Matches/Creates Contact → 4. Creates Candidate → 5. Links Records
+```
+
+**Step-by-Step:**
+
+1. **You create an ALC record** with agent information
+2. **System filters** by record type (Career, Broker, NRF, Registration only)
+3. **System checks** for existing Contact with same email or phone
+4. **If Contact exists:** Links to ALC
+5. **If Contact doesn't exist:** Creates new Contact from ALC data
+6. **System creates Candidate** with appropriate Contract Type
+7. **All records linked** automatically
+
+#### What Gets Created?
+
+| ALC Record Type | Contact Created? | Candidate Contract Type |
+|-----------------|------------------|-------------------------|
+| **Career** | ✅ Yes | Career Contract |
+| **Broker** | ✅ Yes | Broker |
+| **NRF** | ✅ Yes | (blank) |
+| **Registration** | ✅ Yes | (blank) |
+
+#### What Gets Matched?
+
+The system searches for existing Contacts using:
+
+**Priority 1 - Email Match:**
+- Compares ALC email to Contact email
+- Case-insensitive (john@example.com = JOHN@example.com)
+- Exact match required
+
+**Priority 2 - Phone Match:**
+- Compares standardized 10-digit phone numbers
+- Strips formatting: (555) 123-4567 → 5551234567
+- Handles 11-digit with country code: 1-555-123-4567 → 5551234567
+
+**Important:** If neither email nor phone match, a **new Contact is created**.
+
+### 6.3 Field Mapping
+
+#### ALC → Contact Mapping
+
+| ALC Field | → | Contact Field |
+|-----------|---|---------------|
+| First Name | → | FirstName |
+| Last Name | → | LastName |
+| Email | → | Email |
+| Phone | → | Phone |
+| Street | → | MailingStreet |
+| City | → | MailingCity |
+| State | → | MailingState |
+| Zip | → | MailingPostalCode |
+
+#### Candidate Defaults
+
+All auto-created Candidates start with:
+- **Status:** "Contracting Started"
+- **Record Type:** Candidate
+- **Contact:** Linked to the Contact
+- **Contract Type:** Based on ALC Record Type (see table above)
+
+### 6.4 When Automation Doesn't Run
+
+The system **SKIPS** ALCs in these cases:
+
+❌ **Excluded Stages:**
+- CANCELLED
+- TERMINATED
+- Cancelled
+- Terminated
+
+❌ **Excluded Record Types:**
+- Any record type not in the list (Career, Broker, NRF, Registration)
+
+**Why?** No need to create Contact/Candidate for cancelled or terminated contracts.
+
+### 6.5 Using the Monitoring Dashboard
+
+#### Accessing the Dashboard
+
+**Navigation:** App Launcher (⋮⋮⋮) → Recruiter Portal → **ALC Relationship Monitor**
+
+#### Dashboard Sections
+
+**1. Summary Cards**
+
+Quick metrics at a glance:
+- **ALCs Without Contacts** - How many ALCs are missing Contact links (by record type)
+- **ALCs Without Candidates** - How many ALCs are missing Candidate links
+- **Candidates Without Contacts** - Orphaned Candidate records
+- **Recent Errors** - Failed operations in the last 7 days
+
+**2. Relationship Gaps Table**
+
+Shows ALCs that are missing Contact or Candidate relationships:
+
+| What You See | What It Means |
+|--------------|---------------|
+| ALC Name | Link to the ALC record |
+| Record Type | Career, Broker, NRF, or Registration |
+| Email/Phone | Contact information from ALC |
+| Missing | "Contact", "Candidate", or "Both" |
+| Fix Button | Click to trigger backfill for that ALC |
+
+**3. Candidates Without Contacts**
+
+Lists Candidate records that don't have a linked Contact:
+
+| What You See | What It Means |
+|--------------|---------------|
+| Candidate Name | Link to Candidate record |
+| First/Last Name | From the Candidate |
+| Related ALC | Link to the ALC (if exists) |
+| Create Contact Button | Click to create missing Contact |
+
+**4. Audit Logs**
+
+Complete history of automation operations:
+
+| What You See | What It Means |
+|--------------|---------------|
+| Operation Type | CONTACT_CREATED, CANDIDATE_CREATED, etc. |
+| Success | ✅ Success or ❌ Error |
+| Created Date | When the operation occurred |
+| Actions | View Details, Mark Resolved |
+
+**Filters:**
+- **All Logs** - Show everything
+- **Errors Only** - Show only failed operations
+- **Successes Only** - Show only successful operations
+- **Unresolved Errors** - Show errors that haven't been fixed
+
+#### Auto-Refresh Feature
+
+The dashboard automatically refreshes every 30 seconds to show real-time data.
+
+**To disable:** Click the "Auto-Refresh" toggle at the top.
+
+### 6.6 Resolving Errors
+
+#### Common Error: "ALC has no Email or Phone"
+
+**Cause:** ALC record is missing both email and phone.
+
+**Solution:**
+1. Click on the ALC name in the Relationship Gaps table
+2. Add either an Email or Phone number
+3. Click **Save**
+4. Return to the monitor and click **Fix** button
+5. System will re-process the ALC
+
+#### Common Error: "Unable to create Contact: Required fields missing"
+
+**Cause:** ALC is missing First Name or Last Name.
+
+**Solution:**
+1. Open the ALC record
+2. Populate First Name and Last Name fields
+3. Click **Save**
+4. Click **Fix** button in the monitor dashboard
+
+#### Common Error: "Duplicate Contacts detected"
+
+**Cause:** Multiple Contacts exist with the same email.
+
+**Solution:**
+1. Navigate to Contacts
+2. Search for the email address
+3. Merge duplicate Contacts using Salesforce merge tool
+4. Return to monitor and click **Fix** button
+
+#### Using the "View Details" Button
+
+When you see an error in the Audit Logs:
+
+1. Click **View Details** next to the error
+2. Read the Error Message to understand what went wrong
+3. Check the Stack Trace for technical details (if needed)
+4. Note the ALC, Contact, and Candidate IDs involved
+5. Fix the underlying issue
+6. Click **Mark Resolved** after fixing
+
+### 6.7 Best Practices
+
+✅ **Always Include Email or Phone**
+- At least one is required for matching
+- Both are recommended for best results
+
+✅ **Use Standard Phone Formats**
+- (555) 123-4567
+- 555-123-4567
+- 1-555-123-4567
+All of these work!
+
+✅ **Check for Duplicates Before Creating ALCs**
+- Search for existing Contacts by email
+- Link to existing Contact instead of creating duplicate ALC
+
+✅ **Monitor the Dashboard Weekly**
+- Review Summary Cards for gaps
+- Check Error logs for issues
+- Resolve errors promptly
+
+✅ **Populate First and Last Name**
+- Required for Contact creation
+- Ensure they're correct before saving ALC
+
+### 6.8 Hands-On Exercise
+
+**Exercise: Create an ALC and Verify Automation**
+
+1. **Create a Test ALC:**
+   - Record Type: Career
+   - First Name: Test
+   - Last Name: Agent
+   - Email: testagent@example.com
+   - Phone: (555) 123-4567
+   - Stage: ACTIVE
+
+2. **Save the ALC**
+
+3. **Verify Automation:**
+   - Check Contact__c field - should be populated
+   - Check Candidate__c field - should be populated
+   - Click on Contact name - verify details match
+   - Click on Candidate name - verify Contract Type = "Career Contract"
+
+4. **View Audit Log:**
+   - Go to ALC Relationship Monitor
+   - Click "Audit Logs" section
+   - Find your ALC in recent logs
+   - Verify Operation Type = "CONTACT_CREATED" or "CONTACT_MATCHED"
+
+5. **Cleanup:**
+   - Delete the test ALC, Contact, and Candidate records
+
+### 6.9 Knowledge Check
+
+**Question 1:** What happens when you create a Career ALC with an email that matches an existing Contact?
+
+- A) A new Contact is created anyway
+- B) The existing Contact is linked to the ALC ✅
+- C) The ALC creation fails
+- D) Nothing happens
+
+**Answer:** B - The existing Contact is linked to avoid duplicates.
+
+---
+
+**Question 2:** Which ALC record types trigger the automation?
+
+- A) All record types
+- B) Only Career
+- C) Career, Broker, NRF, Registration ✅
+- D) Only Broker and Career
+
+**Answer:** C - Only these four record types trigger automation.
+
+---
+
+**Question 3:** What is the Candidate Status for all auto-created Candidates?
+
+- A) SOURCED
+- B) Contracting Started ✅
+- C) Active
+- D) New
+
+**Answer:** B - All auto-created Candidates start with "Contracting Started".
+
+---
+
+**Question 4:** Where do you go to view automation errors?
+
+- A) Setup → Debug Logs
+- B) ALC Relationship Monitor → Audit Logs ✅
+- C) Reports → Automation Errors
+- D) System Logs
+
+**Answer:** B - The ALC Relationship Monitor has an Audit Logs section.
+
+---
+
+**Question 5:** If an ALC has both email and phone, which does the system check first for matching?
+
+- A) Phone
+- B) Email ✅
+- C) Both simultaneously
+- D) Neither - always creates new Contact
+
+**Answer:** B - Email is checked first, then phone if no email match.
+
+### 6.10 Key Takeaways
+
+✅ **Automation is Automatic** - No action required when creating ALCs  
+✅ **Email/Phone Required** - At least one needed for matching  
+✅ **Intelligent Matching** - Prevents duplicate Contacts  
+✅ **Monitor Dashboard** - Check weekly for issues  
+✅ **Quick Resolution** - Use Fix buttons to resolve gaps  
+✅ **Complete Audit Trail** - Every operation is logged  
+
+**For detailed technical documentation, see:** [ALC-RELATIONSHIP-AUTOMATION.md](ALC-RELATIONSHIP-AUTOMATION.md)
 
 ---
 
