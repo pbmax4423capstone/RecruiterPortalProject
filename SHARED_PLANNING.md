@@ -13,13 +13,15 @@
 
 | ID | Task | Owner | Agent | Priority | Started | ETA | Notes |
 |----|------|-------|-------|----------|---------|-----|-------|
-| - | - | - | - | - | - | - | No active tasks |
+| - | - | - | - | - | - | - | No tasks in progress |
 
 ### 🟡 Ready to Start
 
 | ID | Task | Owner | Agent | Priority | Dependencies | Notes |
 |----|------|-------|-------|----------|--------------|-------|
-| - | - | - | - | - | - | No pending tasks |
+| 003 | Sales Manager Qualification Dashboard - Apex Controller | Patrick/Agent | Patrick's Agent | High | Task #002 ✅ | **HANDOFF READY:** See HANDOFF-RESEARCH-TO-APEX-2026-01-08.md |
+| 004 | Sales Manager Qualification Dashboard - LWC Component | Cole/Agent | Cole's Agent | High | Task #003 | Awaiting Apex controller handoff |
+| 005 | Sales Manager Qualification Dashboard - Testing & Deployment | Cole/Agent | Cole's Agent | High | Task #004 | Final integration testing |
 
 ### 🔴 Blocked
 
@@ -31,6 +33,7 @@
 
 | ID | Task | Owner | Agent | Completed | Notes |
 |----|------|-------|-------|-----------|-------|
+| 002 | Sales Manager Qualification Dashboard - Research & Audit | Patrick/Agent | Research Agent | 2026-01-08 | Handoff document: HANDOFF-RESEARCH-TO-APEX-2026-01-08.md |
 | 001 | Created collaborative planning system | Patrick's Agent | Copilot | 2026-01-08 | WORK_COORDINATION.md and SHARED_PLANNING.md |
 
 ---
