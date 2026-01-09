@@ -27,7 +27,7 @@
 
 .kanban-column.drag-over {
     background: #e8f4fd;
-    border: 2px dashed #0176d3;
+    border: 2px dashed #0066cc; /* Capstone Action Blue */
 }
 
 /* Column Header */
@@ -50,7 +50,7 @@
 }
 
 .column-count {
-    background: #0176d3;
+    background: #0066cc; /* Capstone Action Blue */
     color: white;
     font-size: 12px;
     font-weight: 600;
@@ -82,8 +82,8 @@
 }
 
 .candidate-card:hover {
-    border-color: #0176d3;
-    box-shadow: 0 4px 12px rgba(1, 118, 211, 0.15);
+    border-color: #0066cc; /* Capstone Action Blue */
+    box-shadow: 0 4px 12px rgba(0, 102, 204, 0.15);
     transform: translateY(-2px);
 }
 
@@ -94,9 +94,9 @@
 
 /* In Contracting - Blue Border */
 .candidate-card.in-contracting {
-    border: 2px solid #0176d3;
+    border: 2px solid #0066cc; /* Capstone Action Blue */
     background: linear-gradient(to bottom, #e8f4fd 0%, white 20%);
-    box-shadow: 0 2px 8px rgba(1, 118, 211, 0.2);
+    box-shadow: 0 2px 8px rgba(0, 102, 204, 0.2);
 }
 
 .candidate-card.in-contracting:hover {
@@ -109,7 +109,7 @@
     display: flex;
     align-items: center;
     gap: 4px;
-    background: #0176d3;
+    background: #0066cc; /* Capstone Action Blue */
     color: white;
     font-size: 10px;
     font-weight: 600;
@@ -138,7 +138,7 @@
     width: 40px;
     height: 40px;
     border-radius: 50%;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: linear-gradient(135deg, #003366 0%, #0066cc 100%); /* Capstone Blue Gradient */
     display: flex;
     align-items: center;
     justify-content: center;
@@ -199,7 +199,7 @@
 
 .action-btn:hover {
     background: #f3f3f3;
-    border-color: #0176d3;
+    border-color: #0066cc; /* Capstone Action Blue */
 }
 
 .action-btn lightning-icon {
@@ -207,7 +207,7 @@
 }
 
 .action-btn:hover lightning-icon {
-    --lwc-colorTextIconDefault: #0176d3;
+    --lwc-colorTextIconDefault: #0066cc; /* Capstone Action Blue */
 }
 
 /* Card Details */
@@ -239,7 +239,7 @@
 /* Interview Badge */
 .interview-badge {
     background: #e8f4fd;
-    color: #0176d3;
+    color: #0066cc; /* Capstone Action Blue */
     padding: 2px 8px;
     border-radius: 4px;
     font-weight: 600;
@@ -260,7 +260,7 @@
 }
 
 .contracting-row .detail-icon {
-    --lwc-colorTextIconDefault: #0176d3;
+    --lwc-colorTextIconDefault: #0066cc; /* Capstone Action Blue */
 }
 
 .contracting-stage-text {

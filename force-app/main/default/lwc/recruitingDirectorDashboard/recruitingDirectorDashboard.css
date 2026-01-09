@@ -22,7 +22,7 @@
 
 /* Metric Card Styling */
 .metric-card {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: linear-gradient(135deg, #003366 0%, #0066cc 100%); /* Capstone Blue Gradient */
     border-radius: 8px;
     padding: 1.5rem;
     color: white;
@@ -37,31 +37,31 @@
 }
 
 .metric-card:nth-child(1) {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: linear-gradient(135deg, #003366 0%, #0066cc 100%); /* Capstone Blue */
 }
 
 .metric-card:nth-child(2) {
-    background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+    background: linear-gradient(135deg, #c23934 0%, #ea001e 100%); /* Capstone Error Reds */
 }
 
 .metric-card:nth-child(3) {
-    background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+    background: linear-gradient(135deg, #0066cc 0%, #0070d2 100%); /* Capstone Action Blues */
 }
 
 .metric-card:nth-child(4) {
-    background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+    background: linear-gradient(135deg, #2e844a 0%, #4bca81 100%); /* Capstone Success Greens */
 }
 
 .metric-card:nth-child(5) {
-    background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+    background: linear-gradient(135deg, #fe9339 0%, #f39c12 100%); /* Capstone Warning Orange/Gold */
 }
 
 .metric-card:nth-child(6) {
-    background: linear-gradient(135deg, #30cfd0 0%, #330867 100%);
+    background: linear-gradient(135deg, #0070d2 0%, #003366 100%); /* Capstone Blues */
 }
 
 .metric-card:nth-child(7) {
-    background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+    background: linear-gradient(135deg, #e6f2ff 0%, #d8edff 100%); /* Capstone Light Blues */
 }
 
 .metric-header {
@@ -132,7 +132,7 @@
 
 .chart-bar {
     height: 100%;
-    background: linear-gradient(90deg, #1589EE 0%, #0B5CAB 100%);
+    background: linear-gradient(90deg, #0066cc 0%, #003366 100%); /* Capstone Action Blue to Blue */
     border-radius: 4px;
     display: flex;
     align-items: center;

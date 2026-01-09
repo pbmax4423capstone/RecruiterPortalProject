@@ -49,17 +49,17 @@
 .metric-value {
     font-size: 3rem;
     font-weight: 300;
-    color: #0176d3;
+    color: #0066cc; /* Capstone Action Blue */
     line-height: 1;
     margin: 0.75rem 0;
 }
 
 .metric-value-orange {
-    color: #ff9500;
+    color: #fe9339; /* Capstone Warning Orange */
 }
 
 .metric-value-red {
-    color: #d73527;
+    color: #c23934; /* Capstone Error Red */
 }
 
 .metric-link {
@@ -67,7 +67,7 @@
 }
 
 .metric-link a {
-    color: #0176d3;
+    color: #0066cc; /* Capstone Action Blue */
     text-decoration: none;
     font-size: 0.8125rem;
 }
@@ -160,7 +160,7 @@
 .chart-placeholder-circle {
     width: 200px;
     height: 200px;
-    border: 8px solid var(--dashboard-primary-color, #0176d3);
+    border: 8px solid var(--dashboard-primary-color, #0066cc); /* Capstone Action Blue */
     border-radius: 50%;
     border-top: 8px solid var(--dashboard-secondary-color, #e8f4fd);
     display: flex;
@@ -172,8 +172,8 @@
 
 /* Dark mode chart placeholders */
 .chart-container.dark-mode .chart-placeholder-circle {
-    border-color: #0176d3;
-    border-top-color: #4a90e2;
+    border-color: #0066cc; /* Capstone Action Blue */
+    border-top-color: #0070d2; /* Capstone Action Blue Alt */
     background: #2c2c2c;
 }
 
@@ -303,15 +303,15 @@
 }
 
 .age-bar[data-color="#d73527"] {
-    background: #d73527;
+    background: #c23934; /* Capstone Error Red */
 }
 
 .age-bar[data-color="#ffc500"] {
-    background: #ffc500;
+    background: #f39c12; /* Capstone Warning Gold */
 }
 
 .age-bar[data-color="#06a59a"] {
-    background: #06a59a;
+    background: #2e844a; /* Capstone Success Green */
 }
 
 .age-value {
