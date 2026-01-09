@@ -24,15 +24,11 @@
                     <span class="slds-text-body_small slds-text-color_weak">
                         Viewing: <strong>{selectedSalesManagerLabel}</strong>
                     </span>
+                    <span class="slds-m-left_small slds-text-body_small slds-text-color_weak">
+                        (Auto-refreshes every 30s)
+                    </span>
                 </div>
             </template>
-            <lightning-button
-                label="Refresh"
-                icon-name="utility:refresh"
-                onclick={handleRefresh}
-                title="Refresh Data"
-                class="slds-m-left_small">
-            </lightning-button>
         </div>
         <div class="slds-p-around_small">
             <template if:true={isLoading}>

@@ -344,14 +344,15 @@ public with sharing class CandidatesInContractingController {
             
             String profileName = userProfile.Name;
             
-            // Check profile first
+            // Check profile first for Director/Admin/GA
             if (profileName.contains('Director') || 
                 profileName.contains('System Administrator') ||
-                profileName.contains('Admin')) {
+                profileName.contains('Admin') ||
+                profileName.equalsIgnoreCase('GA')) {
                 return true;
             }
             
-            // Also check UserRole for Directors (e.g., "Recruiting Director")
+            // Also check UserRole for Directors/GA (e.g., "Recruiting Director" or "GA")
             User currentUser = [
                 SELECT UserRole.Name 
                 FROM User 
@@ -361,7 +362,7 @@ public with sharing class CandidatesInContractingController {
             
             if (currentUser.UserRole != null && currentUser.UserRole.Name != null) {
                 String roleName = currentUser.UserRole.Name;
-                if (roleName.contains('Director')) {
+                if (roleName.contains('Director') || roleName.equalsIgnoreCase('GA')) {
                     return true;
                 }
             }

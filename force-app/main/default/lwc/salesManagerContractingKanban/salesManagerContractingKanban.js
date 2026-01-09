@@ -24,10 +24,23 @@ export default class SalesManagerContractingKanban extends NavigationMixin(Light
     draggedFromStage;
     _canViewAllLoaded = false;
     _currentUserLoaded = false;
+    refreshInterval;
 
     connectedCallback() {
         // Don't load from localStorage here - let the wires determine the correct value
         // based on user permissions
+        
+        // Set up auto-refresh every 30 seconds
+        this.refreshInterval = setInterval(() => {
+            this.autoRefresh();
+        }, 30000);
+    }
+
+    disconnectedCallback() {
+        // Clear interval when component is destroyed
+        if (this.refreshInterval) {
+            clearInterval(this.refreshInterval);
+        }
     }
 
     @wire(canViewAllSalesManagers)
@@ -243,6 +256,15 @@ export default class SalesManagerContractingKanban extends NavigationMixin(Light
             this.showToast('Error', 'Failed to refresh data', 'error');
         } finally {
             this.isLoading = false;
+        }
+    }
+
+    async autoRefresh() {
+        // Silent refresh without loading spinner or toast
+        try {
+            await refreshApex(this.wiredResult);
+        } catch (error) {
+            console.error('Auto-refresh failed:', error);
         }
     }
 
