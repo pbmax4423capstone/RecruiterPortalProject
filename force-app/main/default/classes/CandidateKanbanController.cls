@@ -23,14 +23,15 @@ public with sharing class CandidateKanbanController {
             
             String profileName = userProfile.Name;
             
-            // Check profile for Director/Admin
+            // Check profile for Director/Admin/GA
             if (profileName.contains('Director') || 
                 profileName.contains('System Administrator') ||
-                profileName.contains('Admin')) {
+                profileName.contains('Admin') ||
+                profileName.equalsIgnoreCase('GA')) {
                 return true;
             }
             
-            // Check UserRole for Directors
+            // Check UserRole for Directors/GA
             User currentUser = [
                 SELECT UserRole.Name 
                 FROM User 
@@ -40,7 +41,7 @@ public with sharing class CandidateKanbanController {
             
             if (currentUser.UserRole != null && currentUser.UserRole.Name != null) {
                 String roleName = currentUser.UserRole.Name;
-                if (roleName.contains('Director')) {
+                if (roleName.contains('Director') || roleName.equalsIgnoreCase('GA')) {
                     return true;
                 }
             }
