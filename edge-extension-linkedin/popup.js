@@ -6,7 +6,7 @@ const CONFIG = {
   
   // Connected App credentials (create in Salesforce Setup)
   clientId: '3MVG9p1Q1BCe9GmCK.2GT3FP11uBOviHb5qJPJvlkCtUE52LJ_ODY9s2ea_B5E3Fw3xVeiYH3bxLOESNXIMHF', // Production Consumer Key
-  redirectUri: chrome.identity.getRedirectURL(),
+  redirectUri: chrome.identity.getRedirectURL('oauth2'),
   
   // Default field values
   defaults: {
@@ -17,6 +17,11 @@ const CONFIG = {
     recordTypeId: '0125f000000a5IlAAI' // Production Candidate Record Type ID
   }
 };
+
+// Log the redirect URI at startup for debugging
+console.log('[CONFIG] Extension ID:', chrome.runtime.id);
+console.log('[CONFIG] Redirect URI:', CONFIG.redirectUri);
+console.log('[CONFIG] Alternative format:', `https://${chrome.runtime.id}.chromiumapp.org/oauth2`);
 
 // State
 let accessToken = null;
@@ -275,27 +280,59 @@ async function handleLogin() {
   
   try {
     // Log the redirect URL for debugging
-    console.log('Redirect URL:', CONFIG.redirectUri);
+    console.log('[Login] Redirect URL:', CONFIG.redirectUri);
+    console.log('[Login] Client ID:', CONFIG.clientId);
+    console.log('[Login] Login URL:', CONFIG.salesforceLoginUrl);
     
     const authUrl = `${CONFIG.salesforceLoginUrl}/services/oauth2/authorize?` +
       `response_type=token&` +
       `client_id=${encodeURIComponent(CONFIG.clientId)}&` +
-      `redirect_uri=${encodeURIComponent(CONFIG.redirectUri)}`;
+      `redirect_uri=${encodeURIComponent(CONFIG.redirectUri)}&` +
+      `display=popup&` +
+      `prompt=login`;
     
-    console.log('Auth URL:', authUrl);
+    console.log('[Login] Full Auth URL:', authUrl);
+    console.log('[Login] Launching OAuth flow...');
     
-    const responseUrl = await chrome.identity.launchWebAuthFlow({
-      url: authUrl,
-      interactive: true
-    });
-    
-    // Parse the response
-    const hashParams = new URLSearchParams(responseUrl.split('#')[1]);
-    accessToken = hashParams.get('access_token');
-    instanceUrl = hashParams.get('instance_url');
-    
-    if (!accessToken || !instanceUrl) {
-      throw new Error('Failed to get access token');
+    try {
+      const responseUrl = await chrome.identity.launchWebAuthFlow({
+        url: authUrl,
+        interactive: true
+      });
+      
+      console.log('[Login] Response URL:', responseUrl);
+      
+      // Parse the response
+      if (!responseUrl) {
+        throw new Error('No response URL received');
+      }
+      
+      // Check if there's an error in the response
+      if (responseUrl.includes('error=')) {
+        const errorMatch = responseUrl.match(/error=([^&]+)/);
+        const errorDescMatch = responseUrl.match(/error_description=([^&]+)/);
+        const errorMsg = errorMatch ? decodeURIComponent(errorMatch[1]) : 'Unknown error';
+        const errorDesc = errorDescMatch ? decodeURIComponent(errorDescMatch[1]) : '';
+        throw new Error(`OAuth Error: ${errorMsg}${errorDesc ? ' - ' + errorDesc : ''}`);
+      }
+      
+      const hashParams = new URLSearchParams(responseUrl.split('#')[1]);
+      accessToken = hashParams.get('access_token');
+      instanceUrl = hashParams.get('instance_url');
+      
+      console.log('[Login] Access token received:', accessToken ? 'Yes' : 'No');
+      console.log('[Login] Instance URL:', instanceUrl);
+      
+      if (!accessToken || !instanceUrl) {
+        throw new Error('Failed to get access token from response');
+      }
+    } catch (authError) {
+      console.error('[Login] Auth flow error:', authError);
+      // Provide more specific error message
+      if (authError.message && authError.message.includes('Authorization page could not be loaded')) {
+        throw new Error('Cannot load Salesforce login page. Please check:\n1. Connected App callback URL includes: ' + CONFIG.redirectUri + '\n2. Extension has identity permission\n3. Try reloading the extension');
+      }
+      throw authError;
     }
     
     // Get current user ID

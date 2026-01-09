@@ -29,6 +29,7 @@ export default class CandidateRecordView extends NavigationMixin(LightningElemen
     @track currentUserName = '';
     @track interviewSummary = null;
     @track showInterviewerField = false;
+    @track isEditMode = false;
     refreshInterval;
     subscription = null;
     channelName = '/data/Candidate__ChangeEvent';
@@ -42,6 +43,24 @@ export default class CandidateRecordView extends NavigationMixin(LightningElemen
             // Record was updated, refresh our custom data
             this.loadCandidateData();
         }
+    }
+
+    // Edit mode getters
+    get editModeLabel() {
+        return this.isEditMode ? 'View' : 'Edit Inline';
+    }
+
+    get editModeVariant() {
+        return this.isEditMode ? 'neutral' : 'brand-outline';
+    }
+
+    get editModeIcon() {
+        return this.isEditMode ? 'utility:preview' : 'utility:edit';
+    }
+
+    // Toggle edit mode handler
+    handleToggleEditMode() {
+        this.isEditMode = !this.isEditMode;
     }
 
     connectedCallback() {

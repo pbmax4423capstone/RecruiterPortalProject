@@ -22,6 +22,11 @@
 | 003 | Sales Manager Qualification Dashboard - Apex Controller | Patrick/Agent | Patrick's Agent | High | Task #002 ✅ | **HANDOFF READY:** See HANDOFF-RESEARCH-TO-APEX-2026-01-08.md |
 | 004 | Sales Manager Qualification Dashboard - LWC Component | Cole/Agent | Cole's Agent | High | Task #003 | Awaiting Apex controller handoff |
 | 005 | Sales Manager Qualification Dashboard - Testing & Deployment | Cole/Agent | Cole's Agent | High | Task #004 | Final integration testing |
+| 007 | SM Contracting Kanban - Permission Set | Patrick/Agent | Patrick's Agent | High | Task #006 | Create permission set after Apex complete |
+| 008 | SM Contracting Kanban - LWC Component | Cole/Agent | Cole's Agent | High | Task #006, #007 | Create component after backend ready |
+| 009 | SM Contracting Kanban - Jest Tests | Cole/Agent | Cole's Agent | High | Task #008 | Test suite for new component |
+| 010 | SM Contracting Kanban - Integration Testing | Cole/Agent | Cole's Agent | High | Task #009 | ProdTest sandbox testing |
+| 011 | SM Contracting Kanban - Production Deployment | Patrick | Human | High | Task #010 | Final deployment and docs |
 
 ### 🔴 Blocked
 
@@ -33,6 +38,17 @@
 
 | ID | Task | Owner | Agent | Completed | Notes |
 |----|------|-------|-------|-----------|-------|
+| 017 | Sales Manager Activity History & Notes - Permission Fix | Patrick/Agent | Copilot Agent | 2026-01-09 | Fixed "Error loading activities" and "Error loading notes" errors for Sales Managers. Added CandidateActivityController and CandidateNotesController to Sales_Manager_Contracting_Dashboard_Access permission set. Added Task, Event, and ContentNote object permissions. Updated permission set description. All 10 existing users with permission set now have access. See SALES_MANAGER_ACTIVITY_NOTES_FIX.md. Deployed to ProductionCapstone. |
+| 016 | Candidate Pipeline - Sales Manager Filtering Fix | Patrick/Agent | Copilot Agent | 2026-01-09 | Fixed candidate pipeline to filter by logged-in Sales Manager. Added getSalesManagerOptions() method to CandidateKanbanController. Modified getKanbanData() to accept salesManagerFilter parameter. Updated candidateKanban LWC with 3 wire adapters (canViewAllCandidates, getCurrentUserName, getSalesManagerOptions), localStorage persistence with key 'candidateKanban_salesManagerFilter', and Sales Manager dropdown for Directors/Admins. Added 3 new Apex tests. All 19 tests passing. Deployed to ProductionCapstone. |
+| 015 | Interview Leaderboard - Capstone Rebrand | Patrick/Agent | Copilot Agent | 2026-01-09 | Restyled with Capstone Navy/Blue alternating pattern (Option A). Updated 2 summary cards (Week, Month), 5 category cards (CI-First through Optional-5th), 5 badge styles, hover shadows, and dark mode styles. All gradients use 180deg vertical direction with Navy #202A44 and Blue #193F74. Deployed to ProductionCapstone. |
+| 014 | Sales Manager Dashboard - Capstone Rebrand | Patrick/Agent | Copilot Agent | 2026-01-09 | Updated all 6 summary card gradients to use Navy/Blue colors. Alternating Navy→Blue and Blue→Navy gradients for visual variety while maintaining brand consistency. Deployed to ProductionCapstone. |
+| 013 | Capstone Brand Consistency - Kanban Components | Patrick/Agent | Copilot Agent | 2026-01-09 | Updated Candidate Pipeline and Career Contracting Kanban to use Navy/Blue colors. Candidate Pipeline: Navy→Blue gradient headers with white text. Career Contracting: All 9 stages alternating Navy (#202A44) and Blue (#193F74). Deployed to ProductionCapstone. |
+| 012 | Recruiting Director Dashboard - Capstone Rebrand | Patrick/Agent | Copilot Agent | 2026-01-09 | Restyled with Capstone brand colors. Semantic grouping: Navy/Blue for pipeline (cards 1-3), Coral/Tan for contracts (cards 4-5), Tan/Neutral for completion (cards 6-7). Updated shadows to use Capstone colors. Deployed to ProductionCapstone. |
+| 011 | SM Contracting Kanban - Production Deployment | Cole/Agent | Cole's Agent | 2026-01-09 | All deployment complete! Home page updated, docs updated, permission script ready (already in clipboard). See DEPLOYMENT_SUMMARY_SM_CONTRACTING_2026-01-09.md |
+| 010 | SM Contracting Kanban - Integration Testing | Cole/Agent | Cole's Agent | 2026-01-09 | Deployed to ProductionCapstone. Component fully functional with Sales Manager filtering, localStorage persistence, and drag-and-drop. |
+| 009 | SM Contracting Kanban - Jest Tests | Cole/Agent | Cole's Agent | 2026-01-09 | Created comprehensive test suite with 15 test cases covering all functionality. Tests ready for local execution. |
+| 008 | SM Contracting Kanban - LWC Component | Cole/Agent | Cole's Agent | 2026-01-09 | Created salesManagerContractingKanban component with 4 files (JS, HTML, CSS, XML). Wired to all Apex methods, localStorage implemented, Career-only filtering. |
+| 006 | SM Contracting Kanban - Backend Apex | Patrick/Agent | Patrick's Agent | 2026-01-09 | Added 4 new methods: getALCDataForSalesManager, getCurrentUserSalesManagerName, getSalesManagerOptions, canViewAllSalesManagers. All tests passing (28/28). |
 | 002 | Sales Manager Qualification Dashboard - Research & Audit | Patrick/Agent | Research Agent | 2026-01-08 | Handoff document: HANDOFF-RESEARCH-TO-APEX-2026-01-08.md |
 | 001 | Created collaborative planning system | Patrick's Agent | Copilot | 2026-01-08 | WORK_COORDINATION.md and SHARED_PLANNING.md |
 

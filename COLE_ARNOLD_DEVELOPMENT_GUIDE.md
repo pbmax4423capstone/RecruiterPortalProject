@@ -60,6 +60,7 @@ The following components have been actively modified by Pat Baker. Coordinate be
 ### LWC Components
 | Component | Description | Last Modified |
 |-----------|-------------|---------------|
+| `salesManagerContractingKanban` | Sales Manager Career contracting Kanban with filtering | Jan 9, 2026 |
 | `candidateRecordView` | Main candidate record page with auto-refresh | Dec 18, 2025 |
 | `recruiterDashboard` | Main recruiter dashboard | Dec 2025 |
 | `contractBPipelineDashboard` | Contract B lifecycle tracking & YTD metrics | Dec 19, 2025 |
@@ -183,14 +184,51 @@ The `candidateRecordView` component uses:
 - `RecruiterDashboardController.cls` - Dashboard data
 - `CandidateNotesController.cls` - Notes functionality
 - `ContractBDashboardController.cls` - Contract B pipeline & recruiting metrics
-- `CandidateFYCRollupService.cls` - FYC rollup calculations
+- `CandidatesInContractingController.cls` - ALC contracting Kanban data (Career + Agency filtering)
 
 ### Objects
-- `Candidate__c` - Main candidate object
+- `Candidate__c` - Main candidate object with Sales_Manager__c picklist
 - `Interview__c` - Interview scheduling
+- `ALC__c` - Agent Licensing & Contracting records
 - `Contact` - Linked contact records
 
 ### Permission Sets
+- `Recruiter_Portal_User` - Main permissions for portal users
+- `Sales_Manager_Contracting_Dashboard_Access` - Access to salesManagerContractingKanban component (Jan 9, 2026)
+
+---
+
+## salesManagerContractingKanban Component
+
+**Purpose:** Sales Manager-specific view of Career candidates in contracting stages
+
+**Key Features:**
+- **Career-only filtering:** Hard-coded to show only Career record type (no Agency)
+- **Sales Manager filtering:** Each SM sees only their unit's candidates by default
+- **Director override:** Directors/Admins can toggle "All Sales Managers" view
+- **localStorage persistence:** Remembers filter selection across sessions (key: `smContractingKanban_salesManagerFilter`)
+- **Drag-and-drop:** Move candidates between contracting stages with visual feedback
+- **Stage columns:** Dynamically loaded from ALC_Stage_Config__mdt metadata
+
+**Apex Backend:**
+- `CandidatesInContractingController.getALCDataForSalesManager(String salesManagerFilter)` - Main data provider
+- `CandidatesInContractingController.getCurrentUserSalesManagerName()` - Returns current user name
+- `CandidatesInContractingController.getSalesManagerOptions()` - Returns distinct Sales Manager picklist values
+- `CandidatesInContractingController.canViewAllSalesManagers()` - Profile check for Director/Admin access
+
+**Files:**
+- `force-app/main/default/lwc/salesManagerContractingKanban/` (JS, HTML, CSS, XML)
+- `force-app/main/default/lwc/salesManagerContractingKanban/__tests__/` (Jest tests)
+- `force-app/main/default/permissionsets/Sales_Manager_Contracting_Dashboard_Access.permissionset-meta.xml`
+
+**Usage:**
+- Deployed to Sales_Manager_Home_Page.flexipage-meta.xml
+- Requires Sales_Manager_Contracting_Dashboard_Access permission set
+- Shows on Sales Manager home pages automatically
+
+**Testing:**
+- 15 Jest unit tests covering all functionality
+- Apex tests: CandidatesInContractingController_Test (28/28 passing)
 - `Recruiter_Portal_User` - Main permissions for portal users
 
 ---

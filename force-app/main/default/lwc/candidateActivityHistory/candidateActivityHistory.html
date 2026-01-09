@@ -1,0 +1,86 @@
+<template>
+    <div class="activity-container">
+        <div class="card-header">
+            <lightning-icon icon-name="standard:task" size="small"></lightning-icon>
+            <h2>Activity History ({activityCount})</h2>
+            <div class="header-actions">
+                <lightning-button 
+                    icon-name="utility:add" 
+                    variant="brand" 
+                    label="New Task" 
+                    onclick={handleNewTask}
+                    class="action-btn">
+                </lightning-button>
+                <lightning-button 
+                    icon-name="utility:call" 
+                    variant="brand" 
+                    label="New Call" 
+                    onclick={handleNewCall}
+                    class="action-btn">
+                </lightning-button>
+            </div>
+        </div>
+        <div class="card-body">
+            <!-- Open Tasks Section -->
+            <template if:true={hasOpenTasks}>
+                <div class="section-container">
+                    <div class="section-header">
+                        <lightning-icon icon-name="utility:task" size="x-small"></lightning-icon>
+                        <h3>Open Tasks ({openTasksCount})</h3>
+                    </div>
+                    <div class="scrollable-table">
+                        <lightning-datatable
+                            key-field="Id"
+                            data={openTasks}
+                            columns={columns}
+                            hide-checkbox-column
+                            sorted-by={sortedBy}
+                            sorted-direction={sortDirection}
+                            onsort={handleSort}
+                            onrowaction={handleRowAction}>
+                        </lightning-datatable>
+                    </div>
+                </div>
+            </template>
+
+            <!-- Completed Activities Section -->
+            <template if:true={hasCompletedActivities}>
+                <div class="section-container">
+                    <div class="section-header">
+                        <lightning-icon icon-name="utility:check" size="x-small"></lightning-icon>
+                        <h3>Completed Activities ({completedActivitiesCount})</h3>
+                    </div>
+                    <div class="scrollable-table">
+                        <lightning-datatable
+                            key-field="Id"
+                            data={completedActivities}
+                            columns={columns}
+                            hide-checkbox-column
+                            sorted-by={sortedBy}
+                            sorted-direction={sortDirection}
+                            onsort={handleSort}
+                            onrowaction={handleRowAction}>
+                        </lightning-datatable>
+                    </div>
+                </div>
+            </template>
+
+            <!-- Empty State -->
+            <template if:false={hasActivities}>
+                <div class="empty-state">
+                    <lightning-icon icon-name="utility:task" size="small"></lightning-icon>
+                    <p><strong>No activities yet.</strong></p>
+                    <p class="slds-text-body_small slds-m-top_small">
+                        Tasks and events will appear here.
+                    </p>
+                </div>
+            </template>
+            <template if:true={error}>
+                <div class="error-message">
+                    <lightning-icon icon-name="utility:error" size="small"></lightning-icon>
+                    <p><strong>Error loading activities</strong></p>
+                </div>
+            </template>
+        </div>
+    </div>
+</template>

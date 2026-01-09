@@ -2,13 +2,14 @@
 <ListView xmlns="http://soap.sforce.com/2006/04/metadata">
     <fullName>Female_Active_Candidates_MASTER</fullName>
     <columns>NAME</columns>
-    <columns>Status__c</columns>
-    <columns>Next_Step__c</columns>
+    <columns>Next_Meeting_Date__c</columns>
     <columns>Mobile__c</columns>
     <columns>Email__c</columns>
     <columns>Website__c</columns>
+    <columns>Next_Step__c</columns>
     <columns>Attraction_Interview_Date_Completed__c</columns>
     <columns>Notes__c</columns>
+    <columns>Status__c</columns>
     <filterScope>Everything</filterScope>
     <filters>
         <field>Status__c</field>

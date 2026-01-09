@@ -66,9 +66,26 @@ public class ALCRelationshipTriggerHandler {
             }
         }
         
+        // Query existing Candidates for Contacts that were found
+        Map<Id, Id> contactToCandidateId = new Map<Id, Id>();
+        Set<Id> contactIds = new Set<Id>();
+        for (Contact c : emailToContact.values()) {
+            contactIds.add(c.Id);
+        }
+        for (Contact c : phoneToContact.values()) {
+            contactIds.add(c.Id);
+        }
+        
+        if (!contactIds.isEmpty()) {
+            for (Candidate__c cand : [SELECT Id, Contact__c FROM Candidate__c WHERE Contact__c IN :contactIds]) {
+                contactToCandidateId.put(cand.Contact__c, cand.Id);
+            }
+        }
+        
         // Process each ALC
         List<Contact> contactsToInsert = new List<Contact>();
         List<Candidate__c> candidatesToInsert = new List<Candidate__c>();
+        List<ALC__c> alcsWithExistingContactNeedingCandidate = new List<ALC__c>();
         Map<Integer, ALC__c> indexToALC = new Map<Integer, ALC__c>();
         Map<Integer, Boolean> indexNeedsCandidate = new Map<Integer, Boolean>();
         
@@ -94,6 +111,19 @@ public class ALCRelationshipTriggerHandler {
             if (existingContact != null) {
                 // Link to existing Contact
                 alc.Contact__c = existingContact.Id;
+                
+                // Check if Contact has Candidate, if not and this is Career type, create one
+                String recordTypeName = recordTypeIdToName.get(alc.RecordTypeId);
+                if (recordTypeName == 'Career' && alc.Candidate__c == null) {
+                    Id existingCandidateId = contactToCandidateId.get(existingContact.Id);
+                    if (existingCandidateId != null) {
+                        // Link to existing Candidate
+                        alc.Candidate__c = existingCandidateId;
+                    } else {
+                        // Need to create Candidate for existing Contact
+                        alcsWithExistingContactNeedingCandidate.add(alc);
+                    }
+                }
             } else {
                 // Create new Contact
                 Contact newContact = new Contact();
@@ -155,8 +185,33 @@ public class ALCRelationshipTriggerHandler {
                     }
                 }
                 
+                // Create Candidates for existing Contacts that need them
+                if (!alcsWithExistingContactNeedingCandidate.isEmpty()) {
+                    List<Candidate__c> candidatesForExistingContacts = new List<Candidate__c>();
+                    for (ALC__c alc : alcsWithExistingContactNeedingCandidate) {
+                        Candidate__c newCandidate = new Candidate__c();
+                        newCandidate.First_Name__c = alc.First_Name__c;
+                        newCandidate.Last_Name__c = alc.Last_Name__c;
+                        newCandidate.personal_email__c = alc.Personal_Email_Address__c;
+                        newCandidate.Phone__c = alc.Mobile__c;
+                        newCandidate.Contact__c = alc.Contact__c;
+                        newCandidate.Status__c = 'Contract Sent';
+                        candidatesForExistingContacts.add(newCandidate);
+                    }
+                    
+                    if (!candidatesForExistingContacts.isEmpty()) {
+                        insert candidatesForExistingContacts;
+                        
+                        // Link ALCs to their new Candidates
+                        for (Integer i = 0; i < alcsWithExistingContactNeedingCandidate.size(); i++) {
+                            alcsWithExistingContactNeedingCandidate[i].Candidate__c = candidatesForExistingContacts[i].Id;
+                        }
+                    }
+                }
+                
                 // Create audit log asynchronously
-                createAuditLogAsync(contactsToInsert.size(), candidatesToInsert.size(), 'Auto-created via trigger');
+                Integer totalCandidates = candidatesToInsert.size() + (alcsWithExistingContactNeedingCandidate != null ? alcsWithExistingContactNeedingCandidate.size() : 0);
+                createAuditLogAsync(contactsToInsert.size(), totalCandidates, 'Auto-created via trigger');
                 
             } catch (DmlException e) {
                 // Log error asynchronously

@@ -1,3 +1,22 @@
+/* Capstone Brand Colors */
+:host {
+    --capstone-navy-primary: #202A44;
+    --capstone-blue-accent: #193F74;
+    --capstone-coral: #FF544D;
+    --capstone-neutral-lightest: #F3F0E8;
+    --capstone-neutral-light: #E6E4E0;
+    --capstone-tan: #DCB482;
+    --capstone-taupe: #8F837A;
+    --capstone-tan-medium: #BB9F88;
+    --capstone-gray-dark: #5E5E5E;
+    
+    /* Shadow colors with opacity */
+    --shadow-navy: rgba(32, 42, 68, 0.15);
+    --shadow-navy-hover: rgba(32, 42, 68, 0.25);
+    --shadow-coral: rgba(255, 84, 77, 0.2);
+    --shadow-tan: rgba(220, 180, 130, 0.1);
+}
+
 /* Filter Container */
 .filter-container {
     display: flex;
@@ -22,46 +41,59 @@
 
 /* Metric Card Styling */
 .metric-card {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     border-radius: 8px;
     padding: 1.5rem;
     color: white;
     cursor: pointer;
     transition: transform 0.2s ease, box-shadow 0.2s ease;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 2px 4px var(--shadow-navy), inset 0 1px 2px var(--shadow-tan);
 }
 
 .metric-card:hover {
     transform: translateY(-4px);
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 8px 16px var(--shadow-navy-hover), 0 4px 8px var(--shadow-coral);
 }
 
+/* Card 1: Total Candidates - Navy to Blue (vertical gradient) */
 .metric-card:nth-child(1) {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: linear-gradient(180deg, var(--capstone-navy-primary) 0%, var(--capstone-blue-accent) 100%);
+    color: white;
 }
 
+/* Card 2: Upcoming Interviews - Blue to Navy (vertical gradient) */
 .metric-card:nth-child(2) {
-    background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+    background: linear-gradient(180deg, var(--capstone-blue-accent) 0%, var(--capstone-navy-primary) 100%);
+    color: white;
 }
 
+/* Card 3: Active Pipeline - Navy solid */
 .metric-card:nth-child(3) {
-    background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+    background: var(--capstone-navy-primary);
+    color: white;
 }
 
+/* Card 4: Contract B - Navy to Blue (vertical gradient) */
 .metric-card:nth-child(4) {
-    background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+    background: linear-gradient(180deg, var(--capstone-navy-primary) 0%, var(--capstone-blue-accent) 100%);
+    color: white;
 }
 
+/* Card 5: Contract A - Blue to Navy (vertical gradient) */
 .metric-card:nth-child(5) {
-    background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+    background: linear-gradient(180deg, var(--capstone-blue-accent) 0%, var(--capstone-navy-primary) 100%);
+    color: white;
 }
 
+/* Card 6: Hired - Navy to Blue (vertical gradient) */
 .metric-card:nth-child(6) {
-    background: linear-gradient(135deg, #30cfd0 0%, #330867 100%);
+    background: linear-gradient(180deg, var(--capstone-navy-primary) 0%, var(--capstone-blue-accent) 100%);
+    color: white;
 }
 
+/* Card 7: Completed Interviews - Blue to Navy (vertical gradient) */
 .metric-card:nth-child(7) {
-    background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+    background: linear-gradient(180deg, var(--capstone-blue-accent) 0%, var(--capstone-navy-primary) 100%);
+    color: white;
 }
 
 .metric-header {
@@ -92,62 +124,6 @@
     margin-top: 0.5rem;
 }
 
-/* Chart Container */
-.chart-container {
-    background: white;
-    border-radius: 8px;
-    padding: 1.5rem;
-    min-height: 400px;
-}
-
-/* Custom Chart Styles */
-.custom-chart {
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-    padding: 1rem 0;
-}
-
-.chart-bar-container {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-}
-
-.chart-label {
-    min-width: 150px;
-    font-weight: 600;
-    color: #3e3e3c;
-    font-size: 0.875rem;
-}
-
-.chart-bar-wrapper {
-    flex: 1;
-    background-color: #f3f3f3;
-    border-radius: 4px;
-    height: 40px;
-    position: relative;
-    overflow: hidden;
-}
-
-.chart-bar {
-    height: 100%;
-    background: linear-gradient(90deg, #1589EE 0%, #0B5CAB 100%);
-    border-radius: 4px;
-    display: flex;
-    align-items: center;
-    justify-content: flex-end;
-    padding-right: 0.75rem;
-    transition: width 0.3s ease;
-    min-width: 40px;
-}
-
-.chart-value {
-    color: white;
-    font-weight: 700;
-    font-size: 0.875rem;
-}
-
 /* Modal Styling */
 .slds-modal__container {
     max-width: 90%;
@@ -176,9 +152,4 @@
     .metric-value {
         font-size: 2rem;
     }
-}
-
-/* Dark mode adjustments for charts */
-.chart-container {
-    background: var(--lwc-colorBackground, white);
 }

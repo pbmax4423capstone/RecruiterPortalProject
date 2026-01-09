@@ -3,6 +3,7 @@
     <fullName>UTAH_Active_Candidates</fullName>
     <columns>NAME</columns>
     <columns>Next_Meeting_Date__c</columns>
+    <columns>Target_Market__c</columns>
     <columns>Notes__c</columns>
     <columns>Next_Step__c</columns>
     <columns>Mobile__c</columns>

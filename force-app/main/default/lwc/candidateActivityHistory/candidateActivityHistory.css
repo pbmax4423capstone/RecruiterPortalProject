@@ -1,0 +1,147 @@
+/* Container Styles */
+.activity-container {
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+}
+
+.card-header {
+    background: linear-gradient(180deg, #202A44 0%, #193F74 100%);
+    color: white;
+    padding: 1rem 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.card-header h2 {
+    font-size: 1.125rem;
+    font-weight: 600;
+    margin: 0;
+    flex: 1;
+}
+
+.header-actions {
+    margin-left: auto;
+    display: flex;
+    gap: 0.5rem;
+}
+
+.action-btn {
+    background: white;
+    color: #202A44 !important;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.action-btn:hover {
+    background: rgba(255, 255, 255, 0.9);
+}
+
+.card-body {
+    padding: 1.5rem;
+    max-height: 600px;
+    overflow-y: auto;
+}
+
+/* Section Containers */
+.section-container {
+    margin-bottom: 1.5rem;
+}
+
+.section-container:last-child {
+    margin-bottom: 0;
+}
+
+.section-header {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1rem;
+    background: linear-gradient(90deg, #f3f3f3 0%, #fafafa 100%);
+    border-left: 4px solid #202A44;
+    margin-bottom: 0.5rem;
+    border-radius: 4px;
+}
+
+.section-header h3 {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: #202A44;
+    margin: 0;
+}
+
+.section-header lightning-icon {
+    color: #202A44;
+}
+
+/* Scrollable Table */
+.scrollable-table {
+    max-height: 300px;
+    overflow-y: auto;
+    border: 1px solid #e5e5e5;
+    border-radius: 8px;
+}
+
+.scrollable-table::-webkit-scrollbar {
+    width: 8px;
+}
+
+.scrollable-table::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 4px;
+}
+
+.scrollable-table::-webkit-scrollbar-thumb {
+    background: #202A44;
+    border-radius: 4px;
+}
+
+.scrollable-table::-webkit-scrollbar-thumb:hover {
+    background: #193F74;
+}
+
+/* Empty State */
+.empty-state {
+    text-align: center;
+    padding: 2rem;
+    color: #706e6b;
+}
+
+.empty-state lightning-icon {
+    opacity: 0.5;
+    margin-bottom: 0.5rem;
+}
+
+.empty-state p {
+    margin: 0.5rem 0 0 0;
+    font-size: 0.95rem;
+}
+
+/* Error Message */
+.error-message {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    background: #c23934;
+    color: white;
+    padding: 1rem;
+    border-radius: 8px;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .card-header {
+        flex-wrap: wrap;
+    }
+
+    .header-actions {
+        width: 100%;
+        margin-top: 0.5rem;
+        margin-left: 0;
+    }
+
+    .card-body {
+        padding: 1rem;
+    }
+}

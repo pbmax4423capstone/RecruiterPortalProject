@@ -118,7 +118,7 @@ public with sharing class ALCRelationshipMonitorController {
             
             return [
                 SELECT Id, Name, Operation_Type__c, Success__c, Error_Type__c, Error_Message__c,
-                       Created_Date__c, ALC__c, ALC__r.Name, Contact__c, Contact__r.Name, 
+                       Created_Date__c, CreatedDate, ALC__c, ALC__r.Name, Contact__c, Contact__r.Name, 
                        Candidate__c, Candidate__r.Name, Resolved__c, Resolved_By__r.Name,
                        Resolution_Notes__c
                 FROM ALC_Automation_Log__c

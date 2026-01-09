@@ -1,9 +1,9 @@
 import { LightningElement, track, wire } from 'lwc';
+import { NavigationMixin } from 'lightning/navigation';
 import { ShowToastEvent } from 'lightning/platformShowToastEvent';
 import getSalesManagerList from '@salesforce/apex/RecruitingDirectorController.getSalesManagerList';
 import getMetricsForManager from '@salesforce/apex/RecruitingDirectorController.getMetricsForManager';
 import getGlobalMetrics from '@salesforce/apex/RecruitingDirectorController.getGlobalMetrics';
-import getManagerComparison from '@salesforce/apex/RecruitingDirectorController.getManagerComparison';
 import getCandidatesList from '@salesforce/apex/RecruitingDirectorController.getCandidatesList';
 import getUpcomingInterviewsList from '@salesforce/apex/RecruitingDirectorController.getUpcomingInterviewsList';
 import getActivePipelineList from '@salesforce/apex/RecruitingDirectorController.getActivePipelineList';
@@ -13,7 +13,7 @@ import getHiredList from '@salesforce/apex/RecruitingDirectorController.getHired
 import getCompletedInterviewsList from '@salesforce/apex/RecruitingDirectorController.getCompletedInterviewsList';
 import exportToCsv from '@salesforce/apex/RecruitingDirectorController.exportToCsv';
 
-export default class RecruitingDirectorDashboard extends LightningElement {
+export default class RecruitingDirectorDashboard extends NavigationMixin(LightningElement) {
     @track salesManagerOptions = [];
     @track selectedManager = 'All Sales Managers';  // Fixed: was 'All', should match dropdown value
     @track selectedDateRange = 'THIS_MONTH';
@@ -26,8 +26,6 @@ export default class RecruitingDirectorDashboard extends LightningElement {
         hiredThisPeriod: 0,
         completedInterviewsThisPeriod: 0
     };
-    @track chartData = null;
-    @track selectedChartMetric = 'totalCandidates';
     @track isLoading = true;
 
     // Drill-down modal properties
@@ -81,52 +79,13 @@ export default class RecruitingDirectorDashboard extends LightningElement {
                     hiredThisPeriod: result.hiredThisPeriod || 0,
                     completedInterviewsThisPeriod: result.completedInterviewsThisPeriod || 0
                 };
-                this.loadChartData();
+                this.isLoading = false;
             })
             .catch(error => {
                 console.error('Error loading metrics:', error);
                 this.showError('Error loading metrics', error);
                 this.isLoading = false;
             });
-    }
-
-    // Load chart data for manager comparison
-    loadChartData() {
-        getManagerComparison({ 
-            metricType: this.selectedChartMetric,
-            dateRange: this.selectedDateRange 
-        })
-            .then(result => {
-                const labels = result.managers || [];
-                const values = result.values || [];
-                
-                // Find max value for percentage calculation
-                const maxValue = Math.max(...values, 1);
-                
-                // Generate chart data with bar widths
-                this.chartData = labels.map((label, index) => {
-                    const value = values[index] || 0;
-                    const percentage = (value / maxValue) * 100;
-                    return {
-                        label: label,
-                        value: value,
-                        barStyle: `width: ${percentage}%`
-                    };
-                });
-                
-                this.isLoading = false;
-            })
-            .catch(error => {
-                this.showError('Error loading chart data', error);
-                this.isLoading = false;
-            });
-    }
-
-    // Get chart label based on selected metric
-    getChartLabel() {
-        return this.selectedChartMetric === 'totalCandidates' 
-            ? 'Total Candidates' 
-            : 'Active Pipeline';
     }
 
     // Handle manager selection change
@@ -151,17 +110,6 @@ export default class RecruitingDirectorDashboard extends LightningElement {
         this.loadMetrics();
     }
 
-    // Handle chart metric selection
-    handleChartMetricTotalCandidates() {
-        this.selectedChartMetric = 'totalCandidates';
-        this.loadChartData();
-    }
-
-    handleChartMetricActivePipeline() {
-        this.selectedChartMetric = 'activePipeline';
-        this.loadChartData();
-    }
-
     // Button variant getters for active state
     get isMonth() {
         return this.selectedDateRange === 'THIS_MONTH' ? 'brand' : 'neutral';
@@ -173,14 +121,6 @@ export default class RecruitingDirectorDashboard extends LightningElement {
 
     get isYear() {
         return this.selectedDateRange === 'THIS_YEAR' ? 'brand' : 'neutral';
-    }
-
-    get isChartTotalCandidates() {
-        return this.selectedChartMetric === 'totalCandidates' ? 'brand' : 'neutral';
-    }
-
-    get isChartActivePipeline() {
-        return this.selectedChartMetric === 'activePipeline' ? 'brand' : 'neutral';
     }
 
     get hasDrillDownData() {
@@ -242,7 +182,15 @@ export default class RecruitingDirectorDashboard extends LightningElement {
                     { label: 'Candidate', fieldName: 'candidateName', type: 'text' },
                     { label: 'Interview Date', fieldName: 'interviewDate', type: 'date-local', typeAttributes: { month: 'short', day: 'numeric', year: 'numeric', hour: '2-digit', minute: '2-digit' } },
                     { label: 'Interviewer', fieldName: 'interviewer', type: 'text' },
-                    { label: 'Status', fieldName: 'status', type: 'text' }
+                    { label: 'Status', fieldName: 'status', type: 'text' },
+                    {
+                        type: 'button',
+                        typeAttributes: {
+                            label: 'View',
+                            name: 'view',
+                            variant: 'base'
+                        }
+                    }
                 ];
                 break;
             case 'activePipeline':
@@ -284,9 +232,17 @@ export default class RecruitingDirectorDashboard extends LightningElement {
                 dataPromise = getCompletedInterviewsList({ managerName: salesManager, dateRange: this.selectedDateRange });
                 this.drillDownColumns = [
                     { label: 'Candidate', fieldName: 'candidateName', type: 'text' },
-                    { label: 'Completion Date', fieldName: 'completionDate', type: 'date', typeAttributes: { month: 'short', day: 'numeric', year: 'numeric' } },
+                    { label: 'Completion Date', fieldName: 'dateCompleted', type: 'date', typeAttributes: { month: 'short', day: 'numeric', year: 'numeric' } },
                     { label: 'Interviewer', fieldName: 'interviewer', type: 'text' },
-                    { label: 'Status', fieldName: 'status', type: 'text' }
+                    { label: 'Type', fieldName: 'interviewType', type: 'text' },
+                    {
+                        type: 'button',
+                        typeAttributes: {
+                            label: 'View',
+                            name: 'view',
+                            variant: 'base'
+                        }
+                    }
                 ];
                 break;
         }
@@ -307,6 +263,38 @@ export default class RecruitingDirectorDashboard extends LightningElement {
         this.showDrillDownModal = false;
         this.drillDownData = [];
         this.currentDrillDownMetric = '';
+    }
+
+    /**
+     * Handles row actions in the drill-down datatable
+     * Navigates to the record detail page (Interview or Candidate)
+     * 
+     * @param {Event} event - Row action event from datatable
+     */
+    handleRowAction(event) {
+        const actionName = event.detail.action.name;
+        const row = event.detail.row;
+        
+        if (actionName === 'view' && row.id) {
+            // Determine object type based on metric
+            let objectApiName = 'Candidate__c';
+            
+            // For interview-related metrics, navigate to Interview__c
+            if (this.currentDrillDownMetric === 'upcomingInterviews' || 
+                this.currentDrillDownMetric === 'completedInterviews') {
+                objectApiName = 'Interview__c';
+            }
+            
+            // Navigate to record page
+            this[NavigationMixin.Navigate]({
+                type: 'standard__recordPage',
+                attributes: {
+                    recordId: row.id,
+                    objectApiName: objectApiName,
+                    actionName: 'view'
+                }
+            });
+        }
     }
 
     // Handle CSV export

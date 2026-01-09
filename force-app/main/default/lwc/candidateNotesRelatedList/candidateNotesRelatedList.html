@@ -1,0 +1,59 @@
+<template>
+    <div class="notes-container">
+        <div class="card-header">
+            <lightning-icon icon-name="standard:note" size="small"></lightning-icon>
+            <h2>Notes ({noteCount})</h2>
+            <div class="header-actions">
+                <span class="utility-bar-hint">Auto-refreshes every 5s</span>
+                <lightning-button 
+                    icon-name="utility:add" 
+                    variant="brand" 
+                    label="New Note" 
+                    onclick={handleNewNote}
+                    class="new-note-btn">
+                </lightning-button>
+            </div>
+        </div>
+        <div class="card-body">
+            <template if:true={hasNotes}>
+                <div class="notes-list">
+                    <template for:each={notes} for:item="note">
+                        <div key={note.Id} class="note-item">
+                            <div class="note-header">
+                                <h3 class="note-title">{note.Title}</h3>
+                                <span class="note-date">
+                                    <lightning-formatted-date-time value={note.LastModifiedDate}></lightning-formatted-date-time>
+                                </span>
+                            </div>
+                            <div class="note-author">By {note.LastModifiedByName}</div>
+                            <div class="note-content">{note.TextPreview}</div>
+                        </div>
+                    </template>
+                </div>
+            </template>
+            <template if:false={hasNotes}>
+                <div class="empty-state">
+                    <lightning-icon icon-name="utility:note" size="small"></lightning-icon>
+                    <p><strong>No notes yet.</strong></p>
+                    <div class="slds-text-body_small slds-m-top_small">
+                        <p><strong>To add a note:</strong></p>
+                        <ol class="slds-list_ordered slds-m-top_x-small slds-m-left_medium">
+                            <li>Click the "New Note" button above</li>
+                            <li>Create your note and save</li>
+                            <li>The note will appear here automatically</li>
+                        </ol>
+                    </div>
+                </div>
+            </template>
+            <template if:true={error}>
+                <div class="error-message">
+                    <lightning-icon icon-name="utility:error" size="small"></lightning-icon>
+                    <div>
+                        <p><strong>Error loading notes</strong></p>
+                        <p class="slds-text-body_small">{errorMessage}</p>
+                    </div>
+                </div>
+            </template>
+        </div>
+    </div>
+</template>

@@ -1,0 +1,137 @@
+<template>
+    <lightning-card title={cardTitle} icon-name="standard:kanban">
+        <div slot="actions">
+            <!-- Sales Manager Filter Buttons (Only visible for Directors/Admins) -->
+            <template if:true={showSalesManagerDropdown}>
+                <div class="slds-button-group sales-manager-filter-group" role="group">
+                    <template for:each={salesManagerFilters} for:item="filter">
+                        <lightning-button
+                            key={filter.value}
+                            label={filter.label}
+                            variant={filter.variant}
+                            onclick={handleSalesManagerFilterChange}
+                            data-manager={filter.value}
+                            class="sales-manager-filter-button"
+                            title={filter.title}>
+                        </lightning-button>
+                    </template>
+                </div>
+            </template>
+            <!-- Current Selection Label (for non-Directors) -->
+            <template if:false={showSalesManagerDropdown}>
+                <div class="current-manager-label slds-m-right_small">
+                    <lightning-icon icon-name="standard:user" size="x-small" class="slds-m-right_xx-small"></lightning-icon>
+                    <span class="slds-text-body_small slds-text-color_weak">
+                        Viewing: <strong>{selectedSalesManagerLabel}</strong>
+                    </span>
+                </div>
+            </template>
+            <lightning-button
+                label="Refresh"
+                icon-name="utility:refresh"
+                onclick={handleRefresh}
+                title="Refresh Data"
+                class="slds-m-left_small">
+            </lightning-button>
+        </div>
+        <div class="slds-p-around_small">
+            <template if:true={isLoading}>
+                <lightning-spinner alternative-text="Loading candidates..."></lightning-spinner>
+            </template>
+
+            <template if:false={isLoading}>
+                <template if:true={hasData}>
+                    <div class="kanban-container">
+                        <template for:each={stageColumns} for:item="stageColumn">
+                            <div key={stageColumn.stageKey} 
+                                 class="kanban-column"
+                                 data-stage={stageColumn.stageApiValue}
+                                 ondragover={handleDragOver}
+                                 ondrop={handleDrop}>
+                                
+                                <div style={stageColumn.headerStyle} class="kanban-header">
+                                    <h3 class="slds-text-heading_small" style="color: white; font-weight: bold; margin: 0;">
+                                        <lightning-icon icon-name="standard:stage" size="small" class="slds-m-right_x-small"></lightning-icon>
+                                        {stageColumn.stageDisplayLabel}
+                                    </h3>
+                                    <span class="kanban-count">{stageColumn.formattedCount}</span>
+                                </div>
+
+                                <div class="kanban-cards">
+                                    <template for:each={stageColumn.candidates} for:item="candidate">
+                                        <div key={candidate.candidateId}
+                                             class="kanban-card"
+                                             draggable="true"
+                                             data-candidate-id={candidate.candidateId}
+                                             data-alc-id={candidate.alcId}
+                                             data-stage={stageColumn.stageApiValue}
+                                             ondragstart={handleDragStart}
+                                             ondblclick={handleCardDoubleClick}>
+                                            <div class="slds-media slds-media_small">
+                                                <div class="slds-media__figure">
+                                                    <lightning-icon icon-name="standard:contact" size="x-small"></lightning-icon>
+                                                </div>
+                                                <div class="slds-media__body">
+                                                    <h4 class="slds-text-body_regular slds-m-bottom_xx-small slds-truncate" title={candidate.candidateName}>
+                                                        {candidate.candidateName}
+                                                    </h4>
+                                                    <div class="slds-text-body_small slds-text-color_weak slds-m-bottom_xx-small">
+                                                        ALC: {candidate.alcName}
+                                                    </div>
+                                                    <template if:true={candidate.salesManager}>
+                                                        <div class="slds-text-body_small slds-text-color_weak slds-m-bottom_xx-small">
+                                                            SM: {candidate.salesManager}
+                                                        </div>
+                                                    </template>
+                                                    <div class="slds-text-body_small slds-text-color_weak">
+                                                        Modified: <lightning-formatted-date-time 
+                                                            value={candidate.lastStageChange} 
+                                                            year="numeric" 
+                                                            month="short" 
+                                                            day="numeric">
+                                                        </lightning-formatted-date-time>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="drag-handle">
+                                                <lightning-icon icon-name="utility:drag_and_drop" size="xx-small" alternative-text="Drag to move"></lightning-icon>
+                                            </div>
+                                        </div>
+                                    </template>
+
+                                    <template if:true={stageColumn.isEmpty}>
+                                        <div class="empty-column-message slds-text-align_center slds-p-vertical_medium slds-text-color_weak">
+                                            <lightning-icon icon-name="utility:announcement" size="small"></lightning-icon>
+                                            <p class="slds-m-top_x-small">No candidates</p>
+                                        </div>
+                                    </template>
+                                </div>
+                            </div>
+                        </template>
+                    </div>
+                </template>
+
+                <template if:false={hasData}>
+                    <div class="slds-align_absolute-center slds-p-around_large">
+                        <div class="slds-text-align_center">
+                            <lightning-icon icon-name="utility:info" size="large" alternative-text="No data"></lightning-icon>
+                            <p class="slds-text-heading_small slds-m-top_small">
+                                No Career candidates in contracting for {selectedSalesManagerLabel}
+                            </p>
+                        </div>
+                    </div>
+                </template>
+            </template>
+
+            <template if:true={error}>
+                <div class="slds-p-around_medium">
+                    <div class="slds-notify slds-notify_alert slds-alert_error" role="alert">
+                        <span class="slds-assistive-text">Error</span>
+                        <h2>Error loading candidates</h2>
+                        <p class="slds-m-top_small">{errorMessage}</p>
+                    </div>
+                </div>
+            </template>
+        </div>
+    </lightning-card>
+</template>

@@ -11,82 +11,96 @@
             
             <!-- Metrics Display -->
             <template if:false={isLoading}>
-                <div class="slds-grid slds-wrap slds-gutters slds-m-bottom_medium">
+                <div class="metrics-grid">
                     <!-- Total Candidates -->
-                    <div class="slds-col slds-size_1-of-6 slds-medium-size_1-of-3 slds-small-size_1-of-1">
-                        <div class="summary-card summary-total" 
-                             data-label="Total Candidates" 
-                             data-value={totalCandidates}
-                             onclick={handleCardClick}>
-                            <div class="summary-value">{totalCandidates}</div>
-                            <div class="summary-label">Total Candidates</div>
+                    <div class="summary-card summary-total" 
+                         data-label="Total Candidates" 
+                         data-value={totalCandidates}
+                         onclick={handleCardClick}>
+                        <div class="summary-header">
+                            <lightning-icon icon-name="standard:contact" size="small"></lightning-icon>
+                            <span class="summary-title">Total Candidates</span>
                         </div>
+                        <div class="summary-value">{totalCandidates}</div>
+                        <div class="summary-footer">Click to view details</div>
                     </div>
                     
                     <!-- Upcoming Interviews -->
-                    <div class="slds-col slds-size_1-of-6 slds-medium-size_1-of-3 slds-small-size_1-of-1">
-                        <div class="summary-card summary-warning" 
-                             data-label="Upcoming Interviews" 
-                             data-value={upcomingInterviews}
-                             onclick={handleCardClick}>
-                            <div class="summary-value">{upcomingInterviews}</div>
-                            <div class="summary-label">Upcoming Interviews</div>
+                    <div class="summary-card summary-warning" 
+                         data-label="Upcoming Interviews" 
+                         data-value={upcomingInterviews}
+                         onclick={handleCardClick}>
+                        <div class="summary-header">
+                            <lightning-icon icon-name="standard:event" size="small"></lightning-icon>
+                            <span class="summary-title">Upcoming Interviews</span>
                         </div>
+                        <div class="summary-value">{upcomingInterviews}</div>
+                        <div class="summary-footer">Click to view details</div>
                     </div>
                     
                     <!-- Active Pipeline -->
-                    <div class="slds-col slds-size_1-of-6 slds-medium-size_1-of-3 slds-small-size_1-of-1">
-                        <div class="summary-card summary-info" 
-                             data-label="Active Pipeline" 
-                             data-value={activePipeline}
-                             onclick={handleCardClick}>
-                            <div class="summary-value">{activePipeline}</div>
-                            <div class="summary-label">Active Pipeline</div>
+                    <div class="summary-card summary-info" 
+                         data-label="Active Pipeline" 
+                         data-value={activePipeline}
+                         onclick={handleCardClick}>
+                        <div class="summary-header">
+                            <lightning-icon icon-name="standard:opportunity" size="small"></lightning-icon>
+                            <span class="summary-title">Active Pipeline</span>
                         </div>
+                        <div class="summary-value">{activePipeline}</div>
+                        <div class="summary-footer">Click to view details</div>
                     </div>
                     
                     <!-- On Contract B -->
-                    <div class="slds-col slds-size_1-of-6 slds-medium-size_1-of-3 slds-small-size_1-of-1">
-                        <div class="summary-card summary-purple" 
-                             data-label="On Contract B" 
-                             data-value={onContractB}
-                             onclick={handleCardClick}>
-                            <div class="summary-value">{onContractB}</div>
-                            <div class="summary-label">On Contract B</div>
+                    <div class="summary-card summary-purple" 
+                         data-label="On Contract B" 
+                         data-value={onContractB}
+                         onclick={handleCardClick}>
+                        <div class="summary-header">
+                            <lightning-icon icon-name="standard:contract" size="small"></lightning-icon>
+                            <span class="summary-title">On Contract B</span>
                         </div>
+                        <div class="summary-value">{onContractB}</div>
+                        <div class="summary-footer">Click to view details</div>
                     </div>
                     
                     <!-- On Contract A -->
-                    <div class="slds-col slds-size_1-of-6 slds-medium-size_1-of-3 slds-small-size_1-of-1">
-                        <div class="summary-card summary-purple" 
-                             data-label="On Contract A" 
-                             data-value={onContractA}
-                             onclick={handleCardClick}>
-                            <div class="summary-value">{onContractA}</div>
-                            <div class="summary-label">On Contract A</div>
+                    <div class="summary-card summary-success" 
+                         data-label="On Contract A" 
+                         data-value={onContractA}
+                         onclick={handleCardClick}>
+                        <div class="summary-header">
+                            <lightning-icon icon-name="standard:contract" size="small"></lightning-icon>
+                            <span class="summary-title">On Contract A</span>
                         </div>
+                        <div class="summary-value">{onContractA}</div>
+                        <div class="summary-footer">Click to view details</div>
                     </div>
                     
                     <!-- Hired This Month -->
-                    <div class="slds-col slds-size_1-of-6 slds-medium-size_1-of-3 slds-small-size_1-of-1">
-                        <div class="summary-card summary-success" 
-                             data-label="Hired This Month" 
-                             data-value={hiredThisMonth}
-                             onclick={handleCardClick}>
-                            <div class="summary-value">{hiredThisMonth}</div>
-                            <div class="summary-label">Hired This Month</div>
+                    <div class="summary-card summary-rate" 
+                         data-label="Hired This Month" 
+                         data-value={hiredThisMonth}
+                         onclick={handleCardClick}>
+                        <div class="summary-header">
+                            <lightning-icon icon-name="standard:approval" size="small"></lightning-icon>
+                            <span class="summary-title">Hired This Month</span>
                         </div>
+                        <div class="summary-value">{hiredThisMonth}</div>
+                        <div class="summary-footer">Click to view details</div>
                     </div>
                     
                     <!-- Completed Interviews This Month -->
-                    <div class="slds-col slds-size_1-of-6 slds-medium-size_1-of-3 slds-small-size_1-of-1">
-                        <div class="summary-card summary-warning" 
-                             data-label="Completed Interviews This Month" 
-                             data-value={completedInterviewsThisMonth}
-                             onclick={handleCardClick}>
-                            <div class="summary-value">{completedInterviewsThisMonth}</div>
-                            <div class="summary-label">Completed Interviews</div>
+                    <div class="summary-card summary-extra" 
+                         data-label="Completed Interviews This Month" 
+                         data-value={completedInterviewsThisMonth}
+                         onclick={handleCardClick}>
+                        <div class="summary-header">
+                            <lightning-icon icon-name="standard:event" size="small"></lightning-icon>
+                            <span class="summary-title">Completed Interviews</span>
                         </div>
+                        <div class="summary-value">{completedInterviewsThisMonth}</div>
+                        <div class="summary-footer">This Month</div>
                     </div>
                 </div>
                 

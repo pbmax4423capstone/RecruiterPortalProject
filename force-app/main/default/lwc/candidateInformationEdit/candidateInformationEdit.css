@@ -1,0 +1,331 @@
+/* Info Card Container - Enhanced with gradient background and stronger shadows */
+.info-card {
+    background: linear-gradient(135deg, #f0f7ff 0%, #e8f0f7 100%);
+    border-radius: 16px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15), 0 4px 8px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    margin-bottom: 1.5rem;
+}
+
+/* Card Header - Enhanced with more padding, larger font, and text-shadow */
+.card-header {
+    background: linear-gradient(135deg, #032d60 0%, #055199 100%);
+    color: white;
+    padding: 1.5rem 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.card-header h2 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin: 0;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.toggle-button {
+    flex-shrink: 0;
+}
+
+/* Card Body - White background with more padding */
+.card-body {
+    background: white;
+    padding: 2rem;
+}
+
+/* Field Grid - 2 Column Layout with increased gaps */
+.field-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem 2.5rem;
+}
+
+/* Field Item - Card-like appearance with gradient and shadows */
+.field-item {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    background: linear-gradient(135deg, #fafbfc 0%, #f4f6f9 100%);
+    border-radius: 12px;
+    padding: 1rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    transition: all 0.3s ease;
+}
+
+.field-item:hover {
+    transform: translateY(-2px);
+    border: 2px solid #0176d3;
+    box-shadow: 0 6px 16px rgba(1, 118, 211, 0.2);
+}
+
+/* Field Labels - Darker blue, bolder, with colored vertical bar */
+.field-label {
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: #032d60;
+    text-transform: uppercase;
+    letter-spacing: 0.025em;
+    display: flex;
+    align-items: center;
+    position: relative;
+    padding-left: 0.75rem;
+}
+
+.field-label::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    width: 4px;
+    height: 14px;
+    background: linear-gradient(135deg, #0176d3 0%, #0c5aa6 100%);
+    border-radius: 2px;
+}
+
+/* Field Value Containers - White background with visible border and effects */
+.field-value-container {
+    min-height: 2rem;
+    padding: 0.75rem 1rem;
+    border: 2px solid #e5e5e5;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    background-color: white;
+}
+
+.field-value-container:hover {
+    background: linear-gradient(135deg, #e8f4fd 0%, #d5ecfa 100%);
+    border-color: #0176d3;
+    box-shadow: 0 0 0 3px rgba(1, 118, 211, 0.1);
+}
+
+.field-value-container:focus-within {
+    background-color: white;
+    border-color: #0176d3;
+    box-shadow: 0 0 0 4px rgba(1, 118, 211, 0.15);
+    outline: none;
+}
+
+/* When editing, adjust for lightning-input-field */
+.field-value-container lightning-input-field {
+    margin: -0.75rem -1rem;
+}
+
+/* Responsive for smaller screens */
+@media (max-width: 768px) {
+    .field-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .card-body {
+        padding: 1.5rem;
+    }
+    
+    .card-header {
+        padding: 1.25rem 1.5rem;
+    }
+}
+
+/* Read-only field container for Contact */
+.field-value-container-readonly {
+    min-height: 2rem;
+    padding: 0.75rem 1rem;
+    border: 2px solid #e5e5e5;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    background-color: #f9f9f9;
+}
+
+.field-value-container-readonly:hover {
+    background: linear-gradient(135deg, #e8f4fd 0%, #d5ecfa 100%);
+    border-color: #0176d3;
+    box-shadow: 0 0 0 3px rgba(1, 118, 211, 0.1);
+}
+
+.contact-link {
+    color: #0176d3;
+    cursor: pointer;
+    font-weight: 500;
+}
+
+.contact-link:hover {
+    text-decoration: underline;
+}
+
+.no-contact {
+    color: #999;
+    font-style: italic;
+}
+
+/* All Fields Section */
+.all-fields-section {
+    margin-top: 2rem;
+    padding-top: 2rem;
+    border-top: 2px solid #e5e5e5;
+}
+
+.section-title {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: #032d60;
+    margin-bottom: 1.5rem;
+    padding-left: 0.75rem;
+    border-left: 4px solid #0176d3;
+}
+
+/* ===== DARK MODE STYLES ===== */
+.info-card.dark-mode {
+    background: linear-gradient(135deg, #1a1a1a 0%, #252525 100%);
+}
+
+.info-card.dark-mode .card-header {
+    background: linear-gradient(135deg, #1a2332 0%, #2d3e5e 100%);
+}
+
+.info-card.dark-mode .card-body {
+    background: #1e1e1e;
+}
+
+.info-card.dark-mode .field-item {
+    background: linear-gradient(135deg, #2a2a2a 0%, #333333 100%);
+    border-color: #404040;
+}
+
+.info-card.dark-mode .field-item:hover {
+    border-color: #54a3ff;
+    box-shadow: 0 6px 16px rgba(84, 163, 255, 0.3);
+}
+
+.info-card.dark-mode .field-label {
+    color: #9ca3af;
+}
+
+.info-card.dark-mode .field-label::before {
+    background: linear-gradient(135deg, #54a3ff 0%, #3a8adb 100%);
+}
+
+.info-card.dark-mode .field-value-container {
+    background-color: #2d2d2d;
+    border-color: #404040;
+    color: #e0e0e0;
+}
+
+.info-card.dark-mode .field-value-container:hover {
+    background: linear-gradient(135deg, #3a4a5a 0%, #2d3d4d 100%);
+    border-color: #54a3ff;
+    box-shadow: 0 0 0 3px rgba(84, 163, 255, 0.2);
+}
+
+.info-card.dark-mode .field-value-container:focus-within {
+    background-color: #2d2d2d;
+    border-color: #54a3ff;
+    box-shadow: 0 0 0 4px rgba(84, 163, 255, 0.25);
+}
+
+.info-card.dark-mode .field-value-container-readonly {
+    background-color: #242424;
+    border-color: #3a3a3a;
+    color: #e0e0e0;
+}
+
+.info-card.dark-mode .field-value-container-readonly:hover {
+    background: linear-gradient(135deg, #3a4a5a 0%, #2d3d4d 100%);
+    border-color: #54a3ff;
+}
+
+.info-card.dark-mode .contact-link {
+    color: #54a3ff;
+}
+
+.info-card.dark-mode .no-contact {
+    color: #666;
+}
+
+.info-card.dark-mode .section-title {
+    color: #9ca3af;
+    border-left-color: #54a3ff;
+}
+
+.info-card.dark-mode .all-fields-section {
+    border-top-color: #404040;
+}
+
+/* Dark Mode Styles */
+.info-card.dark-mode {
+    background: linear-gradient(135deg, #1a1a1a 0%, #252525 100%);
+}
+
+.info-card.dark-mode .card-header {
+    background: linear-gradient(135deg, #1a2332 0%, #2d3e5e 100%);
+}
+
+.info-card.dark-mode .card-body {
+    background: #1e1e1e;
+}
+
+.info-card.dark-mode .field-item {
+    background: linear-gradient(135deg, #2a2a2a 0%, #333333 100%);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+.info-card.dark-mode .field-item:hover {
+    background: linear-gradient(135deg, #3a4a5a 0%, #2d3d4d 100%);
+    border-color: #54a3ff;
+    box-shadow: 0 6px 16px rgba(84, 163, 255, 0.3);
+}
+
+.info-card.dark-mode .field-label {
+    color: #9ca3af;
+}
+
+.info-card.dark-mode .field-label::before {
+    background: linear-gradient(135deg, #54a3ff 0%, #3b82f6 100%);
+}
+
+.info-card.dark-mode .field-value-container {
+    background-color: #2d2d2d;
+    border-color: #404040;
+    color: #e0e0e0;
+}
+
+.info-card.dark-mode .field-value-container:hover {
+    background: linear-gradient(135deg, #3a4a5a 0%, #2d3d4d 100%);
+    border-color: #54a3ff;
+}
+
+.info-card.dark-mode .field-value-container-readonly {
+    background-color: #242424;
+    border-color: #3a3a3a;
+    color: #e0e0e0;
+}
+
+.info-card.dark-mode .field-value-container-readonly:hover {
+    background: linear-gradient(135deg, #3a4a5a 0%, #2d3d4d 100%);
+    border-color: #54a3ff;
+}
+
+.info-card.dark-mode .contact-link {
+    color: #54a3ff;
+}
+
+.info-card.dark-mode .contact-link:hover {
+    color: #7bb7ff;
+}
+
+.info-card.dark-mode .no-contact {
+    color: #6b7280;
+}
+
+.info-card.dark-mode .section-title {
+    color: #e0e0e0;
+    border-left-color: #54a3ff;
+}
+
+.info-card.dark-mode lightning-input-field {
+    --slds-c-input-color-background: #2d2d2d;
+    --slds-c-input-color-border: #404040;
+    --slds-c-input-text-color: #e0e0e0;
+}

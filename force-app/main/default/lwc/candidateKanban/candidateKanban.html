@@ -1,13 +1,32 @@
 <template>
     <lightning-card title="Candidate Pipeline" icon-name="standard:opportunity">
         <div slot="actions">
+            <!-- Sales Manager Filter Buttons (Only visible for Directors/Admins) -->
+            <template if:true={showSalesManagerDropdown}>
+                <div class="slds-button-group sales-manager-filter-group" role="group">
+                    <template for:each={salesManagerFilters} for:item="filter">
+                        <lightning-button
+                            key={filter.value}
+                            label={filter.label}
+                            variant={filter.variant}
+                            onclick={handleSalesManagerFilterChange}
+                            data-manager={filter.value}
+                            class="sales-manager-filter-button"
+                            title={filter.title}>
+                        </lightning-button>
+                    </template>
+                </div>
+            </template>
+            <!-- Current Selection Label (for non-Directors) -->
+            <template if:false={showSalesManagerDropdown}>
+                <div class="current-manager-label slds-m-right_small">
+                    <lightning-icon icon-name="standard:user" size="x-small" class="slds-m-right_xx-small"></lightning-icon>
+                    <span class="slds-text-body_small slds-text-color_weak">
+                        Viewing: <strong>{selectedSalesManagerLabel}</strong>
+                    </span>
+                </div>
+            </template>
             <lightning-badge label={totalCandidates} class="slds-m-right_small"></lightning-badge>
-            <lightning-button-icon 
-                icon-name="utility:refresh" 
-                alternative-text="Refresh"
-                onclick={handleRefresh}
-                class="slds-m-right_small">
-            </lightning-button-icon>
         </div>
 
         <template if:true={isLoading}>
@@ -90,6 +109,13 @@
                                             <lightning-icon icon-name="utility:user" size="xx-small" class="detail-icon"></lightning-icon>
                                             <span class="detail-text">{candidate.recruiterName}</span>
                                         </div>
+                                        <!-- Sales Manager -->
+                                        <template if:true={candidate.salesManager}>
+                                            <div class="detail-row">
+                                                <lightning-icon icon-name="utility:groups" size="xx-small" class="detail-icon"></lightning-icon>
+                                                <span class="detail-text">SM: {candidate.salesManager}</span>
+                                            </div>
+                                        </template>
                                         <!-- Interview Stage -->
                                         <template if:true={candidate.interviewStage}>
                                             <div class="detail-row">
@@ -108,6 +134,14 @@
                                             </div>
                                         </template>
                                     </div>
+
+                                    <!-- Latest Note -->
+                                    <template if:true={candidate.latestNote}>
+                                        <div class="card-note">
+                                            <lightning-icon icon-name="utility:note" size="xx-small" class="note-icon"></lightning-icon>
+                                            <span class="note-text">{candidate.latestNote}</span>
+                                        </div>
+                                    </template>
 
                                     <!-- Card Footer -->
                                     <div class="card-footer">

@@ -1,0 +1,626 @@
+<template>
+    <div class="info-card">
+        <div class="card-header">
+            <h2>Information</h2>
+            <lightning-button 
+                label={toggleButtonLabel}
+                variant={toggleButtonVariant}
+                onclick={handleToggleAllFields}
+                class="toggle-button">
+            </lightning-button>
+        </div>
+        <div class="card-body">
+            <lightning-record-edit-form 
+                record-id={recordId} 
+                object-api-name={objectApiName}
+                onsuccess={handleSuccess}
+                onerror={handleError}>
+                
+                <div class="field-grid">
+                    <!-- Row 1: Type and Contact -->
+                    <div class="field-item">
+                        <span class="field-label">Type</span>
+                        <div class="field-value-container" data-field="Type__c" onclick={handleFieldClick}>
+                            <template if:false={isEditingType}>
+                                <lightning-output-field field-name={typeField} variant="label-hidden"></lightning-output-field>
+                            </template>
+                            <template if:true={isEditingType}>
+                                <lightning-input-field 
+                                    field-name={typeField} 
+                                    variant="label-hidden"
+                                    onblur={handleFieldBlur}
+                                    onkeydown={handleKeyDown}>
+                                </lightning-input-field>
+                            </template>
+                        </div>
+                    </div>
+                    <div class="field-item">
+                        <span class="field-label">Contact</span>
+                        <template if:true={contactId}>
+                            <div class="field-value-container-readonly" onclick={navigateToContact}>
+                                <a class="contact-link">View Contact: {contactDisplayValue}</a>
+                            </div>
+                        </template>
+                        <template if:false={contactId}>
+                            <div class="field-value-container" data-field="Contact__c" onclick={handleFieldClick}>
+                                <template if:false={isEditingContact}>
+                                    <lightning-output-field field-name={contactField} variant="label-hidden"></lightning-output-field>
+                                </template>
+                                <template if:true={isEditingContact}>
+                                    <lightning-input-field 
+                                        field-name={contactField} 
+                                        variant="label-hidden"
+                                        onblur={handleFieldBlur}
+                                        onkeydown={handleKeyDown}>
+                                    </lightning-input-field>
+                                </template>
+                            </div>
+                        </template>
+                    </div>
+
+                    <!-- Row 2: Name and Owner -->
+                    <div class="field-item">
+                        <span class="field-label">Name</span>
+                        <div class="field-value-container" data-field="Name" onclick={handleFieldClick}>
+                            <template if:false={isEditingName}>
+                                <lightning-output-field field-name={nameField} variant="label-hidden"></lightning-output-field>
+                            </template>
+                            <template if:true={isEditingName}>
+                                <lightning-input-field 
+                                    field-name={nameField} 
+                                    variant="label-hidden"
+                                    onblur={handleFieldBlur}
+                                    onkeydown={handleKeyDown}>
+                                </lightning-input-field>
+                            </template>
+                        </div>
+                    </div>
+                    <div class="field-item">
+                        <span class="field-label">Owner</span>
+                        <div class="field-value-container" data-field="OwnerId" onclick={handleFieldClick}>
+                            <template if:false={isEditingOwner}>
+                                <lightning-output-field field-name={ownerField} variant="label-hidden"></lightning-output-field>
+                            </template>
+                            <template if:true={isEditingOwner}>
+                                <lightning-input-field 
+                                    field-name={ownerField} 
+                                    variant="label-hidden"
+                                    onblur={handleFieldBlur}
+                                    onkeydown={handleKeyDown}>
+                                </lightning-input-field>
+                            </template>
+                        </div>
+                    </div>
+
+                    <!-- Row 3: First Name and Mobile -->
+                    <div class="field-item">
+                        <span class="field-label">First Name</span>
+                        <div class="field-value-container" data-field="First_Name__c" onclick={handleFieldClick}>
+                            <template if:false={isEditingFirstName}>
+                                <lightning-output-field field-name={firstNameField} variant="label-hidden"></lightning-output-field>
+                            </template>
+                            <template if:true={isEditingFirstName}>
+                                <lightning-input-field 
+                                    field-name={firstNameField} 
+                                    variant="label-hidden"
+                                    onblur={handleFieldBlur}
+                                    onkeydown={handleKeyDown}>
+                                </lightning-input-field>
+                            </template>
+                        </div>
+                    </div>
+                    <div class="field-item">
+                        <span class="field-label">Mobile</span>
+                        <div class="field-value-container" data-field="Mobile__c" onclick={handleFieldClick}>
+                            <template if:false={isEditingMobile}>
+                                <lightning-output-field field-name={mobileField} variant="label-hidden"></lightning-output-field>
+                            </template>
+                            <template if:true={isEditingMobile}>
+                                <lightning-input-field 
+                                    field-name={mobileField} 
+                                    variant="label-hidden"
+                                    onblur={handleFieldBlur}
+                                    onkeydown={handleKeyDown}>
+                                </lightning-input-field>
+                            </template>
+                        </div>
+                    </div>
+
+                    <!-- Row 4: Nickname and Personal Email -->
+                    <div class="field-item">
+                        <span class="field-label">Nickname</span>
+                        <div class="field-value-container" data-field="Nickname__c" onclick={handleFieldClick}>
+                            <template if:false={isEditingNickname}>
+                                <lightning-output-field field-name={nicknameField} variant="label-hidden"></lightning-output-field>
+                            </template>
+                            <template if:true={isEditingNickname}>
+                                <lightning-input-field 
+                                    field-name={nicknameField} 
+                                    variant="label-hidden"
+                                    onblur={handleFieldBlur}
+                                    onkeydown={handleKeyDown}>
+                                </lightning-input-field>
+                            </template>
+                        </div>
+                    </div>
+                    <div class="field-item">
+                        <span class="field-label">Personal Email</span>
+                        <div class="field-value-container" data-field="personal_email__c" onclick={handleFieldClick}>
+                            <template if:false={isEditingPersonalEmail}>
+                                <lightning-output-field field-name={personalEmailField} variant="label-hidden"></lightning-output-field>
+                            </template>
+                            <template if:true={isEditingPersonalEmail}>
+                                <lightning-input-field 
+                                    field-name={personalEmailField} 
+                                    variant="label-hidden"
+                                    onblur={handleFieldBlur}
+                                    onkeydown={handleKeyDown}>
+                                </lightning-input-field>
+                            </template>
+                        </div>
+                    </div>
+
+                    <!-- Row 5: Middle Name and Highest Level -->
+                    <div class="field-item">
+                        <span class="field-label">Middle Name</span>
+                        <div class="field-value-container" data-field="Middle_Name_or_Initial__c" onclick={handleFieldClick}>
+                            <template if:false={isEditingMiddleName}>
+                                <lightning-output-field field-name={middleNameField} variant="label-hidden"></lightning-output-field>
+                            </template>
+                            <template if:true={isEditingMiddleName}>
+                                <lightning-input-field 
+                                    field-name={middleNameField} 
+                                    variant="label-hidden"
+                                    onblur={handleFieldBlur}
+                                    onkeydown={handleKeyDown}>
+                                </lightning-input-field>
+                            </template>
+                        </div>
+                    </div>
+                    <div class="field-item">
+                        <span class="field-label">Highest Level</span>
+                        <div class="field-value-container" data-field="Highest_Level_Achieved__c" onclick={handleFieldClick}>
+                            <template if:false={isEditingHighestLevel}>
+                                <lightning-output-field field-name={highestLevelField} variant="label-hidden"></lightning-output-field>
+                            </template>
+                            <template if:true={isEditingHighestLevel}>
+                                <lightning-input-field 
+                                    field-name={highestLevelField} 
+                                    variant="label-hidden"
+                                    onblur={handleFieldBlur}
+                                    onkeydown={handleKeyDown}>
+                                </lightning-input-field>
+                            </template>
+                        </div>
+                    </div>
+
+                    <!-- Row 6: Last Name and MDE200 -->
+                    <div class="field-item">
+                        <span class="field-label">Last Name</span>
+                        <div class="field-value-container" data-field="Last_Name__c" onclick={handleFieldClick}>
+                            <template if:false={isEditingLastName}>
+                                <lightning-output-field field-name={lastNameField} variant="label-hidden"></lightning-output-field>
+                            </template>
+                            <template if:true={isEditingLastName}>
+                                <lightning-input-field 
+                                    field-name={lastNameField} 
+                                    variant="label-hidden"
+                                    onblur={handleFieldBlur}
+                                    onkeydown={handleKeyDown}>
+                                </lightning-input-field>
+                            </template>
+                        </div>
+                    </div>
+                    <div class="field-item">
+                        <span class="field-label">MDE200</span>
+                        <div class="field-value-container" data-field="MDE200__c" onclick={handleFieldClick}>
+                            <template if:false={isEditingMDE200}>
+                                <lightning-output-field field-name={mde200Field} variant="label-hidden"></lightning-output-field>
+                            </template>
+                            <template if:true={isEditingMDE200}>
+                                <lightning-input-field 
+                                    field-name={mde200Field} 
+                                    variant="label-hidden"
+                                    onblur={handleFieldBlur}
+                                    onkeydown={handleKeyDown}>
+                                </lightning-input-field>
+                            </template>
+                        </div>
+                    </div>
+
+                    <!-- Row 7: Agency and MS-10 -->
+                    <div class="field-item">
+                        <span class="field-label">Agency</span>
+                        <div class="field-value-container" data-field="Agency__c" onclick={handleFieldClick}>
+                            <template if:false={isEditingAgency}>
+                                <lightning-output-field field-name={agencyField} variant="label-hidden"></lightning-output-field>
+                            </template>
+                            <template if:true={isEditingAgency}>
+                                <lightning-input-field 
+                                    field-name={agencyField} 
+                                    variant="label-hidden"
+                                    onblur={handleFieldBlur}
+                                    onkeydown={handleKeyDown}>
+                                </lightning-input-field>
+                            </template>
+                        </div>
+                    </div>
+                    <div class="field-item">
+                        <span class="field-label">MS-10</span>
+                        <div class="field-value-container" data-field="MS_10__c" onclick={handleFieldClick}>
+                            <template if:false={isEditingMS10}>
+                                <lightning-output-field field-name={ms10Field} variant="label-hidden"></lightning-output-field>
+                            </template>
+                            <template if:true={isEditingMS10}>
+                                <lightning-input-field 
+                                    field-name={ms10Field} 
+                                    variant="label-hidden"
+                                    onblur={handleFieldBlur}
+                                    onkeydown={handleKeyDown}>
+                                </lightning-input-field>
+                            </template>
+                        </div>
+                    </div>
+
+                    <!-- Row 8: Status and Career Presentation -->
+                    <div class="field-item">
+                        <span class="field-label">Status</span>
+                        <div class="field-value-container" data-field="Status__c" onclick={handleFieldClick}>
+                            <template if:false={isEditingStatus}>
+                                <lightning-output-field field-name={statusField} variant="label-hidden"></lightning-output-field>
+                            </template>
+                            <template if:true={isEditingStatus}>
+                                <lightning-input-field 
+                                    field-name={statusField} 
+                                    variant="label-hidden"
+                                    onblur={handleFieldBlur}
+                                    onkeydown={handleKeyDown}>
+                                </lightning-input-field>
+                            </template>
+                        </div>
+                    </div>
+                    <div class="field-item">
+                        <span class="field-label">Career Presentation</span>
+                        <div class="field-value-container" data-field="Career_Presentation_ppt__c" onclick={handleFieldClick}>
+                            <template if:false={isEditingCareerPresentation}>
+                                <lightning-output-field field-name={careerPresentationField} variant="label-hidden"></lightning-output-field>
+                            </template>
+                            <template if:true={isEditingCareerPresentation}>
+                                <lightning-input-field 
+                                    field-name={careerPresentationField} 
+                                    variant="label-hidden"
+                                    onblur={handleFieldBlur}
+                                    onkeydown={handleKeyDown}>
+                                </lightning-input-field>
+                            </template>
+                        </div>
+                    </div>
+
+                    <!-- Row 9: Target Market and Next Step -->
+                    <div class="field-item">
+                        <span class="field-label">Target Market</span>
+                        <div class="field-value-container" data-field="Target_Market__c" onclick={handleFieldClick}>
+                            <template if:false={isEditingTargetMarket}>
+                                <lightning-output-field field-name={targetMarketField} variant="label-hidden"></lightning-output-field>
+                            </template>
+                            <template if:true={isEditingTargetMarket}>
+                                <lightning-input-field 
+                                    field-name={targetMarketField} 
+                                    variant="label-hidden"
+                                    onblur={handleFieldBlur}
+                                    onkeydown={handleKeyDown}>
+                                </lightning-input-field>
+                            </template>
+                        </div>
+                    </div>
+                    <div class="field-item">
+                        <span class="field-label">Next Step</span>
+                        <div class="field-value-container" data-field="Next_Step__c" onclick={handleFieldClick}>
+                            <template if:false={isEditingNextStep}>
+                                <lightning-output-field field-name={nextStepField} variant="label-hidden"></lightning-output-field>
+                            </template>
+                            <template if:true={isEditingNextStep}>
+                                <lightning-input-field 
+                                    field-name={nextStepField} 
+                                    variant="label-hidden"
+                                    onblur={handleFieldBlur}
+                                    onkeydown={handleKeyDown}>
+                                </lightning-input-field>
+                            </template>
+                        </div>
+                    </div>
+
+                    <!-- Row 10: Sales Manager and Next Meeting -->
+                    <div class="field-item">
+                        <span class="field-label">Sales Manager</span>
+                        <div class="field-value-container" data-field="Sales_Manager__c" onclick={handleFieldClick}>
+                            <template if:false={isEditingSalesManager}>
+                                <lightning-output-field field-name={salesManagerField} variant="label-hidden"></lightning-output-field>
+                            </template>
+                            <template if:true={isEditingSalesManager}>
+                                <lightning-input-field 
+                                    field-name={salesManagerField} 
+                                    variant="label-hidden"
+                                    onblur={handleFieldBlur}
+                                    onkeydown={handleKeyDown}>
+                                </lightning-input-field>
+                            </template>
+                        </div>
+                    </div>
+                    <div class="field-item">
+                        <span class="field-label">Next Meeting</span>
+                        <div class="field-value-container" data-field="Next_Meeting_Date__c" onclick={handleFieldClick}>
+                            <template if:false={isEditingNextMeetingDate}>
+                                <lightning-output-field field-name={nextMeetingDateField} variant="label-hidden"></lightning-output-field>
+                            </template>
+                            <template if:true={isEditingNextMeetingDate}>
+                                <lightning-input-field 
+                                    field-name={nextMeetingDateField} 
+                                    variant="label-hidden"
+                                    onblur={handleFieldBlur}
+                                    onkeydown={handleKeyDown}>
+                                </lightning-input-field>
+                            </template>
+                        </div>
+                    </div>
+
+                    <!-- Row 11: Recruiting Source and Studying Life/Health -->
+                    <div class="field-item">
+                        <span class="field-label">Recruiting Source</span>
+                        <div class="field-value-container" data-field="Recruiting_Source__c" onclick={handleFieldClick}>
+                            <template if:false={isEditingRecruitingSource}>
+                                <lightning-output-field field-name={recruitingSourceField} variant="label-hidden"></lightning-output-field>
+                            </template>
+                            <template if:true={isEditingRecruitingSource}>
+                                <lightning-input-field 
+                                    field-name={recruitingSourceField} 
+                                    variant="label-hidden"
+                                    onblur={handleFieldBlur}
+                                    onkeydown={handleKeyDown}>
+                                </lightning-input-field>
+                            </template>
+                        </div>
+                    </div>
+                    <div class="field-item">
+                        <span class="field-label">Studying Life/Health</span>
+                        <div class="field-value-container" data-field="Studying_for_Life_Health__c" onclick={handleFieldClick}>
+                            <template if:false={isEditingStudyingLifeHealth}>
+                                <lightning-output-field field-name={studyingLifeHealthField} variant="label-inline"></lightning-output-field>
+                            </template>
+                            <template if:true={isEditingStudyingLifeHealth}>
+                                <lightning-input-field 
+                                    field-name={studyingLifeHealthField} 
+                                    variant="label-hidden"
+                                    onblur={handleFieldBlur}
+                                    onkeydown={handleKeyDown}>
+                                </lightning-input-field>
+                            </template>
+                        </div>
+                    </div>
+
+                    <!-- Row 12: Recruiting Sub-Source and Registered -->
+                    <div class="field-item">
+                        <span class="field-label">Recruiting Sub-Source</span>
+                        <div class="field-value-container" data-field="Recruiting_Sub_Source__c" onclick={handleFieldClick}>
+                            <template if:false={isEditingRecruitingSubSource}>
+                                <lightning-output-field field-name={recruitingSubSourceField} variant="label-hidden"></lightning-output-field>
+                            </template>
+                            <template if:true={isEditingRecruitingSubSource}>
+                                <lightning-input-field 
+                                    field-name={recruitingSubSourceField} 
+                                    variant="label-hidden"
+                                    onblur={handleFieldBlur}
+                                    onkeydown={handleKeyDown}>
+                                </lightning-input-field>
+                            </template>
+                        </div>
+                    </div>
+                    <div class="field-item">
+                        <span class="field-label">Registered</span>
+                        <div class="field-value-container" data-field="Registered__c" onclick={handleFieldClick}>
+                            <template if:false={isEditingRegistered}>
+                                <lightning-output-field field-name={registeredField} variant="label-inline"></lightning-output-field>
+                            </template>
+                            <template if:true={isEditingRegistered}>
+                                <lightning-input-field 
+                                    field-name={registeredField} 
+                                    variant="label-hidden"
+                                    onblur={handleFieldBlur}
+                                    onkeydown={handleKeyDown}>
+                                </lightning-input-field>
+                            </template>
+                        </div>
+                    </div>
+
+                    <!-- Row 13: Gender and Insurance Licensed -->
+                    <div class="field-item">
+                        <span class="field-label">Gender</span>
+                        <div class="field-value-container" data-field="Gender__c" onclick={handleFieldClick}>
+                            <template if:false={isEditingGender}>
+                                <lightning-output-field field-name={genderField} variant="label-hidden"></lightning-output-field>
+                            </template>
+                            <template if:true={isEditingGender}>
+                                <lightning-input-field 
+                                    field-name={genderField} 
+                                    variant="label-hidden"
+                                    onblur={handleFieldBlur}
+                                    onkeydown={handleKeyDown}>
+                                </lightning-input-field>
+                            </template>
+                        </div>
+                    </div>
+                    <div class="field-item">
+                        <span class="field-label">Insurance Licensed</span>
+                        <div class="field-value-container" data-field="Insurance_Licensed__c" onclick={handleFieldClick}>
+                            <template if:false={isEditingInsuranceLicensed}>
+                                <lightning-output-field field-name={insuranceLicensedField} variant="label-inline"></lightning-output-field>
+                            </template>
+                            <template if:true={isEditingInsuranceLicensed}>
+                                <lightning-input-field 
+                                    field-name={insuranceLicensedField} 
+                                    variant="label-hidden"
+                                    onblur={handleFieldBlur}
+                                    onkeydown={handleKeyDown}>
+                                </lightning-input-field>
+                            </template>
+                        </div>
+                    </div>
+
+                    <!-- Row 14: Recruiter and DOB -->
+                    <div class="field-item">
+                        <span class="field-label">Recruiter</span>
+                        <div class="field-value-container" data-field="RecruiterPicklist__c" onclick={handleFieldClick}>
+                            <template if:false={isEditingRecruiter}>
+                                <lightning-output-field field-name={recruiterField} variant="label-hidden"></lightning-output-field>
+                            </template>
+                            <template if:true={isEditingRecruiter}>
+                                <lightning-input-field 
+                                    field-name={recruiterField} 
+                                    variant="label-hidden"
+                                    onblur={handleFieldBlur}
+                                    onkeydown={handleKeyDown}>
+                                </lightning-input-field>
+                            </template>
+                        </div>
+                    </div>
+                    <div class="field-item">
+                        <span class="field-label">DOB</span>
+                        <div class="field-value-container" data-field="Date_of_Birth__c" onclick={handleFieldClick}>
+                            <template if:false={isEditingDateOfBirth}>
+                                <lightning-output-field field-name={dateOfBirthField} variant="label-hidden"></lightning-output-field>
+                            </template>
+                            <template if:true={isEditingDateOfBirth}>
+                                <lightning-input-field 
+                                    field-name={dateOfBirthField} 
+                                    variant="label-hidden"
+                                    onblur={handleFieldBlur}
+                                    onkeydown={handleKeyDown}>
+                                </lightning-input-field>
+                            </template>
+                        </div>
+                    </div>
+
+                    <!-- Row 15: Office Location and Relationships -->
+                    <div class="field-item">
+                        <span class="field-label">Office Location</span>
+                        <div class="field-value-container" data-field="Office_Location_Picklist__c" onclick={handleFieldClick}>
+                            <template if:false={isEditingOfficeLocation}>
+                                <lightning-output-field field-name={officeLocationField} variant="label-hidden"></lightning-output-field>
+                            </template>
+                            <template if:true={isEditingOfficeLocation}>
+                                <lightning-input-field 
+                                    field-name={officeLocationField} 
+                                    variant="label-hidden"
+                                    onblur={handleFieldBlur}
+                                    onkeydown={handleKeyDown}>
+                                </lightning-input-field>
+                            </template>
+                        </div>
+                    </div>
+                    <div class="field-item">
+                        <span class="field-label">Relationships</span>
+                        <div class="field-value-container" data-field="RELATIONSHIPS__c" onclick={handleFieldClick}>
+                            <template if:false={isEditingRelationships}>
+                                <lightning-output-field field-name={relationshipsField} variant="label-hidden"></lightning-output-field>
+                            </template>
+                            <template if:true={isEditingRelationships}>
+                                <lightning-input-field 
+                                    field-name={relationshipsField} 
+                                    variant="label-hidden"
+                                    onblur={handleFieldBlur}
+                                    onkeydown={handleKeyDown}>
+                                </lightning-input-field>
+                            </template>
+                        </div>
+                    </div>
+
+                    <!-- Row 16: Website and Suffix -->
+                    <div class="field-item">
+                        <span class="field-label">Website</span>
+                        <div class="field-value-container" data-field="Website__c" onclick={handleFieldClick}>
+                            <template if:false={isEditingWebsite}>
+                                <lightning-output-field field-name={websiteField} variant="label-hidden"></lightning-output-field>
+                            </template>
+                            <template if:true={isEditingWebsite}>
+                                <lightning-input-field 
+                                    field-name={websiteField} 
+                                    variant="label-hidden"
+                                    onblur={handleFieldBlur}
+                                    onkeydown={handleKeyDown}>
+                                </lightning-input-field>
+                            </template>
+                        </div>
+                    </div>
+                    <div class="field-item">
+                        <span class="field-label">Suffix</span>
+                        <div class="field-value-container" data-field="Suffix__c" onclick={handleFieldClick}>
+                            <template if:false={isEditingSuffix}>
+                                <lightning-output-field field-name={suffixField} variant="label-hidden"></lightning-output-field>
+                            </template>
+                            <template if:true={isEditingSuffix}>
+                                <lightning-input-field 
+                                    field-name={suffixField} 
+                                    variant="label-hidden"
+                                    onblur={handleFieldBlur}
+                                    onkeydown={handleKeyDown}>
+                                </lightning-input-field>
+                            </template>
+                        </div>
+                    </div>
+
+                    <!-- Row 17: Device Inspection and Device Inspection Status -->
+                    <div class="field-item">
+                        <span class="field-label">Device Inspection</span>
+                        <div class="field-value-container" data-field="Device_Inspection__c" onclick={handleFieldClick}>
+                            <template if:false={isEditingDeviceInspection}>
+                                <lightning-output-field field-name={deviceInspectionField} variant="label-hidden"></lightning-output-field>
+                            </template>
+                            <template if:true={isEditingDeviceInspection}>
+                                <lightning-input-field 
+                                    field-name={deviceInspectionField} 
+                                    variant="label-hidden"
+                                    onblur={handleFieldBlur}
+                                    onkeydown={handleKeyDown}>
+                                </lightning-input-field>
+                            </template>
+                        </div>
+                    </div>
+                    <div class="field-item">
+                        <span class="field-label">Device Inspection Status</span>
+                        <div class="field-value-container" data-field="Device_Inspection_Status__c" onclick={handleFieldClick}>
+                            <template if:false={isEditingDeviceInspectionStatus}>
+                                <lightning-output-field field-name={deviceInspectionStatusField} variant="label-hidden"></lightning-output-field>
+                            </template>
+                            <template if:true={isEditingDeviceInspectionStatus}>
+                                <lightning-input-field 
+                                    field-name={deviceInspectionStatusField} 
+                                    variant="label-hidden"
+                                    onblur={handleFieldBlur}
+                                    onkeydown={handleKeyDown}>
+                                </lightning-input-field>
+                            </template>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- All Fields Section (when toggled) -->
+                <template if:true={showAllFields}>
+                    <div class="all-fields-section">
+                        <h3 class="section-title">All Editable Fields</h3>
+                        <div class="field-grid">
+                            <template for:each={displayedFields} for:item="fieldName">
+                                <div key={fieldName} class="field-item">
+                                    <lightning-input-field 
+                                        field-name={fieldName}
+                                        variant="label-stacked">
+                                    </lightning-input-field>
+                                </div>
+                            </template>
+                        </div>
+                    </div>
+                </template>
+            </lightning-record-edit-form>
+        </div>
+    </div>
+</template>

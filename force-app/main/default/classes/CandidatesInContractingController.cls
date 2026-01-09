@@ -207,6 +207,173 @@ public with sharing class CandidatesInContractingController {
         }
     }
     
+    /**
+     * Returns ALC data filtered for Sales Managers - Career record type only
+     * @param salesManagerFilter - Sales Manager name or "All Sales Managers"
+     * @return ALCDataResponse with filtered Career record type ALCs
+     */
+    @AuraEnabled(cacheable=true)
+    public static ALCDataResponse getALCDataForSalesManager(String salesManagerFilter) {
+        ALCDataResponse response = new ALCDataResponse();
+        response.alcsByStage = new Map<String, List<CandidateWrapper>>();
+        response.stageConfigs = getStageConfiguration();
+        response.recordTypeCounts = new Map<String, Integer>{
+            'Career' => 0
+        };
+        
+        try {
+            // Default to current user if not specified
+            if (String.isBlank(salesManagerFilter)) {
+                salesManagerFilter = getCurrentUserSalesManagerName();
+            }
+            
+            // Get valid stages for Career record type only
+            Set<String> validStages = new Set<String>();
+            if (response.stageConfigs.containsKey('Career')) {
+                for (StageConfig config : response.stageConfigs.get('Career')) {
+                    validStages.add(config.stageApiValue);
+                }
+            }
+            
+            // Build query - hard-coded to Career record type
+            String query = 'SELECT Id, Name, Stage__c, Candidate__c, Candidate__r.Name, Candidate__r.Sales_Manager__c, ' +
+                          'Contract_Type__c, LastModifiedDate, ' +
+                          'RecordType.DeveloperName, RecordType.Name, Agency__c ' +
+                          'FROM ALC__c ' +
+                          'WHERE RecordType.DeveloperName = \'Career\' ' +
+                          'AND Stage__c IN :validStages ';
+            
+            // Add Sales Manager filter unless viewing all
+            if (salesManagerFilter != 'All Sales Managers' && salesManagerFilter != 'All') {
+                query += 'AND Candidate__r.Sales_Manager__c = :salesManagerFilter ';
+            }
+            
+            query += 'ORDER BY LastModifiedDate DESC';
+            
+            List<ALC__c> alcRecords = Database.query(query);
+            
+            for (ALC__c alc : alcRecords) {
+                // Initialize stage list if needed
+                if (!response.alcsByStage.containsKey(alc.Stage__c)) {
+                    response.alcsByStage.put(alc.Stage__c, new List<CandidateWrapper>());
+                }
+                
+                // Create wrapper for each ALC record
+                CandidateWrapper wrapper = new CandidateWrapper();
+                wrapper.alcId = alc.Id;
+                wrapper.alcName = alc.Name;
+                wrapper.candidateId = alc.Candidate__c;
+                wrapper.candidateName = alc.Candidate__r.Name;
+                wrapper.salesManager = alc.Candidate__r.Sales_Manager__c;
+                wrapper.alcStage = alc.Stage__c;
+                wrapper.lastStageChange = alc.LastModifiedDate;
+                wrapper.recordTypeName = alc.RecordType.DeveloperName;
+                wrapper.agency = alc.Agency__c;
+                
+                response.alcsByStage.get(alc.Stage__c).add(wrapper);
+                
+                // Update Career count
+                Integer currentCount = response.recordTypeCounts.get('Career');
+                response.recordTypeCounts.put('Career', currentCount + 1);
+            }
+        } catch (Exception e) {
+            throw new AuraHandledException('Error retrieving Sales Manager ALC data: ' + e.getMessage());
+        }
+        
+        return response;
+    }
+    
+    /**
+     * Returns the current user's name for Sales Manager filtering
+     * @return Current user's full name
+     */
+    @AuraEnabled(cacheable=true)
+    public static String getCurrentUserSalesManagerName() {
+        return UserInfo.getName();
+    }
+    
+    /**
+     * Returns list of distinct Sales Manager values for dropdown
+     * @return List of Sales Manager names with "All Sales Managers" first
+     */
+    @AuraEnabled(cacheable=true)
+    public static List<String> getSalesManagerOptions() {
+        List<String> options = new List<String>();
+        options.add('All Sales Managers');
+        
+        try {
+            // Query distinct Sales Managers from Candidates with Career ALC records
+            for (AggregateResult ar : [
+                SELECT Candidate__r.Sales_Manager__c
+                FROM ALC__c
+                WHERE RecordType.DeveloperName = 'Career'
+                AND Candidate__r.Sales_Manager__c != null
+                GROUP BY Candidate__r.Sales_Manager__c
+                ORDER BY Candidate__r.Sales_Manager__c
+            ]) {
+                String salesManager = (String)ar.get('Sales_Manager__c');
+                if (String.isNotBlank(salesManager)) {
+                    options.add(salesManager);
+                }
+            }
+        } catch (Exception e) {
+            throw new AuraHandledException('Error retrieving Sales Manager options: ' + e.getMessage());
+        }
+        
+        return options;
+    }
+    
+    /**
+     * Determines if current user can view all Sales Managers (Director/Admin)
+     * @return true if user profile or role contains 'Director' or 'System Administrator'
+     */
+    @AuraEnabled(cacheable=true)
+    public static Boolean canViewAllSalesManagers() {
+        try {
+            // Get current user's profile and role information
+            Id profileId = UserInfo.getProfileId();
+            Id userId = UserInfo.getUserId();
+            
+            // Query Profile directly
+            Profile userProfile = [
+                SELECT Name 
+                FROM Profile 
+                WHERE Id = :profileId 
+                LIMIT 1
+            ];
+            
+            String profileName = userProfile.Name;
+            
+            // Check profile first
+            if (profileName.contains('Director') || 
+                profileName.contains('System Administrator') ||
+                profileName.contains('Admin')) {
+                return true;
+            }
+            
+            // Also check UserRole for Directors (e.g., "Recruiting Director")
+            User currentUser = [
+                SELECT UserRole.Name 
+                FROM User 
+                WHERE Id = :userId 
+                LIMIT 1
+            ];
+            
+            if (currentUser.UserRole != null && currentUser.UserRole.Name != null) {
+                String roleName = currentUser.UserRole.Name;
+                if (roleName.contains('Director')) {
+                    return true;
+                }
+            }
+            
+            return false;
+        } catch (Exception e) {
+            System.debug('Error in canViewAllSalesManagers: ' + e.getMessage());
+            // Default to false if there's any error
+            return false;
+        }
+    }
+    
     // ========== Inner Classes ==========
     
     public class CandidateWrapper {

@@ -129,43 +129,6 @@
 
                     </div>
                 </div>
-
-                <!-- Manager Comparison Chart -->
-                <div class="slds-card__body slds-card__body_inner">
-                    <div class="chart-container">
-                        <h3 class="slds-text-heading_small slds-m-bottom_medium">Manager Comparison</h3>
-                        
-                        <!-- Chart Metric Selector -->
-                        <lightning-button-group class="slds-m-bottom_medium">
-                            <lightning-button 
-                                label="Total Candidates" 
-                                onclick={handleChartMetricTotalCandidates}
-                                variant={isChartTotalCandidates}>
-                            </lightning-button>
-                            <lightning-button 
-                                label="Active Pipeline" 
-                                onclick={handleChartMetricActivePipeline}
-                                variant={isChartActivePipeline}>
-                            </lightning-button>
-                        </lightning-button-group>
-
-                        <!-- Chart -->
-                        <template if:true={chartData}>
-                            <div class="custom-chart">
-                                <template for:each={chartData} for:item="item">
-                                    <div key={item.label} class="chart-bar-container">
-                                        <div class="chart-label">{item.label}</div>
-                                        <div class="chart-bar-wrapper">
-                                            <div class="chart-bar" style={item.barStyle}>
-                                                <span class="chart-value">{item.value}</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </template>
-                            </div>
-                        </template>
-                    </div>
-                </div>
             </template>
 
         <!-- Drill-Down Modal -->
@@ -200,6 +163,7 @@
                                     key-field="id"
                                     data={drillDownData}
                                     columns={drillDownColumns}
+                                    onrowaction={handleRowAction}
                                     hide-checkbox-column
                                     show-row-number-column>
                                 </lightning-datatable>

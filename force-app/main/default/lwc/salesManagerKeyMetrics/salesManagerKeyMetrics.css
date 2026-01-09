@@ -1,56 +1,122 @@
-/* Summary Card Styles - Based on contractBPipelineDashboard pattern */
+/* Capstone Brand Colors */
+:host {
+    --capstone-navy-primary: #202A44;
+    --capstone-blue-accent: #193F74;
+    --capstone-coral: #FF544D;
+    --capstone-neutral-lightest: #F3F0E8;
+    --capstone-neutral-light: #E6E4E0;
+    --capstone-tan: #DCB482;
+    --capstone-taupe: #8F837A;
+    --capstone-tan-medium: #BB9F88;
+    --capstone-gray-dark: #5E5E5E;
+    
+    /* Shadow colors with opacity */
+    --shadow-navy: rgba(32, 42, 68, 0.15);
+    --shadow-navy-hover: rgba(32, 42, 68, 0.25);
+    --shadow-coral: rgba(255, 84, 77, 0.2);
+    --shadow-tan: rgba(220, 180, 130, 0.1);
+}
 
+/* Metrics Grid - Matching Recruiting Director Dashboard */
+.metrics-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+
+/* Summary Card Styles - Matching Recruiting Director Dashboard */
 .summary-card {
     border-radius: 8px;
-    padding: 1rem;
-    text-align: center;
+    padding: 1.5rem;
     color: white;
     cursor: pointer;
     transition: transform 0.2s ease, box-shadow 0.2s ease;
+    box-shadow: 0 2px 4px var(--shadow-navy), inset 0 1px 2px var(--shadow-tan);
 }
 
 .summary-card:hover {
-    transform: scale(1.02);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    transform: translateY(-4px);
+    box-shadow: 0 8px 16px var(--shadow-navy-hover), 0 4px 8px var(--shadow-coral);
 }
 
-.summary-value {
-    font-size: 2rem;
-    font-weight: bold;
-    margin-bottom: 0.25rem;
-}
-
-.summary-label {
-    font-size: 0.75rem;
+.summary-header {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+    font-size: 0.875rem;
     opacity: 0.9;
+}
+
+.summary-title {
+    font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 0.5px;
 }
 
-/* Color Variants - Matching contractBPipelineDashboard gradients */
+.summary-value {
+    font-size: 2.5rem;
+    font-weight: 700;
+    line-height: 1;
+    margin-bottom: 0.5rem;
+}
 
+.summary-footer {
+    font-size: 0.75rem;
+    opacity: 0.8;
+    margin-top: 0.5rem;
+}
+
+.summary-label {
+    font-size: 0.75rem;
+    opacity: 0.8;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+/* Color Variants - Capstone Navy/Blue Branding - Vertical Gradients */
+
+/* Card 1: Total Candidates - Navy to Blue (vertical gradient) */
 .summary-total {
-    background: linear-gradient(135deg, #0176d3, #032d60);
+    background: linear-gradient(180deg, var(--capstone-navy-primary) 0%, var(--capstone-blue-accent) 100%);
+    color: white;
 }
 
+/* Card 2: Upcoming Interviews - Blue to Navy (vertical gradient) */
 .summary-warning {
-    background: linear-gradient(135deg, #f39c12, #b37209);
+    background: linear-gradient(180deg, var(--capstone-blue-accent) 0%, var(--capstone-navy-primary) 100%);
+    color: white;
 }
 
+/* Card 3: Active Pipeline - Navy to Blue (vertical gradient) */
 .summary-info {
-    background: linear-gradient(135deg, #06a59a, #014d48);
+    background: linear-gradient(180deg, var(--capstone-navy-primary) 0%, var(--capstone-blue-accent) 100%);
+    color: white;
 }
 
+/* Card 4: On Contract B - Blue to Navy (vertical gradient) */
 .summary-purple {
-    background: linear-gradient(135deg, #9b59b6, #6c3483);
+    background: linear-gradient(180deg, var(--capstone-blue-accent) 0%, var(--capstone-navy-primary) 100%);
+    color: white;
 }
 
+/* Card 5: On Contract A - Navy to Blue (vertical gradient) */
 .summary-success {
-    background: linear-gradient(135deg, #2e844a, #194e2e);
+    background: linear-gradient(180deg, var(--capstone-navy-primary) 0%, var(--capstone-blue-accent) 100%);
+    color: white;
 }
 
+/* Card 6: Hired This Month - Blue to Navy (vertical gradient) */
 .summary-rate {
-    background: linear-gradient(135deg, #0176d3, #9b59b6);
+    background: linear-gradient(180deg, var(--capstone-blue-accent) 0%, var(--capstone-navy-primary) 100%);
+    color: white;
+}
+
+/* Card 7: Completed Interviews - Navy to Blue (vertical gradient) */
+.summary-extra {
+    background: linear-gradient(180deg, var(--capstone-navy-primary) 0%, var(--capstone-blue-accent) 100%);
+    color: white;
 }
 
 /* Definitions Table Styles */
@@ -112,20 +178,13 @@
 }
 
 /* Responsive Design */
-
-@media (max-width: 1023px) {
-    .summary-card {
-        margin-bottom: 1rem;
-    }
-}
-
-@media (max-width: 767px) {
-    .summary-value {
-        font-size: 1.75rem;
+@media (max-width: 768px) {
+    .metrics-grid {
+        grid-template-columns: 1fr;
     }
     
-    .summary-label {
-        font-size: 0.7rem;
+    .summary-value {
+        font-size: 2rem;
     }
     
     .definitions-table {

@@ -1,0 +1,121 @@
+<template>
+    <div class="interviews-container">
+        <div class="card-header">
+            <lightning-icon icon-name="standard:event" size="small"></lightning-icon>
+            <h2>Interview History ({interviewCount})</h2>
+            <div class="header-actions">
+                <span class="utility-bar-hint">All scheduled and completed interviews • Auto-refreshes when interviews change</span>
+                <lightning-button 
+                    icon-name="utility:new" 
+                    variant="brand" 
+                    label="Create Interview" 
+                    onclick={handleCreateInterview}
+                    class="create-btn">
+                </lightning-button>
+            </div>
+        </div>
+        <div class="card-body">
+            <template if:true={hasInterviews}>
+                <lightning-datatable
+                    key-field="Id"
+                    data={interviews}
+                    columns={columns}
+                    onrowaction={handleRowAction}
+                    hide-checkbox-column>
+                </lightning-datatable>
+            </template>
+            <template if:false={hasInterviews}>
+                <div class="empty-state">
+                    <lightning-icon icon-name="utility:event" size="small"></lightning-icon>
+                    <p><strong>No interviews scheduled yet.</strong></p>
+                    <p class="slds-text-body_small slds-m-top_small">
+                        Click "Create Interview" button above to schedule the first interview.
+                    </p>
+                </div>
+            </template>
+            <template if:true={error}>
+                <div class="error-message">
+                    <lightning-icon icon-name="utility:error" size="small"></lightning-icon>
+                    <p><strong>Error loading interviews</strong></p>
+                </div>
+            </template>
+        </div>
+    </div>
+
+    <!-- Create Interview Modal -->
+    <template if:true={showCreateInterviewModal}>
+        <section role="dialog" tabindex="-1" class="slds-modal slds-fade-in-open slds-modal_medium" aria-labelledby="create-interview-modal-heading">
+            <div class="slds-modal__container">
+                <header class="slds-modal__header">
+                    <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" title="Close" onclick={closeCreateInterviewModal}>
+                        <lightning-icon icon-name="utility:close" alternative-text="close" size="small"></lightning-icon>
+                        <span class="slds-assistive-text">Close</span>
+                    </button>
+                    <h2 id="create-interview-modal-heading" class="slds-modal__title slds-hyphenate">Create Interview</h2>
+                </header>
+                <div class="slds-modal__content slds-p-around_medium" id="create-interview-modal-content">
+                    <lightning-record-edit-form object-api-name="Interview__c" onsuccess={handleInterviewSuccess} onerror={handleInterviewError}>
+                        <lightning-messages></lightning-messages>
+                        
+                        <!-- Interview History Summary -->
+                        <template if:true={interviewSummary}>
+                            <template if:true={interviewSummary.hasCompletedInterviews}>
+                                <div class="slds-box slds-theme_info slds-m-bottom_small">
+                                    <p class="slds-text-body_small">
+                                        <lightning-icon icon-name="utility:info" size="x-small" class="slds-m-right_x-small"></lightning-icon>
+                                        <strong>Interview History:</strong> {interviewSummary.summaryText}
+                                    </p>
+                                </div>
+                            </template>
+                        </template>
+                        
+                        <div class="slds-grid slds-wrap slds-gutters">
+                            <div class="slds-col slds-size_1-of-1">
+                                <lightning-input-field field-name="Candidate__c" value={recordId} readonly></lightning-input-field>
+                            </div>
+                            <div class="slds-col slds-size_1-of-2">
+                                <lightning-input-field field-name="Interview_Type__c" value={suggestedInterviewType} required></lightning-input-field>
+                            </div>
+                            <div class="slds-col slds-size_1-of-2">
+                                <lightning-input-field field-name="Date_Time_Scheduled__c" required></lightning-input-field>
+                            </div>
+                            
+                            <!-- Interviewer Field with Toggle -->
+                            <div class="slds-col slds-size_1-of-1">
+                                <template if:false={showInterviewerField}>
+                                    <div class="slds-form-element">
+                                        <label class="slds-form-element__label">Interviewer</label>
+                                        <div class="slds-form-element__control">
+                                            <div class="slds-text-body_regular slds-p-vertical_x-small">
+                                                {currentUserName}
+                                                <lightning-button variant="base" label="Add Additional Interviewers" onclick={toggleInterviewerField} class="slds-m-left_small"></lightning-button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </template>
+                                <template if:true={showInterviewerField}>
+                                    <lightning-input-field field-name="Interviewer_s__c"></lightning-input-field>
+                                </template>
+                            </div>
+                            
+                            <div class="slds-col slds-size_1-of-2">
+                                <lightning-input-field field-name="Interview_Status__c"></lightning-input-field>
+                            </div>
+                            <div class="slds-col slds-size_1-of-2">
+                                <lightning-input-field field-name="Outcome__c"></lightning-input-field>
+                            </div>
+                            <div class="slds-col slds-size_1-of-1">
+                                <lightning-input-field field-name="Notes__c"></lightning-input-field>
+                            </div>
+                        </div>
+                        <div class="slds-modal__footer">
+                            <lightning-button variant="neutral" label="Cancel" onclick={closeCreateInterviewModal}></lightning-button>
+                            <lightning-button variant="brand" type="submit" label="Create Interview"></lightning-button>
+                        </div>
+                    </lightning-record-edit-form>
+                </div>
+            </div>
+        </section>
+        <div class="slds-backdrop slds-backdrop_open"></div>
+    </template>
+</template>

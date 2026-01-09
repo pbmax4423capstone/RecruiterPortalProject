@@ -6,6 +6,11 @@ import { subscribe, MessageContext } from 'lightning/messageService';
 import DARK_MODE_CHANNEL from '@salesforce/messageChannel/DarkModeChannel__c';
 import getKanbanData from '@salesforce/apex/CandidateKanbanController.getKanbanData';
 import updateCandidateStage from '@salesforce/apex/CandidateKanbanController.updateCandidateStage';
+import canViewAllCandidates from '@salesforce/apex/CandidateKanbanController.canViewAllCandidates';
+import getCurrentUserName from '@salesforce/apex/CandidateKanbanController.getCurrentUserName';
+import getSalesManagerOptions from '@salesforce/apex/CandidateKanbanController.getSalesManagerOptions';
+
+const STORAGE_KEY_SALES_MANAGER = 'candidateKanban_salesManagerFilter';
 
 export default class CandidateKanban extends NavigationMixin(LightningElement) {
     @wire(MessageContext)
@@ -20,9 +25,29 @@ export default class CandidateKanban extends NavigationMixin(LightningElement) {
     draggedCandidateId;
     draggedFromStage;
     subscription = null;
+    
+    // Sales Manager filtering
+    salesManagerFilters = [];
+    selectedSalesManager = 'All Sales Managers'; // Always default to this initially
+    currentUserName = '';
+    showSalesManagerDropdown = false;
+    _canViewAllLoaded = false;
+    _currentUserLoaded = false;
+    refreshInterval;
 
     connectedCallback() {
         this.subscribeToMessageChannel();
+        // Auto-refresh every 30 seconds
+        this.refreshInterval = setInterval(() => {
+            this.handleRefresh();
+        }, 30000);
+    }
+
+    disconnectedCallback() {
+        // Clear the interval when component is destroyed
+        if (this.refreshInterval) {
+            clearInterval(this.refreshInterval);
+        }
     }
 
     subscribeToMessageChannel() {
@@ -31,6 +56,56 @@ export default class CandidateKanban extends NavigationMixin(LightningElement) {
             DARK_MODE_CHANNEL,
             (message) => this.handleDarkModeChange(message)
         );
+    }
+
+    @wire(canViewAllCandidates)
+    wiredCanViewAll({ error, data }) {
+        if (data !== undefined) {
+            this.showSalesManagerDropdown = data;
+            this._canViewAllLoaded = true;
+            
+            // If they CAN view all, always default to "All Sales Managers" on load
+            if (data) {
+                this.selectedSalesManager = 'All Sales Managers';
+            }
+            // If they CANNOT view all, wait for currentUserName wire to set it
+        } else if (error) {
+            console.error('Error checking view permissions:', error);
+            this.showSalesManagerDropdown = false;
+            this._canViewAllLoaded = true;
+        }
+    }
+
+    @wire(getCurrentUserName)
+    wiredCurrentUser({ error, data }) {
+        if (data) {
+            this.currentUserName = data;
+            this._currentUserLoaded = true;
+            
+            // If user CANNOT view all managers, FORCE their name (ignore localStorage)
+            if (!this.showSalesManagerDropdown) {
+                this.selectedSalesManager = data;
+                localStorage.setItem(STORAGE_KEY_SALES_MANAGER, data);
+            }
+        } else if (error) {
+            console.error('Error getting current user:', error);
+            this._currentUserLoaded = true;
+        }
+    }
+
+    @wire(getSalesManagerOptions)
+    wiredSalesManagers({ error, data }) {
+        if (data) {
+            // Build Sales Manager filter buttons/options
+            this.salesManagerFilters = data.map(manager => ({
+                value: manager,
+                label: manager,
+                variant: manager === this.selectedSalesManager ? 'brand' : 'neutral',
+                title: `Filter by ${manager}`
+            }));
+        } else if (error) {
+            console.error('Error loading sales manager options:', error);
+        }
     }
 
     handleDarkModeChange(message) {
@@ -49,7 +124,7 @@ export default class CandidateKanban extends NavigationMixin(LightningElement) {
         return this.darkMode ? 'candidate-card dark-mode' : 'candidate-card';
     }
 
-    @wire(getKanbanData)
+    @wire(getKanbanData, { salesManagerFilter: '$selectedSalesManager' })
     wiredKanban(result) {
         this.wiredKanbanResult = result;
         const { data, error } = result;
@@ -191,5 +266,26 @@ export default class CandidateKanban extends NavigationMixin(LightningElement) {
         refreshApex(this.wiredKanbanResult).then(() => {
             this.isLoading = false;
         });
+    }
+
+    handleSalesManagerFilterChange(event) {
+        const manager = event.target.dataset.manager;
+        this.selectedSalesManager = manager;
+        localStorage.setItem(STORAGE_KEY_SALES_MANAGER, manager);
+        
+        // Update button variants
+        this.salesManagerFilters = this.salesManagerFilters.map(filter => ({
+            ...filter,
+            variant: filter.value === manager ? 'brand' : 'neutral'
+        }));
+        
+        this.isLoading = true;
+    }
+
+    get selectedSalesManagerLabel() {
+        if (!this.selectedSalesManager) {
+            return this._currentUserLoaded || this._canViewAllLoaded ? 'All Sales Managers' : 'Loading...';
+        }
+        return this.selectedSalesManager;
     }
 }

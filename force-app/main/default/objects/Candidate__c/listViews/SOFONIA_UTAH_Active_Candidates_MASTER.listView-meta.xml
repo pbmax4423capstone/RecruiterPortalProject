@@ -13,7 +13,7 @@
     <filters>
         <field>Sales_Manager__c</field>
         <operation>contains</operation>
-        <value>Brad Sofonia</value>
+        <value>Bradley Sofonia</value>
     </filters>
     <filters>
         <field>Office_Location_Picklist__c</field>

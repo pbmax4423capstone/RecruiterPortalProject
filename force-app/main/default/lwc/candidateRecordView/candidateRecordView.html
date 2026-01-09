@@ -28,15 +28,6 @@
                         <div class="action-buttons-row">
                             <div class="action-button-wrapper">
                                 <lightning-button 
-                                    label="Edit" 
-                                    variant="brand" 
-                                    icon-name="utility:edit"
-                                    onclick={handleEdit}
-                                    class="action-button">
-                                </lightning-button>
-                            </div>
-                            <div class="action-button-wrapper">
-                                <lightning-button 
                                     label="Create Interview" 
                                     variant="success" 
                                     icon-name="utility:event"
@@ -50,15 +41,6 @@
                                     variant="brand-outline" 
                                     icon-name="utility:contract"
                                     onclick={handleStartContracting}
-                                    class="action-button">
-                                </lightning-button>
-                            </div>
-                            <div class="action-button-wrapper">
-                                <lightning-button 
-                                    label="Delete" 
-                                    variant="destructive" 
-                                    icon-name="utility:delete"
-                                    onclick={handleDelete}
                                     class="action-button">
                                 </lightning-button>
                             </div>
@@ -93,7 +75,20 @@
                                 <div class="card-header">
                                     <lightning-icon icon-name="standard:account" size="small"></lightning-icon>
                                     <h2>Information</h2>
+                                    <lightning-button 
+                                        label={editModeLabel}
+                                        variant={editModeVariant}
+                                        icon-name={editModeIcon}
+                                        onclick={handleToggleEditMode}
+                                        class="edit-mode-toggle">
+                                    </lightning-button>
                                 </div>
+                                <!-- Edit Mode: Use candidateInformationEdit component -->
+                                <template if:true={isEditMode}>
+                                    <c-candidate-information-edit record-id={recordId}></c-candidate-information-edit>
+                                </template>
+                                <!-- View Mode: Display read-only fields -->
+                                <template if:false={isEditMode}>
                                 <div class="card-body">
                                     <div class="field-row">
                                         <div class="field-item">
@@ -111,10 +106,6 @@
                                         <div class="field-item">
                                             <span class="field-label">Candidate Name</span>
                                             <span class="field-value">{candidateName}</span>
-                                        </div>
-                                        <div class="field-item">
-                                            <span class="field-label">Owner</span>
-                                            <span class="field-value">{salesManager}</span>
                                         </div>
                                     </div>
                                     <div class="field-row">
@@ -268,115 +259,8 @@
                                         </div>
                                     </div>
                                 </div>
+                                </template>
                             </div>
-
-                            <!-- Notes Section -->
-                            <div class="info-card full-width-card">
-                                <div class="card-header">
-                                    <lightning-icon icon-name="standard:note" size="small"></lightning-icon>
-                                    <h2>Notes & Next Steps</h2>
-                                    <div class="header-note">
-                                        <span class="utility-bar-hint">Click Notes in the utility bar below to create notes • Auto-refreshes every 5s</span>
-                                        <lightning-button 
-                                            icon-name="utility:refresh" 
-                                            variant="brand-outline" 
-                                            label="Refresh Notes" 
-                                            onclick={handleRefreshNotes}
-                                            class="refresh-btn">
-                                        </lightning-button>
-                                    </div>
-                                </div>
-                                <div class="card-body">
-                                    <template if:true={hasNotes}>
-                                        <div class="notes-list">
-                                            <template for:each={notes} for:item="note">
-                                                <div key={note.Id} class="note-item">
-                                                    <div class="note-header">
-                                                        <h3 class="note-title">{note.Title}</h3>
-                                                        <span class="note-date">
-                                                            <lightning-formatted-date-time value={note.LastModifiedDate}></lightning-formatted-date-time>
-                                                        </span>
-                                                    </div>
-                                                    <div class="note-author">By {note.LastModifiedByName}</div>
-                                                    <div class="note-content">{note.TextPreview}</div>
-                                                </div>
-                                            </template>
-                                        </div>
-                                    </template>
-                                    <template if:false={hasNotes}>
-                                        <div class="empty-state">
-                                            <lightning-icon icon-name="utility:note" size="small"></lightning-icon>
-                                            <p><strong>No notes yet.</strong></p>
-                                            <div class="slds-text-body_small slds-m-top_small">
-                                                <p><strong>To add a note:</strong></p>
-                                                <ol class="slds-list_ordered slds-m-top_x-small slds-m-left_medium">
-                                                    <li>Click "Notes" in the utility bar below</li>
-                                                    <li>Create your note</li>
-                                                    <li>Click "Related" to attach it to this candidate</li>
-                                                    <li>Return here - notes auto-refresh every 5s</li>
-                                                </ol>
-                                            </div>
-                                        </div>
-                                    </template>
-                                </div>
-                            </div>
-
-                            <!-- Interview History Section -->
-                            <div class="info-card full-width-card">
-                                <div class="card-header">
-                                    <lightning-icon icon-name="standard:event" size="small"></lightning-icon>
-                                    <h2>Interview History</h2>
-                                    <div class="header-note">
-                                        <span class="utility-bar-hint">All scheduled and completed interviews • Auto-refreshes when interviews change</span>
-                                        <lightning-button 
-                                            icon-name="utility:refresh" 
-                                            variant="brand-outline" 
-                                            label="Refresh" 
-                                            onclick={handleRefreshInterviews}
-                                            class="refresh-btn">
-                                        </lightning-button>
-                                    </div>
-                                </div>
-                                <div class="card-body">
-                                    <template if:true={hasInterviews}>
-                                        <lightning-datatable
-                                            key-field="Id"
-                                            data={interviews}
-                                            columns={interviewColumns}
-                                            onrowaction={handleInterviewRowAction}
-                                            hide-checkbox-column
-                                            is-loading={isLoadingInterviews}>
-                                        </lightning-datatable>
-                                    </template>
-                                    <template if:false={hasInterviews}>
-                                        <div class="empty-state">
-                                            <lightning-icon icon-name="utility:event" size="small"></lightning-icon>
-                                            <p><strong>No interviews scheduled yet.</strong></p>
-                                            <p class="slds-text-body_small slds-m-top_small">
-                                                Click "Create Interview" above to schedule the first interview.
-                                            </p>
-                                        </div>
-                                    </template>
-                                </div>
-                            </div>
-
-                            <!-- Legacy Notes Section -->
-                            <template if:true={hasLegacyNotes}>
-                                <div class="info-card full-width-card">
-                                    <div class="card-header">
-                                        <lightning-icon icon-name="standard:file" size="small"></lightning-icon>
-                                        <h2>Legacy Notes</h2>
-                                        <div class="header-note">
-                                            <span class="utility-bar-hint">Historical notes with dates - migrating to new enhanced notes system</span>
-                                        </div>
-                                    </div>
-                                    <div class="card-body">
-                                        <div class="legacy-notes-content">
-                                            <lightning-formatted-text value={legacyNotes}></lightning-formatted-text>
-                                        </div>
-                                    </div>
-                                </div>
-                            </template>
                         </div>
                     </lightning-tab>
 

@@ -31,11 +31,6 @@
         <label>Son Le</label>
     </customValue>
     <customValue>
-        <fullName>Brad Sofonia</fullName>
-        <default>false</default>
-        <label>Brad Sofonia</label>
-    </customValue>
-    <customValue>
         <fullName>Bradley Sofonia</fullName>
         <default>false</default>
         <label>Bradley Sofonia</label>
@@ -50,6 +45,12 @@
         <default>false</default>
         <isActive>false</isActive>
         <label>Jonathan Gruber</label>
+    </customValue>
+    <customValue>
+        <fullName>Brad Sofonia</fullName>
+        <default>false</default>
+        <isActive>false</isActive>
+        <label>Brad Sofonia</label>
     </customValue>
     <customValue>
         <fullName>Scott Primm</fullName>

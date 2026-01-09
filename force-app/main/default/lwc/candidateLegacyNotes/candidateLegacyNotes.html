@@ -1,0 +1,49 @@
+<template>
+    <template if:true={isLoading}>
+        <div class="slds-spinner_container slds-is-relative" style="min-height: 100px;">
+            <lightning-spinner alternative-text="Loading..." size="small"></lightning-spinner>
+        </div>
+    </template>
+
+    <template if:false={isLoading}>
+        <template if:true={hasLegacyNotes}>
+            <div class="legacy-notes-container">
+                <div class="card-header">
+                    <lightning-icon icon-name="standard:file" size="small"></lightning-icon>
+                    <h2>Legacy Notes</h2>
+                    <div class="header-note">
+                        <span class="utility-bar-hint">Historical notes with dates - migrating to new enhanced notes system</span>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="legacy-notes-content">
+                        <lightning-formatted-text value={legacyNotes}></lightning-formatted-text>
+                    </div>
+                </div>
+            </div>
+        </template>
+
+        <template if:false={hasLegacyNotes}>
+            <div class="legacy-notes-container">
+                <div class="card-header">
+                    <lightning-icon icon-name="standard:file" size="small"></lightning-icon>
+                    <h2>Legacy Notes</h2>
+                </div>
+                <div class="card-body">
+                    <div class="empty-state">
+                        <lightning-icon icon-name="utility:file" size="small"></lightning-icon>
+                        <p class="slds-m-top_small"><strong>No legacy notes for this candidate.</strong></p>
+                        <p class="slds-text-body_small slds-m-top_x-small">This candidate has no historical notes from the legacy system.</p>
+                    </div>
+                </div>
+            </div>
+        </template>
+    </template>
+
+    <template if:true={hasError}>
+        <div class="error-message">
+            <lightning-icon icon-name="utility:error" size="small"></lightning-icon>
+            <p><strong>Error loading legacy notes</strong></p>
+        </div>
+    </template>
+</template>

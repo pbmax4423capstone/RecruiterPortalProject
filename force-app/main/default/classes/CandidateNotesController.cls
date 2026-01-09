@@ -1,4 +1,4 @@
-public with sharing class CandidateNotesController {
+public without sharing class CandidateNotesController {
     
     public class NoteWrapper {
         @AuraEnabled public String Id;
@@ -8,21 +8,26 @@ public with sharing class CandidateNotesController {
         @AuraEnabled public String LastModifiedByName;
     }
     
-    @AuraEnabled
+    @AuraEnabled(cacheable=true)
     public static List<NoteWrapper> getNotes(Id recordId) {
         List<NoteWrapper> notes = new List<NoteWrapper>();
         
-        System.debug('Getting notes for record: ' + recordId);
-        
-        // Query ContentDocumentLinks to find notes attached to this record
-        List<ContentDocumentLink> links = [
-            SELECT ContentDocumentId 
-            FROM ContentDocumentLink 
-            WHERE LinkedEntityId = :recordId
-            ORDER BY SystemModstamp DESC
-        ];
-        
-        System.debug('Found ' + links.size() + ' ContentDocumentLinks');
+        try {
+            System.debug('Getting notes for record: ' + recordId);
+            
+            if (recordId == null) {
+                return notes;
+            }
+            
+            // Query ContentDocumentLinks to find notes attached to this record
+            List<ContentDocumentLink> links = [
+                SELECT ContentDocumentId 
+                FROM ContentDocumentLink 
+                WHERE LinkedEntityId = :recordId
+                ORDER BY SystemModstamp DESC
+            ];
+            
+            System.debug('Found ' + links.size() + ' ContentDocumentLinks');
         
         if (!links.isEmpty()) {
             Set<Id> documentIds = new Set<Id>();
@@ -66,5 +71,9 @@ public with sharing class CandidateNotesController {
         }
         
         return notes;
+        } catch (Exception e) {
+            System.debug('Error in getNotes: ' + e.getMessage());
+            throw new AuraHandledException('Error loading notes: ' + e.getMessage());
+        }
     }
 }

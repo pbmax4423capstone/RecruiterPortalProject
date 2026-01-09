@@ -24,14 +24,23 @@ private class CandidatesInContractingControllerTest {
         insert contacts;
         
         // Create test candidates (20 for comprehensive testing) linked to Contacts
+        // Assign Sales Managers: Tim Denton (0-9), Elizabeth Kagele (10-14), Son Le (15-19)
         List<Candidate__c> candidates = new List<Candidate__c>();
         for (Integer i = 0; i < 20; i++) {
+            String salesManager = 'Tim Denton';
+            if (i >= 10 && i <= 14) {
+                salesManager = 'Elizabeth Kagele';
+            } else if (i >= 15) {
+                salesManager = 'Son Le';
+            }
+            
             candidates.add(new Candidate__c(
                 First_Name__c = 'Test',
                 Last_Name__c = 'Candidate' + i,
                 Email__c = 'contracting' + i + '@test.com',
                 Status__c = 'Active/In Process',
-                Contact__c = contacts[i].Id
+                Contact__c = contacts[i].Id,
+                Sales_Manager__c = salesManager
             ));
         }
         insert candidates;
@@ -80,7 +89,7 @@ private class CandidatesInContractingControllerTest {
             Agency__c = 'A157'
         ));
         
-        // A157 Agency - Career Record Type (5 records)
+        // A157 Agency - Career Record Type (5 records for Tim Denton)
         alcRecords.add(new ALC__c(
             Candidate__c = candidates[5].Id,
             Stage__c = 'Sent To Compliance',
@@ -116,6 +125,32 @@ private class CandidatesInContractingControllerTest {
         alcRecords.add(new ALC__c(
             Candidate__c = candidates[9].Id,
             Stage__c = 'Pending SM',
+            Contract_Type__c = null,
+            RecordTypeId = careerRTId,
+            Agency__c = 'A157'
+        ));
+        
+        // Add Career records for Elizabeth Kagele (candidates 10-12)
+        alcRecords.add(new ALC__c(
+            Candidate__c = candidates[10].Id,
+            Stage__c = 'Sent To Compliance',
+            Contract_Type__c = null,
+            RecordTypeId = careerRTId,
+            Agency__c = 'A157'
+        ));
+        
+        alcRecords.add(new ALC__c(
+            Candidate__c = candidates[11].Id,
+            Stage__c = 'Pending SM',
+            Contract_Type__c = null,
+            RecordTypeId = careerRTId,
+            Agency__c = 'A157'
+        ));
+        
+        // Add Career record for Son Le (candidate 15)
+        alcRecords.add(new ALC__c(
+            Candidate__c = candidates[15].Id,
+            Stage__c = 'In Background',
             Contract_Type__c = null,
             RecordTypeId = careerRTId,
             Agency__c = 'A157'
@@ -617,5 +652,169 @@ private class CandidatesInContractingControllerTest {
         System.assertNotEquals(null, wrapper.lastStageChange, 'Last stage change should be populated');
         System.assertNotEquals(null, wrapper.recordTypeName, 'Record type name should be populated');
         System.assertNotEquals(null, wrapper.agency, 'Agency should be populated');
+    }
+    
+    // ========== NEW SALES MANAGER FILTERING TESTS ==========
+    
+    @isTest
+    static void testGetALCDataForSalesManager_FilterBySpecificManager() {
+        Test.startTest();
+        CandidatesInContractingController.ALCDataResponse response = 
+            CandidatesInContractingController.getALCDataForSalesManager('Tim Denton');
+        Test.stopTest();
+        
+        System.assertNotEquals(null, response, 'Response should not be null');
+        System.assertNotEquals(null, response.alcsByStage, 'ALCs by stage should not be null');
+        
+        // Verify only Career records returned
+        Integer totalRecords = 0;
+        for (List<CandidatesInContractingController.CandidateWrapper> wrappers : response.alcsByStage.values()) {
+            for (CandidatesInContractingController.CandidateWrapper wrapper : wrappers) {
+                System.assertEquals('Career', wrapper.recordTypeName, 'Should only have Career records');
+                System.assertEquals('Tim Denton', wrapper.salesManager, 'Should only have Tim Denton candidates');
+                totalRecords++;
+            }
+        }
+        
+        // Tim Denton has Career candidates at indices 5-9 (5 total)
+        System.assert(totalRecords > 0, 'Should have at least some Career records for Tim Denton');
+        System.assertEquals(5, response.recordTypeCounts.get('Career'), 'Should count 5 Career records');
+    }
+    
+    @isTest
+    static void testGetALCDataForSalesManager_FilterByAllSalesManagers() {
+        Test.startTest();
+        CandidatesInContractingController.ALCDataResponse response = 
+            CandidatesInContractingController.getALCDataForSalesManager('All Sales Managers');
+        Test.stopTest();
+        
+        System.assertNotEquals(null, response, 'Response should not be null');
+        
+        // Should return all Career records regardless of Sales Manager
+        Integer totalRecords = 0;
+        Set<String> uniqueManagers = new Set<String>();
+        for (List<CandidatesInContractingController.CandidateWrapper> wrappers : response.alcsByStage.values()) {
+            for (CandidatesInContractingController.CandidateWrapper wrapper : wrappers) {
+                System.assertEquals('Career', wrapper.recordTypeName, 'Should only have Career records');
+                uniqueManagers.add(wrapper.salesManager);
+                totalRecords++;
+            }
+        }
+        
+        // Should have Career records from multiple managers
+        System.assert(uniqueManagers.size() > 1, 'Should have multiple sales managers');
+        System.assert(totalRecords >= 5, 'Should have all Career records');
+    }
+    
+    @isTest
+    static void testGetALCDataForSalesManager_DefaultToCurrentUser() {
+        Test.startTest();
+        // Call without parameter - should default to current user
+        CandidatesInContractingController.ALCDataResponse response = 
+            CandidatesInContractingController.getALCDataForSalesManager(null);
+        Test.stopTest();
+        
+        System.assertNotEquals(null, response, 'Response should not be null');
+        System.assertNotEquals(null, response.alcsByStage, 'ALCs by stage should not be null');
+        
+        // Verify only Career record type
+        for (List<CandidatesInContractingController.CandidateWrapper> wrappers : response.alcsByStage.values()) {
+            for (CandidatesInContractingController.CandidateWrapper wrapper : wrappers) {
+                System.assertEquals('Career', wrapper.recordTypeName, 'Should only have Career records');
+            }
+        }
+    }
+    
+    @isTest
+    static void testGetALCDataForSalesManager_OnlyCareerStages() {
+        Test.startTest();
+        CandidatesInContractingController.ALCDataResponse response = 
+            CandidatesInContractingController.getALCDataForSalesManager('All Sales Managers');
+        Test.stopTest();
+        
+        System.assertNotEquals(null, response.stageConfigs, 'Stage configs should not be null');
+        
+        // Verify only Career stages in response
+        for (String stage : response.alcsByStage.keySet()) {
+            List<CandidatesInContractingController.CandidateWrapper> wrappers = response.alcsByStage.get(stage);
+            for (CandidatesInContractingController.CandidateWrapper wrapper : wrappers) {
+                System.assertEquals('Career', wrapper.recordTypeName, 
+                    'All records should be Career type, found: ' + wrapper.recordTypeName);
+            }
+        }
+    }
+    
+    @isTest
+    static void testGetCurrentUserSalesManagerName() {
+        Test.startTest();
+        String currentUser = CandidatesInContractingController.getCurrentUserSalesManagerName();
+        Test.stopTest();
+        
+        System.assertNotEquals(null, currentUser, 'Current user name should not be null');
+        System.assert(currentUser.length() > 0, 'Current user name should not be empty');
+        System.assertEquals(UserInfo.getName(), currentUser, 'Should return current user full name');
+    }
+    
+    @isTest
+    static void testGetSalesManagerOptions() {
+        Test.startTest();
+        List<String> options = CandidatesInContractingController.getSalesManagerOptions();
+        Test.stopTest();
+        
+        System.assertNotEquals(null, options, 'Options should not be null');
+        System.assert(options.size() > 0, 'Should have at least one option');
+        System.assertEquals('All Sales Managers', options[0], 'First option should be All Sales Managers');
+        
+        // Should include the sales managers from test data
+        Set<String> optionSet = new Set<String>(options);
+        System.assert(optionSet.contains('Tim Denton'), 'Should include Tim Denton');
+    }
+    
+    @isTest
+    static void testCanViewAllSalesManagers_StandardUser() {
+        Test.startTest();
+        Boolean canView = CandidatesInContractingController.canViewAllSalesManagers();
+        Test.stopTest();
+        
+        // Result depends on running user's profile
+        System.assertNotEquals(null, canView, 'Result should not be null');
+        
+        // For standard test user (System Administrator), should be true
+        System.assertEquals(true, canView, 'System Admin should be able to view all');
+    }
+    
+    @isTest
+    static void testGetALCDataForSalesManager_NoRecords() {
+        Test.startTest();
+        // Query with a Sales Manager name that doesn't exist
+        CandidatesInContractingController.ALCDataResponse response = 
+            CandidatesInContractingController.getALCDataForSalesManager('Nonexistent Manager');
+        Test.stopTest();
+        
+        System.assertNotEquals(null, response, 'Response should not be null');
+        System.assertEquals(0, response.recordTypeCounts.get('Career'), 'Should have no records');
+    }
+    
+    @isTest
+    static void testGetALCDataForSalesManager_StageConfiguration() {
+        Test.startTest();
+        CandidatesInContractingController.ALCDataResponse response = 
+            CandidatesInContractingController.getALCDataForSalesManager('Tim Denton');
+        Test.stopTest();
+        
+        System.assertNotEquals(null, response.stageConfigs, 'Stage configs should not be null');
+        
+        // Should have Career stage configuration
+        System.assert(response.stageConfigs.containsKey('Career'), 'Should have Career stage config');
+        
+        // Verify stage configs are properly structured
+        List<CandidatesInContractingController.StageConfig> careerStages = 
+            response.stageConfigs.get('Career');
+        System.assert(careerStages.size() > 0, 'Should have Career stages defined');
+        
+        for (CandidatesInContractingController.StageConfig config : careerStages) {
+            System.assertNotEquals(null, config.stageApiValue, 'Stage API value should not be null');
+            System.assertNotEquals(null, config.stageDisplayLabel, 'Stage display label should not be null');
+        }
     }
 }

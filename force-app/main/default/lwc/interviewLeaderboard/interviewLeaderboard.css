@@ -20,15 +20,15 @@
 .summary-card:hover {
     cursor: pointer;
     transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    box-shadow: 0 4px 12px rgba(32, 42, 68, 0.25);
 }
 
 .summary-card-week {
-    background: linear-gradient(135deg, #4a5568 0%, #2d3748 100%);
+    background: linear-gradient(180deg, #202A44 0%, #193F74 100%);
 }
 
 .summary-card-month {
-    background: linear-gradient(135deg, #0891b2 0%, #0e7490 100%);
+    background: linear-gradient(180deg, #193F74 0%, #202A44 100%);
 }
 
 .summary-number {
@@ -56,27 +56,27 @@
 .category-card:hover {
     cursor: pointer;
     transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    box-shadow: 0 4px 12px rgba(32, 42, 68, 0.25);
 }
 
 .category-ci-first {
-    background: linear-gradient(135deg, #2563eb 0%, #1e40af 100%);
+    background: linear-gradient(180deg, #202A44 0%, #193F74 100%);
 }
 
 .category-align {
-    background: linear-gradient(135deg, #059669 0%, #047857 100%);
+    background: linear-gradient(180deg, #193F74 0%, #202A44 100%);
 }
 
 .category-plan {
-    background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
+    background: linear-gradient(180deg, #202A44 0%, #193F74 100%);
 }
 
 .category-present {
-    background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+    background: linear-gradient(180deg, #193F74 0%, #202A44 100%);
 }
 
 .category-optional {
-    background: linear-gradient(135deg, #9333ea 0%, #7e22ce 100%);
+    background: linear-gradient(180deg, #202A44 0%, #193F74 100%);
 }
 
 .category-number {
@@ -139,23 +139,23 @@
 }
 
 .badge-ci-first {
-    background: linear-gradient(135deg, #2563eb 0%, #1e40af 100%);
+    background: linear-gradient(180deg, #202A44 0%, #193F74 100%);
 }
 
 .badge-align {
-    background: linear-gradient(135deg, #059669 0%, #047857 100%);
+    background: linear-gradient(180deg, #193F74 0%, #202A44 100%);
 }
 
 .badge-plan {
-    background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
+    background: linear-gradient(180deg, #202A44 0%, #193F74 100%);
 }
 
 .badge-present {
-    background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+    background: linear-gradient(180deg, #193F74 0%, #202A44 100%);
 }
 
 .badge-optional {
-    background: linear-gradient(135deg, #9333ea 0%, #7e22ce 100%);
+    background: linear-gradient(180deg, #202A44 0%, #193F74 100%);
 }
 
 /* Weekly Interviews Modal */
@@ -166,7 +166,7 @@
 
 .weekly-interview-item {
     padding: 0.75rem;
-    border-left: 3px solid #0891b2;
+    border-left: 3px solid #193F74;
     background-color: #f9fafb;
 }
 
@@ -184,11 +184,11 @@
 }
 
 .leaderboard-container.dark-mode .summary-card-week {
-    background: linear-gradient(135deg, #2c4460 0%, #1a3a52 100%);
+    background: linear-gradient(180deg, #1a2332 0%, #12284a 100%);
 }
 
 .leaderboard-container.dark-mode .summary-card-month {
-    background: linear-gradient(135deg, #0d5770 0%, #0a4356 100%);
+    background: linear-gradient(180deg, #12284a 0%, #1a2332 100%);
 }
 
 .leaderboard-container.dark-mode .breakdown-section {
@@ -202,12 +202,12 @@
 
 .leaderboard-container.dark-mode .leader-row {
     background-color: #243649;
-    border-left-color: #5ea3f2;
+    border-left-color: #193F74;
 }
 
 .leaderboard-container.dark-mode .leader-row:hover {
     background-color: #2c4460;
-    box-shadow: 0 2px 4px rgba(94, 163, 242, 0.3);
+    box-shadow: 0 2px 4px rgba(25, 63, 116, 0.4);
 }
 
 .leaderboard-container.dark-mode .leader-name {
@@ -216,7 +216,7 @@
 
 .leaderboard-container.dark-mode .weekly-interview-item {
     background-color: #1a3a52;
-    border-left-color: #5ea3f2;
+    border-left-color: #193F74;
 }
 
 .leaderboard-container.dark-mode .weekly-interview-item:hover {

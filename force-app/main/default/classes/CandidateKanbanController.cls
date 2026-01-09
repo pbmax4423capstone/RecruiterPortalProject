@@ -5,11 +5,101 @@
 public with sharing class CandidateKanbanController {
     
     /**
+     * Determines if current user can view all candidates (Director/Admin)
+     * @return true if user profile or role contains 'Director' or 'System Administrator'
+     */
+    @AuraEnabled(cacheable=true)
+    public static Boolean canViewAllCandidates() {
+        try {
+            Id profileId = UserInfo.getProfileId();
+            Id userId = UserInfo.getUserId();
+            
+            Profile userProfile = [
+                SELECT Name 
+                FROM Profile 
+                WHERE Id = :profileId 
+                LIMIT 1
+            ];
+            
+            String profileName = userProfile.Name;
+            
+            // Check profile for Director/Admin
+            if (profileName.contains('Director') || 
+                profileName.contains('System Administrator') ||
+                profileName.contains('Admin')) {
+                return true;
+            }
+            
+            // Check UserRole for Directors
+            User currentUser = [
+                SELECT UserRole.Name 
+                FROM User 
+                WHERE Id = :userId 
+                LIMIT 1
+            ];
+            
+            if (currentUser.UserRole != null && currentUser.UserRole.Name != null) {
+                String roleName = currentUser.UserRole.Name;
+                if (roleName.contains('Director')) {
+                    return true;
+                }
+            }
+            
+            return false;
+        } catch (Exception e) {
+            System.debug('Error in canViewAllCandidates: ' + e.getMessage());
+            return false;
+        }
+    }
+    
+    /**
+     * Returns the current user's name for Sales Manager filtering
+     * @return Current user's full name
+     */
+    @AuraEnabled(cacheable=true)
+    public static String getCurrentUserName() {
+        return UserInfo.getName();
+    }
+    
+    /**
+     * Returns list of distinct Sales Manager values for dropdown
+     * @return List of Sales Manager names with "All Sales Managers" first
+     */
+    @AuraEnabled(cacheable=true)
+    public static List<String> getSalesManagerOptions() {
+        List<String> options = new List<String>();
+        options.add('All Sales Managers');
+        
+        try {
+            // Query distinct Sales Managers from Candidates
+            for (AggregateResult ar : [
+                SELECT Sales_Manager__c
+                FROM Candidate__c
+                WHERE Sales_Manager__c != null
+                AND Status__c NOT IN ('Closed Lost', 'Not Interesting', 'Hired', 'Terminated')
+                GROUP BY Sales_Manager__c
+                ORDER BY Sales_Manager__c
+            ]) {
+                String salesManager = (String)ar.get('Sales_Manager__c');
+                if (String.isNotBlank(salesManager)) {
+                    options.add(salesManager);
+                }
+            }
+        } catch (Exception e) {
+            throw new AuraHandledException('Error retrieving Sales Manager options: ' + e.getMessage());
+        }
+        
+        return options;
+    }
+    
+    /**
      * Get all candidates grouped by Highest Level Achieved stage
+     * Filters by Sales Manager based on parameter and user permissions
+     * @param salesManagerFilter The Sales Manager to filter by (or 'All Sales Managers')
      * @return Map of stage name to list of candidate wrapper objects
      */
     @AuraEnabled(cacheable=true)
-    public static KanbanData getKanbanData() {
+    public static KanbanData getKanbanData(String salesManagerFilter) {
         KanbanData result = new KanbanData();
         
         // Define stages in order (pipeline only - excludes Contracted)
@@ -22,28 +112,105 @@ public with sharing class CandidateKanbanController {
         result.stages.add(new StageInfo('Optional_5th', 'Optional (5th)'));
         result.stages.add(new StageInfo('6-Offer Acc', 'Offer Accepted'));
         
-        // Query active candidates in pipeline - excludes Contracted
-        List<Candidate__c> candidates = [
-            SELECT Id, Name, First_Name__c, Last_Name__c, Nickname__c,
-                   Email__c, personal_email__c, Phone__c, Work_Phone__c,
-                   City__c, State_Province__c, Work_City__c,
-                   Highest_Level_Achieved__c, Status__c,
-                   Recruiter__c, Recruiter__r.Name,
-                   Contact__c, Contact__r.Name,
-                   OwnerId, Owner.Name,
-                   ALC__c, ALC__r.Name, ALC__r.Stage__c,
-                   CreatedDate, LastModifiedDate
-            FROM Candidate__c
-            WHERE Status__c NOT IN ('Closed Lost', 'Not Interested', 'Hired', 'Terminated')
-            AND Highest_Level_Achieved__c != '7-Contracted'
-            ORDER BY LastModifiedDate DESC
-            LIMIT 200
-        ];
+        // Determine if user has global view
+        Boolean isGlobalView = canViewAllCandidates();
+        String currentUserName = String.escapeSingleQuotes(UserInfo.getName());
+        
+        // Determine which filter to use
+        String filterName = currentUserName; // Default to current user
+        
+        if (isGlobalView && String.isNotBlank(salesManagerFilter) && salesManagerFilter != 'All Sales Managers') {
+            // Directors/Admins can override filter
+            filterName = String.escapeSingleQuotes(salesManagerFilter);
+        }
+        
+        // Build dynamic query
+        String query = 'SELECT Id, Name, First_Name__c, Last_Name__c, Nickname__c, ' +
+                       'Email__c, personal_email__c, Phone__c, Work_Phone__c, ' +
+                       'City__c, State_Province__c, Work_City__c, ' +
+                       'Highest_Level_Achieved__c, Status__c, ' +
+                       'Recruiter__c, Recruiter__r.Name, Sales_Manager__c, ' +
+                       'Contact__c, Contact__r.Name, ' +
+                       'OwnerId, Owner.Name, ' +
+                       'ALC__c, ALC__r.Name, ALC__r.Stage__c, ' +
+                       'CreatedDate, LastModifiedDate ' +
+                       'FROM Candidate__c ' +
+                       'WHERE Status__c NOT IN (\'Closed Lost\', \'Not Interesting\', \'Hired\', \'Terminated\') ' +
+                       'AND Highest_Level_Achieved__c != \'7-Contracted\' ';
+        
+        // Add filtering based on user role and filter parameter
+        if (!isGlobalView || (isGlobalView && salesManagerFilter != 'All Sales Managers')) {
+            // Filter by specific Sales Manager
+            query += 'AND Sales_Manager__c = \'' + filterName + '\' ';
+        }
+        // Directors/Admins with "All Sales Managers" see all candidates (no additional filter)
+        
+        query += 'ORDER BY LastModifiedDate DESC LIMIT 200';
+        
+        List<Candidate__c> candidates = Database.query(query);
         
         // Collect candidate IDs
         Set<Id> candidateIds = new Set<Id>();
         for (Candidate__c c : candidates) {
             candidateIds.add(c.Id);
+        }
+        
+        // Query latest note for each candidate
+        Map<Id, String> latestNoteByCandidate = new Map<Id, String>();
+        try {
+            // Query ContentDocumentLinks to find notes attached to candidates
+            List<ContentDocumentLink> links = [
+                SELECT ContentDocumentId, LinkedEntityId
+                FROM ContentDocumentLink 
+                WHERE LinkedEntityId IN :candidateIds
+            ];
+            
+            if (!links.isEmpty()) {
+                Set<Id> documentIds = new Set<Id>();
+                Map<Id, Id> candidateByDocId = new Map<Id, Id>();
+                for (ContentDocumentLink link : links) {
+                    documentIds.add(link.ContentDocumentId);
+                    candidateByDocId.put(link.ContentDocumentId, link.LinkedEntityId);
+                }
+                
+                // Query ContentDocument to get the LatestPublishedVersionId
+                List<ContentDocument> documents = [
+                    SELECT Id, LatestPublishedVersionId
+                    FROM ContentDocument
+                    WHERE Id IN :documentIds
+                ];
+                
+                Set<Id> versionIds = new Set<Id>();
+                Map<Id, Id> docByVersionId = new Map<Id, Id>();
+                for (ContentDocument doc : documents) {
+                    versionIds.add(doc.LatestPublishedVersionId);
+                    docByVersionId.put(doc.LatestPublishedVersionId, doc.Id);
+                }
+                
+                // Query ContentVersion for the note details
+                List<ContentVersion> versions = [
+                    SELECT Id, TextPreview, LastModifiedDate, FileType
+                    FROM ContentVersion
+                    WHERE Id IN :versionIds
+                    AND FileType = 'SNOTE'
+                    ORDER BY LastModifiedDate DESC
+                ];
+                
+                // Keep only the most recent note per candidate
+                for (ContentVersion cv : versions) {
+                    Id docId = docByVersionId.get(cv.Id);
+                    Id candidateId = candidateByDocId.get(docId);
+                    if (candidateId != null && !latestNoteByCandidate.containsKey(candidateId)) {
+                        String notePreview = cv.TextPreview != null ? cv.TextPreview : '';
+                        if (notePreview.length() > 80) {
+                            notePreview = notePreview.substring(0, 80) + '...';
+                        }
+                        latestNoteByCandidate.put(candidateId, notePreview);
+                    }
+                }
+            }
+        } catch (Exception e) {
+            System.debug('Error querying notes: ' + e.getMessage());
         }
         
         // Query latest interview for each candidate (most recent by Date_Time_Scheduled__c or CreatedDate)
@@ -98,7 +265,8 @@ public with sharing class CandidateKanbanController {
             if (result.candidatesByStage.containsKey(stage)) {
                 Interview__c latestInterview = latestInterviewByCandidate.get(c.Id);
                 ALC__c alc = alcByCandidate.get(c.Id);
-                result.candidatesByStage.get(stage).add(new CandidateCard(c, latestInterview, alc));
+                String latestNote = latestNoteByCandidate.get(c.Id);
+                result.candidatesByStage.get(stage).add(new CandidateCard(c, latestInterview, alc, latestNote));
             }
         }
         
@@ -168,6 +336,7 @@ public with sharing class CandidateKanbanController {
         @AuraEnabled public String stage { get; set; }
         @AuraEnabled public String status { get; set; }
         @AuraEnabled public String recruiterName { get; set; }
+        @AuraEnabled public String salesManager { get; set; }
         @AuraEnabled public String ownerName { get; set; }
         @AuraEnabled public String timeAgo { get; set; }
         @AuraEnabled public Datetime lastModified { get; set; }
@@ -175,8 +344,9 @@ public with sharing class CandidateKanbanController {
         @AuraEnabled public String contractingStage { get; set; }
         @AuraEnabled public String interviewStage { get; set; }
         @AuraEnabled public String interviewStatus { get; set; }
+        @AuraEnabled public String latestNote { get; set; }
         
-        public CandidateCard(Candidate__c c, Interview__c latestInterview, ALC__c alc) {
+        public CandidateCard(Candidate__c c, Interview__c latestInterview, ALC__c alc, String latestNote) {
             this.id = c.Id;
             this.name = c.Name;
             this.firstName = c.First_Name__c;
@@ -188,6 +358,7 @@ public with sharing class CandidateKanbanController {
             this.stage = c.Highest_Level_Achieved__c;
             this.status = c.Status__c;
             this.recruiterName = c.Recruiter__r?.Name;
+            this.salesManager = c.Sales_Manager__c;
             this.ownerName = c.Owner.Name;
             this.lastModified = c.LastModifiedDate;
             this.timeAgo = calculateTimeAgo(c.LastModifiedDate);
@@ -203,6 +374,9 @@ public with sharing class CandidateKanbanController {
             if (alc != null && alc.Stage__c != null) {
                 this.contractingStage = alc.Stage__c;
             }
+            
+            // Latest note
+            this.latestNote = latestNote;
         }
         
         private String getInitials(String firstName, String lastName) {

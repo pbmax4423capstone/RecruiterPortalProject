@@ -27,6 +27,12 @@
     <flexiPageRegions>
         <itemInstances>
             <componentInstance>
+                <componentName>c:salesManagerContractingKanban</componentName>
+                <identifier>c_salesManagerContractingKanban</identifier>
+            </componentInstance>
+        </itemInstances>
+        <itemInstances>
+            <componentInstance>
                 <componentName>home:eventContainer</componentName>
                 <identifier>home_eventContainer1</identifier>
             </componentInstance>
