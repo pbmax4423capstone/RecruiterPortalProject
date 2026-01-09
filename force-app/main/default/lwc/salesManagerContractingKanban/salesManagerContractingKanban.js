@@ -49,14 +49,9 @@ export default class SalesManagerContractingKanban extends NavigationMixin(Light
             this.showSalesManagerDropdown = data;
             this._canViewAllLoaded = true;
             
-            // If they CAN view all, use localStorage or default to "All Sales Managers"
+            // If they CAN view all, default to "All Sales Managers" (directors/GAs see global view by default)
             if (data) {
-                const storedManager = localStorage.getItem(STORAGE_KEY_SALES_MANAGER);
-                if (storedManager && storedManager !== 'undefined' && storedManager !== 'null') {
-                    this.selectedSalesManager = storedManager;
-                } else {
-                    this.selectedSalesManager = 'All Sales Managers';
-                }
+                this.selectedSalesManager = 'All Sales Managers';
             }
             // If they CANNOT view all, wait for currentUserName wire to set it
         } else if (error) {
