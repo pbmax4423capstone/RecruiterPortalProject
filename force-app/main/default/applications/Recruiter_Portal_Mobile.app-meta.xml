@@ -5,14 +5,21 @@
         <shouldOverrideOrgTheme>false</shouldOverrideOrgTheme>
     </brand>
     <defaultLandingTab>Recruiter_Dashboard</defaultLandingTab>
+    <description>Mobile-optimized version of the Recruiter Portal with responsive layouts for phones and tablets</description>
     <formFactors>Small</formFactors>
-    <formFactors>Large</formFactors>
+    <formFactors>Medium</formFactors>
     <isNavAutoTempTabsDisabled>false</isNavAutoTempTabsDisabled>
     <isNavPersonalizationDisabled>false</isNavPersonalizationDisabled>
     <isNavTabPersistenceDisabled>false</isNavTabPersistenceDisabled>
     <isOmniPinnedViewEnabled>false</isOmniPinnedViewEnabled>
-    <label>Recruiter Portal</label>
+    <label>Recruiter Portal Mobile</label>
     <navType>Standard</navType>
     <tabs>Recruiter_Dashboard</tabs>
+    <tabs>Sales_Manager_Dashboard</tabs>
+    <tabs>Contract_B_Dashboard</tabs>
+    <tabs>Candidate__c</tabs>
+    <tabs>Interview__c</tabs>
+    <tabs>ALC__c</tabs>
     <uiType>Lightning</uiType>
+    <utilityBar>Recruiter_Portal_UtilityBar</utilityBar>
 </CustomApplication>
