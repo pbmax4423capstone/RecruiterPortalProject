@@ -6,9 +6,9 @@
 
 /* Hero Header */
 .hero-header {
-    background: #032d60;
+    background: linear-gradient(180deg, #003366 0%, #004d99 100%);
     padding: 2.5rem 2rem;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.15);
     margin-bottom: 2rem;
 }
 
@@ -81,7 +81,7 @@
 .stage-badge {
     font-weight: 700;
     font-size: 0.95rem;
-    color: #032d60;
+    color: #003366;
 }
 
 /* Content Grid */
@@ -113,9 +113,9 @@
 }
 
 .card-header {
-    background: linear-gradient(to right, #f8f9fa, #e9ecef);
+    background: linear-gradient(180deg, #f8f9fa 0%, #e6f2ff 100%);
     padding: 1rem 1.5rem;
-    border-bottom: 2px solid #032d60;
+    border-bottom: 2px solid #003366;
     display: flex;
     align-items: center;
     gap: 0.75rem;

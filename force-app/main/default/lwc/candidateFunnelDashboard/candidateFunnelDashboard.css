@@ -33,19 +33,19 @@
 }
 
 .summary-card.highlight-green {
-    background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%);
-    border-left: 4px solid #4caf50;
+    background: linear-gradient(180deg, #e8f5e9 0%, #c8e6c9 100%);
+    border-left: 4px solid #4bca81;
 }
 
 .summary-card.highlight-red {
-    background: linear-gradient(135deg, #ffebee 0%, #ffcdd2 100%);
-    border-left: 4px solid #f44336;
+    background: linear-gradient(180deg, #ffebee 0%, #ffcdd2 100%);
+    border-left: 4px solid #c23934;
 }
 
 .summary-value {
     font-size: 28px;
     font-weight: 700;
-    color: #16325c;
+    color: #003366;
     line-height: 1.2;
 }
 
@@ -91,7 +91,7 @@
 .stage-name {
     font-weight: 600;
     font-size: 13px;
-    color: #16325c;
+    color: #003366;
 }
 
 /* Funnel Bar */
@@ -105,7 +105,7 @@
 
 .funnel-bar {
     height: 100%;
-    background: linear-gradient(135deg, #0176d3 0%, #1b96ff 100%);
+    background: linear-gradient(180deg, #003366 0%, #004d99 100%);
     border-radius: 4px;
     display: flex;
     align-items: center;
@@ -144,23 +144,23 @@
 }
 
 .conversion-excellent {
-    color: #2e844a;
+    color: #4bca81;
 }
 
 .conversion-good {
-    color: #3ba755;
+    color: #4bca81;
 }
 
 .conversion-fair {
-    color: #fe9339;
+    color: #ff6b35;
 }
 
 .conversion-poor {
-    color: #ea001e;
+    color: #c23934;
 }
 
 .conversion-start {
-    color: #0176d3;
+    color: #003366;
 }
 
 .metric-icon {

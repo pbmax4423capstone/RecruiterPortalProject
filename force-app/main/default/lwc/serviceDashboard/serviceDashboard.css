@@ -1,12 +1,12 @@
 /* Service Dashboard Styles */
 .service-dashboard {
     padding: 1rem;
-    background: #f3f3f3;
+    background: #ffffff;
     min-height: 100vh;
 }
 
 .service-dashboard.dark-mode {
-    background: #1a1a1a;
+    background: #16325c;
     color: #ffffff;
 }
 
@@ -21,8 +21,8 @@
 }
 
 .metric-card.dark-mode {
-    background: #2c2c2c;
-    border-color: #444444;
+    background: #1a3a52;
+    border-color: #3e5771;
     color: #ffffff;
 }
 
@@ -49,7 +49,7 @@
 .metric-value {
     font-size: 3rem;
     font-weight: 300;
-    color: #0176d3;
+    color: #003366;
     line-height: 1;
     margin: 0.75rem 0;
 }
@@ -67,7 +67,7 @@
 }
 
 .metric-link a {
-    color: #0176d3;
+    color: #003366;
     text-decoration: none;
     font-size: 0.8125rem;
 }
@@ -102,8 +102,8 @@
 }
 
 .chart-container.dark-mode {
-    background: #2c2c2c;
-    border-color: #444444;
+    background: #1a3a52;
+    border-color: #3e5771;
     color: #ffffff;
 }
 
@@ -117,7 +117,7 @@
 }
 
 .chart-container.dark-mode .chart-header {
-    border-bottom-color: #444444;
+    border-bottom-color: #3e5771;
 }
 
 .chart-title {
@@ -160,9 +160,9 @@
 .chart-placeholder-circle {
     width: 200px;
     height: 200px;
-    border: 8px solid var(--dashboard-primary-color, #0176d3);
+    border: 8px solid var(--dashboard-primary-color, #003366);
     border-radius: 50%;
-    border-top: 8px solid var(--dashboard-secondary-color, #e8f4fd);
+    border-top: 8px solid var(--dashboard-secondary-color, #e6f2ff);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -172,9 +172,9 @@
 
 /* Dark mode chart placeholders */
 .chart-container.dark-mode .chart-placeholder-circle {
-    border-color: #0176d3;
-    border-top-color: #4a90e2;
-    background: #2c2c2c;
+    border-color: #003366;
+    border-top-color: #1589ee;
+    background: #1a3a52;
 }
 
 .chart-placeholder-bar {
@@ -195,8 +195,8 @@
 
 /* Dark mode bar chart placeholders */
 .chart-container.dark-mode .chart-placeholder-bar {
-    background: #2c2c2c;
-    border-color: #4a4a4a;
+    background: #1a3a52;
+    border-color: #3e5771;
 }
 
 .chart-container.dark-mode .bar-chart-placeholder {
