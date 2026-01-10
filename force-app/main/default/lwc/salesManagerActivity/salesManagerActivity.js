@@ -252,7 +252,7 @@ export default class SalesManagerActivity extends NavigationMixin(LightningEleme
         
         try {
             const candidates = await getCandidatesInContracting({
-                salesManager: 'All Sales Managers'
+                salesManager: this.currentSalesManagerFilter
             });
             
             this.modalData = candidates;
@@ -285,7 +285,7 @@ export default class SalesManagerActivity extends NavigationMixin(LightningEleme
         
         try {
             const candidates = await getCandidatesOnboarding({
-                salesManager: 'All Sales Managers',
+                salesManager: this.currentSalesManagerFilter,
                 dateRange: this.currentDateRangeFilter
             });
             
