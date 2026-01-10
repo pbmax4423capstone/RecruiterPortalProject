@@ -1,394 +1,529 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Cole Briefing: Dashboard Metrics & Extensions</title>
     <style>
-        :root {
-            --primary: #0b5cab;
-            --primary-dark: #083c73;
-            --accent: #27ae60;
-            --accent-light: #e8f9f0;
-            --warning: #ffb347;
-            --bg: #f4f6fb;
-            --card: #ffffff;
-            --text: #1f2a37;
-            --muted: #6b7280;
-            --border: #e2e8f0;
-        }
+      :root {
+        --primary: #0b5cab;
+        --primary-dark: #083c73;
+        --accent: #27ae60;
+        --accent-light: #e8f9f0;
+        --warning: #ffb347;
+        --bg: #f4f6fb;
+        --card: #ffffff;
+        --text: #1f2a37;
+        --muted: #6b7280;
+        --border: #e2e8f0;
+      }
 
-        * { box-sizing: border-box; margin: 0; padding: 0; }
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
 
+      body {
+        font-family:
+          "Salesforce Sans",
+          -apple-system,
+          BlinkMacSystemFont,
+          "Segoe UI",
+          Roboto,
+          sans-serif;
+        background: linear-gradient(135deg, #f0f6ff 0%, #fefefe 100%);
+        color: var(--text);
+        min-height: 100vh;
+        padding: 2.5rem 1.5rem 4rem;
+      }
+
+      .page-shell {
+        max-width: 1100px;
+        margin: 0 auto;
+      }
+
+      .back-link {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.4rem;
+        text-decoration: none;
+        color: var(--primary);
+        font-weight: 600;
+        margin-bottom: 1rem;
+      }
+
+      header {
+        background: var(--card);
+        border-radius: 18px;
+        padding: 2.5rem;
+        box-shadow: 0 20px 60px rgba(11, 92, 171, 0.12);
+        margin-bottom: 2rem;
+        position: relative;
+        overflow: hidden;
+      }
+
+      header::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background:
+          radial-gradient(
+            circle at 10% 20%,
+            rgba(11, 92, 171, 0.12),
+            transparent 45%
+          ),
+          radial-gradient(
+            circle at 90% 20%,
+            rgba(39, 174, 96, 0.18),
+            transparent 40%
+          );
+        z-index: 0;
+      }
+
+      header .content {
+        position: relative;
+        z-index: 1;
+      }
+
+      h1 {
+        font-size: 2.4rem;
+        margin-bottom: 0.8rem;
+      }
+
+      .subtitle {
+        color: var(--muted);
+        font-size: 1.05rem;
+        line-height: 1.6;
+        max-width: 720px;
+      }
+
+      .pill-row {
+        margin-top: 1.25rem;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.75rem;
+      }
+
+      .pill {
+        background: rgba(11, 92, 171, 0.08);
+        color: var(--primary);
+        padding: 0.45rem 0.95rem;
+        border-radius: 999px;
+        font-size: 0.85rem;
+        font-weight: 600;
+      }
+
+      section {
+        background: var(--card);
+        border-radius: 18px;
+        padding: 2rem;
+        box-shadow: 0 15px 45px rgba(14, 30, 64, 0.08);
+        margin-bottom: 1.75rem;
+      }
+
+      section h2 {
+        font-size: 1.4rem;
+        margin-bottom: 0.75rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+
+      section h2 span.icon {
+        width: 36px;
+        height: 36px;
+        border-radius: 12px;
+        background: var(--primary);
+        color: white;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.1rem;
+      }
+
+      .grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+        gap: 1rem;
+      }
+
+      .stat-card {
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        padding: 1.25rem;
+      }
+
+      .stat-label {
+        font-size: 0.8rem;
+        letter-spacing: 0.05em;
+        color: var(--muted);
+        text-transform: uppercase;
+      }
+
+      .stat-value {
+        font-size: 1.6rem;
+        font-weight: 700;
+        margin: 0.2rem 0 0.5rem;
+      }
+
+      .stat-note {
+        font-size: 0.9rem;
+        color: var(--muted);
+      }
+
+      ul.checklist {
+        list-style: none;
+        display: grid;
+        gap: 0.85rem;
+        margin-top: 0.5rem;
+      }
+
+      ul.checklist li {
+        display: flex;
+        gap: 0.6rem;
+        align-items: flex-start;
+        line-height: 1.5;
+      }
+
+      ul.checklist li::before {
+        content: "✔";
+        color: var(--accent);
+        font-weight: 700;
+        margin-top: 0.2rem;
+      }
+
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 1rem;
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        overflow: hidden;
+      }
+
+      th,
+      td {
+        padding: 0.85rem 1rem;
+        border-bottom: 1px solid var(--border);
+        text-align: left;
+        font-size: 0.95rem;
+      }
+
+      th {
+        background: #f9fbff;
+        font-weight: 600;
+      }
+
+      tr:last-child td {
+        border-bottom: none;
+      }
+
+      .tag {
+        padding: 0.2rem 0.55rem;
+        border-radius: 6px;
+        background: var(--accent-light);
+        color: var(--accent);
+        font-size: 0.75rem;
+        font-weight: 600;
+      }
+
+      .cta {
+        margin-top: 1rem;
+        display: flex;
+        gap: 1rem;
+        flex-wrap: wrap;
+      }
+
+      .cta a {
+        padding: 0.85rem 1.4rem;
+        border-radius: 10px;
+        text-decoration: none;
+        font-weight: 600;
+      }
+
+      .cta a.primary {
+        background: var(--primary);
+        color: white;
+      }
+
+      .cta a.secondary {
+        border: 1px solid var(--border);
+        color: var(--primary);
+        background: white;
+      }
+
+      @media (max-width: 768px) {
         body {
-            font-family: 'Salesforce Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: linear-gradient(135deg, #f0f6ff 0%, #fefefe 100%);
-            color: var(--text);
-            min-height: 100vh;
-            padding: 2.5rem 1.5rem 4rem;
+          padding: 1.5rem 1rem 3rem;
         }
-
-        .page-shell {
-            max-width: 1100px;
-            margin: 0 auto;
-        }
-
-        .back-link {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.4rem;
-            text-decoration: none;
-            color: var(--primary);
-            font-weight: 600;
-            margin-bottom: 1rem;
-        }
-
-        header {
-            background: var(--card);
-            border-radius: 18px;
-            padding: 2.5rem;
-            box-shadow: 0 20px 60px rgba(11, 92, 171, 0.12);
-            margin-bottom: 2rem;
-            position: relative;
-            overflow: hidden;
-        }
-
-        header::after {
-            content: "";
-            position: absolute;
-            inset: 0;
-            background: radial-gradient(circle at 10% 20%, rgba(11,92,171,0.12), transparent 45%),
-                        radial-gradient(circle at 90% 20%, rgba(39,174,96,0.18), transparent 40%);
-            z-index: 0;
-        }
-
-        header .content { position: relative; z-index: 1; }
-
-        h1 {
-            font-size: 2.4rem;
-            margin-bottom: 0.8rem;
-        }
-
-        .subtitle {
-            color: var(--muted);
-            font-size: 1.05rem;
-            line-height: 1.6;
-            max-width: 720px;
-        }
-
-        .pill-row {
-            margin-top: 1.25rem;
-            display: flex;
-            flex-wrap: wrap;
-            gap: 0.75rem;
-        }
-
-        .pill {
-            background: rgba(11,92,171,0.08);
-            color: var(--primary);
-            padding: 0.45rem 0.95rem;
-            border-radius: 999px;
-            font-size: 0.85rem;
-            font-weight: 600;
-        }
-
+        header,
         section {
-            background: var(--card);
-            border-radius: 18px;
-            padding: 2rem;
-            box-shadow: 0 15px 45px rgba(14, 30, 64, 0.08);
-            margin-bottom: 1.75rem;
+          padding: 1.5rem;
         }
-
-        section h2 {
-            font-size: 1.4rem;
-            margin-bottom: 0.75rem;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
+        h1 {
+          font-size: 1.9rem;
         }
-
-        section h2 span.icon {
-            width: 36px;
-            height: 36px;
-            border-radius: 12px;
-            background: var(--primary);
-            color: white;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.1rem;
-        }
-
-        .grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-            gap: 1rem;
-        }
-
-        .stat-card {
-            border: 1px solid var(--border);
-            border-radius: 12px;
-            padding: 1.25rem;
-        }
-
-        .stat-label {
-            font-size: 0.8rem;
-            letter-spacing: 0.05em;
-            color: var(--muted);
-            text-transform: uppercase;
-        }
-
-        .stat-value { font-size: 1.6rem; font-weight: 700; margin: 0.2rem 0 0.5rem; }
-
-        .stat-note { font-size: 0.9rem; color: var(--muted); }
-
-        ul.checklist {
-            list-style: none;
-            display: grid;
-            gap: 0.85rem;
-            margin-top: 0.5rem;
-        }
-
-        ul.checklist li {
-            display: flex;
-            gap: 0.6rem;
-            align-items: flex-start;
-            line-height: 1.5;
-        }
-
-        ul.checklist li::before {
-            content: "✔";
-            color: var(--accent);
-            font-weight: 700;
-            margin-top: 0.2rem;
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 1rem;
-            border: 1px solid var(--border);
-            border-radius: 12px;
-            overflow: hidden;
-        }
-
-        th, td {
-            padding: 0.85rem 1rem;
-            border-bottom: 1px solid var(--border);
-            text-align: left;
-            font-size: 0.95rem;
-        }
-
-        th { background: #f9fbff; font-weight: 600; }
-
-        tr:last-child td { border-bottom: none; }
-
-        .tag {
-            padding: 0.2rem 0.55rem;
-            border-radius: 6px;
-            background: var(--accent-light);
-            color: var(--accent);
-            font-size: 0.75rem;
-            font-weight: 600;
-        }
-
-        .cta {
-            margin-top: 1rem;
-            display: flex;
-            gap: 1rem;
-            flex-wrap: wrap;
-        }
-
-        .cta a {
-            padding: 0.85rem 1.4rem;
-            border-radius: 10px;
-            text-decoration: none;
-            font-weight: 600;
-        }
-
-        .cta a.primary {
-            background: var(--primary);
-            color: white;
-        }
-
-        .cta a.secondary {
-            border: 1px solid var(--border);
-            color: var(--primary);
-            background: white;
-        }
-
-        @media (max-width: 768px) {
-            body { padding: 1.5rem 1rem 3rem; }
-            header, section { padding: 1.5rem; }
-            h1 { font-size: 1.9rem; }
-        }
+      }
     </style>
-</head>
-<body>
+  </head>
+  <body>
     <div class="page-shell">
-        <a class="back-link" href="training-center.html">← Back to Portal Home</a>
+      <a class="back-link" href="training-center.html">← Back to Portal Home</a>
 
-        <header>
-            <div class="content">
-                <p class="pill">Cole-only briefing</p>
-                <h1>Dashboard Metrics & LinkedIn Extension Sync</h1>
-                <p class="subtitle">
-                    Single source of truth for the December 2025 dashboard refresh and Chrome/Edge extension alignment. Use this to brief stakeholders, plan deployments, and keep both browsers behaving identically while we finish the ProdTest rollout.
-                </p>
-                <div class="pill-row">
-                    <span class="pill">Updated Dec 29, 2025</span>
-                    <span class="pill">Owners: Patrick Baker & Cole Arnold</span>
-                    <span class="pill">Scope: Dashboard Metrics · Extensions · Training</span>
-                </div>
-            </div>
-        </header>
+      <header>
+        <div class="content">
+          <p class="pill">Cole-only briefing</p>
+          <h1>Dashboard Metrics & LinkedIn Extension Sync</h1>
+          <p class="subtitle">
+            Single source of truth for the December 2025 dashboard refresh and
+            Chrome/Edge extension alignment. Use this to brief stakeholders,
+            plan deployments, and keep both browsers behaving identically while
+            we finish the ProdTest rollout.
+          </p>
+          <div class="pill-row">
+            <span class="pill">Updated Dec 29, 2025</span>
+            <span class="pill">Owners: Patrick Baker & Cole Arnold</span>
+            <span class="pill"
+              >Scope: Dashboard Metrics · Extensions · Training</span
+            >
+          </div>
+        </div>
+      </header>
 
-        <section>
-            <h2><span class="icon">📊</span>Dashboard Metrics Snapshot</h2>
-            <div class="grid" style="margin-top:1rem;">
-                <div class="stat-card">
-                    <p class="stat-label">Objective</p>
-                    <p class="stat-value">Completed-only KPIs</p>
-                    <p class="stat-note">All leaderboard helpers now require Status = Completed + Completed_Date__c window.</p>
-                </div>
-                <div class="stat-card">
-                    <p class="stat-label">Placement</p>
-                    <p class="stat-value">Recruiter Dashboard</p>
-                    <p class="stat-note">`candidateRecordView` stays embedded on Candidate Record Page for real-time refresh.</p>
-                </div>
-                <div class="stat-card">
-                    <p class="stat-label">Metadata</p>
-                    <p class="stat-value">Aligned</p>
-                    <p class="stat-note">Highest Level stages, Contract Type options, and list views updated for Contract B tracking.</p>
-                </div>
-            </div>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Metric</th>
-                        <th>Source Method</th>
-                        <th>Notes</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>Total Completed Interviews (MTD/YTD)</td>
-                        <td>`getCompletedInterviewCounts`</td>
-                        <td>Only interviews with completed status and date in window are counted.</td>
-                    </tr>
-                    <tr>
-                        <td>Pipeline Velocity</td>
-                        <td>`getPipelineVelocity`</td>
-                        <td>Stage-duration rollups highlight bottlenecks; relies on new Highest Level values.</td>
-                    </tr>
-                    <tr>
-                        <td>Recruiter Leaderboard</td>
-                        <td>`getRecruiterLeaderboard`</td>
-                        <td>Ranks recruiters by completed interviews and shows delta vs prior period.</td>
-                    </tr>
-                    <tr>
-                        <td>Conversion Ratios</td>
-                        <td>`getConversionStats`</td>
-                        <td>Stage N vs Stage N+1 comparison; ensures metadata aligns with flows.</td>
-                    </tr>
-                    <tr>
-                        <td>Exception Flags</td>
-                        <td>`getExceptionFlags`</td>
-                        <td>Highlights stale candidates or missing follow-ups for service review.</td>
-                    </tr>
-                </tbody>
-            </table>
-            <ul class="checklist">
-                <li>Candidate Record Page flexipage keeps the simplified layout embedding `candidateRecordView` for CDC refresh.</li>
-                <li>`scheduledCallsModal` captures call-result checkboxes + next steps consistent with dashboard stats.</li>
-                <li>Metadata and list views are already merged so reports, flows, and LWCs share the same picklists.</li>
-            </ul>
-        </section>
+      <section>
+        <h2><span class="icon">📊</span>Dashboard Metrics Snapshot</h2>
+        <div class="grid" style="margin-top: 1rem">
+          <div class="stat-card">
+            <p class="stat-label">Objective</p>
+            <p class="stat-value">Completed-only KPIs</p>
+            <p class="stat-note">
+              All leaderboard helpers now require Status = Completed +
+              Completed_Date__c window.
+            </p>
+          </div>
+          <div class="stat-card">
+            <p class="stat-label">Placement</p>
+            <p class="stat-value">Recruiter Dashboard</p>
+            <p class="stat-note">
+              `candidateRecordView` stays embedded on Candidate Record Page for
+              real-time refresh.
+            </p>
+          </div>
+          <div class="stat-card">
+            <p class="stat-label">Metadata</p>
+            <p class="stat-value">Aligned</p>
+            <p class="stat-note">
+              Highest Level stages, Contract Type options, and list views
+              updated for Contract B tracking.
+            </p>
+          </div>
+        </div>
+        <table>
+          <thead>
+            <tr>
+              <th>Metric</th>
+              <th>Source Method</th>
+              <th>Notes</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Total Completed Interviews (MTD/YTD)</td>
+              <td>`getCompletedInterviewCounts`</td>
+              <td>
+                Only interviews with completed status and date in window are
+                counted.
+              </td>
+            </tr>
+            <tr>
+              <td>Pipeline Velocity</td>
+              <td>`getPipelineVelocity`</td>
+              <td>
+                Stage-duration rollups highlight bottlenecks; relies on new
+                Highest Level values.
+              </td>
+            </tr>
+            <tr>
+              <td>Recruiter Leaderboard</td>
+              <td>`getRecruiterLeaderboard`</td>
+              <td>
+                Ranks recruiters by completed interviews and shows delta vs
+                prior period.
+              </td>
+            </tr>
+            <tr>
+              <td>Conversion Ratios</td>
+              <td>`getConversionStats`</td>
+              <td>
+                Stage N vs Stage N+1 comparison; ensures metadata aligns with
+                flows.
+              </td>
+            </tr>
+            <tr>
+              <td>Exception Flags</td>
+              <td>`getExceptionFlags`</td>
+              <td>
+                Highlights stale candidates or missing follow-ups for service
+                review.
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <ul class="checklist">
+          <li>
+            Candidate Record Page flexipage keeps the simplified layout
+            embedding `candidateRecordView` for CDC refresh.
+          </li>
+          <li>
+            `scheduledCallsModal` captures call-result checkboxes + next steps
+            consistent with dashboard stats.
+          </li>
+          <li>
+            Metadata and list views are already merged so reports, flows, and
+            LWCs share the same picklists.
+          </li>
+        </ul>
+      </section>
 
-        <section>
-            <h2><span class="icon">🧩</span>Chrome & Edge Extension Parity</h2>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Area</th>
-                        <th>Chrome</th>
-                        <th>Edge</th>
-                        <th>Notes</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>OAuth & Connected App</td>
-                        <td><span class="tag">In Sync</span></td>
-                        <td><span class="tag">In Sync</span></td>
-                        <td>Shared `LinkedIn_Import_Extension` app with both callback URLs.</td>
-                    </tr>
-                    <tr>
-                        <td>Content Script Guard</td>
-                        <td><span class="tag">Active</span></td>
-                        <td><span class="tag">Active</span></td>
-                        <td>IIFE + `window.__linkedinToSalesforceLoaded` prevents duplicate injection.</td>
-                    </tr>
-                    <tr>
-                        <td>Candidate Creation Flow</td>
-                        <td>Contact → Candidate</td>
-                        <td>Contact → Candidate</td>
-                        <td>Uses `Type__c = 'Candidate'`; keep order when editing popup.js.</td>
-                    </tr>
-                    <tr>
-                        <td>Call Result Sync</td>
-                        <td>✅</td>
-                        <td>✅</td>
-                        <td>`scheduledCallsModal` reflects checkbox + final result for both browsers.</td>
-                    </tr>
-                    <tr>
-                        <td>Error Messaging</td>
-                        <td>Unified toasts</td>
-                        <td>Unified toasts</td>
-                        <td>Popup + background logging are identical for support troubleshooting.</td>
-                    </tr>
-                </tbody>
-            </table>
-            <div class="info" style="margin-top:1rem; background:var(--accent-light); padding:1.2rem 1.4rem; border-radius:12px; border:1px solid rgba(39,174,96,0.3);">
-                <strong>Reminder:</strong> When scripts reference selectors or configuration values, update both extension folders in the same commit so QA can reproduce results in Chrome and Edge without drift.
-            </div>
-        </section>
+      <section>
+        <h2><span class="icon">🧩</span>Chrome & Edge Extension Parity</h2>
+        <table>
+          <thead>
+            <tr>
+              <th>Area</th>
+              <th>Chrome</th>
+              <th>Edge</th>
+              <th>Notes</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>OAuth & Connected App</td>
+              <td><span class="tag">In Sync</span></td>
+              <td><span class="tag">In Sync</span></td>
+              <td>
+                Shared `LinkedIn_Import_Extension` app with both callback URLs.
+              </td>
+            </tr>
+            <tr>
+              <td>Content Script Guard</td>
+              <td><span class="tag">Active</span></td>
+              <td><span class="tag">Active</span></td>
+              <td>
+                IIFE + `window.__linkedinToSalesforceLoaded` prevents duplicate
+                injection.
+              </td>
+            </tr>
+            <tr>
+              <td>Candidate Creation Flow</td>
+              <td>Contact → Candidate</td>
+              <td>Contact → Candidate</td>
+              <td>
+                Uses `Type__c = 'Candidate'`; keep order when editing popup.js.
+              </td>
+            </tr>
+            <tr>
+              <td>Call Result Sync</td>
+              <td>✅</td>
+              <td>✅</td>
+              <td>
+                `scheduledCallsModal` reflects checkbox + final result for both
+                browsers.
+              </td>
+            </tr>
+            <tr>
+              <td>Error Messaging</td>
+              <td>Unified toasts</td>
+              <td>Unified toasts</td>
+              <td>
+                Popup + background logging are identical for support
+                troubleshooting.
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <div
+          class="info"
+          style="
+            margin-top: 1rem;
+            background: var(--accent-light);
+            padding: 1.2rem 1.4rem;
+            border-radius: 12px;
+            border: 1px solid rgba(39, 174, 96, 0.3);
+          "
+        >
+          <strong>Reminder:</strong> When scripts reference selectors or
+          configuration values, update both extension folders in the same commit
+          so QA can reproduce results in Chrome and Edge without drift.
+        </div>
+      </section>
 
-        <section>
-            <h2><span class="icon">✅</span>Cole's Action Checklist</h2>
-            <ul class="checklist">
-                <li>Deploy `interviewLeaderboard` bundle + supporting Apex to ProdTest once smoke tests pass (`sf project deploy start --source-dir force-app/main/default/lwc/interviewLeaderboard --target-org patrickbakeradmin2@financialguide.com.prodtest`).</li>
-                <li>Install both extensions locally, import a sample candidate from LinkedIn, and confirm scheduled call modal writes the expected fields.</li>
-                <li>Add the public link for this briefing to `training-center.html` under a "Cole Resources" block (keeps it off the main trainee flow).</li>
-                <li>Keep `.github/copilot-instructions-cole.md` synced with the latest dashboard/extension guidance so Copilot loads the right guardrails.</li>
-            </ul>
-        </section>
+      <section>
+        <h2><span class="icon">✅</span>Cole's Action Checklist</h2>
+        <ul class="checklist">
+          <li>
+            Deploy `interviewLeaderboard` bundle + supporting Apex to ProdTest
+            once smoke tests pass (`sf project deploy start --source-dir
+            force-app/main/default/lwc/interviewLeaderboard --target-org
+            patrickbakeradmin2@financialguide.com.prodtest`).
+          </li>
+          <li>
+            Install both extensions locally, import a sample candidate from
+            LinkedIn, and confirm scheduled call modal writes the expected
+            fields.
+          </li>
+          <li>
+            Add the public link for this briefing to `training-center.html`
+            under a "Cole Resources" block (keeps it off the main trainee flow).
+          </li>
+          <li>
+            Keep `.github/copilot-instructions-cole.md` synced with the latest
+            dashboard/extension guidance so Copilot loads the right guardrails.
+          </li>
+        </ul>
+      </section>
 
-        <section>
-            <h2><span class="icon">🔗</span>Reference Links</h2>
-            <div class="grid">
-                <div class="stat-card">
-                    <p class="stat-label">Docs</p>
-                    <p class="stat-value">GitHub Markdown</p>
-                    <p class="stat-note"><a href="dashboard-metrics-and-extension-overview.md">dashboard-metrics-and-extension-overview.md</a></p>
-                </div>
-                <div class="stat-card">
-                    <p class="stat-label">Cole Notes</p>
-                    <p class="stat-value">Internal Brief</p>
-                    <p class="stat-note"><a href="Cole-Arnold-Dashboard-Extension-Notes.md">Cole-Arnold-Dashboard-Extension-Notes.md</a></p>
-                </div>
-                <div class="stat-card">
-                    <p class="stat-label">Copilot Rules</p>
-                    <p class="stat-value">Cole Config</p>
-                    <p class="stat-note">`.github/copilot-instructions-cole.md`</p>
-                </div>
-            </div>
-            <div class="cta">
-                <a class="primary" href="mailto:patrick.baker@example.com?subject=Cole%20Briefing%20Questions">Contact Patrick</a>
-                <a class="secondary" href="https://github.com/pbmax4423capstone/RecruiterPortalProject">View Repo</a>
-            </div>
-        </section>
+      <section>
+        <h2><span class="icon">🔗</span>Reference Links</h2>
+        <div class="grid">
+          <div class="stat-card">
+            <p class="stat-label">Docs</p>
+            <p class="stat-value">GitHub Markdown</p>
+            <p class="stat-note">
+              <a href="dashboard-metrics-and-extension-overview.md"
+                >dashboard-metrics-and-extension-overview.md</a
+              >
+            </p>
+          </div>
+          <div class="stat-card">
+            <p class="stat-label">Cole Notes</p>
+            <p class="stat-value">Internal Brief</p>
+            <p class="stat-note">
+              <a href="Cole-Arnold-Dashboard-Extension-Notes.md"
+                >Cole-Arnold-Dashboard-Extension-Notes.md</a
+              >
+            </p>
+          </div>
+          <div class="stat-card">
+            <p class="stat-label">Copilot Rules</p>
+            <p class="stat-value">Cole Config</p>
+            <p class="stat-note">`.github/copilot-instructions-cole.md`</p>
+          </div>
+        </div>
+        <div class="cta">
+          <a
+            class="primary"
+            href="mailto:patrick.baker@example.com?subject=Cole%20Briefing%20Questions"
+            >Contact Patrick</a
+          >
+          <a
+            class="secondary"
+            href="https://github.com/pbmax4423capstone/RecruiterPortalProject"
+            >View Repo</a
+          >
+        </div>
+      </section>
     </div>
-</body>
+  </body>
 </html>

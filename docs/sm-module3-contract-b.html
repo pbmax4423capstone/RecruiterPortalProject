@@ -1,891 +1,1178 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Module 3: Contract B Monitoring - Sales Manager Training</title>
     <style>
-        :root {
-            --primary: #0176d3;
-            --manager: #7c3aed;
-            --manager-dark: #5b21b6;
-            --manager-light: #ede9fe;
-            --success: #2e844a;
-            --success-light: #dcfce7;
-            --warning: #fe9339;
-            --warning-light: #fef3c7;
-            --error: #ea001e;
-            --error-light: #fee2e2;
-            --gray-100: #f3f3f3;
-            --gray-200: #e5e5e5;
-            --gray-300: #d1d5db;
-            --gray-500: #6b7280;
-            --gray-700: #444;
-            --gray-900: #181818;
-        }
-        
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        
-        body {
-            font-family: 'Salesforce Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: var(--gray-100);
-            min-height: 100vh;
-            display: flex;
-        }
-        
-        .sidebar {
-            width: 280px;
-            background: white;
-            border-right: 1px solid var(--gray-200);
-            padding: 1.5rem;
-            position: fixed;
-            height: 100vh;
-            overflow-y: auto;
-        }
-        
-        .sidebar-header {
-            padding-bottom: 1rem;
-            border-bottom: 1px solid var(--gray-200);
-            margin-bottom: 1rem;
-        }
-        
-        .sidebar-header a {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            color: var(--manager);
-            text-decoration: none;
-            font-size: 0.9rem;
-            margin-bottom: 0.5rem;
-        }
-        
-        .sidebar-header a:hover { text-decoration: underline; }
-        .sidebar-header h2 { font-size: 1.1rem; color: var(--gray-900); }
-        
-        .sidebar-header .module-badge {
-            display: inline-block;
-            background: var(--manager-light);
-            color: var(--manager);
-            padding: 0.2rem 0.6rem;
-            border-radius: 10px;
-            font-size: 0.75rem;
-            font-weight: 600;
-            margin-top: 0.5rem;
-        }
-        
-        .steps-list { list-style: none; }
-        
-        .step-item {
-            padding: 0.75rem;
-            border-radius: 8px;
-            margin-bottom: 0.5rem;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-            transition: all 0.2s;
-        }
-        
-        .step-item:hover { background: var(--gray-100); }
-        .step-item.active { background: var(--manager-light); }
-        .step-item.completed { opacity: 0.7; }
-        
-        .step-number {
-            width: 28px;
-            height: 28px;
-            border-radius: 50%;
-            background: var(--gray-200);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 0.85rem;
-            font-weight: 600;
-            color: var(--gray-500);
-            flex-shrink: 0;
-        }
-        
-        .step-item.active .step-number { background: var(--manager); color: white; }
-        .step-item.completed .step-number { background: var(--success); color: white; }
-        .step-item.completed .step-number::before { content: "✓"; }
-        
-        .step-info { flex-grow: 1; }
-        .step-title { font-size: 0.9rem; color: var(--gray-900); font-weight: 500; }
-        .step-duration { font-size: 0.75rem; color: var(--gray-500); }
-        
-        .main-content { flex-grow: 1; margin-left: 280px; padding: 2rem; }
-        .step-content { max-width: 900px; margin: 0 auto; }
-        .step-header { margin-bottom: 2rem; }
-        
-        .step-header .step-badge {
-            display: inline-block;
-            background: var(--manager);
-            color: white;
-            padding: 0.3rem 1rem;
-            border-radius: 20px;
-            font-size: 0.85rem;
-            font-weight: 600;
-            margin-bottom: 0.75rem;
-        }
-        
-        .step-header h1 { font-size: 2rem; color: var(--gray-900); margin-bottom: 0.5rem; }
-        .step-header p { font-size: 1.1rem; color: var(--gray-500); }
-        
-        .content-card {
-            background: white;
-            border-radius: 12px;
-            padding: 2rem;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
-            margin-bottom: 1.5rem;
-        }
-        
-        .content-card h2 { font-size: 1.3rem; color: var(--gray-900); margin-bottom: 1rem; }
-        .content-card h3 { font-size: 1.1rem; color: var(--gray-700); margin: 1.5rem 0 0.75rem; }
-        .content-card p { color: var(--gray-700); line-height: 1.7; margin-bottom: 1rem; }
-        .content-card ul, .content-card ol { margin-left: 1.5rem; margin-bottom: 1rem; color: var(--gray-700); line-height: 1.8; }
-        
-        .screenshot-placeholder {
-            background: linear-gradient(135deg, var(--gray-100), var(--gray-200));
-            border: 2px dashed var(--gray-300);
-            border-radius: 8px;
-            padding: 3rem;
-            text-align: center;
-            margin: 1.5rem 0;
-        }
-        
-        .screenshot-placeholder .icon { font-size: 3rem; margin-bottom: 0.5rem; }
-        .screenshot-placeholder .label { color: var(--gray-500); font-style: italic; }
-        
-        .info-box {
-            background: var(--manager-light);
-            border-left: 4px solid var(--manager);
-            padding: 1rem 1.25rem;
-            border-radius: 0 8px 8px 0;
-            margin: 1.5rem 0;
-        }
-        
-        .info-box.tip { background: #ecfdf5; border-color: var(--success); }
-        .info-box.warning { background: var(--warning-light); border-color: var(--warning); }
-        .info-box.critical { background: var(--error-light); border-color: var(--error); }
-        .info-box strong { display: block; margin-bottom: 0.25rem; color: var(--gray-900); }
-        
-        .metric-highlight {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-            gap: 1rem;
-            margin: 1.5rem 0;
-        }
-        
-        .metric-box {
-            background: var(--manager-light);
-            border-radius: 8px;
-            padding: 1.25rem;
-            text-align: center;
-        }
-        
-        .metric-box .value {
-            font-size: 2rem;
-            font-weight: 700;
-            color: var(--manager);
-        }
-        
-        .metric-box .label {
-            font-size: 0.85rem;
-            color: var(--gray-700);
-            margin-top: 0.25rem;
-        }
-        
-        .status-indicator {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-            padding: 0.5rem 1rem;
-            border-radius: 20px;
-            font-weight: 600;
-            font-size: 0.9rem;
-        }
-        
-        .status-on-track { background: var(--success-light); color: var(--success); }
-        .status-at-risk { background: var(--warning-light); color: #b45309; }
-        .status-critical { background: var(--error-light); color: var(--error); }
-        
-        .step-navigation {
-            display: flex;
-            justify-content: space-between;
-            margin-top: 2rem;
-            padding-top: 2rem;
-            border-top: 1px solid var(--gray-200);
-        }
-        
-        .nav-btn {
-            padding: 0.75rem 1.5rem;
-            border-radius: 8px;
-            font-weight: 600;
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-            cursor: pointer;
-            border: none;
-            font-size: 1rem;
-            transition: all 0.3s;
-            text-decoration: none;
-        }
-        
-        .nav-btn.prev { background: var(--gray-200); color: var(--gray-700); }
-        .nav-btn.prev:hover { background: var(--gray-300); }
-        .nav-btn.next { background: var(--manager); color: white; }
-        .nav-btn.next:hover { background: var(--manager-dark); }
-        .nav-btn.complete { background: var(--success); color: white; }
-        .nav-btn:disabled { opacity: 0.5; cursor: not-allowed; }
-        
-        .progress-indicator {
-            background: var(--gray-200);
-            height: 4px;
-            position: fixed;
-            top: 0;
-            left: 280px;
-            right: 0;
-            z-index: 100;
-        }
-        
-        .progress-fill { height: 100%; background: var(--manager); transition: width 0.3s; }
-        .step-page { display: none; }
-        .step-page.active { display: block; }
-        
-        .data-table { width: 100%; border-collapse: collapse; margin: 1rem 0; }
-        .data-table th, .data-table td { padding: 0.75rem; text-align: left; border-bottom: 1px solid var(--gray-200); }
-        .data-table th { background: var(--gray-100); font-weight: 600; color: var(--gray-700); }
-        
-        .timeline {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin: 2rem 0;
-            position: relative;
-        }
-        
-        .timeline::before {
-            content: '';
-            position: absolute;
-            left: 0;
-            right: 0;
-            top: 50%;
-            height: 4px;
-            background: var(--gray-200);
-            z-index: 0;
-        }
-        
-        .timeline-point {
-            background: white;
-            border: 3px solid var(--manager);
-            border-radius: 50%;
-            width: 40px;
-            height: 40px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 700;
-            color: var(--manager);
-            z-index: 1;
-        }
-        
-        .timeline-label {
-            text-align: center;
-            margin-top: 0.5rem;
-            font-size: 0.85rem;
-            color: var(--gray-700);
-        }
+      :root {
+        --primary: #0176d3;
+        --manager: #7c3aed;
+        --manager-dark: #5b21b6;
+        --manager-light: #ede9fe;
+        --success: #2e844a;
+        --success-light: #dcfce7;
+        --warning: #fe9339;
+        --warning-light: #fef3c7;
+        --error: #ea001e;
+        --error-light: #fee2e2;
+        --gray-100: #f3f3f3;
+        --gray-200: #e5e5e5;
+        --gray-300: #d1d5db;
+        --gray-500: #6b7280;
+        --gray-700: #444;
+        --gray-900: #181818;
+      }
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family:
+          "Salesforce Sans",
+          -apple-system,
+          BlinkMacSystemFont,
+          "Segoe UI",
+          Roboto,
+          sans-serif;
+        background: var(--gray-100);
+        min-height: 100vh;
+        display: flex;
+      }
+
+      .sidebar {
+        width: 280px;
+        background: white;
+        border-right: 1px solid var(--gray-200);
+        padding: 1.5rem;
+        position: fixed;
+        height: 100vh;
+        overflow-y: auto;
+      }
+
+      .sidebar-header {
+        padding-bottom: 1rem;
+        border-bottom: 1px solid var(--gray-200);
+        margin-bottom: 1rem;
+      }
+
+      .sidebar-header a {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        color: var(--manager);
+        text-decoration: none;
+        font-size: 0.9rem;
+        margin-bottom: 0.5rem;
+      }
+
+      .sidebar-header a:hover {
+        text-decoration: underline;
+      }
+      .sidebar-header h2 {
+        font-size: 1.1rem;
+        color: var(--gray-900);
+      }
+
+      .sidebar-header .module-badge {
+        display: inline-block;
+        background: var(--manager-light);
+        color: var(--manager);
+        padding: 0.2rem 0.6rem;
+        border-radius: 10px;
+        font-size: 0.75rem;
+        font-weight: 600;
+        margin-top: 0.5rem;
+      }
+
+      .steps-list {
+        list-style: none;
+      }
+
+      .step-item {
+        padding: 0.75rem;
+        border-radius: 8px;
+        margin-bottom: 0.5rem;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        transition: all 0.2s;
+      }
+
+      .step-item:hover {
+        background: var(--gray-100);
+      }
+      .step-item.active {
+        background: var(--manager-light);
+      }
+      .step-item.completed {
+        opacity: 0.7;
+      }
+
+      .step-number {
+        width: 28px;
+        height: 28px;
+        border-radius: 50%;
+        background: var(--gray-200);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.85rem;
+        font-weight: 600;
+        color: var(--gray-500);
+        flex-shrink: 0;
+      }
+
+      .step-item.active .step-number {
+        background: var(--manager);
+        color: white;
+      }
+      .step-item.completed .step-number {
+        background: var(--success);
+        color: white;
+      }
+      .step-item.completed .step-number::before {
+        content: "✓";
+      }
+
+      .step-info {
+        flex-grow: 1;
+      }
+      .step-title {
+        font-size: 0.9rem;
+        color: var(--gray-900);
+        font-weight: 500;
+      }
+      .step-duration {
+        font-size: 0.75rem;
+        color: var(--gray-500);
+      }
+
+      .main-content {
+        flex-grow: 1;
+        margin-left: 280px;
+        padding: 2rem;
+      }
+      .step-content {
+        max-width: 900px;
+        margin: 0 auto;
+      }
+      .step-header {
+        margin-bottom: 2rem;
+      }
+
+      .step-header .step-badge {
+        display: inline-block;
+        background: var(--manager);
+        color: white;
+        padding: 0.3rem 1rem;
+        border-radius: 20px;
+        font-size: 0.85rem;
+        font-weight: 600;
+        margin-bottom: 0.75rem;
+      }
+
+      .step-header h1 {
+        font-size: 2rem;
+        color: var(--gray-900);
+        margin-bottom: 0.5rem;
+      }
+      .step-header p {
+        font-size: 1.1rem;
+        color: var(--gray-500);
+      }
+
+      .content-card {
+        background: white;
+        border-radius: 12px;
+        padding: 2rem;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+        margin-bottom: 1.5rem;
+      }
+
+      .content-card h2 {
+        font-size: 1.3rem;
+        color: var(--gray-900);
+        margin-bottom: 1rem;
+      }
+      .content-card h3 {
+        font-size: 1.1rem;
+        color: var(--gray-700);
+        margin: 1.5rem 0 0.75rem;
+      }
+      .content-card p {
+        color: var(--gray-700);
+        line-height: 1.7;
+        margin-bottom: 1rem;
+      }
+      .content-card ul,
+      .content-card ol {
+        margin-left: 1.5rem;
+        margin-bottom: 1rem;
+        color: var(--gray-700);
+        line-height: 1.8;
+      }
+
+      .screenshot-placeholder {
+        background: linear-gradient(135deg, var(--gray-100), var(--gray-200));
+        border: 2px dashed var(--gray-300);
+        border-radius: 8px;
+        padding: 3rem;
+        text-align: center;
+        margin: 1.5rem 0;
+      }
+
+      .screenshot-placeholder .icon {
+        font-size: 3rem;
+        margin-bottom: 0.5rem;
+      }
+      .screenshot-placeholder .label {
+        color: var(--gray-500);
+        font-style: italic;
+      }
+
+      .info-box {
+        background: var(--manager-light);
+        border-left: 4px solid var(--manager);
+        padding: 1rem 1.25rem;
+        border-radius: 0 8px 8px 0;
+        margin: 1.5rem 0;
+      }
+
+      .info-box.tip {
+        background: #ecfdf5;
+        border-color: var(--success);
+      }
+      .info-box.warning {
+        background: var(--warning-light);
+        border-color: var(--warning);
+      }
+      .info-box.critical {
+        background: var(--error-light);
+        border-color: var(--error);
+      }
+      .info-box strong {
+        display: block;
+        margin-bottom: 0.25rem;
+        color: var(--gray-900);
+      }
+
+      .metric-highlight {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+        gap: 1rem;
+        margin: 1.5rem 0;
+      }
+
+      .metric-box {
+        background: var(--manager-light);
+        border-radius: 8px;
+        padding: 1.25rem;
+        text-align: center;
+      }
+
+      .metric-box .value {
+        font-size: 2rem;
+        font-weight: 700;
+        color: var(--manager);
+      }
+
+      .metric-box .label {
+        font-size: 0.85rem;
+        color: var(--gray-700);
+        margin-top: 0.25rem;
+      }
+
+      .status-indicator {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.5rem 1rem;
+        border-radius: 20px;
+        font-weight: 600;
+        font-size: 0.9rem;
+      }
+
+      .status-on-track {
+        background: var(--success-light);
+        color: var(--success);
+      }
+      .status-at-risk {
+        background: var(--warning-light);
+        color: #b45309;
+      }
+      .status-critical {
+        background: var(--error-light);
+        color: var(--error);
+      }
+
+      .step-navigation {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 2rem;
+        padding-top: 2rem;
+        border-top: 1px solid var(--gray-200);
+      }
+
+      .nav-btn {
+        padding: 0.75rem 1.5rem;
+        border-radius: 8px;
+        font-weight: 600;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        cursor: pointer;
+        border: none;
+        font-size: 1rem;
+        transition: all 0.3s;
+        text-decoration: none;
+      }
+
+      .nav-btn.prev {
+        background: var(--gray-200);
+        color: var(--gray-700);
+      }
+      .nav-btn.prev:hover {
+        background: var(--gray-300);
+      }
+      .nav-btn.next {
+        background: var(--manager);
+        color: white;
+      }
+      .nav-btn.next:hover {
+        background: var(--manager-dark);
+      }
+      .nav-btn.complete {
+        background: var(--success);
+        color: white;
+      }
+      .nav-btn:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+      }
+
+      .progress-indicator {
+        background: var(--gray-200);
+        height: 4px;
+        position: fixed;
+        top: 0;
+        left: 280px;
+        right: 0;
+        z-index: 100;
+      }
+
+      .progress-fill {
+        height: 100%;
+        background: var(--manager);
+        transition: width 0.3s;
+      }
+      .step-page {
+        display: none;
+      }
+      .step-page.active {
+        display: block;
+      }
+
+      .data-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 1rem 0;
+      }
+      .data-table th,
+      .data-table td {
+        padding: 0.75rem;
+        text-align: left;
+        border-bottom: 1px solid var(--gray-200);
+      }
+      .data-table th {
+        background: var(--gray-100);
+        font-weight: 600;
+        color: var(--gray-700);
+      }
+
+      .timeline {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin: 2rem 0;
+        position: relative;
+      }
+
+      .timeline::before {
+        content: "";
+        position: absolute;
+        left: 0;
+        right: 0;
+        top: 50%;
+        height: 4px;
+        background: var(--gray-200);
+        z-index: 0;
+      }
+
+      .timeline-point {
+        background: white;
+        border: 3px solid var(--manager);
+        border-radius: 50%;
+        width: 40px;
+        height: 40px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 700;
+        color: var(--manager);
+        z-index: 1;
+      }
+
+      .timeline-label {
+        text-align: center;
+        margin-top: 0.5rem;
+        font-size: 0.85rem;
+        color: var(--gray-700);
+      }
     </style>
-</head>
-<body>
+  </head>
+  <body>
     <div class="progress-indicator">
-        <div class="progress-fill" id="progressFill" style="width: 0%"></div>
+      <div class="progress-fill" id="progressFill" style="width: 0%"></div>
     </div>
-    
+
     <aside class="sidebar">
-        <div class="sidebar-header">
-            <a href="sales-manager-training.html">← Back to Manager Training</a>
-            <h2>Module 3: Contract B Monitoring</h2>
-            <span class="module-badge">15 minutes</span>
-        </div>
-        
-        <ul class="steps-list" id="stepsList">
-            <li class="step-item active" data-step="1" onclick="goToStep(1)">
-                <span class="step-number">1</span>
-                <div class="step-info">
-                    <div class="step-title">Contract B Overview</div>
-                    <div class="step-duration">2 min</div>
-                </div>
-            </li>
-            <li class="step-item" data-step="2" onclick="goToStep(2)">
-                <span class="step-number">2</span>
-                <div class="step-info">
-                    <div class="step-title">Requirements Breakdown</div>
-                    <div class="step-duration">3 min</div>
-                </div>
-            </li>
-            <li class="step-item" data-step="3" onclick="goToStep(3)">
-                <span class="step-number">3</span>
-                <div class="step-info">
-                    <div class="step-title">Status Indicators</div>
-                    <div class="step-duration">2 min</div>
-                </div>
-            </li>
-            <li class="step-item" data-step="4" onclick="goToStep(4)">
-                <span class="step-number">4</span>
-                <div class="step-info">
-                    <div class="step-title">Monitoring Dashboard</div>
-                    <div class="step-duration">3 min</div>
-                </div>
-            </li>
-            <li class="step-item" data-step="5" onclick="goToStep(5)">
-                <span class="step-number">5</span>
-                <div class="step-info">
-                    <div class="step-title">Extensions Process</div>
-                    <div class="step-duration">2 min</div>
-                </div>
-            </li>
-            <li class="step-item" data-step="6" onclick="goToStep(6)">
-                <span class="step-number">6</span>
-                <div class="step-info">
-                    <div class="step-title">Outcomes & Actions</div>
-                    <div class="step-duration">2 min</div>
-                </div>
-            </li>
-            <li class="step-item" data-step="7" onclick="goToStep(7)">
-                <span class="step-number">7</span>
-                <div class="step-info">
-                    <div class="step-title">Module Complete</div>
-                    <div class="step-duration">1 min</div>
-                </div>
-            </li>
-        </ul>
+      <div class="sidebar-header">
+        <a href="sales-manager-training.html">← Back to Manager Training</a>
+        <h2>Module 3: Contract B Monitoring</h2>
+        <span class="module-badge">15 minutes</span>
+      </div>
+
+      <ul class="steps-list" id="stepsList">
+        <li class="step-item active" data-step="1" onclick="goToStep(1)">
+          <span class="step-number">1</span>
+          <div class="step-info">
+            <div class="step-title">Contract B Overview</div>
+            <div class="step-duration">2 min</div>
+          </div>
+        </li>
+        <li class="step-item" data-step="2" onclick="goToStep(2)">
+          <span class="step-number">2</span>
+          <div class="step-info">
+            <div class="step-title">Requirements Breakdown</div>
+            <div class="step-duration">3 min</div>
+          </div>
+        </li>
+        <li class="step-item" data-step="3" onclick="goToStep(3)">
+          <span class="step-number">3</span>
+          <div class="step-info">
+            <div class="step-title">Status Indicators</div>
+            <div class="step-duration">2 min</div>
+          </div>
+        </li>
+        <li class="step-item" data-step="4" onclick="goToStep(4)">
+          <span class="step-number">4</span>
+          <div class="step-info">
+            <div class="step-title">Monitoring Dashboard</div>
+            <div class="step-duration">3 min</div>
+          </div>
+        </li>
+        <li class="step-item" data-step="5" onclick="goToStep(5)">
+          <span class="step-number">5</span>
+          <div class="step-info">
+            <div class="step-title">Extensions Process</div>
+            <div class="step-duration">2 min</div>
+          </div>
+        </li>
+        <li class="step-item" data-step="6" onclick="goToStep(6)">
+          <span class="step-number">6</span>
+          <div class="step-info">
+            <div class="step-title">Outcomes & Actions</div>
+            <div class="step-duration">2 min</div>
+          </div>
+        </li>
+        <li class="step-item" data-step="7" onclick="goToStep(7)">
+          <span class="step-number">7</span>
+          <div class="step-info">
+            <div class="step-title">Module Complete</div>
+            <div class="step-duration">1 min</div>
+          </div>
+        </li>
+      </ul>
     </aside>
-    
+
     <main class="main-content">
-        <!-- Step 1: Contract B Overview -->
-        <div class="step-page active" id="step1">
-            <div class="step-content">
-                <div class="step-header">
-                    <span class="step-badge">Step 1 of 7</span>
-                    <h1>Contract B Overview</h1>
-                    <p>Understanding the Contract B probationary period</p>
-                </div>
-                
-                <div class="content-card">
-                    <h2>📋 What is Contract B?</h2>
-                    <p>Contract B is the initial probationary contract for newly hired financial advisors. During this period, advisors must demonstrate their ability to generate business by meeting specific production requirements.</p>
-                    
-                    <div class="info-box critical">
-                        <strong>⚠️ Critical Contract B Requirements</strong>
-                        <p>All Contract B advisors must meet these requirements to transition to Contract A:</p>
-                    </div>
-                    
-                    <div class="metric-highlight">
-                        <div class="metric-box">
-                            <div class="value">4</div>
-                            <div class="label">Months Duration</div>
-                        </div>
-                        <div class="metric-box">
-                            <div class="value">$2,500</div>
-                            <div class="label">FYC Requirement</div>
-                        </div>
-                        <div class="metric-box">
-                            <div class="value">5</div>
-                            <div class="label">Submissions Required</div>
-                        </div>
-                        <div class="metric-box">
-                            <div class="value">4</div>
-                            <div class="label">Max Extension (Months)</div>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="content-card">
-                    <h2>⏱️ Contract B Timeline</h2>
-                    <p>The standard Contract B period runs for 4 months from the advisor's start date:</p>
-                    
-                    <div class="timeline">
-                        <div>
-                            <div class="timeline-point">1</div>
-                            <div class="timeline-label">Month 1<br>Onboarding</div>
-                        </div>
-                        <div>
-                            <div class="timeline-point">2</div>
-                            <div class="timeline-label">Month 2<br>Ramp Up</div>
-                        </div>
-                        <div>
-                            <div class="timeline-point">3</div>
-                            <div class="timeline-label">Month 3<br>Production</div>
-                        </div>
-                        <div>
-                            <div class="timeline-point">4</div>
-                            <div class="timeline-label">Month 4<br>Evaluation</div>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="step-navigation">
-                    <button class="nav-btn prev" disabled>← Previous</button>
-                    <button class="nav-btn next" onclick="goToStep(2)">Next: Requirements Breakdown →</button>
-                </div>
+      <!-- Step 1: Contract B Overview -->
+      <div class="step-page active" id="step1">
+        <div class="step-content">
+          <div class="step-header">
+            <span class="step-badge">Step 1 of 7</span>
+            <h1>Contract B Overview</h1>
+            <p>Understanding the Contract B probationary period</p>
+          </div>
+
+          <div class="content-card">
+            <h2>📋 What is Contract B?</h2>
+            <p>
+              Contract B is the initial probationary contract for newly hired
+              financial advisors. During this period, advisors must demonstrate
+              their ability to generate business by meeting specific production
+              requirements.
+            </p>
+
+            <div class="info-box critical">
+              <strong>⚠️ Critical Contract B Requirements</strong>
+              <p>
+                All Contract B advisors must meet these requirements to
+                transition to Contract A:
+              </p>
             </div>
-        </div>
-        
-        <!-- Step 2: Requirements Breakdown -->
-        <div class="step-page" id="step2">
-            <div class="step-content">
-                <div class="step-header">
-                    <span class="step-badge">Step 2 of 7</span>
-                    <h1>Requirements Breakdown</h1>
-                    <p>Understanding FYC and submission requirements</p>
-                </div>
-                
-                <div class="content-card">
-                    <h2>💰 FYC Requirement: $2,500</h2>
-                    <p><strong>First Year Commission (FYC)</strong> is the commission earned on new policies written during the Contract B period.</p>
-                    
-                    <h3>FYC Calculation</h3>
-                    <ul>
-                        <li>FYC is credited when policies are placed (paid for by client)</li>
-                        <li>Cumulative total across all product lines</li>
-                        <li>Must reach $2,500 by end of Contract B period</li>
-                        <li>FYC from pending applications does not count until placed</li>
-                    </ul>
-                    
-                    <h3>Monthly Pace Targets</h3>
-                    <table class="data-table">
-                        <thead>
-                            <tr>
-                                <th>End of Month</th>
-                                <th>On-Track FYC</th>
-                                <th>% of Goal</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>Month 1</td>
-                                <td>$625</td>
-                                <td>25%</td>
-                            </tr>
-                            <tr>
-                                <td>Month 2</td>
-                                <td>$1,250</td>
-                                <td>50%</td>
-                            </tr>
-                            <tr>
-                                <td>Month 3</td>
-                                <td>$1,875</td>
-                                <td>75%</td>
-                            </tr>
-                            <tr>
-                                <td>Month 4</td>
-                                <td>$2,500</td>
-                                <td>100%</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-                
-                <div class="content-card">
-                    <h2>📝 Submission Requirement: 5</h2>
-                    <p><strong>Submissions</strong> are completed insurance applications submitted to the company for underwriting.</p>
-                    
-                    <ul>
-                        <li>Minimum of 5 submissions required</li>
-                        <li>Counts all product types</li>
-                        <li>Submitted applications count even if ultimately declined</li>
-                        <li>Quality matters - declined apps may indicate coaching needs</li>
-                    </ul>
-                </div>
-                
-                <div class="info-box tip">
-                    <strong>💡 Both Requirements Must Be Met</strong>
-                    An advisor must meet BOTH the $2,500 FYC AND 5 submissions to qualify for transition to Contract A. Meeting one but not the other is insufficient.
-                </div>
-                
-                <div class="step-navigation">
-                    <button class="nav-btn prev" onclick="goToStep(1)">← Previous</button>
-                    <button class="nav-btn next" onclick="goToStep(3)">Next: Status Indicators →</button>
-                </div>
+
+            <div class="metric-highlight">
+              <div class="metric-box">
+                <div class="value">4</div>
+                <div class="label">Months Duration</div>
+              </div>
+              <div class="metric-box">
+                <div class="value">$2,500</div>
+                <div class="label">FYC Requirement</div>
+              </div>
+              <div class="metric-box">
+                <div class="value">5</div>
+                <div class="label">Submissions Required</div>
+              </div>
+              <div class="metric-box">
+                <div class="value">4</div>
+                <div class="label">Max Extension (Months)</div>
+              </div>
             </div>
-        </div>
-        
-        <!-- Step 3: Status Indicators -->
-        <div class="step-page" id="step3">
-            <div class="step-content">
-                <div class="step-header">
-                    <span class="step-badge">Step 3 of 7</span>
-                    <h1>Status Indicators</h1>
-                    <p>Understanding On Track, At Risk, and Critical status</p>
-                </div>
-                
-                <div class="content-card">
-                    <h2>🚦 Status Color Coding</h2>
-                    <p>The system automatically calculates each advisor's status based on their progress relative to time elapsed:</p>
-                    
-                    <div style="margin: 1.5rem 0;">
-                        <div style="margin-bottom: 1.5rem;">
-                            <span class="status-indicator status-on-track">✓ On Track</span>
-                            <p style="margin-top: 0.5rem;">Progress is equal to or ahead of time elapsed. Advisor is on pace to meet requirements.</p>
-                        </div>
-                        
-                        <div style="margin-bottom: 1.5rem;">
-                            <span class="status-indicator status-at-risk">⚠ At Risk</span>
-                            <p style="margin-top: 0.5rem;">Progress is behind schedule but still achievable with increased effort. Requires attention.</p>
-                        </div>
-                        
-                        <div style="margin-bottom: 1.5rem;">
-                            <span class="status-indicator status-critical">✕ Critical</span>
-                            <p style="margin-top: 0.5rem;">Significantly behind with limited time remaining. Urgent intervention needed or extension consideration.</p>
-                        </div>
-                    </div>
-                    
-                    <div class="screenshot-placeholder">
-                        <div class="icon">📸</div>
-                        <div class="label">Screenshot: Contract B Status Badges</div>
-                    </div>
-                </div>
-                
-                <div class="content-card">
-                    <h2>📊 Status Calculation Example</h2>
-                    <p>For an advisor in Month 3 (75% of time elapsed):</p>
-                    
-                    <table class="data-table">
-                        <thead>
-                            <tr>
-                                <th>FYC Progress</th>
-                                <th>Submission Progress</th>
-                                <th>Status</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>$2,000 (80%)</td>
-                                <td>4 (80%)</td>
-                                <td><span class="status-indicator status-on-track">On Track</span></td>
-                            </tr>
-                            <tr>
-                                <td>$1,500 (60%)</td>
-                                <td>3 (60%)</td>
-                                <td><span class="status-indicator status-at-risk">At Risk</span></td>
-                            </tr>
-                            <tr>
-                                <td>$800 (32%)</td>
-                                <td>2 (40%)</td>
-                                <td><span class="status-indicator status-critical">Critical</span></td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-                
-                <div class="step-navigation">
-                    <button class="nav-btn prev" onclick="goToStep(2)">← Previous</button>
-                    <button class="nav-btn next" onclick="goToStep(4)">Next: Monitoring Dashboard →</button>
-                </div>
+          </div>
+
+          <div class="content-card">
+            <h2>⏱️ Contract B Timeline</h2>
+            <p>
+              The standard Contract B period runs for 4 months from the
+              advisor's start date:
+            </p>
+
+            <div class="timeline">
+              <div>
+                <div class="timeline-point">1</div>
+                <div class="timeline-label">Month 1<br />Onboarding</div>
+              </div>
+              <div>
+                <div class="timeline-point">2</div>
+                <div class="timeline-label">Month 2<br />Ramp Up</div>
+              </div>
+              <div>
+                <div class="timeline-point">3</div>
+                <div class="timeline-label">Month 3<br />Production</div>
+              </div>
+              <div>
+                <div class="timeline-point">4</div>
+                <div class="timeline-label">Month 4<br />Evaluation</div>
+              </div>
             </div>
+          </div>
+
+          <div class="step-navigation">
+            <button class="nav-btn prev" disabled>← Previous</button>
+            <button class="nav-btn next" onclick="goToStep(2)">
+              Next: Requirements Breakdown →
+            </button>
+          </div>
         </div>
-        
-        <!-- Step 4: Monitoring Dashboard -->
-        <div class="step-page" id="step4">
-            <div class="step-content">
-                <div class="step-header">
-                    <span class="step-badge">Step 4 of 7</span>
-                    <h1>Monitoring Dashboard</h1>
-                    <p>Using the Contract B monitoring view</p>
-                </div>
-                
-                <div class="content-card">
-                    <h2>📋 Contract B Dashboard View</h2>
-                    <p>As a manager, you have access to a dedicated view showing all Contract B advisors under your team:</p>
-                    
-                    <div class="screenshot-placeholder">
-                        <div class="icon">📸</div>
-                        <div class="label">Screenshot: Contract B Manager Dashboard</div>
-                    </div>
-                    
-                    <h3>Dashboard Elements:</h3>
-                    <ul>
-                        <li><strong>Summary Cards</strong> - Count of On Track, At Risk, and Critical advisors</li>
-                        <li><strong>Advisor List</strong> - Each advisor with their progress metrics</li>
-                        <li><strong>Progress Bars</strong> - Visual FYC and submission progress</li>
-                        <li><strong>Days Remaining</strong> - Time left in Contract B period</li>
-                        <li><strong>Quick Actions</strong> - Links to record details and coaching notes</li>
-                    </ul>
-                </div>
-                
-                <div class="content-card">
-                    <h2>🔍 What to Review Weekly</h2>
-                    <ol>
-                        <li>Check status distribution - how many in each category?</li>
-                        <li>Review any advisors who moved from On Track to At Risk</li>
-                        <li>Identify Critical advisors needing immediate coaching</li>
-                        <li>Note advisors approaching their end date (within 30 days)</li>
-                        <li>Check pending extensions awaiting approval</li>
-                    </ol>
-                </div>
-                
-                <div class="info-box tip">
-                    <strong>💡 Set Up Alerts</strong>
-                    Configure email notifications for when advisors move to "Critical" status or when their Contract B end date is within 30 days.
-                </div>
-                
-                <div class="step-navigation">
-                    <button class="nav-btn prev" onclick="goToStep(3)">← Previous</button>
-                    <button class="nav-btn next" onclick="goToStep(5)">Next: Extensions Process →</button>
-                </div>
+      </div>
+
+      <!-- Step 2: Requirements Breakdown -->
+      <div class="step-page" id="step2">
+        <div class="step-content">
+          <div class="step-header">
+            <span class="step-badge">Step 2 of 7</span>
+            <h1>Requirements Breakdown</h1>
+            <p>Understanding FYC and submission requirements</p>
+          </div>
+
+          <div class="content-card">
+            <h2>💰 FYC Requirement: $2,500</h2>
+            <p>
+              <strong>First Year Commission (FYC)</strong> is the commission
+              earned on new policies written during the Contract B period.
+            </p>
+
+            <h3>FYC Calculation</h3>
+            <ul>
+              <li>
+                FYC is credited when policies are placed (paid for by client)
+              </li>
+              <li>Cumulative total across all product lines</li>
+              <li>Must reach $2,500 by end of Contract B period</li>
+              <li>FYC from pending applications does not count until placed</li>
+            </ul>
+
+            <h3>Monthly Pace Targets</h3>
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>End of Month</th>
+                  <th>On-Track FYC</th>
+                  <th>% of Goal</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Month 1</td>
+                  <td>$625</td>
+                  <td>25%</td>
+                </tr>
+                <tr>
+                  <td>Month 2</td>
+                  <td>$1,250</td>
+                  <td>50%</td>
+                </tr>
+                <tr>
+                  <td>Month 3</td>
+                  <td>$1,875</td>
+                  <td>75%</td>
+                </tr>
+                <tr>
+                  <td>Month 4</td>
+                  <td>$2,500</td>
+                  <td>100%</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="content-card">
+            <h2>📝 Submission Requirement: 5</h2>
+            <p>
+              <strong>Submissions</strong> are completed insurance applications
+              submitted to the company for underwriting.
+            </p>
+
+            <ul>
+              <li>Minimum of 5 submissions required</li>
+              <li>Counts all product types</li>
+              <li>Submitted applications count even if ultimately declined</li>
+              <li>
+                Quality matters - declined apps may indicate coaching needs
+              </li>
+            </ul>
+          </div>
+
+          <div class="info-box tip">
+            <strong>💡 Both Requirements Must Be Met</strong>
+            An advisor must meet BOTH the $2,500 FYC AND 5 submissions to
+            qualify for transition to Contract A. Meeting one but not the other
+            is insufficient.
+          </div>
+
+          <div class="step-navigation">
+            <button class="nav-btn prev" onclick="goToStep(1)">
+              ← Previous
+            </button>
+            <button class="nav-btn next" onclick="goToStep(3)">
+              Next: Status Indicators →
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Step 3: Status Indicators -->
+      <div class="step-page" id="step3">
+        <div class="step-content">
+          <div class="step-header">
+            <span class="step-badge">Step 3 of 7</span>
+            <h1>Status Indicators</h1>
+            <p>Understanding On Track, At Risk, and Critical status</p>
+          </div>
+
+          <div class="content-card">
+            <h2>🚦 Status Color Coding</h2>
+            <p>
+              The system automatically calculates each advisor's status based on
+              their progress relative to time elapsed:
+            </p>
+
+            <div style="margin: 1.5rem 0">
+              <div style="margin-bottom: 1.5rem">
+                <span class="status-indicator status-on-track">✓ On Track</span>
+                <p style="margin-top: 0.5rem">
+                  Progress is equal to or ahead of time elapsed. Advisor is on
+                  pace to meet requirements.
+                </p>
+              </div>
+
+              <div style="margin-bottom: 1.5rem">
+                <span class="status-indicator status-at-risk">⚠ At Risk</span>
+                <p style="margin-top: 0.5rem">
+                  Progress is behind schedule but still achievable with
+                  increased effort. Requires attention.
+                </p>
+              </div>
+
+              <div style="margin-bottom: 1.5rem">
+                <span class="status-indicator status-critical">✕ Critical</span>
+                <p style="margin-top: 0.5rem">
+                  Significantly behind with limited time remaining. Urgent
+                  intervention needed or extension consideration.
+                </p>
+              </div>
             </div>
-        </div>
-        
-        <!-- Step 5: Extensions Process -->
-        <div class="step-page" id="step5">
-            <div class="step-content">
-                <div class="step-header">
-                    <span class="step-badge">Step 5 of 7</span>
-                    <h1>Extensions Process</h1>
-                    <p>Granting extensions to Contract B advisors</p>
-                </div>
-                
-                <div class="content-card">
-                    <h2>⏰ Extension Policy</h2>
-                    <p>Contract B advisors who haven't met requirements may be granted an extension under certain conditions:</p>
-                    
-                    <div class="metric-highlight">
-                        <div class="metric-box">
-                            <div class="value">4</div>
-                            <div class="label">Max Extension Months</div>
-                        </div>
-                        <div class="metric-box">
-                            <div class="value">8</div>
-                            <div class="label">Max Total Months (4+4)</div>
-                        </div>
-                    </div>
-                    
-                    <h3>Extension Considerations:</h3>
-                    <ul>
-                        <li><strong>Progress Made</strong> - Has the advisor shown improvement?</li>
-                        <li><strong>Extenuating Circumstances</strong> - Valid reasons for slow start?</li>
-                        <li><strong>Coaching Engagement</strong> - Has advisor been receptive to guidance?</li>
-                        <li><strong>Pipeline Quality</strong> - Pending applications likely to convert?</li>
-                    </ul>
-                </div>
-                
-                <div class="content-card">
-                    <h2>📝 Granting an Extension</h2>
-                    <ol>
-                        <li>Open the advisor's Contract B record</li>
-                        <li>Click "Request Extension" or edit the End Date</li>
-                        <li>Enter extension length (1-4 months)</li>
-                        <li>Document justification in Notes field</li>
-                        <li>Submit for approval (if required by your org)</li>
-                        <li>System validates total doesn't exceed 8 months</li>
-                    </ol>
-                    
-                    <div class="screenshot-placeholder">
-                        <div class="icon">📸</div>
-                        <div class="label">Screenshot: Extension Request Form</div>
-                    </div>
-                </div>
-                
-                <div class="info-box warning">
-                    <strong>⚠️ Maximum Extension Enforced</strong>
-                    The system will not allow extensions that would push the total Contract B period beyond 8 months (4 original + 4 extension maximum).
-                </div>
-                
-                <div class="step-navigation">
-                    <button class="nav-btn prev" onclick="goToStep(4)">← Previous</button>
-                    <button class="nav-btn next" onclick="goToStep(6)">Next: Outcomes & Actions →</button>
-                </div>
+
+            <div class="screenshot-placeholder">
+              <div class="icon">📸</div>
+              <div class="label">Screenshot: Contract B Status Badges</div>
             </div>
+          </div>
+
+          <div class="content-card">
+            <h2>📊 Status Calculation Example</h2>
+            <p>For an advisor in Month 3 (75% of time elapsed):</p>
+
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>FYC Progress</th>
+                  <th>Submission Progress</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>$2,000 (80%)</td>
+                  <td>4 (80%)</td>
+                  <td>
+                    <span class="status-indicator status-on-track"
+                      >On Track</span
+                    >
+                  </td>
+                </tr>
+                <tr>
+                  <td>$1,500 (60%)</td>
+                  <td>3 (60%)</td>
+                  <td>
+                    <span class="status-indicator status-at-risk">At Risk</span>
+                  </td>
+                </tr>
+                <tr>
+                  <td>$800 (32%)</td>
+                  <td>2 (40%)</td>
+                  <td>
+                    <span class="status-indicator status-critical"
+                      >Critical</span
+                    >
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="step-navigation">
+            <button class="nav-btn prev" onclick="goToStep(2)">
+              ← Previous
+            </button>
+            <button class="nav-btn next" onclick="goToStep(4)">
+              Next: Monitoring Dashboard →
+            </button>
+          </div>
         </div>
-        
-        <!-- Step 6: Outcomes & Actions -->
-        <div class="step-page" id="step6">
-            <div class="step-content">
-                <div class="step-header">
-                    <span class="step-badge">Step 6 of 7</span>
-                    <h1>Outcomes & Actions</h1>
-                    <p>Handling Contract B completion scenarios</p>
-                </div>
-                
-                <div class="content-card">
-                    <h2>🎯 Possible Outcomes</h2>
-                    
-                    <h3 style="color: var(--success);">✓ Transition to Contract A</h3>
-                    <p>Advisor has met both requirements ($2,500 FYC and 5 submissions):</p>
-                    <ul>
-                        <li>Update Contract B status to "Transitioned"</li>
-                        <li>Create Contract A record</li>
-                        <li>Congratulate advisor and announce to team</li>
-                    </ul>
-                    
-                    <h3 style="color: var(--warning);">⏳ Extension Granted</h3>
-                    <p>Advisor shows promise but needs more time:</p>
-                    <ul>
-                        <li>Document extension approval with reasons</li>
-                        <li>Set clear expectations for extension period</li>
-                        <li>Schedule additional coaching sessions</li>
-                        <li>New end date reflects extension (max 4 additional months)</li>
-                    </ul>
-                    
-                    <h3 style="color: var(--error);">✕ Termination</h3>
-                    <p>Advisor did not meet requirements and extension not warranted:</p>
-                    <ul>
-                        <li>Follow HR termination procedures</li>
-                        <li>Update Contract B status to "Terminated"</li>
-                        <li>Document termination date and reason</li>
-                        <li>Ensure proper offboarding</li>
-                    </ul>
-                </div>
-                
-                <div class="content-card">
-                    <h2>📊 Manager Responsibilities</h2>
-                    <table class="data-table">
-                        <thead>
-                            <tr>
-                                <th>Timeframe</th>
-                                <th>Action</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>Weekly</td>
-                                <td>Review Contract B dashboard, identify At Risk/Critical advisors</td>
-                            </tr>
-                            <tr>
-                                <td>30 days before end</td>
-                                <td>Evaluate progress, decide on extension or outcome</td>
-                            </tr>
-                            <tr>
-                                <td>At end date</td>
-                                <td>Process transition, extension, or termination</td>
-                            </tr>
-                            <tr>
-                                <td>Monthly</td>
-                                <td>Report Contract B metrics to leadership</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-                
-                <div class="step-navigation">
-                    <button class="nav-btn prev" onclick="goToStep(5)">← Previous</button>
-                    <button class="nav-btn next" onclick="goToStep(7)">Complete Module →</button>
-                </div>
+      </div>
+
+      <!-- Step 4: Monitoring Dashboard -->
+      <div class="step-page" id="step4">
+        <div class="step-content">
+          <div class="step-header">
+            <span class="step-badge">Step 4 of 7</span>
+            <h1>Monitoring Dashboard</h1>
+            <p>Using the Contract B monitoring view</p>
+          </div>
+
+          <div class="content-card">
+            <h2>📋 Contract B Dashboard View</h2>
+            <p>
+              As a manager, you have access to a dedicated view showing all
+              Contract B advisors under your team:
+            </p>
+
+            <div class="screenshot-placeholder">
+              <div class="icon">📸</div>
+              <div class="label">Screenshot: Contract B Manager Dashboard</div>
             </div>
+
+            <h3>Dashboard Elements:</h3>
+            <ul>
+              <li>
+                <strong>Summary Cards</strong> - Count of On Track, At Risk, and
+                Critical advisors
+              </li>
+              <li>
+                <strong>Advisor List</strong> - Each advisor with their progress
+                metrics
+              </li>
+              <li>
+                <strong>Progress Bars</strong> - Visual FYC and submission
+                progress
+              </li>
+              <li>
+                <strong>Days Remaining</strong> - Time left in Contract B period
+              </li>
+              <li>
+                <strong>Quick Actions</strong> - Links to record details and
+                coaching notes
+              </li>
+            </ul>
+          </div>
+
+          <div class="content-card">
+            <h2>🔍 What to Review Weekly</h2>
+            <ol>
+              <li>Check status distribution - how many in each category?</li>
+              <li>Review any advisors who moved from On Track to At Risk</li>
+              <li>Identify Critical advisors needing immediate coaching</li>
+              <li>Note advisors approaching their end date (within 30 days)</li>
+              <li>Check pending extensions awaiting approval</li>
+            </ol>
+          </div>
+
+          <div class="info-box tip">
+            <strong>💡 Set Up Alerts</strong>
+            Configure email notifications for when advisors move to "Critical"
+            status or when their Contract B end date is within 30 days.
+          </div>
+
+          <div class="step-navigation">
+            <button class="nav-btn prev" onclick="goToStep(3)">
+              ← Previous
+            </button>
+            <button class="nav-btn next" onclick="goToStep(5)">
+              Next: Extensions Process →
+            </button>
+          </div>
         </div>
-        
-        <!-- Step 7: Module Complete -->
-        <div class="step-page" id="step7">
-            <div class="step-content">
-                <div class="step-header">
-                    <span class="step-badge">Step 7 of 7</span>
-                    <h1>🎉 Module Complete!</h1>
-                    <p>You've finished Module 3: Contract B Monitoring</p>
-                </div>
-                
-                <div class="content-card" style="text-align: center; padding: 3rem;">
-                    <div style="font-size: 4rem; margin-bottom: 1rem;">📋</div>
-                    <h2>Training Complete!</h2>
-                    <p style="font-size: 1.1rem; max-width: 500px; margin: 1rem auto;">You now understand how to monitor and manage Contract B advisors through their probationary period.</p>
-                    
-                    <h3 style="margin-top: 2rem;">Key Requirements to Remember:</h3>
-                    <div class="metric-highlight" style="max-width: 500px; margin: 1rem auto;">
-                        <div class="metric-box">
-                            <div class="value">4 mo</div>
-                            <div class="label">Duration</div>
-                        </div>
-                        <div class="metric-box">
-                            <div class="value">$2,500</div>
-                            <div class="label">FYC</div>
-                        </div>
-                        <div class="metric-box">
-                            <div class="value">5</div>
-                            <div class="label">Submissions</div>
-                        </div>
-                        <div class="metric-box">
-                            <div class="value">4 mo</div>
-                            <div class="label">Max Extension</div>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="content-card" style="background: linear-gradient(135deg, var(--success), #22c55e); color: white;">
-                    <h2 style="color: white;">🏆 Sales Manager Training Complete!</h2>
-                    <p style="color: rgba(255,255,255,0.9);">Congratulations! You have completed all 3 modules of the Sales Manager Training Program.</p>
-                    
-                    <div style="display: flex; gap: 1rem; margin-top: 1.5rem; flex-wrap: wrap;">
-                        <a href="sales-manager-training.html" class="nav-btn" style="background: rgba(255,255,255,0.2); color: white;">← Back to Training Hub</a>
-                        <a href="index.html" class="nav-btn" style="background: white; color: var(--success);">Training Center Home</a>
-                    </div>
-                </div>
-                
-                <div class="step-navigation">
-                    <button class="nav-btn prev" onclick="goToStep(6)">← Previous</button>
-                    <button class="nav-btn complete" onclick="completeModule()">✓ Complete Training Program</button>
-                </div>
+      </div>
+
+      <!-- Step 5: Extensions Process -->
+      <div class="step-page" id="step5">
+        <div class="step-content">
+          <div class="step-header">
+            <span class="step-badge">Step 5 of 7</span>
+            <h1>Extensions Process</h1>
+            <p>Granting extensions to Contract B advisors</p>
+          </div>
+
+          <div class="content-card">
+            <h2>⏰ Extension Policy</h2>
+            <p>
+              Contract B advisors who haven't met requirements may be granted an
+              extension under certain conditions:
+            </p>
+
+            <div class="metric-highlight">
+              <div class="metric-box">
+                <div class="value">4</div>
+                <div class="label">Max Extension Months</div>
+              </div>
+              <div class="metric-box">
+                <div class="value">8</div>
+                <div class="label">Max Total Months (4+4)</div>
+              </div>
             </div>
+
+            <h3>Extension Considerations:</h3>
+            <ul>
+              <li>
+                <strong>Progress Made</strong> - Has the advisor shown
+                improvement?
+              </li>
+              <li>
+                <strong>Extenuating Circumstances</strong> - Valid reasons for
+                slow start?
+              </li>
+              <li>
+                <strong>Coaching Engagement</strong> - Has advisor been
+                receptive to guidance?
+              </li>
+              <li>
+                <strong>Pipeline Quality</strong> - Pending applications likely
+                to convert?
+              </li>
+            </ul>
+          </div>
+
+          <div class="content-card">
+            <h2>📝 Granting an Extension</h2>
+            <ol>
+              <li>Open the advisor's Contract B record</li>
+              <li>Click "Request Extension" or edit the End Date</li>
+              <li>Enter extension length (1-4 months)</li>
+              <li>Document justification in Notes field</li>
+              <li>Submit for approval (if required by your org)</li>
+              <li>System validates total doesn't exceed 8 months</li>
+            </ol>
+
+            <div class="screenshot-placeholder">
+              <div class="icon">📸</div>
+              <div class="label">Screenshot: Extension Request Form</div>
+            </div>
+          </div>
+
+          <div class="info-box warning">
+            <strong>⚠️ Maximum Extension Enforced</strong>
+            The system will not allow extensions that would push the total
+            Contract B period beyond 8 months (4 original + 4 extension
+            maximum).
+          </div>
+
+          <div class="step-navigation">
+            <button class="nav-btn prev" onclick="goToStep(4)">
+              ← Previous
+            </button>
+            <button class="nav-btn next" onclick="goToStep(6)">
+              Next: Outcomes & Actions →
+            </button>
+          </div>
         </div>
+      </div>
+
+      <!-- Step 6: Outcomes & Actions -->
+      <div class="step-page" id="step6">
+        <div class="step-content">
+          <div class="step-header">
+            <span class="step-badge">Step 6 of 7</span>
+            <h1>Outcomes & Actions</h1>
+            <p>Handling Contract B completion scenarios</p>
+          </div>
+
+          <div class="content-card">
+            <h2>🎯 Possible Outcomes</h2>
+
+            <h3 style="color: var(--success)">✓ Transition to Contract A</h3>
+            <p>
+              Advisor has met both requirements ($2,500 FYC and 5 submissions):
+            </p>
+            <ul>
+              <li>Update Contract B status to "Transitioned"</li>
+              <li>Create Contract A record</li>
+              <li>Congratulate advisor and announce to team</li>
+            </ul>
+
+            <h3 style="color: var(--warning)">⏳ Extension Granted</h3>
+            <p>Advisor shows promise but needs more time:</p>
+            <ul>
+              <li>Document extension approval with reasons</li>
+              <li>Set clear expectations for extension period</li>
+              <li>Schedule additional coaching sessions</li>
+              <li>New end date reflects extension (max 4 additional months)</li>
+            </ul>
+
+            <h3 style="color: var(--error)">✕ Termination</h3>
+            <p>
+              Advisor did not meet requirements and extension not warranted:
+            </p>
+            <ul>
+              <li>Follow HR termination procedures</li>
+              <li>Update Contract B status to "Terminated"</li>
+              <li>Document termination date and reason</li>
+              <li>Ensure proper offboarding</li>
+            </ul>
+          </div>
+
+          <div class="content-card">
+            <h2>📊 Manager Responsibilities</h2>
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Timeframe</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Weekly</td>
+                  <td>
+                    Review Contract B dashboard, identify At Risk/Critical
+                    advisors
+                  </td>
+                </tr>
+                <tr>
+                  <td>30 days before end</td>
+                  <td>Evaluate progress, decide on extension or outcome</td>
+                </tr>
+                <tr>
+                  <td>At end date</td>
+                  <td>Process transition, extension, or termination</td>
+                </tr>
+                <tr>
+                  <td>Monthly</td>
+                  <td>Report Contract B metrics to leadership</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="step-navigation">
+            <button class="nav-btn prev" onclick="goToStep(5)">
+              ← Previous
+            </button>
+            <button class="nav-btn next" onclick="goToStep(7)">
+              Complete Module →
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Step 7: Module Complete -->
+      <div class="step-page" id="step7">
+        <div class="step-content">
+          <div class="step-header">
+            <span class="step-badge">Step 7 of 7</span>
+            <h1>🎉 Module Complete!</h1>
+            <p>You've finished Module 3: Contract B Monitoring</p>
+          </div>
+
+          <div class="content-card" style="text-align: center; padding: 3rem">
+            <div style="font-size: 4rem; margin-bottom: 1rem">📋</div>
+            <h2>Training Complete!</h2>
+            <p style="font-size: 1.1rem; max-width: 500px; margin: 1rem auto">
+              You now understand how to monitor and manage Contract B advisors
+              through their probationary period.
+            </p>
+
+            <h3 style="margin-top: 2rem">Key Requirements to Remember:</h3>
+            <div
+              class="metric-highlight"
+              style="max-width: 500px; margin: 1rem auto"
+            >
+              <div class="metric-box">
+                <div class="value">4 mo</div>
+                <div class="label">Duration</div>
+              </div>
+              <div class="metric-box">
+                <div class="value">$2,500</div>
+                <div class="label">FYC</div>
+              </div>
+              <div class="metric-box">
+                <div class="value">5</div>
+                <div class="label">Submissions</div>
+              </div>
+              <div class="metric-box">
+                <div class="value">4 mo</div>
+                <div class="label">Max Extension</div>
+              </div>
+            </div>
+          </div>
+
+          <div
+            class="content-card"
+            style="
+              background: linear-gradient(135deg, var(--success), #22c55e);
+              color: white;
+            "
+          >
+            <h2 style="color: white">🏆 Sales Manager Training Complete!</h2>
+            <p style="color: rgba(255, 255, 255, 0.9)">
+              Congratulations! You have completed all 3 modules of the Sales
+              Manager Training Program.
+            </p>
+
+            <div
+              style="
+                display: flex;
+                gap: 1rem;
+                margin-top: 1.5rem;
+                flex-wrap: wrap;
+              "
+            >
+              <a
+                href="sales-manager-training.html"
+                class="nav-btn"
+                style="background: rgba(255, 255, 255, 0.2); color: white"
+                >← Back to Training Hub</a
+              >
+              <a
+                href="index.html"
+                class="nav-btn"
+                style="background: white; color: var(--success)"
+                >Training Center Home</a
+              >
+            </div>
+          </div>
+
+          <div class="step-navigation">
+            <button class="nav-btn prev" onclick="goToStep(6)">
+              ← Previous
+            </button>
+            <button class="nav-btn complete" onclick="completeModule()">
+              ✓ Complete Training Program
+            </button>
+          </div>
+        </div>
+      </div>
     </main>
-    
+
     <script>
-        const totalSteps = 7;
-        let currentStep = 1;
-        let completedSteps = [];
-        
-        function loadProgress() {
-            const saved = localStorage.getItem('sales-manager-sm-module3-step');
-            if (saved) {
-                currentStep = parseInt(saved);
-                for (let i = 1; i < currentStep; i++) {
-                    completedSteps.push(i);
-                }
-            }
-            updateUI();
+      const totalSteps = 7;
+      let currentStep = 1;
+      let completedSteps = [];
+
+      function loadProgress() {
+        const saved = localStorage.getItem("sales-manager-sm-module3-step");
+        if (saved) {
+          currentStep = parseInt(saved);
+          for (let i = 1; i < currentStep; i++) {
+            completedSteps.push(i);
+          }
         }
-        
-        function saveProgress() {
-            localStorage.setItem('sales-manager-sm-module3-step', currentStep);
-            if (currentStep > 1) {
-                localStorage.setItem('sales-manager-sm-module3', 'in-progress');
-            }
+        updateUI();
+      }
+
+      function saveProgress() {
+        localStorage.setItem("sales-manager-sm-module3-step", currentStep);
+        if (currentStep > 1) {
+          localStorage.setItem("sales-manager-sm-module3", "in-progress");
         }
-        
-        function goToStep(step) {
-            if (step > currentStep) {
-                for (let i = currentStep; i < step; i++) {
-                    if (!completedSteps.includes(i)) completedSteps.push(i);
-                }
-            }
-            currentStep = step;
-            saveProgress();
-            updateUI();
+      }
+
+      function goToStep(step) {
+        if (step > currentStep) {
+          for (let i = currentStep; i < step; i++) {
+            if (!completedSteps.includes(i)) completedSteps.push(i);
+          }
         }
-        
-        function updateUI() {
-            document.querySelectorAll('.step-page').forEach((page, index) => {
-                page.classList.remove('active');
-                if (index + 1 === currentStep) page.classList.add('active');
-            });
-            
-            document.querySelectorAll('.step-item').forEach((item, index) => {
-                const stepNum = index + 1;
-                item.classList.remove('active', 'completed');
-                if (stepNum === currentStep) item.classList.add('active');
-                else if (completedSteps.includes(stepNum)) item.classList.add('completed');
-            });
-            
-            const progress = ((currentStep - 1) / (totalSteps - 1)) * 100;
-            document.getElementById('progressFill').style.width = `${progress}%`;
-        }
-        
-        function completeModule() {
-            localStorage.setItem('sales-manager-sm-module3', 'completed');
-            localStorage.setItem('sales-manager-sm-module3-step', totalSteps);
-            alert('🎉 Congratulations! You have completed the entire Sales Manager Training Program!');
-            window.location.href = 'sales-manager-training.html';
-        }
-        
-        loadProgress();
+        currentStep = step;
+        saveProgress();
+        updateUI();
+      }
+
+      function updateUI() {
+        document.querySelectorAll(".step-page").forEach((page, index) => {
+          page.classList.remove("active");
+          if (index + 1 === currentStep) page.classList.add("active");
+        });
+
+        document.querySelectorAll(".step-item").forEach((item, index) => {
+          const stepNum = index + 1;
+          item.classList.remove("active", "completed");
+          if (stepNum === currentStep) item.classList.add("active");
+          else if (completedSteps.includes(stepNum))
+            item.classList.add("completed");
+        });
+
+        const progress = ((currentStep - 1) / (totalSteps - 1)) * 100;
+        document.getElementById("progressFill").style.width = `${progress}%`;
+      }
+
+      function completeModule() {
+        localStorage.setItem("sales-manager-sm-module3", "completed");
+        localStorage.setItem("sales-manager-sm-module3-step", totalSteps);
+        alert(
+          "🎉 Congratulations! You have completed the entire Sales Manager Training Program!"
+        );
+        window.location.href = "sales-manager-training.html";
+      }
+
+      loadProgress();
     </script>
-</body>
+  </body>
 </html>

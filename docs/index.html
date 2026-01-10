@@ -1,303 +1,350 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="refresh" content="0; url=training-center.html">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="refresh" content="0; url=training-center.html" />
     <title>Capstone Salesforce Training Center</title>
     <style>
-        :root {
-            --primary: #0176d3;
-            --primary-dark: #014486;
-            --success: #2e844a;
-            --warning: #fe9339;
-            --danger: #ea001e;
-            --gray-100: #f3f3f3;
-            --gray-200: #e5e5e5;
-            --gray-700: #444;
-            --gray-900: #181818;
-        }
-        
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        
-        body {
-            font-family: 'Salesforce Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            padding: 2rem;
-        }
-        
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-        
-        header {
-            text-align: center;
-            color: white;
-            margin-bottom: 3rem;
-        }
-        
-        header h1 {
-            font-size: 2.5rem;
-            margin-bottom: 0.5rem;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
-        }
-        
-        header p {
-            font-size: 1.2rem;
-            opacity: 0.9;
-        }
-        
-        .cards-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-            gap: 1.5rem;
-            margin-bottom: 2rem;
-        }
-        
-        .card {
-            background: white;
-            border-radius: 12px;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
-            overflow: hidden;
-            transition: transform 0.3s, box-shadow 0.3s;
-        }
-        
-        .card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 15px 50px rgba(0,0,0,0.3);
-        }
-        
-        .card-header {
-            padding: 1.5rem;
-            color: white;
-            position: relative;
-        }
-        
-        .card-header.recruiter { background: linear-gradient(135deg, #0176d3, #014486); }
-        .card-header.manager { background: linear-gradient(135deg, #2e844a, #1a5c2e); }
-        .card-header.quick { background: linear-gradient(135deg, #fe9339, #d97706); }
-        .card-header.technical { background: linear-gradient(135deg, #6b7280, #374151); }
-        
-        .card-header h2 {
-            font-size: 1.4rem;
-            margin-bottom: 0.25rem;
-        }
-        
-        .card-header .duration {
-            font-size: 0.9rem;
-            opacity: 0.9;
-        }
-        
-        .card-header .icon {
-            position: absolute;
-            right: 1.5rem;
-            top: 50%;
-            transform: translateY(-50%);
-            font-size: 3rem;
-            opacity: 0.3;
-        }
-        
-        .card-body {
-            padding: 1.5rem;
-        }
-        
-        .card-body p {
-            color: var(--gray-700);
-            margin-bottom: 1rem;
-            line-height: 1.6;
-        }
-        
-        .card-body ul {
-            list-style: none;
-            margin-bottom: 1.5rem;
-        }
-        
-        .card-body li {
-            padding: 0.5rem 0;
-            padding-left: 1.5rem;
-            position: relative;
-            color: var(--gray-700);
-        }
-        
-        .card-body li::before {
-            content: "✓";
-            position: absolute;
-            left: 0;
-            color: var(--success);
-            font-weight: bold;
-        }
-        
-        .btn {
-            display: inline-block;
-            padding: 0.75rem 1.5rem;
-            border-radius: 6px;
-            text-decoration: none;
-            font-weight: 600;
-            transition: all 0.3s;
-            cursor: pointer;
-            border: none;
-            font-size: 1rem;
-        }
-        
-        .btn-primary {
-            background: var(--primary);
-            color: white;
-        }
-        
-        .btn-primary:hover {
-            background: var(--primary-dark);
-        }
-        
-        .btn-success {
-            background: var(--success);
-            color: white;
-        }
-        
-        .btn-warning {
-            background: var(--warning);
-            color: white;
-        }
-        
-        .btn-secondary {
-            background: var(--gray-200);
-            color: var(--gray-700);
-        }
-        
-        .role-badges {
-            display: flex;
-            gap: 0.5rem;
-            margin-bottom: 1rem;
-        }
-        
-        .badge {
-            padding: 0.25rem 0.75rem;
-            border-radius: 20px;
-            font-size: 0.75rem;
-            font-weight: 600;
-        }
-        
-        .badge-recruiter { background: #e0f2fe; color: #0369a1; }
-        .badge-manager { background: #dcfce7; color: #166534; }
-        .badge-admin { background: #f3e8ff; color: #7c3aed; }
-        
-        footer {
-            text-align: center;
-            color: white;
-            margin-top: 2rem;
-            opacity: 0.8;
-        }
+      :root {
+        --primary: #0176d3;
+        --primary-dark: #014486;
+        --success: #2e844a;
+        --warning: #fe9339;
+        --danger: #ea001e;
+        --gray-100: #f3f3f3;
+        --gray-200: #e5e5e5;
+        --gray-700: #444;
+        --gray-900: #181818;
+      }
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family:
+          "Salesforce Sans",
+          -apple-system,
+          BlinkMacSystemFont,
+          "Segoe UI",
+          Roboto,
+          sans-serif;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        min-height: 100vh;
+        padding: 2rem;
+      }
+
+      .container {
+        max-width: 1200px;
+        margin: 0 auto;
+      }
+
+      header {
+        text-align: center;
+        color: white;
+        margin-bottom: 3rem;
+      }
+
+      header h1 {
+        font-size: 2.5rem;
+        margin-bottom: 0.5rem;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+      }
+
+      header p {
+        font-size: 1.2rem;
+        opacity: 0.9;
+      }
+
+      .cards-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+        gap: 1.5rem;
+        margin-bottom: 2rem;
+      }
+
+      .card {
+        background: white;
+        border-radius: 12px;
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+        overflow: hidden;
+        transition:
+          transform 0.3s,
+          box-shadow 0.3s;
+      }
+
+      .card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 15px 50px rgba(0, 0, 0, 0.3);
+      }
+
+      .card-header {
+        padding: 1.5rem;
+        color: white;
+        position: relative;
+      }
+
+      .card-header.recruiter {
+        background: linear-gradient(135deg, #0176d3, #014486);
+      }
+      .card-header.manager {
+        background: linear-gradient(135deg, #2e844a, #1a5c2e);
+      }
+      .card-header.quick {
+        background: linear-gradient(135deg, #fe9339, #d97706);
+      }
+      .card-header.technical {
+        background: linear-gradient(135deg, #6b7280, #374151);
+      }
+
+      .card-header h2 {
+        font-size: 1.4rem;
+        margin-bottom: 0.25rem;
+      }
+
+      .card-header .duration {
+        font-size: 0.9rem;
+        opacity: 0.9;
+      }
+
+      .card-header .icon {
+        position: absolute;
+        right: 1.5rem;
+        top: 50%;
+        transform: translateY(-50%);
+        font-size: 3rem;
+        opacity: 0.3;
+      }
+
+      .card-body {
+        padding: 1.5rem;
+      }
+
+      .card-body p {
+        color: var(--gray-700);
+        margin-bottom: 1rem;
+        line-height: 1.6;
+      }
+
+      .card-body ul {
+        list-style: none;
+        margin-bottom: 1.5rem;
+      }
+
+      .card-body li {
+        padding: 0.5rem 0;
+        padding-left: 1.5rem;
+        position: relative;
+        color: var(--gray-700);
+      }
+
+      .card-body li::before {
+        content: "✓";
+        position: absolute;
+        left: 0;
+        color: var(--success);
+        font-weight: bold;
+      }
+
+      .btn {
+        display: inline-block;
+        padding: 0.75rem 1.5rem;
+        border-radius: 6px;
+        text-decoration: none;
+        font-weight: 600;
+        transition: all 0.3s;
+        cursor: pointer;
+        border: none;
+        font-size: 1rem;
+      }
+
+      .btn-primary {
+        background: var(--primary);
+        color: white;
+      }
+
+      .btn-primary:hover {
+        background: var(--primary-dark);
+      }
+
+      .btn-success {
+        background: var(--success);
+        color: white;
+      }
+
+      .btn-warning {
+        background: var(--warning);
+        color: white;
+      }
+
+      .btn-secondary {
+        background: var(--gray-200);
+        color: var(--gray-700);
+      }
+
+      .role-badges {
+        display: flex;
+        gap: 0.5rem;
+        margin-bottom: 1rem;
+      }
+
+      .badge {
+        padding: 0.25rem 0.75rem;
+        border-radius: 20px;
+        font-size: 0.75rem;
+        font-weight: 600;
+      }
+
+      .badge-recruiter {
+        background: #e0f2fe;
+        color: #0369a1;
+      }
+      .badge-manager {
+        background: #dcfce7;
+        color: #166534;
+      }
+      .badge-admin {
+        background: #f3e8ff;
+        color: #7c3aed;
+      }
+
+      footer {
+        text-align: center;
+        color: white;
+        margin-top: 2rem;
+        opacity: 0.8;
+      }
     </style>
-</head>
-<body>
+  </head>
+  <body>
     <div class="container">
-        <header>
-            <h1>🎓 Recruiter Portal ATS Training Center</h1>
-            <p>Select a training module to get started</p>
-        </header>
-        
-        <div class="cards-grid">
-            <!-- Quick Start Guides -->
-            <div class="card">
-                <div class="card-header quick">
-                    <h2>⚡ Interactive Quick Start</h2>
-                    <span class="duration">5-10 minutes per guide</span>
-                    <span class="icon">🚀</span>
-                </div>
-                <div class="card-body">
-                    <p>Step-by-step interactive guides that walk you through common tasks.</p>
-                    <ul>
-                        <li>Create Your First Candidate</li>
-                        <li>Schedule an Interview</li>
-                        <li>Process Contract B Lifecycle</li>
-                        <li>Use LinkedIn Extension</li>
-                    </ul>
-                    <div class="role-badges">
-                        <span class="badge badge-recruiter">Recruiters</span>
-                        <span class="badge badge-manager">Managers</span>
-                    </div>
-                    <a href="quick-start-interactive.html" class="btn btn-warning">Start Quick Guides →</a>
-                </div>
+      <header>
+        <h1>🎓 Recruiter Portal ATS Training Center</h1>
+        <p>Select a training module to get started</p>
+      </header>
+
+      <div class="cards-grid">
+        <!-- Quick Start Guides -->
+        <div class="card">
+          <div class="card-header quick">
+            <h2>⚡ Interactive Quick Start</h2>
+            <span class="duration">5-10 minutes per guide</span>
+            <span class="icon">🚀</span>
+          </div>
+          <div class="card-body">
+            <p>
+              Step-by-step interactive guides that walk you through common
+              tasks.
+            </p>
+            <ul>
+              <li>Create Your First Candidate</li>
+              <li>Schedule an Interview</li>
+              <li>Process Contract B Lifecycle</li>
+              <li>Use LinkedIn Extension</li>
+            </ul>
+            <div class="role-badges">
+              <span class="badge badge-recruiter">Recruiters</span>
+              <span class="badge badge-manager">Managers</span>
             </div>
-            
-            <!-- Recruiter Training -->
-            <div class="card">
-                <div class="card-header recruiter">
-                    <h2>📋 Recruiter Training Program</h2>
-                    <span class="duration">3-4 hours complete</span>
-                    <span class="icon">👤</span>
-                </div>
-                <div class="card-body">
-                    <p>Complete training for recruiters covering all aspects of the ATS system.</p>
-                    <ul>
-                        <li>Dashboard Navigation</li>
-                        <li>Candidate Management</li>
-                        <li>Interview Tracking</li>
-                        <li>Contract B Lifecycle</li>
-                        <li>LinkedIn Integration</li>
-                    </ul>
-                    <div class="role-badges">
-                        <span class="badge badge-recruiter">Recruiters</span>
-                    </div>
-                    <a href="recruiter-training.html" class="btn btn-primary">Start Training →</a>
-                </div>
-            </div>
-            
-            <!-- Sales Manager Training -->
-            <div class="card">
-                <div class="card-header manager">
-                    <h2>📊 Sales Manager Guide</h2>
-                    <span class="duration">1-2 hours</span>
-                    <span class="icon">📈</span>
-                </div>
-                <div class="card-body">
-                    <p>Focused training for sales managers on monitoring Contract B agents.</p>
-                    <ul>
-                        <li>Dashboard Overview</li>
-                        <li>Monitoring Agent Progress</li>
-                        <li>FYC & Submission Tracking</li>
-                        <li>Extension Recommendations</li>
-                        <li>Coaching Best Practices</li>
-                    </ul>
-                    <div class="role-badges">
-                        <span class="badge badge-manager">Sales Managers</span>
-                    </div>
-                    <a href="manager-training.html" class="btn btn-success">Start Training →</a>
-                </div>
-            </div>
-            
-            <!-- Reference Card -->
-            <div class="card">
-                <div class="card-header technical">
-                    <h2>📄 Quick Reference Card</h2>
-                    <span class="duration">Printable</span>
-                    <span class="icon">📑</span>
-                </div>
-                <div class="card-body">
-                    <p>One-page reference with all essential information for daily use.</p>
-                    <ul>
-                        <li>Status Badge Meanings</li>
-                        <li>Common Task Steps</li>
-                        <li>Key Formulas</li>
-                        <li>Support Contacts</li>
-                    </ul>
-                    <div class="role-badges">
-                        <span class="badge badge-recruiter">Recruiters</span>
-                        <span class="badge badge-manager">Managers</span>
-                    </div>
-                    <a href="reference-card.html" class="btn btn-secondary">View Reference →</a>
-                </div>
-            </div>
+            <a href="quick-start-interactive.html" class="btn btn-warning"
+              >Start Quick Guides →</a
+            >
+          </div>
         </div>
-        
-        <footer>
-            <p>Recruiter Portal ATS v1.0 | December 2025 | Need help? Contact recruiting-ops@company.com</p>
-        </footer>
+
+        <!-- Recruiter Training -->
+        <div class="card">
+          <div class="card-header recruiter">
+            <h2>📋 Recruiter Training Program</h2>
+            <span class="duration">3-4 hours complete</span>
+            <span class="icon">👤</span>
+          </div>
+          <div class="card-body">
+            <p>
+              Complete training for recruiters covering all aspects of the ATS
+              system.
+            </p>
+            <ul>
+              <li>Dashboard Navigation</li>
+              <li>Candidate Management</li>
+              <li>Interview Tracking</li>
+              <li>Contract B Lifecycle</li>
+              <li>LinkedIn Integration</li>
+            </ul>
+            <div class="role-badges">
+              <span class="badge badge-recruiter">Recruiters</span>
+            </div>
+            <a href="recruiter-training.html" class="btn btn-primary"
+              >Start Training →</a
+            >
+          </div>
+        </div>
+
+        <!-- Sales Manager Training -->
+        <div class="card">
+          <div class="card-header manager">
+            <h2>📊 Sales Manager Guide</h2>
+            <span class="duration">1-2 hours</span>
+            <span class="icon">📈</span>
+          </div>
+          <div class="card-body">
+            <p>
+              Focused training for sales managers on monitoring Contract B
+              agents.
+            </p>
+            <ul>
+              <li>Dashboard Overview</li>
+              <li>Monitoring Agent Progress</li>
+              <li>FYC & Submission Tracking</li>
+              <li>Extension Recommendations</li>
+              <li>Coaching Best Practices</li>
+            </ul>
+            <div class="role-badges">
+              <span class="badge badge-manager">Sales Managers</span>
+            </div>
+            <a href="manager-training.html" class="btn btn-success"
+              >Start Training →</a
+            >
+          </div>
+        </div>
+
+        <!-- Reference Card -->
+        <div class="card">
+          <div class="card-header technical">
+            <h2>📄 Quick Reference Card</h2>
+            <span class="duration">Printable</span>
+            <span class="icon">📑</span>
+          </div>
+          <div class="card-body">
+            <p>
+              One-page reference with all essential information for daily use.
+            </p>
+            <ul>
+              <li>Status Badge Meanings</li>
+              <li>Common Task Steps</li>
+              <li>Key Formulas</li>
+              <li>Support Contacts</li>
+            </ul>
+            <div class="role-badges">
+              <span class="badge badge-recruiter">Recruiters</span>
+              <span class="badge badge-manager">Managers</span>
+            </div>
+            <a href="reference-card.html" class="btn btn-secondary"
+              >View Reference →</a
+            >
+          </div>
+        </div>
+      </div>
+
+      <footer>
+        <p>
+          Recruiter Portal ATS v1.0 | December 2025 | Need help? Contact
+          recruiting-ops@company.com
+        </p>
+      </footer>
     </div>
-</body>
+  </body>
 </html>

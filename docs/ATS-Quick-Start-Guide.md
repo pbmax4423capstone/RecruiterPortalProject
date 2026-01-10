@@ -1,4 +1,5 @@
 # Recruiter Portal ATS - Quick Start Guide
+
 ## One-Page Reference Card
 
 ---
@@ -14,25 +15,29 @@
 ## 📊 Dashboard At-A-Glance
 
 ### Summary Cards
-| Card | Meaning |
-|------|---------|
-| **Active Contract B** | Total in probation |
-| **Requirements Met** | Ready to transition |
-| **At Risk** | Needs attention (<30 days) |
-| **Total/Avg FYC** | Revenue metrics |
+
+| Card                  | Meaning                    |
+| --------------------- | -------------------------- |
+| **Active Contract B** | Total in probation         |
+| **Requirements Met**  | Ready to transition        |
+| **At Risk**           | Needs attention (<30 days) |
+| **Total/Avg FYC**     | Revenue metrics            |
 
 **Interactive Features:**
+
 - Click any card to see detailed modal with filtered candidates
 - Dashboard auto-refreshes to show real-time data
 - **At Risk count should ideally be zero** - prioritize these candidates
 
 ### Status Badges
+
 - 🟢 **Complete** = Requirements met → Transition to A
 - 🟡 **On Track** = Good progress → Monitor
 - 🟠 **At Risk** = <30 days left → Action needed
 - 🔴 **Critical** = <14 days left → Urgent!
 
 ### Interview Statistics Toggle
+
 > 📊 **Current Month / YTD toggle only affects Interview Statistics section**. All other dashboard sections always show year-to-date data.
 
 ---
@@ -40,9 +45,11 @@
 ## 🔗 ALC Contact/Candidate Automation
 
 ### What It Does
+
 Automatically creates Contact and Candidate records when you create an ALC (Agent Licensing & Contracting) record.
 
 ### Requirements Checklist
+
 - ✅ **Required:** First Name + Last Name
 - ✅ **Required:** Email OR Phone (both recommended)
 - ✅ **Record Type:** Career, Broker, NRF, or Registration
@@ -50,12 +57,12 @@ Automatically creates Contact and Candidate records when you create an ALC (Agen
 
 ### What Gets Created
 
-| ALC Type | Contact? | Candidate Contract Type |
-|----------|----------|-------------------------|
-| Career | ✅ | Career Contract |
-| Broker | ✅ | Broker |
-| NRF | ✅ | (blank) |
-| Registration | ✅ | (blank) |
+| ALC Type     | Contact? | Candidate Contract Type |
+| ------------ | -------- | ----------------------- |
+| Career       | ✅       | Career Contract         |
+| Broker       | ✅       | Broker                  |
+| NRF          | ✅       | (blank)                 |
+| Registration | ✅       | (blank)                 |
 
 ### If Contact/Candidate Missing
 
@@ -66,17 +73,20 @@ Automatically creates Contact and Candidate records when you create an ALC (Agen
 
 ### Common Errors
 
-| Error | Fix |
-|-------|-----|
-| No Email/Phone | Add to ALC → Save → Click Fix |
+| Error                   | Fix                           |
+| ----------------------- | ----------------------------- |
+| No Email/Phone          | Add to ALC → Save → Click Fix |
 | Missing First/Last Name | Add to ALC → Save → Click Fix |
-| Duplicate Contacts | Merge Contacts → Click Fix |
+| Duplicate Contacts      | Merge Contacts → Click Fix    |
 
 ### Quick Link
+
 **Monitor Dashboard:** App Launcher → Recruiter Portal → ALC Relationship Monitor
 
 ### Phone Format
+
 All these work:
+
 - `(555) 123-4567`
 - `555-123-4567`
 - `1-555-123-4567`
@@ -86,9 +96,9 @@ All these work:
 ## ✅ Contract B Requirements
 
 | Requirement | Target | Timeline |
-|-------------|--------|----------|
-| FYC | $2,500 | 4 months |
-| Submissions | 5 | 4 months |
+| ----------- | ------ | -------- |
+| FYC         | $2,500 | 4 months |
+| Submissions | 5      | 4 months |
 
 **Extension:** Adds 4 more months if granted
 
@@ -97,12 +107,14 @@ All these work:
 ## 🔧 Common Tasks
 
 ### Create Candidate
+
 `Dashboard → "Create New Candidate" button (4th in header) → Fill Form (Name*, Email*) → Save`
 
 **Required Fields:** Full Name, Email Address  
 **Optional Fields:** Phone Number, Position, Lead Source, Initial Notes
 
 **Position Options:**
+
 - Insurance Agent (default)
 - Senior Insurance Agent
 - Insurance Sales Representative
@@ -112,6 +124,7 @@ All these work:
 - Other
 
 **Lead Source Options:**
+
 - Recruiter Portal (default)
 - LinkedIn
 - Indeed
@@ -121,10 +134,12 @@ All these work:
 - Job Fair
 - Other
 
-### Schedule Interview (Separate Step)  
+### Schedule Interview (Separate Step)
+
 `Dashboard → "Schedule Interview" button (5th in header) → Select Candidate → Choose Type → Set Date/Time → Save`
 
 **Interview Types:**
+
 - **Attraction Interview (Ci-First)** - Initial contact
 - **SI1 (Align-2nd)** - First structured interview
 - **SI2 (Plan-3rd)** - Second structured interview
@@ -134,17 +149,21 @@ All these work:
 > ⚠️ **Important:** You **cannot** schedule an interview from the Create Candidate modal. These are separate workflows.
 
 ### Complete Interview
+
 `Interview Record → Status = "Completed" → Save`
 
 > 📝 **Note:** System tracks completion date automatically when status changes to "Completed". No manual date entry needed.
 
 ### Grant Extension
+
 `Candidate Record → ☑️ Extension Granted → Save`
 
 ### Record Termination
+
 `Candidate → Status = "Terminated" → Termination Date → Reason → Save`
 
 ### Transition B → A
+
 `Candidate → Contract Type = "Contract A" → Save`
 
 ---
@@ -176,12 +195,12 @@ All these work:
 
 ## 📞 Support
 
-| Issue | Contact |
-|-------|---------|
-| Login | IT Help Desk |
+| Issue    | Contact        |
+| -------- | -------------- |
+| Login    | IT Help Desk   |
 | Training | Recruiting Ops |
-| Bugs | SF Admin |
+| Bugs     | SF Admin       |
 
 ---
 
-*Recruiter Portal ATS v1.0 | December 2025*
+_Recruiter Portal ATS v1.0 | December 2025_

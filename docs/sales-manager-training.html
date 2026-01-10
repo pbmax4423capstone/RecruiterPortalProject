@@ -1,377 +1,458 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Sales Manager Training - Recruiter Portal</title>
     <style>
-        :root {
-            --primary: #0176d3;
-            --primary-dark: #014486;
-            --primary-light: #e0f2fe;
-            --success: #2e844a;
-            --success-light: #dcfce7;
-            --warning: #fe9339;
-            --warning-light: #fef3c7;
-            --manager: #7c3aed;
-            --manager-dark: #5b21b6;
-            --manager-light: #ede9fe;
-            --gray-100: #f3f3f3;
-            --gray-200: #e5e5e5;
-            --gray-500: #6b7280;
-            --gray-700: #444;
-            --gray-900: #181818;
-        }
-        
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        
-        body {
-            font-family: 'Salesforce Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: var(--gray-100);
-            min-height: 100vh;
-        }
-        
-        .hero {
-            background: linear-gradient(135deg, var(--manager), var(--manager-dark));
-            color: white;
-            padding: 3rem 2rem;
-            text-align: center;
-        }
-        
-        .hero h1 { font-size: 2.5rem; margin-bottom: 0.5rem; }
-        .hero p { font-size: 1.2rem; opacity: 0.9; max-width: 600px; margin: 0 auto; }
-        
-        .hero-badge {
-            display: inline-block;
-            background: rgba(255,255,255,0.2);
-            padding: 0.5rem 1rem;
-            border-radius: 20px;
-            font-size: 0.9rem;
-            margin-top: 1rem;
-        }
-        
-        .nav-back {
-            padding: 1rem 2rem;
-            background: white;
-            border-bottom: 1px solid var(--gray-200);
-        }
-        
-        .nav-back a {
-            color: var(--primary);
-            text-decoration: none;
-            font-weight: 500;
-        }
-        
-        .nav-back a:hover { text-decoration: underline; }
-        
-        .container {
-            max-width: 1000px;
-            margin: 0 auto;
-            padding: 2rem;
-        }
-        
-        .progress-section {
-            background: white;
-            border-radius: 12px;
-            padding: 1.5rem;
-            margin-bottom: 2rem;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
-        }
-        
-        .progress-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 1rem;
-        }
-        
-        .progress-header h3 { color: var(--gray-900); }
-        .progress-stats { color: var(--gray-500); font-size: 0.9rem; }
-        
-        .progress-bar {
-            background: var(--gray-200);
-            height: 12px;
-            border-radius: 6px;
-            overflow: hidden;
-        }
-        
-        .progress-fill {
-            background: linear-gradient(90deg, var(--manager), var(--manager-dark));
-            height: 100%;
-            transition: width 0.5s ease;
-        }
-        
-        .modules-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 1.5rem;
-        }
-        
-        .module-card {
-            background: white;
-            border-radius: 12px;
-            padding: 1.5rem;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
-            transition: transform 0.2s, box-shadow 0.2s;
-            text-decoration: none;
-            display: block;
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .module-card:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 8px 25px rgba(0,0,0,0.12);
-        }
-        
-        .module-card.locked {
-            opacity: 0.6;
-            cursor: not-allowed;
-        }
-        
-        .module-icon {
-            width: 60px;
-            height: 60px;
-            background: var(--manager-light);
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.75rem;
-            margin-bottom: 1rem;
-        }
-        
-        .module-card h3 {
-            color: var(--gray-900);
-            font-size: 1.2rem;
-            margin-bottom: 0.5rem;
-        }
-        
-        .module-card p {
-            color: var(--gray-500);
-            font-size: 0.9rem;
-            line-height: 1.5;
-            margin-bottom: 1rem;
-        }
-        
-        .module-meta {
-            display: flex;
-            gap: 1rem;
-            font-size: 0.85rem;
-            color: var(--gray-500);
-        }
-        
-        .module-meta span {
-            display: flex;
-            align-items: center;
-            gap: 0.25rem;
-        }
-        
-        .module-status {
-            position: absolute;
-            top: 1rem;
-            right: 1rem;
-            padding: 0.25rem 0.75rem;
-            border-radius: 12px;
-            font-size: 0.75rem;
-            font-weight: 600;
-        }
-        
-        .status-not-started { background: var(--gray-200); color: var(--gray-700); }
-        .status-in-progress { background: var(--warning-light); color: #b45309; }
-        .status-completed { background: var(--success-light); color: var(--success); }
-        
-        .audience-section {
-            background: white;
-            border-radius: 12px;
-            padding: 2rem;
-            margin-top: 2rem;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
-        }
-        
-        .audience-section h2 {
-            color: var(--gray-900);
-            margin-bottom: 1rem;
-            font-size: 1.3rem;
-        }
-        
-        .audience-list {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 1rem;
-        }
-        
-        .audience-item {
-            display: flex;
-            gap: 1rem;
-            padding: 1rem;
-            background: var(--manager-light);
-            border-radius: 8px;
-        }
-        
-        .audience-item .icon {
-            font-size: 1.5rem;
-            flex-shrink: 0;
-        }
-        
-        .audience-item h4 {
-            color: var(--gray-900);
-            font-size: 0.95rem;
-            margin-bottom: 0.25rem;
-        }
-        
-        .audience-item p {
-            color: var(--gray-500);
-            font-size: 0.85rem;
-            margin: 0;
-        }
-        
-        .quick-links {
-            margin-top: 2rem;
-            display: flex;
-            gap: 1rem;
-            flex-wrap: wrap;
-        }
-        
-        .quick-link {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-            padding: 0.75rem 1.25rem;
-            background: var(--manager);
-            color: white;
-            border-radius: 8px;
-            text-decoration: none;
-            font-weight: 500;
-            transition: background 0.2s;
-        }
-        
-        .quick-link:hover { background: var(--manager-dark); }
-        
-        .quick-link.secondary {
-            background: white;
-            color: var(--manager);
-            border: 2px solid var(--manager);
-        }
-        
-        .quick-link.secondary:hover { background: var(--manager-light); }
+      :root {
+        --primary: #0176d3;
+        --primary-dark: #014486;
+        --primary-light: #e0f2fe;
+        --success: #2e844a;
+        --success-light: #dcfce7;
+        --warning: #fe9339;
+        --warning-light: #fef3c7;
+        --manager: #7c3aed;
+        --manager-dark: #5b21b6;
+        --manager-light: #ede9fe;
+        --gray-100: #f3f3f3;
+        --gray-200: #e5e5e5;
+        --gray-500: #6b7280;
+        --gray-700: #444;
+        --gray-900: #181818;
+      }
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family:
+          "Salesforce Sans",
+          -apple-system,
+          BlinkMacSystemFont,
+          "Segoe UI",
+          Roboto,
+          sans-serif;
+        background: var(--gray-100);
+        min-height: 100vh;
+      }
+
+      .hero {
+        background: linear-gradient(
+          135deg,
+          var(--manager),
+          var(--manager-dark)
+        );
+        color: white;
+        padding: 3rem 2rem;
+        text-align: center;
+      }
+
+      .hero h1 {
+        font-size: 2.5rem;
+        margin-bottom: 0.5rem;
+      }
+      .hero p {
+        font-size: 1.2rem;
+        opacity: 0.9;
+        max-width: 600px;
+        margin: 0 auto;
+      }
+
+      .hero-badge {
+        display: inline-block;
+        background: rgba(255, 255, 255, 0.2);
+        padding: 0.5rem 1rem;
+        border-radius: 20px;
+        font-size: 0.9rem;
+        margin-top: 1rem;
+      }
+
+      .nav-back {
+        padding: 1rem 2rem;
+        background: white;
+        border-bottom: 1px solid var(--gray-200);
+      }
+
+      .nav-back a {
+        color: var(--primary);
+        text-decoration: none;
+        font-weight: 500;
+      }
+
+      .nav-back a:hover {
+        text-decoration: underline;
+      }
+
+      .container {
+        max-width: 1000px;
+        margin: 0 auto;
+        padding: 2rem;
+      }
+
+      .progress-section {
+        background: white;
+        border-radius: 12px;
+        padding: 1.5rem;
+        margin-bottom: 2rem;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+      }
+
+      .progress-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 1rem;
+      }
+
+      .progress-header h3 {
+        color: var(--gray-900);
+      }
+      .progress-stats {
+        color: var(--gray-500);
+        font-size: 0.9rem;
+      }
+
+      .progress-bar {
+        background: var(--gray-200);
+        height: 12px;
+        border-radius: 6px;
+        overflow: hidden;
+      }
+
+      .progress-fill {
+        background: linear-gradient(90deg, var(--manager), var(--manager-dark));
+        height: 100%;
+        transition: width 0.5s ease;
+      }
+
+      .modules-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 1.5rem;
+      }
+
+      .module-card {
+        background: white;
+        border-radius: 12px;
+        padding: 1.5rem;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+        transition:
+          transform 0.2s,
+          box-shadow 0.2s;
+        text-decoration: none;
+        display: block;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .module-card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.12);
+      }
+
+      .module-card.locked {
+        opacity: 0.6;
+        cursor: not-allowed;
+      }
+
+      .module-icon {
+        width: 60px;
+        height: 60px;
+        background: var(--manager-light);
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.75rem;
+        margin-bottom: 1rem;
+      }
+
+      .module-card h3 {
+        color: var(--gray-900);
+        font-size: 1.2rem;
+        margin-bottom: 0.5rem;
+      }
+
+      .module-card p {
+        color: var(--gray-500);
+        font-size: 0.9rem;
+        line-height: 1.5;
+        margin-bottom: 1rem;
+      }
+
+      .module-meta {
+        display: flex;
+        gap: 1rem;
+        font-size: 0.85rem;
+        color: var(--gray-500);
+      }
+
+      .module-meta span {
+        display: flex;
+        align-items: center;
+        gap: 0.25rem;
+      }
+
+      .module-status {
+        position: absolute;
+        top: 1rem;
+        right: 1rem;
+        padding: 0.25rem 0.75rem;
+        border-radius: 12px;
+        font-size: 0.75rem;
+        font-weight: 600;
+      }
+
+      .status-not-started {
+        background: var(--gray-200);
+        color: var(--gray-700);
+      }
+      .status-in-progress {
+        background: var(--warning-light);
+        color: #b45309;
+      }
+      .status-completed {
+        background: var(--success-light);
+        color: var(--success);
+      }
+
+      .audience-section {
+        background: white;
+        border-radius: 12px;
+        padding: 2rem;
+        margin-top: 2rem;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+      }
+
+      .audience-section h2 {
+        color: var(--gray-900);
+        margin-bottom: 1rem;
+        font-size: 1.3rem;
+      }
+
+      .audience-list {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 1rem;
+      }
+
+      .audience-item {
+        display: flex;
+        gap: 1rem;
+        padding: 1rem;
+        background: var(--manager-light);
+        border-radius: 8px;
+      }
+
+      .audience-item .icon {
+        font-size: 1.5rem;
+        flex-shrink: 0;
+      }
+
+      .audience-item h4 {
+        color: var(--gray-900);
+        font-size: 0.95rem;
+        margin-bottom: 0.25rem;
+      }
+
+      .audience-item p {
+        color: var(--gray-500);
+        font-size: 0.85rem;
+        margin: 0;
+      }
+
+      .quick-links {
+        margin-top: 2rem;
+        display: flex;
+        gap: 1rem;
+        flex-wrap: wrap;
+      }
+
+      .quick-link {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.75rem 1.25rem;
+        background: var(--manager);
+        color: white;
+        border-radius: 8px;
+        text-decoration: none;
+        font-weight: 500;
+        transition: background 0.2s;
+      }
+
+      .quick-link:hover {
+        background: var(--manager-dark);
+      }
+
+      .quick-link.secondary {
+        background: white;
+        color: var(--manager);
+        border: 2px solid var(--manager);
+      }
+
+      .quick-link.secondary:hover {
+        background: var(--manager-light);
+      }
     </style>
-</head>
-<body>
+  </head>
+  <body>
     <div class="nav-back">
-        <a href="index.html">← Back to Training Center</a>
+      <a href="index.html">← Back to Training Center</a>
     </div>
-    
+
     <header class="hero">
-        <h1>👔 Sales Manager Training</h1>
-        <p>Learn how to monitor your team's recruiting performance, track Contract B progress, and run reports</p>
-        <div class="hero-badge">3 Modules • ~45 minutes total</div>
+      <h1>👔 Sales Manager Training</h1>
+      <p>
+        Learn how to monitor your team's recruiting performance, track Contract
+        B progress, and run reports
+      </p>
+      <div class="hero-badge">3 Modules • ~45 minutes total</div>
     </header>
-    
+
     <div class="container">
-        <div class="progress-section">
-            <div class="progress-header">
-                <h3>Your Progress</h3>
-                <span class="progress-stats" id="progressStats">0 of 3 modules completed</span>
+      <div class="progress-section">
+        <div class="progress-header">
+          <h3>Your Progress</h3>
+          <span class="progress-stats" id="progressStats"
+            >0 of 3 modules completed</span
+          >
+        </div>
+        <div class="progress-bar">
+          <div class="progress-fill" id="progressFill" style="width: 0%"></div>
+        </div>
+      </div>
+
+      <div class="modules-grid">
+        <a
+          href="sm-module1-team-overview.html"
+          class="module-card"
+          data-module="sm-module1"
+        >
+          <span class="module-status status-not-started" id="status-sm-module1"
+            >Not Started</span
+          >
+          <div class="module-icon">📊</div>
+          <h3>Module 1: Team Overview</h3>
+          <p>
+            Navigate the manager dashboard to view team performance, pipeline
+            metrics, and recruiter activity at a glance.
+          </p>
+          <div class="module-meta">
+            <span>⏱️ 15 min</span>
+            <span>📖 6 steps</span>
+          </div>
+        </a>
+
+        <a
+          href="sm-module2-reports.html"
+          class="module-card"
+          data-module="sm-module2"
+        >
+          <span class="module-status status-not-started" id="status-sm-module2"
+            >Not Started</span
+          >
+          <div class="module-icon">📈</div>
+          <h3>Module 2: Reports & Analytics</h3>
+          <p>
+            Run and interpret recruiting reports, analyze conversion rates, and
+            identify trends in your team's pipeline.
+          </p>
+          <div class="module-meta">
+            <span>⏱️ 15 min</span>
+            <span>📖 6 steps</span>
+          </div>
+        </a>
+
+        <a
+          href="sm-module3-contract-b.html"
+          class="module-card"
+          data-module="sm-module3"
+        >
+          <span class="module-status status-not-started" id="status-sm-module3"
+            >Not Started</span
+          >
+          <div class="module-icon">📋</div>
+          <h3>Module 3: Contract B Monitoring</h3>
+          <p>
+            Track Contract B advisors' progress toward requirements: 4-month
+            timeline, $2,500 FYC, 5 submissions.
+          </p>
+          <div class="module-meta">
+            <span>⏱️ 15 min</span>
+            <span>📖 7 steps</span>
+          </div>
+        </a>
+      </div>
+
+      <div class="audience-section">
+        <h2>👥 Who This Training Is For</h2>
+        <div class="audience-list">
+          <div class="audience-item">
+            <span class="icon">👔</span>
+            <div>
+              <h4>Sales Managers</h4>
+              <p>Monitor team recruiting performance and Contract B progress</p>
             </div>
-            <div class="progress-bar">
-                <div class="progress-fill" id="progressFill" style="width: 0%"></div>
+          </div>
+          <div class="audience-item">
+            <span class="icon">📊</span>
+            <div>
+              <h4>Team Leads</h4>
+              <p>Review recruiter metrics and pipeline health</p>
             </div>
-        </div>
-        
-        <div class="modules-grid">
-            <a href="sm-module1-team-overview.html" class="module-card" data-module="sm-module1">
-                <span class="module-status status-not-started" id="status-sm-module1">Not Started</span>
-                <div class="module-icon">📊</div>
-                <h3>Module 1: Team Overview</h3>
-                <p>Navigate the manager dashboard to view team performance, pipeline metrics, and recruiter activity at a glance.</p>
-                <div class="module-meta">
-                    <span>⏱️ 15 min</span>
-                    <span>📖 6 steps</span>
-                </div>
-            </a>
-            
-            <a href="sm-module2-reports.html" class="module-card" data-module="sm-module2">
-                <span class="module-status status-not-started" id="status-sm-module2">Not Started</span>
-                <div class="module-icon">📈</div>
-                <h3>Module 2: Reports & Analytics</h3>
-                <p>Run and interpret recruiting reports, analyze conversion rates, and identify trends in your team's pipeline.</p>
-                <div class="module-meta">
-                    <span>⏱️ 15 min</span>
-                    <span>📖 6 steps</span>
-                </div>
-            </a>
-            
-            <a href="sm-module3-contract-b.html" class="module-card" data-module="sm-module3">
-                <span class="module-status status-not-started" id="status-sm-module3">Not Started</span>
-                <div class="module-icon">📋</div>
-                <h3>Module 3: Contract B Monitoring</h3>
-                <p>Track Contract B advisors' progress toward requirements: 4-month timeline, $2,500 FYC, 5 submissions.</p>
-                <div class="module-meta">
-                    <span>⏱️ 15 min</span>
-                    <span>📖 7 steps</span>
-                </div>
-            </a>
-        </div>
-        
-        <div class="audience-section">
-            <h2>👥 Who This Training Is For</h2>
-            <div class="audience-list">
-                <div class="audience-item">
-                    <span class="icon">👔</span>
-                    <div>
-                        <h4>Sales Managers</h4>
-                        <p>Monitor team recruiting performance and Contract B progress</p>
-                    </div>
-                </div>
-                <div class="audience-item">
-                    <span class="icon">📊</span>
-                    <div>
-                        <h4>Team Leads</h4>
-                        <p>Review recruiter metrics and pipeline health</p>
-                    </div>
-                </div>
-                <div class="audience-item">
-                    <span class="icon">🎯</span>
-                    <div>
-                        <h4>Regional Directors</h4>
-                        <p>Analyze recruiting trends across multiple teams</p>
-                    </div>
-                </div>
+          </div>
+          <div class="audience-item">
+            <span class="icon">🎯</span>
+            <div>
+              <h4>Regional Directors</h4>
+              <p>Analyze recruiting trends across multiple teams</p>
             </div>
+          </div>
         </div>
-        
-        <div class="quick-links">
-            <a href="recruiter-training.html" class="quick-link secondary">📚 Recruiter Training (5 Modules)</a>
-            <a href="qa-testing-guide.html" class="quick-link secondary">🧪 QA Testing Guide</a>
-        </div>
+      </div>
+
+      <div class="quick-links">
+        <a href="recruiter-training.html" class="quick-link secondary"
+          >📚 Recruiter Training (5 Modules)</a
+        >
+        <a href="qa-testing-guide.html" class="quick-link secondary"
+          >🧪 QA Testing Guide</a
+        >
+      </div>
     </div>
-    
+
     <script>
-        function updateProgress() {
-            const modules = ['sm-module1', 'sm-module2', 'sm-module3'];
-            let completed = 0;
-            
-            modules.forEach(module => {
-                const status = localStorage.getItem(`sales-manager-${module}`);
-                const badge = document.getElementById(`status-${module}`);
-                
-                if (status === 'completed') {
-                    completed++;
-                    badge.textContent = 'Completed';
-                    badge.className = 'module-status status-completed';
-                } else if (status === 'in-progress') {
-                    badge.textContent = 'In Progress';
-                    badge.className = 'module-status status-in-progress';
-                }
-            });
-            
-            const percent = (completed / modules.length) * 100;
-            document.getElementById('progressFill').style.width = `${percent}%`;
-            document.getElementById('progressStats').textContent = `${completed} of ${modules.length} modules completed`;
-        }
-        
-        updateProgress();
+      function updateProgress() {
+        const modules = ["sm-module1", "sm-module2", "sm-module3"];
+        let completed = 0;
+
+        modules.forEach((module) => {
+          const status = localStorage.getItem(`sales-manager-${module}`);
+          const badge = document.getElementById(`status-${module}`);
+
+          if (status === "completed") {
+            completed++;
+            badge.textContent = "Completed";
+            badge.className = "module-status status-completed";
+          } else if (status === "in-progress") {
+            badge.textContent = "In Progress";
+            badge.className = "module-status status-in-progress";
+          }
+        });
+
+        const percent = (completed / modules.length) * 100;
+        document.getElementById("progressFill").style.width = `${percent}%`;
+        document.getElementById("progressStats").textContent =
+          `${completed} of ${modules.length} modules completed`;
+      }
+
+      updateProgress();
     </script>
-</body>
+  </body>
 </html>

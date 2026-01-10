@@ -1,4 +1,5 @@
 # QA Verification Report - Candidates in Contracting Component
+
 **Date:** 2026-01-08  
 **Agent:** QA Agent  
 **Previous Agent:** Deployment Agent  
@@ -17,12 +18,12 @@
 
 ### Actual Record Counts (Excluding Terminal Stages)
 
-| Record Type | Actual Count | Expected Count | Status |
-|-------------|--------------|----------------|--------|
-| Broker | 12 | 61 | ❌ 49 missing |
-| Career | 26 | 23 | ⚠️ 3 extra |
-| NRF | 0 | 21 | ❌ 21 missing |
-| Registration | 2 | 12 | ❌ 10 missing |
+| Record Type  | Actual Count | Expected Count | Status        |
+| ------------ | ------------ | -------------- | ------------- |
+| Broker       | 12           | 61             | ❌ 49 missing |
+| Career       | 26           | 23             | ⚠️ 3 extra    |
+| NRF          | 0            | 21             | ❌ 21 missing |
+| Registration | 2            | 12             | ❌ 10 missing |
 
 ---
 
@@ -33,6 +34,7 @@
 **Problem:** ALC records have stage values that don't exist in Custom Metadata configuration.
 
 **Broker Record Type - Actual Stages in Data:**
+
 ```
 ✅ Pending SM (1 record) - matches metadata
 ✅ Submit to HO (1 record) - matches metadata
@@ -46,6 +48,7 @@
 ```
 
 **Career Record Type - Actual Stages in Data:**
+
 ```
 ✅ Initial Form Sent (2 records) - matches metadata
 ✅ MM_ONX_Sent (2 records) - matches metadata
@@ -58,12 +61,14 @@
 ```
 
 **Registration Record Type - Actual Stages in Data:**
+
 ```
 ✅ Follow Up with Agent (1 record) - matches metadata
 ✅ Background Check (if 6 months or more) (1 record) - matches metadata
 ```
 
 **NRF Record Type:**
+
 ```
 ❌ NO RECORDS FOUND - Expected 21 records
 ```
@@ -73,10 +78,12 @@
 ### Issue #2: Record Type Misassignment 🚨
 
 **Critical:** Many Broker records have stage values from OTHER record types:
+
 - 22 Broker records in "Received Approval Letter" (Registration terminal stage)
 - 3 Broker records in "Candidate Complete" (Career terminal stage)
 
 **Root Causes:**
+
 1. Records may have been manually edited with wrong stage values
 2. Records may have wrong Record Type assignment
 3. Picklist values may not be restricted by Record Type
@@ -87,6 +94,7 @@
 ### Issue #3: Stage Value Variations
 
 **Found multiple spelling/format variations:**
+
 - "CANCELED" vs "CANCELLED" (both appear in data)
 - "MM Onyx Sent" vs "MM_ONX_Sent" (underscore vs space)
 - "Post Background - Pending SM/Rachyll" vs "Post Background - Pending Rachyll"
@@ -96,8 +104,9 @@
 ### Issue #4: Undocumented Stages
 
 **Stages in data but NOT in Custom Metadata:**
+
 - "Create Card in Capstone ALC Trackers" (7 Broker records)
-- "Post Background - Pending SM/Rachyll" (2 Broker records)  
+- "Post Background - Pending SM/Rachyll" (2 Broker records)
 - "To do" (1 Career record)
 
 These records will be excluded from the component because their stages aren't in `validStages` set.
@@ -111,19 +120,23 @@ These records will be excluded from the component because their stages aren't in
 Based on current Custom Metadata + actual data:
 
 **Broker Tab:**
+
 - Will show: 2 records (Pending SM + Submit to HO)
 - Won't show: 46 records (wrong stages, terminal stages, or not in metadata)
 - **Tab will show: "Broker (2)"** not "Broker (61)"
 
 **Career Tab:**
+
 - Will show: 25 records (excluding 50 Candidate Complete + 95 CANCELED + 1 To do)
 - **Tab will show: "Career (25)"** close to expected 23
 
 **NRF Tab:**
+
 - Will show: 0 records (no NRF records exist in data)
 - **Tab will show: "NRF (0)"** not "NRF (21)"
 
 **Registration Tab:**
+
 - Will show: 2 records
 - **Tab will show: "Registration (2)"** not "Registration (12)"
 
@@ -134,6 +147,7 @@ Based on current Custom Metadata + actual data:
 ### Why Counts Don't Match Reference View
 
 The reference Kanban view likely:
+
 1. **Uses different stage filtering** - May show ALL stages or use different picklist values
 2. **Has different Record Type scope** - May be querying different records
 3. **Uses historical data** - May include archived or deleted records
@@ -142,6 +156,7 @@ The reference Kanban view likely:
 ### Data Integrity Issues
 
 The ALC object has significant data quality problems:
+
 1. **No Record Type + Stage validation** - Records can have any stage value regardless of Record Type
 2. **Manual data entry errors** - Stage values don't match metadata configuration
 3. **Missing picklist dependencies** - Stage picklist not controlled by Record Type
@@ -160,7 +175,7 @@ The ALC object has significant data quality problems:
 
 2. **Data Quality Fix Required**
    - Run data audit to identify all records with invalid stage values
-   - Create picklist value dependencies: Record Type → Stage__c
+   - Create picklist value dependencies: Record Type → Stage\_\_c
    - Clean up data: fix Record Types or stage values
    - Standardize spelling (CANCELED vs CANCELLED)
 
@@ -171,10 +186,11 @@ The ALC object has significant data quality problems:
 ### Short Term
 
 1. **Query Production to Match Reference**
+
    ```sql
    -- Run this query in the reference view's context
-   SELECT RecordType.DeveloperName, Stage__c, COUNT(Id) 
-   FROM ALC__c 
+   SELECT RecordType.DeveloperName, Stage__c, COUNT(Id)
+   FROM ALC__c
    WHERE [same filters as reference view]
    GROUP BY RecordType.DeveloperName, Stage__c
    ```
@@ -222,6 +238,7 @@ The ALC object has significant data quality problems:
 ❌ **But production data doesn't match the metadata**
 
 **Next Steps:**
+
 1. User clarifies reference view and data expectations
 2. Fix data quality issues (Record Types, stage values)
 3. Update Custom Metadata to match valid production stage values

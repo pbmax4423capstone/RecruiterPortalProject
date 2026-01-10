@@ -1,14 +1,16 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8" ?>
 <ConnectedApp xmlns="http://soap.sforce.com/2006/04/metadata">
     <contactEmail>patrickbakeradmin2@financialguide.com</contactEmail>
     <label>LinkedIn Import Extension</label>
     <oauthConfig>
-        <callbackUrl>https://kfopjhkobdcnpmikhndjgdcnlcackjf.chromiumapp.org/oauth2
+        <callbackUrl
+    >https://kfopjhkobdcnpmikhndjgdcnlcackjf.chromiumapp.org/oauth2
 https://kfopjhkobdcnpmikhndjgdcnlcackjf.chromiumapp.org/
 https://ondifgbcphfobecpenbdoaafailmilfo.chromiumapp.org/
 https://ainimbbieggffjdgaedbdjjgppldghfh.chromiumapp.org/
 https://hgmdpjghfjbpadajdnpgghemkhakobji.chromiumapp.org/</callbackUrl>
-        <consumerKey>3MVG9p1Q1BCe9GmCK.2GT3FP11uBOviHb5qJPJvlkCtUE52LJ_ODY9s2ea_B5E3Fw3xVeiYH3bxLOESNXIMHF</consumerKey>
+        <consumerKey
+    >3MVG9p1Q1BCe9GmCK.2GT3FP11uBOviHb5qJPJvlkCtUE52LJ_ODY9s2ea_B5E3Fw3xVeiYH3bxLOESNXIMHF</consumerKey>
         <isAdminApproved>false</isAdminApproved>
         <isClientCredentialEnabled>false</isClientCredentialEnabled>
         <isCodeCredentialEnabled>false</isCodeCredentialEnabled>
@@ -19,7 +21,8 @@ https://hgmdpjghfjbpadajdnpgghemkhakobji.chromiumapp.org/</callbackUrl>
         <isPkceRequired>false</isPkceRequired>
         <isRefreshTokenRotationEnabled>false</isRefreshTokenRotationEnabled>
         <isSecretRequiredForRefreshToken>false</isSecretRequiredForRefreshToken>
-        <isSecretRequiredForTokenExchange>false</isSecretRequiredForTokenExchange>
+        <isSecretRequiredForTokenExchange
+    >false</isSecretRequiredForTokenExchange>
         <isTokenExchangeEnabled>false</isTokenExchangeEnabled>
         <scopes>Api</scopes>
         <scopes>RefreshToken</scopes>

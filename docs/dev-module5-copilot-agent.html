@@ -1,858 +1,1132 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Module 5: GitHub Copilot Agent - Developer Training</title>
     <style>
-        :root {
-            --primary: #238636;
-            --primary-dark: #1a7f37;
-            --primary-light: #d1fae5;
-            --module-color: #0969da;
-            --module-light: #ddf4ff;
-            --gray-100: #f6f8fa;
-            --gray-200: #e5e5e5;
-            --gray-300: #d0d7de;
-            --gray-500: #6e7781;
-            --gray-700: #444;
-            --gray-900: #1f2328;
-            --code-bg: #161b22;
-            --warning-bg: #fff8c5;
-            --warning-border: #d4a72c;
-            --info-bg: #ddf4ff;
-            --info-border: #54aeff;
-        }
-        
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans', Helvetica, Arial, sans-serif;
-            background: var(--gray-100);
-            min-height: 100vh;
-            display: flex;
-        }
-        
-        .sidebar {
-            width: 300px;
-            background: white;
-            border-right: 1px solid var(--gray-300);
-            padding: 1.5rem;
-            position: fixed;
-            height: 100vh;
-            overflow-y: auto;
-        }
-        
-        .sidebar-header {
-            padding-bottom: 1rem;
-            border-bottom: 1px solid var(--gray-200);
-            margin-bottom: 1rem;
-        }
-        
-        .sidebar-header a {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            color: var(--primary);
-            text-decoration: none;
-            font-size: 0.9rem;
-            margin-bottom: 0.5rem;
-        }
-        
-        .sidebar-header a:hover { text-decoration: underline; }
-        .sidebar-header h2 { font-size: 1.1rem; color: var(--gray-900); }
-        
-        .sidebar-header .module-badge {
-            display: inline-block;
-            background: var(--module-color);
-            color: white;
-            padding: 0.2rem 0.6rem;
-            border-radius: 10px;
-            font-size: 0.75rem;
-            font-weight: 600;
-            margin-top: 0.5rem;
-        }
-        
-        .steps-list { list-style: none; }
-        
-        .step-item {
-            padding: 0.75rem;
-            border-radius: 8px;
-            margin-bottom: 0.5rem;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-            transition: all 0.2s;
-        }
-        
-        .step-item:hover { background: var(--gray-100); }
-        .step-item.active { background: var(--module-light); }
-        .step-item.completed { opacity: 0.7; }
-        
-        .step-number {
-            width: 28px;
-            height: 28px;
-            border-radius: 50%;
-            background: var(--gray-200);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 0.85rem;
-            font-weight: 600;
-            color: var(--gray-500);
-            flex-shrink: 0;
-        }
-        
-        .step-item.active .step-number { background: var(--module-color); color: white; }
-        .step-item.completed .step-number { background: var(--primary); color: white; }
-        .step-item.completed .step-number::before { content: "✓"; }
-        
-        .step-info { flex-grow: 1; }
-        .step-title { font-size: 0.9rem; color: var(--gray-900); font-weight: 500; }
-        .step-duration { font-size: 0.75rem; color: var(--gray-500); }
-        
-        .main-content { flex-grow: 1; margin-left: 300px; padding: 2rem; }
-        .step-content { max-width: 800px; margin: 0 auto; }
-        
-        .step-header { margin-bottom: 2rem; }
-        
-        .step-header .step-badge {
-            display: inline-block;
-            background: var(--module-color);
-            color: white;
-            padding: 0.3rem 1rem;
-            border-radius: 20px;
-            font-size: 0.85rem;
-            font-weight: 600;
-            margin-bottom: 0.75rem;
-        }
-        
-        .step-header h1 { font-size: 2rem; color: var(--gray-900); margin-bottom: 0.5rem; }
-        .step-header p { font-size: 1.1rem; color: var(--gray-500); }
-        
-        .content-card {
-            background: white;
-            border-radius: 12px;
-            padding: 1.5rem;
-            border: 1px solid var(--gray-300);
-            margin-bottom: 1.5rem;
-        }
-        
-        .content-card h2 { font-size: 1.25rem; color: var(--gray-900); margin-bottom: 1rem; }
-        .content-card h3 { font-size: 1rem; color: var(--gray-700); margin: 1.5rem 0 0.75rem; }
-        .content-card p { color: var(--gray-700); line-height: 1.7; margin-bottom: 1rem; }
-        .content-card ul, .content-card ol { margin-left: 1.5rem; margin-bottom: 1rem; color: var(--gray-700); line-height: 1.8; }
-        
-        .code-block {
-            background: var(--code-bg);
-            color: #e6edf3;
-            border-radius: 8px;
-            padding: 1rem;
-            margin: 1rem 0;
-            overflow-x: auto;
-            font-family: 'Consolas', 'Monaco', monospace;
-            font-size: 0.9rem;
-            line-height: 1.6;
-        }
-        
-        .code-block .comment { color: #8b949e; }
-        .code-block .prompt { color: #7ee787; }
-        .code-block .ai { color: #79c0ff; }
-        .code-block .code { color: #e6edf3; }
-        .code-block .keyword { color: #ff7b72; }
-        .code-block .string { color: #a5d6ff; }
-        
-        code {
-            background: var(--gray-100);
-            padding: 0.2rem 0.4rem;
-            border-radius: 4px;
-            font-family: 'Consolas', monospace;
-            font-size: 0.9em;
-            color: #cf222e;
-        }
-        
-        .info-box {
-            background: var(--info-bg);
-            border-left: 4px solid var(--info-border);
-            padding: 1rem 1.25rem;
-            border-radius: 0 8px 8px 0;
-            margin: 1.5rem 0;
-        }
-        
-        .warning-box {
-            background: var(--warning-bg);
-            border-left: 4px solid var(--warning-border);
-            padding: 1rem 1.25rem;
-            border-radius: 0 8px 8px 0;
-            margin: 1.5rem 0;
-        }
-        
-        .success-box {
-            background: var(--primary-light);
-            border-left: 4px solid var(--primary);
-            padding: 1rem 1.25rem;
-            border-radius: 0 8px 8px 0;
-            margin: 1.5rem 0;
-        }
-        
-        .info-box strong, .warning-box strong, .success-box strong { display: block; margin-bottom: 0.25rem; color: var(--gray-900); }
-        
-        .data-table { width: 100%; border-collapse: collapse; margin: 1rem 0; font-size: 0.9rem; }
-        .data-table th, .data-table td { padding: 0.75rem; text-align: left; border-bottom: 1px solid var(--gray-200); }
-        .data-table th { background: var(--gray-100); font-weight: 600; color: var(--gray-700); }
-        
-        .feature-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 1rem;
-            margin: 1rem 0;
-        }
-        
-        .feature-box {
-            background: var(--gray-100);
-            padding: 1rem;
-            border-radius: 8px;
-            border-left: 3px solid var(--module-color);
-        }
-        
-        .feature-box h4 { color: var(--module-color); font-size: 0.95rem; margin-bottom: 0.5rem; }
-        .feature-box p { font-size: 0.85rem; color: var(--gray-700); margin: 0; }
-        
-        .step-navigation {
-            display: flex;
-            justify-content: space-between;
-            margin-top: 2rem;
-            padding-top: 2rem;
-            border-top: 1px solid var(--gray-200);
-        }
-        
-        .nav-btn {
-            padding: 0.75rem 1.5rem;
-            border-radius: 8px;
-            font-weight: 600;
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-            cursor: pointer;
-            border: none;
-            font-size: 1rem;
-            transition: all 0.3s;
-            text-decoration: none;
-        }
-        
-        .nav-btn.prev { background: var(--gray-200); color: var(--gray-700); }
-        .nav-btn.prev:hover { background: var(--gray-300); }
-        .nav-btn.next { background: var(--module-color); color: white; }
-        .nav-btn.next:hover { opacity: 0.9; }
-        .nav-btn:disabled { opacity: 0.5; cursor: not-allowed; }
-        
-        .progress-indicator {
-            background: var(--gray-200);
-            height: 4px;
-            position: fixed;
-            top: 0;
-            left: 300px;
-            right: 0;
-            z-index: 100;
-        }
-        
-        .progress-fill { height: 100%; background: var(--module-color); transition: width 0.3s; }
-        .step-page { display: none; }
-        .step-page.active { display: block; }
-        
-        .copilot-logo {
-            width: 60px;
-            height: 60px;
-            background: linear-gradient(135deg, var(--module-color), #40a6ff);
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 2rem;
-            margin: 0 auto 1rem;
-        }
-        
-        .keyboard-shortcut {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.25rem;
-            background: var(--gray-200);
-            padding: 0.25rem 0.5rem;
-            border-radius: 4px;
-            font-family: 'Consolas', monospace;
-            font-size: 0.85rem;
-            border: 1px solid var(--gray-300);
-        }
+      :root {
+        --primary: #238636;
+        --primary-dark: #1a7f37;
+        --primary-light: #d1fae5;
+        --module-color: #0969da;
+        --module-light: #ddf4ff;
+        --gray-100: #f6f8fa;
+        --gray-200: #e5e5e5;
+        --gray-300: #d0d7de;
+        --gray-500: #6e7781;
+        --gray-700: #444;
+        --gray-900: #1f2328;
+        --code-bg: #161b22;
+        --warning-bg: #fff8c5;
+        --warning-border: #d4a72c;
+        --info-bg: #ddf4ff;
+        --info-border: #54aeff;
+      }
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family:
+          -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans", Helvetica,
+          Arial, sans-serif;
+        background: var(--gray-100);
+        min-height: 100vh;
+        display: flex;
+      }
+
+      .sidebar {
+        width: 300px;
+        background: white;
+        border-right: 1px solid var(--gray-300);
+        padding: 1.5rem;
+        position: fixed;
+        height: 100vh;
+        overflow-y: auto;
+      }
+
+      .sidebar-header {
+        padding-bottom: 1rem;
+        border-bottom: 1px solid var(--gray-200);
+        margin-bottom: 1rem;
+      }
+
+      .sidebar-header a {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        color: var(--primary);
+        text-decoration: none;
+        font-size: 0.9rem;
+        margin-bottom: 0.5rem;
+      }
+
+      .sidebar-header a:hover {
+        text-decoration: underline;
+      }
+      .sidebar-header h2 {
+        font-size: 1.1rem;
+        color: var(--gray-900);
+      }
+
+      .sidebar-header .module-badge {
+        display: inline-block;
+        background: var(--module-color);
+        color: white;
+        padding: 0.2rem 0.6rem;
+        border-radius: 10px;
+        font-size: 0.75rem;
+        font-weight: 600;
+        margin-top: 0.5rem;
+      }
+
+      .steps-list {
+        list-style: none;
+      }
+
+      .step-item {
+        padding: 0.75rem;
+        border-radius: 8px;
+        margin-bottom: 0.5rem;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        transition: all 0.2s;
+      }
+
+      .step-item:hover {
+        background: var(--gray-100);
+      }
+      .step-item.active {
+        background: var(--module-light);
+      }
+      .step-item.completed {
+        opacity: 0.7;
+      }
+
+      .step-number {
+        width: 28px;
+        height: 28px;
+        border-radius: 50%;
+        background: var(--gray-200);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.85rem;
+        font-weight: 600;
+        color: var(--gray-500);
+        flex-shrink: 0;
+      }
+
+      .step-item.active .step-number {
+        background: var(--module-color);
+        color: white;
+      }
+      .step-item.completed .step-number {
+        background: var(--primary);
+        color: white;
+      }
+      .step-item.completed .step-number::before {
+        content: "✓";
+      }
+
+      .step-info {
+        flex-grow: 1;
+      }
+      .step-title {
+        font-size: 0.9rem;
+        color: var(--gray-900);
+        font-weight: 500;
+      }
+      .step-duration {
+        font-size: 0.75rem;
+        color: var(--gray-500);
+      }
+
+      .main-content {
+        flex-grow: 1;
+        margin-left: 300px;
+        padding: 2rem;
+      }
+      .step-content {
+        max-width: 800px;
+        margin: 0 auto;
+      }
+
+      .step-header {
+        margin-bottom: 2rem;
+      }
+
+      .step-header .step-badge {
+        display: inline-block;
+        background: var(--module-color);
+        color: white;
+        padding: 0.3rem 1rem;
+        border-radius: 20px;
+        font-size: 0.85rem;
+        font-weight: 600;
+        margin-bottom: 0.75rem;
+      }
+
+      .step-header h1 {
+        font-size: 2rem;
+        color: var(--gray-900);
+        margin-bottom: 0.5rem;
+      }
+      .step-header p {
+        font-size: 1.1rem;
+        color: var(--gray-500);
+      }
+
+      .content-card {
+        background: white;
+        border-radius: 12px;
+        padding: 1.5rem;
+        border: 1px solid var(--gray-300);
+        margin-bottom: 1.5rem;
+      }
+
+      .content-card h2 {
+        font-size: 1.25rem;
+        color: var(--gray-900);
+        margin-bottom: 1rem;
+      }
+      .content-card h3 {
+        font-size: 1rem;
+        color: var(--gray-700);
+        margin: 1.5rem 0 0.75rem;
+      }
+      .content-card p {
+        color: var(--gray-700);
+        line-height: 1.7;
+        margin-bottom: 1rem;
+      }
+      .content-card ul,
+      .content-card ol {
+        margin-left: 1.5rem;
+        margin-bottom: 1rem;
+        color: var(--gray-700);
+        line-height: 1.8;
+      }
+
+      .code-block {
+        background: var(--code-bg);
+        color: #e6edf3;
+        border-radius: 8px;
+        padding: 1rem;
+        margin: 1rem 0;
+        overflow-x: auto;
+        font-family: "Consolas", "Monaco", monospace;
+        font-size: 0.9rem;
+        line-height: 1.6;
+      }
+
+      .code-block .comment {
+        color: #8b949e;
+      }
+      .code-block .prompt {
+        color: #7ee787;
+      }
+      .code-block .ai {
+        color: #79c0ff;
+      }
+      .code-block .code {
+        color: #e6edf3;
+      }
+      .code-block .keyword {
+        color: #ff7b72;
+      }
+      .code-block .string {
+        color: #a5d6ff;
+      }
+
+      code {
+        background: var(--gray-100);
+        padding: 0.2rem 0.4rem;
+        border-radius: 4px;
+        font-family: "Consolas", monospace;
+        font-size: 0.9em;
+        color: #cf222e;
+      }
+
+      .info-box {
+        background: var(--info-bg);
+        border-left: 4px solid var(--info-border);
+        padding: 1rem 1.25rem;
+        border-radius: 0 8px 8px 0;
+        margin: 1.5rem 0;
+      }
+
+      .warning-box {
+        background: var(--warning-bg);
+        border-left: 4px solid var(--warning-border);
+        padding: 1rem 1.25rem;
+        border-radius: 0 8px 8px 0;
+        margin: 1.5rem 0;
+      }
+
+      .success-box {
+        background: var(--primary-light);
+        border-left: 4px solid var(--primary);
+        padding: 1rem 1.25rem;
+        border-radius: 0 8px 8px 0;
+        margin: 1.5rem 0;
+      }
+
+      .info-box strong,
+      .warning-box strong,
+      .success-box strong {
+        display: block;
+        margin-bottom: 0.25rem;
+        color: var(--gray-900);
+      }
+
+      .data-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 1rem 0;
+        font-size: 0.9rem;
+      }
+      .data-table th,
+      .data-table td {
+        padding: 0.75rem;
+        text-align: left;
+        border-bottom: 1px solid var(--gray-200);
+      }
+      .data-table th {
+        background: var(--gray-100);
+        font-weight: 600;
+        color: var(--gray-700);
+      }
+
+      .feature-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1rem;
+        margin: 1rem 0;
+      }
+
+      .feature-box {
+        background: var(--gray-100);
+        padding: 1rem;
+        border-radius: 8px;
+        border-left: 3px solid var(--module-color);
+      }
+
+      .feature-box h4 {
+        color: var(--module-color);
+        font-size: 0.95rem;
+        margin-bottom: 0.5rem;
+      }
+      .feature-box p {
+        font-size: 0.85rem;
+        color: var(--gray-700);
+        margin: 0;
+      }
+
+      .step-navigation {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 2rem;
+        padding-top: 2rem;
+        border-top: 1px solid var(--gray-200);
+      }
+
+      .nav-btn {
+        padding: 0.75rem 1.5rem;
+        border-radius: 8px;
+        font-weight: 600;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        cursor: pointer;
+        border: none;
+        font-size: 1rem;
+        transition: all 0.3s;
+        text-decoration: none;
+      }
+
+      .nav-btn.prev {
+        background: var(--gray-200);
+        color: var(--gray-700);
+      }
+      .nav-btn.prev:hover {
+        background: var(--gray-300);
+      }
+      .nav-btn.next {
+        background: var(--module-color);
+        color: white;
+      }
+      .nav-btn.next:hover {
+        opacity: 0.9;
+      }
+      .nav-btn:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+      }
+
+      .progress-indicator {
+        background: var(--gray-200);
+        height: 4px;
+        position: fixed;
+        top: 0;
+        left: 300px;
+        right: 0;
+        z-index: 100;
+      }
+
+      .progress-fill {
+        height: 100%;
+        background: var(--module-color);
+        transition: width 0.3s;
+      }
+      .step-page {
+        display: none;
+      }
+      .step-page.active {
+        display: block;
+      }
+
+      .copilot-logo {
+        width: 60px;
+        height: 60px;
+        background: linear-gradient(135deg, var(--module-color), #40a6ff);
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 2rem;
+        margin: 0 auto 1rem;
+      }
+
+      .keyboard-shortcut {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.25rem;
+        background: var(--gray-200);
+        padding: 0.25rem 0.5rem;
+        border-radius: 4px;
+        font-family: "Consolas", monospace;
+        font-size: 0.85rem;
+        border: 1px solid var(--gray-300);
+      }
     </style>
-</head>
-<body>
+  </head>
+  <body>
     <div class="progress-indicator">
-        <div class="progress-fill" id="progressFill" style="width: 0%"></div>
+      <div class="progress-fill" id="progressFill" style="width: 0%"></div>
     </div>
-    
+
     <aside class="sidebar">
-        <div class="sidebar-header">
-            <a href="developer-training.html">← Back to Developer Training</a>
-            <h2>Module 5: Copilot Agent</h2>
-            <span class="module-badge">15 minutes</span>
-        </div>
-        
-        <ul class="steps-list" id="stepsList">
-            <li class="step-item active" data-step="1" onclick="goToStep(1)">
-                <span class="step-number">1</span>
-                <div class="step-info">
-                    <div class="step-title">What is Copilot?</div>
-                    <div class="step-duration">2 min</div>
-                </div>
-            </li>
-            <li class="step-item" data-step="2" onclick="goToStep(2)">
-                <span class="step-number">2</span>
-                <div class="step-info">
-                    <div class="step-title">Copilot Chat vs Agent</div>
-                    <div class="step-duration">3 min</div>
-                </div>
-            </li>
-            <li class="step-item" data-step="3" onclick="goToStep(3)">
-                <span class="step-number">3</span>
-                <div class="step-info">
-                    <div class="step-title">Effective Prompting</div>
-                    <div class="step-duration">4 min</div>
-                </div>
-            </li>
-            <li class="step-item" data-step="4" onclick="goToStep(4)">
-                <span class="step-number">4</span>
-                <div class="step-info">
-                    <div class="step-title">Agent Mode in Action</div>
-                    <div class="step-duration">3 min</div>
-                </div>
-            </li>
-            <li class="step-item" data-step="5" onclick="goToStep(5)">
-                <span class="step-number">5</span>
-                <div class="step-info">
-                    <div class="step-title">Best Practices</div>
-                    <div class="step-duration">2 min</div>
-                </div>
-            </li>
-            <li class="step-item" data-step="6" onclick="goToStep(6)">
-                <span class="step-number">6</span>
-                <div class="step-info">
-                    <div class="step-title">Module Complete</div>
-                    <div class="step-duration">1 min</div>
-                </div>
-            </li>
-        </ul>
+      <div class="sidebar-header">
+        <a href="developer-training.html">← Back to Developer Training</a>
+        <h2>Module 5: Copilot Agent</h2>
+        <span class="module-badge">15 minutes</span>
+      </div>
+
+      <ul class="steps-list" id="stepsList">
+        <li class="step-item active" data-step="1" onclick="goToStep(1)">
+          <span class="step-number">1</span>
+          <div class="step-info">
+            <div class="step-title">What is Copilot?</div>
+            <div class="step-duration">2 min</div>
+          </div>
+        </li>
+        <li class="step-item" data-step="2" onclick="goToStep(2)">
+          <span class="step-number">2</span>
+          <div class="step-info">
+            <div class="step-title">Copilot Chat vs Agent</div>
+            <div class="step-duration">3 min</div>
+          </div>
+        </li>
+        <li class="step-item" data-step="3" onclick="goToStep(3)">
+          <span class="step-number">3</span>
+          <div class="step-info">
+            <div class="step-title">Effective Prompting</div>
+            <div class="step-duration">4 min</div>
+          </div>
+        </li>
+        <li class="step-item" data-step="4" onclick="goToStep(4)">
+          <span class="step-number">4</span>
+          <div class="step-info">
+            <div class="step-title">Agent Mode in Action</div>
+            <div class="step-duration">3 min</div>
+          </div>
+        </li>
+        <li class="step-item" data-step="5" onclick="goToStep(5)">
+          <span class="step-number">5</span>
+          <div class="step-info">
+            <div class="step-title">Best Practices</div>
+            <div class="step-duration">2 min</div>
+          </div>
+        </li>
+        <li class="step-item" data-step="6" onclick="goToStep(6)">
+          <span class="step-number">6</span>
+          <div class="step-info">
+            <div class="step-title">Module Complete</div>
+            <div class="step-duration">1 min</div>
+          </div>
+        </li>
+      </ul>
     </aside>
-    
+
     <main class="main-content">
-        <!-- Step 1 -->
-        <div class="step-page active" id="step1">
-            <div class="step-content">
-                <div class="step-header">
-                    <span class="step-badge">Step 1 of 6</span>
-                    <h1>What is GitHub Copilot?</h1>
-                    <p>Your AI pair programmer</p>
-                </div>
-                
-                <div class="content-card" style="text-align: center;">
-                    <div class="copilot-logo">🤖</div>
-                    <h2>AI-Powered Code Assistant</h2>
-                    <p>GitHub Copilot is an AI pair programmer that helps you write code faster and with less effort.</p>
-                </div>
-                
-                <div class="content-card">
-                    <h2>🎯 What Copilot Can Do</h2>
-                    <div class="feature-grid">
-                        <div class="feature-box">
-                            <h4>💡 Code Suggestions</h4>
-                            <p>Autocomplete lines or entire functions as you type</p>
-                        </div>
-                        <div class="feature-box">
-                            <h4>💬 Chat Interface</h4>
-                            <p>Ask questions about code and get explanations</p>
-                        </div>
-                        <div class="feature-box">
-                            <h4>🔧 Code Generation</h4>
-                            <p>Generate code from natural language descriptions</p>
-                        </div>
-                        <div class="feature-box">
-                            <h4>🐛 Debug Assistance</h4>
-                            <p>Help find and fix bugs in your code</p>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="content-card">
-                    <h2>⌨️ Key Shortcuts in VS Code</h2>
-                    <table class="data-table">
-                        <tr>
-                            <th>Action</th>
-                            <th>Shortcut</th>
-                        </tr>
-                        <tr>
-                            <td>Accept suggestion</td>
-                            <td><span class="keyboard-shortcut">Tab</span></td>
-                        </tr>
-                        <tr>
-                            <td>Reject suggestion</td>
-                            <td><span class="keyboard-shortcut">Esc</span></td>
-                        </tr>
-                        <tr>
-                            <td>See next suggestion</td>
-                            <td><span class="keyboard-shortcut">Alt</span> + <span class="keyboard-shortcut">]</span></td>
-                        </tr>
-                        <tr>
-                            <td>Open Copilot Chat</td>
-                            <td><span class="keyboard-shortcut">Ctrl</span> + <span class="keyboard-shortcut">Shift</span> + <span class="keyboard-shortcut">I</span></td>
-                        </tr>
-                    </table>
-                </div>
-                
-                <div class="step-navigation">
-                    <button class="nav-btn prev" disabled>← Previous</button>
-                    <button class="nav-btn next" onclick="goToStep(2)">Next: Chat vs Agent →</button>
-                </div>
-            </div>
-        </div>
-        
-        <!-- Step 2 -->
-        <div class="step-page" id="step2">
-            <div class="step-content">
-                <div class="step-header">
-                    <span class="step-badge">Step 2 of 6</span>
-                    <h1>Copilot Chat vs Agent Mode</h1>
-                    <p>Understanding the two modes</p>
-                </div>
-                
-                <div class="content-card">
-                    <h2>💬 Copilot Chat</h2>
-                    <p>Traditional conversational interface for asking questions:</p>
-                    <ul>
-                        <li>Ask questions about your code</li>
-                        <li>Get explanations of concepts</li>
-                        <li>Generate code snippets to copy/paste</li>
-                        <li>Debug specific issues</li>
-                    </ul>
-                    <div class="code-block">
-<span class="prompt">You:</span> How do I sort an array of objects by date in JavaScript?
+      <!-- Step 1 -->
+      <div class="step-page active" id="step1">
+        <div class="step-content">
+          <div class="step-header">
+            <span class="step-badge">Step 1 of 6</span>
+            <h1>What is GitHub Copilot?</h1>
+            <p>Your AI pair programmer</p>
+          </div>
 
-<span class="ai">Copilot:</span> Here's how to sort by date:
-<span class="code">
-<span class="keyword">const</span> sorted = items.<span class="keyword">sort</span>((a, b) => 
-    <span class="keyword">new</span> Date(a.date) - <span class="keyword">new</span> Date(b.date)
-);
-</span>
-                    </div>
-                </div>
-                
-                <div class="content-card">
-                    <h2>🤖 Copilot Agent Mode</h2>
-                    <p><strong>Agent mode</strong> goes beyond chat—it can <strong>take action</strong> on your codebase:</p>
-                    <ul>
-                        <li><strong>Edit files</strong> directly in your workspace</li>
-                        <li><strong>Create new files</strong> and folders</li>
-                        <li><strong>Run terminal commands</strong></li>
-                        <li><strong>Search your codebase</strong> to understand context</li>
-                        <li><strong>Make multi-file changes</strong> in one request</li>
-                    </ul>
-                    
-                    <div class="info-box">
-                        <strong>💡 When to Use Agent Mode</strong>
-                        Use Agent mode when you want Copilot to actually make changes to your code, not just suggest them.
-                    </div>
-                </div>
-                
-                <div class="content-card">
-                    <h2>📊 Comparison</h2>
-                    <table class="data-table">
-                        <tr>
-                            <th>Feature</th>
-                            <th>Chat</th>
-                            <th>Agent</th>
-                        </tr>
-                        <tr>
-                            <td>Answer questions</td>
-                            <td>✅</td>
-                            <td>✅</td>
-                        </tr>
-                        <tr>
-                            <td>Generate code snippets</td>
-                            <td>✅</td>
-                            <td>✅</td>
-                        </tr>
-                        <tr>
-                            <td>Edit files directly</td>
-                            <td>❌</td>
-                            <td>✅</td>
-                        </tr>
-                        <tr>
-                            <td>Create new files</td>
-                            <td>❌</td>
-                            <td>✅</td>
-                        </tr>
-                        <tr>
-                            <td>Run commands</td>
-                            <td>❌</td>
-                            <td>✅</td>
-                        </tr>
-                        <tr>
-                            <td>Multi-file changes</td>
-                            <td>❌</td>
-                            <td>✅</td>
-                        </tr>
-                    </table>
-                </div>
-                
-                <div class="step-navigation">
-                    <button class="nav-btn prev" onclick="goToStep(1)">← Previous</button>
-                    <button class="nav-btn next" onclick="goToStep(3)">Next: Effective Prompting →</button>
-                </div>
-            </div>
-        </div>
-        
-        <!-- Step 3 -->
-        <div class="step-page" id="step3">
-            <div class="step-content">
-                <div class="step-header">
-                    <span class="step-badge">Step 3 of 6</span>
-                    <h1>Effective Prompting</h1>
-                    <p>Get better results from Copilot</p>
-                </div>
-                
-                <div class="content-card">
-                    <h2>📝 The CRISP Framework</h2>
-                    <p>Write better prompts with <strong>C-R-I-S-P</strong>:</p>
-                    
-                    <table class="data-table">
-                        <tr>
-                            <th style="width: 100px;">Letter</th>
-                            <th>Meaning</th>
-                            <th>Example</th>
-                        </tr>
-                        <tr>
-                            <td><strong>C</strong>ontext</td>
-                            <td>What's the situation?</td>
-                            <td>"In our Salesforce LWC project..."</td>
-                        </tr>
-                        <tr>
-                            <td><strong>R</strong>ole</td>
-                            <td>Who should Copilot be?</td>
-                            <td>"Act as a senior developer..."</td>
-                        </tr>
-                        <tr>
-                            <td><strong>I</strong>nstructions</td>
-                            <td>What do you need?</td>
-                            <td>"Create a function that..."</td>
-                        </tr>
-                        <tr>
-                            <td><strong>S</strong>pecifics</td>
-                            <td>Any requirements?</td>
-                            <td>"Use async/await, handle errors..."</td>
-                        </tr>
-                        <tr>
-                            <td><strong>P</strong>attern</td>
-                            <td>What format/style?</td>
-                            <td>"Follow our existing code style..."</td>
-                        </tr>
-                    </table>
-                </div>
-                
-                <div class="content-card">
-                    <h2>❌ Bad vs ✅ Good Prompts</h2>
-                    
-                    <h3>Example 1: Too Vague</h3>
-                    <div class="code-block">
-<span class="comment">❌ Bad:</span> "Fix the bug"
+          <div class="content-card" style="text-align: center">
+            <div class="copilot-logo">🤖</div>
+            <h2>AI-Powered Code Assistant</h2>
+            <p>
+              GitHub Copilot is an AI pair programmer that helps you write code
+              faster and with less effort.
+            </p>
+          </div>
 
-<span class="prompt">✅ Good:</span> "The login form submits twice when users click the 
-button quickly. Add debouncing to prevent duplicate submissions. 
-The form is in src/components/LoginForm.js"
-                    </div>
-                    
-                    <h3>Example 2: Missing Context</h3>
-                    <div class="code-block">
-<span class="comment">❌ Bad:</span> "Write a test"
+          <div class="content-card">
+            <h2>🎯 What Copilot Can Do</h2>
+            <div class="feature-grid">
+              <div class="feature-box">
+                <h4>💡 Code Suggestions</h4>
+                <p>Autocomplete lines or entire functions as you type</p>
+              </div>
+              <div class="feature-box">
+                <h4>💬 Chat Interface</h4>
+                <p>Ask questions about code and get explanations</p>
+              </div>
+              <div class="feature-box">
+                <h4>🔧 Code Generation</h4>
+                <p>Generate code from natural language descriptions</p>
+              </div>
+              <div class="feature-box">
+                <h4>🐛 Debug Assistance</h4>
+                <p>Help find and fix bugs in your code</p>
+              </div>
+            </div>
+          </div>
 
-<span class="prompt">✅ Good:</span> "Write a Jest unit test for the calculateTotal 
-function in src/utils/pricing.js. Test cases should include:
-- Normal calculation with valid inputs
-- Zero quantity edge case  
-- Negative price validation"
-                    </div>
-                    
-                    <h3>Example 3: Unclear Output</h3>
-                    <div class="code-block">
-<span class="comment">❌ Bad:</span> "Make it better"
+          <div class="content-card">
+            <h2>⌨️ Key Shortcuts in VS Code</h2>
+            <table class="data-table">
+              <tr>
+                <th>Action</th>
+                <th>Shortcut</th>
+              </tr>
+              <tr>
+                <td>Accept suggestion</td>
+                <td><span class="keyboard-shortcut">Tab</span></td>
+              </tr>
+              <tr>
+                <td>Reject suggestion</td>
+                <td><span class="keyboard-shortcut">Esc</span></td>
+              </tr>
+              <tr>
+                <td>See next suggestion</td>
+                <td>
+                  <span class="keyboard-shortcut">Alt</span> +
+                  <span class="keyboard-shortcut">]</span>
+                </td>
+              </tr>
+              <tr>
+                <td>Open Copilot Chat</td>
+                <td>
+                  <span class="keyboard-shortcut">Ctrl</span> +
+                  <span class="keyboard-shortcut">Shift</span> +
+                  <span class="keyboard-shortcut">I</span>
+                </td>
+              </tr>
+            </table>
+          </div>
 
-<span class="prompt">✅ Good:</span> "Refactor getUsers() to use async/await instead 
-of .then() callbacks. Keep the same functionality but improve 
-readability. Add error handling with try/catch."
-                    </div>
-                </div>
-                
-                <div class="success-box">
-                    <strong>✅ Pro Tip</strong>
-                    The more specific you are, the better results you'll get. Include file names, function names, and specific requirements.
-                </div>
-                
-                <div class="step-navigation">
-                    <button class="nav-btn prev" onclick="goToStep(2)">← Previous</button>
-                    <button class="nav-btn next" onclick="goToStep(4)">Next: Agent Mode in Action →</button>
-                </div>
-            </div>
+          <div class="step-navigation">
+            <button class="nav-btn prev" disabled>← Previous</button>
+            <button class="nav-btn next" onclick="goToStep(2)">
+              Next: Chat vs Agent →
+            </button>
+          </div>
         </div>
-        
-        <!-- Step 4 -->
-        <div class="step-page" id="step4">
-            <div class="step-content">
-                <div class="step-header">
-                    <span class="step-badge">Step 4 of 6</span>
-                    <h1>Agent Mode in Action</h1>
-                    <p>Real-world use cases</p>
-                </div>
-                
-                <div class="content-card">
-                    <h2>🚀 Common Agent Mode Tasks</h2>
-                    
-                    <h3>1. Create New Features</h3>
-                    <div class="code-block">
-<span class="prompt">You:</span> Create a new user profile page component that displays:
-- User avatar
-- Name and email
-- Join date
-- Recent activity list
+      </div>
 
-Use our existing Card component and follow the styling in 
-ProfilePage.css. Create both the component and a test file.
-                    </div>
-                    
-                    <h3>2. Refactor Existing Code</h3>
-                    <div class="code-block">
-<span class="prompt">You:</span> Refactor the UserService class to use dependency injection
-instead of hardcoded database connections. Update all files that
-import UserService to use the new pattern.
-                    </div>
-                    
-                    <h3>3. Fix Bugs Across Multiple Files</h3>
-                    <div class="code-block">
-<span class="prompt">You:</span> The date picker is showing dates in the wrong timezone.
-Find all places where we format dates and ensure they use 
-the user's local timezone. Check components/, utils/, and api/.
-                    </div>
-                </div>
-                
-                <div class="content-card">
-                    <h2>⚡ Agent Mode Workflow</h2>
-                    <ol>
-                        <li><strong>Describe your task</strong> - Be specific about what you need</li>
-                        <li><strong>Review the plan</strong> - Agent will show you what it intends to do</li>
-                        <li><strong>Approve or adjust</strong> - You can modify before it executes</li>
-                        <li><strong>Watch it work</strong> - Agent makes changes in real-time</li>
-                        <li><strong>Review changes</strong> - Always review before committing</li>
-                    </ol>
-                </div>
-                
-                <div class="warning-box">
-                    <strong>⚠️ Always Review AI-Generated Code</strong>
-                    Copilot is helpful but not perfect. Always review changes before committing. Check for:
-                    <ul style="margin-top: 0.5rem; margin-bottom: 0;">
-                        <li>Logic errors</li>
-                        <li>Security issues</li>
-                        <li>Code that doesn't match your patterns</li>
-                        <li>Missing edge cases</li>
-                    </ul>
-                </div>
-                
-                <div class="step-navigation">
-                    <button class="nav-btn prev" onclick="goToStep(3)">← Previous</button>
-                    <button class="nav-btn next" onclick="goToStep(5)">Next: Best Practices →</button>
-                </div>
+      <!-- Step 2 -->
+      <div class="step-page" id="step2">
+        <div class="step-content">
+          <div class="step-header">
+            <span class="step-badge">Step 2 of 6</span>
+            <h1>Copilot Chat vs Agent Mode</h1>
+            <p>Understanding the two modes</p>
+          </div>
+
+          <div class="content-card">
+            <h2>💬 Copilot Chat</h2>
+            <p>Traditional conversational interface for asking questions:</p>
+            <ul>
+              <li>Ask questions about your code</li>
+              <li>Get explanations of concepts</li>
+              <li>Generate code snippets to copy/paste</li>
+              <li>Debug specific issues</li>
+            </ul>
+            <div class="code-block">
+              <span class="prompt">You:</span> How do I sort an array of objects
+              by date in JavaScript?
+
+              <span class="ai">Copilot:</span> Here's how to sort by date:
+              <span class="code">
+                <span class="keyword">const</span> sorted = items.<span
+                  class="keyword"
+                  >sort</span
+                >((a, b) => <span class="keyword">new</span> Date(a.date) -
+                <span class="keyword">new</span> Date(b.date) );
+              </span>
             </div>
-        </div>
-        
-        <!-- Step 5 -->
-        <div class="step-page" id="step5">
-            <div class="step-content">
-                <div class="step-header">
-                    <span class="step-badge">Step 5 of 6</span>
-                    <h1>Best Practices</h1>
-                    <p>Using Copilot responsibly</p>
-                </div>
-                
-                <div class="content-card">
-                    <h2>✅ Do's</h2>
-                    <ul>
-                        <li><strong>Review all generated code</strong> - Never blindly accept suggestions</li>
-                        <li><strong>Test thoroughly</strong> - AI can write buggy code too</li>
-                        <li><strong>Use for boilerplate</strong> - Great for repetitive code patterns</li>
-                        <li><strong>Iterate on prompts</strong> - Refine if first result isn't right</li>
-                        <li><strong>Learn from suggestions</strong> - Discover new patterns and APIs</li>
-                        <li><strong>Break down complex tasks</strong> - Smaller requests = better results</li>
-                    </ul>
-                </div>
-                
-                <div class="content-card">
-                    <h2>❌ Don'ts</h2>
-                    <ul>
-                        <li><strong>Don't share secrets</strong> - Never put API keys or passwords in prompts</li>
-                        <li><strong>Don't blindly trust</strong> - Verify security-sensitive code</li>
-                        <li><strong>Don't skip understanding</strong> - Know what the code does before using it</li>
-                        <li><strong>Don't use for everything</strong> - Simple code is often faster to write yourself</li>
-                        <li><strong>Don't ignore context</strong> - Copilot doesn't always understand your full codebase</li>
-                    </ul>
-                </div>
-                
-                <div class="content-card">
-                    <h2>🎯 Team Collaboration with Copilot</h2>
-                    <p>When multiple developers use Copilot:</p>
-                    <ul>
-                        <li><strong>Share effective prompts</strong> - Build a team knowledge base</li>
-                        <li><strong>Standardize patterns</strong> - Agree on code styles Copilot should follow</li>
-                        <li><strong>Review AI code in PRs</strong> - Extra scrutiny on generated code</li>
-                        <li><strong>Document AI contributions</strong> - Note when significant code was AI-generated</li>
-                    </ul>
-                </div>
-                
-                <div class="info-box">
-                    <strong>💡 Copilot Limitations</strong>
-                    <ul style="margin-top: 0.5rem; margin-bottom: 0;">
-                        <li>May not know your latest code changes</li>
-                        <li>Can hallucinate APIs that don't exist</li>
-                        <li>May suggest outdated patterns</li>
-                        <li>Doesn't run or test the code</li>
-                    </ul>
-                </div>
-                
-                <div class="step-navigation">
-                    <button class="nav-btn prev" onclick="goToStep(4)">← Previous</button>
-                    <button class="nav-btn next" onclick="goToStep(6)">Complete Module →</button>
-                </div>
+          </div>
+
+          <div class="content-card">
+            <h2>🤖 Copilot Agent Mode</h2>
+            <p>
+              <strong>Agent mode</strong> goes beyond chat—it can
+              <strong>take action</strong> on your codebase:
+            </p>
+            <ul>
+              <li><strong>Edit files</strong> directly in your workspace</li>
+              <li><strong>Create new files</strong> and folders</li>
+              <li><strong>Run terminal commands</strong></li>
+              <li>
+                <strong>Search your codebase</strong> to understand context
+              </li>
+              <li><strong>Make multi-file changes</strong> in one request</li>
+            </ul>
+
+            <div class="info-box">
+              <strong>💡 When to Use Agent Mode</strong>
+              Use Agent mode when you want Copilot to actually make changes to
+              your code, not just suggest them.
             </div>
+          </div>
+
+          <div class="content-card">
+            <h2>📊 Comparison</h2>
+            <table class="data-table">
+              <tr>
+                <th>Feature</th>
+                <th>Chat</th>
+                <th>Agent</th>
+              </tr>
+              <tr>
+                <td>Answer questions</td>
+                <td>✅</td>
+                <td>✅</td>
+              </tr>
+              <tr>
+                <td>Generate code snippets</td>
+                <td>✅</td>
+                <td>✅</td>
+              </tr>
+              <tr>
+                <td>Edit files directly</td>
+                <td>❌</td>
+                <td>✅</td>
+              </tr>
+              <tr>
+                <td>Create new files</td>
+                <td>❌</td>
+                <td>✅</td>
+              </tr>
+              <tr>
+                <td>Run commands</td>
+                <td>❌</td>
+                <td>✅</td>
+              </tr>
+              <tr>
+                <td>Multi-file changes</td>
+                <td>❌</td>
+                <td>✅</td>
+              </tr>
+            </table>
+          </div>
+
+          <div class="step-navigation">
+            <button class="nav-btn prev" onclick="goToStep(1)">
+              ← Previous
+            </button>
+            <button class="nav-btn next" onclick="goToStep(3)">
+              Next: Effective Prompting →
+            </button>
+          </div>
         </div>
-        
-        <!-- Step 6 -->
-        <div class="step-page" id="step6">
-            <div class="step-content">
-                <div class="step-header">
-                    <span class="step-badge">Step 6 of 6</span>
-                    <h1>🎉 Module Complete!</h1>
-                    <p>You're ready to code with AI</p>
-                </div>
-                
-                <div class="content-card" style="text-align: center; padding: 2.5rem;">
-                    <div class="copilot-logo">🤖</div>
-                    <h2>Copilot Mastery!</h2>
-                    <p style="font-size: 1.1rem; max-width: 500px; margin: 1rem auto;">You now know how to effectively use GitHub Copilot to boost your productivity.</p>
-                </div>
-                
-                <div class="content-card">
-                    <h2>📋 Key Takeaways</h2>
-                    <ul>
-                        <li><strong>Chat for questions</strong>, <strong>Agent for actions</strong></li>
-                        <li><strong>Be specific</strong> - Use the CRISP framework for prompts</li>
-                        <li><strong>Always review</strong> - AI code needs human verification</li>
-                        <li><strong>Iterate</strong> - Refine prompts for better results</li>
-                        <li><strong>Know the limits</strong> - Copilot is a tool, not a replacement</li>
-                    </ul>
-                </div>
-                
-                <div class="content-card">
-                    <h2>🔑 Quick Reference</h2>
-                    <table class="data-table">
-                        <tr>
-                            <td><span class="keyboard-shortcut">Tab</span></td>
-                            <td>Accept suggestion</td>
-                        </tr>
-                        <tr>
-                            <td><span class="keyboard-shortcut">Esc</span></td>
-                            <td>Reject suggestion</td>
-                        </tr>
-                        <tr>
-                            <td><span class="keyboard-shortcut">Ctrl</span> + <span class="keyboard-shortcut">Shift</span> + <span class="keyboard-shortcut">I</span></td>
-                            <td>Open Copilot Chat</td>
-                        </tr>
-                        <tr>
-                            <td><span class="keyboard-shortcut">Alt</span> + <span class="keyboard-shortcut">]</span></td>
-                            <td>Next suggestion</td>
-                        </tr>
-                    </table>
-                </div>
-                
-                <div class="content-card" style="background: linear-gradient(135deg, var(--module-color), #0550ae); color: white;">
-                    <h2 style="color: white;">Next Up: Project Setup Best Practices</h2>
-                    <p style="color: rgba(255,255,255,0.9);">Learn how to structure GitHub repositories for team success.</p>
-                    <div style="margin-top: 1rem;">
-                        <a href="dev-module6-project-setup.html" class="nav-btn" style="background: white; color: var(--module-color);">Start Module 6 →</a>
-                    </div>
-                </div>
-                
-                <div class="step-navigation">
-                    <button class="nav-btn prev" onclick="goToStep(5)">← Previous</button>
-                    <button class="nav-btn next" onclick="completeModule()" style="background: var(--primary);">✓ Complete Module</button>
-                </div>
+      </div>
+
+      <!-- Step 3 -->
+      <div class="step-page" id="step3">
+        <div class="step-content">
+          <div class="step-header">
+            <span class="step-badge">Step 3 of 6</span>
+            <h1>Effective Prompting</h1>
+            <p>Get better results from Copilot</p>
+          </div>
+
+          <div class="content-card">
+            <h2>📝 The CRISP Framework</h2>
+            <p>Write better prompts with <strong>C-R-I-S-P</strong>:</p>
+
+            <table class="data-table">
+              <tr>
+                <th style="width: 100px">Letter</th>
+                <th>Meaning</th>
+                <th>Example</th>
+              </tr>
+              <tr>
+                <td><strong>C</strong>ontext</td>
+                <td>What's the situation?</td>
+                <td>"In our Salesforce LWC project..."</td>
+              </tr>
+              <tr>
+                <td><strong>R</strong>ole</td>
+                <td>Who should Copilot be?</td>
+                <td>"Act as a senior developer..."</td>
+              </tr>
+              <tr>
+                <td><strong>I</strong>nstructions</td>
+                <td>What do you need?</td>
+                <td>"Create a function that..."</td>
+              </tr>
+              <tr>
+                <td><strong>S</strong>pecifics</td>
+                <td>Any requirements?</td>
+                <td>"Use async/await, handle errors..."</td>
+              </tr>
+              <tr>
+                <td><strong>P</strong>attern</td>
+                <td>What format/style?</td>
+                <td>"Follow our existing code style..."</td>
+              </tr>
+            </table>
+          </div>
+
+          <div class="content-card">
+            <h2>❌ Bad vs ✅ Good Prompts</h2>
+
+            <h3>Example 1: Too Vague</h3>
+            <div class="code-block">
+              <span class="comment">❌ Bad:</span> "Fix the bug"
+
+              <span class="prompt">✅ Good:</span> "The login form submits twice
+              when users click the button quickly. Add debouncing to prevent
+              duplicate submissions. The form is in src/components/LoginForm.js"
             </div>
+
+            <h3>Example 2: Missing Context</h3>
+            <div class="code-block">
+              <span class="comment">❌ Bad:</span> "Write a test"
+
+              <span class="prompt">✅ Good:</span> "Write a Jest unit test for
+              the calculateTotal function in src/utils/pricing.js. Test cases
+              should include: - Normal calculation with valid inputs - Zero
+              quantity edge case - Negative price validation"
+            </div>
+
+            <h3>Example 3: Unclear Output</h3>
+            <div class="code-block">
+              <span class="comment">❌ Bad:</span> "Make it better"
+
+              <span class="prompt">✅ Good:</span> "Refactor getUsers() to use
+              async/await instead of .then() callbacks. Keep the same
+              functionality but improve readability. Add error handling with
+              try/catch."
+            </div>
+          </div>
+
+          <div class="success-box">
+            <strong>✅ Pro Tip</strong>
+            The more specific you are, the better results you'll get. Include
+            file names, function names, and specific requirements.
+          </div>
+
+          <div class="step-navigation">
+            <button class="nav-btn prev" onclick="goToStep(2)">
+              ← Previous
+            </button>
+            <button class="nav-btn next" onclick="goToStep(4)">
+              Next: Agent Mode in Action →
+            </button>
+          </div>
         </div>
+      </div>
+
+      <!-- Step 4 -->
+      <div class="step-page" id="step4">
+        <div class="step-content">
+          <div class="step-header">
+            <span class="step-badge">Step 4 of 6</span>
+            <h1>Agent Mode in Action</h1>
+            <p>Real-world use cases</p>
+          </div>
+
+          <div class="content-card">
+            <h2>🚀 Common Agent Mode Tasks</h2>
+
+            <h3>1. Create New Features</h3>
+            <div class="code-block">
+              <span class="prompt">You:</span> Create a new user profile page
+              component that displays: - User avatar - Name and email - Join
+              date - Recent activity list Use our existing Card component and
+              follow the styling in ProfilePage.css. Create both the component
+              and a test file.
+            </div>
+
+            <h3>2. Refactor Existing Code</h3>
+            <div class="code-block">
+              <span class="prompt">You:</span> Refactor the UserService class to
+              use dependency injection instead of hardcoded database
+              connections. Update all files that import UserService to use the
+              new pattern.
+            </div>
+
+            <h3>3. Fix Bugs Across Multiple Files</h3>
+            <div class="code-block">
+              <span class="prompt">You:</span> The date picker is showing dates
+              in the wrong timezone. Find all places where we format dates and
+              ensure they use the user's local timezone. Check components/,
+              utils/, and api/.
+            </div>
+          </div>
+
+          <div class="content-card">
+            <h2>⚡ Agent Mode Workflow</h2>
+            <ol>
+              <li>
+                <strong>Describe your task</strong> - Be specific about what you
+                need
+              </li>
+              <li>
+                <strong>Review the plan</strong> - Agent will show you what it
+                intends to do
+              </li>
+              <li>
+                <strong>Approve or adjust</strong> - You can modify before it
+                executes
+              </li>
+              <li>
+                <strong>Watch it work</strong> - Agent makes changes in
+                real-time
+              </li>
+              <li>
+                <strong>Review changes</strong> - Always review before
+                committing
+              </li>
+            </ol>
+          </div>
+
+          <div class="warning-box">
+            <strong>⚠️ Always Review AI-Generated Code</strong>
+            Copilot is helpful but not perfect. Always review changes before
+            committing. Check for:
+            <ul style="margin-top: 0.5rem; margin-bottom: 0">
+              <li>Logic errors</li>
+              <li>Security issues</li>
+              <li>Code that doesn't match your patterns</li>
+              <li>Missing edge cases</li>
+            </ul>
+          </div>
+
+          <div class="step-navigation">
+            <button class="nav-btn prev" onclick="goToStep(3)">
+              ← Previous
+            </button>
+            <button class="nav-btn next" onclick="goToStep(5)">
+              Next: Best Practices →
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Step 5 -->
+      <div class="step-page" id="step5">
+        <div class="step-content">
+          <div class="step-header">
+            <span class="step-badge">Step 5 of 6</span>
+            <h1>Best Practices</h1>
+            <p>Using Copilot responsibly</p>
+          </div>
+
+          <div class="content-card">
+            <h2>✅ Do's</h2>
+            <ul>
+              <li>
+                <strong>Review all generated code</strong> - Never blindly
+                accept suggestions
+              </li>
+              <li>
+                <strong>Test thoroughly</strong> - AI can write buggy code too
+              </li>
+              <li>
+                <strong>Use for boilerplate</strong> - Great for repetitive code
+                patterns
+              </li>
+              <li>
+                <strong>Iterate on prompts</strong> - Refine if first result
+                isn't right
+              </li>
+              <li>
+                <strong>Learn from suggestions</strong> - Discover new patterns
+                and APIs
+              </li>
+              <li>
+                <strong>Break down complex tasks</strong> - Smaller requests =
+                better results
+              </li>
+            </ul>
+          </div>
+
+          <div class="content-card">
+            <h2>❌ Don'ts</h2>
+            <ul>
+              <li>
+                <strong>Don't share secrets</strong> - Never put API keys or
+                passwords in prompts
+              </li>
+              <li>
+                <strong>Don't blindly trust</strong> - Verify security-sensitive
+                code
+              </li>
+              <li>
+                <strong>Don't skip understanding</strong> - Know what the code
+                does before using it
+              </li>
+              <li>
+                <strong>Don't use for everything</strong> - Simple code is often
+                faster to write yourself
+              </li>
+              <li>
+                <strong>Don't ignore context</strong> - Copilot doesn't always
+                understand your full codebase
+              </li>
+            </ul>
+          </div>
+
+          <div class="content-card">
+            <h2>🎯 Team Collaboration with Copilot</h2>
+            <p>When multiple developers use Copilot:</p>
+            <ul>
+              <li>
+                <strong>Share effective prompts</strong> - Build a team
+                knowledge base
+              </li>
+              <li>
+                <strong>Standardize patterns</strong> - Agree on code styles
+                Copilot should follow
+              </li>
+              <li>
+                <strong>Review AI code in PRs</strong> - Extra scrutiny on
+                generated code
+              </li>
+              <li>
+                <strong>Document AI contributions</strong> - Note when
+                significant code was AI-generated
+              </li>
+            </ul>
+          </div>
+
+          <div class="info-box">
+            <strong>💡 Copilot Limitations</strong>
+            <ul style="margin-top: 0.5rem; margin-bottom: 0">
+              <li>May not know your latest code changes</li>
+              <li>Can hallucinate APIs that don't exist</li>
+              <li>May suggest outdated patterns</li>
+              <li>Doesn't run or test the code</li>
+            </ul>
+          </div>
+
+          <div class="step-navigation">
+            <button class="nav-btn prev" onclick="goToStep(4)">
+              ← Previous
+            </button>
+            <button class="nav-btn next" onclick="goToStep(6)">
+              Complete Module →
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Step 6 -->
+      <div class="step-page" id="step6">
+        <div class="step-content">
+          <div class="step-header">
+            <span class="step-badge">Step 6 of 6</span>
+            <h1>🎉 Module Complete!</h1>
+            <p>You're ready to code with AI</p>
+          </div>
+
+          <div class="content-card" style="text-align: center; padding: 2.5rem">
+            <div class="copilot-logo">🤖</div>
+            <h2>Copilot Mastery!</h2>
+            <p style="font-size: 1.1rem; max-width: 500px; margin: 1rem auto">
+              You now know how to effectively use GitHub Copilot to boost your
+              productivity.
+            </p>
+          </div>
+
+          <div class="content-card">
+            <h2>📋 Key Takeaways</h2>
+            <ul>
+              <li>
+                <strong>Chat for questions</strong>,
+                <strong>Agent for actions</strong>
+              </li>
+              <li>
+                <strong>Be specific</strong> - Use the CRISP framework for
+                prompts
+              </li>
+              <li>
+                <strong>Always review</strong> - AI code needs human
+                verification
+              </li>
+              <li>
+                <strong>Iterate</strong> - Refine prompts for better results
+              </li>
+              <li>
+                <strong>Know the limits</strong> - Copilot is a tool, not a
+                replacement
+              </li>
+            </ul>
+          </div>
+
+          <div class="content-card">
+            <h2>🔑 Quick Reference</h2>
+            <table class="data-table">
+              <tr>
+                <td><span class="keyboard-shortcut">Tab</span></td>
+                <td>Accept suggestion</td>
+              </tr>
+              <tr>
+                <td><span class="keyboard-shortcut">Esc</span></td>
+                <td>Reject suggestion</td>
+              </tr>
+              <tr>
+                <td>
+                  <span class="keyboard-shortcut">Ctrl</span> +
+                  <span class="keyboard-shortcut">Shift</span> +
+                  <span class="keyboard-shortcut">I</span>
+                </td>
+                <td>Open Copilot Chat</td>
+              </tr>
+              <tr>
+                <td>
+                  <span class="keyboard-shortcut">Alt</span> +
+                  <span class="keyboard-shortcut">]</span>
+                </td>
+                <td>Next suggestion</td>
+              </tr>
+            </table>
+          </div>
+
+          <div
+            class="content-card"
+            style="
+              background: linear-gradient(135deg, var(--module-color), #0550ae);
+              color: white;
+            "
+          >
+            <h2 style="color: white">Next Up: Project Setup Best Practices</h2>
+            <p style="color: rgba(255, 255, 255, 0.9)">
+              Learn how to structure GitHub repositories for team success.
+            </p>
+            <div style="margin-top: 1rem">
+              <a
+                href="dev-module6-project-setup.html"
+                class="nav-btn"
+                style="background: white; color: var(--module-color)"
+                >Start Module 6 →</a
+              >
+            </div>
+          </div>
+
+          <div class="step-navigation">
+            <button class="nav-btn prev" onclick="goToStep(5)">
+              ← Previous
+            </button>
+            <button
+              class="nav-btn next"
+              onclick="completeModule()"
+              style="background: var(--primary)"
+            >
+              ✓ Complete Module
+            </button>
+          </div>
+        </div>
+      </div>
     </main>
-    
+
     <script>
-        const totalSteps = 6;
-        let currentStep = 1;
-        let completedSteps = [];
-        
-        function loadProgress() {
-            const saved = localStorage.getItem('dev-module5-step');
-            if (saved) {
-                currentStep = parseInt(saved);
-                for (let i = 1; i < currentStep; i++) {
-                    completedSteps.push(i);
-                }
-            }
-            updateUI();
+      const totalSteps = 6;
+      let currentStep = 1;
+      let completedSteps = [];
+
+      function loadProgress() {
+        const saved = localStorage.getItem("dev-module5-step");
+        if (saved) {
+          currentStep = parseInt(saved);
+          for (let i = 1; i < currentStep; i++) {
+            completedSteps.push(i);
+          }
         }
-        
-        function saveProgress() {
-            localStorage.setItem('dev-module5-step', currentStep);
-            if (currentStep > 1) {
-                localStorage.setItem('dev-module5', 'in-progress');
-            }
+        updateUI();
+      }
+
+      function saveProgress() {
+        localStorage.setItem("dev-module5-step", currentStep);
+        if (currentStep > 1) {
+          localStorage.setItem("dev-module5", "in-progress");
         }
-        
-        function goToStep(step) {
-            if (step > currentStep) {
-                for (let i = currentStep; i < step; i++) {
-                    if (!completedSteps.includes(i)) completedSteps.push(i);
-                }
-            }
-            currentStep = step;
-            saveProgress();
-            updateUI();
-            window.scrollTo(0, 0);
+      }
+
+      function goToStep(step) {
+        if (step > currentStep) {
+          for (let i = currentStep; i < step; i++) {
+            if (!completedSteps.includes(i)) completedSteps.push(i);
+          }
         }
-        
-        function updateUI() {
-            document.querySelectorAll('.step-page').forEach((page, index) => {
-                page.classList.remove('active');
-                if (index + 1 === currentStep) page.classList.add('active');
-            });
-            
-            document.querySelectorAll('.step-item').forEach((item, index) => {
-                const stepNum = index + 1;
-                item.classList.remove('active', 'completed');
-                if (stepNum === currentStep) item.classList.add('active');
-                else if (completedSteps.includes(stepNum)) item.classList.add('completed');
-            });
-            
-            const progress = ((currentStep - 1) / (totalSteps - 1)) * 100;
-            document.getElementById('progressFill').style.width = `${progress}%`;
-        }
-        
-        function completeModule() {
-            localStorage.setItem('dev-module5', 'completed');
-            localStorage.setItem('dev-module5-step', totalSteps);
-            window.location.href = 'developer-training.html';
-        }
-        
-        loadProgress();
+        currentStep = step;
+        saveProgress();
+        updateUI();
+        window.scrollTo(0, 0);
+      }
+
+      function updateUI() {
+        document.querySelectorAll(".step-page").forEach((page, index) => {
+          page.classList.remove("active");
+          if (index + 1 === currentStep) page.classList.add("active");
+        });
+
+        document.querySelectorAll(".step-item").forEach((item, index) => {
+          const stepNum = index + 1;
+          item.classList.remove("active", "completed");
+          if (stepNum === currentStep) item.classList.add("active");
+          else if (completedSteps.includes(stepNum))
+            item.classList.add("completed");
+        });
+
+        const progress = ((currentStep - 1) / (totalSteps - 1)) * 100;
+        document.getElementById("progressFill").style.width = `${progress}%`;
+      }
+
+      function completeModule() {
+        localStorage.setItem("dev-module5", "completed");
+        localStorage.setItem("dev-module5-step", totalSteps);
+        window.location.href = "developer-training.html";
+      }
+
+      loadProgress();
     </script>
-</body>
+  </body>
 </html>

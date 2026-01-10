@@ -1,16 +1,61 @@
 .sales-manager-dashboard {
-    width: 100%;
-    padding: 0;
+  width: 100%;
+  padding: 0;
 }
 
 .metrics-section {
-    margin-bottom: 20px;
+  margin-bottom: 20px;
 }
 
 .pipeline-section {
-    width: 100%;
+  width: 100%;
 }
 
 .pipeline-section lightning-card {
-    border: none;
+  border: none;
+}
+
+/* ========================================
+   MOBILE-RESPONSIVE DESIGN
+   ======================================== */
+
+/* Tablet Layout (768px - 1024px) */
+@media (max-width: 1024px) and (min-width: 768px) {
+  .sales-manager-dashboard {
+    padding: 0.5rem;
+  }
+
+  .metrics-section {
+    margin-bottom: 1rem;
+  }
+}
+
+/* Mobile Layout (< 768px) */
+@media (max-width: 767px) {
+  .sales-manager-dashboard {
+    padding: 0;
+  }
+
+  .metrics-section {
+    margin-bottom: 0.75rem;
+  }
+
+  /* Stack all content vertically */
+  .pipeline-section {
+    width: 100%;
+  }
+
+  /* Touch-friendly interactions */
+  lightning-button,
+  lightning-button-icon {
+    min-height: 44px;
+    min-width: 44px;
+  }
+}
+
+/* Extra Small Mobile (< 375px) */
+@media (max-width: 374px) {
+  .sales-manager-dashboard {
+    font-size: 0.875rem;
+  }
 }

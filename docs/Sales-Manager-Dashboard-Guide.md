@@ -1,4 +1,5 @@
 # Sales Manager Dashboard Guide
+
 ## Contract B Agent Monitoring
 
 **Purpose:** Help Sales Managers monitor and support Contract B agents through their probationary period.
@@ -17,11 +18,11 @@
 
 ## Contract B Requirements Reminder
 
-| Metric | Target | Your Role |
-|--------|--------|-----------|
-| **FYC** | $2,500 | Coach on sales techniques |
-| **Submissions** | 5 opportunities | Help identify prospects |
-| **Timeline** | 4 months | Track progress weekly |
+| Metric          | Target          | Your Role                 |
+| --------------- | --------------- | ------------------------- |
+| **FYC**         | $2,500          | Coach on sales techniques |
+| **Submissions** | 5 opportunities | Help identify prospects   |
+| **Timeline**    | 4 months        | Track progress weekly     |
 
 ---
 
@@ -32,11 +33,13 @@
 ### Step 1: Check Summary Cards
 
 Look at these numbers first:
+
 - **Active Contract B** - How many agents are you tracking?
 - **At Risk** - ⚠️ These need immediate attention (should ideally be zero)
 - **Requirements Met** - Ready for transition celebration!
 
 **Interactive Features:**
+
 - **Click any summary card** to open a detailed modal showing filtered candidates
 - **Auto-refresh:** Dashboard automatically updates with real-time data
 - **Priority Focus:** Monitor "At Risk" count daily - take action immediately when it's above zero
@@ -45,21 +48,21 @@ Look at these numbers first:
 
 Focus on these columns:
 
-| Column | What to Check |
-|--------|---------------|
-| **Days Left** | Sort ascending - lowest first need attention |
+| Column           | What to Check                                 |
+| ---------------- | --------------------------------------------- |
+| **Days Left**    | Sort ascending - lowest first need attention  |
 | **FYC Progress** | Is the bar growing? Should be >50% at month 2 |
-| **Submissions** | X/5 - Are they on pace? |
-| **Status** | Any 🔴 Critical or 🟠 At Risk? |
+| **Submissions**  | X/5 - Are they on pace?                       |
+| **Status**       | Any 🔴 Critical or 🟠 At Risk?                |
 
 ### Step 3: Take Action
 
-| Status | Days Left | Action |
-|--------|-----------|--------|
-| 🔴 Critical | <14 | Escalate immediately, daily check-ins |
-| 🟠 At Risk | <30 | Weekly coaching sessions |
-| 🟡 On Track | 30+ | Monthly review |
-| 🟢 Complete | Any | Celebrate! Process transition |
+| Status      | Days Left | Action                                |
+| ----------- | --------- | ------------------------------------- |
+| 🔴 Critical | <14       | Escalate immediately, daily check-ins |
+| 🟠 At Risk  | <30       | Weekly coaching sessions              |
+| 🟡 On Track | 30+       | Monthly review                        |
+| 🟢 Complete | Any       | Celebrate! Process transition         |
 
 ---
 
@@ -82,21 +85,25 @@ For each Contract B agent on your team:
 ## Progress Benchmarks
 
 ### Month 1 (Days 1-30)
+
 - FYC: $0-500 (building pipeline)
 - Submissions: 0-1
 - **Focus:** Activity and prospecting
 
 ### Month 2 (Days 31-60)
+
 - FYC: $500-1,500
 - Submissions: 1-3
 - **Focus:** Converting pipeline to business
 
 ### Month 3 (Days 61-90)
+
 - FYC: $1,500-2,200
 - Submissions: 3-4
 - **Focus:** Closing and submitting
 
 ### Month 4 (Days 91-120)
+
 - FYC: $2,500+ ✅
 - Submissions: 5+ ✅
 - **Focus:** Meeting requirements
@@ -106,12 +113,14 @@ For each Contract B agent on your team:
 ## When to Recommend Extension
 
 Consider extension if agent has:
+
 - Active pipeline/pending opportunities
 - FYC at 60%+ of target
 - 3-4 submissions in progress
 - Demonstrated commitment and activity
 
 **To grant extension:**
+
 1. Discuss with Recruiting Leadership
 2. Open Candidate record
 3. Check "Extension Granted"
@@ -121,12 +130,12 @@ Consider extension if agent has:
 
 ## Red Flags to Watch
 
-| Warning Sign | Action |
-|--------------|--------|
+| Warning Sign              | Action                        |
+| ------------------------- | ----------------------------- |
 | No submissions by Month 2 | Intensive prospecting support |
-| FYC flat for 3+ weeks | Review sales process |
-| Missing coaching meetings | Performance conversation |
-| Low activity metrics | Discuss commitment |
+| FYC flat for 3+ weeks     | Review sales process          |
+| Missing coaching meetings | Performance conversation      |
+| Low activity metrics      | Discuss commitment            |
 
 ---
 
@@ -149,8 +158,9 @@ To view Contract B agent details:
 2. **Record View:** Click agent name → Full record with all fields
 
 Key fields on Candidate record:
-- Total FYC__c
-- Opportunity Count__c
+
+- Total FYC\_\_c
+- Opportunity Count\_\_c
 - Contract End Date
 - Extension Granted
 - Days Until Contract End
@@ -159,13 +169,13 @@ Key fields on Candidate record:
 
 ## Need Help?
 
-| Question | Who to Ask |
-|----------|------------|
-| Dashboard access | IT Help Desk |
-| Agent performance issues | Recruiting Manager |
-| Extension decisions | Recruiting Director |
-| System questions | Salesforce Admin |
+| Question                 | Who to Ask          |
+| ------------------------ | ------------------- |
+| Dashboard access         | IT Help Desk        |
+| Agent performance issues | Recruiting Manager  |
+| Extension decisions      | Recruiting Director |
+| System questions         | Salesforce Admin    |
 
 ---
 
-*Sales Manager Guide v1.0 | December 2025*
+_Sales Manager Guide v1.0 | December 2025_

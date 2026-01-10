@@ -1,857 +1,1141 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Module 3: Interview Tracking - Recruiter Training</title>
     <style>
-        :root {
-            --primary: #0176d3;
-            --primary-dark: #014486;
-            --primary-light: #e0f2fe;
-            --success: #2e844a;
-            --success-light: #dcfce7;
-            --warning: #fe9339;
-            --warning-light: #fef3c7;
-            --gray-100: #f3f3f3;
-            --gray-200: #e5e5e5;
-            --gray-300: #d1d5db;
-            --gray-500: #6b7280;
-            --gray-700: #444;
-            --gray-900: #181818;
-        }
-        
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        
-        body {
-            font-family: 'Salesforce Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: var(--gray-100);
-            min-height: 100vh;
-            display: flex;
-        }
-        
-        .sidebar {
-            width: 280px;
-            background: white;
-            border-right: 1px solid var(--gray-200);
-            padding: 1.5rem;
-            position: fixed;
-            height: 100vh;
-            overflow-y: auto;
-        }
-        
-        .sidebar-header {
-            padding-bottom: 1rem;
-            border-bottom: 1px solid var(--gray-200);
-            margin-bottom: 1rem;
-        }
-        
-        .sidebar-header a {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            color: var(--primary);
-            text-decoration: none;
-            font-size: 0.9rem;
-            margin-bottom: 0.5rem;
-        }
-        
-        .sidebar-header a:hover { text-decoration: underline; }
-        
-        .sidebar-header h2 { font-size: 1.1rem; color: var(--gray-900); }
-        
-        .sidebar-header .module-badge {
-            display: inline-block;
-            background: var(--primary-light);
-            color: var(--primary);
-            padding: 0.2rem 0.6rem;
-            border-radius: 10px;
-            font-size: 0.75rem;
-            font-weight: 600;
-            margin-top: 0.5rem;
-        }
-        
-        .steps-list { list-style: none; }
-        
-        .step-item {
-            padding: 0.75rem;
-            border-radius: 8px;
-            margin-bottom: 0.5rem;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-            transition: all 0.2s;
-        }
-        
-        .step-item:hover { background: var(--gray-100); }
-        .step-item.active { background: var(--primary-light); }
-        .step-item.completed { opacity: 0.7; }
-        
-        .step-number {
-            width: 28px;
-            height: 28px;
-            border-radius: 50%;
-            background: var(--gray-200);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 0.85rem;
-            font-weight: 600;
-            color: var(--gray-500);
-            flex-shrink: 0;
-        }
-        
-        .step-item.active .step-number { background: var(--primary); color: white; }
-        .step-item.completed .step-number { background: var(--success); color: white; }
-        .step-item.completed .step-number::before { content: "✓"; }
-        
-        .step-info { flex-grow: 1; }
-        .step-title { font-size: 0.9rem; color: var(--gray-900); font-weight: 500; }
-        .step-duration { font-size: 0.75rem; color: var(--gray-500); }
-        
-        .main-content { flex-grow: 1; margin-left: 280px; padding: 2rem; }
-        .step-content { max-width: 900px; margin: 0 auto; }
-        .step-header { margin-bottom: 2rem; }
-        
-        .step-header .step-badge {
-            display: inline-block;
-            background: var(--primary);
-            color: white;
-            padding: 0.3rem 1rem;
-            border-radius: 20px;
-            font-size: 0.85rem;
-            font-weight: 600;
-            margin-bottom: 0.75rem;
-        }
-        
-        .step-header h1 { font-size: 2rem; color: var(--gray-900); margin-bottom: 0.5rem; }
-        .step-header p { font-size: 1.1rem; color: var(--gray-500); }
-        
-        .content-card {
-            background: white;
-            border-radius: 12px;
-            padding: 2rem;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
-            margin-bottom: 1.5rem;
-        }
-        
-        .content-card h2 {
-            font-size: 1.3rem;
-            color: var(--gray-900);
-            margin-bottom: 1rem;
-        }
-        
-        .content-card p { color: var(--gray-700); line-height: 1.7; margin-bottom: 1rem; }
-        .content-card ul, .content-card ol { margin-left: 1.5rem; margin-bottom: 1rem; color: var(--gray-700); line-height: 1.8; }
-        
-        .screenshot-placeholder {
-            background: linear-gradient(135deg, var(--gray-100), var(--gray-200));
-            border: 2px dashed var(--gray-300);
-            border-radius: 8px;
-            padding: 3rem;
-            text-align: center;
-            margin: 1.5rem 0;
-        }
-        
-        .screenshot-placeholder .icon { font-size: 3rem; margin-bottom: 0.5rem; }
-        .screenshot-placeholder .label { color: var(--gray-500); font-style: italic; }
-        
-        .info-box {
-            background: var(--primary-light);
-            border-left: 4px solid var(--primary);
-            padding: 1rem 1.25rem;
-            border-radius: 0 8px 8px 0;
-            margin: 1.5rem 0;
-        }
-        
-        .info-box.tip { background: #ecfdf5; border-color: var(--success); }
-        .info-box.warning { background: var(--warning-light); border-color: var(--warning); }
-        .info-box strong { display: block; margin-bottom: 0.25rem; color: var(--gray-900); }
-        
-        .data-table { width: 100%; border-collapse: collapse; margin: 1rem 0; }
-        .data-table th, .data-table td { padding: 0.75rem; text-align: left; border-bottom: 1px solid var(--gray-200); }
-        .data-table th { background: var(--gray-100); font-weight: 600; color: var(--gray-700); }
-        
-        .step-navigation {
-            display: flex;
-            justify-content: space-between;
-            margin-top: 2rem;
-            padding-top: 2rem;
-            border-top: 1px solid var(--gray-200);
-        }
-        
-        .nav-btn {
-            padding: 0.75rem 1.5rem;
-            border-radius: 8px;
-            font-weight: 600;
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-            cursor: pointer;
-            border: none;
-            font-size: 1rem;
-            transition: all 0.3s;
-            text-decoration: none;
-        }
-        
-        .nav-btn.prev { background: var(--gray-200); color: var(--gray-700); }
-        .nav-btn.prev:hover { background: var(--gray-300); }
-        .nav-btn.next { background: var(--primary); color: white; }
-        .nav-btn.next:hover { background: var(--primary-dark); }
-        .nav-btn.complete { background: var(--success); color: white; }
-        .nav-btn:disabled { opacity: 0.5; cursor: not-allowed; }
-        
-        .progress-indicator {
-            background: var(--gray-200);
-            height: 4px;
-            position: fixed;
-            top: 0;
-            left: 280px;
-            right: 0;
-            z-index: 100;
-        }
-        
-        .progress-fill { height: 100%; background: var(--primary); transition: width 0.3s; }
-        
-        .interview-type-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 1rem;
-            margin: 1.5rem 0;
-        }
-        
-        .interview-type-card {
-            background: var(--gray-100);
-            border-radius: 10px;
-            padding: 1.25rem;
-            border-left: 4px solid var(--primary);
-        }
-        
-        .interview-type-card h4 {
-            color: var(--gray-900);
-            margin-bottom: 0.5rem;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-        
-        .interview-type-card p {
-            font-size: 0.9rem;
-            color: var(--gray-500);
-            margin: 0;
-        }
-        
-        .status-badge {
-            display: inline-block;
-            padding: 0.25rem 0.75rem;
-            border-radius: 12px;
-            font-size: 0.8rem;
-            font-weight: 600;
-        }
-        
-        .status-scheduled { background: #dbeafe; color: #1d4ed8; }
-        .status-completed { background: var(--success-light); color: var(--success); }
-        .status-cancelled { background: var(--gray-200); color: var(--gray-500); }
-        
-        .feature-list {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 1rem;
-            margin: 1.5rem 0;
-        }
-        
-        .feature-item {
-            display: flex;
-            gap: 1rem;
-            padding: 1rem;
-            background: var(--gray-100);
-            border-radius: 8px;
-            text-decoration: none;
-        }
-        
-        .feature-icon {
-            width: 40px;
-            height: 40px;
-            background: var(--primary);
-            border-radius: 8px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.25rem;
-            flex-shrink: 0;
-        }
-        
-        .feature-text h4 { font-size: 0.95rem; color: var(--gray-900); margin-bottom: 0.25rem; }
-        .feature-text p { font-size: 0.85rem; color: var(--gray-500); margin: 0; }
-        
-        .step-page { display: none; }
-        .step-page.active { display: block; }
+      :root {
+        --primary: #0176d3;
+        --primary-dark: #014486;
+        --primary-light: #e0f2fe;
+        --success: #2e844a;
+        --success-light: #dcfce7;
+        --warning: #fe9339;
+        --warning-light: #fef3c7;
+        --gray-100: #f3f3f3;
+        --gray-200: #e5e5e5;
+        --gray-300: #d1d5db;
+        --gray-500: #6b7280;
+        --gray-700: #444;
+        --gray-900: #181818;
+      }
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family:
+          "Salesforce Sans",
+          -apple-system,
+          BlinkMacSystemFont,
+          "Segoe UI",
+          Roboto,
+          sans-serif;
+        background: var(--gray-100);
+        min-height: 100vh;
+        display: flex;
+      }
+
+      .sidebar {
+        width: 280px;
+        background: white;
+        border-right: 1px solid var(--gray-200);
+        padding: 1.5rem;
+        position: fixed;
+        height: 100vh;
+        overflow-y: auto;
+      }
+
+      .sidebar-header {
+        padding-bottom: 1rem;
+        border-bottom: 1px solid var(--gray-200);
+        margin-bottom: 1rem;
+      }
+
+      .sidebar-header a {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        color: var(--primary);
+        text-decoration: none;
+        font-size: 0.9rem;
+        margin-bottom: 0.5rem;
+      }
+
+      .sidebar-header a:hover {
+        text-decoration: underline;
+      }
+
+      .sidebar-header h2 {
+        font-size: 1.1rem;
+        color: var(--gray-900);
+      }
+
+      .sidebar-header .module-badge {
+        display: inline-block;
+        background: var(--primary-light);
+        color: var(--primary);
+        padding: 0.2rem 0.6rem;
+        border-radius: 10px;
+        font-size: 0.75rem;
+        font-weight: 600;
+        margin-top: 0.5rem;
+      }
+
+      .steps-list {
+        list-style: none;
+      }
+
+      .step-item {
+        padding: 0.75rem;
+        border-radius: 8px;
+        margin-bottom: 0.5rem;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        transition: all 0.2s;
+      }
+
+      .step-item:hover {
+        background: var(--gray-100);
+      }
+      .step-item.active {
+        background: var(--primary-light);
+      }
+      .step-item.completed {
+        opacity: 0.7;
+      }
+
+      .step-number {
+        width: 28px;
+        height: 28px;
+        border-radius: 50%;
+        background: var(--gray-200);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.85rem;
+        font-weight: 600;
+        color: var(--gray-500);
+        flex-shrink: 0;
+      }
+
+      .step-item.active .step-number {
+        background: var(--primary);
+        color: white;
+      }
+      .step-item.completed .step-number {
+        background: var(--success);
+        color: white;
+      }
+      .step-item.completed .step-number::before {
+        content: "✓";
+      }
+
+      .step-info {
+        flex-grow: 1;
+      }
+      .step-title {
+        font-size: 0.9rem;
+        color: var(--gray-900);
+        font-weight: 500;
+      }
+      .step-duration {
+        font-size: 0.75rem;
+        color: var(--gray-500);
+      }
+
+      .main-content {
+        flex-grow: 1;
+        margin-left: 280px;
+        padding: 2rem;
+      }
+      .step-content {
+        max-width: 900px;
+        margin: 0 auto;
+      }
+      .step-header {
+        margin-bottom: 2rem;
+      }
+
+      .step-header .step-badge {
+        display: inline-block;
+        background: var(--primary);
+        color: white;
+        padding: 0.3rem 1rem;
+        border-radius: 20px;
+        font-size: 0.85rem;
+        font-weight: 600;
+        margin-bottom: 0.75rem;
+      }
+
+      .step-header h1 {
+        font-size: 2rem;
+        color: var(--gray-900);
+        margin-bottom: 0.5rem;
+      }
+      .step-header p {
+        font-size: 1.1rem;
+        color: var(--gray-500);
+      }
+
+      .content-card {
+        background: white;
+        border-radius: 12px;
+        padding: 2rem;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+        margin-bottom: 1.5rem;
+      }
+
+      .content-card h2 {
+        font-size: 1.3rem;
+        color: var(--gray-900);
+        margin-bottom: 1rem;
+      }
+
+      .content-card p {
+        color: var(--gray-700);
+        line-height: 1.7;
+        margin-bottom: 1rem;
+      }
+      .content-card ul,
+      .content-card ol {
+        margin-left: 1.5rem;
+        margin-bottom: 1rem;
+        color: var(--gray-700);
+        line-height: 1.8;
+      }
+
+      .screenshot-placeholder {
+        background: linear-gradient(135deg, var(--gray-100), var(--gray-200));
+        border: 2px dashed var(--gray-300);
+        border-radius: 8px;
+        padding: 3rem;
+        text-align: center;
+        margin: 1.5rem 0;
+      }
+
+      .screenshot-placeholder .icon {
+        font-size: 3rem;
+        margin-bottom: 0.5rem;
+      }
+      .screenshot-placeholder .label {
+        color: var(--gray-500);
+        font-style: italic;
+      }
+
+      .info-box {
+        background: var(--primary-light);
+        border-left: 4px solid var(--primary);
+        padding: 1rem 1.25rem;
+        border-radius: 0 8px 8px 0;
+        margin: 1.5rem 0;
+      }
+
+      .info-box.tip {
+        background: #ecfdf5;
+        border-color: var(--success);
+      }
+      .info-box.warning {
+        background: var(--warning-light);
+        border-color: var(--warning);
+      }
+      .info-box strong {
+        display: block;
+        margin-bottom: 0.25rem;
+        color: var(--gray-900);
+      }
+
+      .data-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 1rem 0;
+      }
+      .data-table th,
+      .data-table td {
+        padding: 0.75rem;
+        text-align: left;
+        border-bottom: 1px solid var(--gray-200);
+      }
+      .data-table th {
+        background: var(--gray-100);
+        font-weight: 600;
+        color: var(--gray-700);
+      }
+
+      .step-navigation {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 2rem;
+        padding-top: 2rem;
+        border-top: 1px solid var(--gray-200);
+      }
+
+      .nav-btn {
+        padding: 0.75rem 1.5rem;
+        border-radius: 8px;
+        font-weight: 600;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        cursor: pointer;
+        border: none;
+        font-size: 1rem;
+        transition: all 0.3s;
+        text-decoration: none;
+      }
+
+      .nav-btn.prev {
+        background: var(--gray-200);
+        color: var(--gray-700);
+      }
+      .nav-btn.prev:hover {
+        background: var(--gray-300);
+      }
+      .nav-btn.next {
+        background: var(--primary);
+        color: white;
+      }
+      .nav-btn.next:hover {
+        background: var(--primary-dark);
+      }
+      .nav-btn.complete {
+        background: var(--success);
+        color: white;
+      }
+      .nav-btn:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+      }
+
+      .progress-indicator {
+        background: var(--gray-200);
+        height: 4px;
+        position: fixed;
+        top: 0;
+        left: 280px;
+        right: 0;
+        z-index: 100;
+      }
+
+      .progress-fill {
+        height: 100%;
+        background: var(--primary);
+        transition: width 0.3s;
+      }
+
+      .interview-type-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 1rem;
+        margin: 1.5rem 0;
+      }
+
+      .interview-type-card {
+        background: var(--gray-100);
+        border-radius: 10px;
+        padding: 1.25rem;
+        border-left: 4px solid var(--primary);
+      }
+
+      .interview-type-card h4 {
+        color: var(--gray-900);
+        margin-bottom: 0.5rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+
+      .interview-type-card p {
+        font-size: 0.9rem;
+        color: var(--gray-500);
+        margin: 0;
+      }
+
+      .status-badge {
+        display: inline-block;
+        padding: 0.25rem 0.75rem;
+        border-radius: 12px;
+        font-size: 0.8rem;
+        font-weight: 600;
+      }
+
+      .status-scheduled {
+        background: #dbeafe;
+        color: #1d4ed8;
+      }
+      .status-completed {
+        background: var(--success-light);
+        color: var(--success);
+      }
+      .status-cancelled {
+        background: var(--gray-200);
+        color: var(--gray-500);
+      }
+
+      .feature-list {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 1rem;
+        margin: 1.5rem 0;
+      }
+
+      .feature-item {
+        display: flex;
+        gap: 1rem;
+        padding: 1rem;
+        background: var(--gray-100);
+        border-radius: 8px;
+        text-decoration: none;
+      }
+
+      .feature-icon {
+        width: 40px;
+        height: 40px;
+        background: var(--primary);
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.25rem;
+        flex-shrink: 0;
+      }
+
+      .feature-text h4 {
+        font-size: 0.95rem;
+        color: var(--gray-900);
+        margin-bottom: 0.25rem;
+      }
+      .feature-text p {
+        font-size: 0.85rem;
+        color: var(--gray-500);
+        margin: 0;
+      }
+
+      .step-page {
+        display: none;
+      }
+      .step-page.active {
+        display: block;
+      }
     </style>
-</head>
-<body>
+  </head>
+  <body>
     <div class="progress-indicator">
-        <div class="progress-fill" id="progressFill" style="width: 0%"></div>
+      <div class="progress-fill" id="progressFill" style="width: 0%"></div>
     </div>
-    
+
     <aside class="sidebar">
-        <div class="sidebar-header">
-            <a href="recruiter-training.html">← Back to Training Program</a>
-            <h2>Module 3: Interview Tracking</h2>
-            <span class="module-badge">30-45 minutes</span>
-        </div>
-        
-        <ul class="steps-list" id="stepsList">
-            <li class="step-item active" data-step="1" onclick="goToStep(1)">
-                <span class="step-number">1</span>
-                <div class="step-info">
-                    <div class="step-title">Interview Overview</div>
-                    <div class="step-duration">5 min</div>
-                </div>
-            </li>
-            <li class="step-item" data-step="2" onclick="goToStep(2)">
-                <span class="step-number">2</span>
-                <div class="step-info">
-                    <div class="step-title">Interview Types</div>
-                    <div class="step-duration">7 min</div>
-                </div>
-            </li>
-            <li class="step-item" data-step="3" onclick="goToStep(3)">
-                <span class="step-number">3</span>
-                <div class="step-info">
-                    <div class="step-title">Scheduling Interviews</div>
-                    <div class="step-duration">10 min</div>
-                </div>
-            </li>
-            <li class="step-item" data-step="4" onclick="goToStep(4)">
-                <span class="step-number">4</span>
-                <div class="step-info">
-                    <div class="step-title">Recording Completion</div>
-                    <div class="step-duration">7 min</div>
-                </div>
-            </li>
-            <li class="step-item" data-step="5" onclick="goToStep(5)">
-                <span class="step-number">5</span>
-                <div class="step-info">
-                    <div class="step-title">Interview Metrics</div>
-                    <div class="step-duration">7 min</div>
-                </div>
-            </li>
-            <li class="step-item" data-step="6" onclick="goToStep(6)">
-                <span class="step-number">6</span>
-                <div class="step-info">
-                    <div class="step-title">Best Practices</div>
-                    <div class="step-duration">5 min</div>
-                </div>
-            </li>
-            <li class="step-item" data-step="7" onclick="goToStep(7)">
-                <span class="step-number">7</span>
-                <div class="step-info">
-                    <div class="step-title">Module Complete</div>
-                    <div class="step-duration">2 min</div>
-                </div>
-            </li>
-        </ul>
+      <div class="sidebar-header">
+        <a href="recruiter-training.html">← Back to Training Program</a>
+        <h2>Module 3: Interview Tracking</h2>
+        <span class="module-badge">30-45 minutes</span>
+      </div>
+
+      <ul class="steps-list" id="stepsList">
+        <li class="step-item active" data-step="1" onclick="goToStep(1)">
+          <span class="step-number">1</span>
+          <div class="step-info">
+            <div class="step-title">Interview Overview</div>
+            <div class="step-duration">5 min</div>
+          </div>
+        </li>
+        <li class="step-item" data-step="2" onclick="goToStep(2)">
+          <span class="step-number">2</span>
+          <div class="step-info">
+            <div class="step-title">Interview Types</div>
+            <div class="step-duration">7 min</div>
+          </div>
+        </li>
+        <li class="step-item" data-step="3" onclick="goToStep(3)">
+          <span class="step-number">3</span>
+          <div class="step-info">
+            <div class="step-title">Scheduling Interviews</div>
+            <div class="step-duration">10 min</div>
+          </div>
+        </li>
+        <li class="step-item" data-step="4" onclick="goToStep(4)">
+          <span class="step-number">4</span>
+          <div class="step-info">
+            <div class="step-title">Recording Completion</div>
+            <div class="step-duration">7 min</div>
+          </div>
+        </li>
+        <li class="step-item" data-step="5" onclick="goToStep(5)">
+          <span class="step-number">5</span>
+          <div class="step-info">
+            <div class="step-title">Interview Metrics</div>
+            <div class="step-duration">7 min</div>
+          </div>
+        </li>
+        <li class="step-item" data-step="6" onclick="goToStep(6)">
+          <span class="step-number">6</span>
+          <div class="step-info">
+            <div class="step-title">Best Practices</div>
+            <div class="step-duration">5 min</div>
+          </div>
+        </li>
+        <li class="step-item" data-step="7" onclick="goToStep(7)">
+          <span class="step-number">7</span>
+          <div class="step-info">
+            <div class="step-title">Module Complete</div>
+            <div class="step-duration">2 min</div>
+          </div>
+        </li>
+      </ul>
     </aside>
-    
+
     <main class="main-content">
-        <!-- Step 1: Interview Overview -->
-        <div class="step-page active" id="step1">
-            <div class="step-content">
-                <div class="step-header">
-                    <span class="step-badge">Step 1 of 7</span>
-                    <h1>Interview Overview</h1>
-                    <p>Understanding the interview tracking system</p>
-                </div>
-                
-                <div class="content-card">
-                    <h2>📅 What is Interview Tracking?</h2>
-                    <p>Interview tracking allows you to schedule, manage, and record all candidate interviews within the Recruiter Portal. Each interview is linked to a candidate record and contributes to overall recruiting metrics.</p>
-                    
-                    <div class="screenshot-placeholder">
-                        <div class="icon">📸</div>
-                        <div class="label">Screenshot: Interview Related List on Candidate Record</div>
-                    </div>
-                    
-                    <h3>Why Track Interviews?</h3>
-                    <ul>
-                        <li><strong>Pipeline visibility</strong> - Know where every candidate stands</li>
-                        <li><strong>Scheduling efficiency</strong> - Avoid double-booking</li>
-                        <li><strong>Performance metrics</strong> - Track conversion rates by stage</li>
-                        <li><strong>Historical record</strong> - Document the recruiting process</li>
-                    </ul>
-                </div>
-                
-                <div class="info-box">
-                    <strong>ℹ️ Interview Records</strong>
-                    Each interview is stored as a separate record linked to the candidate. You can view all interviews in the related list on the candidate record.
-                </div>
-                
-                <div class="step-navigation">
-                    <button class="nav-btn prev" disabled>← Previous</button>
-                    <button class="nav-btn next" onclick="goToStep(2)">Next: Interview Types →</button>
-                </div>
+      <!-- Step 1: Interview Overview -->
+      <div class="step-page active" id="step1">
+        <div class="step-content">
+          <div class="step-header">
+            <span class="step-badge">Step 1 of 7</span>
+            <h1>Interview Overview</h1>
+            <p>Understanding the interview tracking system</p>
+          </div>
+
+          <div class="content-card">
+            <h2>📅 What is Interview Tracking?</h2>
+            <p>
+              Interview tracking allows you to schedule, manage, and record all
+              candidate interviews within the Recruiter Portal. Each interview
+              is linked to a candidate record and contributes to overall
+              recruiting metrics.
+            </p>
+
+            <div class="screenshot-placeholder">
+              <div class="icon">📸</div>
+              <div class="label">
+                Screenshot: Interview Related List on Candidate Record
+              </div>
             </div>
+
+            <h3>Why Track Interviews?</h3>
+            <ul>
+              <li>
+                <strong>Pipeline visibility</strong> - Know where every
+                candidate stands
+              </li>
+              <li>
+                <strong>Scheduling efficiency</strong> - Avoid double-booking
+              </li>
+              <li>
+                <strong>Performance metrics</strong> - Track conversion rates by
+                stage
+              </li>
+              <li>
+                <strong>Historical record</strong> - Document the recruiting
+                process
+              </li>
+            </ul>
+          </div>
+
+          <div class="info-box">
+            <strong>ℹ️ Interview Records</strong>
+            Each interview is stored as a separate record linked to the
+            candidate. You can view all interviews in the related list on the
+            candidate record.
+          </div>
+
+          <div class="step-navigation">
+            <button class="nav-btn prev" disabled>← Previous</button>
+            <button class="nav-btn next" onclick="goToStep(2)">
+              Next: Interview Types →
+            </button>
+          </div>
         </div>
-        
-        <!-- Step 2: Interview Types -->
-        <div class="step-page" id="step2">
-            <div class="step-content">
-                <div class="step-header">
-                    <span class="step-badge">Step 2 of 7</span>
-                    <h1>Interview Types</h1>
-                    <p>Understanding the different interview stages</p>
-                </div>
-                
-                <div class="content-card">
-                    <h2>🎯 Interview Type Definitions</h2>
-                    <p>Candidates progress through multiple interview stages. Select the appropriate type when scheduling:</p>
-                    
-                    <div class="interview-type-grid">
-                        <div class="interview-type-card">
-                            <h4>📞 Initial Screen</h4>
-                            <p>First contact - typically a 15-30 minute phone or video call to assess basic fit and interest.</p>
-                        </div>
-                        <div class="interview-type-card">
-                            <h4>👔 Manager Interview</h4>
-                            <p>Meeting with the hiring manager to discuss role details, experience, and team fit.</p>
-                        </div>
-                        <div class="interview-type-card">
-                            <h4>🎯 Final Interview</h4>
-                            <p>Final round with senior leadership or panel. Often includes presentation or case study.</p>
-                        </div>
-                        <div class="interview-type-card">
-                            <h4>📋 Technical Assessment</h4>
-                            <p>Skills evaluation specific to the role. May include tests, exercises, or demonstrations.</p>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="content-card">
-                    <h2>📊 Typical Interview Flow</h2>
-                    <table class="data-table">
-                        <thead>
-                            <tr>
-                                <th>Stage</th>
-                                <th>Duration</th>
-                                <th>Conducted By</th>
-                                <th>Focus Areas</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>Initial Screen</td>
-                                <td>15-30 min</td>
-                                <td>Recruiter</td>
-                                <td>Interest, availability, basic qualifications</td>
-                            </tr>
-                            <tr>
-                                <td>Manager Interview</td>
-                                <td>45-60 min</td>
-                                <td>Hiring Manager</td>
-                                <td>Experience, skills, culture fit</td>
-                            </tr>
-                            <tr>
-                                <td>Final Interview</td>
-                                <td>60-90 min</td>
-                                <td>Leadership Team</td>
-                                <td>Strategic thinking, leadership, values</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-                
-                <div class="info-box tip">
-                    <strong>💡 Pro Tip</strong>
-                    Not every candidate requires all interview types. Skip stages when appropriate based on role level and candidate experience.
-                </div>
-                
-                <div class="step-navigation">
-                    <button class="nav-btn prev" onclick="goToStep(1)">← Previous</button>
-                    <button class="nav-btn next" onclick="goToStep(3)">Next: Scheduling Interviews →</button>
-                </div>
+      </div>
+
+      <!-- Step 2: Interview Types -->
+      <div class="step-page" id="step2">
+        <div class="step-content">
+          <div class="step-header">
+            <span class="step-badge">Step 2 of 7</span>
+            <h1>Interview Types</h1>
+            <p>Understanding the different interview stages</p>
+          </div>
+
+          <div class="content-card">
+            <h2>🎯 Interview Type Definitions</h2>
+            <p>
+              Candidates progress through multiple interview stages. Select the
+              appropriate type when scheduling:
+            </p>
+
+            <div class="interview-type-grid">
+              <div class="interview-type-card">
+                <h4>📞 Initial Screen</h4>
+                <p>
+                  First contact - typically a 15-30 minute phone or video call
+                  to assess basic fit and interest.
+                </p>
+              </div>
+              <div class="interview-type-card">
+                <h4>👔 Manager Interview</h4>
+                <p>
+                  Meeting with the hiring manager to discuss role details,
+                  experience, and team fit.
+                </p>
+              </div>
+              <div class="interview-type-card">
+                <h4>🎯 Final Interview</h4>
+                <p>
+                  Final round with senior leadership or panel. Often includes
+                  presentation or case study.
+                </p>
+              </div>
+              <div class="interview-type-card">
+                <h4>📋 Technical Assessment</h4>
+                <p>
+                  Skills evaluation specific to the role. May include tests,
+                  exercises, or demonstrations.
+                </p>
+              </div>
             </div>
+          </div>
+
+          <div class="content-card">
+            <h2>📊 Typical Interview Flow</h2>
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Stage</th>
+                  <th>Duration</th>
+                  <th>Conducted By</th>
+                  <th>Focus Areas</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Initial Screen</td>
+                  <td>15-30 min</td>
+                  <td>Recruiter</td>
+                  <td>Interest, availability, basic qualifications</td>
+                </tr>
+                <tr>
+                  <td>Manager Interview</td>
+                  <td>45-60 min</td>
+                  <td>Hiring Manager</td>
+                  <td>Experience, skills, culture fit</td>
+                </tr>
+                <tr>
+                  <td>Final Interview</td>
+                  <td>60-90 min</td>
+                  <td>Leadership Team</td>
+                  <td>Strategic thinking, leadership, values</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="info-box tip">
+            <strong>💡 Pro Tip</strong>
+            Not every candidate requires all interview types. Skip stages when
+            appropriate based on role level and candidate experience.
+          </div>
+
+          <div class="step-navigation">
+            <button class="nav-btn prev" onclick="goToStep(1)">
+              ← Previous
+            </button>
+            <button class="nav-btn next" onclick="goToStep(3)">
+              Next: Scheduling Interviews →
+            </button>
+          </div>
         </div>
-        
-        <!-- Step 3: Scheduling Interviews -->
-        <div class="step-page" id="step3">
-            <div class="step-content">
-                <div class="step-header">
-                    <span class="step-badge">Step 3 of 7</span>
-                    <h1>Scheduling Interviews</h1>
-                    <p>Learn how to schedule interviews for candidates</p>
-                </div>
-                
-                <div class="content-card">
-                    <h2>📅 How to Schedule an Interview</h2>
-                    <p>Use the "Schedule Interview" action button in the dashboard header to launch the scheduling flow.</p>
-                    
-                    <div class="screenshot-placeholder">
-                        <div class="icon">📸</div>
-                        <div class="label">Screenshot: Schedule Interview Button</div>
-                    </div>
-                    
-                    <h3>Scheduling Flow Steps:</h3>
-                    <ol>
-                        <li><strong>Select Candidate</strong> - Search and choose the candidate</li>
-                        <li><strong>Choose Interview Type</strong> - Select from available types</li>
-                        <li><strong>Set Date & Time</strong> - Pick the interview date and time</li>
-                        <li><strong>Add Details</strong> - Location, video link, notes</li>
-                        <li><strong>Confirm & Save</strong> - Review and create the interview</li>
-                    </ol>
-                </div>
-                
-                <div class="content-card">
-                    <h2>📝 Required Interview Fields</h2>
-                    <table class="data-table">
-                        <thead>
-                            <tr>
-                                <th>Field</th>
-                                <th>Required</th>
-                                <th>Description</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td><strong>Candidate</strong></td>
-                                <td>Yes</td>
-                                <td>Link to candidate record</td>
-                            </tr>
-                            <tr>
-                                <td><strong>Interview Type</strong></td>
-                                <td>Yes</td>
-                                <td>Type of interview (Initial, Manager, Final)</td>
-                            </tr>
-                            <tr>
-                                <td><strong>Date/Time</strong></td>
-                                <td>Yes</td>
-                                <td>When the interview is scheduled</td>
-                            </tr>
-                            <tr>
-                                <td><strong>Status</strong></td>
-                                <td>Yes</td>
-                                <td>Scheduled, Completed, or Cancelled</td>
-                            </tr>
-                            <tr>
-                                <td><strong>Location/Link</strong></td>
-                                <td>No</td>
-                                <td>Where or how (Zoom, Teams, etc.)</td>
-                            </tr>
-                            <tr>
-                                <td><strong>Notes</strong></td>
-                                <td>No</td>
-                                <td>Additional details or preparation notes</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-                
-                <div class="info-box warning">
-                    <strong>⚠️ Time Zone Note</strong>
-                    All interview times are displayed in your local time zone. Confirm the candidate's time zone when scheduling to avoid confusion.
-                </div>
-                
-                <div class="step-navigation">
-                    <button class="nav-btn prev" onclick="goToStep(2)">← Previous</button>
-                    <button class="nav-btn next" onclick="goToStep(4)">Next: Recording Completion →</button>
-                </div>
+      </div>
+
+      <!-- Step 3: Scheduling Interviews -->
+      <div class="step-page" id="step3">
+        <div class="step-content">
+          <div class="step-header">
+            <span class="step-badge">Step 3 of 7</span>
+            <h1>Scheduling Interviews</h1>
+            <p>Learn how to schedule interviews for candidates</p>
+          </div>
+
+          <div class="content-card">
+            <h2>📅 How to Schedule an Interview</h2>
+            <p>
+              Use the "Schedule Interview" action button in the dashboard header
+              to launch the scheduling flow.
+            </p>
+
+            <div class="screenshot-placeholder">
+              <div class="icon">📸</div>
+              <div class="label">Screenshot: Schedule Interview Button</div>
             </div>
+
+            <h3>Scheduling Flow Steps:</h3>
+            <ol>
+              <li>
+                <strong>Select Candidate</strong> - Search and choose the
+                candidate
+              </li>
+              <li>
+                <strong>Choose Interview Type</strong> - Select from available
+                types
+              </li>
+              <li>
+                <strong>Set Date & Time</strong> - Pick the interview date and
+                time
+              </li>
+              <li>
+                <strong>Add Details</strong> - Location, video link, notes
+              </li>
+              <li>
+                <strong>Confirm & Save</strong> - Review and create the
+                interview
+              </li>
+            </ol>
+          </div>
+
+          <div class="content-card">
+            <h2>📝 Required Interview Fields</h2>
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Field</th>
+                  <th>Required</th>
+                  <th>Description</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>Candidate</strong></td>
+                  <td>Yes</td>
+                  <td>Link to candidate record</td>
+                </tr>
+                <tr>
+                  <td><strong>Interview Type</strong></td>
+                  <td>Yes</td>
+                  <td>Type of interview (Initial, Manager, Final)</td>
+                </tr>
+                <tr>
+                  <td><strong>Date/Time</strong></td>
+                  <td>Yes</td>
+                  <td>When the interview is scheduled</td>
+                </tr>
+                <tr>
+                  <td><strong>Status</strong></td>
+                  <td>Yes</td>
+                  <td>Scheduled, Completed, or Cancelled</td>
+                </tr>
+                <tr>
+                  <td><strong>Location/Link</strong></td>
+                  <td>No</td>
+                  <td>Where or how (Zoom, Teams, etc.)</td>
+                </tr>
+                <tr>
+                  <td><strong>Notes</strong></td>
+                  <td>No</td>
+                  <td>Additional details or preparation notes</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="info-box warning">
+            <strong>⚠️ Time Zone Note</strong>
+            All interview times are displayed in your local time zone. Confirm
+            the candidate's time zone when scheduling to avoid confusion.
+          </div>
+
+          <div class="step-navigation">
+            <button class="nav-btn prev" onclick="goToStep(2)">
+              ← Previous
+            </button>
+            <button class="nav-btn next" onclick="goToStep(4)">
+              Next: Recording Completion →
+            </button>
+          </div>
         </div>
-        
-        <!-- Step 4: Recording Completion -->
-        <div class="step-page" id="step4">
-            <div class="step-content">
-                <div class="step-header">
-                    <span class="step-badge">Step 4 of 7</span>
-                    <h1>Recording Completion</h1>
-                    <p>How to mark interviews as completed and record outcomes</p>
-                </div>
-                
-                <div class="content-card">
-                    <h2>✅ Marking Interviews Complete</h2>
-                    <p>After an interview occurs, you must update the record to reflect completion. Use the "Log Interview" action button or edit the interview record directly.</p>
-                    
-                    <div class="screenshot-placeholder">
-                        <div class="icon">📸</div>
-                        <div class="label">Screenshot: Log Interview Action</div>
-                    </div>
-                    
-                    <h3>Interview Statuses</h3>
-                    <div style="display: flex; gap: 1rem; margin: 1rem 0;">
-                        <span class="status-badge status-scheduled">Scheduled</span>
-                        <span class="status-badge status-completed">Completed</span>
-                        <span class="status-badge status-cancelled">Cancelled</span>
-                    </div>
-                </div>
-                
-                <div class="content-card">
-                    <h2>📝 Completion Checklist</h2>
-                    <p>When marking an interview as completed, update these fields:</p>
-                    <ul>
-                        <li><strong>Status</strong> - Change from "Scheduled" to "Completed"</li>
-                        <li><strong>Actual Date</strong> - Confirm or adjust if rescheduled</li>
-                        <li><strong>Outcome Notes</strong> - Record key observations</li>
-                        <li><strong>Next Steps</strong> - What happens next for this candidate</li>
-                    </ul>
-                    
-                    <h3>Automatic Updates</h3>
-                    <p>When you complete an interview:</p>
-                    <ul>
-                        <li>Candidate's "Highest Level Achieved" updates automatically</li>
-                        <li>Interview statistics on dashboard refresh</li>
-                        <li>Pipeline metrics recalculate</li>
-                    </ul>
-                </div>
-                
-                <div class="info-box tip">
-                    <strong>💡 Complete Same Day</strong>
-                    Update interview status on the same day it occurs for accurate metrics. Delayed updates affect daily/weekly reports.
-                </div>
-                
-                <div class="step-navigation">
-                    <button class="nav-btn prev" onclick="goToStep(3)">← Previous</button>
-                    <button class="nav-btn next" onclick="goToStep(5)">Next: Interview Metrics →</button>
-                </div>
+      </div>
+
+      <!-- Step 4: Recording Completion -->
+      <div class="step-page" id="step4">
+        <div class="step-content">
+          <div class="step-header">
+            <span class="step-badge">Step 4 of 7</span>
+            <h1>Recording Completion</h1>
+            <p>How to mark interviews as completed and record outcomes</p>
+          </div>
+
+          <div class="content-card">
+            <h2>✅ Marking Interviews Complete</h2>
+            <p>
+              After an interview occurs, you must update the record to reflect
+              completion. Use the "Log Interview" action button or edit the
+              interview record directly.
+            </p>
+
+            <div class="screenshot-placeholder">
+              <div class="icon">📸</div>
+              <div class="label">Screenshot: Log Interview Action</div>
             </div>
-        </div>
-        
-        <!-- Step 5: Interview Metrics -->
-        <div class="step-page" id="step5">
-            <div class="step-content">
-                <div class="step-header">
-                    <span class="step-badge">Step 5 of 7</span>
-                    <h1>Interview Metrics</h1>
-                    <p>Understanding interview statistics and reporting</p>
-                </div>
-                
-                <div class="content-card">
-                    <h2>📊 Dashboard Interview Statistics</h2>
-                    <p>The Interview Statistics section on the dashboard provides real-time metrics about your interviewing activity.</p>
-                    
-                    <div class="screenshot-placeholder">
-                        <div class="icon">📸</div>
-                        <div class="label">Screenshot: Interview Statistics Section</div>
-                    </div>
-                    
-                    <h3>Key Metrics Displayed</h3>
-                    <table class="data-table">
-                        <thead>
-                            <tr>
-                                <th>Metric</th>
-                                <th>Description</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td><strong>Scheduled This Week</strong></td>
-                                <td>Interviews scheduled for current week</td>
-                            </tr>
-                            <tr>
-                                <td><strong>Completed This Month</strong></td>
-                                <td>Interviews completed in current month</td>
-                            </tr>
-                            <tr>
-                                <td><strong>Completion Rate</strong></td>
-                                <td>% of scheduled interviews actually completed</td>
-                            </tr>
-                            <tr>
-                                <td><strong>By Type Breakdown</strong></td>
-                                <td>Count of each interview type</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-                
-                <div class="content-card">
-                    <h2>📈 Using the Month/YTD Toggle</h2>
-                    <p>Click the toggle button to switch between views:</p>
-                    <ul>
-                        <li><strong>Month View</strong> - Current month's interview activity</li>
-                        <li><strong>YTD View</strong> - Year-to-date cumulative totals</li>
-                    </ul>
-                    <p>YTD view helps identify seasonal trends and long-term performance patterns.</p>
-                </div>
-                
-                <div class="info-box">
-                    <strong>ℹ️ Manager Reports</strong>
-                    Managers receive weekly interview reports showing team performance. Keep your interviews updated to ensure accurate team metrics.
-                </div>
-                
-                <div class="step-navigation">
-                    <button class="nav-btn prev" onclick="goToStep(4)">← Previous</button>
-                    <button class="nav-btn next" onclick="goToStep(6)">Next: Best Practices →</button>
-                </div>
+
+            <h3>Interview Statuses</h3>
+            <div style="display: flex; gap: 1rem; margin: 1rem 0">
+              <span class="status-badge status-scheduled">Scheduled</span>
+              <span class="status-badge status-completed">Completed</span>
+              <span class="status-badge status-cancelled">Cancelled</span>
             </div>
+          </div>
+
+          <div class="content-card">
+            <h2>📝 Completion Checklist</h2>
+            <p>When marking an interview as completed, update these fields:</p>
+            <ul>
+              <li>
+                <strong>Status</strong> - Change from "Scheduled" to "Completed"
+              </li>
+              <li>
+                <strong>Actual Date</strong> - Confirm or adjust if rescheduled
+              </li>
+              <li><strong>Outcome Notes</strong> - Record key observations</li>
+              <li>
+                <strong>Next Steps</strong> - What happens next for this
+                candidate
+              </li>
+            </ul>
+
+            <h3>Automatic Updates</h3>
+            <p>When you complete an interview:</p>
+            <ul>
+              <li>
+                Candidate's "Highest Level Achieved" updates automatically
+              </li>
+              <li>Interview statistics on dashboard refresh</li>
+              <li>Pipeline metrics recalculate</li>
+            </ul>
+          </div>
+
+          <div class="info-box tip">
+            <strong>💡 Complete Same Day</strong>
+            Update interview status on the same day it occurs for accurate
+            metrics. Delayed updates affect daily/weekly reports.
+          </div>
+
+          <div class="step-navigation">
+            <button class="nav-btn prev" onclick="goToStep(3)">
+              ← Previous
+            </button>
+            <button class="nav-btn next" onclick="goToStep(5)">
+              Next: Interview Metrics →
+            </button>
+          </div>
         </div>
-        
-        <!-- Step 6: Best Practices -->
-        <div class="step-page" id="step6">
-            <div class="step-content">
-                <div class="step-header">
-                    <span class="step-badge">Step 6 of 7</span>
-                    <h1>Best Practices</h1>
-                    <p>Tips for effective interview management</p>
-                </div>
-                
-                <div class="content-card">
-                    <h2>✅ Interview Scheduling Best Practices</h2>
-                    <ul>
-                        <li><strong>Schedule promptly</strong> - Create interview records as soon as confirmed</li>
-                        <li><strong>Include all details</strong> - Video links, locations, preparation notes</li>
-                        <li><strong>Confirm with candidates</strong> - Send calendar invites immediately</li>
-                        <li><strong>Buffer time</strong> - Allow 15 minutes between interviews</li>
-                        <li><strong>Update immediately</strong> - Mark completed same day</li>
-                    </ul>
-                </div>
-                
-                <div class="content-card">
-                    <h2>❌ Common Mistakes to Avoid</h2>
-                    <ul>
-                        <li><strong>Forgetting to update status</strong> - Leaves metrics inaccurate</li>
-                        <li><strong>Wrong interview type</strong> - Skews reporting by stage</li>
-                        <li><strong>Missing outcome notes</strong> - Loses valuable context</li>
-                        <li><strong>Backdating completions</strong> - Distorts timeline metrics</li>
-                        <li><strong>Deleting cancelled interviews</strong> - Mark as Cancelled instead</li>
-                    </ul>
-                </div>
-                
-                <div class="content-card">
-                    <h2>🎯 Interview Quality Checklist</h2>
-                    <p>Before moving to the next stage, verify:</p>
-                    <ul>
-                        <li>☐ Interview scheduled with correct type</li>
-                        <li>☐ Candidate received calendar invite</li>
-                        <li>☐ Video link or location confirmed</li>
-                        <li>☐ Interview marked complete after occurrence</li>
-                        <li>☐ Outcome notes recorded</li>
-                        <li>☐ Next steps identified</li>
-                    </ul>
-                </div>
-                
-                <div class="info-box tip">
-                    <strong>💡 Pro Tip</strong>
-                    Set a daily reminder to review and update any interviews from the previous day. This keeps metrics accurate and pipeline current.
-                </div>
-                
-                <div class="step-navigation">
-                    <button class="nav-btn prev" onclick="goToStep(5)">← Previous</button>
-                    <button class="nav-btn next" onclick="goToStep(7)">Complete Module →</button>
-                </div>
+      </div>
+
+      <!-- Step 5: Interview Metrics -->
+      <div class="step-page" id="step5">
+        <div class="step-content">
+          <div class="step-header">
+            <span class="step-badge">Step 5 of 7</span>
+            <h1>Interview Metrics</h1>
+            <p>Understanding interview statistics and reporting</p>
+          </div>
+
+          <div class="content-card">
+            <h2>📊 Dashboard Interview Statistics</h2>
+            <p>
+              The Interview Statistics section on the dashboard provides
+              real-time metrics about your interviewing activity.
+            </p>
+
+            <div class="screenshot-placeholder">
+              <div class="icon">📸</div>
+              <div class="label">Screenshot: Interview Statistics Section</div>
             </div>
+
+            <h3>Key Metrics Displayed</h3>
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Metric</th>
+                  <th>Description</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>Scheduled This Week</strong></td>
+                  <td>Interviews scheduled for current week</td>
+                </tr>
+                <tr>
+                  <td><strong>Completed This Month</strong></td>
+                  <td>Interviews completed in current month</td>
+                </tr>
+                <tr>
+                  <td><strong>Completion Rate</strong></td>
+                  <td>% of scheduled interviews actually completed</td>
+                </tr>
+                <tr>
+                  <td><strong>By Type Breakdown</strong></td>
+                  <td>Count of each interview type</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="content-card">
+            <h2>📈 Using the Month/YTD Toggle</h2>
+            <p>Click the toggle button to switch between views:</p>
+            <ul>
+              <li>
+                <strong>Month View</strong> - Current month's interview activity
+              </li>
+              <li>
+                <strong>YTD View</strong> - Year-to-date cumulative totals
+              </li>
+            </ul>
+            <p>
+              YTD view helps identify seasonal trends and long-term performance
+              patterns.
+            </p>
+          </div>
+
+          <div class="info-box">
+            <strong>ℹ️ Manager Reports</strong>
+            Managers receive weekly interview reports showing team performance.
+            Keep your interviews updated to ensure accurate team metrics.
+          </div>
+
+          <div class="step-navigation">
+            <button class="nav-btn prev" onclick="goToStep(4)">
+              ← Previous
+            </button>
+            <button class="nav-btn next" onclick="goToStep(6)">
+              Next: Best Practices →
+            </button>
+          </div>
         </div>
-        
-        <!-- Step 7: Module Complete -->
-        <div class="step-page" id="step7">
-            <div class="step-content">
-                <div class="step-header">
-                    <span class="step-badge">Step 7 of 7</span>
-                    <h1>🎉 Module Complete!</h1>
-                    <p>You've finished the Interview Tracking module</p>
+      </div>
+
+      <!-- Step 6: Best Practices -->
+      <div class="step-page" id="step6">
+        <div class="step-content">
+          <div class="step-header">
+            <span class="step-badge">Step 6 of 7</span>
+            <h1>Best Practices</h1>
+            <p>Tips for effective interview management</p>
+          </div>
+
+          <div class="content-card">
+            <h2>✅ Interview Scheduling Best Practices</h2>
+            <ul>
+              <li>
+                <strong>Schedule promptly</strong> - Create interview records as
+                soon as confirmed
+              </li>
+              <li>
+                <strong>Include all details</strong> - Video links, locations,
+                preparation notes
+              </li>
+              <li>
+                <strong>Confirm with candidates</strong> - Send calendar invites
+                immediately
+              </li>
+              <li>
+                <strong>Buffer time</strong> - Allow 15 minutes between
+                interviews
+              </li>
+              <li>
+                <strong>Update immediately</strong> - Mark completed same day
+              </li>
+            </ul>
+          </div>
+
+          <div class="content-card">
+            <h2>❌ Common Mistakes to Avoid</h2>
+            <ul>
+              <li>
+                <strong>Forgetting to update status</strong> - Leaves metrics
+                inaccurate
+              </li>
+              <li>
+                <strong>Wrong interview type</strong> - Skews reporting by stage
+              </li>
+              <li>
+                <strong>Missing outcome notes</strong> - Loses valuable context
+              </li>
+              <li>
+                <strong>Backdating completions</strong> - Distorts timeline
+                metrics
+              </li>
+              <li>
+                <strong>Deleting cancelled interviews</strong> - Mark as
+                Cancelled instead
+              </li>
+            </ul>
+          </div>
+
+          <div class="content-card">
+            <h2>🎯 Interview Quality Checklist</h2>
+            <p>Before moving to the next stage, verify:</p>
+            <ul>
+              <li>☐ Interview scheduled with correct type</li>
+              <li>☐ Candidate received calendar invite</li>
+              <li>☐ Video link or location confirmed</li>
+              <li>☐ Interview marked complete after occurrence</li>
+              <li>☐ Outcome notes recorded</li>
+              <li>☐ Next steps identified</li>
+            </ul>
+          </div>
+
+          <div class="info-box tip">
+            <strong>💡 Pro Tip</strong>
+            Set a daily reminder to review and update any interviews from the
+            previous day. This keeps metrics accurate and pipeline current.
+          </div>
+
+          <div class="step-navigation">
+            <button class="nav-btn prev" onclick="goToStep(5)">
+              ← Previous
+            </button>
+            <button class="nav-btn next" onclick="goToStep(7)">
+              Complete Module →
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Step 7: Module Complete -->
+      <div class="step-page" id="step7">
+        <div class="step-content">
+          <div class="step-header">
+            <span class="step-badge">Step 7 of 7</span>
+            <h1>🎉 Module Complete!</h1>
+            <p>You've finished the Interview Tracking module</p>
+          </div>
+
+          <div class="content-card" style="text-align: center; padding: 3rem">
+            <div style="font-size: 4rem; margin-bottom: 1rem">🏆</div>
+            <h2>Congratulations!</h2>
+            <p style="font-size: 1.1rem; max-width: 500px; margin: 1rem auto">
+              You now know how to schedule, track, and report on interviews
+              effectively in the Recruiter Portal.
+            </p>
+
+            <h3 style="margin-top: 2rem">What You Learned:</h3>
+            <ul style="text-align: left; max-width: 400px; margin: 1rem auto">
+              <li>Interview tracking purpose and benefits</li>
+              <li>Different interview types and stages</li>
+              <li>How to schedule interviews</li>
+              <li>Recording interview completion</li>
+              <li>Dashboard interview metrics</li>
+              <li>Best practices for interview management</li>
+            </ul>
+          </div>
+
+          <div class="content-card">
+            <h2>📚 Next Steps</h2>
+            <p>Continue your training with the next module:</p>
+            <div class="feature-list">
+              <a
+                href="module4-contract-b.html"
+                class="feature-item"
+                style="cursor: pointer"
+              >
+                <div class="feature-icon" style="background: #f59e0b">📊</div>
+                <div class="feature-text">
+                  <h4>Module 4: Contract B Lifecycle</h4>
+                  <p>
+                    Understand the Contract B probationary period and
+                    requirements
+                  </p>
                 </div>
-                
-                <div class="content-card" style="text-align: center; padding: 3rem;">
-                    <div style="font-size: 4rem; margin-bottom: 1rem;">🏆</div>
-                    <h2>Congratulations!</h2>
-                    <p style="font-size: 1.1rem; max-width: 500px; margin: 1rem auto;">You now know how to schedule, track, and report on interviews effectively in the Recruiter Portal.</p>
-                    
-                    <h3 style="margin-top: 2rem;">What You Learned:</h3>
-                    <ul style="text-align: left; max-width: 400px; margin: 1rem auto;">
-                        <li>Interview tracking purpose and benefits</li>
-                        <li>Different interview types and stages</li>
-                        <li>How to schedule interviews</li>
-                        <li>Recording interview completion</li>
-                        <li>Dashboard interview metrics</li>
-                        <li>Best practices for interview management</li>
-                    </ul>
-                </div>
-                
-                <div class="content-card">
-                    <h2>📚 Next Steps</h2>
-                    <p>Continue your training with the next module:</p>
-                    <div class="feature-list">
-                        <a href="module4-contract-b.html" class="feature-item" style="cursor: pointer;">
-                            <div class="feature-icon" style="background: #f59e0b;">📊</div>
-                            <div class="feature-text">
-                                <h4>Module 4: Contract B Lifecycle</h4>
-                                <p>Understand the Contract B probationary period and requirements</p>
-                            </div>
-                        </a>
-                    </div>
-                </div>
-                
-                <div class="step-navigation">
-                    <button class="nav-btn prev" onclick="goToStep(6)">← Previous</button>
-                    <button class="nav-btn complete" onclick="completeModule()">✓ Mark Complete & Continue</button>
-                </div>
+              </a>
             </div>
+          </div>
+
+          <div class="step-navigation">
+            <button class="nav-btn prev" onclick="goToStep(6)">
+              ← Previous
+            </button>
+            <button class="nav-btn complete" onclick="completeModule()">
+              ✓ Mark Complete & Continue
+            </button>
+          </div>
         </div>
+      </div>
     </main>
-    
+
     <script>
-        const totalSteps = 7;
-        let currentStep = 1;
-        let completedSteps = [];
-        
-        function loadProgress() {
-            const saved = localStorage.getItem('recruiter-training-module3-step');
-            if (saved) {
-                currentStep = parseInt(saved);
-                for (let i = 1; i < currentStep; i++) {
-                    completedSteps.push(i);
-                }
+      const totalSteps = 7;
+      let currentStep = 1;
+      let completedSteps = [];
+
+      function loadProgress() {
+        const saved = localStorage.getItem("recruiter-training-module3-step");
+        if (saved) {
+          currentStep = parseInt(saved);
+          for (let i = 1; i < currentStep; i++) {
+            completedSteps.push(i);
+          }
+        }
+        updateUI();
+      }
+
+      function saveProgress() {
+        localStorage.setItem("recruiter-training-module3-step", currentStep);
+        if (currentStep > 1) {
+          localStorage.setItem("recruiter-training-module3", "in-progress");
+        }
+      }
+
+      function goToStep(step) {
+        if (step > currentStep) {
+          for (let i = currentStep; i < step; i++) {
+            if (!completedSteps.includes(i)) {
+              completedSteps.push(i);
             }
-            updateUI();
+          }
         }
-        
-        function saveProgress() {
-            localStorage.setItem('recruiter-training-module3-step', currentStep);
-            if (currentStep > 1) {
-                localStorage.setItem('recruiter-training-module3', 'in-progress');
-            }
+        currentStep = step;
+        saveProgress();
+        updateUI();
+      }
+
+      function updateUI() {
+        document.querySelectorAll(".step-page").forEach((page, index) => {
+          page.classList.remove("active");
+          if (index + 1 === currentStep) page.classList.add("active");
+        });
+
+        document.querySelectorAll(".step-item").forEach((item, index) => {
+          const stepNum = index + 1;
+          item.classList.remove("active", "completed");
+          if (stepNum === currentStep) item.classList.add("active");
+          else if (completedSteps.includes(stepNum))
+            item.classList.add("completed");
+        });
+
+        const progress = ((currentStep - 1) / (totalSteps - 1)) * 100;
+        document.getElementById("progressFill").style.width = `${progress}%`;
+      }
+
+      function completeModule() {
+        localStorage.setItem("recruiter-training-module3", "completed");
+        localStorage.setItem("recruiter-training-module3-step", totalSteps);
+
+        if (
+          confirm(
+            "Module complete! Continue to Module 4: Contract B Lifecycle?"
+          )
+        ) {
+          window.location.href = "module4-contract-b.html";
+        } else {
+          window.location.href = "recruiter-training.html";
         }
-        
-        function goToStep(step) {
-            if (step > currentStep) {
-                for (let i = currentStep; i < step; i++) {
-                    if (!completedSteps.includes(i)) {
-                        completedSteps.push(i);
-                    }
-                }
-            }
-            currentStep = step;
-            saveProgress();
-            updateUI();
-        }
-        
-        function updateUI() {
-            document.querySelectorAll('.step-page').forEach((page, index) => {
-                page.classList.remove('active');
-                if (index + 1 === currentStep) page.classList.add('active');
-            });
-            
-            document.querySelectorAll('.step-item').forEach((item, index) => {
-                const stepNum = index + 1;
-                item.classList.remove('active', 'completed');
-                if (stepNum === currentStep) item.classList.add('active');
-                else if (completedSteps.includes(stepNum)) item.classList.add('completed');
-            });
-            
-            const progress = ((currentStep - 1) / (totalSteps - 1)) * 100;
-            document.getElementById('progressFill').style.width = `${progress}%`;
-        }
-        
-        function completeModule() {
-            localStorage.setItem('recruiter-training-module3', 'completed');
-            localStorage.setItem('recruiter-training-module3-step', totalSteps);
-            
-            if (confirm('Module complete! Continue to Module 4: Contract B Lifecycle?')) {
-                window.location.href = 'module4-contract-b.html';
-            } else {
-                window.location.href = 'recruiter-training.html';
-            }
-        }
-        
-        loadProgress();
+      }
+
+      loadProgress();
     </script>
-</body>
+  </body>
 </html>

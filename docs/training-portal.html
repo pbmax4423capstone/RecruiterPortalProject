@@ -1,618 +1,642 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Recruiter Portal Training Center</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            line-height: 1.6;
-        }
-        
-        .hero {
-            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
-            color: white;
-            padding: 60px 20px;
-            text-align: center;
-        }
-        
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        line-height: 1.6;
+      }
+
+      .hero {
+        background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+        color: white;
+        padding: 60px 20px;
+        text-align: center;
+      }
+
+      .hero h1 {
+        font-size: 3em;
+        margin-bottom: 15px;
+      }
+
+      .hero .subtitle {
+        font-size: 1.5em;
+        margin-bottom: 10px;
+        opacity: 0.95;
+      }
+
+      .hero .welcome {
+        font-size: 1.1em;
+        max-width: 800px;
+        margin: 20px auto;
+        opacity: 0.9;
+      }
+
+      .container {
+        max-width: 1400px;
+        margin: 0 auto;
+        padding: 40px 20px;
+      }
+
+      .section {
+        background: white;
+        margin-bottom: 30px;
+        border-radius: 12px;
+        padding: 40px;
+        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.15);
+      }
+
+      .section h2 {
+        color: #1e3c72;
+        font-size: 2.2em;
+        margin-bottom: 25px;
+        border-bottom: 3px solid #667eea;
+        padding-bottom: 10px;
+      }
+
+      .modules-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+        gap: 25px;
+        margin-top: 30px;
+      }
+
+      .module-card {
+        background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+        border-radius: 10px;
+        padding: 30px;
+        transition: all 0.3s ease;
+        border: 2px solid transparent;
+      }
+
+      .module-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 25px rgba(102, 126, 234, 0.3);
+        border-color: #667eea;
+      }
+
+      .module-header {
+        display: flex;
+        align-items: center;
+        margin-bottom: 15px;
+      }
+
+      .module-icon {
+        font-size: 2.5em;
+        margin-right: 15px;
+      }
+
+      .module-title {
+        font-size: 1.6em;
+        color: #2c3e50;
+        font-weight: bold;
+      }
+
+      .module-meta {
+        display: flex;
+        gap: 15px;
+        margin-bottom: 15px;
+        font-size: 0.9em;
+      }
+
+      .badge {
+        display: inline-block;
+        padding: 5px 12px;
+        border-radius: 15px;
+        font-weight: bold;
+      }
+
+      .badge-beginner {
+        background: #27ae60;
+        color: white;
+      }
+
+      .badge-intermediate {
+        background: #f39c12;
+        color: white;
+      }
+
+      .badge-duration {
+        background: #3498db;
+        color: white;
+      }
+
+      .module-description {
+        color: #555;
+        margin-bottom: 20px;
+        line-height: 1.8;
+      }
+
+      .video-placeholder {
+        background: linear-gradient(135deg, #e8eaf6 0%, #c5cae9 100%);
+        border: 2px dashed #667eea;
+        border-radius: 8px;
+        padding: 40px 20px;
+        text-align: center;
+        margin: 15px 0;
+        color: #667eea;
+        font-weight: bold;
+      }
+
+      .video-placeholder .emoji {
+        font-size: 2em;
+        display: block;
+        margin-bottom: 10px;
+      }
+
+      .module-links {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        margin-top: 20px;
+      }
+
+      .btn {
+        display: inline-block;
+        padding: 12px 25px;
+        border-radius: 6px;
+        text-decoration: none;
+        font-weight: bold;
+        text-align: center;
+        transition: all 0.3s ease;
+      }
+
+      .btn-primary {
+        background: #667eea;
+        color: white;
+      }
+
+      .btn-primary:hover {
+        background: #5568d3;
+        transform: scale(1.02);
+      }
+
+      .btn-secondary {
+        background: #95a5a6;
+        color: white;
+      }
+
+      .btn-secondary:hover {
+        background: #7f8c8d;
+      }
+
+      .learning-paths {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 20px;
+        margin-top: 25px;
+      }
+
+      .path-card {
+        background: linear-gradient(135deg, #ffeaa7 0%, #fdcb6e 100%);
+        border-radius: 10px;
+        padding: 25px;
+        border: 2px solid #f39c12;
+      }
+
+      .path-card h3 {
+        color: #2c3e50;
+        margin-bottom: 15px;
+        font-size: 1.4em;
+      }
+
+      .path-card ul {
+        list-style-position: inside;
+        color: #2c3e50;
+        line-height: 2;
+      }
+
+      .resources-list {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 15px;
+        margin-top: 20px;
+      }
+
+      .resource-item {
+        background: #f8f9fa;
+        padding: 20px;
+        border-radius: 8px;
+        border-left: 4px solid #667eea;
+        transition: all 0.3s ease;
+      }
+
+      .resource-item:hover {
+        background: #e8eaf6;
+        transform: translateX(5px);
+      }
+
+      .resource-item h3 {
+        color: #1e3c72;
+        margin-bottom: 10px;
+        font-size: 1.2em;
+      }
+
+      .resource-item p {
+        color: #666;
+        margin-bottom: 10px;
+      }
+
+      .support-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 20px;
+        margin-top: 25px;
+      }
+
+      .support-card {
+        background: #fff3cd;
+        padding: 25px;
+        border-radius: 8px;
+        border: 2px solid #ffc107;
+        text-align: center;
+      }
+
+      .support-card .icon {
+        font-size: 2.5em;
+        margin-bottom: 10px;
+      }
+
+      .support-card h3 {
+        color: #856404;
+        margin-bottom: 10px;
+      }
+
+      .support-card p {
+        color: #856404;
+      }
+
+      footer {
+        background: #2c3e50;
+        color: white;
+        text-align: center;
+        padding: 30px 20px;
+        margin-top: 40px;
+      }
+
+      footer p {
+        margin: 5px 0;
+      }
+
+      .footer-note {
+        margin-top: 15px;
+        font-size: 0.9em;
+        opacity: 0.8;
+      }
+
+      @media (max-width: 768px) {
         .hero h1 {
-            font-size: 3em;
-            margin-bottom: 15px;
+          font-size: 2em;
         }
-        
+
         .hero .subtitle {
-            font-size: 1.5em;
-            margin-bottom: 10px;
-            opacity: 0.95;
+          font-size: 1.2em;
         }
-        
-        .hero .welcome {
-            font-size: 1.1em;
-            max-width: 800px;
-            margin: 20px auto;
-            opacity: 0.9;
-        }
-        
-        .container {
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 40px 20px;
-        }
-        
-        .section {
-            background: white;
-            margin-bottom: 30px;
-            border-radius: 12px;
-            padding: 40px;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.15);
-        }
-        
-        .section h2 {
-            color: #1e3c72;
-            font-size: 2.2em;
-            margin-bottom: 25px;
-            border-bottom: 3px solid #667eea;
-            padding-bottom: 10px;
-        }
-        
+
         .modules-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-            gap: 25px;
-            margin-top: 30px;
+          grid-template-columns: 1fr;
         }
-        
-        .module-card {
-            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
-            border-radius: 10px;
-            padding: 30px;
-            transition: all 0.3s ease;
-            border: 2px solid transparent;
+
+        .section {
+          padding: 20px;
         }
-        
-        .module-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.3);
-            border-color: #667eea;
-        }
-        
-        .module-header {
-            display: flex;
-            align-items: center;
-            margin-bottom: 15px;
-        }
-        
-        .module-icon {
-            font-size: 2.5em;
-            margin-right: 15px;
-        }
-        
-        .module-title {
-            font-size: 1.6em;
-            color: #2c3e50;
-            font-weight: bold;
-        }
-        
-        .module-meta {
-            display: flex;
-            gap: 15px;
-            margin-bottom: 15px;
-            font-size: 0.9em;
-        }
-        
-        .badge {
-            display: inline-block;
-            padding: 5px 12px;
-            border-radius: 15px;
-            font-weight: bold;
-        }
-        
-        .badge-beginner {
-            background: #27ae60;
-            color: white;
-        }
-        
-        .badge-intermediate {
-            background: #f39c12;
-            color: white;
-        }
-        
-        .badge-duration {
-            background: #3498db;
-            color: white;
-        }
-        
-        .module-description {
-            color: #555;
-            margin-bottom: 20px;
-            line-height: 1.8;
-        }
-        
-        .video-placeholder {
-            background: linear-gradient(135deg, #e8eaf6 0%, #c5cae9 100%);
-            border: 2px dashed #667eea;
-            border-radius: 8px;
-            padding: 40px 20px;
-            text-align: center;
-            margin: 15px 0;
-            color: #667eea;
-            font-weight: bold;
-        }
-        
-        .video-placeholder .emoji {
-            font-size: 2em;
-            display: block;
-            margin-bottom: 10px;
-        }
-        
-        .module-links {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-            margin-top: 20px;
-        }
-        
-        .btn {
-            display: inline-block;
-            padding: 12px 25px;
-            border-radius: 6px;
-            text-decoration: none;
-            font-weight: bold;
-            text-align: center;
-            transition: all 0.3s ease;
-        }
-        
-        .btn-primary {
-            background: #667eea;
-            color: white;
-        }
-        
-        .btn-primary:hover {
-            background: #5568d3;
-            transform: scale(1.02);
-        }
-        
-        .btn-secondary {
-            background: #95a5a6;
-            color: white;
-        }
-        
-        .btn-secondary:hover {
-            background: #7f8c8d;
-        }
-        
-        .learning-paths {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 20px;
-            margin-top: 25px;
-        }
-        
-        .path-card {
-            background: linear-gradient(135deg, #ffeaa7 0%, #fdcb6e 100%);
-            border-radius: 10px;
-            padding: 25px;
-            border: 2px solid #f39c12;
-        }
-        
-        .path-card h3 {
-            color: #2c3e50;
-            margin-bottom: 15px;
-            font-size: 1.4em;
-        }
-        
-        .path-card ul {
-            list-style-position: inside;
-            color: #2c3e50;
-            line-height: 2;
-        }
-        
-        .resources-list {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 15px;
-            margin-top: 20px;
-        }
-        
-        .resource-item {
-            background: #f8f9fa;
-            padding: 20px;
-            border-radius: 8px;
-            border-left: 4px solid #667eea;
-            transition: all 0.3s ease;
-        }
-        
-        .resource-item:hover {
-            background: #e8eaf6;
-            transform: translateX(5px);
-        }
-        
-        .resource-item h3 {
-            color: #1e3c72;
-            margin-bottom: 10px;
-            font-size: 1.2em;
-        }
-        
-        .resource-item p {
-            color: #666;
-            margin-bottom: 10px;
-        }
-        
-        .support-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 20px;
-            margin-top: 25px;
-        }
-        
-        .support-card {
-            background: #fff3cd;
-            padding: 25px;
-            border-radius: 8px;
-            border: 2px solid #ffc107;
-            text-align: center;
-        }
-        
-        .support-card .icon {
-            font-size: 2.5em;
-            margin-bottom: 10px;
-        }
-        
-        .support-card h3 {
-            color: #856404;
-            margin-bottom: 10px;
-        }
-        
-        .support-card p {
-            color: #856404;
-        }
-        
-        footer {
-            background: #2c3e50;
-            color: white;
-            text-align: center;
-            padding: 30px 20px;
-            margin-top: 40px;
-        }
-        
-        footer p {
-            margin: 5px 0;
-        }
-        
-        .footer-note {
-            margin-top: 15px;
-            font-size: 0.9em;
-            opacity: 0.8;
-        }
-        
-        @media (max-width: 768px) {
-            .hero h1 {
-                font-size: 2em;
-            }
-            
-            .hero .subtitle {
-                font-size: 1.2em;
-            }
-            
-            .modules-grid {
-                grid-template-columns: 1fr;
-            }
-            
-            .section {
-                padding: 20px;
-            }
-        }
+      }
     </style>
-</head>
-<body>
+  </head>
+  <body>
     <!-- Hero Section -->
     <div class="hero">
-        <h1>🎓 Recruiter Portal Training Center</h1>
-        <p class="subtitle">Master the Recruiter Portal in 3 Easy Steps</p>
-        <p class="welcome">
-            Welcome to the comprehensive training center for the Recruiter Portal! Whether you're a new recruiter or an experienced sales manager, this training will help you leverage the full power of our recruiting platform.
-        </p>
+      <h1>🎓 Recruiter Portal Training Center</h1>
+      <p class="subtitle">Master the Recruiter Portal in 3 Easy Steps</p>
+      <p class="welcome">
+        Welcome to the comprehensive training center for the Recruiter Portal!
+        Whether you're a new recruiter or an experienced sales manager, this
+        training will help you leverage the full power of our recruiting
+        platform.
+      </p>
     </div>
-    
+
     <!-- Main Container -->
     <div class="container">
-        
-        <!-- Training Modules Section -->
-        <div class="section">
-            <h2>📚 Training Modules</h2>
-            <p style="color: #666; font-size: 1.1em; margin-bottom: 20px;">
-                Follow these three modules in sequence to build your skills from beginner to proficient user.
-            </p>
-            
-            <div class="modules-grid">
-                
-                <!-- Module 1: Creating Candidates -->
-                <div class="module-card">
-                    <div class="module-header">
-                        <span class="module-icon">👤</span>
-                        <div>
-                            <div class="module-title">Module 1: Creating Candidates</div>
-                            <div class="module-meta">
-                                <span class="badge badge-beginner">Beginner</span>
-                                <span class="badge badge-duration">⏱️ 10 min</span>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <p class="module-description">
-                        Learn how to create new candidate records in the system, including required fields, optional information, and best practices for data entry.
-                    </p>
-                    
-                    <div class="video-placeholder">
-                        <span class="emoji">🎥</span>
-                        <div>Video will be added here</div>
-                        <div style="font-size: 0.85em; margin-top: 10px;">
-                            Record using Loom script:<br>
-                            <code>loom-scripts/01-creating-a-candidate.md</code>
-                        </div>
-                    </div>
-                    
-                    <div class="module-links">
-                        <a href="interactive-candidate-creation-guide.html" class="btn btn-primary">
-                            📖 Open Interactive Guide
-                        </a>
-                        <a href="ATS-Quick-Start-Guide.md" class="btn btn-secondary" download>
-                            📄 Download Quick Start Guide
-                        </a>
-                    </div>
+      <!-- Training Modules Section -->
+      <div class="section">
+        <h2>📚 Training Modules</h2>
+        <p style="color: #666; font-size: 1.1em; margin-bottom: 20px">
+          Follow these three modules in sequence to build your skills from
+          beginner to proficient user.
+        </p>
+
+        <div class="modules-grid">
+          <!-- Module 1: Creating Candidates -->
+          <div class="module-card">
+            <div class="module-header">
+              <span class="module-icon">👤</span>
+              <div>
+                <div class="module-title">Module 1: Creating Candidates</div>
+                <div class="module-meta">
+                  <span class="badge badge-beginner">Beginner</span>
+                  <span class="badge badge-duration">⏱️ 10 min</span>
                 </div>
-                
-                <!-- Module 2: Scheduling Interviews -->
-                <div class="module-card">
-                    <div class="module-header">
-                        <span class="module-icon">📅</span>
-                        <div>
-                            <div class="module-title">Module 2: Scheduling Interviews</div>
-                            <div class="module-meta">
-                                <span class="badge badge-beginner">Beginner</span>
-                                <span class="badge badge-duration">⏱️ 10 min</span>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <p class="module-description">
-                        Master the interview scheduling process, including interview types, scheduling future meetings, and marking interviews complete after they occur.
-                    </p>
-                    
-                    <div class="video-placeholder">
-                        <span class="emoji">🎥</span>
-                        <div>Video will be added here</div>
-                        <div style="font-size: 0.85em; margin-top: 10px;">
-                            Record using Loom script:<br>
-                            <code>loom-scripts/02-scheduling-interviews.md</code>
-                        </div>
-                    </div>
-                    
-                    <div class="module-links">
-                        <a href="interactive-interview-scheduling-guide.html" class="btn btn-primary">
-                            📖 Open Interactive Guide
-                        </a>
-                    </div>
-                </div>
-                
-                <!-- Module 3: Sales Manager Dashboard -->
-                <div class="module-card">
-                    <div class="module-header">
-                        <span class="module-icon">📊</span>
-                        <div>
-                            <div class="module-title">Module 3: Sales Manager Dashboard</div>
-                            <div class="module-meta">
-                                <span class="badge badge-intermediate">Intermediate</span>
-                                <span class="badge badge-duration">⏱️ 15 min</span>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <p class="module-description">
-                        Explore advanced dashboard features including team metrics, pipeline tracking, Contract B lifecycle management, and YTD recruiting statistics.
-                    </p>
-                    
-                    <div class="video-placeholder">
-                        <span class="emoji">🎥</span>
-                        <div>Video will be added here</div>
-                        <div style="font-size: 0.85em; margin-top: 10px;">
-                            Record using Loom script:<br>
-                            <code>loom-scripts/03-sales-manager-dashboard.md</code>
-                        </div>
-                    </div>
-                    
-                    <div class="module-links">
-                        <a href="Sales-Manager-Dashboard-Guide.md" class="btn btn-primary" download>
-                            📊 Open Dashboard Guide
-                        </a>
-                    </div>
-                </div>
-                
+              </div>
             </div>
-        </div>
-        
-        <!-- Learning Paths Section -->
-        <div class="section">
-            <h2>🎯 Learning Paths</h2>
-            <p style="color: #666; font-size: 1.1em; margin-bottom: 20px;">
-                Choose the learning path that matches your role and experience level.
+
+            <p class="module-description">
+              Learn how to create new candidate records in the system, including
+              required fields, optional information, and best practices for data
+              entry.
             </p>
-            
-            <div class="learning-paths">
-                
-                <!-- Recruiter Track -->
-                <div class="path-card">
-                    <h3>🎯 Recruiter Track</h3>
-                    <p style="color: #2c3e50; margin-bottom: 15px;">
-                        <strong>Perfect for:</strong> New recruiters and team members
-                    </p>
-                    <ul>
-                        <li>Module 1: Creating Candidates</li>
-                        <li>Module 2: Scheduling Interviews</li>
-                        <li>Module 3: Sales Manager Dashboard</li>
-                    </ul>
-                    <p style="margin-top: 15px; color: #2c3e50;">
-                        <strong>Total Time:</strong> 35 minutes
-                    </p>
-                </div>
-                
-                <!-- Sales Manager Track -->
-                <div class="path-card">
-                    <h3>📊 Sales Manager Track</h3>
-                    <p style="color: #2c3e50; margin-bottom: 15px;">
-                        <strong>Perfect for:</strong> Sales managers and team leaders
-                    </p>
-                    <ul>
-                        <li>Module 2: Scheduling Interviews</li>
-                        <li>Module 3: Sales Manager Dashboard</li>
-                        <li>Contract B Lifecycle Training</li>
-                    </ul>
-                    <p style="margin-top: 15px; color: #2c3e50;">
-                        <strong>Total Time:</strong> 45 minutes
-                    </p>
-                </div>
-                
-                <!-- Quick Start Track -->
-                <div class="path-card">
-                    <h3>⚡ Quick Start Track</h3>
-                    <p style="color: #2c3e50; margin-bottom: 15px;">
-                        <strong>Perfect for:</strong> Urgent onboarding needs
-                    </p>
-                    <ul>
-                        <li>Watch all 3 video modules</li>
-                        <li>Download Quick Start Guide</li>
-                        <li>Start using the system immediately</li>
-                    </ul>
-                    <p style="margin-top: 15px; color: #2c3e50;">
-                        <strong>Total Time:</strong> 35 minutes
-                    </p>
-                </div>
-                
+
+            <div class="video-placeholder">
+              <span class="emoji">🎥</span>
+              <div>Video will be added here</div>
+              <div style="font-size: 0.85em; margin-top: 10px">
+                Record using Loom script:<br />
+                <code>loom-scripts/01-creating-a-candidate.md</code>
+              </div>
             </div>
-        </div>
-        
-        <!-- Additional Resources Section -->
-        <div class="section">
-            <h2>📖 Additional Resources</h2>
-            <p style="color: #666; font-size: 1.1em; margin-bottom: 20px;">
-                Comprehensive documentation and reference materials for deeper learning.
+
+            <div class="module-links">
+              <a
+                href="interactive-candidate-creation-guide.html"
+                class="btn btn-primary"
+              >
+                📖 Open Interactive Guide
+              </a>
+              <a
+                href="ATS-Quick-Start-Guide.md"
+                class="btn btn-secondary"
+                download
+              >
+                📄 Download Quick Start Guide
+              </a>
+            </div>
+          </div>
+
+          <!-- Module 2: Scheduling Interviews -->
+          <div class="module-card">
+            <div class="module-header">
+              <span class="module-icon">📅</span>
+              <div>
+                <div class="module-title">Module 2: Scheduling Interviews</div>
+                <div class="module-meta">
+                  <span class="badge badge-beginner">Beginner</span>
+                  <span class="badge badge-duration">⏱️ 10 min</span>
+                </div>
+              </div>
+            </div>
+
+            <p class="module-description">
+              Master the interview scheduling process, including interview
+              types, scheduling future meetings, and marking interviews complete
+              after they occur.
             </p>
-            
-            <div class="resources-list">
-                
-                <!-- Resource 1 -->
-                <div class="resource-item">
-                    <h3>📚 Comprehensive Training Program</h3>
-                    <p>Full recruiter training covering all system features</p>
-                    <p><strong>Duration:</strong> 3-4 hours</p>
-                    <a href="ATS-Training-Program.md" class="btn btn-primary" download>
-                        Download PDF
-                    </a>
-                </div>
-                
-                <!-- Resource 2 -->
-                <div class="resource-item">
-                    <h3>📋 Quick Start Guide</h3>
-                    <p>One-page reference for essential tasks</p>
-                    <p><strong>Duration:</strong> 5 min read</p>
-                    <a href="ATS-Quick-Start-Guide.md" class="btn btn-primary" download>
-                        Download PDF
-                    </a>
-                </div>
-                
-                <!-- Resource 3 -->
-                <div class="resource-item">
-                    <h3>📊 Contract B Lifecycle Training</h3>
-                    <p>Learn the Contract B tracking system and FYC calculations</p>
-                    <p><strong>Duration:</strong> 30 min</p>
-                    <a href="Contract-B-Lifecycle-Training.md" class="btn btn-primary" download>
-                        Download PDF
-                    </a>
-                </div>
-                
-                <!-- Resource 4 -->
-                <div class="resource-item">
-                    <h3>📊 Sales Manager Dashboard Guide</h3>
-                    <p>Advanced dashboard features and team metrics</p>
-                    <p><strong>Duration:</strong> 20 min</p>
-                    <a href="Sales-Manager-Dashboard-Guide.md" class="btn btn-primary" download>
-                        Download PDF
-                    </a>
-                </div>
-                
+
+            <div class="video-placeholder">
+              <span class="emoji">🎥</span>
+              <div>Video will be added here</div>
+              <div style="font-size: 0.85em; margin-top: 10px">
+                Record using Loom script:<br />
+                <code>loom-scripts/02-scheduling-interviews.md</code>
+              </div>
             </div>
-        </div>
-        
-        <!-- Support Section -->
-        <div class="section">
-            <h2>💬 Need Help?</h2>
-            <p style="color: #666; font-size: 1.1em; margin-bottom: 20px;">
-                We're here to support you every step of the way.
+
+            <div class="module-links">
+              <a
+                href="interactive-interview-scheduling-guide.html"
+                class="btn btn-primary"
+              >
+                📖 Open Interactive Guide
+              </a>
+            </div>
+          </div>
+
+          <!-- Module 3: Sales Manager Dashboard -->
+          <div class="module-card">
+            <div class="module-header">
+              <span class="module-icon">📊</span>
+              <div>
+                <div class="module-title">
+                  Module 3: Sales Manager Dashboard
+                </div>
+                <div class="module-meta">
+                  <span class="badge badge-intermediate">Intermediate</span>
+                  <span class="badge badge-duration">⏱️ 15 min</span>
+                </div>
+              </div>
+            </div>
+
+            <p class="module-description">
+              Explore advanced dashboard features including team metrics,
+              pipeline tracking, Contract B lifecycle management, and YTD
+              recruiting statistics.
             </p>
-            
-            <div class="support-grid">
-                
-                <!-- Support Option 1 -->
-                <div class="support-card">
-                    <div class="icon">📧</div>
-                    <h3>Email Support</h3>
-                    <p>help@capstonetechsupport.com</p>
-                    <p style="font-size: 0.9em; margin-top: 10px;">
-                        Response time: 24 hours
-                    </p>
-                </div>
-                
-                <!-- Support Option 2 -->
-                <div class="support-card">
-                    <div class="icon">❓</div>
-                    <h3>FAQ</h3>
-                    <p>Common questions and answers</p>
-                    <p style="font-size: 0.9em; margin-top: 10px;">
-                        Coming soon
-                    </p>
-                </div>
-                
-                <!-- Support Option 3 -->
-                <div class="support-card">
-                    <div class="icon">🎓</div>
-                    <h3>Training Sessions</h3>
-                    <p>Live training available on request</p>
-                    <p style="font-size: 0.9em; margin-top: 10px;">
-                        Contact support to schedule
-                    </p>
-                </div>
-                
-                <!-- Support Option 4 -->
-                <div class="support-card">
-                    <div class="icon">📞</div>
-                    <h3>Help Desk</h3>
-                    <p>Technical support available</p>
-                    <p style="font-size: 0.9em; margin-top: 10px;">
-                        Monday-Friday, 9am-5pm EST
-                    </p>
-                </div>
-                
+
+            <div class="video-placeholder">
+              <span class="emoji">🎥</span>
+              <div>Video will be added here</div>
+              <div style="font-size: 0.85em; margin-top: 10px">
+                Record using Loom script:<br />
+                <code>loom-scripts/03-sales-manager-dashboard.md</code>
+              </div>
             </div>
+
+            <div class="module-links">
+              <a
+                href="Sales-Manager-Dashboard-Guide.md"
+                class="btn btn-primary"
+                download
+              >
+                📊 Open Dashboard Guide
+              </a>
+            </div>
+          </div>
         </div>
-        
+      </div>
+
+      <!-- Learning Paths Section -->
+      <div class="section">
+        <h2>🎯 Learning Paths</h2>
+        <p style="color: #666; font-size: 1.1em; margin-bottom: 20px">
+          Choose the learning path that matches your role and experience level.
+        </p>
+
+        <div class="learning-paths">
+          <!-- Recruiter Track -->
+          <div class="path-card">
+            <h3>🎯 Recruiter Track</h3>
+            <p style="color: #2c3e50; margin-bottom: 15px">
+              <strong>Perfect for:</strong> New recruiters and team members
+            </p>
+            <ul>
+              <li>Module 1: Creating Candidates</li>
+              <li>Module 2: Scheduling Interviews</li>
+              <li>Module 3: Sales Manager Dashboard</li>
+            </ul>
+            <p style="margin-top: 15px; color: #2c3e50">
+              <strong>Total Time:</strong> 35 minutes
+            </p>
+          </div>
+
+          <!-- Sales Manager Track -->
+          <div class="path-card">
+            <h3>📊 Sales Manager Track</h3>
+            <p style="color: #2c3e50; margin-bottom: 15px">
+              <strong>Perfect for:</strong> Sales managers and team leaders
+            </p>
+            <ul>
+              <li>Module 2: Scheduling Interviews</li>
+              <li>Module 3: Sales Manager Dashboard</li>
+              <li>Contract B Lifecycle Training</li>
+            </ul>
+            <p style="margin-top: 15px; color: #2c3e50">
+              <strong>Total Time:</strong> 45 minutes
+            </p>
+          </div>
+
+          <!-- Quick Start Track -->
+          <div class="path-card">
+            <h3>⚡ Quick Start Track</h3>
+            <p style="color: #2c3e50; margin-bottom: 15px">
+              <strong>Perfect for:</strong> Urgent onboarding needs
+            </p>
+            <ul>
+              <li>Watch all 3 video modules</li>
+              <li>Download Quick Start Guide</li>
+              <li>Start using the system immediately</li>
+            </ul>
+            <p style="margin-top: 15px; color: #2c3e50">
+              <strong>Total Time:</strong> 35 minutes
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Additional Resources Section -->
+      <div class="section">
+        <h2>📖 Additional Resources</h2>
+        <p style="color: #666; font-size: 1.1em; margin-bottom: 20px">
+          Comprehensive documentation and reference materials for deeper
+          learning.
+        </p>
+
+        <div class="resources-list">
+          <!-- Resource 1 -->
+          <div class="resource-item">
+            <h3>📚 Comprehensive Training Program</h3>
+            <p>Full recruiter training covering all system features</p>
+            <p><strong>Duration:</strong> 3-4 hours</p>
+            <a href="ATS-Training-Program.md" class="btn btn-primary" download>
+              Download PDF
+            </a>
+          </div>
+
+          <!-- Resource 2 -->
+          <div class="resource-item">
+            <h3>📋 Quick Start Guide</h3>
+            <p>One-page reference for essential tasks</p>
+            <p><strong>Duration:</strong> 5 min read</p>
+            <a href="ATS-Quick-Start-Guide.md" class="btn btn-primary" download>
+              Download PDF
+            </a>
+          </div>
+
+          <!-- Resource 3 -->
+          <div class="resource-item">
+            <h3>📊 Contract B Lifecycle Training</h3>
+            <p>Learn the Contract B tracking system and FYC calculations</p>
+            <p><strong>Duration:</strong> 30 min</p>
+            <a
+              href="Contract-B-Lifecycle-Training.md"
+              class="btn btn-primary"
+              download
+            >
+              Download PDF
+            </a>
+          </div>
+
+          <!-- Resource 4 -->
+          <div class="resource-item">
+            <h3>📊 Sales Manager Dashboard Guide</h3>
+            <p>Advanced dashboard features and team metrics</p>
+            <p><strong>Duration:</strong> 20 min</p>
+            <a
+              href="Sales-Manager-Dashboard-Guide.md"
+              class="btn btn-primary"
+              download
+            >
+              Download PDF
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Support Section -->
+      <div class="section">
+        <h2>💬 Need Help?</h2>
+        <p style="color: #666; font-size: 1.1em; margin-bottom: 20px">
+          We're here to support you every step of the way.
+        </p>
+
+        <div class="support-grid">
+          <!-- Support Option 1 -->
+          <div class="support-card">
+            <div class="icon">📧</div>
+            <h3>Email Support</h3>
+            <p>help@capstonetechsupport.com</p>
+            <p style="font-size: 0.9em; margin-top: 10px">
+              Response time: 24 hours
+            </p>
+          </div>
+
+          <!-- Support Option 2 -->
+          <div class="support-card">
+            <div class="icon">❓</div>
+            <h3>FAQ</h3>
+            <p>Common questions and answers</p>
+            <p style="font-size: 0.9em; margin-top: 10px">Coming soon</p>
+          </div>
+
+          <!-- Support Option 3 -->
+          <div class="support-card">
+            <div class="icon">🎓</div>
+            <h3>Training Sessions</h3>
+            <p>Live training available on request</p>
+            <p style="font-size: 0.9em; margin-top: 10px">
+              Contact support to schedule
+            </p>
+          </div>
+
+          <!-- Support Option 4 -->
+          <div class="support-card">
+            <div class="icon">📞</div>
+            <h3>Help Desk</h3>
+            <p>Technical support available</p>
+            <p style="font-size: 0.9em; margin-top: 10px">
+              Monday-Friday, 9am-5pm EST
+            </p>
+          </div>
+        </div>
+      </div>
     </div>
-    
+
     <!-- Footer -->
     <footer>
-        <p>&copy; 2026 Recruiter Portal Training Center. All rights reserved.</p>
-        <p>Last Updated: January 7, 2026</p>
-        <p class="footer-note">
-            This training portal is hosted on GitHub Pages for easy access and distribution.
-        </p>
+      <p>&copy; 2026 Recruiter Portal Training Center. All rights reserved.</p>
+      <p>Last Updated: January 7, 2026</p>
+      <p class="footer-note">
+        This training portal is hosted on GitHub Pages for easy access and
+        distribution.
+      </p>
     </footer>
-</body>
+  </body>
 </html>

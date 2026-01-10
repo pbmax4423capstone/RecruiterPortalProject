@@ -9,8 +9,9 @@
 ## DEPLOYMENT STATUS
 
 ### ✅ Recruiting Sandbox (COMPLETED)
+
 - **Org:** patrickbakeradmin2@financialguide.com.recruiting
-- **Deploy ID:** 
+- **Deploy ID:**
   - LWC: 0Afdh0000054zBhCAI
   - Apex: 0Afdh0000054yV4CAI
 - **Status:** Succeeded
@@ -24,11 +25,13 @@
   - ✅ SummaryCardMetricsControllerTest.cls
 
 ### ⏳ ProdTest Sandbox (PENDING)
+
 - **Org:** patrickbakeradmin2@financialguide.com.prodtest
 - **Status:** Not yet deployed (awaiting custom field sync)
 - **Blocker:** Existing classes have compilation errors due to missing custom fields
 
 ### ⏳ Production (PHASE 2)
+
 - **Status:** Not yet deployed
 - **Prerequisite:** Phase 2 implementation with real data integration
 
@@ -37,18 +40,21 @@
 ## DEPLOYMENT COMMANDS
 
 ### Option 1: Deploy LWC Component Only
+
 ```powershell
 cd "c:\Users\patba\OneDrive - MassMutual\SF Projects VS Code\SalesforceRecruiterPortal\RecruiterPortal"
 sf project deploy start --target-org Recruiting --source-dir force-app/main/default/lwc/summaryCardMetrics
 ```
 
 ### Option 2: Deploy Apex Classes Only
+
 ```powershell
 cd "c:\Users\patba\OneDrive - MassMutual\SF Projects VS Code\SalesforceRecruiterPortal\RecruiterPortal"
 sf project deploy start --target-org Recruiting --metadata "ApexClass:SummaryCardMetricsController" --metadata "ApexClass:SummaryCardMetricsControllerTest"
 ```
 
 ### Option 3: Deploy Everything Together
+
 ```powershell
 cd "c:\Users\patba\OneDrive - MassMutual\SF Projects VS Code\SalesforceRecruiterPortal\RecruiterPortal"
 
@@ -60,6 +66,7 @@ sf project deploy start --target-org Recruiting --metadata "ApexClass:SummaryCar
 ```
 
 ### Validation-Only Deployment (Dry Run)
+
 ```powershell
 # Add --dry-run flag to test without actually deploying
 sf project deploy start --dry-run --target-org Recruiting --source-dir force-app/main/default/lwc/summaryCardMetrics
@@ -70,12 +77,14 @@ sf project deploy start --dry-run --target-org Recruiting --source-dir force-app
 ## POST-DEPLOYMENT VALIDATION
 
 ### 1. Verify Component in Setup
+
 1. Log into Recruiting Sandbox
 2. Navigate to **Setup** → **Custom Code** → **Lightning Components**
 3. Search for `summaryCardMetrics`
 4. Verify status: **Active**
 
 ### 2. Verify Apex Classes
+
 1. Navigate to **Setup** → **Custom Code** → **Apex Classes**
 2. Verify presence:
    - `SummaryCardMetricsController`
@@ -83,15 +92,18 @@ sf project deploy start --dry-run --target-org Recruiting --source-dir force-app
 3. Check compilation status: **No errors**
 
 ### 3. Run Apex Test
+
 ```powershell
 sf apex run test --target-org Recruiting --tests SummaryCardMetricsControllerTest --result-format human
 ```
 
 Expected output:
+
 - Test: `testGetMetricsPhase1ReturnsEmptyMap` - **PASS**
 - Coverage: 100% (Phase 1 stub method)
 
 ### 4. Test in Lightning App Builder
+
 1. Open Lightning App Builder
 2. Create or edit an App Page
 3. Drag `Summary Card Metrics` component onto page
@@ -105,6 +117,7 @@ Expected output:
    - ✅ Informational note visible
 
 ### 5. Test Click Events
+
 1. Open browser Developer Tools (F12)
 2. Go to **Console** tab
 3. Click on each metric card
@@ -114,6 +127,7 @@ Expected output:
    ```
 
 ### 6. Test Responsive Design
+
 1. Use browser Developer Tools responsive mode
 2. Test breakpoints:
    - Desktop (1024px+): 6 cards in 1 row
@@ -127,12 +141,14 @@ Expected output:
 ### If Issues Occur, Roll Back Immediately
 
 #### Step 1: Remove Component from Pages
+
 ```powershell
 # If component was added to Lightning pages, remove it first
 # Via UI: Edit page in Lightning App Builder, remove component, save
 ```
 
 #### Step 2: Delete Metadata
+
 ```powershell
 cd "c:\Users\patba\OneDrive - MassMutual\SF Projects VS Code\SalesforceRecruiterPortal\RecruiterPortal"
 
@@ -145,8 +161,9 @@ sf project delete source --target-org Recruiting --metadata "ApexClass:SummaryCa
 ```
 
 #### Step 3: Verify Removal
+
 1. Check Setup → Lightning Components (should not show summaryCardMetrics)
-2. Check Setup → Apex Classes (should not show SummaryCardMetrics*)
+2. Check Setup → Apex Classes (should not show SummaryCardMetrics\*)
 3. Verify no dependent components are affected
 
 ---
@@ -154,13 +171,15 @@ sf project delete source --target-org Recruiting --metadata "ApexClass:SummaryCa
 ## DEPLOYMENT TO PRODTEST
 
 ### Prerequisites
+
 1. ✅ Successful deployment to Recruiting Sandbox
 2. ✅ Manual testing completed
 3. ⚠️ **BLOCKER:** Sync custom fields to ProdTest
-   - Missing fields: Total_FYC__c, Contract_Outcome__c, Transition_to_A_Date__c, Termination_Date__c, Termination_Reason__c
+   - Missing fields: Total_FYC**c, Contract_Outcome**c, Transition_to_A_Date**c, Termination_Date**c, Termination_Reason\_\_c
 4. ✅ Validation deployment passes
 
 ### Commands for ProdTest
+
 ```powershell
 cd "c:\Users\patba\OneDrive - MassMutual\SF Projects VS Code\SalesforceRecruiterPortal\RecruiterPortal"
 
@@ -179,6 +198,7 @@ sf project deploy start --target-org patrickbakeradmin2@financialguide.com.prodt
 ## DEPLOYMENT TO PRODUCTION (PHASE 2)
 
 ### Prerequisites
+
 1. ✅ Phase 2 implementation complete (real data integration)
 2. ✅ Wire service connected to Apex
 3. ✅ All tests passing with real data
@@ -187,6 +207,7 @@ sf project deploy start --target-org patrickbakeradmin2@financialguide.com.prodt
 6. ✅ Change request approved
 
 ### Production Deployment Strategy
+
 1. **Validation Deployment** (--dry-run)
 2. **Scheduled Maintenance Window** (if required)
 3. **Actual Deployment**
@@ -198,12 +219,14 @@ sf project deploy start --target-org patrickbakeradmin2@financialguide.com.prodt
 ## KNOWN ISSUES & MITIGATIONS
 
 ### Issue 1: ProdTest Custom Field Sync
+
 **Problem:** ProdTest sandbox missing custom fields from Recruiting  
 **Impact:** Cannot deploy entire classes folder due to compilation errors in unrelated classes  
 **Mitigation:** Deploy only summaryCardMetrics component individually  
 **Resolution:** Sync custom field metadata from Recruiting to ProdTest
 
 ### Issue 2: Phase 1 Mock Data Only
+
 **Status:** Expected behavior  
 **Impact:** Component displays hardcoded values (not real data)  
 **Mitigation:** Clearly labeled as Phase 1 in documentation  
@@ -214,14 +237,16 @@ sf project deploy start --target-org patrickbakeradmin2@financialguide.com.prodt
 ## MAINTENANCE & SUPPORT
 
 ### Component Owner
+
 - Team: Recruiter Portal Development Team
 - Repository: RecruiterPortalProject (GitHub)
-- Documentation: 
+- Documentation:
   - `docs/requirements-summary-card-metrics.md`
   - `docs/technical-design-summary-card-metrics.md`
   - `docs/qa-validation-report-summary-card-metrics.md`
 
 ### Future Enhancements (Phase 2)
+
 1. Connect to real Salesforce data via wire service
 2. Implement actual filtering of Pipeline Details table
 3. Add refresh button
@@ -234,6 +259,7 @@ sf project deploy start --target-org patrickbakeradmin2@financialguide.com.prodt
 ## DEPLOYMENT CHECKLIST
 
 ### Pre-Deployment
+
 - [✅] Code reviewed and approved
 - [✅] QA validation complete (100% pass rate)
 - [✅] Documentation complete
@@ -241,12 +267,14 @@ sf project deploy start --target-org patrickbakeradmin2@financialguide.com.prodt
 - [✅] Backup of existing metadata (N/A - new component)
 
 ### Deployment
+
 - [✅] Deploy LWC component - **SUCCEEDED**
 - [✅] Deploy Apex controller - **SUCCEEDED**
 - [✅] Deploy Apex test class - **SUCCEEDED**
 - [✅] Verify deployment status - **SUCCEEDED**
 
 ### Post-Deployment
+
 - [ ] Verify component in Setup
 - [ ] Run Apex tests
 - [ ] Test in Lightning App Builder
@@ -259,18 +287,19 @@ sf project deploy start --target-org patrickbakeradmin2@financialguide.com.prodt
 
 ## DEPLOYMENT LOG
 
-| Date | Environment | Status | Deploy ID | Notes |
-|------|-------------|--------|-----------|-------|
-| 2025-12-23 | Recruiting Sandbox | ✅ Succeeded | 0Afdh0000054zBhCAI (LWC) | LWC deployed successfully |
+| Date       | Environment        | Status       | Deploy ID                 | Notes                              |
+| ---------- | ------------------ | ------------ | ------------------------- | ---------------------------------- |
+| 2025-12-23 | Recruiting Sandbox | ✅ Succeeded | 0Afdh0000054zBhCAI (LWC)  | LWC deployed successfully          |
 | 2025-12-23 | Recruiting Sandbox | ✅ Succeeded | 0Afdh0000054yV4CAI (Apex) | Apex classes deployed successfully |
-| TBD | ProdTest Sandbox | ⏳ Pending | - | Awaiting custom field sync |
-| TBD | Production | ⏳ Phase 2 | - | Requires Phase 2 implementation |
+| TBD        | ProdTest Sandbox   | ⏳ Pending   | -                         | Awaiting custom field sync         |
+| TBD        | Production         | ⏳ Phase 2   | -                         | Requires Phase 2 implementation    |
 
 ---
 
 ## CONTACT INFORMATION
 
 **Questions or Issues:**
+
 - Check documentation in `docs/` folder
 - Review QA validation report
 - Consult technical design document

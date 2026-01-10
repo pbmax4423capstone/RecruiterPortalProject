@@ -1,4 +1,5 @@
 # Metadata Fixes Applied - ALC Stage Configuration
+
 **Date:** 2026-01-08  
 **Agent:** Metadata Specialist Agent  
 **Previous Agent:** Research Agent  
@@ -11,6 +12,7 @@
 **File:** `force-app/main/default/customMetadata/ALC_Stage_Config.NRF_Stage_07.md-meta.xml`
 
 **Change:**
+
 ```xml
 <!-- BEFORE -->
 <field>Is_Active__c</field>
@@ -30,18 +32,22 @@
 Verified that all terminal stages remain correctly marked `Is_Active__c = false`:
 
 ✅ **Broker:**
+
 - Stage 08: COMPLETE (inactive)
 - Stage 09: CANCELED (inactive)
 
 ✅ **Career:**
+
 - Stage 10: Candidate Complete (inactive)
 - Stage 11: TERMINATED (inactive)
 - Stage 12: CANCELED (inactive)
 
 ✅ **NRF:**
+
 - Stage 08: COMPLETE (inactive)
 
 ✅ **Registration:**
+
 - Stage 07: Received Approval Letter (inactive)
 - Stage 08: CANCELED (inactive)
 
@@ -50,9 +56,11 @@ Verified that all terminal stages remain correctly marked `Is_Active__c = false`
 ## Summary
 
 **Files Modified:** 1
+
 - `ALC_Stage_Config.NRF_Stage_07.md-meta.xml`
 
 **Files Verified (No Changes):** 36
+
 - All other stage configurations remain correct
 
 ---
@@ -60,7 +68,8 @@ Verified that all terminal stages remain correctly marked `Is_Active__c = false`
 ## Expected Impact
 
 After deployment, NRF records in "Request FieldNet/CoverPath Access" stage will:
-1. Be included in SOQL queries (Stage__c IN :validStages)
+
+1. Be included in SOQL queries (Stage\_\_c IN :validStages)
 2. Appear in the component's stage columns
 3. Be counted in the NRF tab label count
 

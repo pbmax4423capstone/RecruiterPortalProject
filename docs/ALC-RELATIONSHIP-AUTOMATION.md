@@ -1,10 +1,11 @@
 # ALC Contact/Candidate Relationship Automation
+
 ## Technical Documentation
 
 **Version:** 1.0  
 **Author:** Patrick Baker  
 **Last Updated:** January 8, 2026  
-**Status:** Production Active  
+**Status:** Production Active
 
 ---
 
@@ -40,7 +41,7 @@ The ALC Contact/Candidate Relationship Automation system automatically creates a
 ✅ **Prevents Duplicates** - Intelligent matching by email and phone  
 ✅ **Audit Trail** - Complete logging of all operations  
 ✅ **Self-Healing** - Automatic backfill for historical data  
-✅ **Record Type Aware** - Maps ALC types to correct Candidate contract types  
+✅ **Record Type Aware** - Maps ALC types to correct Candidate contract types
 
 ### Workflow Summary
 
@@ -180,6 +181,7 @@ Contact matchedContact = contactsByEmail.get(emailKey);
 ```
 
 **Email Matching Rules:**
+
 - Email is converted to lowercase for case-insensitive matching
 - Exact match required (no fuzzy matching)
 - First match wins if duplicates exist
@@ -196,6 +198,7 @@ Contact matchedContact = contactsByPhone.get(stdPhone);
 ```
 
 **Phone Matching Rules:**
+
 1. Strip all non-digit characters: `(555) 123-4567` → `5551234567`
 2. Handle 11-digit with country code: `15551234567` → `5551234567`
 3. Validate exactly 10 digits
@@ -227,20 +230,20 @@ private String standardizePhone(String phone) {
     if (String.isBlank(phone)) {
         return null;
     }
-    
+
     // Remove all non-digit characters
     String digitsOnly = phone.replaceAll('[^0-9]', '');
-    
+
     // Handle 11-digit numbers starting with 1
     if (digitsOnly.length() == 11 && digitsOnly.startsWith('1')) {
         digitsOnly = digitsOnly.substring(1);
     }
-    
+
     // Return if exactly 10 digits
     if (digitsOnly.length() == 10) {
         return digitsOnly;
     }
-    
+
     return null;
 }
 ```
@@ -249,25 +252,27 @@ private String standardizePhone(String phone) {
 
 The regex `[^0-9]` removes all characters except digits:
 
-| Input | After Regex | Valid? | Output |
-|-------|-------------|--------|--------|
-| `(555) 123-4567` | `5551234567` | ✅ Yes | `5551234567` |
-| `1-555-123-4567` | `15551234567` | ✅ Yes (11→10) | `5551234567` |
-| `555.123.4567` | `5551234567` | ✅ Yes | `5551234567` |
-| `+1 555 123 4567` | `15551234567` | ✅ Yes (11→10) | `5551234567` |
-| `555-1234` | `5551234` | ❌ No (7 digits) | `null` |
-| `123-4567` | `1234567` | ❌ No (7 digits) | `null` |
-| `abc-def-ghij` | `` | ❌ No (0 digits) | `null` |
+| Input             | After Regex   | Valid?           | Output       |
+| ----------------- | ------------- | ---------------- | ------------ |
+| `(555) 123-4567`  | `5551234567`  | ✅ Yes           | `5551234567` |
+| `1-555-123-4567`  | `15551234567` | ✅ Yes (11→10)   | `5551234567` |
+| `555.123.4567`    | `5551234567`  | ✅ Yes           | `5551234567` |
+| `+1 555 123 4567` | `15551234567` | ✅ Yes (11→10)   | `5551234567` |
+| `555-1234`        | `5551234`     | ❌ No (7 digits) | `null`       |
+| `123-4567`        | `1234567`     | ❌ No (7 digits) | `null`       |
+| `abc-def-ghij`    | ``            | ❌ No (0 digits) | `null`       |
 
 ### 10-Digit Validation
 
 **Requirements:**
+
 - Must contain exactly 10 digits after standardization
 - Rejects 7-digit local numbers
 - Rejects invalid formats
 - Returns `null` for invalid inputs
 
 **Why 10 Digits?**
+
 - Standard US phone format: (NPA) NXX-XXXX
 - NPA = 3-digit area code
 - NXX = 3-digit exchange
@@ -287,11 +292,11 @@ The Levenshtein distance algorithm measures the minimum number of single-charact
 private Integer levenshteinDistance(String s1, String s2) {
     if (String.isBlank(s1)) return String.isBlank(s2) ? 0 : s2.length();
     if (String.isBlank(s2)) return s1.length();
-    
+
     Integer len1 = s1.length();
     Integer len2 = s2.length();
     List<List<Integer>> dp = new List<List<Integer>>();
-    
+
     // Initialize matrix
     for (Integer i = 0; i <= len1; i++) {
         List<Integer> row = new List<Integer>();
@@ -306,7 +311,7 @@ private Integer levenshteinDistance(String s1, String s2) {
         }
         dp.add(row);
     }
-    
+
     // Fill matrix
     for (Integer i = 1; i <= len1; i++) {
         for (Integer j = 1; j <= len2; j++) {
@@ -317,7 +322,7 @@ private Integer levenshteinDistance(String s1, String s2) {
             );
         }
     }
-    
+
     return dp[len1][len2];
 }
 ```
@@ -356,13 +361,13 @@ if (distance <= 2) {
 
 ### Use Cases
 
-| Scenario | Distance | Match? |
-|----------|----------|--------|
-| "John Smith" vs "John Smith" | 0 | ✅ Exact |
-| "John Smith" vs "Jon Smith" | 1 | ✅ Typo |
-| "John Smith" vs "John Smyth" | 1 | ✅ Typo |
-| "John Smith" vs "Jon Smyth" | 2 | ✅ 2 typos |
-| "John Smith" vs "Jane Smith" | 3 | ❌ Different |
+| Scenario                     | Distance | Match?       |
+| ---------------------------- | -------- | ------------ |
+| "John Smith" vs "John Smith" | 0        | ✅ Exact     |
+| "John Smith" vs "Jon Smith"  | 1        | ✅ Typo      |
+| "John Smith" vs "John Smyth" | 1        | ✅ Typo      |
+| "John Smith" vs "Jon Smyth"  | 2        | ✅ 2 typos   |
+| "John Smith" vs "Jane Smith" | 3        | ❌ Different |
 
 **Note:** Currently not active in production. Email/phone matching takes priority.
 
@@ -374,12 +379,12 @@ if (distance <= 2) {
 
 The system maps ALC Record Types to Candidate `Contract_Type__c` values:
 
-| ALC Record Type | Candidate Contract_Type__c | Candidate Status |
-|-----------------|---------------------------|------------------|
-| **Broker** | `Broker` | `Contracting Started` |
-| **Career** | `Career Contract` | `Contracting Started` |
-| **NRF** | `null` (blank) | `Contracting Started` |
-| **Registration** | `null` (blank) | `Contracting Started` |
+| ALC Record Type  | Candidate Contract_Type\_\_c | Candidate Status      |
+| ---------------- | ---------------------------- | --------------------- |
+| **Broker**       | `Broker`                     | `Contracting Started` |
+| **Career**       | `Career Contract`            | `Contracting Started` |
+| **NRF**          | `null` (blank)               | `Contracting Started` |
+| **Registration** | `null` (blank)               | `Contracting Started` |
 
 ### Code Implementation
 
@@ -389,7 +394,7 @@ private Candidate__c createCandidateFromALC(ALC__c alc) {
     cand.Contact__c = alc.Contact__c;
     cand.Status__c = 'Contracting Started';
     cand.RecordTypeId = candidateRecordTypeId; // "Candidate" record type
-    
+
     // Get record type name for Contract_Type__c mapping
     String recordTypeName = getRecordTypeName(alc.RecordTypeId);
     if (recordTypeName == 'Broker') {
@@ -398,7 +403,7 @@ private Candidate__c createCandidateFromALC(ALC__c alc) {
         cand.Contract_Type__c = 'Career Contract';
     }
     // NRF and Registration get null Contract_Type__c
-    
+
     return cand;
 }
 ```
@@ -414,6 +419,7 @@ private static final Set<String> VALID_RECORD_TYPES = new Set<String>{
 ```
 
 **Excluded Record Types:**
+
 - Any other custom record types
 - System default record types
 
@@ -436,16 +442,16 @@ private static final Set<String> EXCLUDED_STAGES = new Set<String>{
 ### Trigger Definition
 
 ```apex
-trigger ALCRelationshipTrigger on ALC__c (before insert, before update) {
-    ALCRelationshipTriggerHandler handler = new ALCRelationshipTriggerHandler();
-    
-    if (Trigger.isBefore && Trigger.isInsert) {
-        handler.handleBeforeInsert(Trigger.new);
-    }
-    
-    if (Trigger.isBefore && Trigger.isUpdate) {
-        handler.handleBeforeUpdate(Trigger.new, Trigger.oldMap);
-    }
+trigger ALCRelationshipTrigger on ALC__c(before insert, before update) {
+  ALCRelationshipTriggerHandler handler = new ALCRelationshipTriggerHandler();
+
+  if (Trigger.isBefore && Trigger.isInsert) {
+    handler.handleBeforeInsert(Trigger.new);
+  }
+
+  if (Trigger.isBefore && Trigger.isUpdate) {
+    handler.handleBeforeUpdate(Trigger.new, Trigger.oldMap);
+  }
 }
 ```
 
@@ -454,11 +460,13 @@ trigger ALCRelationshipTrigger on ALC__c (before insert, before update) {
 **Purpose:** Create Contact and Candidate **before** ALC record is saved.
 
 **Advantages:**
+
 - ✅ Can set `Contact__c` and `Candidate__c` fields on ALC in-memory
 - ✅ No additional DML on ALC record needed
 - ✅ Atomic transaction - all or nothing
 
 **Limitations:**
+
 - ❌ Cannot perform DML on Trigger.new records
 - ❌ Must use in-memory field updates
 
@@ -467,6 +475,7 @@ trigger ALCRelationshipTrigger on ALC__c (before insert, before update) {
 **Purpose:** Fill missing relationships when ALC is updated.
 
 **Use Cases:**
+
 - User manually updates ALC and adds email/phone
 - Data import updates existing ALCs
 - Backfill operations fix historical data
@@ -499,47 +508,47 @@ for (ALC__c alc : alcs) {
 
 ### Governor Limit Considerations
 
-| Governor Limit | Usage | Max Allowed | Notes |
-|----------------|-------|-------------|-------|
-| SOQL Queries | 3-5 per transaction | 100 | Bulkified queries |
-| DML Statements | 3-4 per transaction | 150 | Insert Contacts, Candidates |
-| DML Rows | Up to 200 ALCs | 10,000 | Well within limit |
-| Future Calls | 1 (audit logs) | 50 | Async logging |
+| Governor Limit | Usage               | Max Allowed | Notes                       |
+| -------------- | ------------------- | ----------- | --------------------------- |
+| SOQL Queries   | 3-5 per transaction | 100         | Bulkified queries           |
+| DML Statements | 3-4 per transaction | 150         | Insert Contacts, Candidates |
+| DML Rows       | Up to 200 ALCs      | 10,000      | Well within limit           |
+| Future Calls   | 1 (audit logs)      | 50          | Async logging               |
 
 ---
 
 ## 8. Audit Logging System
 
-### ALC_Automation_Log__c Object
+### ALC_Automation_Log\_\_c Object
 
 **Purpose:** Track all automation operations for debugging and compliance.
 
 **Fields:**
 
-| Field | Type | Description |
-|-------|------|-------------|
-| `Operation_Type__c` | Picklist | Type of operation performed |
-| `Success__c` | Checkbox | Whether operation succeeded |
-| `ALC__c` | Lookup | Related ALC record |
-| `Contact__c` | Lookup | Related Contact record |
-| `Candidate__c` | Lookup | Related Candidate record |
-| `Error_Message__c` | Long Text | Error message if failed |
-| `Stack_Trace__c` | Long Text | Exception stack trace |
-| `Processing_Date__c` | DateTime | When operation occurred |
-| `Resolved__c` | Checkbox | Whether error was resolved |
-| `Resolved_By__c` | Lookup (User) | Who resolved the error |
-| `Resolution_Notes__c` | Long Text | How error was resolved |
+| Field                 | Type          | Description                 |
+| --------------------- | ------------- | --------------------------- |
+| `Operation_Type__c`   | Picklist      | Type of operation performed |
+| `Success__c`          | Checkbox      | Whether operation succeeded |
+| `ALC__c`              | Lookup        | Related ALC record          |
+| `Contact__c`          | Lookup        | Related Contact record      |
+| `Candidate__c`        | Lookup        | Related Candidate record    |
+| `Error_Message__c`    | Long Text     | Error message if failed     |
+| `Stack_Trace__c`      | Long Text     | Exception stack trace       |
+| `Processing_Date__c`  | DateTime      | When operation occurred     |
+| `Resolved__c`         | Checkbox      | Whether error was resolved  |
+| `Resolved_By__c`      | Lookup (User) | Who resolved the error      |
+| `Resolution_Notes__c` | Long Text     | How error was resolved      |
 
 ### Operation Types
 
-| Operation Type | Description |
-|----------------|-------------|
-| `CONTACT_LINKED` | Existing Contact linked to ALC |
-| `CONTACT_CREATED` | New Contact created from ALC |
-| `CONTACT_MATCHED` | Contact matched by email/phone |
-| `CANDIDATE_CREATED` | New Candidate created |
-| `CANDIDATE_UPDATED` | Existing Candidate updated |
-| `ERROR` | Operation failed |
+| Operation Type      | Description                    |
+| ------------------- | ------------------------------ |
+| `CONTACT_LINKED`    | Existing Contact linked to ALC |
+| `CONTACT_CREATED`   | New Contact created from ALC   |
+| `CONTACT_MATCHED`   | Contact matched by email/phone |
+| `CANDIDATE_CREATED` | New Candidate created          |
+| `CANDIDATE_UPDATED` | Existing Candidate updated     |
+| `ERROR`             | Operation failed               |
 
 ### Async Logging
 
@@ -549,7 +558,7 @@ Audit logs are created asynchronously to avoid blocking the main transaction:
 @future
 private static void insertAuditLogsAsync(String logsJson) {
     try {
-        List<ALC_Automation_Log__c> logs = (List<ALC_Automation_Log__c>) 
+        List<ALC_Automation_Log__c> logs = (List<ALC_Automation_Log__c>)
             JSON.deserialize(logsJson, List<ALC_Automation_Log__c>.class);
         insert logs;
     } catch (Exception e) {
@@ -559,6 +568,7 @@ private static void insertAuditLogsAsync(String logsJson) {
 ```
 
 **Benefits:**
+
 - ✅ Doesn't block ALC creation
 - ✅ Doesn't count against main transaction DML limits
 - ✅ Graceful failure - won't roll back ALC creation
@@ -568,8 +578,9 @@ private static void insertAuditLogsAsync(String logsJson) {
 **Recommendation:** Archive logs older than 90 days.
 
 **Query to find old logs:**
+
 ```soql
-SELECT Id FROM ALC_Automation_Log__c 
+SELECT Id FROM ALC_Automation_Log__c
 WHERE CreatedDate < LAST_N_DAYS:90
 ```
 
@@ -582,9 +593,10 @@ WHERE CreatedDate < LAST_N_DAYS:90
 **Navigation:** App Launcher → Recruiter Portal → ALC Relationship Monitor
 
 **Permissions Required:**
+
 - `ALC_Relationship_Monitor` permission set
-- Read access to ALC__c, Contact, Candidate__c
-- Read/Write access to ALC_Automation_Log__c
+- Read access to ALC**c, Contact, Candidate**c
+- Read/Write access to ALC_Automation_Log\_\_c
 
 ### Dashboard Sections
 
@@ -601,16 +613,16 @@ Displays high-level metrics:
 
 Shows ALCs missing Contact or Candidate links:
 
-| Column | Description |
-|--------|-------------|
-| ALC Name | Link to ALC record |
+| Column      | Description                       |
+| ----------- | --------------------------------- |
+| ALC Name    | Link to ALC record                |
 | Record Type | Career, Broker, NRF, Registration |
-| First Name | From ALC |
-| Last Name | From ALC |
-| Email | From ALC |
-| Phone | From ALC |
-| Missing | "Contact", "Candidate", or "Both" |
-| Actions | "Fix" button |
+| First Name  | From ALC                          |
+| Last Name   | From ALC                          |
+| Email       | From ALC                          |
+| Phone       | From ALC                          |
+| Missing     | "Contact", "Candidate", or "Both" |
+| Actions     | "Fix" button                      |
 
 **Fix Button:** Triggers backfill service to create missing records.
 
@@ -618,28 +630,29 @@ Shows ALCs missing Contact or Candidate links:
 
 Lists orphaned Candidates:
 
-| Column | Description |
-|--------|-------------|
-| Candidate Name | Link to Candidate record |
-| First Name | From linked Contact (if exists) |
-| Last Name | From linked Contact (if exists) |
-| Email | From Contact |
-| Related ALC | Link to ALC record |
-| Actions | "Create Contact" button |
+| Column         | Description                     |
+| -------------- | ------------------------------- |
+| Candidate Name | Link to Candidate record        |
+| First Name     | From linked Contact (if exists) |
+| Last Name      | From linked Contact (if exists) |
+| Email          | From Contact                    |
+| Related ALC    | Link to ALC record              |
+| Actions        | "Create Contact" button         |
 
 #### 4. Audit Logs
 
 Recent automation logs with filtering:
 
-| Column | Description |
-|--------|-------------|
-| Log Name | Link to log record |
-| Operation Type | Type of operation |
-| Success | ✅ or ❌ |
-| Created Date | When operation occurred |
-| Actions | "View Details", "Mark Resolved" |
+| Column         | Description                     |
+| -------------- | ------------------------------- |
+| Log Name       | Link to log record              |
+| Operation Type | Type of operation               |
+| Success        | ✅ or ❌                        |
+| Created Date   | When operation occurred         |
+| Actions        | "View Details", "Mark Resolved" |
 
 **Filters:**
+
 - All Logs
 - Errors Only
 - Successes Only
@@ -689,11 +702,13 @@ The Backfill Wizard processes historical ALC records that were created before th
 ### Components
 
 **Apex Classes:**
+
 - `ALCRelationshipBackfillService` - Core backfill logic
 - `ALCBackfillWizardController` - UI controller
 - `ALCRelationshipBackfillBatch` - Batch job for large datasets
 
 **LWC Component:**
+
 - `alcBackfillWizard` - User interface (if exists)
 
 ### Using the Backfill Service
@@ -735,6 +750,7 @@ Database.executeBatch(batchJob, 200);
 ```
 
 **Monitor Batch Job:**
+
 ```
 Setup → Apex Jobs → Find "ALCRelationshipBackfillBatch"
 ```
@@ -752,6 +768,7 @@ The backfill service uses the same logic as the trigger:
 7. Log audit records
 
 **Difference from Trigger:**
+
 - ✅ Can DML update ALCs (not in trigger context)
 - ✅ Processes existing records (not just new inserts)
 - ✅ Can handle larger batches with batch jobs
@@ -767,6 +784,7 @@ The backfill service uses the same logic as the trigger:
 **Cause:** ALC record missing both email and phone fields.
 
 **Solution:**
+
 1. Open ALC record
 2. Add Email or Phone
 3. Save record
@@ -781,15 +799,17 @@ The backfill service uses the same logic as the trigger:
 **Cause:** ALC missing First Name or Last Name.
 
 **Solution:**
+
 1. Open ALC record
-2. Populate First_Name__c and Last_Name__c
+2. Populate First_Name**c and Last_Name**c
 3. Save record
 4. Run backfill from monitor dashboard
 
 **Check Required Fields:**
+
 ```soql
-SELECT Id, Name, First_Name__c, Last_Name__c, Email__c 
-FROM ALC__c 
+SELECT Id, Name, First_Name__c, Last_Name__c, Email__c
+FROM ALC__c
 WHERE (First_Name__c = null OR Last_Name__c = null)
 AND RecordType.DeveloperName IN ('Career', 'Broker', 'NRF', 'Registration')
 AND Stage__c NOT IN ('CANCELLED', 'TERMINATED')
@@ -802,11 +822,13 @@ AND Stage__c NOT IN ('CANCELLED', 'TERMINATED')
 **Cause:** Multiple Contacts exist with same email.
 
 **Solution:**
+
 1. Run Contact deduplication
 2. Merge duplicate Contacts in Salesforce
 3. Re-run backfill for affected ALCs
 
 **Find Duplicates:**
+
 ```soql
 SELECT Email, COUNT(Id) cnt
 FROM Contact
@@ -818,7 +840,7 @@ HAVING COUNT(Id) > 1
 
 #### Error 4: "Candidate already exists"
 
-**Cause:** ALC already has Candidate__c populated.
+**Cause:** ALC already has Candidate\_\_c populated.
 
 **Expected:** This is not an error - system will link existing Candidate.
 
@@ -831,6 +853,7 @@ HAVING COUNT(Id) > 1
 **Cause:** Processing more than 100 ALCs with inefficient queries.
 
 **Solution:** Use batch job instead of single transaction:
+
 ```apex
 ALCRelationshipBackfillBatch batchJob = new ALCRelationshipBackfillBatch();
 Database.executeBatch(batchJob, 200);
@@ -854,13 +877,15 @@ Enable debug logs for troubleshooting:
 ### Monitoring Queries
 
 **Check trigger status:**
+
 ```soql
-SELECT Id, Name, Status, UsageAfterInsert, UsageAfterUpdate 
-FROM ApexTrigger 
+SELECT Id, Name, Status, UsageAfterInsert, UsageAfterUpdate
+FROM ApexTrigger
 WHERE Name = 'ALCRelationshipTrigger'
 ```
 
 **Check recent automation logs:**
+
 ```soql
 SELECT Id, Operation_Type__c, Success__c, Error_Message__c, CreatedDate
 FROM ALC_Automation_Log__c
@@ -870,6 +895,7 @@ LIMIT 50
 ```
 
 **Find unlinked ALCs:**
+
 ```soql
 SELECT Id, Name, Contact__c, Candidate__c, Email__c, Phone__c
 FROM ALC__c
@@ -928,6 +954,7 @@ sf apex run test --test ALCBackfillWizardController_Test --target-org Production
 ```
 
 **Verify:**
+
 - All tests pass
 - Code coverage > 75%
 
@@ -976,6 +1003,7 @@ sf project delete --source-dir "force-app/main/default/triggers/ALCRelationshipT
 ### Unit Tests
 
 **Coverage Requirements:**
+
 - Trigger Handler: 100%
 - Backfill Service: 90%+
 - Controllers: 85%+
@@ -995,11 +1023,11 @@ static void testInsertALC_NoContactOrCandidate_CreatesBoth() {
         Phone__c = '555-123-4567',
         Stage__c = 'ACTIVE'
     );
-    
+
     Test.startTest();
     insert newAlc;
     Test.stopTest();
-    
+
     ALC__c insertedAlc = [SELECT Contact__c, Candidate__c FROM ALC__c WHERE Id = :newAlc.Id];
     System.assertNotEquals(null, insertedAlc.Contact__c, 'Contact should be created');
     System.assertNotEquals(null, insertedAlc.Candidate__c, 'Candidate should be created');
@@ -1017,7 +1045,7 @@ static void testInsertALC_WithMatchingContact_LinksContact() {
         Email = 'jane.smith@example.com'
     );
     insert existingContact;
-    
+
     ALC__c newAlc = new ALC__c(
         RecordTypeId = brokerRecordTypeId,
         First_Name__c = 'Jane',
@@ -1025,11 +1053,11 @@ static void testInsertALC_WithMatchingContact_LinksContact() {
         Email__c = 'jane.smith@example.com',
         Stage__c = 'ACTIVE'
     );
-    
+
     Test.startTest();
     insert newAlc;
     Test.stopTest();
-    
+
     ALC__c insertedAlc = [SELECT Contact__c FROM ALC__c WHERE Id = :newAlc.Id];
     System.assertEquals(existingContact.Id, insertedAlc.Contact__c, 'Should link existing Contact');
 }
@@ -1050,11 +1078,11 @@ static void testBulkInsert_200ALCs() {
             Stage__c = 'ACTIVE'
         ));
     }
-    
+
     Test.startTest();
     insert bulkAlcs;
     Test.stopTest();
-    
+
     List<ALC__c> insertedAlcs = [SELECT Contact__c, Candidate__c FROM ALC__c WHERE Id IN :bulkAlcs];
     for (ALC__c alc : insertedAlcs) {
         System.assertNotEquals(null, alc.Contact__c, 'All ALCs should have Contacts');
@@ -1088,11 +1116,13 @@ static void testBulkInsert_200ALCs() {
 ### Q2: Can I disable the automation temporarily?
 
 **A:** Yes. Deactivate the trigger:
+
 ```bash
 sf apex trigger deactivate --name ALCRelationshipTrigger --target-org ProductionCapstone
 ```
 
 To reactivate:
+
 ```bash
 sf apex trigger activate --name ALCRelationshipTrigger --target-org ProductionCapstone
 ```
@@ -1126,8 +1156,9 @@ sf apex trigger activate --name ALCRelationshipTrigger --target-org ProductionCa
 ### Q7: How do I export audit logs?
 
 **A:**
+
 ```soql
-SELECT Id, Operation_Type__c, Success__c, Error_Message__c, 
+SELECT Id, Operation_Type__c, Success__c, Error_Message__c,
        ALC__c, Contact__c, Candidate__c, CreatedDate
 FROM ALC_Automation_Log__c
 WHERE CreatedDate = LAST_N_DAYS:30
@@ -1154,9 +1185,11 @@ Export from Data Loader or Reports.
 1. Check the ALC stage (must not be CANCELLED/TERMINATED)
 2. Check the ALC record type (must be Career, Broker, NRF, or Registration)
 3. Query audit logs for that ALC:
+
 ```soql
 SELECT * FROM ALC_Automation_Log__c WHERE ALC__c = '001xxxxxxxxxxxx'
 ```
+
 4. Check for error messages in the log
 5. Run backfill manually from the monitor dashboard
 
@@ -1166,25 +1199,25 @@ SELECT * FROM ALC_Automation_Log__c WHERE ALC__c = '001xxxxxxxxxxxx'
 
 ### ALC → Contact Mapping
 
-| ALC Field | Contact Field |
-|-----------|---------------|
-| `First_Name__c` | `FirstName` |
-| `Last_Name__c` | `LastName` |
-| `Email__c` | `Email` |
-| `Phone__c` | `Phone` |
-| `Street__c` | `MailingStreet` |
-| `City__c` | `MailingCity` |
-| `State__c` | `MailingState` |
-| `Zip__c` | `MailingPostalCode` |
+| ALC Field       | Contact Field       |
+| --------------- | ------------------- |
+| `First_Name__c` | `FirstName`         |
+| `Last_Name__c`  | `LastName`          |
+| `Email__c`      | `Email`             |
+| `Phone__c`      | `Phone`             |
+| `Street__c`     | `MailingStreet`     |
+| `City__c`       | `MailingCity`       |
+| `State__c`      | `MailingState`      |
+| `Zip__c`        | `MailingPostalCode` |
 
 ### ALC → Candidate Mapping
 
-| ALC Field | Candidate Field | Notes |
-|-----------|-----------------|-------|
-| `Contact__c` | `Contact__c` | Lookup to Contact |
-| Record Type | `Contract_Type__c` | See mapping table |
-| *(system)* | `Status__c` | Always "Contracting Started" |
-| *(system)* | `RecordTypeId` | "Candidate" record type |
+| ALC Field    | Candidate Field    | Notes                        |
+| ------------ | ------------------ | ---------------------------- |
+| `Contact__c` | `Contact__c`       | Lookup to Contact            |
+| Record Type  | `Contract_Type__c` | See mapping table            |
+| _(system)_   | `Status__c`        | Always "Contracting Started" |
+| _(system)_   | `RecordTypeId`     | "Candidate" record type      |
 
 ---
 
@@ -1236,16 +1269,17 @@ AND CreatedDate = TODAY
 
 ## Document History
 
-| Version | Date | Author | Changes |
-|---------|------|--------|---------|
-| 1.0 | Jan 8, 2026 | Patrick Baker | Initial release |
+| Version | Date        | Author        | Changes         |
+| ------- | ----------- | ------------- | --------------- |
+| 1.0     | Jan 8, 2026 | Patrick Baker | Initial release |
 
 ---
 
-**For support or questions, contact:**  
-- **Email:** help@capstonetechsupport.com  
-- **Salesforce Chatter:** @Patrick Baker  
+**For support or questions, contact:**
+
+- **Email:** help@capstonetechsupport.com
+- **Salesforce Chatter:** @Patrick Baker
 
 ---
 
-*End of Technical Documentation*
+_End of Technical Documentation_

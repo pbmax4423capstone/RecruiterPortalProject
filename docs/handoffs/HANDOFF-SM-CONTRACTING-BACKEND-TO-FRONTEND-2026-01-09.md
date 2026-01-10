@@ -14,17 +14,21 @@
 Added 4 new methods to `CandidatesInContractingController.cls`:
 
 #### 1. `getALCDataForSalesManager(String salesManagerFilter)`
+
 **Purpose:** Main data provider for Sales Manager Contracting Kanban component  
 **Parameters:**
+
 - `salesManagerFilter` - Sales Manager name or "All Sales Managers"
 - Defaults to `getCurrentUserSalesManagerName()` if blank
 
 **Returns:** `ALCDataResponse` containing:
+
 - `alcsByStage` - Map of stage API values to CandidateWrapper lists
 - `stageConfigs` - Map of stage configurations (Career only)
 - `recordTypeCounts` - Map with Career count only
 
 **Key Features:**
+
 - ✅ Hard-coded to Career record type: `WHERE RecordType.DeveloperName = 'Career'`
 - ✅ Filters by `Candidate__r.Sales_Manager__c = :salesManagerFilter`
 - ✅ Supports "All Sales Managers" option (no filter applied)
@@ -32,6 +36,7 @@ Added 4 new methods to `CandidatesInContractingController.cls`:
 - ✅ Respects `with sharing` - record-level security enforced
 
 **Query Structure:**
+
 ```apex
 WHERE RecordType.DeveloperName = 'Career'
 AND Stage__c IN :validStages // From ALC_Stage_Config__mdt where Record_Type = 'Career'
@@ -40,17 +45,20 @@ ORDER BY LastModifiedDate DESC
 ```
 
 #### 2. `getCurrentUserSalesManagerName()`
+
 **Purpose:** Returns logged-in user's full name for default filtering  
 **Returns:** `String` - Current user's name from `UserInfo.getName()`  
 **Cacheable:** Yes (`@AuraEnabled(cacheable=true)`)
 
 #### 3. `getSalesManagerOptions()`
+
 **Purpose:** Provides dropdown options for Sales Manager filter  
 **Returns:** `List<String>` with "All Sales Managers" first, then distinct Sales Manager values  
 **Query:** Groups by `Candidate__r.Sales_Manager__c` from Career ALC records  
 **Cacheable:** Yes
 
 #### 4. `canViewAllSalesManagers()`
+
 **Purpose:** Determines if current user can view dropdown (Director/Admin)  
 **Returns:** `Boolean` - true if profile contains "Director", "System Administrator", or "Admin"  
 **Cacheable:** Yes  
@@ -64,6 +72,7 @@ ORDER BY LastModifiedDate DESC
 **Results:** 28/28 tests passing (100%)
 
 ### New Test Methods Added:
+
 1. `testGetALCDataForSalesManager_FilterBySpecificManager` - Verifies filtering by specific Sales Manager
 2. `testGetALCDataForSalesManager_FilterByAllSalesManagers` - Verifies "All" option shows all records
 3. `testGetALCDataForSalesManager_DefaultToCurrentUser` - Verifies null param defaults to current user
@@ -75,6 +84,7 @@ ORDER BY LastModifiedDate DESC
 9. `testGetALCDataForSalesManager_StageConfiguration` - Verifies stage config structure
 
 ### Test Data:
+
 - 20 test candidates with 3 Sales Managers:
   - Tim Denton (candidates 0-9) - 5 Career ALCs
   - Elizabeth Kagele (candidates 10-14) - 2 Career ALCs
@@ -92,6 +102,7 @@ ORDER BY LastModifiedDate DESC
 **Test Coverage:** 28/28 passing
 
 **Files Deployed:**
+
 - `CandidatesInContractingController.cls`
 - `CandidatesInContractingController.cls-meta.xml`
 - `CandidatesInContractingControllerTest.cls`
@@ -112,7 +123,7 @@ ORDER BY LastModifiedDate DESC
 #### Wire Adapters Needed:
 
 ```javascript
-@wire(getALCDataForSalesManager, { 
+@wire(getALCDataForSalesManager, {
     salesManagerFilter: '$selectedSalesManager'
 })
 wiredALCData(result) { ... }
@@ -130,6 +141,7 @@ wiredSalesManagers({ error, data }) { ... }
 #### Key Implementation Details:
 
 **1. localStorage for Filter Persistence:**
+
 - Key: `smContractingKanban_salesManagerFilter`
 - Save on filter change
 - Load on component init
@@ -138,12 +150,14 @@ wiredSalesManagers({ error, data }) { ... }
   - If false → default to current user's name
 
 **2. Sales Manager Dropdown:**
+
 - Only visible if `canViewAllSalesManagers` returns true
 - Dropdown options from `getSalesManagerOptions`
 - Selected value controls `selectedSalesManager` property
 - On change: save to localStorage, refresh data
 
 **3. UI Simplifications:**
+
 ```javascript
 // REMOVE from original component:
 - Record type tabs (Broker, Career, NRF, etc.)
@@ -162,6 +176,7 @@ wiredSalesManagers({ error, data }) { ... }
 Display same active workflow stages as original component, but filtered to Career record type only. The `getALCDataForSalesManager` method returns stage configs with Career stages pre-filtered.
 
 **5. Component Metadata (.js-meta.xml):**
+
 ```xml
 <targets>
     <target>lightning__RecordPage</target>
@@ -177,11 +192,11 @@ Display same active workflow stages as original component, but filtered to Caree
 ### Method Signatures for LWC Import:
 
 ```javascript
-import getALCDataForSalesManager from '@salesforce/apex/CandidatesInContractingController.getALCDataForSalesManager';
-import getCurrentUserSalesManagerName from '@salesforce/apex/CandidatesInContractingController.getCurrentUserSalesManagerName';
-import getSalesManagerOptions from '@salesforce/apex/CandidatesInContractingController.getSalesManagerOptions';
-import canViewAllSalesManagers from '@salesforce/apex/CandidatesInContractingController.canViewAllSalesManagers';
-import updateCandidateStage from '@salesforce/apex/CandidatesInContractingController.updateCandidateStage'; // Existing method for drag-and-drop
+import getALCDataForSalesManager from "@salesforce/apex/CandidatesInContractingController.getALCDataForSalesManager";
+import getCurrentUserSalesManagerName from "@salesforce/apex/CandidatesInContractingController.getCurrentUserSalesManagerName";
+import getSalesManagerOptions from "@salesforce/apex/CandidatesInContractingController.getSalesManagerOptions";
+import canViewAllSalesManagers from "@salesforce/apex/CandidatesInContractingController.canViewAllSalesManagers";
+import updateCandidateStage from "@salesforce/apex/CandidatesInContractingController.updateCandidateStage"; // Existing method for drag-and-drop
 ```
 
 ### ALCDataResponse Structure:
@@ -228,18 +243,22 @@ import updateCandidateStage from '@salesforce/apex/CandidatesInContractingContro
 ## Important Notes ⚠️
 
 ### localStorage Key Format:
+
 **Key:** `smContractingKanban_salesManagerFilter`  
 **Why:** Matches existing pattern (like `agencyFilter` in original component)
 
 ### Default Behavior for Directors/Admins:
+
 - **canViewAllSalesManagers = true:** Default to "All Sales Managers"
 - **canViewAllSalesManagers = false:** Default to current user's name
 - **Reason:** Directors need oversight view by default, Sales Managers see only their data
 
 ### Stage Columns:
+
 The original component displays stages from `ALC_Stage_Config__mdt` where `Is_Active__c = true`. The new method already filters to Career record type stages, so no additional filtering needed in LWC.
 
 ### Drag-and-Drop:
+
 Use existing `updateCandidateStage(alcId, newStage)` method - it works for all record types including Career.
 
 ---
@@ -247,6 +266,7 @@ Use existing `updateCandidateStage(alcId, newStage)` method - it works for all r
 ## Testing Checklist for Frontend
 
 ### Jest Unit Tests (Task #009):
+
 - [ ] Component renders with Career records only
 - [ ] localStorage saves filter preference
 - [ ] localStorage loads filter preference on init
@@ -258,6 +278,7 @@ Use existing `updateCandidateStage(alcId, newStage)` method - it works for all r
 - [ ] Loading spinner shows during data fetch
 
 ### Integration Tests - ProdTest Sandbox (Task #010):
+
 - [ ] Deploy to `choujifan90@gmail.com.prodtest`
 - [ ] Test as Sales Manager user (profile without "Director")
   - [ ] Should see only their Career candidates
@@ -276,10 +297,12 @@ Use existing `updateCandidateStage(alcId, newStage)` method - it works for all r
 ## Files Modified
 
 ### Apex:
+
 - ✅ `force-app/main/default/classes/CandidatesInContractingController.cls`
 - ✅ `force-app/main/default/classes/CandidatesInContractingControllerTest.cls`
 
 ### LWC (To Be Created by Cole's Agent):
+
 - [ ] `force-app/main/default/lwc/salesManagerContractingKanban/salesManagerContractingKanban.js`
 - [ ] `force-app/main/default/lwc/salesManagerContractingKanban/salesManagerContractingKanban.html`
 - [ ] `force-app/main/default/lwc/salesManagerContractingKanban/salesManagerContractingKanban.css`
@@ -291,13 +314,12 @@ Use existing `updateCandidateStage(alcId, newStage)` method - it works for all r
 ## Reference Components
 
 ### For Pattern Reference:
+
 1. **candidatesInContracting** - Source component to clone
    - Path: `force-app/main/default/lwc/candidatesInContracting/`
    - Has: Record type tabs, agency filter, drag-and-drop
-   
 2. **portalHeaderNew** - Dark mode publisher pattern
    - Shows how to use Lightning Message Service
-   
 3. **recruitingDirectorDashboard** - Sales Manager dropdown pattern
    - Shows how to implement manager filter dropdown
 
@@ -306,6 +328,7 @@ Use existing `updateCandidateStage(alcId, newStage)` method - it works for all r
 ## Questions or Issues?
 
 If you encounter any issues with:
+
 - **Apex methods:** Review this handoff document or test class examples
 - **Data structure:** See "ALCDataResponse Structure" section
 - **Profile detection:** Test `canViewAllSalesManagers` in browser console
@@ -318,6 +341,7 @@ If you encounter any issues with:
 ## Success Criteria ✅
 
 Frontend implementation is complete when:
+
 1. ✅ Component cloned from `candidatesInContracting`
 2. ✅ Wired to all 4 new Apex methods
 3. ✅ localStorage implemented with correct key

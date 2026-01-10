@@ -3,15 +3,8 @@
   "name": "LinkedIn to Salesforce - Capstone Recruiter (Edge)",
   "version": "2.0.0",
   "description": "Import LinkedIn profiles as candidates into Salesforce Recruiter Portal (Microsoft Edge)",
-  "permissions": [
-    "activeTab",
-    "storage",
-    "identity",
-    "scripting"
-  ],
-  "host_permissions": [
-    "<all_urls>"
-  ],
+  "permissions": ["activeTab", "storage", "identity", "scripting"],
+  "host_permissions": ["<all_urls>"],
   "action": {
     "default_popup": "popup.html",
     "default_icon": {

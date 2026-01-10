@@ -1,1183 +1,1570 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Module 5: LinkedIn Integration - Recruiter Training</title>
     <style>
-        :root {
-            --primary: #0176d3;
-            --primary-dark: #014486;
-            --primary-light: #e0f2fe;
-            --success: #2e844a;
-            --success-light: #dcfce7;
-            --warning: #fe9339;
-            --warning-light: #fef3c7;
-            --linkedin: #0077b5;
-            --linkedin-dark: #005885;
-            --gray-100: #f3f3f3;
-            --gray-200: #e5e5e5;
-            --gray-300: #d1d5db;
-            --gray-500: #6b7280;
-            --gray-700: #444;
-            --gray-900: #181818;
-        }
-        
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        
-        body {
-            font-family: 'Salesforce Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: var(--gray-100);
-            min-height: 100vh;
-            display: flex;
-        }
-        
-        .sidebar {
-            width: 280px;
-            background: white;
-            border-right: 1px solid var(--gray-200);
-            padding: 1.5rem;
-            position: fixed;
-            height: 100vh;
-            overflow-y: auto;
-        }
-        
-        .sidebar-header {
-            padding-bottom: 1rem;
-            border-bottom: 1px solid var(--gray-200);
-            margin-bottom: 1rem;
-        }
-        
-        .sidebar-header a {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            color: var(--primary);
-            text-decoration: none;
-            font-size: 0.9rem;
-            margin-bottom: 0.5rem;
-        }
-        
-        .sidebar-header a:hover { text-decoration: underline; }
-        .sidebar-header h2 { font-size: 1.1rem; color: var(--gray-900); }
-        
-        .sidebar-header .module-badge {
-            display: inline-block;
-            background: #e0f2fe;
-            color: var(--linkedin);
-            padding: 0.2rem 0.6rem;
-            border-radius: 10px;
-            font-size: 0.75rem;
-            font-weight: 600;
-            margin-top: 0.5rem;
-        }
-        
-        .steps-list { list-style: none; }
-        
-        .step-item {
-            padding: 0.75rem;
-            border-radius: 8px;
-            margin-bottom: 0.5rem;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-            transition: all 0.2s;
-        }
-        
-        .step-item:hover { background: var(--gray-100); }
-        .step-item.active { background: #e0f2fe; }
-        .step-item.completed { opacity: 0.7; }
-        
-        .step-number {
-            width: 28px;
-            height: 28px;
-            border-radius: 50%;
-            background: var(--gray-200);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 0.85rem;
-            font-weight: 600;
-            color: var(--gray-500);
-            flex-shrink: 0;
-        }
-        
-        .step-item.active .step-number { background: var(--linkedin); color: white; }
-        .step-item.completed .step-number { background: var(--success); color: white; }
-        .step-item.completed .step-number::before { content: "✓"; }
-        
-        .step-info { flex-grow: 1; }
-        .step-title { font-size: 0.9rem; color: var(--gray-900); font-weight: 500; }
-        .step-duration { font-size: 0.75rem; color: var(--gray-500); }
-        
-        .main-content { flex-grow: 1; margin-left: 280px; padding: 2rem; }
-        .step-content { max-width: 900px; margin: 0 auto; }
-        .step-header { margin-bottom: 2rem; }
-        
-        .step-header .step-badge {
-            display: inline-block;
-            background: var(--linkedin);
-            color: white;
-            padding: 0.3rem 1rem;
-            border-radius: 20px;
-            font-size: 0.85rem;
-            font-weight: 600;
-            margin-bottom: 0.75rem;
-        }
-        
-        .step-header h1 { font-size: 2rem; color: var(--gray-900); margin-bottom: 0.5rem; }
-        .step-header p { font-size: 1.1rem; color: var(--gray-500); }
-        
-        .content-card {
-            background: white;
-            border-radius: 12px;
-            padding: 2rem;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
-            margin-bottom: 1.5rem;
-        }
-        
-        .content-card h2 { font-size: 1.3rem; color: var(--gray-900); margin-bottom: 1rem; }
-        .content-card p { color: var(--gray-700); line-height: 1.7; margin-bottom: 1rem; }
-        .content-card ul, .content-card ol { margin-left: 1.5rem; margin-bottom: 1rem; color: var(--gray-700); line-height: 1.8; }
-        
-        .screenshot-placeholder {
-            background: linear-gradient(135deg, var(--gray-100), var(--gray-200));
-            border: 2px dashed var(--gray-300);
-            border-radius: 8px;
-            padding: 3rem;
-            text-align: center;
-            margin: 1.5rem 0;
-        }
-        
-        .screenshot-placeholder .icon { font-size: 3rem; margin-bottom: 0.5rem; }
-        .screenshot-placeholder .label { color: var(--gray-500); font-style: italic; }
-        
-        .info-box {
-            background: var(--primary-light);
-            border-left: 4px solid var(--primary);
-            padding: 1rem 1.25rem;
-            border-radius: 0 8px 8px 0;
-            margin: 1.5rem 0;
-        }
-        
-        .info-box.tip { background: #ecfdf5; border-color: var(--success); }
-        .info-box.warning { background: var(--warning-light); border-color: var(--warning); }
-        .info-box strong { display: block; margin-bottom: 0.25rem; color: var(--gray-900); }
-        
-        .data-table { width: 100%; border-collapse: collapse; margin: 1rem 0; }
-        .data-table th, .data-table td { padding: 0.75rem; text-align: left; border-bottom: 1px solid var(--gray-200); }
-        .data-table th { background: var(--gray-100); font-weight: 600; color: var(--gray-700); }
-        
-        .step-navigation {
-            display: flex;
-            justify-content: space-between;
-            margin-top: 2rem;
-            padding-top: 2rem;
-            border-top: 1px solid var(--gray-200);
-        }
-        
-        .nav-btn {
-            padding: 0.75rem 1.5rem;
-            border-radius: 8px;
-            font-weight: 600;
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-            cursor: pointer;
-            border: none;
-            font-size: 1rem;
-            transition: all 0.3s;
-            text-decoration: none;
-        }
-        
-        .nav-btn.prev { background: var(--gray-200); color: var(--gray-700); }
-        .nav-btn.prev:hover { background: var(--gray-300); }
-        .nav-btn.next { background: var(--linkedin); color: white; }
-        .nav-btn.next:hover { background: var(--linkedin-dark); }
-        .nav-btn.complete { background: var(--success); color: white; }
-        .nav-btn:disabled { opacity: 0.5; cursor: not-allowed; }
-        
-        .progress-indicator {
-            background: var(--gray-200);
-            height: 4px;
-            position: fixed;
-            top: 0;
-            left: 280px;
-            right: 0;
-            z-index: 100;
-        }
-        
-        .progress-fill { height: 100%; background: var(--linkedin); transition: width 0.3s; }
-        
-        .browser-tabs {
-            display: flex;
-            gap: 0;
-            margin: 1.5rem 0;
-        }
-        
-        .browser-tab {
-            padding: 1rem 1.5rem;
-            background: var(--gray-200);
-            border: none;
-            cursor: pointer;
-            font-weight: 500;
-            font-size: 0.95rem;
-            transition: all 0.2s;
-        }
-        
-        .browser-tab:first-child { border-radius: 8px 0 0 8px; }
-        .browser-tab:last-child { border-radius: 0 8px 8px 0; }
-        .browser-tab.active { background: var(--linkedin); color: white; }
-        .browser-tab:hover:not(.active) { background: var(--gray-300); }
-        
-        .browser-content { display: none; }
-        .browser-content.active { display: block; }
-        
-        .feature-list {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 1rem;
-            margin: 1.5rem 0;
-        }
-        
-        .feature-item {
-            display: flex;
-            gap: 1rem;
-            padding: 1rem;
-            background: var(--gray-100);
-            border-radius: 8px;
-            text-decoration: none;
-        }
-        
-        .feature-icon {
-            width: 40px;
-            height: 40px;
-            background: var(--linkedin);
-            border-radius: 8px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.25rem;
-            flex-shrink: 0;
-        }
-        
-        .feature-text h4 { font-size: 0.95rem; color: var(--gray-900); margin-bottom: 0.25rem; }
-        .feature-text p { font-size: 0.85rem; color: var(--gray-500); margin: 0; }
-        
-        .numbered-steps {
-            counter-reset: step-counter;
-        }
-        
-        .numbered-step {
-            counter-increment: step-counter;
-            display: flex;
-            gap: 1rem;
-            padding: 1rem;
-            background: var(--gray-100);
-            border-radius: 8px;
-            margin-bottom: 1rem;
-        }
-        
-        .numbered-step::before {
-            content: counter(step-counter);
-            background: var(--linkedin);
-            color: white;
-            width: 28px;
-            height: 28px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 600;
-            flex-shrink: 0;
-        }
-        
-        .step-page { display: none; }
-        .step-page.active { display: block; }
-        
-        /* Feedback Section Styles */
-        .feedback-card {
-            background: white;
-            border-radius: 12px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
-            overflow: hidden;
-            margin-top: 1.5rem;
-        }
-        
-        .feedback-header {
-            background: linear-gradient(135deg, #8b5cf6, #6d28d9);
-            padding: 1.25rem;
-            text-align: center;
-            color: white;
-        }
-        
-        .feedback-header h3 {
-            font-size: 1.25rem;
-            margin-bottom: 0.25rem;
-        }
-        
-        .feedback-header p {
-            opacity: 0.9;
-            font-size: 0.9rem;
-            margin: 0;
-        }
-        
-        .feedback-body {
-            padding: 1.5rem;
-        }
-        
+      :root {
+        --primary: #0176d3;
+        --primary-dark: #014486;
+        --primary-light: #e0f2fe;
+        --success: #2e844a;
+        --success-light: #dcfce7;
+        --warning: #fe9339;
+        --warning-light: #fef3c7;
+        --linkedin: #0077b5;
+        --linkedin-dark: #005885;
+        --gray-100: #f3f3f3;
+        --gray-200: #e5e5e5;
+        --gray-300: #d1d5db;
+        --gray-500: #6b7280;
+        --gray-700: #444;
+        --gray-900: #181818;
+      }
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family:
+          "Salesforce Sans",
+          -apple-system,
+          BlinkMacSystemFont,
+          "Segoe UI",
+          Roboto,
+          sans-serif;
+        background: var(--gray-100);
+        min-height: 100vh;
+        display: flex;
+      }
+
+      .sidebar {
+        width: 280px;
+        background: white;
+        border-right: 1px solid var(--gray-200);
+        padding: 1.5rem;
+        position: fixed;
+        height: 100vh;
+        overflow-y: auto;
+      }
+
+      .sidebar-header {
+        padding-bottom: 1rem;
+        border-bottom: 1px solid var(--gray-200);
+        margin-bottom: 1rem;
+      }
+
+      .sidebar-header a {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        color: var(--primary);
+        text-decoration: none;
+        font-size: 0.9rem;
+        margin-bottom: 0.5rem;
+      }
+
+      .sidebar-header a:hover {
+        text-decoration: underline;
+      }
+      .sidebar-header h2 {
+        font-size: 1.1rem;
+        color: var(--gray-900);
+      }
+
+      .sidebar-header .module-badge {
+        display: inline-block;
+        background: #e0f2fe;
+        color: var(--linkedin);
+        padding: 0.2rem 0.6rem;
+        border-radius: 10px;
+        font-size: 0.75rem;
+        font-weight: 600;
+        margin-top: 0.5rem;
+      }
+
+      .steps-list {
+        list-style: none;
+      }
+
+      .step-item {
+        padding: 0.75rem;
+        border-radius: 8px;
+        margin-bottom: 0.5rem;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        transition: all 0.2s;
+      }
+
+      .step-item:hover {
+        background: var(--gray-100);
+      }
+      .step-item.active {
+        background: #e0f2fe;
+      }
+      .step-item.completed {
+        opacity: 0.7;
+      }
+
+      .step-number {
+        width: 28px;
+        height: 28px;
+        border-radius: 50%;
+        background: var(--gray-200);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.85rem;
+        font-weight: 600;
+        color: var(--gray-500);
+        flex-shrink: 0;
+      }
+
+      .step-item.active .step-number {
+        background: var(--linkedin);
+        color: white;
+      }
+      .step-item.completed .step-number {
+        background: var(--success);
+        color: white;
+      }
+      .step-item.completed .step-number::before {
+        content: "✓";
+      }
+
+      .step-info {
+        flex-grow: 1;
+      }
+      .step-title {
+        font-size: 0.9rem;
+        color: var(--gray-900);
+        font-weight: 500;
+      }
+      .step-duration {
+        font-size: 0.75rem;
+        color: var(--gray-500);
+      }
+
+      .main-content {
+        flex-grow: 1;
+        margin-left: 280px;
+        padding: 2rem;
+      }
+      .step-content {
+        max-width: 900px;
+        margin: 0 auto;
+      }
+      .step-header {
+        margin-bottom: 2rem;
+      }
+
+      .step-header .step-badge {
+        display: inline-block;
+        background: var(--linkedin);
+        color: white;
+        padding: 0.3rem 1rem;
+        border-radius: 20px;
+        font-size: 0.85rem;
+        font-weight: 600;
+        margin-bottom: 0.75rem;
+      }
+
+      .step-header h1 {
+        font-size: 2rem;
+        color: var(--gray-900);
+        margin-bottom: 0.5rem;
+      }
+      .step-header p {
+        font-size: 1.1rem;
+        color: var(--gray-500);
+      }
+
+      .content-card {
+        background: white;
+        border-radius: 12px;
+        padding: 2rem;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+        margin-bottom: 1.5rem;
+      }
+
+      .content-card h2 {
+        font-size: 1.3rem;
+        color: var(--gray-900);
+        margin-bottom: 1rem;
+      }
+      .content-card p {
+        color: var(--gray-700);
+        line-height: 1.7;
+        margin-bottom: 1rem;
+      }
+      .content-card ul,
+      .content-card ol {
+        margin-left: 1.5rem;
+        margin-bottom: 1rem;
+        color: var(--gray-700);
+        line-height: 1.8;
+      }
+
+      .screenshot-placeholder {
+        background: linear-gradient(135deg, var(--gray-100), var(--gray-200));
+        border: 2px dashed var(--gray-300);
+        border-radius: 8px;
+        padding: 3rem;
+        text-align: center;
+        margin: 1.5rem 0;
+      }
+
+      .screenshot-placeholder .icon {
+        font-size: 3rem;
+        margin-bottom: 0.5rem;
+      }
+      .screenshot-placeholder .label {
+        color: var(--gray-500);
+        font-style: italic;
+      }
+
+      .info-box {
+        background: var(--primary-light);
+        border-left: 4px solid var(--primary);
+        padding: 1rem 1.25rem;
+        border-radius: 0 8px 8px 0;
+        margin: 1.5rem 0;
+      }
+
+      .info-box.tip {
+        background: #ecfdf5;
+        border-color: var(--success);
+      }
+      .info-box.warning {
+        background: var(--warning-light);
+        border-color: var(--warning);
+      }
+      .info-box strong {
+        display: block;
+        margin-bottom: 0.25rem;
+        color: var(--gray-900);
+      }
+
+      .data-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 1rem 0;
+      }
+      .data-table th,
+      .data-table td {
+        padding: 0.75rem;
+        text-align: left;
+        border-bottom: 1px solid var(--gray-200);
+      }
+      .data-table th {
+        background: var(--gray-100);
+        font-weight: 600;
+        color: var(--gray-700);
+      }
+
+      .step-navigation {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 2rem;
+        padding-top: 2rem;
+        border-top: 1px solid var(--gray-200);
+      }
+
+      .nav-btn {
+        padding: 0.75rem 1.5rem;
+        border-radius: 8px;
+        font-weight: 600;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        cursor: pointer;
+        border: none;
+        font-size: 1rem;
+        transition: all 0.3s;
+        text-decoration: none;
+      }
+
+      .nav-btn.prev {
+        background: var(--gray-200);
+        color: var(--gray-700);
+      }
+      .nav-btn.prev:hover {
+        background: var(--gray-300);
+      }
+      .nav-btn.next {
+        background: var(--linkedin);
+        color: white;
+      }
+      .nav-btn.next:hover {
+        background: var(--linkedin-dark);
+      }
+      .nav-btn.complete {
+        background: var(--success);
+        color: white;
+      }
+      .nav-btn:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+      }
+
+      .progress-indicator {
+        background: var(--gray-200);
+        height: 4px;
+        position: fixed;
+        top: 0;
+        left: 280px;
+        right: 0;
+        z-index: 100;
+      }
+
+      .progress-fill {
+        height: 100%;
+        background: var(--linkedin);
+        transition: width 0.3s;
+      }
+
+      .browser-tabs {
+        display: flex;
+        gap: 0;
+        margin: 1.5rem 0;
+      }
+
+      .browser-tab {
+        padding: 1rem 1.5rem;
+        background: var(--gray-200);
+        border: none;
+        cursor: pointer;
+        font-weight: 500;
+        font-size: 0.95rem;
+        transition: all 0.2s;
+      }
+
+      .browser-tab:first-child {
+        border-radius: 8px 0 0 8px;
+      }
+      .browser-tab:last-child {
+        border-radius: 0 8px 8px 0;
+      }
+      .browser-tab.active {
+        background: var(--linkedin);
+        color: white;
+      }
+      .browser-tab:hover:not(.active) {
+        background: var(--gray-300);
+      }
+
+      .browser-content {
+        display: none;
+      }
+      .browser-content.active {
+        display: block;
+      }
+
+      .feature-list {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 1rem;
+        margin: 1.5rem 0;
+      }
+
+      .feature-item {
+        display: flex;
+        gap: 1rem;
+        padding: 1rem;
+        background: var(--gray-100);
+        border-radius: 8px;
+        text-decoration: none;
+      }
+
+      .feature-icon {
+        width: 40px;
+        height: 40px;
+        background: var(--linkedin);
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.25rem;
+        flex-shrink: 0;
+      }
+
+      .feature-text h4 {
+        font-size: 0.95rem;
+        color: var(--gray-900);
+        margin-bottom: 0.25rem;
+      }
+      .feature-text p {
+        font-size: 0.85rem;
+        color: var(--gray-500);
+        margin: 0;
+      }
+
+      .numbered-steps {
+        counter-reset: step-counter;
+      }
+
+      .numbered-step {
+        counter-increment: step-counter;
+        display: flex;
+        gap: 1rem;
+        padding: 1rem;
+        background: var(--gray-100);
+        border-radius: 8px;
+        margin-bottom: 1rem;
+      }
+
+      .numbered-step::before {
+        content: counter(step-counter);
+        background: var(--linkedin);
+        color: white;
+        width: 28px;
+        height: 28px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 600;
+        flex-shrink: 0;
+      }
+
+      .step-page {
+        display: none;
+      }
+      .step-page.active {
+        display: block;
+      }
+
+      /* Feedback Section Styles */
+      .feedback-card {
+        background: white;
+        border-radius: 12px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+        overflow: hidden;
+        margin-top: 1.5rem;
+      }
+
+      .feedback-header {
+        background: linear-gradient(135deg, #8b5cf6, #6d28d9);
+        padding: 1.25rem;
+        text-align: center;
+        color: white;
+      }
+
+      .feedback-header h3 {
+        font-size: 1.25rem;
+        margin-bottom: 0.25rem;
+      }
+
+      .feedback-header p {
+        opacity: 0.9;
+        font-size: 0.9rem;
+        margin: 0;
+      }
+
+      .feedback-body {
+        padding: 1.5rem;
+      }
+
+      .feedback-type-buttons {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 1rem;
+        margin-bottom: 1rem;
+      }
+
+      @media (max-width: 600px) {
         .feedback-type-buttons {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 1rem;
-            margin-bottom: 1rem;
+          grid-template-columns: 1fr;
         }
-        
-        @media (max-width: 600px) {
-            .feedback-type-buttons {
-                grid-template-columns: 1fr;
-            }
-        }
-        
-        .type-btn {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            padding: 1.25rem 1rem;
-            border: 2px solid var(--gray-200);
-            border-radius: 10px;
-            background: white;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-        
-        .type-btn:hover {
-            border-color: var(--primary);
-            background: var(--primary-light);
-        }
-        
-        .type-btn.selected {
-            border-color: #8b5cf6;
-            background: #f3e8ff;
-        }
-        
-        .type-btn .type-icon {
-            font-size: 2rem;
-            margin-bottom: 0.5rem;
-        }
-        
-        .type-btn .type-label {
-            font-weight: 600;
-            color: var(--gray-900);
-            font-size: 0.95rem;
-        }
-        
-        .type-btn .type-desc {
-            font-size: 0.8rem;
-            color: var(--gray-500);
-            margin-top: 0.25rem;
-        }
-        
-        .feedback-form {
-            display: none;
-            margin-top: 1rem;
-            padding-top: 1rem;
-            border-top: 1px solid var(--gray-200);
-        }
-        
-        .feedback-form.visible {
-            display: block;
-        }
-        
-        .form-group {
-            margin-bottom: 1rem;
-        }
-        
-        .form-group label {
-            display: block;
-            font-weight: 600;
-            color: var(--gray-700);
-            margin-bottom: 0.5rem;
-            font-size: 0.9rem;
-        }
-        
-        .form-group input,
-        .form-group textarea {
-            width: 100%;
-            padding: 0.75rem;
-            border: 1px solid var(--gray-300);
-            border-radius: 8px;
-            font-size: 1rem;
-            font-family: inherit;
-            transition: border-color 0.2s, box-shadow 0.2s;
-        }
-        
-        .form-group input:focus,
-        .form-group textarea:focus {
-            outline: none;
-            border-color: #8b5cf6;
-            box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.15);
-        }
-        
-        .form-group textarea {
-            resize: vertical;
-            min-height: 100px;
-        }
-        
-        .selected-type-badge {
-            display: inline-block;
-            background: #8b5cf6;
-            color: white;
-            padding: 0.35rem 0.75rem;
-            border-radius: 20px;
-            font-size: 0.85rem;
-            font-weight: 500;
-            margin-bottom: 1rem;
-        }
-        
-        .btn-submit-feedback {
-            width: 100%;
-            background: linear-gradient(135deg, #8b5cf6, #6d28d9);
-            color: white;
-            padding: 0.875rem 1.5rem;
-            border: none;
-            border-radius: 8px;
-            font-weight: 600;
-            font-size: 1rem;
-            cursor: pointer;
-            transition: transform 0.2s, box-shadow 0.2s;
-        }
-        
-        .btn-submit-feedback:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(139, 92, 246, 0.4);
-        }
-        
-        .btn-submit-feedback:disabled {
-            opacity: 0.7;
-            cursor: not-allowed;
-            transform: none;
-        }
-        
-        .feedback-message {
-            margin-top: 1rem;
-            padding: 1rem;
-            border-radius: 8px;
-            text-align: center;
-            font-weight: 500;
-        }
-        
-        .feedback-message.success {
-            background: var(--success-light);
-            color: var(--success);
-        }
-        
-        .feedback-message.error {
-            background: #fee2e2;
-            color: #dc2626;
-        }
+      }
+
+      .type-btn {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 1.25rem 1rem;
+        border: 2px solid var(--gray-200);
+        border-radius: 10px;
+        background: white;
+        cursor: pointer;
+        transition: all 0.2s;
+      }
+
+      .type-btn:hover {
+        border-color: var(--primary);
+        background: var(--primary-light);
+      }
+
+      .type-btn.selected {
+        border-color: #8b5cf6;
+        background: #f3e8ff;
+      }
+
+      .type-btn .type-icon {
+        font-size: 2rem;
+        margin-bottom: 0.5rem;
+      }
+
+      .type-btn .type-label {
+        font-weight: 600;
+        color: var(--gray-900);
+        font-size: 0.95rem;
+      }
+
+      .type-btn .type-desc {
+        font-size: 0.8rem;
+        color: var(--gray-500);
+        margin-top: 0.25rem;
+      }
+
+      .feedback-form {
+        display: none;
+        margin-top: 1rem;
+        padding-top: 1rem;
+        border-top: 1px solid var(--gray-200);
+      }
+
+      .feedback-form.visible {
+        display: block;
+      }
+
+      .form-group {
+        margin-bottom: 1rem;
+      }
+
+      .form-group label {
+        display: block;
+        font-weight: 600;
+        color: var(--gray-700);
+        margin-bottom: 0.5rem;
+        font-size: 0.9rem;
+      }
+
+      .form-group input,
+      .form-group textarea {
+        width: 100%;
+        padding: 0.75rem;
+        border: 1px solid var(--gray-300);
+        border-radius: 8px;
+        font-size: 1rem;
+        font-family: inherit;
+        transition:
+          border-color 0.2s,
+          box-shadow 0.2s;
+      }
+
+      .form-group input:focus,
+      .form-group textarea:focus {
+        outline: none;
+        border-color: #8b5cf6;
+        box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.15);
+      }
+
+      .form-group textarea {
+        resize: vertical;
+        min-height: 100px;
+      }
+
+      .selected-type-badge {
+        display: inline-block;
+        background: #8b5cf6;
+        color: white;
+        padding: 0.35rem 0.75rem;
+        border-radius: 20px;
+        font-size: 0.85rem;
+        font-weight: 500;
+        margin-bottom: 1rem;
+      }
+
+      .btn-submit-feedback {
+        width: 100%;
+        background: linear-gradient(135deg, #8b5cf6, #6d28d9);
+        color: white;
+        padding: 0.875rem 1.5rem;
+        border: none;
+        border-radius: 8px;
+        font-weight: 600;
+        font-size: 1rem;
+        cursor: pointer;
+        transition:
+          transform 0.2s,
+          box-shadow 0.2s;
+      }
+
+      .btn-submit-feedback:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(139, 92, 246, 0.4);
+      }
+
+      .btn-submit-feedback:disabled {
+        opacity: 0.7;
+        cursor: not-allowed;
+        transform: none;
+      }
+
+      .feedback-message {
+        margin-top: 1rem;
+        padding: 1rem;
+        border-radius: 8px;
+        text-align: center;
+        font-weight: 500;
+      }
+
+      .feedback-message.success {
+        background: var(--success-light);
+        color: var(--success);
+      }
+
+      .feedback-message.error {
+        background: #fee2e2;
+        color: #dc2626;
+      }
     </style>
-</head>
-<body>
+  </head>
+  <body>
     <div class="progress-indicator">
-        <div class="progress-fill" id="progressFill" style="width: 0%"></div>
+      <div class="progress-fill" id="progressFill" style="width: 0%"></div>
     </div>
-    
+
     <aside class="sidebar">
-        <div class="sidebar-header">
-            <a href="recruiter-training.html">← Back to Training Program</a>
-            <h2>Module 5: LinkedIn Integration</h2>
-            <span class="module-badge">20-30 minutes</span>
-        </div>
-        
-        <ul class="steps-list" id="stepsList">
-            <li class="step-item active" data-step="1" onclick="goToStep(1)">
-                <span class="step-number">1</span>
-                <div class="step-info">
-                    <div class="step-title">Extension Overview</div>
-                    <div class="step-duration">3 min</div>
-                </div>
-            </li>
-            <li class="step-item" data-step="2" onclick="goToStep(2)">
-                <span class="step-number">2</span>
-                <div class="step-info">
-                    <div class="step-title">Installation</div>
-                    <div class="step-duration">5 min</div>
-                </div>
-            </li>
-            <li class="step-item" data-step="3" onclick="goToStep(3)">
-                <span class="step-number">3</span>
-                <div class="step-info">
-                    <div class="step-title">Configuration</div>
-                    <div class="step-duration">5 min</div>
-                </div>
-            </li>
-            <li class="step-item" data-step="4" onclick="goToStep(4)">
-                <span class="step-number">4</span>
-                <div class="step-info">
-                    <div class="step-title">Using the Extension</div>
-                    <div class="step-duration">7 min</div>
-                </div>
-            </li>
-            <li class="step-item" data-step="5" onclick="goToStep(5)">
-                <span class="step-number">5</span>
-                <div class="step-info">
-                    <div class="step-title">Data Mapping</div>
-                    <div class="step-duration">5 min</div>
-                </div>
-            </li>
-            <li class="step-item" data-step="6" onclick="goToStep(6)">
-                <span class="step-number">6</span>
-                <div class="step-info">
-                    <div class="step-title">Troubleshooting</div>
-                    <div class="step-duration">3 min</div>
-                </div>
-            </li>
-            <li class="step-item" data-step="7" onclick="goToStep(7)">
-                <span class="step-number">7</span>
-                <div class="step-info">
-                    <div class="step-title">Module Complete</div>
-                    <div class="step-duration">2 min</div>
-                </div>
-            </li>
-        </ul>
+      <div class="sidebar-header">
+        <a href="recruiter-training.html">← Back to Training Program</a>
+        <h2>Module 5: LinkedIn Integration</h2>
+        <span class="module-badge">20-30 minutes</span>
+      </div>
+
+      <ul class="steps-list" id="stepsList">
+        <li class="step-item active" data-step="1" onclick="goToStep(1)">
+          <span class="step-number">1</span>
+          <div class="step-info">
+            <div class="step-title">Extension Overview</div>
+            <div class="step-duration">3 min</div>
+          </div>
+        </li>
+        <li class="step-item" data-step="2" onclick="goToStep(2)">
+          <span class="step-number">2</span>
+          <div class="step-info">
+            <div class="step-title">Installation</div>
+            <div class="step-duration">5 min</div>
+          </div>
+        </li>
+        <li class="step-item" data-step="3" onclick="goToStep(3)">
+          <span class="step-number">3</span>
+          <div class="step-info">
+            <div class="step-title">Configuration</div>
+            <div class="step-duration">5 min</div>
+          </div>
+        </li>
+        <li class="step-item" data-step="4" onclick="goToStep(4)">
+          <span class="step-number">4</span>
+          <div class="step-info">
+            <div class="step-title">Using the Extension</div>
+            <div class="step-duration">7 min</div>
+          </div>
+        </li>
+        <li class="step-item" data-step="5" onclick="goToStep(5)">
+          <span class="step-number">5</span>
+          <div class="step-info">
+            <div class="step-title">Data Mapping</div>
+            <div class="step-duration">5 min</div>
+          </div>
+        </li>
+        <li class="step-item" data-step="6" onclick="goToStep(6)">
+          <span class="step-number">6</span>
+          <div class="step-info">
+            <div class="step-title">Troubleshooting</div>
+            <div class="step-duration">3 min</div>
+          </div>
+        </li>
+        <li class="step-item" data-step="7" onclick="goToStep(7)">
+          <span class="step-number">7</span>
+          <div class="step-info">
+            <div class="step-title">Module Complete</div>
+            <div class="step-duration">2 min</div>
+          </div>
+        </li>
+      </ul>
     </aside>
-    
+
     <main class="main-content">
-        <!-- Step 1: Extension Overview -->
-        <div class="step-page active" id="step1">
-            <div class="step-content">
-                <div class="step-header">
-                    <span class="step-badge">Step 1 of 7</span>
-                    <h1>Extension Overview</h1>
-                    <p>Introduction to the LinkedIn import extension</p>
-                </div>
-                
-                <div class="content-card">
-                    <h2>🔗 What is the LinkedIn Extension?</h2>
-                    <p>The LinkedIn Import Extension is a browser add-on that allows you to quickly import candidate information directly from LinkedIn profiles into the Recruiter Portal. It creates both a <strong>Contact</strong> record and a linked <strong>Candidate</strong> record in Salesforce.</p>
-                    
-                    <div class="info-box">
-                        <strong>🔘 Save to Salesforce Button</strong>
-                        When you visit a LinkedIn profile, a blue "Save to Salesforce" button appears below the person's profile photo. Click this button to open the extension popup and capture their information.
-                    </div>
-                    
-                    <h3>Key Benefits</h3>
-                    <div class="feature-list">
-                        <div class="feature-item">
-                            <div class="feature-icon">⚡</div>
-                            <div class="feature-text">
-                                <h4>Save Time</h4>
-                                <p>Import candidate data with one click instead of manual entry</p>
-                            </div>
-                        </div>
-                        <div class="feature-item">
-                            <div class="feature-icon">✓</div>
-                            <div class="feature-text">
-                                <h4>Reduce Errors</h4>
-                                <p>Automatic data capture prevents typos and mistakes</p>
-                            </div>
-                        </div>
-                        <div class="feature-item">
-                            <div class="feature-icon">📧</div>
-                            <div class="feature-text">
-                                <h4>Contact Info Capture</h4>
-                                <p>Automatically captures email, phone, and birthday from Contact Info</p>
-                            </div>
-                        </div>
-                        <div class="feature-item">
-                            <div class="feature-icon">🔗</div>
-                            <div class="feature-text">
-                                <h4>Profile Link</h4>
-                                <p>Preserves LinkedIn URL on the Contact record</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="info-box">
-                    <strong>ℹ️ Browser Support</strong>
-                    The extension works with Microsoft Edge and Google Chrome. Choose the browser you use daily for recruiting.
-                </div>
-                
-                <div class="step-navigation">
-                    <button class="nav-btn prev" disabled>← Previous</button>
-                    <button class="nav-btn next" onclick="goToStep(2)">Next: Installation →</button>
-                </div>
+      <!-- Step 1: Extension Overview -->
+      <div class="step-page active" id="step1">
+        <div class="step-content">
+          <div class="step-header">
+            <span class="step-badge">Step 1 of 7</span>
+            <h1>Extension Overview</h1>
+            <p>Introduction to the LinkedIn import extension</p>
+          </div>
+
+          <div class="content-card">
+            <h2>🔗 What is the LinkedIn Extension?</h2>
+            <p>
+              The LinkedIn Import Extension is a browser add-on that allows you
+              to quickly import candidate information directly from LinkedIn
+              profiles into the Recruiter Portal. It creates both a
+              <strong>Contact</strong> record and a linked
+              <strong>Candidate</strong> record in Salesforce.
+            </p>
+
+            <div class="info-box">
+              <strong>🔘 Save to Salesforce Button</strong>
+              When you visit a LinkedIn profile, a blue "Save to Salesforce"
+              button appears below the person's profile photo. Click this button
+              to open the extension popup and capture their information.
             </div>
-        </div>
-        
-        <!-- Step 2: Installation -->
-        <div class="step-page" id="step2">
-            <div class="step-content">
-                <div class="step-header">
-                    <span class="step-badge">Step 2 of 7</span>
-                    <h1>Installation</h1>
-                    <p>How to install the LinkedIn extension</p>
+
+            <h3>Key Benefits</h3>
+            <div class="feature-list">
+              <div class="feature-item">
+                <div class="feature-icon">⚡</div>
+                <div class="feature-text">
+                  <h4>Save Time</h4>
+                  <p>
+                    Import candidate data with one click instead of manual entry
+                  </p>
                 </div>
-                
-                <div class="content-card">
-                    <h2>📥 Installing the Extension</h2>
-                    <p>Select your browser below for installation instructions:</p>
-                    
-                    <div class="browser-tabs">
-                        <button class="browser-tab active" onclick="showBrowser('edge')">Microsoft Edge</button>
-                        <button class="browser-tab" onclick="showBrowser('chrome')">Google Chrome</button>
-                    </div>
-                    
-                    <div class="browser-content active" id="edge-content">
-                        <h3>Microsoft Edge Installation</h3>
-                        <div class="numbered-steps">
-                            <div class="numbered-step">
-                                <div>Open Microsoft Edge and go to <strong>edge://extensions</strong></div>
-                            </div>
-                            <div class="numbered-step">
-                                <div>Enable "Developer mode" toggle in the bottom left corner</div>
-                            </div>
-                            <div class="numbered-step">
-                                <div>Click "Load unpacked" button</div>
-                            </div>
-                            <div class="numbered-step">
-                                <div>Navigate to the extension folder provided by IT and select it</div>
-                            </div>
-                            <div class="numbered-step">
-                                <div>The extension icon should appear in your toolbar</div>
-                            </div>
-                        </div>
-                        
-                        <div style="text-align: center; margin: 1.5rem 0; padding: 1.5rem; background: var(--gray-100); border-radius: 8px;">
-                            <p style="margin-bottom: 0.75rem; color: var(--gray-700); font-weight: 500;">Extension Icon in Toolbar:</p>
-                            <img src="images/extension-icon.png" alt="LinkedIn to Salesforce Extension Icon" style="width: 48px; height: 48px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.15);">
-                            <p style="margin-top: 0.75rem; font-size: 0.85rem; color: var(--gray-500);">Look for this blue puzzle piece icon</p>
-                        </div>
-                    </div>
-                    
-                    <div class="browser-content" id="chrome-content">
-                        <h3>Google Chrome Installation</h3>
-                        <div class="numbered-steps">
-                            <div class="numbered-step">
-                                <div>Open Google Chrome and go to <strong>chrome://extensions</strong></div>
-                            </div>
-                            <div class="numbered-step">
-                                <div>Enable "Developer mode" toggle in the top right corner</div>
-                            </div>
-                            <div class="numbered-step">
-                                <div>Click "Load unpacked" button</div>
-                            </div>
-                            <div class="numbered-step">
-                                <div>Navigate to the extension folder provided by IT and select it</div>
-                            </div>
-                            <div class="numbered-step">
-                                <div>The extension icon should appear in your toolbar (you may need to pin it)</div>
-                            </div>
-                        </div>
-                        
-                        <div class="screenshot-placeholder">
-                            <div class="icon">📸</div>
-                            <div class="label">Screenshot: Chrome Extensions Page</div>
-                        </div>
-                    </div>
+              </div>
+              <div class="feature-item">
+                <div class="feature-icon">✓</div>
+                <div class="feature-text">
+                  <h4>Reduce Errors</h4>
+                  <p>Automatic data capture prevents typos and mistakes</p>
                 </div>
-                
-                <div class="info-box tip">
-                    <strong>💡 Pin the Extension</strong>
-                    After installation, pin the extension to your toolbar for easy access. Click the puzzle piece icon and select "Pin" next to the extension name.
+              </div>
+              <div class="feature-item">
+                <div class="feature-icon">📧</div>
+                <div class="feature-text">
+                  <h4>Contact Info Capture</h4>
+                  <p>
+                    Automatically captures email, phone, and birthday from
+                    Contact Info
+                  </p>
                 </div>
-                
-                <div class="step-navigation">
-                    <button class="nav-btn prev" onclick="goToStep(1)">← Previous</button>
-                    <button class="nav-btn next" onclick="goToStep(3)">Next: Configuration →</button>
+              </div>
+              <div class="feature-item">
+                <div class="feature-icon">🔗</div>
+                <div class="feature-text">
+                  <h4>Profile Link</h4>
+                  <p>Preserves LinkedIn URL on the Contact record</p>
                 </div>
+              </div>
             </div>
+          </div>
+
+          <div class="info-box">
+            <strong>ℹ️ Browser Support</strong>
+            The extension works with Microsoft Edge and Google Chrome. Choose
+            the browser you use daily for recruiting.
+          </div>
+
+          <div class="step-navigation">
+            <button class="nav-btn prev" disabled>← Previous</button>
+            <button class="nav-btn next" onclick="goToStep(2)">
+              Next: Installation →
+            </button>
+          </div>
         </div>
-        
-        <!-- Step 3: Configuration -->
-        <div class="step-page" id="step3">
-            <div class="step-content">
-                <div class="step-header">
-                    <span class="step-badge">Step 3 of 7</span>
-                    <h1>Configuration</h1>
-                    <p>Setting up the extension for first use</p>
-                </div>
-                
-                <div class="content-card">
-                    <h2>⚙️ Initial Configuration</h2>
-                    <p>Before using the extension, you need to configure your Salesforce connection:</p>
-                    
-                    <div class="numbered-steps">
-                        <div class="numbered-step">
-                            <div>Click the extension icon in your toolbar</div>
-                        </div>
-                        <div class="numbered-step">
-                            <div>Click "Settings" or the gear icon</div>
-                        </div>
-                        <div class="numbered-step">
-                            <div>Enter your Salesforce org URL (e.g., https://yourcompany.my.salesforce.com)</div>
-                        </div>
-                        <div class="numbered-step">
-                            <div>Click "Connect" to authenticate with Salesforce</div>
-                        </div>
-                        <div class="numbered-step">
-                            <div>Log in with your Salesforce credentials when prompted</div>
-                        </div>
-                        <div class="numbered-step">
-                            <div>Grant the extension permission to access your Salesforce data</div>
-                        </div>
-                    </div>
-                    
-                    <div class="screenshot-placeholder">
-                        <div class="icon">📸</div>
-                        <div class="label">Screenshot: Extension Settings Panel</div>
-                    </div>
-                </div>
-                
-                <div class="content-card">
-                    <h2>🔑 Configuration Settings</h2>
-                    <table class="data-table">
-                        <thead>
-                            <tr>
-                                <th>Setting</th>
-                                <th>Description</th>
-                                <th>Recommended Value</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td><strong>Salesforce URL</strong></td>
-                                <td>Your Salesforce org instance URL</td>
-                                <td>Get from IT or login URL</td>
-                            </tr>
-                            <tr>
-                                <td><strong>Default Source</strong></td>
-                                <td>Source value for imported candidates</td>
-                                <td>LinkedIn (auto-set)</td>
-                            </tr>
-                            <tr>
-                                <td><strong>Auto-open Record</strong></td>
-                                <td>Open candidate record after import</td>
-                                <td>Enabled</td>
-                            </tr>
-                            <tr>
-                                <td><strong>Duplicate Check</strong></td>
-                                <td>Check for existing records before import</td>
-                                <td>Enabled</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-                
-                <div class="info-box warning">
-                    <strong>⚠️ Stay Logged In</strong>
-                    For the extension to work, you must be logged into Salesforce in the same browser. Keep a Salesforce tab open.
-                </div>
-                
-                <div class="step-navigation">
-                    <button class="nav-btn prev" onclick="goToStep(2)">← Previous</button>
-                    <button class="nav-btn next" onclick="goToStep(4)">Next: Using the Extension →</button>
-                </div>
+      </div>
+
+      <!-- Step 2: Installation -->
+      <div class="step-page" id="step2">
+        <div class="step-content">
+          <div class="step-header">
+            <span class="step-badge">Step 2 of 7</span>
+            <h1>Installation</h1>
+            <p>How to install the LinkedIn extension</p>
+          </div>
+
+          <div class="content-card">
+            <h2>📥 Installing the Extension</h2>
+            <p>Select your browser below for installation instructions:</p>
+
+            <div class="browser-tabs">
+              <button class="browser-tab active" onclick="showBrowser('edge')">
+                Microsoft Edge
+              </button>
+              <button class="browser-tab" onclick="showBrowser('chrome')">
+                Google Chrome
+              </button>
             </div>
-        </div>
-        
-        <!-- Step 4: Using the Extension -->
-        <div class="step-page" id="step4">
-            <div class="step-content">
-                <div class="step-header">
-                    <span class="step-badge">Step 4 of 7</span>
-                    <h1>Using the Extension</h1>
-                    <p>How to import candidates from LinkedIn</p>
+
+            <div class="browser-content active" id="edge-content">
+              <h3>Microsoft Edge Installation</h3>
+              <div class="numbered-steps">
+                <div class="numbered-step">
+                  <div>
+                    Open Microsoft Edge and go to
+                    <strong>edge://extensions</strong>
+                  </div>
                 </div>
-                
-                <div class="content-card">
-                    <h2>📤 Importing a Candidate</h2>
-                    <p>Follow these steps to import a candidate from LinkedIn:</p>
-                    
-                    <div class="numbered-steps">
-                        <div class="numbered-step">
-                            <div>Navigate to the candidate's LinkedIn profile page</div>
-                        </div>
-                        <div class="numbered-step">
-                            <div>Click the blue <strong>"Save to Salesforce"</strong> button below their profile photo</div>
-                        </div>
-                        <div class="numbered-step">
-                            <div>Review the captured data in the popup window - verify name, email, phone, and birthday are correct</div>
-                        </div>
-                        <div class="numbered-step">
-                            <div>Make any necessary edits or additions to the fields</div>
-                        </div>
-                        <div class="numbered-step">
-                            <div>Click the <strong>"Create Candidate"</strong> button</div>
-                        </div>
-                        <div class="numbered-step">
-                            <div>A Contact and linked Candidate record will be created in Salesforce</div>
-                        </div>
-                    </div>
-                    
-                    <div class="info-box tip">
-                        <strong>💡 How It Works</strong>
-                        When you click the "Save to Salesforce" button, the extension automatically opens a popup displaying the candidate's profile information. From this popup, you can review the data and save the candidate directly to Salesforce.
-                    </div>
+                <div class="numbered-step">
+                  <div>
+                    Enable "Developer mode" toggle in the bottom left corner
+                  </div>
                 </div>
-                
-                <div class="content-card">
-                    <h2>✏️ Editing Before Import</h2>
-                    <p>The extension popup allows you to review and modify data before importing:</p>
-                    <ul>
-                        <li><strong>First Name / Last Name</strong> - Verify the name split is correct (designations like CFP®, MBA are automatically removed)</li>
-                        <li><strong>Email</strong> - Captured automatically if visible in Contact Info modal</li>
-                        <li><strong>Phone</strong> - Captured automatically from Contact Info (800 numbers are excluded)</li>
-                        <li><strong>Birthday</strong> - Captured automatically if the person has added it to their profile</li>
-                    </ul>
+                <div class="numbered-step">
+                  <div>Click "Load unpacked" button</div>
                 </div>
-                
-                <div class="info-box tip">
-                    <strong>💡 Success Message</strong>
-                    After a successful import, you'll see a green confirmation message. The Contact and Candidate records are now created in Salesforce.
+                <div class="numbered-step">
+                  <div>
+                    Navigate to the extension folder provided by IT and select
+                    it
+                  </div>
                 </div>
-                
-                <div class="info-box warning">
-                    <strong>⚠️ Duplicate Detection</strong>
-                    If a candidate with the same name already exists, you'll see an error message. Search for the existing record in Salesforce instead of creating a duplicate.
+                <div class="numbered-step">
+                  <div>The extension icon should appear in your toolbar</div>
                 </div>
-                
-                <div class="step-navigation">
-                    <button class="nav-btn prev" onclick="goToStep(3)">← Previous</button>
-                    <button class="nav-btn next" onclick="goToStep(5)">Next: Data Mapping →</button>
-                </div>
+              </div>
+
+              <div
+                style="
+                  text-align: center;
+                  margin: 1.5rem 0;
+                  padding: 1.5rem;
+                  background: var(--gray-100);
+                  border-radius: 8px;
+                "
+              >
+                <p
+                  style="
+                    margin-bottom: 0.75rem;
+                    color: var(--gray-700);
+                    font-weight: 500;
+                  "
+                >
+                  Extension Icon in Toolbar:
+                </p>
+                <img
+                  src="images/extension-icon.png"
+                  alt="LinkedIn to Salesforce Extension Icon"
+                  style="
+                    width: 48px;
+                    height: 48px;
+                    border-radius: 8px;
+                    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+                  "
+                />
+                <p
+                  style="
+                    margin-top: 0.75rem;
+                    font-size: 0.85rem;
+                    color: var(--gray-500);
+                  "
+                >
+                  Look for this blue puzzle piece icon
+                </p>
+              </div>
             </div>
-        </div>
-        
-        <!-- Step 5: Data Mapping -->
-        <div class="step-page" id="step5">
-            <div class="step-content">
-                <div class="step-header">
-                    <span class="step-badge">Step 5 of 7</span>
-                    <h1>Data Mapping</h1>
-                    <p>Understanding how LinkedIn data maps to Salesforce fields</p>
+
+            <div class="browser-content" id="chrome-content">
+              <h3>Google Chrome Installation</h3>
+              <div class="numbered-steps">
+                <div class="numbered-step">
+                  <div>
+                    Open Google Chrome and go to
+                    <strong>chrome://extensions</strong>
+                  </div>
                 </div>
-                
-                <div class="content-card">
-                    <h2>🔄 Field Mapping</h2>
-                    <p>The extension creates a <strong>Contact</strong> record first, then a linked <strong>Candidate</strong> record. Here's how data is mapped:</p>
-                    
-                    <h3>Contact Record Fields</h3>
-                    <table class="data-table">
-                        <thead>
-                            <tr>
-                                <th>LinkedIn Field</th>
-                                <th>Contact Field</th>
-                                <th>Notes</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>Full Name</td>
-                                <td>First Name, Last Name</td>
-                                <td>Split automatically, designations removed</td>
-                            </tr>
-                            <tr>
-                                <td>Email (Contact Info)</td>
-                                <td>Email</td>
-                                <td>From mailto: link in Contact Info modal</td>
-                            </tr>
-                            <tr>
-                                <td>Phone (Contact Info)</td>
-                                <td>Phone</td>
-                                <td>From Contact Info modal (800 numbers excluded)</td>
-                            </tr>
-                            <tr>
-                                <td>Birthday (Contact Info)</td>
-                                <td>Birthday</td>
-                                <td>If available in their profile</td>
-                            </tr>
-                            <tr>
-                                <td>Profile URL</td>
-                                <td>Website</td>
-                                <td>LinkedIn profile URL stored here</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                    
-                    <h3 style="margin-top: 1.5rem;">Candidate Record Fields</h3>
-                    <table class="data-table">
-                        <thead>
-                            <tr>
-                                <th>Field</th>
-                                <th>Value</th>
-                                <th>Notes</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>Contact</td>
-                                <td>Linked Contact</td>
-                                <td>Links to the Contact record created above</td>
-                            </tr>
-                            <tr>
-                                <td>First Name, Last Name</td>
-                                <td>From LinkedIn</td>
-                                <td>Same as Contact</td>
-                            </tr>
-                            <tr>
-                                <td>Personal Email</td>
-                                <td>Formula Field</td>
-                                <td>Automatically pulls from Contact.Email</td>
-                            </tr>
-                            <tr>
-                                <td>Mobile</td>
-                                <td>From Contact</td>
-                                <td>Displays Contact's Phone on Candidate page</td>
-                            </tr>
-                            <tr>
-                                <td>Website</td>
-                                <td>LinkedIn URL</td>
-                                <td>Profile URL for reference</td>
-                            </tr>
-                            <tr>
-                                <td>Status</td>
-                                <td>0-Prequal</td>
-                                <td>Auto-set for new candidates</td>
-                            </tr>
-                        </tbody>
-                    </table>
+                <div class="numbered-step">
+                  <div>
+                    Enable "Developer mode" toggle in the top right corner
+                  </div>
                 </div>
-                
-                <div class="content-card">
-                    <h2>📋 Single Source of Truth</h2>
-                    <p>The Contact record is the <strong>single source of truth</strong> for personal information:</p>
-                    <ul>
-                        <li><strong>Email</strong> - Stored on Contact, displayed on Candidate via formula field</li>
-                        <li><strong>Phone</strong> - Stored on Contact, displayed on Candidate record page</li>
-                        <li><strong>Birthday</strong> - Stored on Contact record</li>
-                    </ul>
-                    <p style="margin-top: 1rem;">If you need to update email or phone, update the <strong>Contact</strong> record and it will automatically reflect on the Candidate.</p>
+                <div class="numbered-step">
+                  <div>Click "Load unpacked" button</div>
                 </div>
-                
-                <div class="info-box">
-                    <strong>ℹ️ View Contact</strong>
-                    From any Candidate record, click "View Contact" to see the linked Contact with full details including email, phone, and birthday.
+                <div class="numbered-step">
+                  <div>
+                    Navigate to the extension folder provided by IT and select
+                    it
+                  </div>
                 </div>
-                
-                <div class="step-navigation">
-                    <button class="nav-btn prev" onclick="goToStep(4)">← Previous</button>
-                    <button class="nav-btn next" onclick="goToStep(6)">Next: Troubleshooting →</button>
+                <div class="numbered-step">
+                  <div>
+                    The extension icon should appear in your toolbar (you may
+                    need to pin it)
+                  </div>
                 </div>
+              </div>
+
+              <div class="screenshot-placeholder">
+                <div class="icon">📸</div>
+                <div class="label">Screenshot: Chrome Extensions Page</div>
+              </div>
             </div>
+          </div>
+
+          <div class="info-box tip">
+            <strong>💡 Pin the Extension</strong>
+            After installation, pin the extension to your toolbar for easy
+            access. Click the puzzle piece icon and select "Pin" next to the
+            extension name.
+          </div>
+
+          <div class="step-navigation">
+            <button class="nav-btn prev" onclick="goToStep(1)">
+              ← Previous
+            </button>
+            <button class="nav-btn next" onclick="goToStep(3)">
+              Next: Configuration →
+            </button>
+          </div>
         </div>
-        
-        <!-- Step 6: Troubleshooting -->
-        <div class="step-page" id="step6">
-            <div class="step-content">
-                <div class="step-header">
-                    <span class="step-badge">Step 6 of 7</span>
-                    <h1>Troubleshooting</h1>
-                    <p>Common issues and how to resolve them</p>
+      </div>
+
+      <!-- Step 3: Configuration -->
+      <div class="step-page" id="step3">
+        <div class="step-content">
+          <div class="step-header">
+            <span class="step-badge">Step 3 of 7</span>
+            <h1>Configuration</h1>
+            <p>Setting up the extension for first use</p>
+          </div>
+
+          <div class="content-card">
+            <h2>⚙️ Initial Configuration</h2>
+            <p>
+              Before using the extension, you need to configure your Salesforce
+              connection:
+            </p>
+
+            <div class="numbered-steps">
+              <div class="numbered-step">
+                <div>Click the extension icon in your toolbar</div>
+              </div>
+              <div class="numbered-step">
+                <div>Click "Settings" or the gear icon</div>
+              </div>
+              <div class="numbered-step">
+                <div>
+                  Enter your Salesforce org URL (e.g.,
+                  https://yourcompany.my.salesforce.com)
                 </div>
-                
-                <div class="content-card">
-                    <h2>🔧 Common Issues</h2>
-                    
-                    <h3>"Save to Salesforce" Button Not Appearing</h3>
-                    <ul>
-                        <li>Verify you're on a LinkedIn profile page (not search results)</li>
-                        <li>Wait a few seconds for the page to fully load</li>
-                        <li>Try refreshing the LinkedIn page</li>
-                        <li>Check that the extension is enabled in your browser</li>
-                    </ul>
-                    
-                    <h3>"Session Expired" or Authentication Error</h3>
-                    <ul>
-                        <li>Your Salesforce session has expired</li>
-                        <li>Open Salesforce in a new tab and log in</li>
-                        <li>Return to LinkedIn and try again</li>
-                        <li>If still not working, click "Settings" in the extension and re-connect</li>
-                    </ul>
-                    
-                    <h3>Email/Phone Not Captured</h3>
-                    <ul>
-                        <li>Click "Contact info" on the LinkedIn profile to open the modal</li>
-                        <li>Wait for the Contact Info modal to fully load</li>
-                        <li>The person may not have added email/phone to their profile</li>
-                        <li>Some users have privacy settings that hide this information</li>
-                    </ul>
-                    
-                    <h3>"Duplicate" Error Message</h3>
-                    <ul>
-                        <li>A Contact or Candidate with the same name already exists in Salesforce</li>
-                        <li>Search for the existing record in Salesforce</li>
-                        <li>Do not create duplicates - use the existing record</li>
-                    </ul>
-                    
-                    <h3>Name Includes Credentials (CFP®, MBA, etc.)</h3>
-                    <ul>
-                        <li>The extension automatically removes common designations</li>
-                        <li>If credentials still appear, manually edit the name in the popup before saving</li>
-                    </ul>
+              </div>
+              <div class="numbered-step">
+                <div>Click "Connect" to authenticate with Salesforce</div>
+              </div>
+              <div class="numbered-step">
+                <div>Log in with your Salesforce credentials when prompted</div>
+              </div>
+              <div class="numbered-step">
+                <div>
+                  Grant the extension permission to access your Salesforce data
                 </div>
-                
-                <div class="content-card">
-                    <h2>📞 Getting Help</h2>
-                    <p>If you continue to experience issues:</p>
-                    <ol>
-                        <li>Take a screenshot of any error messages</li>
-                        <li>Note which browser and version you're using</li>
-                        <li>Contact IT Help Desk with the details</li>
-                        <li>Reference "LinkedIn Import Extension" in your ticket</li>
-                    </ol>
-                </div>
-                
-                <div class="info-box tip">
-                    <strong>💡 Keep Extension Updated</strong>
-                    IT will periodically release updates to the extension. When notified, re-install using the latest version for best performance.
-                </div>
-                
-                <div class="step-navigation">
-                    <button class="nav-btn prev" onclick="goToStep(5)">← Previous</button>
-                    <button class="nav-btn next" onclick="goToStep(7)">Complete Module →</button>
-                </div>
+              </div>
             </div>
-        </div>
-        
-        <!-- Step 7: Module Complete -->
-        <div class="step-page" id="step7">
-            <div class="step-content">
-                <div class="step-header">
-                    <span class="step-badge">Step 7 of 7</span>
-                    <h1>🎉 Module Complete!</h1>
-                    <p>You've finished the LinkedIn Integration module</p>
-                </div>
-                
-                <div class="content-card" style="text-align: center; padding: 3rem;">
-                    <div style="font-size: 4rem; margin-bottom: 1rem;">🏆</div>
-                    <h2>Congratulations!</h2>
-                    <p style="font-size: 1.1rem; max-width: 500px; margin: 1rem auto;">You now know how to import candidates directly from LinkedIn using the browser extension.</p>
-                    
-                    <h3 style="margin-top: 2rem;">What You Learned:</h3>
-                    <ul style="text-align: left; max-width: 400px; margin: 1rem auto;">
-                        <li>How to use the "Save to Salesforce" button</li>
-                        <li>Installation for Edge and Chrome</li>
-                        <li>How Contact Info (email, phone, birthday) is captured</li>
-                        <li>The Contact → Candidate record creation flow</li>
-                        <li>How data maps from LinkedIn to Salesforce</li>
-                        <li>Single source of truth on Contact records</li>
-                        <li>Troubleshooting common issues</li>
-                    </ul>
-                </div>
-                
-                <div class="content-card" style="background: linear-gradient(135deg, var(--success), #22c55e); color: white;">
-                    <h2 style="color: white;">🎓 Training Program Complete!</h2>
-                    <p style="color: rgba(255,255,255,0.9);">You have successfully completed all 5 modules of the Recruiter Training Program. You're now ready to use the Recruiter Portal ATS effectively!</p>
-                    
-                    <div class="feature-list" style="margin-top: 1.5rem;">
-                        <a href="recruiter-training.html" class="feature-item" style="cursor: pointer; background: rgba(255,255,255,0.2);">
-                            <div class="feature-icon" style="background: rgba(255,255,255,0.3);">📋</div>
-                            <div class="feature-text">
-                                <h4 style="color: white;">Return to Training Hub</h4>
-                                <p style="color: rgba(255,255,255,0.8);">View your progress and revisit any modules</p>
-                            </div>
-                        </a>
-                        <a href="index.html" class="feature-item" style="cursor: pointer; background: rgba(255,255,255,0.2);">
-                            <div class="feature-icon" style="background: rgba(255,255,255,0.3);">🏠</div>
-                            <div class="feature-text">
-                                <h4 style="color: white;">Training Center Home</h4>
-                                <p style="color: rgba(255,255,255,0.8);">Explore other training resources</p>
-                            </div>
-                        </a>
-                    </div>
-                </div>
-                
-                <!-- Feedback Section -->
-                <div class="content-card" style="background: linear-gradient(135deg, #8b5cf6, #a78bfa); color: white;">
-                    <h2 style="color: white;">📣 Share Your Feedback</h2>
-                    <p style="color: rgba(255,255,255,0.9);">Have ideas or found an issue? You can submit feedback directly from the LinkedIn extension!</p>
-                    <div style="margin-top: 1rem; padding: 1rem; background: rgba(255,255,255,0.2); border-radius: 8px;">
-                        <p style="margin: 0; color: white;"><strong>To submit feedback:</strong></p>
-                        <ol style="margin: 0.5rem 0 0 1.5rem; color: rgba(255,255,255,0.9);">
-                            <li>Open the LinkedIn extension popup</li>
-                            <li>Click "📣 Send Feedback" at the bottom</li>
-                            <li>Select feedback type (General, Feature, or Bug)</li>
-                            <li>Fill in the subject and description</li>
-                            <li>Click Submit - it goes directly to Salesforce!</li>
-                        </ol>
-                    </div>
-                </div>
-                
-                <div class="step-navigation">
-                    <button class="nav-btn prev" onclick="goToStep(6)">← Previous</button>
-                    <button class="nav-btn complete" onclick="completeModule()">✓ Complete Training Program</button>
-                </div>
+
+            <div class="screenshot-placeholder">
+              <div class="icon">📸</div>
+              <div class="label">Screenshot: Extension Settings Panel</div>
             </div>
+          </div>
+
+          <div class="content-card">
+            <h2>🔑 Configuration Settings</h2>
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Setting</th>
+                  <th>Description</th>
+                  <th>Recommended Value</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>Salesforce URL</strong></td>
+                  <td>Your Salesforce org instance URL</td>
+                  <td>Get from IT or login URL</td>
+                </tr>
+                <tr>
+                  <td><strong>Default Source</strong></td>
+                  <td>Source value for imported candidates</td>
+                  <td>LinkedIn (auto-set)</td>
+                </tr>
+                <tr>
+                  <td><strong>Auto-open Record</strong></td>
+                  <td>Open candidate record after import</td>
+                  <td>Enabled</td>
+                </tr>
+                <tr>
+                  <td><strong>Duplicate Check</strong></td>
+                  <td>Check for existing records before import</td>
+                  <td>Enabled</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="info-box warning">
+            <strong>⚠️ Stay Logged In</strong>
+            For the extension to work, you must be logged into Salesforce in the
+            same browser. Keep a Salesforce tab open.
+          </div>
+
+          <div class="step-navigation">
+            <button class="nav-btn prev" onclick="goToStep(2)">
+              ← Previous
+            </button>
+            <button class="nav-btn next" onclick="goToStep(4)">
+              Next: Using the Extension →
+            </button>
+          </div>
         </div>
+      </div>
+
+      <!-- Step 4: Using the Extension -->
+      <div class="step-page" id="step4">
+        <div class="step-content">
+          <div class="step-header">
+            <span class="step-badge">Step 4 of 7</span>
+            <h1>Using the Extension</h1>
+            <p>How to import candidates from LinkedIn</p>
+          </div>
+
+          <div class="content-card">
+            <h2>📤 Importing a Candidate</h2>
+            <p>Follow these steps to import a candidate from LinkedIn:</p>
+
+            <div class="numbered-steps">
+              <div class="numbered-step">
+                <div>Navigate to the candidate's LinkedIn profile page</div>
+              </div>
+              <div class="numbered-step">
+                <div>
+                  Click the blue <strong>"Save to Salesforce"</strong> button
+                  below their profile photo
+                </div>
+              </div>
+              <div class="numbered-step">
+                <div>
+                  Review the captured data in the popup window - verify name,
+                  email, phone, and birthday are correct
+                </div>
+              </div>
+              <div class="numbered-step">
+                <div>Make any necessary edits or additions to the fields</div>
+              </div>
+              <div class="numbered-step">
+                <div>Click the <strong>"Create Candidate"</strong> button</div>
+              </div>
+              <div class="numbered-step">
+                <div>
+                  A Contact and linked Candidate record will be created in
+                  Salesforce
+                </div>
+              </div>
+            </div>
+
+            <div class="info-box tip">
+              <strong>💡 How It Works</strong>
+              When you click the "Save to Salesforce" button, the extension
+              automatically opens a popup displaying the candidate's profile
+              information. From this popup, you can review the data and save the
+              candidate directly to Salesforce.
+            </div>
+          </div>
+
+          <div class="content-card">
+            <h2>✏️ Editing Before Import</h2>
+            <p>
+              The extension popup allows you to review and modify data before
+              importing:
+            </p>
+            <ul>
+              <li>
+                <strong>First Name / Last Name</strong> - Verify the name split
+                is correct (designations like CFP®, MBA are automatically
+                removed)
+              </li>
+              <li>
+                <strong>Email</strong> - Captured automatically if visible in
+                Contact Info modal
+              </li>
+              <li>
+                <strong>Phone</strong> - Captured automatically from Contact
+                Info (800 numbers are excluded)
+              </li>
+              <li>
+                <strong>Birthday</strong> - Captured automatically if the person
+                has added it to their profile
+              </li>
+            </ul>
+          </div>
+
+          <div class="info-box tip">
+            <strong>💡 Success Message</strong>
+            After a successful import, you'll see a green confirmation message.
+            The Contact and Candidate records are now created in Salesforce.
+          </div>
+
+          <div class="info-box warning">
+            <strong>⚠️ Duplicate Detection</strong>
+            If a candidate with the same name already exists, you'll see an
+            error message. Search for the existing record in Salesforce instead
+            of creating a duplicate.
+          </div>
+
+          <div class="step-navigation">
+            <button class="nav-btn prev" onclick="goToStep(3)">
+              ← Previous
+            </button>
+            <button class="nav-btn next" onclick="goToStep(5)">
+              Next: Data Mapping →
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Step 5: Data Mapping -->
+      <div class="step-page" id="step5">
+        <div class="step-content">
+          <div class="step-header">
+            <span class="step-badge">Step 5 of 7</span>
+            <h1>Data Mapping</h1>
+            <p>Understanding how LinkedIn data maps to Salesforce fields</p>
+          </div>
+
+          <div class="content-card">
+            <h2>🔄 Field Mapping</h2>
+            <p>
+              The extension creates a <strong>Contact</strong> record first,
+              then a linked <strong>Candidate</strong> record. Here's how data
+              is mapped:
+            </p>
+
+            <h3>Contact Record Fields</h3>
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>LinkedIn Field</th>
+                  <th>Contact Field</th>
+                  <th>Notes</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Full Name</td>
+                  <td>First Name, Last Name</td>
+                  <td>Split automatically, designations removed</td>
+                </tr>
+                <tr>
+                  <td>Email (Contact Info)</td>
+                  <td>Email</td>
+                  <td>From mailto: link in Contact Info modal</td>
+                </tr>
+                <tr>
+                  <td>Phone (Contact Info)</td>
+                  <td>Phone</td>
+                  <td>From Contact Info modal (800 numbers excluded)</td>
+                </tr>
+                <tr>
+                  <td>Birthday (Contact Info)</td>
+                  <td>Birthday</td>
+                  <td>If available in their profile</td>
+                </tr>
+                <tr>
+                  <td>Profile URL</td>
+                  <td>Website</td>
+                  <td>LinkedIn profile URL stored here</td>
+                </tr>
+              </tbody>
+            </table>
+
+            <h3 style="margin-top: 1.5rem">Candidate Record Fields</h3>
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Field</th>
+                  <th>Value</th>
+                  <th>Notes</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Contact</td>
+                  <td>Linked Contact</td>
+                  <td>Links to the Contact record created above</td>
+                </tr>
+                <tr>
+                  <td>First Name, Last Name</td>
+                  <td>From LinkedIn</td>
+                  <td>Same as Contact</td>
+                </tr>
+                <tr>
+                  <td>Personal Email</td>
+                  <td>Formula Field</td>
+                  <td>Automatically pulls from Contact.Email</td>
+                </tr>
+                <tr>
+                  <td>Mobile</td>
+                  <td>From Contact</td>
+                  <td>Displays Contact's Phone on Candidate page</td>
+                </tr>
+                <tr>
+                  <td>Website</td>
+                  <td>LinkedIn URL</td>
+                  <td>Profile URL for reference</td>
+                </tr>
+                <tr>
+                  <td>Status</td>
+                  <td>0-Prequal</td>
+                  <td>Auto-set for new candidates</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="content-card">
+            <h2>📋 Single Source of Truth</h2>
+            <p>
+              The Contact record is the
+              <strong>single source of truth</strong> for personal information:
+            </p>
+            <ul>
+              <li>
+                <strong>Email</strong> - Stored on Contact, displayed on
+                Candidate via formula field
+              </li>
+              <li>
+                <strong>Phone</strong> - Stored on Contact, displayed on
+                Candidate record page
+              </li>
+              <li><strong>Birthday</strong> - Stored on Contact record</li>
+            </ul>
+            <p style="margin-top: 1rem">
+              If you need to update email or phone, update the
+              <strong>Contact</strong> record and it will automatically reflect
+              on the Candidate.
+            </p>
+          </div>
+
+          <div class="info-box">
+            <strong>ℹ️ View Contact</strong>
+            From any Candidate record, click "View Contact" to see the linked
+            Contact with full details including email, phone, and birthday.
+          </div>
+
+          <div class="step-navigation">
+            <button class="nav-btn prev" onclick="goToStep(4)">
+              ← Previous
+            </button>
+            <button class="nav-btn next" onclick="goToStep(6)">
+              Next: Troubleshooting →
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Step 6: Troubleshooting -->
+      <div class="step-page" id="step6">
+        <div class="step-content">
+          <div class="step-header">
+            <span class="step-badge">Step 6 of 7</span>
+            <h1>Troubleshooting</h1>
+            <p>Common issues and how to resolve them</p>
+          </div>
+
+          <div class="content-card">
+            <h2>🔧 Common Issues</h2>
+
+            <h3>"Save to Salesforce" Button Not Appearing</h3>
+            <ul>
+              <li>
+                Verify you're on a LinkedIn profile page (not search results)
+              </li>
+              <li>Wait a few seconds for the page to fully load</li>
+              <li>Try refreshing the LinkedIn page</li>
+              <li>Check that the extension is enabled in your browser</li>
+            </ul>
+
+            <h3>"Session Expired" or Authentication Error</h3>
+            <ul>
+              <li>Your Salesforce session has expired</li>
+              <li>Open Salesforce in a new tab and log in</li>
+              <li>Return to LinkedIn and try again</li>
+              <li>
+                If still not working, click "Settings" in the extension and
+                re-connect
+              </li>
+            </ul>
+
+            <h3>Email/Phone Not Captured</h3>
+            <ul>
+              <li>
+                Click "Contact info" on the LinkedIn profile to open the modal
+              </li>
+              <li>Wait for the Contact Info modal to fully load</li>
+              <li>
+                The person may not have added email/phone to their profile
+              </li>
+              <li>
+                Some users have privacy settings that hide this information
+              </li>
+            </ul>
+
+            <h3>"Duplicate" Error Message</h3>
+            <ul>
+              <li>
+                A Contact or Candidate with the same name already exists in
+                Salesforce
+              </li>
+              <li>Search for the existing record in Salesforce</li>
+              <li>Do not create duplicates - use the existing record</li>
+            </ul>
+
+            <h3>Name Includes Credentials (CFP®, MBA, etc.)</h3>
+            <ul>
+              <li>The extension automatically removes common designations</li>
+              <li>
+                If credentials still appear, manually edit the name in the popup
+                before saving
+              </li>
+            </ul>
+          </div>
+
+          <div class="content-card">
+            <h2>📞 Getting Help</h2>
+            <p>If you continue to experience issues:</p>
+            <ol>
+              <li>Take a screenshot of any error messages</li>
+              <li>Note which browser and version you're using</li>
+              <li>Contact IT Help Desk with the details</li>
+              <li>Reference "LinkedIn Import Extension" in your ticket</li>
+            </ol>
+          </div>
+
+          <div class="info-box tip">
+            <strong>💡 Keep Extension Updated</strong>
+            IT will periodically release updates to the extension. When
+            notified, re-install using the latest version for best performance.
+          </div>
+
+          <div class="step-navigation">
+            <button class="nav-btn prev" onclick="goToStep(5)">
+              ← Previous
+            </button>
+            <button class="nav-btn next" onclick="goToStep(7)">
+              Complete Module →
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Step 7: Module Complete -->
+      <div class="step-page" id="step7">
+        <div class="step-content">
+          <div class="step-header">
+            <span class="step-badge">Step 7 of 7</span>
+            <h1>🎉 Module Complete!</h1>
+            <p>You've finished the LinkedIn Integration module</p>
+          </div>
+
+          <div class="content-card" style="text-align: center; padding: 3rem">
+            <div style="font-size: 4rem; margin-bottom: 1rem">🏆</div>
+            <h2>Congratulations!</h2>
+            <p style="font-size: 1.1rem; max-width: 500px; margin: 1rem auto">
+              You now know how to import candidates directly from LinkedIn using
+              the browser extension.
+            </p>
+
+            <h3 style="margin-top: 2rem">What You Learned:</h3>
+            <ul style="text-align: left; max-width: 400px; margin: 1rem auto">
+              <li>How to use the "Save to Salesforce" button</li>
+              <li>Installation for Edge and Chrome</li>
+              <li>How Contact Info (email, phone, birthday) is captured</li>
+              <li>The Contact → Candidate record creation flow</li>
+              <li>How data maps from LinkedIn to Salesforce</li>
+              <li>Single source of truth on Contact records</li>
+              <li>Troubleshooting common issues</li>
+            </ul>
+          </div>
+
+          <div
+            class="content-card"
+            style="
+              background: linear-gradient(135deg, var(--success), #22c55e);
+              color: white;
+            "
+          >
+            <h2 style="color: white">🎓 Training Program Complete!</h2>
+            <p style="color: rgba(255, 255, 255, 0.9)">
+              You have successfully completed all 5 modules of the Recruiter
+              Training Program. You're now ready to use the Recruiter Portal ATS
+              effectively!
+            </p>
+
+            <div class="feature-list" style="margin-top: 1.5rem">
+              <a
+                href="recruiter-training.html"
+                class="feature-item"
+                style="cursor: pointer; background: rgba(255, 255, 255, 0.2)"
+              >
+                <div
+                  class="feature-icon"
+                  style="background: rgba(255, 255, 255, 0.3)"
+                >
+                  📋
+                </div>
+                <div class="feature-text">
+                  <h4 style="color: white">Return to Training Hub</h4>
+                  <p style="color: rgba(255, 255, 255, 0.8)">
+                    View your progress and revisit any modules
+                  </p>
+                </div>
+              </a>
+              <a
+                href="index.html"
+                class="feature-item"
+                style="cursor: pointer; background: rgba(255, 255, 255, 0.2)"
+              >
+                <div
+                  class="feature-icon"
+                  style="background: rgba(255, 255, 255, 0.3)"
+                >
+                  🏠
+                </div>
+                <div class="feature-text">
+                  <h4 style="color: white">Training Center Home</h4>
+                  <p style="color: rgba(255, 255, 255, 0.8)">
+                    Explore other training resources
+                  </p>
+                </div>
+              </a>
+            </div>
+          </div>
+
+          <!-- Feedback Section -->
+          <div
+            class="content-card"
+            style="
+              background: linear-gradient(135deg, #8b5cf6, #a78bfa);
+              color: white;
+            "
+          >
+            <h2 style="color: white">📣 Share Your Feedback</h2>
+            <p style="color: rgba(255, 255, 255, 0.9)">
+              Have ideas or found an issue? You can submit feedback directly
+              from the LinkedIn extension!
+            </p>
+            <div
+              style="
+                margin-top: 1rem;
+                padding: 1rem;
+                background: rgba(255, 255, 255, 0.2);
+                border-radius: 8px;
+              "
+            >
+              <p style="margin: 0; color: white">
+                <strong>To submit feedback:</strong>
+              </p>
+              <ol
+                style="
+                  margin: 0.5rem 0 0 1.5rem;
+                  color: rgba(255, 255, 255, 0.9);
+                "
+              >
+                <li>Open the LinkedIn extension popup</li>
+                <li>Click "📣 Send Feedback" at the bottom</li>
+                <li>Select feedback type (General, Feature, or Bug)</li>
+                <li>Fill in the subject and description</li>
+                <li>Click Submit - it goes directly to Salesforce!</li>
+              </ol>
+            </div>
+          </div>
+
+          <div class="step-navigation">
+            <button class="nav-btn prev" onclick="goToStep(6)">
+              ← Previous
+            </button>
+            <button class="nav-btn complete" onclick="completeModule()">
+              ✓ Complete Training Program
+            </button>
+          </div>
+        </div>
+      </div>
     </main>
-    
+
     <script>
-        const totalSteps = 7;
-        let currentStep = 1;
-        let completedSteps = [];
-        
-        function loadProgress() {
-            const saved = localStorage.getItem('recruiter-training-module5-step');
-            if (saved) {
-                currentStep = parseInt(saved);
-                for (let i = 1; i < currentStep; i++) {
-                    completedSteps.push(i);
-                }
-            }
-            updateUI();
+      const totalSteps = 7;
+      let currentStep = 1;
+      let completedSteps = [];
+
+      function loadProgress() {
+        const saved = localStorage.getItem("recruiter-training-module5-step");
+        if (saved) {
+          currentStep = parseInt(saved);
+          for (let i = 1; i < currentStep; i++) {
+            completedSteps.push(i);
+          }
         }
-        
-        function saveProgress() {
-            localStorage.setItem('recruiter-training-module5-step', currentStep);
-            if (currentStep > 1) {
-                localStorage.setItem('recruiter-training-module5', 'in-progress');
-            }
+        updateUI();
+      }
+
+      function saveProgress() {
+        localStorage.setItem("recruiter-training-module5-step", currentStep);
+        if (currentStep > 1) {
+          localStorage.setItem("recruiter-training-module5", "in-progress");
         }
-        
-        function goToStep(step) {
-            if (step > currentStep) {
-                for (let i = currentStep; i < step; i++) {
-                    if (!completedSteps.includes(i)) completedSteps.push(i);
-                }
-            }
-            currentStep = step;
-            saveProgress();
-            updateUI();
+      }
+
+      function goToStep(step) {
+        if (step > currentStep) {
+          for (let i = currentStep; i < step; i++) {
+            if (!completedSteps.includes(i)) completedSteps.push(i);
+          }
         }
-        
-        function updateUI() {
-            document.querySelectorAll('.step-page').forEach((page, index) => {
-                page.classList.remove('active');
-                if (index + 1 === currentStep) page.classList.add('active');
-            });
-            
-            document.querySelectorAll('.step-item').forEach((item, index) => {
-                const stepNum = index + 1;
-                item.classList.remove('active', 'completed');
-                if (stepNum === currentStep) item.classList.add('active');
-                else if (completedSteps.includes(stepNum)) item.classList.add('completed');
-            });
-            
-            const progress = ((currentStep - 1) / (totalSteps - 1)) * 100;
-            document.getElementById('progressFill').style.width = `${progress}%`;
-        }
-        
-        function showBrowser(browser) {
-            document.querySelectorAll('.browser-tab').forEach(tab => tab.classList.remove('active'));
-            document.querySelectorAll('.browser-content').forEach(content => content.classList.remove('active'));
-            
-            event.target.classList.add('active');
-            document.getElementById(`${browser}-content`).classList.add('active');
-        }
-        
-        function completeModule() {
-            localStorage.setItem('recruiter-training-module5', 'completed');
-            localStorage.setItem('recruiter-training-module5-step', totalSteps);
-            
-            alert('🎉 Congratulations! You have completed the entire Recruiter Training Program!');
-            window.location.href = 'recruiter-training.html';
-        }
-        
-        loadProgress();
+        currentStep = step;
+        saveProgress();
+        updateUI();
+      }
+
+      function updateUI() {
+        document.querySelectorAll(".step-page").forEach((page, index) => {
+          page.classList.remove("active");
+          if (index + 1 === currentStep) page.classList.add("active");
+        });
+
+        document.querySelectorAll(".step-item").forEach((item, index) => {
+          const stepNum = index + 1;
+          item.classList.remove("active", "completed");
+          if (stepNum === currentStep) item.classList.add("active");
+          else if (completedSteps.includes(stepNum))
+            item.classList.add("completed");
+        });
+
+        const progress = ((currentStep - 1) / (totalSteps - 1)) * 100;
+        document.getElementById("progressFill").style.width = `${progress}%`;
+      }
+
+      function showBrowser(browser) {
+        document
+          .querySelectorAll(".browser-tab")
+          .forEach((tab) => tab.classList.remove("active"));
+        document
+          .querySelectorAll(".browser-content")
+          .forEach((content) => content.classList.remove("active"));
+
+        event.target.classList.add("active");
+        document.getElementById(`${browser}-content`).classList.add("active");
+      }
+
+      function completeModule() {
+        localStorage.setItem("recruiter-training-module5", "completed");
+        localStorage.setItem("recruiter-training-module5-step", totalSteps);
+
+        alert(
+          "🎉 Congratulations! You have completed the entire Recruiter Training Program!"
+        );
+        window.location.href = "recruiter-training.html";
+      }
+
+      loadProgress();
     </script>
-</body>
+  </body>
 </html>

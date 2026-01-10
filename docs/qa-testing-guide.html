@@ -1,1495 +1,1963 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>QA Testing Guide - Recruiter Portal ATS</title>
     <style>
-        :root {
-            --primary: #0176d3;
-            --primary-dark: #014486;
-            --primary-light: #e0f2fe;
-            --success: #2e844a;
-            --success-light: #dcfce7;
-            --warning: #fe9339;
-            --warning-light: #fef3c7;
-            --error: #ea001e;
-            --error-light: #fee2e2;
-            --gray-100: #f3f3f3;
-            --gray-200: #e5e5e5;
-            --gray-300: #d1d5db;
-            --gray-500: #6b7280;
-            --gray-700: #444;
-            --gray-900: #181818;
-        }
-        
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        
-        body {
-            font-family: 'Salesforce Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: var(--gray-100);
-            min-height: 100vh;
-        }
-        
-        .header {
-            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
-            color: white;
-            padding: 2rem;
-            text-align: center;
-        }
-        
-        .header h1 { font-size: 2.5rem; margin-bottom: 0.5rem; }
-        .header p { font-size: 1.1rem; opacity: 0.9; }
-        
+      :root {
+        --primary: #0176d3;
+        --primary-dark: #014486;
+        --primary-light: #e0f2fe;
+        --success: #2e844a;
+        --success-light: #dcfce7;
+        --warning: #fe9339;
+        --warning-light: #fef3c7;
+        --error: #ea001e;
+        --error-light: #fee2e2;
+        --gray-100: #f3f3f3;
+        --gray-200: #e5e5e5;
+        --gray-300: #d1d5db;
+        --gray-500: #6b7280;
+        --gray-700: #444;
+        --gray-900: #181818;
+      }
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family:
+          "Salesforce Sans",
+          -apple-system,
+          BlinkMacSystemFont,
+          "Segoe UI",
+          Roboto,
+          sans-serif;
+        background: var(--gray-100);
+        min-height: 100vh;
+      }
+
+      .header {
+        background: linear-gradient(
+          135deg,
+          var(--primary),
+          var(--primary-dark)
+        );
+        color: white;
+        padding: 2rem;
+        text-align: center;
+      }
+
+      .header h1 {
+        font-size: 2.5rem;
+        margin-bottom: 0.5rem;
+      }
+      .header p {
+        font-size: 1.1rem;
+        opacity: 0.9;
+      }
+
+      .nav-bar {
+        background: white;
+        border-bottom: 1px solid var(--gray-200);
+        padding: 1rem 2rem;
+        position: sticky;
+        top: 0;
+        z-index: 100;
+      }
+
+      .nav-bar a {
+        color: var(--primary);
+        text-decoration: none;
+        margin-right: 2rem;
+        font-weight: 500;
+      }
+
+      .nav-bar a:hover {
+        text-decoration: underline;
+      }
+
+      .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 2rem;
+      }
+
+      .section {
+        background: white;
+        border-radius: 12px;
+        padding: 2rem;
+        margin-bottom: 2rem;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+      }
+
+      .section-header {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        margin-bottom: 1.5rem;
+        padding-bottom: 1rem;
+        border-bottom: 2px solid var(--gray-200);
+      }
+
+      .section-number {
+        background: var(--primary);
+        color: white;
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 700;
+        font-size: 1.2rem;
+      }
+
+      .section-header h2 {
+        font-size: 1.5rem;
+        color: var(--gray-900);
+      }
+
+      .test-case {
+        border: 1px solid var(--gray-200);
+        border-radius: 8px;
+        margin-bottom: 1rem;
+        overflow: hidden;
+      }
+
+      .test-case-header {
+        background: var(--gray-100);
+        padding: 1rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        cursor: pointer;
+      }
+
+      .test-case-header:hover {
+        background: var(--gray-200);
+      }
+
+      .test-id {
+        font-family: monospace;
+        background: var(--primary-light);
+        color: var(--primary-dark);
+        padding: 0.25rem 0.5rem;
+        border-radius: 4px;
+        font-size: 0.85rem;
+        margin-right: 1rem;
+      }
+
+      .test-title {
+        font-weight: 600;
+        color: var(--gray-900);
+        flex-grow: 1;
+      }
+
+      .priority {
+        padding: 0.25rem 0.75rem;
+        border-radius: 12px;
+        font-size: 0.8rem;
+        font-weight: 600;
+      }
+
+      .priority.high {
+        background: var(--error-light);
+        color: var(--error);
+      }
+      .priority.medium {
+        background: var(--warning-light);
+        color: #b45309;
+      }
+      .priority.low {
+        background: var(--gray-200);
+        color: var(--gray-700);
+      }
+
+      .test-case-body {
+        padding: 1.5rem;
+        display: none;
+      }
+
+      .test-case.open .test-case-body {
+        display: block;
+      }
+      .test-case.open .test-case-header {
+        background: var(--primary-light);
+      }
+
+      .test-field {
+        margin-bottom: 1rem;
+      }
+      .test-field label {
+        font-weight: 600;
+        color: var(--gray-700);
+        display: block;
+        margin-bottom: 0.25rem;
+      }
+      .test-field p {
+        color: var(--gray-700);
+        line-height: 1.6;
+      }
+
+      .steps-list {
+        list-style: none;
+        counter-reset: step;
+      }
+
+      .steps-list li {
+        counter-increment: step;
+        padding: 0.5rem 0 0.5rem 2.5rem;
+        position: relative;
+        border-left: 2px solid var(--gray-200);
+        margin-left: 0.75rem;
+      }
+
+      .steps-list li::before {
+        content: counter(step);
+        position: absolute;
+        left: -12px;
+        background: var(--primary);
+        color: white;
+        width: 22px;
+        height: 22px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.75rem;
+        font-weight: 600;
+      }
+
+      .expected-result {
+        background: var(--success-light);
+        border-left: 4px solid var(--success);
+        padding: 1rem;
+        border-radius: 0 8px 8px 0;
+        margin-top: 0.5rem;
+      }
+
+      .expected-result strong {
+        color: var(--success);
+      }
+
+      .checkbox-row {
+        display: flex;
+        gap: 2rem;
+        margin-top: 1rem;
+        padding-top: 1rem;
+        border-top: 1px solid var(--gray-200);
+      }
+
+      .checkbox-item {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+
+      .checkbox-item input[type="checkbox"] {
+        width: 20px;
+        height: 20px;
+        cursor: pointer;
+      }
+
+      .summary-card {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 1rem;
+        margin-bottom: 2rem;
+      }
+
+      .stat-card {
+        background: white;
+        border-radius: 8px;
+        padding: 1.5rem;
+        text-align: center;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+      }
+
+      .stat-card .number {
+        font-size: 2.5rem;
+        font-weight: 700;
+        color: var(--primary);
+      }
+
+      .stat-card .label {
+        color: var(--gray-500);
+        font-size: 0.9rem;
+        margin-top: 0.25rem;
+      }
+
+      .toc {
+        background: var(--primary-light);
+        border-radius: 8px;
+        padding: 1.5rem;
+        margin-bottom: 2rem;
+      }
+
+      .toc h3 {
+        margin-bottom: 1rem;
+        color: var(--primary-dark);
+      }
+      .toc ul {
+        list-style: none;
+      }
+      .toc li {
+        margin-bottom: 0.5rem;
+      }
+      .toc a {
+        color: var(--primary);
+        text-decoration: none;
+      }
+      .toc a:hover {
+        text-decoration: underline;
+      }
+
+      .info-box {
+        background: var(--primary-light);
+        border-left: 4px solid var(--primary);
+        padding: 1rem;
+        border-radius: 0 8px 8px 0;
+        margin: 1rem 0;
+      }
+
+      .info-box.warning {
+        background: var(--warning-light);
+        border-color: var(--warning);
+      }
+
+      @media print {
         .nav-bar {
-            background: white;
-            border-bottom: 1px solid var(--gray-200);
-            padding: 1rem 2rem;
-            position: sticky;
-            top: 0;
-            z-index: 100;
+          display: none;
         }
-        
-        .nav-bar a {
-            color: var(--primary);
-            text-decoration: none;
-            margin-right: 2rem;
-            font-weight: 500;
-        }
-        
-        .nav-bar a:hover { text-decoration: underline; }
-        
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 2rem;
-        }
-        
-        .section {
-            background: white;
-            border-radius: 12px;
-            padding: 2rem;
-            margin-bottom: 2rem;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
-        }
-        
-        .section-header {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-            margin-bottom: 1.5rem;
-            padding-bottom: 1rem;
-            border-bottom: 2px solid var(--gray-200);
-        }
-        
-        .section-number {
-            background: var(--primary);
-            color: white;
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 700;
-            font-size: 1.2rem;
-        }
-        
-        .section-header h2 { font-size: 1.5rem; color: var(--gray-900); }
-        
-        .test-case {
-            border: 1px solid var(--gray-200);
-            border-radius: 8px;
-            margin-bottom: 1rem;
-            overflow: hidden;
-        }
-        
-        .test-case-header {
-            background: var(--gray-100);
-            padding: 1rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            cursor: pointer;
-        }
-        
-        .test-case-header:hover { background: var(--gray-200); }
-        
-        .test-id {
-            font-family: monospace;
-            background: var(--primary-light);
-            color: var(--primary-dark);
-            padding: 0.25rem 0.5rem;
-            border-radius: 4px;
-            font-size: 0.85rem;
-            margin-right: 1rem;
-        }
-        
-        .test-title { font-weight: 600; color: var(--gray-900); flex-grow: 1; }
-        
-        .priority {
-            padding: 0.25rem 0.75rem;
-            border-radius: 12px;
-            font-size: 0.8rem;
-            font-weight: 600;
-        }
-        
-        .priority.high { background: var(--error-light); color: var(--error); }
-        .priority.medium { background: var(--warning-light); color: #b45309; }
-        .priority.low { background: var(--gray-200); color: var(--gray-700); }
-        
         .test-case-body {
-            padding: 1.5rem;
-            display: none;
+          display: block !important;
         }
-        
-        .test-case.open .test-case-body { display: block; }
-        .test-case.open .test-case-header { background: var(--primary-light); }
-        
-        .test-field { margin-bottom: 1rem; }
-        .test-field label { font-weight: 600; color: var(--gray-700); display: block; margin-bottom: 0.25rem; }
-        .test-field p { color: var(--gray-700); line-height: 1.6; }
-        
-        .steps-list {
-            list-style: none;
-            counter-reset: step;
+        .section {
+          break-inside: avoid;
         }
-        
-        .steps-list li {
-            counter-increment: step;
-            padding: 0.5rem 0 0.5rem 2.5rem;
-            position: relative;
-            border-left: 2px solid var(--gray-200);
-            margin-left: 0.75rem;
-        }
-        
-        .steps-list li::before {
-            content: counter(step);
-            position: absolute;
-            left: -12px;
-            background: var(--primary);
-            color: white;
-            width: 22px;
-            height: 22px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 0.75rem;
-            font-weight: 600;
-        }
-        
-        .expected-result {
-            background: var(--success-light);
-            border-left: 4px solid var(--success);
-            padding: 1rem;
-            border-radius: 0 8px 8px 0;
-            margin-top: 0.5rem;
-        }
-        
-        .expected-result strong { color: var(--success); }
-        
-        .checkbox-row {
-            display: flex;
-            gap: 2rem;
-            margin-top: 1rem;
-            padding-top: 1rem;
-            border-top: 1px solid var(--gray-200);
-        }
-        
-        .checkbox-item {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-        
-        .checkbox-item input[type="checkbox"] {
-            width: 20px;
-            height: 20px;
-            cursor: pointer;
-        }
-        
-        .summary-card {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 1rem;
-            margin-bottom: 2rem;
-        }
-        
-        .stat-card {
-            background: white;
-            border-radius: 8px;
-            padding: 1.5rem;
-            text-align: center;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
-        }
-        
-        .stat-card .number {
-            font-size: 2.5rem;
-            font-weight: 700;
-            color: var(--primary);
-        }
-        
-        .stat-card .label {
-            color: var(--gray-500);
-            font-size: 0.9rem;
-            margin-top: 0.25rem;
-        }
-        
-        .toc {
-            background: var(--primary-light);
-            border-radius: 8px;
-            padding: 1.5rem;
-            margin-bottom: 2rem;
-        }
-        
-        .toc h3 { margin-bottom: 1rem; color: var(--primary-dark); }
-        .toc ul { list-style: none; }
-        .toc li { margin-bottom: 0.5rem; }
-        .toc a { color: var(--primary); text-decoration: none; }
-        .toc a:hover { text-decoration: underline; }
-        
-        .info-box {
-            background: var(--primary-light);
-            border-left: 4px solid var(--primary);
-            padding: 1rem;
-            border-radius: 0 8px 8px 0;
-            margin: 1rem 0;
-        }
-        
-        .info-box.warning {
-            background: var(--warning-light);
-            border-color: var(--warning);
-        }
-        
-        @media print {
-            .nav-bar { display: none; }
-            .test-case-body { display: block !important; }
-            .section { break-inside: avoid; }
-        }
+      }
     </style>
-</head>
-<body>
+  </head>
+  <body>
     <header class="header">
-        <h1>🧪 QA Testing Guide</h1>
-        <p>Recruiter Portal ATS - Comprehensive Test Cases</p>
+      <h1>🧪 QA Testing Guide</h1>
+      <p>Recruiter Portal ATS - Comprehensive Test Cases</p>
     </header>
-    
+
     <nav class="nav-bar">
-        <a href="index.html">← Training Center</a>
-        <a href="#candidates">Candidates</a>
-        <a href="#interviews">Interviews</a>
-        <a href="#contract-b">Contract B</a>
-        <a href="#dashboard">Dashboard</a>
-        <a href="#linkedin">LinkedIn</a>
+      <a href="index.html">← Training Center</a>
+      <a href="#candidates">Candidates</a>
+      <a href="#interviews">Interviews</a>
+      <a href="#contract-b">Contract B</a>
+      <a href="#dashboard">Dashboard</a>
+      <a href="#linkedin">LinkedIn</a>
     </nav>
-    
+
     <div class="container">
-        <div class="summary-card">
-            <div class="stat-card">
-                <div class="number">35</div>
-                <div class="label">Total Test Cases</div>
-            </div>
-            <div class="stat-card">
-                <div class="number">12</div>
-                <div class="label">High Priority</div>
-            </div>
-            <div class="stat-card">
-                <div class="number">5</div>
-                <div class="label">Test Sections</div>
-            </div>
-            <div class="stat-card">
-                <div class="number">~3 hrs</div>
-                <div class="label">Est. Full Test Time</div>
-            </div>
+      <div class="summary-card">
+        <div class="stat-card">
+          <div class="number">35</div>
+          <div class="label">Total Test Cases</div>
         </div>
-        
-        <div class="toc">
-            <h3>📋 Table of Contents</h3>
-            <ul>
-                <li><a href="#candidates">Section 1: Candidate Management (8 tests)</a></li>
-                <li><a href="#interviews">Section 2: Interview Tracking (7 tests)</a></li>
-                <li><a href="#contract-b">Section 3: Contract B Lifecycle (8 tests)</a></li>
-                <li><a href="#dashboard">Section 4: Dashboard Metrics (7 tests)</a></li>
-                <li><a href="#linkedin">Section 5: LinkedIn Extension (5 tests)</a></li>
-            </ul>
+        <div class="stat-card">
+          <div class="number">12</div>
+          <div class="label">High Priority</div>
         </div>
-        
-        <!-- SECTION 1: CANDIDATE MANAGEMENT -->
-        <section class="section" id="candidates">
-            <div class="section-header">
-                <span class="section-number">1</span>
-                <h2>Candidate Management</h2>
+        <div class="stat-card">
+          <div class="number">5</div>
+          <div class="label">Test Sections</div>
+        </div>
+        <div class="stat-card">
+          <div class="number">~3 hrs</div>
+          <div class="label">Est. Full Test Time</div>
+        </div>
+      </div>
+
+      <div class="toc">
+        <h3>📋 Table of Contents</h3>
+        <ul>
+          <li>
+            <a href="#candidates">Section 1: Candidate Management (8 tests)</a>
+          </li>
+          <li>
+            <a href="#interviews">Section 2: Interview Tracking (7 tests)</a>
+          </li>
+          <li>
+            <a href="#contract-b">Section 3: Contract B Lifecycle (8 tests)</a>
+          </li>
+          <li>
+            <a href="#dashboard">Section 4: Dashboard Metrics (7 tests)</a>
+          </li>
+          <li>
+            <a href="#linkedin">Section 5: LinkedIn Extension (5 tests)</a>
+          </li>
+        </ul>
+      </div>
+
+      <!-- SECTION 1: CANDIDATE MANAGEMENT -->
+      <section class="section" id="candidates">
+        <div class="section-header">
+          <span class="section-number">1</span>
+          <h2>Candidate Management</h2>
+        </div>
+
+        <div class="test-case">
+          <div class="test-case-header" onclick="toggleTest(this)">
+            <span class="test-id">TC-CAND-001</span>
+            <span class="test-title"
+              >Create New Candidate with Required Fields</span
+            >
+            <span class="priority high">High</span>
+          </div>
+          <div class="test-case-body">
+            <div class="test-field">
+              <label>Preconditions</label>
+              <p>
+                User logged into Salesforce with Recruiter profile. On
+                Candidates tab or Dashboard.
+              </p>
             </div>
-            
-            <div class="test-case">
-                <div class="test-case-header" onclick="toggleTest(this)">
-                    <span class="test-id">TC-CAND-001</span>
-                    <span class="test-title">Create New Candidate with Required Fields</span>
-                    <span class="priority high">High</span>
-                </div>
-                <div class="test-case-body">
-                    <div class="test-field">
-                        <label>Preconditions</label>
-                        <p>User logged into Salesforce with Recruiter profile. On Candidates tab or Dashboard.</p>
-                    </div>
-                    <div class="test-field">
-                        <label>Test Steps</label>
-                        <ol class="steps-list">
-                            <li>Click "New Candidate" button</li>
-                            <li>Enter First Name: "Test"</li>
-                            <li>Enter Last Name: "Candidate"</li>
-                            <li>Enter Email: "test.candidate@example.com"</li>
-                            <li>Enter Phone: "(555) 123-4567"</li>
-                            <li>Select Source: "Referral"</li>
-                            <li>Click "Save"</li>
-                        </ol>
-                    </div>
-                    <div class="expected-result">
-                        <strong>Expected Result:</strong> Candidate record created successfully. User redirected to candidate detail page. Status defaults to "New". All entered fields display correctly.
-                    </div>
-                    <div class="checkbox-row">
-                        <label class="checkbox-item"><input type="checkbox"> Pass</label>
-                        <label class="checkbox-item"><input type="checkbox"> Fail</label>
-                        <label class="checkbox-item"><input type="checkbox"> Blocked</label>
-                    </div>
-                </div>
+            <div class="test-field">
+              <label>Test Steps</label>
+              <ol class="steps-list">
+                <li>Click "New Candidate" button</li>
+                <li>Enter First Name: "Test"</li>
+                <li>Enter Last Name: "Candidate"</li>
+                <li>Enter Email: "test.candidate@example.com"</li>
+                <li>Enter Phone: "(555) 123-4567"</li>
+                <li>Select Source: "Referral"</li>
+                <li>Click "Save"</li>
+              </ol>
             </div>
-            
-            <div class="test-case">
-                <div class="test-case-header" onclick="toggleTest(this)">
-                    <span class="test-id">TC-CAND-002</span>
-                    <span class="test-title">Required Field Validation</span>
-                    <span class="priority high">High</span>
-                </div>
-                <div class="test-case-body">
-                    <div class="test-field">
-                        <label>Preconditions</label>
-                        <p>User on New Candidate form.</p>
-                    </div>
-                    <div class="test-field">
-                        <label>Test Steps</label>
-                        <ol class="steps-list">
-                            <li>Leave First Name blank</li>
-                            <li>Leave Last Name blank</li>
-                            <li>Click "Save"</li>
-                        </ol>
-                    </div>
-                    <div class="expected-result">
-                        <strong>Expected Result:</strong> Save fails. Error messages displayed for required fields (First Name, Last Name). Form remains open for correction.
-                    </div>
-                    <div class="checkbox-row">
-                        <label class="checkbox-item"><input type="checkbox"> Pass</label>
-                        <label class="checkbox-item"><input type="checkbox"> Fail</label>
-                        <label class="checkbox-item"><input type="checkbox"> Blocked</label>
-                    </div>
-                </div>
+            <div class="expected-result">
+              <strong>Expected Result:</strong> Candidate record created
+              successfully. User redirected to candidate detail page. Status
+              defaults to "New". All entered fields display correctly.
             </div>
-            
-            <div class="test-case">
-                <div class="test-case-header" onclick="toggleTest(this)">
-                    <span class="test-id">TC-CAND-003</span>
-                    <span class="test-title">Update Candidate Information</span>
-                    <span class="priority medium">Medium</span>
-                </div>
-                <div class="test-case-body">
-                    <div class="test-field">
-                        <label>Preconditions</label>
-                        <p>Existing candidate record open in edit mode.</p>
-                    </div>
-                    <div class="test-field">
-                        <label>Test Steps</label>
-                        <ol class="steps-list">
-                            <li>Click "Edit" button on candidate record</li>
-                            <li>Change Phone to "(555) 987-6543"</li>
-                            <li>Add Notes: "Updated contact information"</li>
-                            <li>Click "Save"</li>
-                        </ol>
-                    </div>
-                    <div class="expected-result">
-                        <strong>Expected Result:</strong> Record saved successfully. Updated fields display new values. Last Modified date/user updated.
-                    </div>
-                    <div class="checkbox-row">
-                        <label class="checkbox-item"><input type="checkbox"> Pass</label>
-                        <label class="checkbox-item"><input type="checkbox"> Fail</label>
-                        <label class="checkbox-item"><input type="checkbox"> Blocked</label>
-                    </div>
-                </div>
+            <div class="checkbox-row">
+              <label class="checkbox-item"
+                ><input type="checkbox" /> Pass</label
+              >
+              <label class="checkbox-item"
+                ><input type="checkbox" /> Fail</label
+              >
+              <label class="checkbox-item"
+                ><input type="checkbox" /> Blocked</label
+              >
             </div>
-            
-            <div class="test-case">
-                <div class="test-case-header" onclick="toggleTest(this)">
-                    <span class="test-id">TC-CAND-004</span>
-                    <span class="test-title">Change Candidate Pipeline Stage</span>
-                    <span class="priority high">High</span>
-                </div>
-                <div class="test-case-body">
-                    <div class="test-field">
-                        <label>Preconditions</label>
-                        <p>Candidate exists with Status = "New".</p>
-                    </div>
-                    <div class="test-field">
-                        <label>Test Steps</label>
-                        <ol class="steps-list">
-                            <li>Open candidate record</li>
-                            <li>Click on Status field or path component</li>
-                            <li>Change status from "New" to "Phone Screen"</li>
-                            <li>Save the record</li>
-                            <li>Repeat for each stage: Phone Screen → Interview Scheduled → Interview Complete → Offer → Hired</li>
-                        </ol>
-                    </div>
-                    <div class="expected-result">
-                        <strong>Expected Result:</strong> Status updates correctly at each stage. Visual indicators (badges/colors) update appropriately. Pipeline stage change is reflected on Dashboard.
-                    </div>
-                    <div class="checkbox-row">
-                        <label class="checkbox-item"><input type="checkbox"> Pass</label>
-                        <label class="checkbox-item"><input type="checkbox"> Fail</label>
-                        <label class="checkbox-item"><input type="checkbox"> Blocked</label>
-                    </div>
-                </div>
+          </div>
+        </div>
+
+        <div class="test-case">
+          <div class="test-case-header" onclick="toggleTest(this)">
+            <span class="test-id">TC-CAND-002</span>
+            <span class="test-title">Required Field Validation</span>
+            <span class="priority high">High</span>
+          </div>
+          <div class="test-case-body">
+            <div class="test-field">
+              <label>Preconditions</label>
+              <p>User on New Candidate form.</p>
             </div>
-            
-            <div class="test-case">
-                <div class="test-case-header" onclick="toggleTest(this)">
-                    <span class="test-id">TC-CAND-005</span>
-                    <span class="test-title">Duplicate Detection on Email</span>
-                    <span class="priority medium">Medium</span>
-                </div>
-                <div class="test-case-body">
-                    <div class="test-field">
-                        <label>Preconditions</label>
-                        <p>Candidate exists with email "existing@example.com".</p>
-                    </div>
-                    <div class="test-field">
-                        <label>Test Steps</label>
-                        <ol class="steps-list">
-                            <li>Click "New Candidate"</li>
-                            <li>Enter different name but same email: "existing@example.com"</li>
-                            <li>Fill other required fields</li>
-                            <li>Click "Save"</li>
-                        </ol>
-                    </div>
-                    <div class="expected-result">
-                        <strong>Expected Result:</strong> System detects duplicate. Warning/alert shown with link to existing record. User can choose to proceed or cancel.
-                    </div>
-                    <div class="checkbox-row">
-                        <label class="checkbox-item"><input type="checkbox"> Pass</label>
-                        <label class="checkbox-item"><input type="checkbox"> Fail</label>
-                        <label class="checkbox-item"><input type="checkbox"> Blocked</label>
-                    </div>
-                </div>
+            <div class="test-field">
+              <label>Test Steps</label>
+              <ol class="steps-list">
+                <li>Leave First Name blank</li>
+                <li>Leave Last Name blank</li>
+                <li>Click "Save"</li>
+              </ol>
             </div>
-            
-            <div class="test-case">
-                <div class="test-case-header" onclick="toggleTest(this)">
-                    <span class="test-id">TC-CAND-006</span>
-                    <span class="test-title">Source Field Tracking</span>
-                    <span class="priority medium">Medium</span>
-                </div>
-                <div class="test-case-body">
-                    <div class="test-field">
-                        <label>Preconditions</label>
-                        <p>User on New Candidate form.</p>
-                    </div>
-                    <div class="test-field">
-                        <label>Test Steps</label>
-                        <ol class="steps-list">
-                            <li>Create candidate with Source = "Referral", save</li>
-                            <li>Create candidate with Source = "ZoomInfo", save</li>
-                            <li>Create candidate with Source = "LinkedIn", save</li>
-                            <li>Create candidate with Source = "Job Board", save</li>
-                            <li>View Dashboard or run Source report</li>
-                        </ol>
-                    </div>
-                    <div class="expected-result">
-                        <strong>Expected Result:</strong> Each source value saved correctly. Source breakdown on Dashboard accurately reflects counts. Reports can filter by source.
-                    </div>
-                    <div class="checkbox-row">
-                        <label class="checkbox-item"><input type="checkbox"> Pass</label>
-                        <label class="checkbox-item"><input type="checkbox"> Fail</label>
-                        <label class="checkbox-item"><input type="checkbox"> Blocked</label>
-                    </div>
-                </div>
+            <div class="expected-result">
+              <strong>Expected Result:</strong> Save fails. Error messages
+              displayed for required fields (First Name, Last Name). Form
+              remains open for correction.
             </div>
-            
-            <div class="test-case">
-                <div class="test-case-header" onclick="toggleTest(this)">
-                    <span class="test-id">TC-CAND-007</span>
-                    <span class="test-title">Delete Candidate Record</span>
-                    <span class="priority low">Low</span>
-                </div>
-                <div class="test-case-body">
-                    <div class="test-field">
-                        <label>Preconditions</label>
-                        <p>Test candidate record exists with no related interviews.</p>
-                    </div>
-                    <div class="test-field">
-                        <label>Test Steps</label>
-                        <ol class="steps-list">
-                            <li>Open candidate detail page</li>
-                            <li>Click dropdown arrow → "Delete"</li>
-                            <li>Confirm deletion in dialog</li>
-                        </ol>
-                    </div>
-                    <div class="expected-result">
-                        <strong>Expected Result:</strong> Record deleted successfully. User redirected to list view. Deleted record no longer appears in searches or dashboard counts.
-                    </div>
-                    <div class="checkbox-row">
-                        <label class="checkbox-item"><input type="checkbox"> Pass</label>
-                        <label class="checkbox-item"><input type="checkbox"> Fail</label>
-                        <label class="checkbox-item"><input type="checkbox"> Blocked</label>
-                    </div>
-                </div>
+            <div class="checkbox-row">
+              <label class="checkbox-item"
+                ><input type="checkbox" /> Pass</label
+              >
+              <label class="checkbox-item"
+                ><input type="checkbox" /> Fail</label
+              >
+              <label class="checkbox-item"
+                ><input type="checkbox" /> Blocked</label
+              >
             </div>
-            
-            <div class="test-case">
-                <div class="test-case-header" onclick="toggleTest(this)">
-                    <span class="test-id">TC-CAND-008</span>
-                    <span class="test-title">Search and Filter Candidates</span>
-                    <span class="priority medium">Medium</span>
-                </div>
-                <div class="test-case-body">
-                    <div class="test-field">
-                        <label>Preconditions</label>
-                        <p>Multiple candidates exist with various statuses and sources.</p>
-                    </div>
-                    <div class="test-field">
-                        <label>Test Steps</label>
-                        <ol class="steps-list">
-                            <li>Go to Candidates list view</li>
-                            <li>Use global search to find candidate by name</li>
-                            <li>Filter list view by Status = "Interview Scheduled"</li>
-                            <li>Sort by Created Date descending</li>
-                            <li>Filter by Source = "Referral"</li>
-                        </ol>
-                    </div>
-                    <div class="expected-result">
-                        <strong>Expected Result:</strong> Search returns matching candidates. Filters apply correctly. Sort order accurate. Combined filters work together.
-                    </div>
-                    <div class="checkbox-row">
-                        <label class="checkbox-item"><input type="checkbox"> Pass</label>
-                        <label class="checkbox-item"><input type="checkbox"> Fail</label>
-                        <label class="checkbox-item"><input type="checkbox"> Blocked</label>
-                    </div>
-                </div>
+          </div>
+        </div>
+
+        <div class="test-case">
+          <div class="test-case-header" onclick="toggleTest(this)">
+            <span class="test-id">TC-CAND-003</span>
+            <span class="test-title">Update Candidate Information</span>
+            <span class="priority medium">Medium</span>
+          </div>
+          <div class="test-case-body">
+            <div class="test-field">
+              <label>Preconditions</label>
+              <p>Existing candidate record open in edit mode.</p>
             </div>
-        </section>
-        
-        <!-- SECTION 2: INTERVIEW TRACKING -->
-        <section class="section" id="interviews">
-            <div class="section-header">
-                <span class="section-number">2</span>
-                <h2>Interview Tracking</h2>
+            <div class="test-field">
+              <label>Test Steps</label>
+              <ol class="steps-list">
+                <li>Click "Edit" button on candidate record</li>
+                <li>Change Phone to "(555) 987-6543"</li>
+                <li>Add Notes: "Updated contact information"</li>
+                <li>Click "Save"</li>
+              </ol>
             </div>
-            
-            <div class="test-case">
-                <div class="test-case-header" onclick="toggleTest(this)">
-                    <span class="test-id">TC-INT-001</span>
-                    <span class="test-title">Schedule Phone Interview</span>
-                    <span class="priority high">High</span>
-                </div>
-                <div class="test-case-body">
-                    <div class="test-field">
-                        <label>Preconditions</label>
-                        <p>Candidate exists with Status = "New" or "Phone Screen".</p>
-                    </div>
-                    <div class="test-field">
-                        <label>Test Steps</label>
-                        <ol class="steps-list">
-                            <li>Open candidate record</li>
-                            <li>Click "Schedule Interview" or "New Interview" button</li>
-                            <li>Select Interview Type: "Phone Screen"</li>
-                            <li>Enter Date/Time for tomorrow at 10:00 AM</li>
-                            <li>Add Notes: "Initial phone screen"</li>
-                            <li>Click "Save"</li>
-                        </ol>
-                    </div>
-                    <div class="expected-result">
-                        <strong>Expected Result:</strong> Interview record created. Linked to Candidate. Interview appears in related list. Candidate status updates to "Interview Scheduled" if configured.
-                    </div>
-                    <div class="checkbox-row">
-                        <label class="checkbox-item"><input type="checkbox"> Pass</label>
-                        <label class="checkbox-item"><input type="checkbox"> Fail</label>
-                        <label class="checkbox-item"><input type="checkbox"> Blocked</label>
-                    </div>
-                </div>
+            <div class="expected-result">
+              <strong>Expected Result:</strong> Record saved successfully.
+              Updated fields display new values. Last Modified date/user
+              updated.
             </div>
-            
-            <div class="test-case">
-                <div class="test-case-header" onclick="toggleTest(this)">
-                    <span class="test-id">TC-INT-002</span>
-                    <span class="test-title">Schedule In-Person Interview</span>
-                    <span class="priority high">High</span>
-                </div>
-                <div class="test-case-body">
-                    <div class="test-field">
-                        <label>Preconditions</label>
-                        <p>Candidate has completed phone screen successfully.</p>
-                    </div>
-                    <div class="test-field">
-                        <label>Test Steps</label>
-                        <ol class="steps-list">
-                            <li>Open candidate record</li>
-                            <li>Click "New Interview"</li>
-                            <li>Select Interview Type: "In-Person"</li>
-                            <li>Enter Date/Time for next week</li>
-                            <li>Enter Location: "123 Main St, Conference Room A"</li>
-                            <li>Assign Interviewer (if field exists)</li>
-                            <li>Click "Save"</li>
-                        </ol>
-                    </div>
-                    <div class="expected-result">
-                        <strong>Expected Result:</strong> In-person interview record created with all details. Location field saved. Multiple interview records can exist for same candidate.
-                    </div>
-                    <div class="checkbox-row">
-                        <label class="checkbox-item"><input type="checkbox"> Pass</label>
-                        <label class="checkbox-item"><input type="checkbox"> Fail</label>
-                        <label class="checkbox-item"><input type="checkbox"> Blocked</label>
-                    </div>
-                </div>
+            <div class="checkbox-row">
+              <label class="checkbox-item"
+                ><input type="checkbox" /> Pass</label
+              >
+              <label class="checkbox-item"
+                ><input type="checkbox" /> Fail</label
+              >
+              <label class="checkbox-item"
+                ><input type="checkbox" /> Blocked</label
+              >
             </div>
-            
-            <div class="test-case">
-                <div class="test-case-header" onclick="toggleTest(this)">
-                    <span class="test-id">TC-INT-003</span>
-                    <span class="test-title">Record Interview Completion - Pass</span>
-                    <span class="priority high">High</span>
-                </div>
-                <div class="test-case-body">
-                    <div class="test-field">
-                        <label>Preconditions</label>
-                        <p>Interview record exists with Status = "Scheduled". Interview date has passed.</p>
-                    </div>
-                    <div class="test-field">
-                        <label>Test Steps</label>
-                        <ol class="steps-list">
-                            <li>Open the scheduled interview record</li>
-                            <li>Click "Edit" or "Log Interview"</li>
-                            <li>Change Status to "Completed"</li>
-                            <li>Set Result/Outcome: "Pass" or "Proceed"</li>
-                            <li>Enter Feedback: "Strong candidate, good communication skills"</li>
-                            <li>Click "Save"</li>
-                        </ol>
-                    </div>
-                    <div class="expected-result">
-                        <strong>Expected Result:</strong> Interview marked complete. Completion date auto-populated. Feedback saved. Candidate status may auto-update based on workflow.
-                    </div>
-                    <div class="checkbox-row">
-                        <label class="checkbox-item"><input type="checkbox"> Pass</label>
-                        <label class="checkbox-item"><input type="checkbox"> Fail</label>
-                        <label class="checkbox-item"><input type="checkbox"> Blocked</label>
-                    </div>
-                </div>
+          </div>
+        </div>
+
+        <div class="test-case">
+          <div class="test-case-header" onclick="toggleTest(this)">
+            <span class="test-id">TC-CAND-004</span>
+            <span class="test-title">Change Candidate Pipeline Stage</span>
+            <span class="priority high">High</span>
+          </div>
+          <div class="test-case-body">
+            <div class="test-field">
+              <label>Preconditions</label>
+              <p>Candidate exists with Status = "New".</p>
             </div>
-            
-            <div class="test-case">
-                <div class="test-case-header" onclick="toggleTest(this)">
-                    <span class="test-id">TC-INT-004</span>
-                    <span class="test-title">Record Interview Completion - No Hire</span>
-                    <span class="priority medium">Medium</span>
-                </div>
-                <div class="test-case-body">
-                    <div class="test-field">
-                        <label>Preconditions</label>
-                        <p>Interview exists. Candidate did not pass the interview.</p>
-                    </div>
-                    <div class="test-field">
-                        <label>Test Steps</label>
-                        <ol class="steps-list">
-                            <li>Open the interview record</li>
-                            <li>Change Status to "Completed"</li>
-                            <li>Set Result/Outcome: "No Hire" or "Rejected"</li>
-                            <li>Enter Feedback explaining decision</li>
-                            <li>Save the record</li>
-                            <li>Check if candidate status auto-updates</li>
-                        </ol>
-                    </div>
-                    <div class="expected-result">
-                        <strong>Expected Result:</strong> Interview completed with rejection outcome. Candidate status updates to "Rejected" or remains for manual update. Feedback preserved for compliance.
-                    </div>
-                    <div class="checkbox-row">
-                        <label class="checkbox-item"><input type="checkbox"> Pass</label>
-                        <label class="checkbox-item"><input type="checkbox"> Fail</label>
-                        <label class="checkbox-item"><input type="checkbox"> Blocked</label>
-                    </div>
-                </div>
+            <div class="test-field">
+              <label>Test Steps</label>
+              <ol class="steps-list">
+                <li>Open candidate record</li>
+                <li>Click on Status field or path component</li>
+                <li>Change status from "New" to "Phone Screen"</li>
+                <li>Save the record</li>
+                <li>
+                  Repeat for each stage: Phone Screen → Interview Scheduled →
+                  Interview Complete → Offer → Hired
+                </li>
+              </ol>
             </div>
-            
-            <div class="test-case">
-                <div class="test-case-header" onclick="toggleTest(this)">
-                    <span class="test-id">TC-INT-005</span>
-                    <span class="test-title">Reschedule Interview</span>
-                    <span class="priority medium">Medium</span>
-                </div>
-                <div class="test-case-body">
-                    <div class="test-field">
-                        <label>Preconditions</label>
-                        <p>Interview exists with future date/time. Candidate needs to reschedule.</p>
-                    </div>
-                    <div class="test-field">
-                        <label>Test Steps</label>
-                        <ol class="steps-list">
-                            <li>Open the interview record</li>
-                            <li>Click "Edit"</li>
-                            <li>Change Date/Time to new date</li>
-                            <li>Update Notes: "Rescheduled per candidate request"</li>
-                            <li>Save the record</li>
-                        </ol>
-                    </div>
-                    <div class="expected-result">
-                        <strong>Expected Result:</strong> Interview date/time updated. Notes reflect change. Any calendar integrations update accordingly.
-                    </div>
-                    <div class="checkbox-row">
-                        <label class="checkbox-item"><input type="checkbox"> Pass</label>
-                        <label class="checkbox-item"><input type="checkbox"> Fail</label>
-                        <label class="checkbox-item"><input type="checkbox"> Blocked</label>
-                    </div>
-                </div>
+            <div class="expected-result">
+              <strong>Expected Result:</strong> Status updates correctly at each
+              stage. Visual indicators (badges/colors) update appropriately.
+              Pipeline stage change is reflected on Dashboard.
             </div>
-            
-            <div class="test-case">
-                <div class="test-case-header" onclick="toggleTest(this)">
-                    <span class="test-id">TC-INT-006</span>
-                    <span class="test-title">Cancel Interview</span>
-                    <span class="priority low">Low</span>
-                </div>
-                <div class="test-case-body">
-                    <div class="test-field">
-                        <label>Preconditions</label>
-                        <p>Scheduled interview exists. Need to cancel (candidate withdrew, etc.).</p>
-                    </div>
-                    <div class="test-field">
-                        <label>Test Steps</label>
-                        <ol class="steps-list">
-                            <li>Open interview record</li>
-                            <li>Change Status to "Cancelled"</li>
-                            <li>Enter cancellation reason in Notes</li>
-                            <li>Save the record</li>
-                        </ol>
-                    </div>
-                    <div class="expected-result">
-                        <strong>Expected Result:</strong> Interview status changes to Cancelled. Record preserved for history. Does not count in completed interview metrics.
-                    </div>
-                    <div class="checkbox-row">
-                        <label class="checkbox-item"><input type="checkbox"> Pass</label>
-                        <label class="checkbox-item"><input type="checkbox"> Fail</label>
-                        <label class="checkbox-item"><input type="checkbox"> Blocked</label>
-                    </div>
-                </div>
+            <div class="checkbox-row">
+              <label class="checkbox-item"
+                ><input type="checkbox" /> Pass</label
+              >
+              <label class="checkbox-item"
+                ><input type="checkbox" /> Fail</label
+              >
+              <label class="checkbox-item"
+                ><input type="checkbox" /> Blocked</label
+              >
             </div>
-            
-            <div class="test-case">
-                <div class="test-case-header" onclick="toggleTest(this)">
-                    <span class="test-id">TC-INT-007</span>
-                    <span class="test-title">Interview Metrics on Dashboard</span>
-                    <span class="priority high">High</span>
-                </div>
-                <div class="test-case-body">
-                    <div class="test-field">
-                        <label>Preconditions</label>
-                        <p>Multiple interviews exist: some scheduled, some completed this week/month.</p>
-                    </div>
-                    <div class="test-field">
-                        <label>Test Steps</label>
-                        <ol class="steps-list">
-                            <li>Navigate to Recruiter Dashboard</li>
-                            <li>Locate Interview metrics section</li>
-                            <li>Verify "This Week" count matches actual completed interviews</li>
-                            <li>Verify "This Month" count matches actual completed interviews</li>
-                            <li>Verify "Scheduled" count matches upcoming interviews</li>
-                        </ol>
-                    </div>
-                    <div class="expected-result">
-                        <strong>Expected Result:</strong> All interview metrics accurate. Counts update in real-time or on refresh. Clicking metrics navigates to filtered list.
-                    </div>
-                    <div class="checkbox-row">
-                        <label class="checkbox-item"><input type="checkbox"> Pass</label>
-                        <label class="checkbox-item"><input type="checkbox"> Fail</label>
-                        <label class="checkbox-item"><input type="checkbox"> Blocked</label>
-                    </div>
-                </div>
+          </div>
+        </div>
+
+        <div class="test-case">
+          <div class="test-case-header" onclick="toggleTest(this)">
+            <span class="test-id">TC-CAND-005</span>
+            <span class="test-title">Duplicate Detection on Email</span>
+            <span class="priority medium">Medium</span>
+          </div>
+          <div class="test-case-body">
+            <div class="test-field">
+              <label>Preconditions</label>
+              <p>Candidate exists with email "existing@example.com".</p>
             </div>
-        </section>
-        
-        <!-- SECTION 3: CONTRACT B LIFECYCLE -->
-        <section class="section" id="contract-b">
-            <div class="section-header">
-                <span class="section-number">3</span>
-                <h2>Contract B Lifecycle</h2>
+            <div class="test-field">
+              <label>Test Steps</label>
+              <ol class="steps-list">
+                <li>Click "New Candidate"</li>
+                <li>
+                  Enter different name but same email: "existing@example.com"
+                </li>
+                <li>Fill other required fields</li>
+                <li>Click "Save"</li>
+              </ol>
             </div>
-            
-            <div class="info-box warning">
-                <strong>⚠️ Critical Contract B Metrics</strong>
-                <p>Verify all tests use correct values: <strong>4 months</strong> duration, <strong>$2,500 FYC</strong> requirement, <strong>5 submissions</strong> required, <strong>4 month max extension</strong>.</p>
+            <div class="expected-result">
+              <strong>Expected Result:</strong> System detects duplicate.
+              Warning/alert shown with link to existing record. User can choose
+              to proceed or cancel.
             </div>
-            
-            <div class="test-case">
-                <div class="test-case-header" onclick="toggleTest(this)">
-                    <span class="test-id">TC-CTB-001</span>
-                    <span class="test-title">Contract B Record Creation</span>
-                    <span class="priority high">High</span>
-                </div>
-                <div class="test-case-body">
-                    <div class="test-field">
-                        <label>Preconditions</label>
-                        <p>Candidate hired and ready for Contract B onboarding.</p>
-                    </div>
-                    <div class="test-field">
-                        <label>Test Steps</label>
-                        <ol class="steps-list">
-                            <li>Create new Contract B record for advisor</li>
-                            <li>Set Start Date to today's date</li>
-                            <li>Verify End Date auto-calculates to 4 months from start</li>
-                            <li>Verify FYC Requirement shows $2,500</li>
-                            <li>Verify Submission Requirement shows 5</li>
-                            <li>Save the record</li>
-                        </ol>
-                    </div>
-                    <div class="expected-result">
-                        <strong>Expected Result:</strong> Contract B record created. End Date = Start Date + 4 months. FYC Requirement = $2,500. Submission Requirement = 5. Status defaults to "Active".
-                    </div>
-                    <div class="checkbox-row">
-                        <label class="checkbox-item"><input type="checkbox"> Pass</label>
-                        <label class="checkbox-item"><input type="checkbox"> Fail</label>
-                        <label class="checkbox-item"><input type="checkbox"> Blocked</label>
-                    </div>
-                </div>
+            <div class="checkbox-row">
+              <label class="checkbox-item"
+                ><input type="checkbox" /> Pass</label
+              >
+              <label class="checkbox-item"
+                ><input type="checkbox" /> Fail</label
+              >
+              <label class="checkbox-item"
+                ><input type="checkbox" /> Blocked</label
+              >
             </div>
-            
-            <div class="test-case">
-                <div class="test-case-header" onclick="toggleTest(this)">
-                    <span class="test-id">TC-CTB-002</span>
-                    <span class="test-title">FYC Tracking and Rollup</span>
-                    <span class="priority high">High</span>
-                </div>
-                <div class="test-case-body">
-                    <div class="test-field">
-                        <label>Preconditions</label>
-                        <p>Active Contract B record exists with $0 FYC.</p>
-                    </div>
-                    <div class="test-field">
-                        <label>Test Steps</label>
-                        <ol class="steps-list">
-                            <li>Add/update production record with FYC = $1,000</li>
-                            <li>Verify Contract B FYC total updates to $1,000</li>
-                            <li>Add another production record with FYC = $1,500</li>
-                            <li>Verify Contract B FYC total = $2,500</li>
-                            <li>Verify progress indicator shows 100% of $2,500 requirement</li>
-                        </ol>
-                    </div>
-                    <div class="expected-result">
-                        <strong>Expected Result:</strong> FYC correctly rolls up from production records. Total matches sum of individual FYC values. Progress shows accurate percentage toward $2,500 goal.
-                    </div>
-                    <div class="checkbox-row">
-                        <label class="checkbox-item"><input type="checkbox"> Pass</label>
-                        <label class="checkbox-item"><input type="checkbox"> Fail</label>
-                        <label class="checkbox-item"><input type="checkbox"> Blocked</label>
-                    </div>
-                </div>
+          </div>
+        </div>
+
+        <div class="test-case">
+          <div class="test-case-header" onclick="toggleTest(this)">
+            <span class="test-id">TC-CAND-006</span>
+            <span class="test-title">Source Field Tracking</span>
+            <span class="priority medium">Medium</span>
+          </div>
+          <div class="test-case-body">
+            <div class="test-field">
+              <label>Preconditions</label>
+              <p>User on New Candidate form.</p>
             </div>
-            
-            <div class="test-case">
-                <div class="test-case-header" onclick="toggleTest(this)">
-                    <span class="test-id">TC-CTB-003</span>
-                    <span class="test-title">Submission Count Tracking</span>
-                    <span class="priority high">High</span>
-                </div>
-                <div class="test-case-body">
-                    <div class="test-field">
-                        <label>Preconditions</label>
-                        <p>Active Contract B with 0 submissions.</p>
-                    </div>
-                    <div class="test-field">
-                        <label>Test Steps</label>
-                        <ol class="steps-list">
-                            <li>Add a submission record linked to Contract B</li>
-                            <li>Verify submission count = 1</li>
-                            <li>Add 4 more submissions</li>
-                            <li>Verify submission count = 5</li>
-                            <li>Verify progress shows 100% of 5 submission requirement</li>
-                        </ol>
-                    </div>
-                    <div class="expected-result">
-                        <strong>Expected Result:</strong> Submission count accurately reflects linked records. Progress indicator shows 5/5 when requirement met.
-                    </div>
-                    <div class="checkbox-row">
-                        <label class="checkbox-item"><input type="checkbox"> Pass</label>
-                        <label class="checkbox-item"><input type="checkbox"> Fail</label>
-                        <label class="checkbox-item"><input type="checkbox"> Blocked</label>
-                    </div>
-                </div>
+            <div class="test-field">
+              <label>Test Steps</label>
+              <ol class="steps-list">
+                <li>Create candidate with Source = "Referral", save</li>
+                <li>Create candidate with Source = "ZoomInfo", save</li>
+                <li>Create candidate with Source = "LinkedIn", save</li>
+                <li>Create candidate with Source = "Job Board", save</li>
+                <li>View Dashboard or run Source report</li>
+              </ol>
             </div>
-            
-            <div class="test-case">
-                <div class="test-case-header" onclick="toggleTest(this)">
-                    <span class="test-id">TC-CTB-004</span>
-                    <span class="test-title">Status Indicator - On Track</span>
-                    <span class="priority high">High</span>
-                </div>
-                <div class="test-case-body">
-                    <div class="test-field">
-                        <label>Preconditions</label>
-                        <p>Contract B in month 2 of 4. FYC = $1,500 (60%). Submissions = 3 (60%).</p>
-                    </div>
-                    <div class="test-field">
-                        <label>Test Steps</label>
-                        <ol class="steps-list">
-                            <li>Open Contract B record</li>
-                            <li>Verify status indicator displays "On Track" (green)</li>
-                            <li>Verify dashboard shows this advisor in "On Track" category</li>
-                        </ol>
-                    </div>
-                    <div class="expected-result">
-                        <strong>Expected Result:</strong> With 50% time elapsed and 60% progress, status shows "On Track" with green indicator.
-                    </div>
-                    <div class="checkbox-row">
-                        <label class="checkbox-item"><input type="checkbox"> Pass</label>
-                        <label class="checkbox-item"><input type="checkbox"> Fail</label>
-                        <label class="checkbox-item"><input type="checkbox"> Blocked</label>
-                    </div>
-                </div>
+            <div class="expected-result">
+              <strong>Expected Result:</strong> Each source value saved
+              correctly. Source breakdown on Dashboard accurately reflects
+              counts. Reports can filter by source.
             </div>
-            
-            <div class="test-case">
-                <div class="test-case-header" onclick="toggleTest(this)">
-                    <span class="test-id">TC-CTB-005</span>
-                    <span class="test-title">Status Indicator - At Risk</span>
-                    <span class="priority high">High</span>
-                </div>
-                <div class="test-case-body">
-                    <div class="test-field">
-                        <label>Preconditions</label>
-                        <p>Contract B in month 3 of 4. FYC = $1,000 (40%). Submissions = 2 (40%).</p>
-                    </div>
-                    <div class="test-field">
-                        <label>Test Steps</label>
-                        <ol class="steps-list">
-                            <li>Open Contract B record</li>
-                            <li>Verify status indicator displays "At Risk" (yellow/orange)</li>
-                            <li>Verify dashboard shows this advisor in "At Risk" category</li>
-                        </ol>
-                    </div>
-                    <div class="expected-result">
-                        <strong>Expected Result:</strong> With 75% time elapsed but only 40% progress, status shows "At Risk" with yellow/orange indicator.
-                    </div>
-                    <div class="checkbox-row">
-                        <label class="checkbox-item"><input type="checkbox"> Pass</label>
-                        <label class="checkbox-item"><input type="checkbox"> Fail</label>
-                        <label class="checkbox-item"><input type="checkbox"> Blocked</label>
-                    </div>
-                </div>
+            <div class="checkbox-row">
+              <label class="checkbox-item"
+                ><input type="checkbox" /> Pass</label
+              >
+              <label class="checkbox-item"
+                ><input type="checkbox" /> Fail</label
+              >
+              <label class="checkbox-item"
+                ><input type="checkbox" /> Blocked</label
+              >
             </div>
-            
-            <div class="test-case">
-                <div class="test-case-header" onclick="toggleTest(this)">
-                    <span class="test-id">TC-CTB-006</span>
-                    <span class="test-title">Status Indicator - Critical</span>
-                    <span class="priority high">High</span>
-                </div>
-                <div class="test-case-body">
-                    <div class="test-field">
-                        <label>Preconditions</label>
-                        <p>Contract B in final month (month 4). FYC = $500 (20%). Submissions = 1 (20%).</p>
-                    </div>
-                    <div class="test-field">
-                        <label>Test Steps</label>
-                        <ol class="steps-list">
-                            <li>Open Contract B record</li>
-                            <li>Verify status indicator displays "Critical" (red)</li>
-                            <li>Verify dashboard shows this advisor in "Critical" category</li>
-                            <li>Verify any alerts/notifications trigger appropriately</li>
-                        </ol>
-                    </div>
-                    <div class="expected-result">
-                        <strong>Expected Result:</strong> With contract ending soon and requirements far from met, status shows "Critical" with red indicator.
-                    </div>
-                    <div class="checkbox-row">
-                        <label class="checkbox-item"><input type="checkbox"> Pass</label>
-                        <label class="checkbox-item"><input type="checkbox"> Fail</label>
-                        <label class="checkbox-item"><input type="checkbox"> Blocked</label>
-                    </div>
-                </div>
+          </div>
+        </div>
+
+        <div class="test-case">
+          <div class="test-case-header" onclick="toggleTest(this)">
+            <span class="test-id">TC-CAND-007</span>
+            <span class="test-title">Delete Candidate Record</span>
+            <span class="priority low">Low</span>
+          </div>
+          <div class="test-case-body">
+            <div class="test-field">
+              <label>Preconditions</label>
+              <p>Test candidate record exists with no related interviews.</p>
             </div>
-            
-            <div class="test-case">
-                <div class="test-case-header" onclick="toggleTest(this)">
-                    <span class="test-id">TC-CTB-007</span>
-                    <span class="test-title">Grant Extension (Max 4 Months)</span>
-                    <span class="priority high">High</span>
-                </div>
-                <div class="test-case-body">
-                    <div class="test-field">
-                        <label>Preconditions</label>
-                        <p>Contract B nearing end date. Has not met requirements. No prior extensions.</p>
-                    </div>
-                    <div class="test-field">
-                        <label>Test Steps</label>
-                        <ol class="steps-list">
-                            <li>Open Contract B record</li>
-                            <li>Click "Grant Extension" or edit End Date</li>
-                            <li>Enter 2 month extension</li>
-                            <li>Verify new End Date = original + 2 months</li>
-                            <li>Try to add another 3 month extension</li>
-                            <li>Verify system limits total extension to 4 months max</li>
-                        </ol>
-                    </div>
-                    <div class="expected-result">
-                        <strong>Expected Result:</strong> Extension granted. End date updated. System enforces 4 month maximum extension limit. Cannot exceed 8 months total (4 original + 4 extension).
-                    </div>
-                    <div class="checkbox-row">
-                        <label class="checkbox-item"><input type="checkbox"> Pass</label>
-                        <label class="checkbox-item"><input type="checkbox"> Fail</label>
-                        <label class="checkbox-item"><input type="checkbox"> Blocked</label>
-                    </div>
-                </div>
+            <div class="test-field">
+              <label>Test Steps</label>
+              <ol class="steps-list">
+                <li>Open candidate detail page</li>
+                <li>Click dropdown arrow → "Delete"</li>
+                <li>Confirm deletion in dialog</li>
+              </ol>
             </div>
-            
-            <div class="test-case">
-                <div class="test-case-header" onclick="toggleTest(this)">
-                    <span class="test-id">TC-CTB-008</span>
-                    <span class="test-title">Contract B Outcomes - Transition/Extension/Termination</span>
-                    <span class="priority high">High</span>
-                </div>
-                <div class="test-case-body">
-                    <div class="test-field">
-                        <label>Preconditions</label>
-                        <p>Three Contract B records: one met requirements, one extended, one failed.</p>
-                    </div>
-                    <div class="test-field">
-                        <label>Test Steps</label>
-                        <ol class="steps-list">
-                            <li>Test Transition: Contract B with $2,500+ FYC and 5+ submissions → Mark as "Transition to A"</li>
-                            <li>Verify advisor record updates appropriately</li>
-                            <li>Test Extension: Contract B not meeting requirements → Grant extension</li>
-                            <li>Verify status reflects extension period</li>
-                            <li>Test Termination: Contract B expired without meeting requirements → Mark as "Terminated"</li>
-                            <li>Verify termination date and reason recorded</li>
-                        </ol>
-                    </div>
-                    <div class="expected-result">
-                        <strong>Expected Result:</strong> All three outcomes process correctly. Transition updates advisor status. Extension updates dates. Termination records final status with date.
-                    </div>
-                    <div class="checkbox-row">
-                        <label class="checkbox-item"><input type="checkbox"> Pass</label>
-                        <label class="checkbox-item"><input type="checkbox"> Fail</label>
-                        <label class="checkbox-item"><input type="checkbox"> Blocked</label>
-                    </div>
-                </div>
+            <div class="expected-result">
+              <strong>Expected Result:</strong> Record deleted successfully.
+              User redirected to list view. Deleted record no longer appears in
+              searches or dashboard counts.
             </div>
-        </section>
-        
-        <!-- SECTION 4: DASHBOARD METRICS -->
-        <section class="section" id="dashboard">
-            <div class="section-header">
-                <span class="section-number">4</span>
-                <h2>Dashboard Metrics</h2>
+            <div class="checkbox-row">
+              <label class="checkbox-item"
+                ><input type="checkbox" /> Pass</label
+              >
+              <label class="checkbox-item"
+                ><input type="checkbox" /> Fail</label
+              >
+              <label class="checkbox-item"
+                ><input type="checkbox" /> Blocked</label
+              >
             </div>
-            
-            <div class="test-case">
-                <div class="test-case-header" onclick="toggleTest(this)">
-                    <span class="test-id">TC-DASH-001</span>
-                    <span class="test-title">Summary Cards Display</span>
-                    <span class="priority high">High</span>
-                </div>
-                <div class="test-case-body">
-                    <div class="test-field">
-                        <label>Preconditions</label>
-                        <p>User logged in. Known candidate counts exist in system.</p>
-                    </div>
-                    <div class="test-field">
-                        <label>Test Steps</label>
-                        <ol class="steps-list">
-                            <li>Navigate to Recruiter Dashboard</li>
-                            <li>Verify "Total Candidates" card shows correct count</li>
-                            <li>Verify "Active Pipeline" card shows non-closed candidates</li>
-                            <li>Verify "This Month's Hires" card shows accurate count</li>
-                            <li>Verify "Scheduled Interviews" card shows upcoming interviews</li>
-                        </ol>
-                    </div>
-                    <div class="expected-result">
-                        <strong>Expected Result:</strong> All summary cards display accurate, real-time data. Numbers match actual record counts in Salesforce.
-                    </div>
-                    <div class="checkbox-row">
-                        <label class="checkbox-item"><input type="checkbox"> Pass</label>
-                        <label class="checkbox-item"><input type="checkbox"> Fail</label>
-                        <label class="checkbox-item"><input type="checkbox"> Blocked</label>
-                    </div>
-                </div>
+          </div>
+        </div>
+
+        <div class="test-case">
+          <div class="test-case-header" onclick="toggleTest(this)">
+            <span class="test-id">TC-CAND-008</span>
+            <span class="test-title">Search and Filter Candidates</span>
+            <span class="priority medium">Medium</span>
+          </div>
+          <div class="test-case-body">
+            <div class="test-field">
+              <label>Preconditions</label>
+              <p>
+                Multiple candidates exist with various statuses and sources.
+              </p>
             </div>
-            
-            <div class="test-case">
-                <div class="test-case-header" onclick="toggleTest(this)">
-                    <span class="test-id">TC-DASH-002</span>
-                    <span class="test-title">Pipeline Stage Breakdown</span>
-                    <span class="priority high">High</span>
-                </div>
-                <div class="test-case-body">
-                    <div class="test-field">
-                        <label>Preconditions</label>
-                        <p>Candidates exist in various pipeline stages.</p>
-                    </div>
-                    <div class="test-field">
-                        <label>Test Steps</label>
-                        <ol class="steps-list">
-                            <li>View pipeline breakdown section on Dashboard</li>
-                            <li>Verify counts for each stage: New, Phone Screen, Interview Scheduled, Interview Complete, Offer, Hired</li>
-                            <li>Click on a stage to view filtered list</li>
-                            <li>Confirm filtered list matches the count shown</li>
-                        </ol>
-                    </div>
-                    <div class="expected-result">
-                        <strong>Expected Result:</strong> Each pipeline stage shows accurate count. Clicking navigates to correctly filtered list view.
-                    </div>
-                    <div class="checkbox-row">
-                        <label class="checkbox-item"><input type="checkbox"> Pass</label>
-                        <label class="checkbox-item"><input type="checkbox"> Fail</label>
-                        <label class="checkbox-item"><input type="checkbox"> Blocked</label>
-                    </div>
-                </div>
+            <div class="test-field">
+              <label>Test Steps</label>
+              <ol class="steps-list">
+                <li>Go to Candidates list view</li>
+                <li>Use global search to find candidate by name</li>
+                <li>Filter list view by Status = "Interview Scheduled"</li>
+                <li>Sort by Created Date descending</li>
+                <li>Filter by Source = "Referral"</li>
+              </ol>
             </div>
-            
-            <div class="test-case">
-                <div class="test-case-header" onclick="toggleTest(this)">
-                    <span class="test-id">TC-DASH-003</span>
-                    <span class="test-title">YTD Metrics Accuracy</span>
-                    <span class="priority medium">Medium</span>
-                </div>
-                <div class="test-case-body">
-                    <div class="test-field">
-                        <label>Preconditions</label>
-                        <p>Records exist from current calendar year.</p>
-                    </div>
-                    <div class="test-field">
-                        <label>Test Steps</label>
-                        <ol class="steps-list">
-                            <li>View YTD (Year-to-Date) metrics section</li>
-                            <li>Verify YTD Hires count matches records hired since Jan 1</li>
-                            <li>Verify YTD Interviews matches completed interviews since Jan 1</li>
-                            <li>Run report to cross-check numbers</li>
-                        </ol>
-                    </div>
-                    <div class="expected-result">
-                        <strong>Expected Result:</strong> YTD metrics accurately reflect all activity from January 1 of current year through today.
-                    </div>
-                    <div class="checkbox-row">
-                        <label class="checkbox-item"><input type="checkbox"> Pass</label>
-                        <label class="checkbox-item"><input type="checkbox"> Fail</label>
-                        <label class="checkbox-item"><input type="checkbox"> Blocked</label>
-                    </div>
-                </div>
+            <div class="expected-result">
+              <strong>Expected Result:</strong> Search returns matching
+              candidates. Filters apply correctly. Sort order accurate. Combined
+              filters work together.
             </div>
-            
-            <div class="test-case">
-                <div class="test-case-header" onclick="toggleTest(this)">
-                    <span class="test-id">TC-DASH-004</span>
-                    <span class="test-title">Pipeline Table Sorting</span>
-                    <span class="priority medium">Medium</span>
-                </div>
-                <div class="test-case-body">
-                    <div class="test-field">
-                        <label>Preconditions</label>
-                        <p>Pipeline table visible with multiple candidates.</p>
-                    </div>
-                    <div class="test-field">
-                        <label>Test Steps</label>
-                        <ol class="steps-list">
-                            <li>Click column header "Name" to sort alphabetically</li>
-                            <li>Click again to reverse sort order</li>
-                            <li>Click "Status" column to sort by pipeline stage</li>
-                            <li>Click "Created Date" to sort by date</li>
-                        </ol>
-                    </div>
-                    <div class="expected-result">
-                        <strong>Expected Result:</strong> Table sorts correctly by each column. Sort indicator shows direction. Data re-orders appropriately.
-                    </div>
-                    <div class="checkbox-row">
-                        <label class="checkbox-item"><input type="checkbox"> Pass</label>
-                        <label class="checkbox-item"><input type="checkbox"> Fail</label>
-                        <label class="checkbox-item"><input type="checkbox"> Blocked</label>
-                    </div>
-                </div>
+            <div class="checkbox-row">
+              <label class="checkbox-item"
+                ><input type="checkbox" /> Pass</label
+              >
+              <label class="checkbox-item"
+                ><input type="checkbox" /> Fail</label
+              >
+              <label class="checkbox-item"
+                ><input type="checkbox" /> Blocked</label
+              >
             </div>
-            
-            <div class="test-case">
-                <div class="test-case-header" onclick="toggleTest(this)">
-                    <span class="test-id">TC-DASH-005</span>
-                    <span class="test-title">Action Buttons Functionality</span>
-                    <span class="priority medium">Medium</span>
-                </div>
-                <div class="test-case-body">
-                    <div class="test-field">
-                        <label>Preconditions</label>
-                        <p>Dashboard loaded with candidate records visible.</p>
-                    </div>
-                    <div class="test-field">
-                        <label>Test Steps</label>
-                        <ol class="steps-list">
-                            <li>Click "New Candidate" button</li>
-                            <li>Verify new candidate form opens</li>
-                            <li>Cancel and return to Dashboard</li>
-                            <li>Click "Schedule Interview" on a candidate row</li>
-                            <li>Verify interview scheduling form opens with candidate pre-selected</li>
-                        </ol>
-                    </div>
-                    <div class="expected-result">
-                        <strong>Expected Result:</strong> All action buttons function correctly. Forms open with appropriate context. Navigation works as expected.
-                    </div>
-                    <div class="checkbox-row">
-                        <label class="checkbox-item"><input type="checkbox"> Pass</label>
-                        <label class="checkbox-item"><input type="checkbox"> Fail</label>
-                        <label class="checkbox-item"><input type="checkbox"> Blocked</label>
-                    </div>
-                </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- SECTION 2: INTERVIEW TRACKING -->
+      <section class="section" id="interviews">
+        <div class="section-header">
+          <span class="section-number">2</span>
+          <h2>Interview Tracking</h2>
+        </div>
+
+        <div class="test-case">
+          <div class="test-case-header" onclick="toggleTest(this)">
+            <span class="test-id">TC-INT-001</span>
+            <span class="test-title">Schedule Phone Interview</span>
+            <span class="priority high">High</span>
+          </div>
+          <div class="test-case-body">
+            <div class="test-field">
+              <label>Preconditions</label>
+              <p>Candidate exists with Status = "New" or "Phone Screen".</p>
             </div>
-            
-            <div class="test-case">
-                <div class="test-case-header" onclick="toggleTest(this)">
-                    <span class="test-id">TC-DASH-006</span>
-                    <span class="test-title">Status Badge Colors</span>
-                    <span class="priority low">Low</span>
-                </div>
-                <div class="test-case-body">
-                    <div class="test-field">
-                        <label>Preconditions</label>
-                        <p>Candidates exist in all pipeline stages.</p>
-                    </div>
-                    <div class="test-field">
-                        <label>Test Steps</label>
-                        <ol class="steps-list">
-                            <li>View candidates in pipeline table</li>
-                            <li>Verify "New" shows appropriate color (blue)</li>
-                            <li>Verify "Interview Scheduled" shows different color (yellow/orange)</li>
-                            <li>Verify "Hired" shows success color (green)</li>
-                            <li>Verify "Rejected" shows appropriate color (gray/red)</li>
-                        </ol>
-                    </div>
-                    <div class="expected-result">
-                        <strong>Expected Result:</strong> Each status has distinct, consistent color coding. Colors match design specifications.
-                    </div>
-                    <div class="checkbox-row">
-                        <label class="checkbox-item"><input type="checkbox"> Pass</label>
-                        <label class="checkbox-item"><input type="checkbox"> Fail</label>
-                        <label class="checkbox-item"><input type="checkbox"> Blocked</label>
-                    </div>
-                </div>
+            <div class="test-field">
+              <label>Test Steps</label>
+              <ol class="steps-list">
+                <li>Open candidate record</li>
+                <li>Click "Schedule Interview" or "New Interview" button</li>
+                <li>Select Interview Type: "Phone Screen"</li>
+                <li>Enter Date/Time for tomorrow at 10:00 AM</li>
+                <li>Add Notes: "Initial phone screen"</li>
+                <li>Click "Save"</li>
+              </ol>
             </div>
-            
-            <div class="test-case">
-                <div class="test-case-header" onclick="toggleTest(this)">
-                    <span class="test-id">TC-DASH-007</span>
-                    <span class="test-title">Dashboard Refresh/Real-time Updates</span>
-                    <span class="priority medium">Medium</span>
-                </div>
-                <div class="test-case-body">
-                    <div class="test-field">
-                        <label>Preconditions</label>
-                        <p>Dashboard open. Second browser/tab available for making changes.</p>
-                    </div>
-                    <div class="test-field">
-                        <label>Test Steps</label>
-                        <ol class="steps-list">
-                            <li>Note current counts on Dashboard</li>
-                            <li>In another tab, create a new candidate</li>
-                            <li>Return to Dashboard and refresh (or wait for auto-refresh)</li>
-                            <li>Verify counts have updated</li>
-                            <li>Verify new candidate appears in pipeline table</li>
-                        </ol>
-                    </div>
-                    <div class="expected-result">
-                        <strong>Expected Result:</strong> Dashboard reflects changes after refresh. New records appear. Counts update accurately.
-                    </div>
-                    <div class="checkbox-row">
-                        <label class="checkbox-item"><input type="checkbox"> Pass</label>
-                        <label class="checkbox-item"><input type="checkbox"> Fail</label>
-                        <label class="checkbox-item"><input type="checkbox"> Blocked</label>
-                    </div>
-                </div>
+            <div class="expected-result">
+              <strong>Expected Result:</strong> Interview record created. Linked
+              to Candidate. Interview appears in related list. Candidate status
+              updates to "Interview Scheduled" if configured.
             </div>
-        </section>
-        
-        <!-- SECTION 5: LINKEDIN EXTENSION -->
-        <section class="section" id="linkedin">
-            <div class="section-header">
-                <span class="section-number">5</span>
-                <h2>LinkedIn Extension</h2>
+            <div class="checkbox-row">
+              <label class="checkbox-item"
+                ><input type="checkbox" /> Pass</label
+              >
+              <label class="checkbox-item"
+                ><input type="checkbox" /> Fail</label
+              >
+              <label class="checkbox-item"
+                ><input type="checkbox" /> Blocked</label
+              >
             </div>
-            
-            <div class="info-box">
-                <strong>ℹ️ Prerequisites</strong>
-                <p>LinkedIn extension installed in Edge or Chrome. User logged into Salesforce in same browser. LinkedIn account accessible.</p>
+          </div>
+        </div>
+
+        <div class="test-case">
+          <div class="test-case-header" onclick="toggleTest(this)">
+            <span class="test-id">TC-INT-002</span>
+            <span class="test-title">Schedule In-Person Interview</span>
+            <span class="priority high">High</span>
+          </div>
+          <div class="test-case-body">
+            <div class="test-field">
+              <label>Preconditions</label>
+              <p>Candidate has completed phone screen successfully.</p>
             </div>
-            
-            <div class="test-case">
-                <div class="test-case-header" onclick="toggleTest(this)">
-                    <span class="test-id">TC-LI-001</span>
-                    <span class="test-title">Extension Installation Verification</span>
-                    <span class="priority high">High</span>
-                </div>
-                <div class="test-case-body">
-                    <div class="test-field">
-                        <label>Preconditions</label>
-                        <p>Extension files available. Browser supports extensions.</p>
-                    </div>
-                    <div class="test-field">
-                        <label>Test Steps</label>
-                        <ol class="steps-list">
-                            <li>Open browser extensions page (edge://extensions or chrome://extensions)</li>
-                            <li>Enable Developer Mode</li>
-                            <li>Load unpacked extension from provided folder</li>
-                            <li>Verify extension icon appears in toolbar</li>
-                            <li>Pin extension to toolbar if needed</li>
-                        </ol>
-                    </div>
-                    <div class="expected-result">
-                        <strong>Expected Result:</strong> Extension loads without errors. Icon visible in browser toolbar. No console errors on installation.
-                    </div>
-                    <div class="checkbox-row">
-                        <label class="checkbox-item"><input type="checkbox"> Pass</label>
-                        <label class="checkbox-item"><input type="checkbox"> Fail</label>
-                        <label class="checkbox-item"><input type="checkbox"> Blocked</label>
-                    </div>
-                </div>
+            <div class="test-field">
+              <label>Test Steps</label>
+              <ol class="steps-list">
+                <li>Open candidate record</li>
+                <li>Click "New Interview"</li>
+                <li>Select Interview Type: "In-Person"</li>
+                <li>Enter Date/Time for next week</li>
+                <li>Enter Location: "123 Main St, Conference Room A"</li>
+                <li>Assign Interviewer (if field exists)</li>
+                <li>Click "Save"</li>
+              </ol>
             </div>
-            
-            <div class="test-case">
-                <div class="test-case-header" onclick="toggleTest(this)">
-                    <span class="test-id">TC-LI-002</span>
-                    <span class="test-title">Salesforce Connection</span>
-                    <span class="priority high">High</span>
-                </div>
-                <div class="test-case-body">
-                    <div class="test-field">
-                        <label>Preconditions</label>
-                        <p>Extension installed. Salesforce credentials available.</p>
-                    </div>
-                    <div class="test-field">
-                        <label>Test Steps</label>
-                        <ol class="steps-list">
-                            <li>Click extension icon</li>
-                            <li>Click Settings/gear icon</li>
-                            <li>Enter Salesforce org URL</li>
-                            <li>Click Connect</li>
-                            <li>Log in with Salesforce credentials when prompted</li>
-                            <li>Grant permissions if requested</li>
-                        </ol>
-                    </div>
-                    <div class="expected-result">
-                        <strong>Expected Result:</strong> Connection established. "Connected" status displayed. Extension ready to import candidates.
-                    </div>
-                    <div class="checkbox-row">
-                        <label class="checkbox-item"><input type="checkbox"> Pass</label>
-                        <label class="checkbox-item"><input type="checkbox"> Fail</label>
-                        <label class="checkbox-item"><input type="checkbox"> Blocked</label>
-                    </div>
-                </div>
+            <div class="expected-result">
+              <strong>Expected Result:</strong> In-person interview record
+              created with all details. Location field saved. Multiple interview
+              records can exist for same candidate.
             </div>
-            
-            <div class="test-case">
-                <div class="test-case-header" onclick="toggleTest(this)">
-                    <span class="test-id">TC-LI-003</span>
-                    <span class="test-title">Import Candidate from LinkedIn Profile</span>
-                    <span class="priority high">High</span>
-                </div>
-                <div class="test-case-body">
-                    <div class="test-field">
-                        <label>Preconditions</label>
-                        <p>Extension connected to Salesforce. On a LinkedIn profile page.</p>
-                    </div>
-                    <div class="test-field">
-                        <label>Test Steps</label>
-                        <ol class="steps-list">
-                            <li>Navigate to a LinkedIn profile page</li>
-                            <li>Click the extension icon</li>
-                            <li>Verify name and headline are captured</li>
-                            <li>Verify location is parsed</li>
-                            <li>Click "Import to Salesforce"</li>
-                            <li>Verify success message appears</li>
-                            <li>Click link to open new candidate record</li>
-                        </ol>
-                    </div>
-                    <div class="expected-result">
-                        <strong>Expected Result:</strong> Candidate created in Salesforce with: First/Last Name, Title/Headline, Location, LinkedIn URL, Source = "LinkedIn", Status = "New".
-                    </div>
-                    <div class="checkbox-row">
-                        <label class="checkbox-item"><input type="checkbox"> Pass</label>
-                        <label class="checkbox-item"><input type="checkbox"> Fail</label>
-                        <label class="checkbox-item"><input type="checkbox"> Blocked</label>
-                    </div>
-                </div>
+            <div class="checkbox-row">
+              <label class="checkbox-item"
+                ><input type="checkbox" /> Pass</label
+              >
+              <label class="checkbox-item"
+                ><input type="checkbox" /> Fail</label
+              >
+              <label class="checkbox-item"
+                ><input type="checkbox" /> Blocked</label
+              >
             </div>
-            
-            <div class="test-case">
-                <div class="test-case-header" onclick="toggleTest(this)">
-                    <span class="test-id">TC-LI-004</span>
-                    <span class="test-title">Duplicate Detection</span>
-                    <span class="priority medium">Medium</span>
-                </div>
-                <div class="test-case-body">
-                    <div class="test-field">
-                        <label>Preconditions</label>
-                        <p>Candidate already exists from previous import.</p>
-                    </div>
-                    <div class="test-field">
-                        <label>Test Steps</label>
-                        <ol class="steps-list">
-                            <li>Navigate to same LinkedIn profile previously imported</li>
-                            <li>Click extension icon</li>
-                            <li>Attempt to import again</li>
-                        </ol>
-                    </div>
-                    <div class="expected-result">
-                        <strong>Expected Result:</strong> System detects duplicate. Warning message displayed with option to view existing record or proceed with new record.
-                    </div>
-                    <div class="checkbox-row">
-                        <label class="checkbox-item"><input type="checkbox"> Pass</label>
-                        <label class="checkbox-item"><input type="checkbox"> Fail</label>
-                        <label class="checkbox-item"><input type="checkbox"> Blocked</label>
-                    </div>
-                </div>
+          </div>
+        </div>
+
+        <div class="test-case">
+          <div class="test-case-header" onclick="toggleTest(this)">
+            <span class="test-id">TC-INT-003</span>
+            <span class="test-title">Record Interview Completion - Pass</span>
+            <span class="priority high">High</span>
+          </div>
+          <div class="test-case-body">
+            <div class="test-field">
+              <label>Preconditions</label>
+              <p>
+                Interview record exists with Status = "Scheduled". Interview
+                date has passed.
+              </p>
             </div>
-            
-            <div class="test-case">
-                <div class="test-case-header" onclick="toggleTest(this)">
-                    <span class="test-id">TC-LI-005</span>
-                    <span class="test-title">Error Handling - Not on Profile Page</span>
-                    <span class="priority low">Low</span>
-                </div>
-                <div class="test-case-body">
-                    <div class="test-field">
-                        <label>Preconditions</label>
-                        <p>Extension connected. Not on a LinkedIn profile page.</p>
-                    </div>
-                    <div class="test-field">
-                        <label>Test Steps</label>
-                        <ol class="steps-list">
-                            <li>Navigate to LinkedIn search results page (not a profile)</li>
-                            <li>Click extension icon</li>
-                            <li>Observe behavior</li>
-                        </ol>
-                    </div>
-                    <div class="expected-result">
-                        <strong>Expected Result:</strong> Helpful error message displayed: "Please navigate to a LinkedIn profile page to import a candidate." No crash or confusing errors.
-                    </div>
-                    <div class="checkbox-row">
-                        <label class="checkbox-item"><input type="checkbox"> Pass</label>
-                        <label class="checkbox-item"><input type="checkbox"> Fail</label>
-                        <label class="checkbox-item"><input type="checkbox"> Blocked</label>
-                    </div>
-                </div>
+            <div class="test-field">
+              <label>Test Steps</label>
+              <ol class="steps-list">
+                <li>Open the scheduled interview record</li>
+                <li>Click "Edit" or "Log Interview"</li>
+                <li>Change Status to "Completed"</li>
+                <li>Set Result/Outcome: "Pass" or "Proceed"</li>
+                <li>
+                  Enter Feedback: "Strong candidate, good communication skills"
+                </li>
+                <li>Click "Save"</li>
+              </ol>
             </div>
-        </section>
+            <div class="expected-result">
+              <strong>Expected Result:</strong> Interview marked complete.
+              Completion date auto-populated. Feedback saved. Candidate status
+              may auto-update based on workflow.
+            </div>
+            <div class="checkbox-row">
+              <label class="checkbox-item"
+                ><input type="checkbox" /> Pass</label
+              >
+              <label class="checkbox-item"
+                ><input type="checkbox" /> Fail</label
+              >
+              <label class="checkbox-item"
+                ><input type="checkbox" /> Blocked</label
+              >
+            </div>
+          </div>
+        </div>
+
+        <div class="test-case">
+          <div class="test-case-header" onclick="toggleTest(this)">
+            <span class="test-id">TC-INT-004</span>
+            <span class="test-title"
+              >Record Interview Completion - No Hire</span
+            >
+            <span class="priority medium">Medium</span>
+          </div>
+          <div class="test-case-body">
+            <div class="test-field">
+              <label>Preconditions</label>
+              <p>Interview exists. Candidate did not pass the interview.</p>
+            </div>
+            <div class="test-field">
+              <label>Test Steps</label>
+              <ol class="steps-list">
+                <li>Open the interview record</li>
+                <li>Change Status to "Completed"</li>
+                <li>Set Result/Outcome: "No Hire" or "Rejected"</li>
+                <li>Enter Feedback explaining decision</li>
+                <li>Save the record</li>
+                <li>Check if candidate status auto-updates</li>
+              </ol>
+            </div>
+            <div class="expected-result">
+              <strong>Expected Result:</strong> Interview completed with
+              rejection outcome. Candidate status updates to "Rejected" or
+              remains for manual update. Feedback preserved for compliance.
+            </div>
+            <div class="checkbox-row">
+              <label class="checkbox-item"
+                ><input type="checkbox" /> Pass</label
+              >
+              <label class="checkbox-item"
+                ><input type="checkbox" /> Fail</label
+              >
+              <label class="checkbox-item"
+                ><input type="checkbox" /> Blocked</label
+              >
+            </div>
+          </div>
+        </div>
+
+        <div class="test-case">
+          <div class="test-case-header" onclick="toggleTest(this)">
+            <span class="test-id">TC-INT-005</span>
+            <span class="test-title">Reschedule Interview</span>
+            <span class="priority medium">Medium</span>
+          </div>
+          <div class="test-case-body">
+            <div class="test-field">
+              <label>Preconditions</label>
+              <p>
+                Interview exists with future date/time. Candidate needs to
+                reschedule.
+              </p>
+            </div>
+            <div class="test-field">
+              <label>Test Steps</label>
+              <ol class="steps-list">
+                <li>Open the interview record</li>
+                <li>Click "Edit"</li>
+                <li>Change Date/Time to new date</li>
+                <li>Update Notes: "Rescheduled per candidate request"</li>
+                <li>Save the record</li>
+              </ol>
+            </div>
+            <div class="expected-result">
+              <strong>Expected Result:</strong> Interview date/time updated.
+              Notes reflect change. Any calendar integrations update
+              accordingly.
+            </div>
+            <div class="checkbox-row">
+              <label class="checkbox-item"
+                ><input type="checkbox" /> Pass</label
+              >
+              <label class="checkbox-item"
+                ><input type="checkbox" /> Fail</label
+              >
+              <label class="checkbox-item"
+                ><input type="checkbox" /> Blocked</label
+              >
+            </div>
+          </div>
+        </div>
+
+        <div class="test-case">
+          <div class="test-case-header" onclick="toggleTest(this)">
+            <span class="test-id">TC-INT-006</span>
+            <span class="test-title">Cancel Interview</span>
+            <span class="priority low">Low</span>
+          </div>
+          <div class="test-case-body">
+            <div class="test-field">
+              <label>Preconditions</label>
+              <p>
+                Scheduled interview exists. Need to cancel (candidate withdrew,
+                etc.).
+              </p>
+            </div>
+            <div class="test-field">
+              <label>Test Steps</label>
+              <ol class="steps-list">
+                <li>Open interview record</li>
+                <li>Change Status to "Cancelled"</li>
+                <li>Enter cancellation reason in Notes</li>
+                <li>Save the record</li>
+              </ol>
+            </div>
+            <div class="expected-result">
+              <strong>Expected Result:</strong> Interview status changes to
+              Cancelled. Record preserved for history. Does not count in
+              completed interview metrics.
+            </div>
+            <div class="checkbox-row">
+              <label class="checkbox-item"
+                ><input type="checkbox" /> Pass</label
+              >
+              <label class="checkbox-item"
+                ><input type="checkbox" /> Fail</label
+              >
+              <label class="checkbox-item"
+                ><input type="checkbox" /> Blocked</label
+              >
+            </div>
+          </div>
+        </div>
+
+        <div class="test-case">
+          <div class="test-case-header" onclick="toggleTest(this)">
+            <span class="test-id">TC-INT-007</span>
+            <span class="test-title">Interview Metrics on Dashboard</span>
+            <span class="priority high">High</span>
+          </div>
+          <div class="test-case-body">
+            <div class="test-field">
+              <label>Preconditions</label>
+              <p>
+                Multiple interviews exist: some scheduled, some completed this
+                week/month.
+              </p>
+            </div>
+            <div class="test-field">
+              <label>Test Steps</label>
+              <ol class="steps-list">
+                <li>Navigate to Recruiter Dashboard</li>
+                <li>Locate Interview metrics section</li>
+                <li>
+                  Verify "This Week" count matches actual completed interviews
+                </li>
+                <li>
+                  Verify "This Month" count matches actual completed interviews
+                </li>
+                <li>Verify "Scheduled" count matches upcoming interviews</li>
+              </ol>
+            </div>
+            <div class="expected-result">
+              <strong>Expected Result:</strong> All interview metrics accurate.
+              Counts update in real-time or on refresh. Clicking metrics
+              navigates to filtered list.
+            </div>
+            <div class="checkbox-row">
+              <label class="checkbox-item"
+                ><input type="checkbox" /> Pass</label
+              >
+              <label class="checkbox-item"
+                ><input type="checkbox" /> Fail</label
+              >
+              <label class="checkbox-item"
+                ><input type="checkbox" /> Blocked</label
+              >
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- SECTION 3: CONTRACT B LIFECYCLE -->
+      <section class="section" id="contract-b">
+        <div class="section-header">
+          <span class="section-number">3</span>
+          <h2>Contract B Lifecycle</h2>
+        </div>
+
+        <div class="info-box warning">
+          <strong>⚠️ Critical Contract B Metrics</strong>
+          <p>
+            Verify all tests use correct values:
+            <strong>4 months</strong> duration,
+            <strong>$2,500 FYC</strong> requirement,
+            <strong>5 submissions</strong> required,
+            <strong>4 month max extension</strong>.
+          </p>
+        </div>
+
+        <div class="test-case">
+          <div class="test-case-header" onclick="toggleTest(this)">
+            <span class="test-id">TC-CTB-001</span>
+            <span class="test-title">Contract B Record Creation</span>
+            <span class="priority high">High</span>
+          </div>
+          <div class="test-case-body">
+            <div class="test-field">
+              <label>Preconditions</label>
+              <p>Candidate hired and ready for Contract B onboarding.</p>
+            </div>
+            <div class="test-field">
+              <label>Test Steps</label>
+              <ol class="steps-list">
+                <li>Create new Contract B record for advisor</li>
+                <li>Set Start Date to today's date</li>
+                <li>Verify End Date auto-calculates to 4 months from start</li>
+                <li>Verify FYC Requirement shows $2,500</li>
+                <li>Verify Submission Requirement shows 5</li>
+                <li>Save the record</li>
+              </ol>
+            </div>
+            <div class="expected-result">
+              <strong>Expected Result:</strong> Contract B record created. End
+              Date = Start Date + 4 months. FYC Requirement = $2,500. Submission
+              Requirement = 5. Status defaults to "Active".
+            </div>
+            <div class="checkbox-row">
+              <label class="checkbox-item"
+                ><input type="checkbox" /> Pass</label
+              >
+              <label class="checkbox-item"
+                ><input type="checkbox" /> Fail</label
+              >
+              <label class="checkbox-item"
+                ><input type="checkbox" /> Blocked</label
+              >
+            </div>
+          </div>
+        </div>
+
+        <div class="test-case">
+          <div class="test-case-header" onclick="toggleTest(this)">
+            <span class="test-id">TC-CTB-002</span>
+            <span class="test-title">FYC Tracking and Rollup</span>
+            <span class="priority high">High</span>
+          </div>
+          <div class="test-case-body">
+            <div class="test-field">
+              <label>Preconditions</label>
+              <p>Active Contract B record exists with $0 FYC.</p>
+            </div>
+            <div class="test-field">
+              <label>Test Steps</label>
+              <ol class="steps-list">
+                <li>Add/update production record with FYC = $1,000</li>
+                <li>Verify Contract B FYC total updates to $1,000</li>
+                <li>Add another production record with FYC = $1,500</li>
+                <li>Verify Contract B FYC total = $2,500</li>
+                <li>
+                  Verify progress indicator shows 100% of $2,500 requirement
+                </li>
+              </ol>
+            </div>
+            <div class="expected-result">
+              <strong>Expected Result:</strong> FYC correctly rolls up from
+              production records. Total matches sum of individual FYC values.
+              Progress shows accurate percentage toward $2,500 goal.
+            </div>
+            <div class="checkbox-row">
+              <label class="checkbox-item"
+                ><input type="checkbox" /> Pass</label
+              >
+              <label class="checkbox-item"
+                ><input type="checkbox" /> Fail</label
+              >
+              <label class="checkbox-item"
+                ><input type="checkbox" /> Blocked</label
+              >
+            </div>
+          </div>
+        </div>
+
+        <div class="test-case">
+          <div class="test-case-header" onclick="toggleTest(this)">
+            <span class="test-id">TC-CTB-003</span>
+            <span class="test-title">Submission Count Tracking</span>
+            <span class="priority high">High</span>
+          </div>
+          <div class="test-case-body">
+            <div class="test-field">
+              <label>Preconditions</label>
+              <p>Active Contract B with 0 submissions.</p>
+            </div>
+            <div class="test-field">
+              <label>Test Steps</label>
+              <ol class="steps-list">
+                <li>Add a submission record linked to Contract B</li>
+                <li>Verify submission count = 1</li>
+                <li>Add 4 more submissions</li>
+                <li>Verify submission count = 5</li>
+                <li>Verify progress shows 100% of 5 submission requirement</li>
+              </ol>
+            </div>
+            <div class="expected-result">
+              <strong>Expected Result:</strong> Submission count accurately
+              reflects linked records. Progress indicator shows 5/5 when
+              requirement met.
+            </div>
+            <div class="checkbox-row">
+              <label class="checkbox-item"
+                ><input type="checkbox" /> Pass</label
+              >
+              <label class="checkbox-item"
+                ><input type="checkbox" /> Fail</label
+              >
+              <label class="checkbox-item"
+                ><input type="checkbox" /> Blocked</label
+              >
+            </div>
+          </div>
+        </div>
+
+        <div class="test-case">
+          <div class="test-case-header" onclick="toggleTest(this)">
+            <span class="test-id">TC-CTB-004</span>
+            <span class="test-title">Status Indicator - On Track</span>
+            <span class="priority high">High</span>
+          </div>
+          <div class="test-case-body">
+            <div class="test-field">
+              <label>Preconditions</label>
+              <p>
+                Contract B in month 2 of 4. FYC = $1,500 (60%). Submissions = 3
+                (60%).
+              </p>
+            </div>
+            <div class="test-field">
+              <label>Test Steps</label>
+              <ol class="steps-list">
+                <li>Open Contract B record</li>
+                <li>Verify status indicator displays "On Track" (green)</li>
+                <li>
+                  Verify dashboard shows this advisor in "On Track" category
+                </li>
+              </ol>
+            </div>
+            <div class="expected-result">
+              <strong>Expected Result:</strong> With 50% time elapsed and 60%
+              progress, status shows "On Track" with green indicator.
+            </div>
+            <div class="checkbox-row">
+              <label class="checkbox-item"
+                ><input type="checkbox" /> Pass</label
+              >
+              <label class="checkbox-item"
+                ><input type="checkbox" /> Fail</label
+              >
+              <label class="checkbox-item"
+                ><input type="checkbox" /> Blocked</label
+              >
+            </div>
+          </div>
+        </div>
+
+        <div class="test-case">
+          <div class="test-case-header" onclick="toggleTest(this)">
+            <span class="test-id">TC-CTB-005</span>
+            <span class="test-title">Status Indicator - At Risk</span>
+            <span class="priority high">High</span>
+          </div>
+          <div class="test-case-body">
+            <div class="test-field">
+              <label>Preconditions</label>
+              <p>
+                Contract B in month 3 of 4. FYC = $1,000 (40%). Submissions = 2
+                (40%).
+              </p>
+            </div>
+            <div class="test-field">
+              <label>Test Steps</label>
+              <ol class="steps-list">
+                <li>Open Contract B record</li>
+                <li>
+                  Verify status indicator displays "At Risk" (yellow/orange)
+                </li>
+                <li>
+                  Verify dashboard shows this advisor in "At Risk" category
+                </li>
+              </ol>
+            </div>
+            <div class="expected-result">
+              <strong>Expected Result:</strong> With 75% time elapsed but only
+              40% progress, status shows "At Risk" with yellow/orange indicator.
+            </div>
+            <div class="checkbox-row">
+              <label class="checkbox-item"
+                ><input type="checkbox" /> Pass</label
+              >
+              <label class="checkbox-item"
+                ><input type="checkbox" /> Fail</label
+              >
+              <label class="checkbox-item"
+                ><input type="checkbox" /> Blocked</label
+              >
+            </div>
+          </div>
+        </div>
+
+        <div class="test-case">
+          <div class="test-case-header" onclick="toggleTest(this)">
+            <span class="test-id">TC-CTB-006</span>
+            <span class="test-title">Status Indicator - Critical</span>
+            <span class="priority high">High</span>
+          </div>
+          <div class="test-case-body">
+            <div class="test-field">
+              <label>Preconditions</label>
+              <p>
+                Contract B in final month (month 4). FYC = $500 (20%).
+                Submissions = 1 (20%).
+              </p>
+            </div>
+            <div class="test-field">
+              <label>Test Steps</label>
+              <ol class="steps-list">
+                <li>Open Contract B record</li>
+                <li>Verify status indicator displays "Critical" (red)</li>
+                <li>
+                  Verify dashboard shows this advisor in "Critical" category
+                </li>
+                <li>Verify any alerts/notifications trigger appropriately</li>
+              </ol>
+            </div>
+            <div class="expected-result">
+              <strong>Expected Result:</strong> With contract ending soon and
+              requirements far from met, status shows "Critical" with red
+              indicator.
+            </div>
+            <div class="checkbox-row">
+              <label class="checkbox-item"
+                ><input type="checkbox" /> Pass</label
+              >
+              <label class="checkbox-item"
+                ><input type="checkbox" /> Fail</label
+              >
+              <label class="checkbox-item"
+                ><input type="checkbox" /> Blocked</label
+              >
+            </div>
+          </div>
+        </div>
+
+        <div class="test-case">
+          <div class="test-case-header" onclick="toggleTest(this)">
+            <span class="test-id">TC-CTB-007</span>
+            <span class="test-title">Grant Extension (Max 4 Months)</span>
+            <span class="priority high">High</span>
+          </div>
+          <div class="test-case-body">
+            <div class="test-field">
+              <label>Preconditions</label>
+              <p>
+                Contract B nearing end date. Has not met requirements. No prior
+                extensions.
+              </p>
+            </div>
+            <div class="test-field">
+              <label>Test Steps</label>
+              <ol class="steps-list">
+                <li>Open Contract B record</li>
+                <li>Click "Grant Extension" or edit End Date</li>
+                <li>Enter 2 month extension</li>
+                <li>Verify new End Date = original + 2 months</li>
+                <li>Try to add another 3 month extension</li>
+                <li>Verify system limits total extension to 4 months max</li>
+              </ol>
+            </div>
+            <div class="expected-result">
+              <strong>Expected Result:</strong> Extension granted. End date
+              updated. System enforces 4 month maximum extension limit. Cannot
+              exceed 8 months total (4 original + 4 extension).
+            </div>
+            <div class="checkbox-row">
+              <label class="checkbox-item"
+                ><input type="checkbox" /> Pass</label
+              >
+              <label class="checkbox-item"
+                ><input type="checkbox" /> Fail</label
+              >
+              <label class="checkbox-item"
+                ><input type="checkbox" /> Blocked</label
+              >
+            </div>
+          </div>
+        </div>
+
+        <div class="test-case">
+          <div class="test-case-header" onclick="toggleTest(this)">
+            <span class="test-id">TC-CTB-008</span>
+            <span class="test-title"
+              >Contract B Outcomes - Transition/Extension/Termination</span
+            >
+            <span class="priority high">High</span>
+          </div>
+          <div class="test-case-body">
+            <div class="test-field">
+              <label>Preconditions</label>
+              <p>
+                Three Contract B records: one met requirements, one extended,
+                one failed.
+              </p>
+            </div>
+            <div class="test-field">
+              <label>Test Steps</label>
+              <ol class="steps-list">
+                <li>
+                  Test Transition: Contract B with $2,500+ FYC and 5+
+                  submissions → Mark as "Transition to A"
+                </li>
+                <li>Verify advisor record updates appropriately</li>
+                <li>
+                  Test Extension: Contract B not meeting requirements → Grant
+                  extension
+                </li>
+                <li>Verify status reflects extension period</li>
+                <li>
+                  Test Termination: Contract B expired without meeting
+                  requirements → Mark as "Terminated"
+                </li>
+                <li>Verify termination date and reason recorded</li>
+              </ol>
+            </div>
+            <div class="expected-result">
+              <strong>Expected Result:</strong> All three outcomes process
+              correctly. Transition updates advisor status. Extension updates
+              dates. Termination records final status with date.
+            </div>
+            <div class="checkbox-row">
+              <label class="checkbox-item"
+                ><input type="checkbox" /> Pass</label
+              >
+              <label class="checkbox-item"
+                ><input type="checkbox" /> Fail</label
+              >
+              <label class="checkbox-item"
+                ><input type="checkbox" /> Blocked</label
+              >
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- SECTION 4: DASHBOARD METRICS -->
+      <section class="section" id="dashboard">
+        <div class="section-header">
+          <span class="section-number">4</span>
+          <h2>Dashboard Metrics</h2>
+        </div>
+
+        <div class="test-case">
+          <div class="test-case-header" onclick="toggleTest(this)">
+            <span class="test-id">TC-DASH-001</span>
+            <span class="test-title">Summary Cards Display</span>
+            <span class="priority high">High</span>
+          </div>
+          <div class="test-case-body">
+            <div class="test-field">
+              <label>Preconditions</label>
+              <p>User logged in. Known candidate counts exist in system.</p>
+            </div>
+            <div class="test-field">
+              <label>Test Steps</label>
+              <ol class="steps-list">
+                <li>Navigate to Recruiter Dashboard</li>
+                <li>Verify "Total Candidates" card shows correct count</li>
+                <li>
+                  Verify "Active Pipeline" card shows non-closed candidates
+                </li>
+                <li>Verify "This Month's Hires" card shows accurate count</li>
+                <li>
+                  Verify "Scheduled Interviews" card shows upcoming interviews
+                </li>
+              </ol>
+            </div>
+            <div class="expected-result">
+              <strong>Expected Result:</strong> All summary cards display
+              accurate, real-time data. Numbers match actual record counts in
+              Salesforce.
+            </div>
+            <div class="checkbox-row">
+              <label class="checkbox-item"
+                ><input type="checkbox" /> Pass</label
+              >
+              <label class="checkbox-item"
+                ><input type="checkbox" /> Fail</label
+              >
+              <label class="checkbox-item"
+                ><input type="checkbox" /> Blocked</label
+              >
+            </div>
+          </div>
+        </div>
+
+        <div class="test-case">
+          <div class="test-case-header" onclick="toggleTest(this)">
+            <span class="test-id">TC-DASH-002</span>
+            <span class="test-title">Pipeline Stage Breakdown</span>
+            <span class="priority high">High</span>
+          </div>
+          <div class="test-case-body">
+            <div class="test-field">
+              <label>Preconditions</label>
+              <p>Candidates exist in various pipeline stages.</p>
+            </div>
+            <div class="test-field">
+              <label>Test Steps</label>
+              <ol class="steps-list">
+                <li>View pipeline breakdown section on Dashboard</li>
+                <li>
+                  Verify counts for each stage: New, Phone Screen, Interview
+                  Scheduled, Interview Complete, Offer, Hired
+                </li>
+                <li>Click on a stage to view filtered list</li>
+                <li>Confirm filtered list matches the count shown</li>
+              </ol>
+            </div>
+            <div class="expected-result">
+              <strong>Expected Result:</strong> Each pipeline stage shows
+              accurate count. Clicking navigates to correctly filtered list
+              view.
+            </div>
+            <div class="checkbox-row">
+              <label class="checkbox-item"
+                ><input type="checkbox" /> Pass</label
+              >
+              <label class="checkbox-item"
+                ><input type="checkbox" /> Fail</label
+              >
+              <label class="checkbox-item"
+                ><input type="checkbox" /> Blocked</label
+              >
+            </div>
+          </div>
+        </div>
+
+        <div class="test-case">
+          <div class="test-case-header" onclick="toggleTest(this)">
+            <span class="test-id">TC-DASH-003</span>
+            <span class="test-title">YTD Metrics Accuracy</span>
+            <span class="priority medium">Medium</span>
+          </div>
+          <div class="test-case-body">
+            <div class="test-field">
+              <label>Preconditions</label>
+              <p>Records exist from current calendar year.</p>
+            </div>
+            <div class="test-field">
+              <label>Test Steps</label>
+              <ol class="steps-list">
+                <li>View YTD (Year-to-Date) metrics section</li>
+                <li>
+                  Verify YTD Hires count matches records hired since Jan 1
+                </li>
+                <li>
+                  Verify YTD Interviews matches completed interviews since Jan 1
+                </li>
+                <li>Run report to cross-check numbers</li>
+              </ol>
+            </div>
+            <div class="expected-result">
+              <strong>Expected Result:</strong> YTD metrics accurately reflect
+              all activity from January 1 of current year through today.
+            </div>
+            <div class="checkbox-row">
+              <label class="checkbox-item"
+                ><input type="checkbox" /> Pass</label
+              >
+              <label class="checkbox-item"
+                ><input type="checkbox" /> Fail</label
+              >
+              <label class="checkbox-item"
+                ><input type="checkbox" /> Blocked</label
+              >
+            </div>
+          </div>
+        </div>
+
+        <div class="test-case">
+          <div class="test-case-header" onclick="toggleTest(this)">
+            <span class="test-id">TC-DASH-004</span>
+            <span class="test-title">Pipeline Table Sorting</span>
+            <span class="priority medium">Medium</span>
+          </div>
+          <div class="test-case-body">
+            <div class="test-field">
+              <label>Preconditions</label>
+              <p>Pipeline table visible with multiple candidates.</p>
+            </div>
+            <div class="test-field">
+              <label>Test Steps</label>
+              <ol class="steps-list">
+                <li>Click column header "Name" to sort alphabetically</li>
+                <li>Click again to reverse sort order</li>
+                <li>Click "Status" column to sort by pipeline stage</li>
+                <li>Click "Created Date" to sort by date</li>
+              </ol>
+            </div>
+            <div class="expected-result">
+              <strong>Expected Result:</strong> Table sorts correctly by each
+              column. Sort indicator shows direction. Data re-orders
+              appropriately.
+            </div>
+            <div class="checkbox-row">
+              <label class="checkbox-item"
+                ><input type="checkbox" /> Pass</label
+              >
+              <label class="checkbox-item"
+                ><input type="checkbox" /> Fail</label
+              >
+              <label class="checkbox-item"
+                ><input type="checkbox" /> Blocked</label
+              >
+            </div>
+          </div>
+        </div>
+
+        <div class="test-case">
+          <div class="test-case-header" onclick="toggleTest(this)">
+            <span class="test-id">TC-DASH-005</span>
+            <span class="test-title">Action Buttons Functionality</span>
+            <span class="priority medium">Medium</span>
+          </div>
+          <div class="test-case-body">
+            <div class="test-field">
+              <label>Preconditions</label>
+              <p>Dashboard loaded with candidate records visible.</p>
+            </div>
+            <div class="test-field">
+              <label>Test Steps</label>
+              <ol class="steps-list">
+                <li>Click "New Candidate" button</li>
+                <li>Verify new candidate form opens</li>
+                <li>Cancel and return to Dashboard</li>
+                <li>Click "Schedule Interview" on a candidate row</li>
+                <li>
+                  Verify interview scheduling form opens with candidate
+                  pre-selected
+                </li>
+              </ol>
+            </div>
+            <div class="expected-result">
+              <strong>Expected Result:</strong> All action buttons function
+              correctly. Forms open with appropriate context. Navigation works
+              as expected.
+            </div>
+            <div class="checkbox-row">
+              <label class="checkbox-item"
+                ><input type="checkbox" /> Pass</label
+              >
+              <label class="checkbox-item"
+                ><input type="checkbox" /> Fail</label
+              >
+              <label class="checkbox-item"
+                ><input type="checkbox" /> Blocked</label
+              >
+            </div>
+          </div>
+        </div>
+
+        <div class="test-case">
+          <div class="test-case-header" onclick="toggleTest(this)">
+            <span class="test-id">TC-DASH-006</span>
+            <span class="test-title">Status Badge Colors</span>
+            <span class="priority low">Low</span>
+          </div>
+          <div class="test-case-body">
+            <div class="test-field">
+              <label>Preconditions</label>
+              <p>Candidates exist in all pipeline stages.</p>
+            </div>
+            <div class="test-field">
+              <label>Test Steps</label>
+              <ol class="steps-list">
+                <li>View candidates in pipeline table</li>
+                <li>Verify "New" shows appropriate color (blue)</li>
+                <li>
+                  Verify "Interview Scheduled" shows different color
+                  (yellow/orange)
+                </li>
+                <li>Verify "Hired" shows success color (green)</li>
+                <li>Verify "Rejected" shows appropriate color (gray/red)</li>
+              </ol>
+            </div>
+            <div class="expected-result">
+              <strong>Expected Result:</strong> Each status has distinct,
+              consistent color coding. Colors match design specifications.
+            </div>
+            <div class="checkbox-row">
+              <label class="checkbox-item"
+                ><input type="checkbox" /> Pass</label
+              >
+              <label class="checkbox-item"
+                ><input type="checkbox" /> Fail</label
+              >
+              <label class="checkbox-item"
+                ><input type="checkbox" /> Blocked</label
+              >
+            </div>
+          </div>
+        </div>
+
+        <div class="test-case">
+          <div class="test-case-header" onclick="toggleTest(this)">
+            <span class="test-id">TC-DASH-007</span>
+            <span class="test-title">Dashboard Refresh/Real-time Updates</span>
+            <span class="priority medium">Medium</span>
+          </div>
+          <div class="test-case-body">
+            <div class="test-field">
+              <label>Preconditions</label>
+              <p>
+                Dashboard open. Second browser/tab available for making changes.
+              </p>
+            </div>
+            <div class="test-field">
+              <label>Test Steps</label>
+              <ol class="steps-list">
+                <li>Note current counts on Dashboard</li>
+                <li>In another tab, create a new candidate</li>
+                <li>
+                  Return to Dashboard and refresh (or wait for auto-refresh)
+                </li>
+                <li>Verify counts have updated</li>
+                <li>Verify new candidate appears in pipeline table</li>
+              </ol>
+            </div>
+            <div class="expected-result">
+              <strong>Expected Result:</strong> Dashboard reflects changes after
+              refresh. New records appear. Counts update accurately.
+            </div>
+            <div class="checkbox-row">
+              <label class="checkbox-item"
+                ><input type="checkbox" /> Pass</label
+              >
+              <label class="checkbox-item"
+                ><input type="checkbox" /> Fail</label
+              >
+              <label class="checkbox-item"
+                ><input type="checkbox" /> Blocked</label
+              >
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- SECTION 5: LINKEDIN EXTENSION -->
+      <section class="section" id="linkedin">
+        <div class="section-header">
+          <span class="section-number">5</span>
+          <h2>LinkedIn Extension</h2>
+        </div>
+
+        <div class="info-box">
+          <strong>ℹ️ Prerequisites</strong>
+          <p>
+            LinkedIn extension installed in Edge or Chrome. User logged into
+            Salesforce in same browser. LinkedIn account accessible.
+          </p>
+        </div>
+
+        <div class="test-case">
+          <div class="test-case-header" onclick="toggleTest(this)">
+            <span class="test-id">TC-LI-001</span>
+            <span class="test-title">Extension Installation Verification</span>
+            <span class="priority high">High</span>
+          </div>
+          <div class="test-case-body">
+            <div class="test-field">
+              <label>Preconditions</label>
+              <p>Extension files available. Browser supports extensions.</p>
+            </div>
+            <div class="test-field">
+              <label>Test Steps</label>
+              <ol class="steps-list">
+                <li>
+                  Open browser extensions page (edge://extensions or
+                  chrome://extensions)
+                </li>
+                <li>Enable Developer Mode</li>
+                <li>Load unpacked extension from provided folder</li>
+                <li>Verify extension icon appears in toolbar</li>
+                <li>Pin extension to toolbar if needed</li>
+              </ol>
+            </div>
+            <div class="expected-result">
+              <strong>Expected Result:</strong> Extension loads without errors.
+              Icon visible in browser toolbar. No console errors on
+              installation.
+            </div>
+            <div class="checkbox-row">
+              <label class="checkbox-item"
+                ><input type="checkbox" /> Pass</label
+              >
+              <label class="checkbox-item"
+                ><input type="checkbox" /> Fail</label
+              >
+              <label class="checkbox-item"
+                ><input type="checkbox" /> Blocked</label
+              >
+            </div>
+          </div>
+        </div>
+
+        <div class="test-case">
+          <div class="test-case-header" onclick="toggleTest(this)">
+            <span class="test-id">TC-LI-002</span>
+            <span class="test-title">Salesforce Connection</span>
+            <span class="priority high">High</span>
+          </div>
+          <div class="test-case-body">
+            <div class="test-field">
+              <label>Preconditions</label>
+              <p>Extension installed. Salesforce credentials available.</p>
+            </div>
+            <div class="test-field">
+              <label>Test Steps</label>
+              <ol class="steps-list">
+                <li>Click extension icon</li>
+                <li>Click Settings/gear icon</li>
+                <li>Enter Salesforce org URL</li>
+                <li>Click Connect</li>
+                <li>Log in with Salesforce credentials when prompted</li>
+                <li>Grant permissions if requested</li>
+              </ol>
+            </div>
+            <div class="expected-result">
+              <strong>Expected Result:</strong> Connection established.
+              "Connected" status displayed. Extension ready to import
+              candidates.
+            </div>
+            <div class="checkbox-row">
+              <label class="checkbox-item"
+                ><input type="checkbox" /> Pass</label
+              >
+              <label class="checkbox-item"
+                ><input type="checkbox" /> Fail</label
+              >
+              <label class="checkbox-item"
+                ><input type="checkbox" /> Blocked</label
+              >
+            </div>
+          </div>
+        </div>
+
+        <div class="test-case">
+          <div class="test-case-header" onclick="toggleTest(this)">
+            <span class="test-id">TC-LI-003</span>
+            <span class="test-title"
+              >Import Candidate from LinkedIn Profile</span
+            >
+            <span class="priority high">High</span>
+          </div>
+          <div class="test-case-body">
+            <div class="test-field">
+              <label>Preconditions</label>
+              <p>
+                Extension connected to Salesforce. On a LinkedIn profile page.
+              </p>
+            </div>
+            <div class="test-field">
+              <label>Test Steps</label>
+              <ol class="steps-list">
+                <li>Navigate to a LinkedIn profile page</li>
+                <li>Click the extension icon</li>
+                <li>Verify name and headline are captured</li>
+                <li>Verify location is parsed</li>
+                <li>Click "Import to Salesforce"</li>
+                <li>Verify success message appears</li>
+                <li>Click link to open new candidate record</li>
+              </ol>
+            </div>
+            <div class="expected-result">
+              <strong>Expected Result:</strong> Candidate created in Salesforce
+              with: First/Last Name, Title/Headline, Location, LinkedIn URL,
+              Source = "LinkedIn", Status = "New".
+            </div>
+            <div class="checkbox-row">
+              <label class="checkbox-item"
+                ><input type="checkbox" /> Pass</label
+              >
+              <label class="checkbox-item"
+                ><input type="checkbox" /> Fail</label
+              >
+              <label class="checkbox-item"
+                ><input type="checkbox" /> Blocked</label
+              >
+            </div>
+          </div>
+        </div>
+
+        <div class="test-case">
+          <div class="test-case-header" onclick="toggleTest(this)">
+            <span class="test-id">TC-LI-004</span>
+            <span class="test-title">Duplicate Detection</span>
+            <span class="priority medium">Medium</span>
+          </div>
+          <div class="test-case-body">
+            <div class="test-field">
+              <label>Preconditions</label>
+              <p>Candidate already exists from previous import.</p>
+            </div>
+            <div class="test-field">
+              <label>Test Steps</label>
+              <ol class="steps-list">
+                <li>Navigate to same LinkedIn profile previously imported</li>
+                <li>Click extension icon</li>
+                <li>Attempt to import again</li>
+              </ol>
+            </div>
+            <div class="expected-result">
+              <strong>Expected Result:</strong> System detects duplicate.
+              Warning message displayed with option to view existing record or
+              proceed with new record.
+            </div>
+            <div class="checkbox-row">
+              <label class="checkbox-item"
+                ><input type="checkbox" /> Pass</label
+              >
+              <label class="checkbox-item"
+                ><input type="checkbox" /> Fail</label
+              >
+              <label class="checkbox-item"
+                ><input type="checkbox" /> Blocked</label
+              >
+            </div>
+          </div>
+        </div>
+
+        <div class="test-case">
+          <div class="test-case-header" onclick="toggleTest(this)">
+            <span class="test-id">TC-LI-005</span>
+            <span class="test-title">Error Handling - Not on Profile Page</span>
+            <span class="priority low">Low</span>
+          </div>
+          <div class="test-case-body">
+            <div class="test-field">
+              <label>Preconditions</label>
+              <p>Extension connected. Not on a LinkedIn profile page.</p>
+            </div>
+            <div class="test-field">
+              <label>Test Steps</label>
+              <ol class="steps-list">
+                <li>
+                  Navigate to LinkedIn search results page (not a profile)
+                </li>
+                <li>Click extension icon</li>
+                <li>Observe behavior</li>
+              </ol>
+            </div>
+            <div class="expected-result">
+              <strong>Expected Result:</strong> Helpful error message displayed:
+              "Please navigate to a LinkedIn profile page to import a
+              candidate." No crash or confusing errors.
+            </div>
+            <div class="checkbox-row">
+              <label class="checkbox-item"
+                ><input type="checkbox" /> Pass</label
+              >
+              <label class="checkbox-item"
+                ><input type="checkbox" /> Fail</label
+              >
+              <label class="checkbox-item"
+                ><input type="checkbox" /> Blocked</label
+              >
+            </div>
+          </div>
+        </div>
+      </section>
     </div>
-    
+
     <script>
-        function toggleTest(header) {
-            const testCase = header.parentElement;
-            testCase.classList.toggle('open');
-        }
-        
-        // Expand all for printing
-        window.onbeforeprint = function() {
-            document.querySelectorAll('.test-case').forEach(tc => tc.classList.add('open'));
-        };
+      function toggleTest(header) {
+        const testCase = header.parentElement;
+        testCase.classList.toggle("open");
+      }
+
+      // Expand all for printing
+      window.onbeforeprint = function () {
+        document
+          .querySelectorAll(".test-case")
+          .forEach((tc) => tc.classList.add("open"));
+      };
     </script>
-</body>
+  </body>
 </html>

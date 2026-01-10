@@ -1,659 +1,911 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Module 1: Team Overview - Sales Manager Training</title>
     <style>
-        :root {
-            --primary: #0176d3;
-            --manager: #7c3aed;
-            --manager-dark: #5b21b6;
-            --manager-light: #ede9fe;
-            --success: #2e844a;
-            --success-light: #dcfce7;
-            --warning: #fe9339;
-            --warning-light: #fef3c7;
-            --gray-100: #f3f3f3;
-            --gray-200: #e5e5e5;
-            --gray-300: #d1d5db;
-            --gray-500: #6b7280;
-            --gray-700: #444;
-            --gray-900: #181818;
-        }
-        
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        
-        body {
-            font-family: 'Salesforce Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: var(--gray-100);
-            min-height: 100vh;
-            display: flex;
-        }
-        
-        .sidebar {
-            width: 280px;
-            background: white;
-            border-right: 1px solid var(--gray-200);
-            padding: 1.5rem;
-            position: fixed;
-            height: 100vh;
-            overflow-y: auto;
-        }
-        
-        .sidebar-header {
-            padding-bottom: 1rem;
-            border-bottom: 1px solid var(--gray-200);
-            margin-bottom: 1rem;
-        }
-        
-        .sidebar-header a {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            color: var(--manager);
-            text-decoration: none;
-            font-size: 0.9rem;
-            margin-bottom: 0.5rem;
-        }
-        
-        .sidebar-header a:hover { text-decoration: underline; }
-        .sidebar-header h2 { font-size: 1.1rem; color: var(--gray-900); }
-        
-        .sidebar-header .module-badge {
-            display: inline-block;
-            background: var(--manager-light);
-            color: var(--manager);
-            padding: 0.2rem 0.6rem;
-            border-radius: 10px;
-            font-size: 0.75rem;
-            font-weight: 600;
-            margin-top: 0.5rem;
-        }
-        
-        .steps-list { list-style: none; }
-        
-        .step-item {
-            padding: 0.75rem;
-            border-radius: 8px;
-            margin-bottom: 0.5rem;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-            transition: all 0.2s;
-        }
-        
-        .step-item:hover { background: var(--gray-100); }
-        .step-item.active { background: var(--manager-light); }
-        .step-item.completed { opacity: 0.7; }
-        
-        .step-number {
-            width: 28px;
-            height: 28px;
-            border-radius: 50%;
-            background: var(--gray-200);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 0.85rem;
-            font-weight: 600;
-            color: var(--gray-500);
-            flex-shrink: 0;
-        }
-        
-        .step-item.active .step-number { background: var(--manager); color: white; }
-        .step-item.completed .step-number { background: var(--success); color: white; }
-        .step-item.completed .step-number::before { content: "✓"; }
-        
-        .step-info { flex-grow: 1; }
-        .step-title { font-size: 0.9rem; color: var(--gray-900); font-weight: 500; }
-        .step-duration { font-size: 0.75rem; color: var(--gray-500); }
-        
-        .main-content { flex-grow: 1; margin-left: 280px; padding: 2rem; }
-        .step-content { max-width: 900px; margin: 0 auto; }
-        .step-header { margin-bottom: 2rem; }
-        
-        .step-header .step-badge {
-            display: inline-block;
-            background: var(--manager);
-            color: white;
-            padding: 0.3rem 1rem;
-            border-radius: 20px;
-            font-size: 0.85rem;
-            font-weight: 600;
-            margin-bottom: 0.75rem;
-        }
-        
-        .step-header h1 { font-size: 2rem; color: var(--gray-900); margin-bottom: 0.5rem; }
-        .step-header p { font-size: 1.1rem; color: var(--gray-500); }
-        
-        .content-card {
-            background: white;
-            border-radius: 12px;
-            padding: 2rem;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
-            margin-bottom: 1.5rem;
-        }
-        
-        .content-card h2 { font-size: 1.3rem; color: var(--gray-900); margin-bottom: 1rem; }
-        .content-card p { color: var(--gray-700); line-height: 1.7; margin-bottom: 1rem; }
-        .content-card ul, .content-card ol { margin-left: 1.5rem; margin-bottom: 1rem; color: var(--gray-700); line-height: 1.8; }
-        
-        .screenshot-placeholder {
-            background: linear-gradient(135deg, var(--gray-100), var(--gray-200));
-            border: 2px dashed var(--gray-300);
-            border-radius: 8px;
-            padding: 3rem;
-            text-align: center;
-            margin: 1.5rem 0;
-        }
-        
-        .screenshot-placeholder .icon { font-size: 3rem; margin-bottom: 0.5rem; }
-        .screenshot-placeholder .label { color: var(--gray-500); font-style: italic; }
-        
-        .info-box {
-            background: var(--manager-light);
-            border-left: 4px solid var(--manager);
-            padding: 1rem 1.25rem;
-            border-radius: 0 8px 8px 0;
-            margin: 1.5rem 0;
-        }
-        
-        .info-box.tip { background: #ecfdf5; border-color: var(--success); }
-        .info-box.warning { background: var(--warning-light); border-color: var(--warning); }
-        .info-box strong { display: block; margin-bottom: 0.25rem; color: var(--gray-900); }
-        
-        .metric-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 1rem;
-            margin: 1.5rem 0;
-        }
-        
-        .metric-item {
-            background: var(--gray-100);
-            border-radius: 8px;
-            padding: 1rem;
-            text-align: center;
-        }
-        
-        .metric-item .value { font-size: 1.75rem; font-weight: 700; color: var(--manager); }
-        .metric-item .label { font-size: 0.85rem; color: var(--gray-500); margin-top: 0.25rem; }
-        
-        .step-navigation {
-            display: flex;
-            justify-content: space-between;
-            margin-top: 2rem;
-            padding-top: 2rem;
-            border-top: 1px solid var(--gray-200);
-        }
-        
-        .nav-btn {
-            padding: 0.75rem 1.5rem;
-            border-radius: 8px;
-            font-weight: 600;
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-            cursor: pointer;
-            border: none;
-            font-size: 1rem;
-            transition: all 0.3s;
-            text-decoration: none;
-        }
-        
-        .nav-btn.prev { background: var(--gray-200); color: var(--gray-700); }
-        .nav-btn.prev:hover { background: var(--gray-300); }
-        .nav-btn.next { background: var(--manager); color: white; }
-        .nav-btn.next:hover { background: var(--manager-dark); }
-        .nav-btn.complete { background: var(--success); color: white; }
-        .nav-btn:disabled { opacity: 0.5; cursor: not-allowed; }
-        
-        .progress-indicator {
-            background: var(--gray-200);
-            height: 4px;
-            position: fixed;
-            top: 0;
-            left: 280px;
-            right: 0;
-            z-index: 100;
-        }
-        
-        .progress-fill { height: 100%; background: var(--manager); transition: width 0.3s; }
-        .step-page { display: none; }
-        .step-page.active { display: block; }
-        
-        .comparison-table { width: 100%; border-collapse: collapse; margin: 1rem 0; }
-        .comparison-table th, .comparison-table td { padding: 0.75rem; text-align: left; border-bottom: 1px solid var(--gray-200); }
-        .comparison-table th { background: var(--gray-100); font-weight: 600; }
+      :root {
+        --primary: #0176d3;
+        --manager: #7c3aed;
+        --manager-dark: #5b21b6;
+        --manager-light: #ede9fe;
+        --success: #2e844a;
+        --success-light: #dcfce7;
+        --warning: #fe9339;
+        --warning-light: #fef3c7;
+        --gray-100: #f3f3f3;
+        --gray-200: #e5e5e5;
+        --gray-300: #d1d5db;
+        --gray-500: #6b7280;
+        --gray-700: #444;
+        --gray-900: #181818;
+      }
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family:
+          "Salesforce Sans",
+          -apple-system,
+          BlinkMacSystemFont,
+          "Segoe UI",
+          Roboto,
+          sans-serif;
+        background: var(--gray-100);
+        min-height: 100vh;
+        display: flex;
+      }
+
+      .sidebar {
+        width: 280px;
+        background: white;
+        border-right: 1px solid var(--gray-200);
+        padding: 1.5rem;
+        position: fixed;
+        height: 100vh;
+        overflow-y: auto;
+      }
+
+      .sidebar-header {
+        padding-bottom: 1rem;
+        border-bottom: 1px solid var(--gray-200);
+        margin-bottom: 1rem;
+      }
+
+      .sidebar-header a {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        color: var(--manager);
+        text-decoration: none;
+        font-size: 0.9rem;
+        margin-bottom: 0.5rem;
+      }
+
+      .sidebar-header a:hover {
+        text-decoration: underline;
+      }
+      .sidebar-header h2 {
+        font-size: 1.1rem;
+        color: var(--gray-900);
+      }
+
+      .sidebar-header .module-badge {
+        display: inline-block;
+        background: var(--manager-light);
+        color: var(--manager);
+        padding: 0.2rem 0.6rem;
+        border-radius: 10px;
+        font-size: 0.75rem;
+        font-weight: 600;
+        margin-top: 0.5rem;
+      }
+
+      .steps-list {
+        list-style: none;
+      }
+
+      .step-item {
+        padding: 0.75rem;
+        border-radius: 8px;
+        margin-bottom: 0.5rem;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        transition: all 0.2s;
+      }
+
+      .step-item:hover {
+        background: var(--gray-100);
+      }
+      .step-item.active {
+        background: var(--manager-light);
+      }
+      .step-item.completed {
+        opacity: 0.7;
+      }
+
+      .step-number {
+        width: 28px;
+        height: 28px;
+        border-radius: 50%;
+        background: var(--gray-200);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.85rem;
+        font-weight: 600;
+        color: var(--gray-500);
+        flex-shrink: 0;
+      }
+
+      .step-item.active .step-number {
+        background: var(--manager);
+        color: white;
+      }
+      .step-item.completed .step-number {
+        background: var(--success);
+        color: white;
+      }
+      .step-item.completed .step-number::before {
+        content: "✓";
+      }
+
+      .step-info {
+        flex-grow: 1;
+      }
+      .step-title {
+        font-size: 0.9rem;
+        color: var(--gray-900);
+        font-weight: 500;
+      }
+      .step-duration {
+        font-size: 0.75rem;
+        color: var(--gray-500);
+      }
+
+      .main-content {
+        flex-grow: 1;
+        margin-left: 280px;
+        padding: 2rem;
+      }
+      .step-content {
+        max-width: 900px;
+        margin: 0 auto;
+      }
+      .step-header {
+        margin-bottom: 2rem;
+      }
+
+      .step-header .step-badge {
+        display: inline-block;
+        background: var(--manager);
+        color: white;
+        padding: 0.3rem 1rem;
+        border-radius: 20px;
+        font-size: 0.85rem;
+        font-weight: 600;
+        margin-bottom: 0.75rem;
+      }
+
+      .step-header h1 {
+        font-size: 2rem;
+        color: var(--gray-900);
+        margin-bottom: 0.5rem;
+      }
+      .step-header p {
+        font-size: 1.1rem;
+        color: var(--gray-500);
+      }
+
+      .content-card {
+        background: white;
+        border-radius: 12px;
+        padding: 2rem;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+        margin-bottom: 1.5rem;
+      }
+
+      .content-card h2 {
+        font-size: 1.3rem;
+        color: var(--gray-900);
+        margin-bottom: 1rem;
+      }
+      .content-card p {
+        color: var(--gray-700);
+        line-height: 1.7;
+        margin-bottom: 1rem;
+      }
+      .content-card ul,
+      .content-card ol {
+        margin-left: 1.5rem;
+        margin-bottom: 1rem;
+        color: var(--gray-700);
+        line-height: 1.8;
+      }
+
+      .screenshot-placeholder {
+        background: linear-gradient(135deg, var(--gray-100), var(--gray-200));
+        border: 2px dashed var(--gray-300);
+        border-radius: 8px;
+        padding: 3rem;
+        text-align: center;
+        margin: 1.5rem 0;
+      }
+
+      .screenshot-placeholder .icon {
+        font-size: 3rem;
+        margin-bottom: 0.5rem;
+      }
+      .screenshot-placeholder .label {
+        color: var(--gray-500);
+        font-style: italic;
+      }
+
+      .info-box {
+        background: var(--manager-light);
+        border-left: 4px solid var(--manager);
+        padding: 1rem 1.25rem;
+        border-radius: 0 8px 8px 0;
+        margin: 1.5rem 0;
+      }
+
+      .info-box.tip {
+        background: #ecfdf5;
+        border-color: var(--success);
+      }
+      .info-box.warning {
+        background: var(--warning-light);
+        border-color: var(--warning);
+      }
+      .info-box strong {
+        display: block;
+        margin-bottom: 0.25rem;
+        color: var(--gray-900);
+      }
+
+      .metric-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 1rem;
+        margin: 1.5rem 0;
+      }
+
+      .metric-item {
+        background: var(--gray-100);
+        border-radius: 8px;
+        padding: 1rem;
+        text-align: center;
+      }
+
+      .metric-item .value {
+        font-size: 1.75rem;
+        font-weight: 700;
+        color: var(--manager);
+      }
+      .metric-item .label {
+        font-size: 0.85rem;
+        color: var(--gray-500);
+        margin-top: 0.25rem;
+      }
+
+      .step-navigation {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 2rem;
+        padding-top: 2rem;
+        border-top: 1px solid var(--gray-200);
+      }
+
+      .nav-btn {
+        padding: 0.75rem 1.5rem;
+        border-radius: 8px;
+        font-weight: 600;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        cursor: pointer;
+        border: none;
+        font-size: 1rem;
+        transition: all 0.3s;
+        text-decoration: none;
+      }
+
+      .nav-btn.prev {
+        background: var(--gray-200);
+        color: var(--gray-700);
+      }
+      .nav-btn.prev:hover {
+        background: var(--gray-300);
+      }
+      .nav-btn.next {
+        background: var(--manager);
+        color: white;
+      }
+      .nav-btn.next:hover {
+        background: var(--manager-dark);
+      }
+      .nav-btn.complete {
+        background: var(--success);
+        color: white;
+      }
+      .nav-btn:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+      }
+
+      .progress-indicator {
+        background: var(--gray-200);
+        height: 4px;
+        position: fixed;
+        top: 0;
+        left: 280px;
+        right: 0;
+        z-index: 100;
+      }
+
+      .progress-fill {
+        height: 100%;
+        background: var(--manager);
+        transition: width 0.3s;
+      }
+      .step-page {
+        display: none;
+      }
+      .step-page.active {
+        display: block;
+      }
+
+      .comparison-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 1rem 0;
+      }
+      .comparison-table th,
+      .comparison-table td {
+        padding: 0.75rem;
+        text-align: left;
+        border-bottom: 1px solid var(--gray-200);
+      }
+      .comparison-table th {
+        background: var(--gray-100);
+        font-weight: 600;
+      }
     </style>
-</head>
-<body>
+  </head>
+  <body>
     <div class="progress-indicator">
-        <div class="progress-fill" id="progressFill" style="width: 0%"></div>
+      <div class="progress-fill" id="progressFill" style="width: 0%"></div>
     </div>
-    
+
     <aside class="sidebar">
-        <div class="sidebar-header">
-            <a href="sales-manager-training.html">← Back to Manager Training</a>
-            <h2>Module 1: Team Overview</h2>
-            <span class="module-badge">15 minutes</span>
-        </div>
-        
-        <ul class="steps-list" id="stepsList">
-            <li class="step-item active" data-step="1" onclick="goToStep(1)">
-                <span class="step-number">1</span>
-                <div class="step-info">
-                    <div class="step-title">Manager Dashboard Intro</div>
-                    <div class="step-duration">2 min</div>
-                </div>
-            </li>
-            <li class="step-item" data-step="2" onclick="goToStep(2)">
-                <span class="step-number">2</span>
-                <div class="step-info">
-                    <div class="step-title">Team Summary Cards</div>
-                    <div class="step-duration">3 min</div>
-                </div>
-            </li>
-            <li class="step-item" data-step="3" onclick="goToStep(3)">
-                <span class="step-number">3</span>
-                <div class="step-info">
-                    <div class="step-title">Recruiter Performance</div>
-                    <div class="step-duration">3 min</div>
-                </div>
-            </li>
-            <li class="step-item" data-step="4" onclick="goToStep(4)">
-                <span class="step-number">4</span>
-                <div class="step-info">
-                    <div class="step-title">Pipeline By Stage</div>
-                    <div class="step-duration">3 min</div>
-                </div>
-            </li>
-            <li class="step-item" data-step="5" onclick="goToStep(5)">
-                <span class="step-number">5</span>
-                <div class="step-info">
-                    <div class="step-title">Filtering & Drill-Down</div>
-                    <div class="step-duration">2 min</div>
-                </div>
-            </li>
-            <li class="step-item" data-step="6" onclick="goToStep(6)">
-                <span class="step-number">6</span>
-                <div class="step-info">
-                    <div class="step-title">Module Complete</div>
-                    <div class="step-duration">2 min</div>
-                </div>
-            </li>
-        </ul>
+      <div class="sidebar-header">
+        <a href="sales-manager-training.html">← Back to Manager Training</a>
+        <h2>Module 1: Team Overview</h2>
+        <span class="module-badge">15 minutes</span>
+      </div>
+
+      <ul class="steps-list" id="stepsList">
+        <li class="step-item active" data-step="1" onclick="goToStep(1)">
+          <span class="step-number">1</span>
+          <div class="step-info">
+            <div class="step-title">Manager Dashboard Intro</div>
+            <div class="step-duration">2 min</div>
+          </div>
+        </li>
+        <li class="step-item" data-step="2" onclick="goToStep(2)">
+          <span class="step-number">2</span>
+          <div class="step-info">
+            <div class="step-title">Team Summary Cards</div>
+            <div class="step-duration">3 min</div>
+          </div>
+        </li>
+        <li class="step-item" data-step="3" onclick="goToStep(3)">
+          <span class="step-number">3</span>
+          <div class="step-info">
+            <div class="step-title">Recruiter Performance</div>
+            <div class="step-duration">3 min</div>
+          </div>
+        </li>
+        <li class="step-item" data-step="4" onclick="goToStep(4)">
+          <span class="step-number">4</span>
+          <div class="step-info">
+            <div class="step-title">Pipeline By Stage</div>
+            <div class="step-duration">3 min</div>
+          </div>
+        </li>
+        <li class="step-item" data-step="5" onclick="goToStep(5)">
+          <span class="step-number">5</span>
+          <div class="step-info">
+            <div class="step-title">Filtering & Drill-Down</div>
+            <div class="step-duration">2 min</div>
+          </div>
+        </li>
+        <li class="step-item" data-step="6" onclick="goToStep(6)">
+          <span class="step-number">6</span>
+          <div class="step-info">
+            <div class="step-title">Module Complete</div>
+            <div class="step-duration">2 min</div>
+          </div>
+        </li>
+      </ul>
     </aside>
-    
+
     <main class="main-content">
-        <!-- Step 1: Manager Dashboard Intro -->
-        <div class="step-page active" id="step1">
-            <div class="step-content">
-                <div class="step-header">
-                    <span class="step-badge">Step 1 of 6</span>
-                    <h1>Manager Dashboard Introduction</h1>
-                    <p>Overview of your team management capabilities</p>
-                </div>
-                
-                <div class="content-card">
-                    <h2>👔 Welcome to the Manager View</h2>
-                    <p>As a Sales Manager, you have access to a specialized dashboard that provides visibility into your entire team's recruiting activities. This view aggregates data from all recruiters reporting to you.</p>
-                    
-                    <div class="screenshot-placeholder">
-                        <div class="icon">📸</div>
-                        <div class="label">Screenshot: Manager Dashboard Overview</div>
-                    </div>
-                    
-                    <h3>What You Can Monitor:</h3>
-                    <ul>
-                        <li><strong>Team Pipeline</strong> - All candidates across your team's recruiters</li>
-                        <li><strong>Individual Recruiter Performance</strong> - Compare activity levels</li>
-                        <li><strong>Interview Completion Rates</strong> - Track weekly/monthly totals</li>
-                        <li><strong>Contract B Progress</strong> - Monitor new advisor development</li>
-                        <li><strong>Hiring Trends</strong> - YTD and monthly hire counts</li>
-                    </ul>
-                </div>
-                
-                <div class="info-box">
-                    <strong>ℹ️ Access Requirements</strong>
-                    The Manager Dashboard is available to users with the Sales Manager profile or appropriate permission sets. Contact your Salesforce admin if you don't see the manager view.
-                </div>
-                
-                <div class="step-navigation">
-                    <button class="nav-btn prev" disabled>← Previous</button>
-                    <button class="nav-btn next" onclick="goToStep(2)">Next: Team Summary Cards →</button>
-                </div>
+      <!-- Step 1: Manager Dashboard Intro -->
+      <div class="step-page active" id="step1">
+        <div class="step-content">
+          <div class="step-header">
+            <span class="step-badge">Step 1 of 6</span>
+            <h1>Manager Dashboard Introduction</h1>
+            <p>Overview of your team management capabilities</p>
+          </div>
+
+          <div class="content-card">
+            <h2>👔 Welcome to the Manager View</h2>
+            <p>
+              As a Sales Manager, you have access to a specialized dashboard
+              that provides visibility into your entire team's recruiting
+              activities. This view aggregates data from all recruiters
+              reporting to you.
+            </p>
+
+            <div class="screenshot-placeholder">
+              <div class="icon">📸</div>
+              <div class="label">Screenshot: Manager Dashboard Overview</div>
             </div>
+
+            <h3>What You Can Monitor:</h3>
+            <ul>
+              <li>
+                <strong>Team Pipeline</strong> - All candidates across your
+                team's recruiters
+              </li>
+              <li>
+                <strong>Individual Recruiter Performance</strong> - Compare
+                activity levels
+              </li>
+              <li>
+                <strong>Interview Completion Rates</strong> - Track
+                weekly/monthly totals
+              </li>
+              <li>
+                <strong>Contract B Progress</strong> - Monitor new advisor
+                development
+              </li>
+              <li>
+                <strong>Hiring Trends</strong> - YTD and monthly hire counts
+              </li>
+            </ul>
+          </div>
+
+          <div class="info-box">
+            <strong>ℹ️ Access Requirements</strong>
+            The Manager Dashboard is available to users with the Sales Manager
+            profile or appropriate permission sets. Contact your Salesforce
+            admin if you don't see the manager view.
+          </div>
+
+          <div class="step-navigation">
+            <button class="nav-btn prev" disabled>← Previous</button>
+            <button class="nav-btn next" onclick="goToStep(2)">
+              Next: Team Summary Cards →
+            </button>
+          </div>
         </div>
-        
-        <!-- Step 2: Team Summary Cards -->
-        <div class="step-page" id="step2">
-            <div class="step-content">
-                <div class="step-header">
-                    <span class="step-badge">Step 2 of 6</span>
-                    <h1>Team Summary Cards</h1>
-                    <p>Understanding your team's key metrics at a glance</p>
-                </div>
-                
-                <div class="content-card">
-                    <h2>📊 Summary Metrics Explained</h2>
-                    <p>The top of the Manager Dashboard displays summary cards showing aggregate metrics for your entire team:</p>
-                    
-                    <div class="metric-grid">
-                        <div class="metric-item">
-                            <div class="value">156</div>
-                            <div class="label">Total Team Pipeline</div>
-                        </div>
-                        <div class="metric-item">
-                            <div class="value">24</div>
-                            <div class="label">Interviews This Month</div>
-                        </div>
-                        <div class="metric-item">
-                            <div class="value">8</div>
-                            <div class="label">Hires This Month</div>
-                        </div>
-                        <div class="metric-item">
-                            <div class="value">5</div>
-                            <div class="label">Active Contract B</div>
-                        </div>
-                    </div>
-                    
-                    <div class="screenshot-placeholder">
-                        <div class="icon">📸</div>
-                        <div class="label">Screenshot: Team Summary Cards</div>
-                    </div>
-                </div>
-                
-                <div class="content-card">
-                    <h2>📈 Metric Definitions</h2>
-                    <table class="comparison-table">
-                        <thead>
-                            <tr>
-                                <th>Metric</th>
-                                <th>What It Measures</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td><strong>Total Team Pipeline</strong></td>
-                                <td>All active candidates (not hired or rejected) across all recruiters</td>
-                            </tr>
-                            <tr>
-                                <td><strong>Interviews This Month</strong></td>
-                                <td>Completed interviews since the 1st of the current month</td>
-                            </tr>
-                            <tr>
-                                <td><strong>Hires This Month</strong></td>
-                                <td>Candidates moved to "Hired" status this month</td>
-                            </tr>
-                            <tr>
-                                <td><strong>Active Contract B</strong></td>
-                                <td>Advisors currently in Contract B period (not yet transitioned/terminated)</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-                
-                <div class="info-box tip">
-                    <strong>💡 Click to Drill Down</strong>
-                    Click any summary card to see the underlying records. For example, clicking "Hires This Month" opens a filtered list of all candidates hired this month.
-                </div>
-                
-                <div class="step-navigation">
-                    <button class="nav-btn prev" onclick="goToStep(1)">← Previous</button>
-                    <button class="nav-btn next" onclick="goToStep(3)">Next: Recruiter Performance →</button>
-                </div>
+      </div>
+
+      <!-- Step 2: Team Summary Cards -->
+      <div class="step-page" id="step2">
+        <div class="step-content">
+          <div class="step-header">
+            <span class="step-badge">Step 2 of 6</span>
+            <h1>Team Summary Cards</h1>
+            <p>Understanding your team's key metrics at a glance</p>
+          </div>
+
+          <div class="content-card">
+            <h2>📊 Summary Metrics Explained</h2>
+            <p>
+              The top of the Manager Dashboard displays summary cards showing
+              aggregate metrics for your entire team:
+            </p>
+
+            <div class="metric-grid">
+              <div class="metric-item">
+                <div class="value">156</div>
+                <div class="label">Total Team Pipeline</div>
+              </div>
+              <div class="metric-item">
+                <div class="value">24</div>
+                <div class="label">Interviews This Month</div>
+              </div>
+              <div class="metric-item">
+                <div class="value">8</div>
+                <div class="label">Hires This Month</div>
+              </div>
+              <div class="metric-item">
+                <div class="value">5</div>
+                <div class="label">Active Contract B</div>
+              </div>
             </div>
-        </div>
-        
-        <!-- Step 3: Recruiter Performance -->
-        <div class="step-page" id="step3">
-            <div class="step-content">
-                <div class="step-header">
-                    <span class="step-badge">Step 3 of 6</span>
-                    <h1>Recruiter Performance</h1>
-                    <p>Compare and track individual recruiter metrics</p>
-                </div>
-                
-                <div class="content-card">
-                    <h2>👥 Individual Recruiter Metrics</h2>
-                    <p>The Recruiter Performance section shows a breakdown by each team member, allowing you to identify top performers and those who may need support.</p>
-                    
-                    <div class="screenshot-placeholder">
-                        <div class="icon">📸</div>
-                        <div class="label">Screenshot: Recruiter Performance Table</div>
-                    </div>
-                    
-                    <h3>Metrics Shown Per Recruiter:</h3>
-                    <ul>
-                        <li><strong>Active Pipeline</strong> - Current candidates being worked</li>
-                        <li><strong>Interviews Completed</strong> - This month vs last month</li>
-                        <li><strong>Conversion Rate</strong> - % of interviews leading to hires</li>
-                        <li><strong>Avg Time to Hire</strong> - Days from first contact to hire</li>
-                    </ul>
-                </div>
-                
-                <div class="content-card">
-                    <h2>📊 Using Performance Data</h2>
-                    <p>This data helps you:</p>
-                    <ul>
-                        <li>Identify recruiters who are exceeding targets for recognition</li>
-                        <li>Spot recruiters who may need coaching or additional resources</li>
-                        <li>Balance workload across your team</li>
-                        <li>Set realistic goals based on historical performance</li>
-                    </ul>
-                </div>
-                
-                <div class="info-box warning">
-                    <strong>⚠️ Context Matters</strong>
-                    Numbers alone don't tell the whole story. A recruiter with fewer hires might be focusing on quality or working harder-to-fill positions. Use these metrics as conversation starters, not judgments.
-                </div>
-                
-                <div class="step-navigation">
-                    <button class="nav-btn prev" onclick="goToStep(2)">← Previous</button>
-                    <button class="nav-btn next" onclick="goToStep(4)">Next: Pipeline By Stage →</button>
-                </div>
+
+            <div class="screenshot-placeholder">
+              <div class="icon">📸</div>
+              <div class="label">Screenshot: Team Summary Cards</div>
             </div>
+          </div>
+
+          <div class="content-card">
+            <h2>📈 Metric Definitions</h2>
+            <table class="comparison-table">
+              <thead>
+                <tr>
+                  <th>Metric</th>
+                  <th>What It Measures</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>Total Team Pipeline</strong></td>
+                  <td>
+                    All active candidates (not hired or rejected) across all
+                    recruiters
+                  </td>
+                </tr>
+                <tr>
+                  <td><strong>Interviews This Month</strong></td>
+                  <td>
+                    Completed interviews since the 1st of the current month
+                  </td>
+                </tr>
+                <tr>
+                  <td><strong>Hires This Month</strong></td>
+                  <td>Candidates moved to "Hired" status this month</td>
+                </tr>
+                <tr>
+                  <td><strong>Active Contract B</strong></td>
+                  <td>
+                    Advisors currently in Contract B period (not yet
+                    transitioned/terminated)
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="info-box tip">
+            <strong>💡 Click to Drill Down</strong>
+            Click any summary card to see the underlying records. For example,
+            clicking "Hires This Month" opens a filtered list of all candidates
+            hired this month.
+          </div>
+
+          <div class="step-navigation">
+            <button class="nav-btn prev" onclick="goToStep(1)">
+              ← Previous
+            </button>
+            <button class="nav-btn next" onclick="goToStep(3)">
+              Next: Recruiter Performance →
+            </button>
+          </div>
         </div>
-        
-        <!-- Step 4: Pipeline By Stage -->
-        <div class="step-page" id="step4">
-            <div class="step-content">
-                <div class="step-header">
-                    <span class="step-badge">Step 4 of 6</span>
-                    <h1>Pipeline By Stage</h1>
-                    <p>Visualize candidate distribution across the hiring funnel</p>
-                </div>
-                
-                <div class="content-card">
-                    <h2>🔄 Pipeline Stage Breakdown</h2>
-                    <p>This visualization shows how many candidates are in each stage of the recruiting process across your entire team:</p>
-                    
-                    <div class="screenshot-placeholder">
-                        <div class="icon">📸</div>
-                        <div class="label">Screenshot: Pipeline Stage Funnel/Chart</div>
-                    </div>
-                    
-                    <h3>Pipeline Stages:</h3>
-                    <ol>
-                        <li><strong>New</strong> - Recently added, not yet contacted</li>
-                        <li><strong>Phone Screen</strong> - Initial outreach/qualification</li>
-                        <li><strong>Interview Scheduled</strong> - Formal interview set up</li>
-                        <li><strong>Interview Complete</strong> - Awaiting decision</li>
-                        <li><strong>Offer</strong> - Offer extended</li>
-                        <li><strong>Hired</strong> - Accepted and onboarding</li>
-                    </ol>
-                </div>
-                
-                <div class="content-card">
-                    <h2>🎯 What to Look For</h2>
-                    <ul>
-                        <li><strong>Bottlenecks</strong> - Too many candidates stuck at one stage</li>
-                        <li><strong>Empty Stages</strong> - Gaps in the pipeline that may cause future problems</li>
-                        <li><strong>Healthy Funnel</strong> - Natural progression with decreasing numbers at each stage</li>
-                    </ul>
-                </div>
-                
-                <div class="info-box tip">
-                    <strong>💡 Weekly Review</strong>
-                    Review the pipeline breakdown in your weekly team meetings. Ask recruiters about candidates who have been in the same stage for more than 2 weeks.
-                </div>
-                
-                <div class="step-navigation">
-                    <button class="nav-btn prev" onclick="goToStep(3)">← Previous</button>
-                    <button class="nav-btn next" onclick="goToStep(5)">Next: Filtering & Drill-Down →</button>
-                </div>
+      </div>
+
+      <!-- Step 3: Recruiter Performance -->
+      <div class="step-page" id="step3">
+        <div class="step-content">
+          <div class="step-header">
+            <span class="step-badge">Step 3 of 6</span>
+            <h1>Recruiter Performance</h1>
+            <p>Compare and track individual recruiter metrics</p>
+          </div>
+
+          <div class="content-card">
+            <h2>👥 Individual Recruiter Metrics</h2>
+            <p>
+              The Recruiter Performance section shows a breakdown by each team
+              member, allowing you to identify top performers and those who may
+              need support.
+            </p>
+
+            <div class="screenshot-placeholder">
+              <div class="icon">📸</div>
+              <div class="label">Screenshot: Recruiter Performance Table</div>
             </div>
+
+            <h3>Metrics Shown Per Recruiter:</h3>
+            <ul>
+              <li>
+                <strong>Active Pipeline</strong> - Current candidates being
+                worked
+              </li>
+              <li>
+                <strong>Interviews Completed</strong> - This month vs last month
+              </li>
+              <li>
+                <strong>Conversion Rate</strong> - % of interviews leading to
+                hires
+              </li>
+              <li>
+                <strong>Avg Time to Hire</strong> - Days from first contact to
+                hire
+              </li>
+            </ul>
+          </div>
+
+          <div class="content-card">
+            <h2>📊 Using Performance Data</h2>
+            <p>This data helps you:</p>
+            <ul>
+              <li>
+                Identify recruiters who are exceeding targets for recognition
+              </li>
+              <li>
+                Spot recruiters who may need coaching or additional resources
+              </li>
+              <li>Balance workload across your team</li>
+              <li>Set realistic goals based on historical performance</li>
+            </ul>
+          </div>
+
+          <div class="info-box warning">
+            <strong>⚠️ Context Matters</strong>
+            Numbers alone don't tell the whole story. A recruiter with fewer
+            hires might be focusing on quality or working harder-to-fill
+            positions. Use these metrics as conversation starters, not
+            judgments.
+          </div>
+
+          <div class="step-navigation">
+            <button class="nav-btn prev" onclick="goToStep(2)">
+              ← Previous
+            </button>
+            <button class="nav-btn next" onclick="goToStep(4)">
+              Next: Pipeline By Stage →
+            </button>
+          </div>
         </div>
-        
-        <!-- Step 5: Filtering & Drill-Down -->
-        <div class="step-page" id="step5">
-            <div class="step-content">
-                <div class="step-header">
-                    <span class="step-badge">Step 5 of 6</span>
-                    <h1>Filtering & Drill-Down</h1>
-                    <p>Navigate deeper into specific data</p>
-                </div>
-                
-                <div class="content-card">
-                    <h2>🔍 Filtering Options</h2>
-                    <p>Use filters to focus on specific subsets of your team's data:</p>
-                    
-                    <ul>
-                        <li><strong>By Recruiter</strong> - View one recruiter's metrics in isolation</li>
-                        <li><strong>By Date Range</strong> - Compare different time periods</li>
-                        <li><strong>By Source</strong> - See which lead sources perform best</li>
-                        <li><strong>By Status</strong> - Focus on specific pipeline stages</li>
-                    </ul>
-                    
-                    <div class="screenshot-placeholder">
-                        <div class="icon">📸</div>
-                        <div class="label">Screenshot: Filter Controls</div>
-                    </div>
-                </div>
-                
-                <div class="content-card">
-                    <h2>📋 Drill-Down to Records</h2>
-                    <p>From any metric or chart, you can click to see the underlying records:</p>
-                    <ol>
-                        <li>Click a metric card, chart segment, or table row</li>
-                        <li>A filtered list view opens showing matching records</li>
-                        <li>Click any record to view full details</li>
-                        <li>Use browser back button or navigation to return to dashboard</li>
-                    </ol>
-                </div>
-                
-                <div class="info-box">
-                    <strong>ℹ️ Export Data</strong>
-                    From list views, you can export data to Excel/CSV for further analysis or to share with leadership.
-                </div>
-                
-                <div class="step-navigation">
-                    <button class="nav-btn prev" onclick="goToStep(4)">← Previous</button>
-                    <button class="nav-btn next" onclick="goToStep(6)">Complete Module →</button>
-                </div>
+      </div>
+
+      <!-- Step 4: Pipeline By Stage -->
+      <div class="step-page" id="step4">
+        <div class="step-content">
+          <div class="step-header">
+            <span class="step-badge">Step 4 of 6</span>
+            <h1>Pipeline By Stage</h1>
+            <p>Visualize candidate distribution across the hiring funnel</p>
+          </div>
+
+          <div class="content-card">
+            <h2>🔄 Pipeline Stage Breakdown</h2>
+            <p>
+              This visualization shows how many candidates are in each stage of
+              the recruiting process across your entire team:
+            </p>
+
+            <div class="screenshot-placeholder">
+              <div class="icon">📸</div>
+              <div class="label">Screenshot: Pipeline Stage Funnel/Chart</div>
             </div>
+
+            <h3>Pipeline Stages:</h3>
+            <ol>
+              <li><strong>New</strong> - Recently added, not yet contacted</li>
+              <li>
+                <strong>Phone Screen</strong> - Initial outreach/qualification
+              </li>
+              <li>
+                <strong>Interview Scheduled</strong> - Formal interview set up
+              </li>
+              <li><strong>Interview Complete</strong> - Awaiting decision</li>
+              <li><strong>Offer</strong> - Offer extended</li>
+              <li><strong>Hired</strong> - Accepted and onboarding</li>
+            </ol>
+          </div>
+
+          <div class="content-card">
+            <h2>🎯 What to Look For</h2>
+            <ul>
+              <li>
+                <strong>Bottlenecks</strong> - Too many candidates stuck at one
+                stage
+              </li>
+              <li>
+                <strong>Empty Stages</strong> - Gaps in the pipeline that may
+                cause future problems
+              </li>
+              <li>
+                <strong>Healthy Funnel</strong> - Natural progression with
+                decreasing numbers at each stage
+              </li>
+            </ul>
+          </div>
+
+          <div class="info-box tip">
+            <strong>💡 Weekly Review</strong>
+            Review the pipeline breakdown in your weekly team meetings. Ask
+            recruiters about candidates who have been in the same stage for more
+            than 2 weeks.
+          </div>
+
+          <div class="step-navigation">
+            <button class="nav-btn prev" onclick="goToStep(3)">
+              ← Previous
+            </button>
+            <button class="nav-btn next" onclick="goToStep(5)">
+              Next: Filtering & Drill-Down →
+            </button>
+          </div>
         </div>
-        
-        <!-- Step 6: Module Complete -->
-        <div class="step-page" id="step6">
-            <div class="step-content">
-                <div class="step-header">
-                    <span class="step-badge">Step 6 of 6</span>
-                    <h1>🎉 Module Complete!</h1>
-                    <p>You've finished Module 1: Team Overview</p>
-                </div>
-                
-                <div class="content-card" style="text-align: center; padding: 3rem;">
-                    <div style="font-size: 4rem; margin-bottom: 1rem;">📊</div>
-                    <h2>Great Progress!</h2>
-                    <p style="font-size: 1.1rem; max-width: 500px; margin: 1rem auto;">You now know how to navigate the Manager Dashboard and understand your team's recruiting metrics.</p>
-                    
-                    <h3 style="margin-top: 2rem;">Key Takeaways:</h3>
-                    <ul style="text-align: left; max-width: 400px; margin: 1rem auto;">
-                        <li>Summary cards show team-wide metrics</li>
-                        <li>Compare individual recruiter performance</li>
-                        <li>Pipeline breakdown reveals bottlenecks</li>
-                        <li>Filters help focus on specific data</li>
-                        <li>Click metrics to drill down to records</li>
-                    </ul>
-                </div>
-                
-                <div class="content-card" style="background: var(--manager-light);">
-                    <h2>📚 Continue Your Training</h2>
-                    <p>Module 2 covers running reports and analyzing recruiting trends.</p>
-                    <a href="sm-module2-reports.html" class="nav-btn next" style="margin-top: 1rem;">Start Module 2: Reports & Analytics →</a>
-                </div>
-                
-                <div class="step-navigation">
-                    <button class="nav-btn prev" onclick="goToStep(5)">← Previous</button>
-                    <button class="nav-btn complete" onclick="completeModule()">✓ Mark Module Complete</button>
-                </div>
+      </div>
+
+      <!-- Step 5: Filtering & Drill-Down -->
+      <div class="step-page" id="step5">
+        <div class="step-content">
+          <div class="step-header">
+            <span class="step-badge">Step 5 of 6</span>
+            <h1>Filtering & Drill-Down</h1>
+            <p>Navigate deeper into specific data</p>
+          </div>
+
+          <div class="content-card">
+            <h2>🔍 Filtering Options</h2>
+            <p>Use filters to focus on specific subsets of your team's data:</p>
+
+            <ul>
+              <li>
+                <strong>By Recruiter</strong> - View one recruiter's metrics in
+                isolation
+              </li>
+              <li>
+                <strong>By Date Range</strong> - Compare different time periods
+              </li>
+              <li>
+                <strong>By Source</strong> - See which lead sources perform best
+              </li>
+              <li>
+                <strong>By Status</strong> - Focus on specific pipeline stages
+              </li>
+            </ul>
+
+            <div class="screenshot-placeholder">
+              <div class="icon">📸</div>
+              <div class="label">Screenshot: Filter Controls</div>
             </div>
+          </div>
+
+          <div class="content-card">
+            <h2>📋 Drill-Down to Records</h2>
+            <p>
+              From any metric or chart, you can click to see the underlying
+              records:
+            </p>
+            <ol>
+              <li>Click a metric card, chart segment, or table row</li>
+              <li>A filtered list view opens showing matching records</li>
+              <li>Click any record to view full details</li>
+              <li>
+                Use browser back button or navigation to return to dashboard
+              </li>
+            </ol>
+          </div>
+
+          <div class="info-box">
+            <strong>ℹ️ Export Data</strong>
+            From list views, you can export data to Excel/CSV for further
+            analysis or to share with leadership.
+          </div>
+
+          <div class="step-navigation">
+            <button class="nav-btn prev" onclick="goToStep(4)">
+              ← Previous
+            </button>
+            <button class="nav-btn next" onclick="goToStep(6)">
+              Complete Module →
+            </button>
+          </div>
         </div>
+      </div>
+
+      <!-- Step 6: Module Complete -->
+      <div class="step-page" id="step6">
+        <div class="step-content">
+          <div class="step-header">
+            <span class="step-badge">Step 6 of 6</span>
+            <h1>🎉 Module Complete!</h1>
+            <p>You've finished Module 1: Team Overview</p>
+          </div>
+
+          <div class="content-card" style="text-align: center; padding: 3rem">
+            <div style="font-size: 4rem; margin-bottom: 1rem">📊</div>
+            <h2>Great Progress!</h2>
+            <p style="font-size: 1.1rem; max-width: 500px; margin: 1rem auto">
+              You now know how to navigate the Manager Dashboard and understand
+              your team's recruiting metrics.
+            </p>
+
+            <h3 style="margin-top: 2rem">Key Takeaways:</h3>
+            <ul style="text-align: left; max-width: 400px; margin: 1rem auto">
+              <li>Summary cards show team-wide metrics</li>
+              <li>Compare individual recruiter performance</li>
+              <li>Pipeline breakdown reveals bottlenecks</li>
+              <li>Filters help focus on specific data</li>
+              <li>Click metrics to drill down to records</li>
+            </ul>
+          </div>
+
+          <div class="content-card" style="background: var(--manager-light)">
+            <h2>📚 Continue Your Training</h2>
+            <p>
+              Module 2 covers running reports and analyzing recruiting trends.
+            </p>
+            <a
+              href="sm-module2-reports.html"
+              class="nav-btn next"
+              style="margin-top: 1rem"
+              >Start Module 2: Reports & Analytics →</a
+            >
+          </div>
+
+          <div class="step-navigation">
+            <button class="nav-btn prev" onclick="goToStep(5)">
+              ← Previous
+            </button>
+            <button class="nav-btn complete" onclick="completeModule()">
+              ✓ Mark Module Complete
+            </button>
+          </div>
+        </div>
+      </div>
     </main>
-    
+
     <script>
-        const totalSteps = 6;
-        let currentStep = 1;
-        let completedSteps = [];
-        
-        function loadProgress() {
-            const saved = localStorage.getItem('sales-manager-sm-module1-step');
-            if (saved) {
-                currentStep = parseInt(saved);
-                for (let i = 1; i < currentStep; i++) {
-                    completedSteps.push(i);
-                }
-            }
-            updateUI();
+      const totalSteps = 6;
+      let currentStep = 1;
+      let completedSteps = [];
+
+      function loadProgress() {
+        const saved = localStorage.getItem("sales-manager-sm-module1-step");
+        if (saved) {
+          currentStep = parseInt(saved);
+          for (let i = 1; i < currentStep; i++) {
+            completedSteps.push(i);
+          }
         }
-        
-        function saveProgress() {
-            localStorage.setItem('sales-manager-sm-module1-step', currentStep);
-            if (currentStep > 1) {
-                localStorage.setItem('sales-manager-sm-module1', 'in-progress');
-            }
+        updateUI();
+      }
+
+      function saveProgress() {
+        localStorage.setItem("sales-manager-sm-module1-step", currentStep);
+        if (currentStep > 1) {
+          localStorage.setItem("sales-manager-sm-module1", "in-progress");
         }
-        
-        function goToStep(step) {
-            if (step > currentStep) {
-                for (let i = currentStep; i < step; i++) {
-                    if (!completedSteps.includes(i)) completedSteps.push(i);
-                }
-            }
-            currentStep = step;
-            saveProgress();
-            updateUI();
+      }
+
+      function goToStep(step) {
+        if (step > currentStep) {
+          for (let i = currentStep; i < step; i++) {
+            if (!completedSteps.includes(i)) completedSteps.push(i);
+          }
         }
-        
-        function updateUI() {
-            document.querySelectorAll('.step-page').forEach((page, index) => {
-                page.classList.remove('active');
-                if (index + 1 === currentStep) page.classList.add('active');
-            });
-            
-            document.querySelectorAll('.step-item').forEach((item, index) => {
-                const stepNum = index + 1;
-                item.classList.remove('active', 'completed');
-                if (stepNum === currentStep) item.classList.add('active');
-                else if (completedSteps.includes(stepNum)) item.classList.add('completed');
-            });
-            
-            const progress = ((currentStep - 1) / (totalSteps - 1)) * 100;
-            document.getElementById('progressFill').style.width = `${progress}%`;
-        }
-        
-        function completeModule() {
-            localStorage.setItem('sales-manager-sm-module1', 'completed');
-            localStorage.setItem('sales-manager-sm-module1-step', totalSteps);
-            alert('🎉 Module 1 complete! Moving to Module 2...');
-            window.location.href = 'sm-module2-reports.html';
-        }
-        
-        loadProgress();
+        currentStep = step;
+        saveProgress();
+        updateUI();
+      }
+
+      function updateUI() {
+        document.querySelectorAll(".step-page").forEach((page, index) => {
+          page.classList.remove("active");
+          if (index + 1 === currentStep) page.classList.add("active");
+        });
+
+        document.querySelectorAll(".step-item").forEach((item, index) => {
+          const stepNum = index + 1;
+          item.classList.remove("active", "completed");
+          if (stepNum === currentStep) item.classList.add("active");
+          else if (completedSteps.includes(stepNum))
+            item.classList.add("completed");
+        });
+
+        const progress = ((currentStep - 1) / (totalSteps - 1)) * 100;
+        document.getElementById("progressFill").style.width = `${progress}%`;
+      }
+
+      function completeModule() {
+        localStorage.setItem("sales-manager-sm-module1", "completed");
+        localStorage.setItem("sales-manager-sm-module1-step", totalSteps);
+        alert("🎉 Module 1 complete! Moving to Module 2...");
+        window.location.href = "sm-module2-reports.html";
+      }
+
+      loadProgress();
     </script>
-</body>
+  </body>
 </html>

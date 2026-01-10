@@ -19,6 +19,7 @@ Agents are AI assistants configured with specific knowledge, instructions, and c
 ### Agent Capabilities
 
 Each agent has:
+
 - **Context:** Knowledge of the project structure, conventions, recent changes
 - **Specialization:** Focused expertise in specific areas
 - **Shared Understanding:** Access to common documentation and codebase
@@ -33,11 +34,13 @@ Each agent has:
 When one agent needs to hand off to another, provide explicit context:
 
 **❌ Bad - Vague handoff:**
+
 ```
 "Cole, please finish the dashboard work"
 ```
 
 **✅ Good - Explicit handoff:**
+
 ```
 "Cole's Agent: Please implement the LWC frontend for the new FYC calculator.
 
@@ -76,6 +79,7 @@ Create documents that both agents can reference:
 4. **Code comments** in complex implementations
 
 **Example - Creating a handoff document:**
+
 ```markdown
 ## Handoff: Dark Mode Implementation
 
@@ -84,27 +88,32 @@ Create documents that both agents can reference:
 **Date:** 2026-01-08
 
 ### Work Completed
+
 - Implemented dark mode toggle in portalHeaderNew
-- Created LightningMessageService channel: DarkModeChannel__c
+- Created LightningMessageService channel: DarkModeChannel\_\_c
 - Updated 5 subscriber components (candidateKanban, recentActivity, etc.)
 - Tested in choujifan90@gmail.com.prodtest
 
 ### Next Steps (For Patrick)
-1. Deploy DarkModeChannel__c to ProductionCapstone
+
+1. Deploy DarkModeChannel\_\_c to ProductionCapstone
 2. Deploy updated LWC components
 3. Test with real users
 4. Add to training documentation
 
 ### Files Modified
-- force-app/main/default/messageChannels/DarkModeChannel__c.messageChannel-meta.xml
-- force-app/main/default/lwc/portalHeaderNew/*
-- force-app/main/default/lwc/candidateKanban/*
+
+- force-app/main/default/messageChannels/DarkModeChannel\_\_c.messageChannel-meta.xml
+- force-app/main/default/lwc/portalHeaderNew/\*
+- force-app/main/default/lwc/candidateKanban/\*
 - [See full list in commit abc123]
 
 ### Known Issues
+
 - None at this time
 
 ### Testing Checklist
+
 - [x] Toggle works in all components
 - [x] State persists on page navigation
 - [x] No console errors
@@ -119,24 +128,28 @@ Use checkpoints for complex multi-phase work:
 ## Project: Q1 Dashboard Enhancements
 
 ### Checkpoint 1: Planning (Cole's Agent) ✅
+
 - [x] Research requirements
 - [x] Create technical spec
 - [x] Identify affected components
 - Document: docs/Q1-DASHBOARD-ENHANCEMENTS.md
 
 ### Checkpoint 2: Backend (Patrick's Agent) 🔵
+
 - [ ] Update Apex controllers
 - [ ] Add new SOQL queries
 - [ ] Write unit tests
 - Files: RecruiterDashboardController.cls, ContractBDashboardController.cls
 
 ### Checkpoint 3: Frontend (Cole's Agent) 🟡
+
 - [ ] Update LWC components
 - [ ] Add new UI elements
 - [ ] Update styling
 - Files: recruiterDashboard, contractBPipelineDashboard
 
 ### Checkpoint 4: Integration (Both) 🟡
+
 - [ ] End-to-end testing
 - [ ] Fix any issues
 - [ ] Update documentation
@@ -203,7 +216,7 @@ Coordination Points:
 Phase 1: Research
 Cole's Agent
 ├─ Investigate CDC for Interview__c
-├─ Test in ProdTest sandbox  
+├─ Test in ProdTest sandbox
 └─ Document findings in docs/CDC-IMPLEMENTATION.md
     ↓ HANDOFF (Request review)
 
@@ -364,6 +377,7 @@ See: .github/copilot-instructions-cole.md
 ## ⚡ Quick Reference Commands
 
 ### For Patrick's Agent
+
 ```bash
 # See Patrick's instructions
 cat .github/copilot-instructions.md | head -50
@@ -376,6 +390,7 @@ sf project deploy start --source-dir "force-app/main/default/classes"
 ```
 
 ### For Cole's Agent
+
 ```bash
 # See Cole's instructions
 cat .github/copilot-instructions-cole.md | head -50
@@ -388,6 +403,7 @@ sf project deploy start --source-dir "force-app/main/default/lwc/COMPONENT" --ta
 ```
 
 ### For Both Agents
+
 ```bash
 # Check active work
 cat SHARED_PLANNING.md | grep "🔵"
@@ -432,6 +448,7 @@ ls -lt docs/handoffs/ | head -5
 ### Issue: Agent modified unexpected files
 
 **Solution:**
+
 1. Check what was modified: `git status`
 2. Review changes: `git diff [file]`
 3. If incorrect, revert: `git checkout [file]`
@@ -441,6 +458,7 @@ ls -lt docs/handoffs/ | head -5
 ### Issue: Conflicting changes between agents
 
 **Solution:**
+
 1. Stop both agents
 2. Assess conflict scope
 3. Decide priority
@@ -451,6 +469,7 @@ ls -lt docs/handoffs/ | head -5
 ### Issue: Agent seems confused about recent changes
 
 **Solution:**
+
 1. Provide recent commit SHAs to review
 2. Show relevant file contents
 3. Link to documentation
@@ -459,6 +478,7 @@ ls -lt docs/handoffs/ | head -5
 ### Issue: Handoff information incomplete
 
 **Solution:**
+
 1. Use the handoff template from WORK_COORDINATION.md
 2. Ask agent to review and fill in missing details
 3. Test the described state matches reality
@@ -480,12 +500,14 @@ ls -lt docs/handoffs/ | head -5
 This guide should evolve based on what works and what doesn't.
 
 **Feedback Process:**
+
 1. Try the coordination patterns
 2. Note what works well and what's difficult
 3. Update this guide with improvements
 4. Share learnings with the team
 
 **Version History:**
+
 - v1.0 (2026-01-08): Initial version - basic coordination patterns
 
 ---

@@ -1,815 +1,1038 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Module 2: Branch Strategy - Developer Training</title>
     <style>
-        :root {
-            --primary: #238636;
-            --primary-dark: #1a7f37;
-            --primary-light: #d1fae5;
-            --module-color: #8250df;
-            --module-light: #f3e8ff;
-            --gray-100: #f6f8fa;
-            --gray-200: #e5e5e5;
-            --gray-300: #d0d7de;
-            --gray-500: #6e7781;
-            --gray-700: #444;
-            --gray-900: #1f2328;
-            --code-bg: #161b22;
-            --warning-bg: #fff8c5;
-            --warning-border: #d4a72c;
-            --info-bg: #ddf4ff;
-            --info-border: #54aeff;
-        }
-        
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans', Helvetica, Arial, sans-serif;
-            background: var(--gray-100);
-            min-height: 100vh;
-            display: flex;
-        }
-        
-        .sidebar {
-            width: 300px;
-            background: white;
-            border-right: 1px solid var(--gray-300);
-            padding: 1.5rem;
-            position: fixed;
-            height: 100vh;
-            overflow-y: auto;
-        }
-        
-        .sidebar-header {
-            padding-bottom: 1rem;
-            border-bottom: 1px solid var(--gray-200);
-            margin-bottom: 1rem;
-        }
-        
-        .sidebar-header a {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            color: var(--primary);
-            text-decoration: none;
-            font-size: 0.9rem;
-            margin-bottom: 0.5rem;
-        }
-        
-        .sidebar-header a:hover { text-decoration: underline; }
-        .sidebar-header h2 { font-size: 1.1rem; color: var(--gray-900); }
-        
-        .sidebar-header .module-badge {
-            display: inline-block;
-            background: var(--module-color);
-            color: white;
-            padding: 0.2rem 0.6rem;
-            border-radius: 10px;
-            font-size: 0.75rem;
-            font-weight: 600;
-            margin-top: 0.5rem;
-        }
-        
-        .steps-list { list-style: none; }
-        
-        .step-item {
-            padding: 0.75rem;
-            border-radius: 8px;
-            margin-bottom: 0.5rem;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-            transition: all 0.2s;
-        }
-        
-        .step-item:hover { background: var(--gray-100); }
-        .step-item.active { background: var(--module-light); }
-        .step-item.completed { opacity: 0.7; }
-        
-        .step-number {
-            width: 28px;
-            height: 28px;
-            border-radius: 50%;
-            background: var(--gray-200);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 0.85rem;
-            font-weight: 600;
-            color: var(--gray-500);
-            flex-shrink: 0;
-        }
-        
-        .step-item.active .step-number { background: var(--module-color); color: white; }
-        .step-item.completed .step-number { background: var(--primary); color: white; }
-        .step-item.completed .step-number::before { content: "✓"; }
-        
-        .step-info { flex-grow: 1; }
-        .step-title { font-size: 0.9rem; color: var(--gray-900); font-weight: 500; }
-        .step-duration { font-size: 0.75rem; color: var(--gray-500); }
-        
-        .main-content { flex-grow: 1; margin-left: 300px; padding: 2rem; }
-        .step-content { max-width: 800px; margin: 0 auto; }
-        
-        .step-header { margin-bottom: 2rem; }
-        
-        .step-header .step-badge {
-            display: inline-block;
-            background: var(--module-color);
-            color: white;
-            padding: 0.3rem 1rem;
-            border-radius: 20px;
-            font-size: 0.85rem;
-            font-weight: 600;
-            margin-bottom: 0.75rem;
-        }
-        
-        .step-header h1 { font-size: 2rem; color: var(--gray-900); margin-bottom: 0.5rem; }
-        .step-header p { font-size: 1.1rem; color: var(--gray-500); }
-        
-        .content-card {
-            background: white;
-            border-radius: 12px;
-            padding: 1.5rem;
-            border: 1px solid var(--gray-300);
-            margin-bottom: 1.5rem;
-        }
-        
-        .content-card h2 { font-size: 1.25rem; color: var(--gray-900); margin-bottom: 1rem; }
-        .content-card h3 { font-size: 1rem; color: var(--gray-700); margin: 1.5rem 0 0.75rem; }
-        .content-card p { color: var(--gray-700); line-height: 1.7; margin-bottom: 1rem; }
-        .content-card ul, .content-card ol { margin-left: 1.5rem; margin-bottom: 1rem; color: var(--gray-700); line-height: 1.8; }
-        
-        .code-block {
-            background: var(--code-bg);
-            color: #e6edf3;
-            border-radius: 8px;
-            padding: 1rem;
-            margin: 1rem 0;
-            overflow-x: auto;
-            font-family: 'Consolas', 'Monaco', monospace;
-            font-size: 0.9rem;
-            line-height: 1.6;
-        }
-        
-        .code-block .comment { color: #8b949e; }
-        .code-block .command { color: #79c0ff; }
-        .code-block .string { color: #a5d6ff; }
-        .code-block .flag { color: #ffa657; }
-        .code-block .branch { color: #7ee787; }
-        
-        code {
-            background: var(--gray-100);
-            padding: 0.2rem 0.4rem;
-            border-radius: 4px;
-            font-family: 'Consolas', monospace;
-            font-size: 0.9em;
-            color: #cf222e;
-        }
-        
-        .info-box {
-            background: var(--info-bg);
-            border-left: 4px solid var(--info-border);
-            padding: 1rem 1.25rem;
-            border-radius: 0 8px 8px 0;
-            margin: 1.5rem 0;
-        }
-        
-        .warning-box {
-            background: var(--warning-bg);
-            border-left: 4px solid var(--warning-border);
-            padding: 1rem 1.25rem;
-            border-radius: 0 8px 8px 0;
-            margin: 1.5rem 0;
-        }
-        
-        .success-box {
-            background: var(--primary-light);
-            border-left: 4px solid var(--primary);
-            padding: 1rem 1.25rem;
-            border-radius: 0 8px 8px 0;
-            margin: 1.5rem 0;
-        }
-        
-        .info-box strong, .warning-box strong, .success-box strong { display: block; margin-bottom: 0.25rem; color: var(--gray-900); }
-        
-        .data-table { width: 100%; border-collapse: collapse; margin: 1rem 0; font-size: 0.9rem; }
-        .data-table th, .data-table td { padding: 0.75rem; text-align: left; border-bottom: 1px solid var(--gray-200); }
-        .data-table th { background: var(--gray-100); font-weight: 600; color: var(--gray-700); }
-        
-        .comparison-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 1rem;
-            margin: 1rem 0;
-        }
-        
-        .comparison-card {
-            border: 1px solid var(--gray-300);
-            border-radius: 8px;
-            padding: 1rem;
-        }
-        
-        .comparison-card h4 {
-            font-size: 1rem;
-            margin-bottom: 0.5rem;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-        
-        .branch-diagram {
-            background: var(--gray-100);
-            border-radius: 8px;
-            padding: 1.5rem;
-            margin: 1rem 0;
-            text-align: center;
-        }
-        
-        .branch-diagram pre {
-            font-family: 'Consolas', monospace;
-            font-size: 0.85rem;
-            line-height: 1.5;
-            text-align: left;
-            display: inline-block;
-        }
-        
-        .step-navigation {
-            display: flex;
-            justify-content: space-between;
-            margin-top: 2rem;
-            padding-top: 2rem;
-            border-top: 1px solid var(--gray-200);
-        }
-        
-        .nav-btn {
-            padding: 0.75rem 1.5rem;
-            border-radius: 8px;
-            font-weight: 600;
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-            cursor: pointer;
-            border: none;
-            font-size: 1rem;
-            transition: all 0.3s;
-            text-decoration: none;
-        }
-        
-        .nav-btn.prev { background: var(--gray-200); color: var(--gray-700); }
-        .nav-btn.prev:hover { background: var(--gray-300); }
-        .nav-btn.next { background: var(--module-color); color: white; }
-        .nav-btn.next:hover { opacity: 0.9; }
-        .nav-btn:disabled { opacity: 0.5; cursor: not-allowed; }
-        
-        .progress-indicator {
-            background: var(--gray-200);
-            height: 4px;
-            position: fixed;
-            top: 0;
-            left: 300px;
-            right: 0;
-            z-index: 100;
-        }
-        
-        .progress-fill { height: 100%; background: var(--module-color); transition: width 0.3s; }
-        .step-page { display: none; }
-        .step-page.active { display: block; }
+      :root {
+        --primary: #238636;
+        --primary-dark: #1a7f37;
+        --primary-light: #d1fae5;
+        --module-color: #8250df;
+        --module-light: #f3e8ff;
+        --gray-100: #f6f8fa;
+        --gray-200: #e5e5e5;
+        --gray-300: #d0d7de;
+        --gray-500: #6e7781;
+        --gray-700: #444;
+        --gray-900: #1f2328;
+        --code-bg: #161b22;
+        --warning-bg: #fff8c5;
+        --warning-border: #d4a72c;
+        --info-bg: #ddf4ff;
+        --info-border: #54aeff;
+      }
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family:
+          -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans", Helvetica,
+          Arial, sans-serif;
+        background: var(--gray-100);
+        min-height: 100vh;
+        display: flex;
+      }
+
+      .sidebar {
+        width: 300px;
+        background: white;
+        border-right: 1px solid var(--gray-300);
+        padding: 1.5rem;
+        position: fixed;
+        height: 100vh;
+        overflow-y: auto;
+      }
+
+      .sidebar-header {
+        padding-bottom: 1rem;
+        border-bottom: 1px solid var(--gray-200);
+        margin-bottom: 1rem;
+      }
+
+      .sidebar-header a {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        color: var(--primary);
+        text-decoration: none;
+        font-size: 0.9rem;
+        margin-bottom: 0.5rem;
+      }
+
+      .sidebar-header a:hover {
+        text-decoration: underline;
+      }
+      .sidebar-header h2 {
+        font-size: 1.1rem;
+        color: var(--gray-900);
+      }
+
+      .sidebar-header .module-badge {
+        display: inline-block;
+        background: var(--module-color);
+        color: white;
+        padding: 0.2rem 0.6rem;
+        border-radius: 10px;
+        font-size: 0.75rem;
+        font-weight: 600;
+        margin-top: 0.5rem;
+      }
+
+      .steps-list {
+        list-style: none;
+      }
+
+      .step-item {
+        padding: 0.75rem;
+        border-radius: 8px;
+        margin-bottom: 0.5rem;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        transition: all 0.2s;
+      }
+
+      .step-item:hover {
+        background: var(--gray-100);
+      }
+      .step-item.active {
+        background: var(--module-light);
+      }
+      .step-item.completed {
+        opacity: 0.7;
+      }
+
+      .step-number {
+        width: 28px;
+        height: 28px;
+        border-radius: 50%;
+        background: var(--gray-200);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.85rem;
+        font-weight: 600;
+        color: var(--gray-500);
+        flex-shrink: 0;
+      }
+
+      .step-item.active .step-number {
+        background: var(--module-color);
+        color: white;
+      }
+      .step-item.completed .step-number {
+        background: var(--primary);
+        color: white;
+      }
+      .step-item.completed .step-number::before {
+        content: "✓";
+      }
+
+      .step-info {
+        flex-grow: 1;
+      }
+      .step-title {
+        font-size: 0.9rem;
+        color: var(--gray-900);
+        font-weight: 500;
+      }
+      .step-duration {
+        font-size: 0.75rem;
+        color: var(--gray-500);
+      }
+
+      .main-content {
+        flex-grow: 1;
+        margin-left: 300px;
+        padding: 2rem;
+      }
+      .step-content {
+        max-width: 800px;
+        margin: 0 auto;
+      }
+
+      .step-header {
+        margin-bottom: 2rem;
+      }
+
+      .step-header .step-badge {
+        display: inline-block;
+        background: var(--module-color);
+        color: white;
+        padding: 0.3rem 1rem;
+        border-radius: 20px;
+        font-size: 0.85rem;
+        font-weight: 600;
+        margin-bottom: 0.75rem;
+      }
+
+      .step-header h1 {
+        font-size: 2rem;
+        color: var(--gray-900);
+        margin-bottom: 0.5rem;
+      }
+      .step-header p {
+        font-size: 1.1rem;
+        color: var(--gray-500);
+      }
+
+      .content-card {
+        background: white;
+        border-radius: 12px;
+        padding: 1.5rem;
+        border: 1px solid var(--gray-300);
+        margin-bottom: 1.5rem;
+      }
+
+      .content-card h2 {
+        font-size: 1.25rem;
+        color: var(--gray-900);
+        margin-bottom: 1rem;
+      }
+      .content-card h3 {
+        font-size: 1rem;
+        color: var(--gray-700);
+        margin: 1.5rem 0 0.75rem;
+      }
+      .content-card p {
+        color: var(--gray-700);
+        line-height: 1.7;
+        margin-bottom: 1rem;
+      }
+      .content-card ul,
+      .content-card ol {
+        margin-left: 1.5rem;
+        margin-bottom: 1rem;
+        color: var(--gray-700);
+        line-height: 1.8;
+      }
+
+      .code-block {
+        background: var(--code-bg);
+        color: #e6edf3;
+        border-radius: 8px;
+        padding: 1rem;
+        margin: 1rem 0;
+        overflow-x: auto;
+        font-family: "Consolas", "Monaco", monospace;
+        font-size: 0.9rem;
+        line-height: 1.6;
+      }
+
+      .code-block .comment {
+        color: #8b949e;
+      }
+      .code-block .command {
+        color: #79c0ff;
+      }
+      .code-block .string {
+        color: #a5d6ff;
+      }
+      .code-block .flag {
+        color: #ffa657;
+      }
+      .code-block .branch {
+        color: #7ee787;
+      }
+
+      code {
+        background: var(--gray-100);
+        padding: 0.2rem 0.4rem;
+        border-radius: 4px;
+        font-family: "Consolas", monospace;
+        font-size: 0.9em;
+        color: #cf222e;
+      }
+
+      .info-box {
+        background: var(--info-bg);
+        border-left: 4px solid var(--info-border);
+        padding: 1rem 1.25rem;
+        border-radius: 0 8px 8px 0;
+        margin: 1.5rem 0;
+      }
+
+      .warning-box {
+        background: var(--warning-bg);
+        border-left: 4px solid var(--warning-border);
+        padding: 1rem 1.25rem;
+        border-radius: 0 8px 8px 0;
+        margin: 1.5rem 0;
+      }
+
+      .success-box {
+        background: var(--primary-light);
+        border-left: 4px solid var(--primary);
+        padding: 1rem 1.25rem;
+        border-radius: 0 8px 8px 0;
+        margin: 1.5rem 0;
+      }
+
+      .info-box strong,
+      .warning-box strong,
+      .success-box strong {
+        display: block;
+        margin-bottom: 0.25rem;
+        color: var(--gray-900);
+      }
+
+      .data-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 1rem 0;
+        font-size: 0.9rem;
+      }
+      .data-table th,
+      .data-table td {
+        padding: 0.75rem;
+        text-align: left;
+        border-bottom: 1px solid var(--gray-200);
+      }
+      .data-table th {
+        background: var(--gray-100);
+        font-weight: 600;
+        color: var(--gray-700);
+      }
+
+      .comparison-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 1rem;
+        margin: 1rem 0;
+      }
+
+      .comparison-card {
+        border: 1px solid var(--gray-300);
+        border-radius: 8px;
+        padding: 1rem;
+      }
+
+      .comparison-card h4 {
+        font-size: 1rem;
+        margin-bottom: 0.5rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+
+      .branch-diagram {
+        background: var(--gray-100);
+        border-radius: 8px;
+        padding: 1.5rem;
+        margin: 1rem 0;
+        text-align: center;
+      }
+
+      .branch-diagram pre {
+        font-family: "Consolas", monospace;
+        font-size: 0.85rem;
+        line-height: 1.5;
+        text-align: left;
+        display: inline-block;
+      }
+
+      .step-navigation {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 2rem;
+        padding-top: 2rem;
+        border-top: 1px solid var(--gray-200);
+      }
+
+      .nav-btn {
+        padding: 0.75rem 1.5rem;
+        border-radius: 8px;
+        font-weight: 600;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        cursor: pointer;
+        border: none;
+        font-size: 1rem;
+        transition: all 0.3s;
+        text-decoration: none;
+      }
+
+      .nav-btn.prev {
+        background: var(--gray-200);
+        color: var(--gray-700);
+      }
+      .nav-btn.prev:hover {
+        background: var(--gray-300);
+      }
+      .nav-btn.next {
+        background: var(--module-color);
+        color: white;
+      }
+      .nav-btn.next:hover {
+        opacity: 0.9;
+      }
+      .nav-btn:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+      }
+
+      .progress-indicator {
+        background: var(--gray-200);
+        height: 4px;
+        position: fixed;
+        top: 0;
+        left: 300px;
+        right: 0;
+        z-index: 100;
+      }
+
+      .progress-fill {
+        height: 100%;
+        background: var(--module-color);
+        transition: width 0.3s;
+      }
+      .step-page {
+        display: none;
+      }
+      .step-page.active {
+        display: block;
+      }
     </style>
-</head>
-<body>
+  </head>
+  <body>
     <div class="progress-indicator">
-        <div class="progress-fill" id="progressFill" style="width: 0%"></div>
+      <div class="progress-fill" id="progressFill" style="width: 0%"></div>
     </div>
-    
+
     <aside class="sidebar">
-        <div class="sidebar-header">
-            <a href="developer-training.html">← Back to Developer Training</a>
-            <h2>Module 2: Branch Strategy</h2>
-            <span class="module-badge">15 minutes</span>
-        </div>
-        
-        <ul class="steps-list" id="stepsList">
-            <li class="step-item active" data-step="1" onclick="goToStep(1)">
-                <span class="step-number">1</span>
-                <div class="step-info">
-                    <div class="step-title">Why Branch Strategy Matters</div>
-                    <div class="step-duration">2 min</div>
-                </div>
-            </li>
-            <li class="step-item" data-step="2" onclick="goToStep(2)">
-                <span class="step-number">2</span>
-                <div class="step-info">
-                    <div class="step-title">Feature Branch Workflow</div>
-                    <div class="step-duration">3 min</div>
-                </div>
-            </li>
-            <li class="step-item" data-step="3" onclick="goToStep(3)">
-                <span class="step-number">3</span>
-                <div class="step-info">
-                    <div class="step-title">Branch Naming Conventions</div>
-                    <div class="step-duration">3 min</div>
-                </div>
-            </li>
-            <li class="step-item" data-step="4" onclick="goToStep(4)">
-                <span class="step-number">4</span>
-                <div class="step-info">
-                    <div class="step-title">GitFlow vs Trunk-Based</div>
-                    <div class="step-duration">3 min</div>
-                </div>
-            </li>
-            <li class="step-item" data-step="5" onclick="goToStep(5)">
-                <span class="step-number">5</span>
-                <div class="step-info">
-                    <div class="step-title">Protecting Main Branch</div>
-                    <div class="step-duration">3 min</div>
-                </div>
-            </li>
-            <li class="step-item" data-step="6" onclick="goToStep(6)">
-                <span class="step-number">6</span>
-                <div class="step-info">
-                    <div class="step-title">Module Complete</div>
-                    <div class="step-duration">1 min</div>
-                </div>
-            </li>
-        </ul>
+      <div class="sidebar-header">
+        <a href="developer-training.html">← Back to Developer Training</a>
+        <h2>Module 2: Branch Strategy</h2>
+        <span class="module-badge">15 minutes</span>
+      </div>
+
+      <ul class="steps-list" id="stepsList">
+        <li class="step-item active" data-step="1" onclick="goToStep(1)">
+          <span class="step-number">1</span>
+          <div class="step-info">
+            <div class="step-title">Why Branch Strategy Matters</div>
+            <div class="step-duration">2 min</div>
+          </div>
+        </li>
+        <li class="step-item" data-step="2" onclick="goToStep(2)">
+          <span class="step-number">2</span>
+          <div class="step-info">
+            <div class="step-title">Feature Branch Workflow</div>
+            <div class="step-duration">3 min</div>
+          </div>
+        </li>
+        <li class="step-item" data-step="3" onclick="goToStep(3)">
+          <span class="step-number">3</span>
+          <div class="step-info">
+            <div class="step-title">Branch Naming Conventions</div>
+            <div class="step-duration">3 min</div>
+          </div>
+        </li>
+        <li class="step-item" data-step="4" onclick="goToStep(4)">
+          <span class="step-number">4</span>
+          <div class="step-info">
+            <div class="step-title">GitFlow vs Trunk-Based</div>
+            <div class="step-duration">3 min</div>
+          </div>
+        </li>
+        <li class="step-item" data-step="5" onclick="goToStep(5)">
+          <span class="step-number">5</span>
+          <div class="step-info">
+            <div class="step-title">Protecting Main Branch</div>
+            <div class="step-duration">3 min</div>
+          </div>
+        </li>
+        <li class="step-item" data-step="6" onclick="goToStep(6)">
+          <span class="step-number">6</span>
+          <div class="step-info">
+            <div class="step-title">Module Complete</div>
+            <div class="step-duration">1 min</div>
+          </div>
+        </li>
+      </ul>
     </aside>
-    
+
     <main class="main-content">
-        <!-- Step 1 -->
-        <div class="step-page active" id="step1">
-            <div class="step-content">
-                <div class="step-header">
-                    <span class="step-badge">Step 1 of 6</span>
-                    <h1>Why Branch Strategy Matters</h1>
-                    <p>The foundation of team collaboration</p>
-                </div>
-                
-                <div class="content-card">
-                    <h2>🌿 Without a Strategy: Chaos</h2>
-                    <p>When teams don't agree on branching conventions:</p>
-                    <ul>
-                        <li>❌ Developers step on each other's code</li>
-                        <li>❌ Main branch becomes unstable</li>
-                        <li>❌ No one knows which code is "production ready"</li>
-                        <li>❌ Merge conflicts multiply</li>
-                        <li>❌ Code reviews become afterthoughts</li>
-                    </ul>
-                </div>
-                
-                <div class="content-card">
-                    <h2>✅ With a Strategy: Order</h2>
-                    <p>A defined branch strategy ensures:</p>
-                    <ul>
-                        <li>✅ <strong>Main is always stable</strong> - deployable at any time</li>
-                        <li>✅ <strong>Features are isolated</strong> - work doesn't interfere</li>
-                        <li>✅ <strong>Changes are reviewed</strong> - PRs before merging</li>
-                        <li>✅ <strong>History is clear</strong> - easy to track what shipped when</li>
-                        <li>✅ <strong>Rollbacks are simple</strong> - can revert cleanly</li>
-                    </ul>
-                </div>
-                
-                <div class="info-box">
-                    <strong>💡 One Rule Above All</strong>
-                    <code>main</code> (or <code>master</code>) should <strong>always be deployable</strong>. If it's not, your strategy has failed.
-                </div>
-                
-                <div class="step-navigation">
-                    <button class="nav-btn prev" disabled>← Previous</button>
-                    <button class="nav-btn next" onclick="goToStep(2)">Next: Feature Branch Workflow →</button>
-                </div>
-            </div>
+      <!-- Step 1 -->
+      <div class="step-page active" id="step1">
+        <div class="step-content">
+          <div class="step-header">
+            <span class="step-badge">Step 1 of 6</span>
+            <h1>Why Branch Strategy Matters</h1>
+            <p>The foundation of team collaboration</p>
+          </div>
+
+          <div class="content-card">
+            <h2>🌿 Without a Strategy: Chaos</h2>
+            <p>When teams don't agree on branching conventions:</p>
+            <ul>
+              <li>❌ Developers step on each other's code</li>
+              <li>❌ Main branch becomes unstable</li>
+              <li>❌ No one knows which code is "production ready"</li>
+              <li>❌ Merge conflicts multiply</li>
+              <li>❌ Code reviews become afterthoughts</li>
+            </ul>
+          </div>
+
+          <div class="content-card">
+            <h2>✅ With a Strategy: Order</h2>
+            <p>A defined branch strategy ensures:</p>
+            <ul>
+              <li>
+                ✅ <strong>Main is always stable</strong> - deployable at any
+                time
+              </li>
+              <li>
+                ✅ <strong>Features are isolated</strong> - work doesn't
+                interfere
+              </li>
+              <li>
+                ✅ <strong>Changes are reviewed</strong> - PRs before merging
+              </li>
+              <li>
+                ✅ <strong>History is clear</strong> - easy to track what
+                shipped when
+              </li>
+              <li>
+                ✅ <strong>Rollbacks are simple</strong> - can revert cleanly
+              </li>
+            </ul>
+          </div>
+
+          <div class="info-box">
+            <strong>💡 One Rule Above All</strong>
+            <code>main</code> (or <code>master</code>) should
+            <strong>always be deployable</strong>. If it's not, your strategy
+            has failed.
+          </div>
+
+          <div class="step-navigation">
+            <button class="nav-btn prev" disabled>← Previous</button>
+            <button class="nav-btn next" onclick="goToStep(2)">
+              Next: Feature Branch Workflow →
+            </button>
+          </div>
         </div>
-        
-        <!-- Step 2 -->
-        <div class="step-page" id="step2">
-            <div class="step-content">
-                <div class="step-header">
-                    <span class="step-badge">Step 2 of 6</span>
-                    <h1>Feature Branch Workflow</h1>
-                    <p>The most common team workflow</p>
-                </div>
-                
-                <div class="content-card">
-                    <h2>📋 How It Works</h2>
-                    <ol>
-                        <li><strong>Create a branch</strong> from <code>main</code> for each feature/fix</li>
-                        <li><strong>Work on your branch</strong> - commit frequently</li>
-                        <li><strong>Push your branch</strong> to remote</li>
-                        <li><strong>Open a Pull Request</strong> to merge into main</li>
-                        <li><strong>Get code review</strong> from teammates</li>
-                        <li><strong>Merge</strong> after approval</li>
-                        <li><strong>Delete the branch</strong> - it's done!</li>
-                    </ol>
-                    
-                    <div class="branch-diagram">
-<pre>
+      </div>
+
+      <!-- Step 2 -->
+      <div class="step-page" id="step2">
+        <div class="step-content">
+          <div class="step-header">
+            <span class="step-badge">Step 2 of 6</span>
+            <h1>Feature Branch Workflow</h1>
+            <p>The most common team workflow</p>
+          </div>
+
+          <div class="content-card">
+            <h2>📋 How It Works</h2>
+            <ol>
+              <li>
+                <strong>Create a branch</strong> from <code>main</code> for each
+                feature/fix
+              </li>
+              <li><strong>Work on your branch</strong> - commit frequently</li>
+              <li><strong>Push your branch</strong> to remote</li>
+              <li><strong>Open a Pull Request</strong> to merge into main</li>
+              <li><strong>Get code review</strong> from teammates</li>
+              <li><strong>Merge</strong> after approval</li>
+              <li><strong>Delete the branch</strong> - it's done!</li>
+            </ol>
+
+            <div class="branch-diagram">
+              <pre>
 main     ●────●────●────●────●────●  (stable, deployed)
               \              /
 feature        ●───●───●───●        (your work)
-</pre>
-                    </div>
-                </div>
-                
-                <div class="content-card">
-                    <h2>🔧 Step-by-Step Commands</h2>
-                    <div class="code-block">
-<span class="comment"># 1. Start from latest main</span>
-<span class="command">git checkout</span> <span class="branch">main</span>
-<span class="command">git pull</span> origin main
-
-<span class="comment"># 2. Create feature branch</span>
-<span class="command">git checkout</span> <span class="flag">-b</span> <span class="branch">feature/add-user-search</span>
-
-<span class="comment"># 3. Work and commit</span>
-<span class="command">git add</span> <span class="flag">.</span>
-<span class="command">git commit</span> <span class="flag">-m</span> <span class="string">"Add search input component"</span>
-
-<span class="comment"># 4. Push to remote</span>
-<span class="command">git push</span> <span class="flag">-u</span> origin <span class="branch">feature/add-user-search</span>
-
-<span class="comment"># 5. Open PR on GitHub (or via CLI)</span>
-<span class="comment"># 6. After merge, clean up locally</span>
-<span class="command">git checkout</span> <span class="branch">main</span>
-<span class="command">git pull</span>
-<span class="command">git branch</span> <span class="flag">-d</span> <span class="branch">feature/add-user-search</span>
-                    </div>
-                </div>
-                
-                <div class="success-box">
-                    <strong>✅ Best Practice</strong>
-                    Keep feature branches short-lived (1-3 days max). Long-running branches are merge conflict magnets.
-                </div>
-                
-                <div class="step-navigation">
-                    <button class="nav-btn prev" onclick="goToStep(1)">← Previous</button>
-                    <button class="nav-btn next" onclick="goToStep(3)">Next: Branch Naming Conventions →</button>
-                </div>
+</pre
+              >
             </div>
-        </div>
-        
-        <!-- Step 3 -->
-        <div class="step-page" id="step3">
-            <div class="step-content">
-                <div class="step-header">
-                    <span class="step-badge">Step 3 of 6</span>
-                    <h1>Branch Naming Conventions</h1>
-                    <p>Consistent names improve team communication</p>
-                </div>
-                
-                <div class="content-card">
-                    <h2>📝 Recommended Naming Pattern</h2>
-                    <div class="code-block">
-<span class="string">&lt;type&gt;/&lt;description&gt;</span>
+          </div>
 
-<span class="comment"># Examples:</span>
-<span class="branch">feature/user-authentication</span>
-<span class="branch">fix/login-button-disabled</span>
-<span class="branch">hotfix/security-vulnerability</span>
-<span class="branch">refactor/api-cleanup</span>
-                    </div>
-                </div>
-                
-                <div class="content-card">
-                    <h2>📋 Branch Type Prefixes</h2>
-                    <table class="data-table">
-                        <tr>
-                            <th>Prefix</th>
-                            <th>Purpose</th>
-                            <th>Example</th>
-                        </tr>
-                        <tr>
-                            <td><code>feature/</code></td>
-                            <td>New functionality or enhancement</td>
-                            <td><code>feature/dark-mode</code></td>
-                        </tr>
-                        <tr>
-                            <td><code>fix/</code></td>
-                            <td>Bug fixes (non-urgent)</td>
-                            <td><code>fix/date-format-issue</code></td>
-                        </tr>
-                        <tr>
-                            <td><code>hotfix/</code></td>
-                            <td>Urgent production fixes</td>
-                            <td><code>hotfix/payment-crash</code></td>
-                        </tr>
-                        <tr>
-                            <td><code>refactor/</code></td>
-                            <td>Code improvements (no behavior change)</td>
-                            <td><code>refactor/service-layer</code></td>
-                        </tr>
-                        <tr>
-                            <td><code>docs/</code></td>
-                            <td>Documentation only</td>
-                            <td><code>docs/api-readme</code></td>
-                        </tr>
-                        <tr>
-                            <td><code>test/</code></td>
-                            <td>Adding or updating tests</td>
-                            <td><code>test/user-service</code></td>
-                        </tr>
-                    </table>
-                </div>
-                
-                <div class="content-card">
-                    <h2>🎯 Naming Rules</h2>
-                    <ul>
-                        <li><strong>Use lowercase</strong> - <code>feature/add-login</code> not <code>Feature/Add-Login</code></li>
-                        <li><strong>Use hyphens</strong> - <code>fix/button-color</code> not <code>fix/button_color</code></li>
-                        <li><strong>Be descriptive but concise</strong> - 2-4 words is ideal</li>
-                        <li><strong>Include ticket number</strong> (optional) - <code>feature/JIRA-123-user-search</code></li>
-                        <li><strong>Avoid special characters</strong> - only letters, numbers, hyphens, slashes</li>
-                    </ul>
-                    
-                    <div class="warning-box">
-                        <strong>⚠️ Avoid These</strong>
-                        <code>mybranch</code>, <code>test123</code>, <code>johns-stuff</code>, <code>WIP</code> - these tell teammates nothing useful.
-                    </div>
-                </div>
-                
-                <div class="step-navigation">
-                    <button class="nav-btn prev" onclick="goToStep(2)">← Previous</button>
-                    <button class="nav-btn next" onclick="goToStep(4)">Next: GitFlow vs Trunk-Based →</button>
-                </div>
-            </div>
-        </div>
-        
-        <!-- Step 4 -->
-        <div class="step-page" id="step4">
-            <div class="step-content">
-                <div class="step-header">
-                    <span class="step-badge">Step 4 of 6</span>
-                    <h1>GitFlow vs Trunk-Based</h1>
-                    <p>Choosing the right workflow for your team</p>
-                </div>
-                
-                <div class="content-card">
-                    <h2>🔀 Two Popular Approaches</h2>
-                    
-                    <div class="comparison-grid">
-                        <div class="comparison-card">
-                            <h4>🌳 GitFlow</h4>
-                            <p>Multiple long-running branches for different purposes.</p>
-                            <ul>
-                                <li><code>main</code> - production code</li>
-                                <li><code>develop</code> - integration branch</li>
-                                <li><code>feature/*</code> - new features</li>
-                                <li><code>release/*</code> - release prep</li>
-                                <li><code>hotfix/*</code> - urgent fixes</li>
-                            </ul>
-                        </div>
-                        <div class="comparison-card">
-                            <h4>🎯 Trunk-Based</h4>
-                            <p>Short-lived branches, frequent merges to main.</p>
-                            <ul>
-                                <li><code>main</code> - the only long-lived branch</li>
-                                <li>Feature branches last hours/days</li>
-                                <li>Merge to main multiple times daily</li>
-                                <li>Feature flags for incomplete work</li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="content-card">
-                    <h2>📊 When to Use Each</h2>
-                    <table class="data-table">
-                        <tr>
-                            <th>Factor</th>
-                            <th>GitFlow</th>
-                            <th>Trunk-Based</th>
-                        </tr>
-                        <tr>
-                            <td>Team Size</td>
-                            <td>Large teams</td>
-                            <td>Small to medium teams</td>
-                        </tr>
-                        <tr>
-                            <td>Release Cadence</td>
-                            <td>Scheduled releases</td>
-                            <td>Continuous deployment</td>
-                        </tr>
-                        <tr>
-                            <td>Code Review</td>
-                            <td>Extensive review cycles</td>
-                            <td>Quick reviews, small PRs</td>
-                        </tr>
-                        <tr>
-                            <td>Complexity</td>
-                            <td>More complex</td>
-                            <td>Simpler</td>
-                        </tr>
-                        <tr>
-                            <td>Best For</td>
-                            <td>Products with versions</td>
-                            <td>Web apps, SaaS</td>
-                        </tr>
-                    </table>
-                </div>
-                
-                <div class="success-box">
-                    <strong>💡 Our Recommendation</strong>
-                    For most teams, <strong>simplified trunk-based</strong> is ideal: short-lived feature branches, quick PRs, frequent merges to main. Save GitFlow for products that need versioned releases.
-                </div>
-                
-                <div class="step-navigation">
-                    <button class="nav-btn prev" onclick="goToStep(3)">← Previous</button>
-                    <button class="nav-btn next" onclick="goToStep(5)">Next: Protecting Main Branch →</button>
-                </div>
-            </div>
-        </div>
-        
-        <!-- Step 5 -->
-        <div class="step-page" id="step5">
-            <div class="step-content">
-                <div class="step-header">
-                    <span class="step-badge">Step 5 of 6</span>
-                    <h1>Protecting Main Branch</h1>
-                    <p>Enforce quality with branch protection rules</p>
-                </div>
-                
-                <div class="content-card">
-                    <h2>🛡️ Why Protect Main?</h2>
-                    <p>Branch protection rules prevent accidents and enforce standards:</p>
-                    <ul>
-                        <li>No direct pushes - all changes go through PRs</li>
-                        <li>Required reviews before merge</li>
-                        <li>Status checks must pass (tests, linting)</li>
-                        <li>Force pushes prohibited</li>
-                    </ul>
-                </div>
-                
-                <div class="content-card">
-                    <h2>⚙️ Recommended Protection Rules</h2>
-                    <p>In GitHub: Settings → Branches → Add branch protection rule</p>
-                    
-                    <table class="data-table">
-                        <tr>
-                            <th>Rule</th>
-                            <th>Setting</th>
-                            <th>Why</th>
-                        </tr>
-                        <tr>
-                            <td>Require pull request</td>
-                            <td>✅ Enabled</td>
-                            <td>No direct commits to main</td>
-                        </tr>
-                        <tr>
-                            <td>Required reviewers</td>
-                            <td>1-2</td>
-                            <td>Second pair of eyes</td>
-                        </tr>
-                        <tr>
-                            <td>Dismiss stale reviews</td>
-                            <td>✅ Enabled</td>
-                            <td>New changes need re-review</td>
-                        </tr>
-                        <tr>
-                            <td>Require status checks</td>
-                            <td>✅ Enabled</td>
-                            <td>Tests must pass</td>
-                        </tr>
-                        <tr>
-                            <td>Require branch up-to-date</td>
-                            <td>✅ Enabled</td>
-                            <td>Must have latest main</td>
-                        </tr>
-                        <tr>
-                            <td>Include administrators</td>
-                            <td>✅ Enabled</td>
-                            <td>Rules apply to everyone</td>
-                        </tr>
-                    </table>
-                </div>
-                
-                <div class="content-card">
-                    <h2>🔒 Sample Branch Protection Setup</h2>
-                    <div class="code-block">
-<span class="comment"># In GitHub, protect these branches:</span>
+          <div class="content-card">
+            <h2>🔧 Step-by-Step Commands</h2>
+            <div class="code-block">
+              <span class="comment"># 1. Start from latest main</span>
+              <span class="command">git checkout</span>
+              <span class="branch">main</span>
+              <span class="command">git pull</span> origin main
 
-<span class="branch">main</span>       → Full protection (required reviews, status checks)
-<span class="branch">develop</span>    → Partial protection (required reviews)
-<span class="branch">release/*</span>  → Protected (no force push)
-                    </div>
-                    
-                    <div class="warning-box">
-                        <strong>⚠️ Don't Skip Reviews</strong>
-                        Even for "small" changes. Today's "quick fix" is tomorrow's production bug.
-                    </div>
-                </div>
-                
-                <div class="step-navigation">
-                    <button class="nav-btn prev" onclick="goToStep(4)">← Previous</button>
-                    <button class="nav-btn next" onclick="goToStep(6)">Complete Module →</button>
-                </div>
+              <span class="comment"># 2. Create feature branch</span>
+              <span class="command">git checkout</span>
+              <span class="flag">-b</span>
+              <span class="branch">feature/add-user-search</span>
+
+              <span class="comment"># 3. Work and commit</span>
+              <span class="command">git add</span> <span class="flag">.</span>
+              <span class="command">git commit</span>
+              <span class="flag">-m</span>
+              <span class="string">"Add search input component"</span>
+
+              <span class="comment"># 4. Push to remote</span>
+              <span class="command">git push</span>
+              <span class="flag">-u</span> origin
+              <span class="branch">feature/add-user-search</span>
+
+              <span class="comment"># 5. Open PR on GitHub (or via CLI)</span>
+              <span class="comment"># 6. After merge, clean up locally</span>
+              <span class="command">git checkout</span>
+              <span class="branch">main</span>
+              <span class="command">git pull</span>
+              <span class="command">git branch</span>
+              <span class="flag">-d</span>
+              <span class="branch">feature/add-user-search</span>
             </div>
+          </div>
+
+          <div class="success-box">
+            <strong>✅ Best Practice</strong>
+            Keep feature branches short-lived (1-3 days max). Long-running
+            branches are merge conflict magnets.
+          </div>
+
+          <div class="step-navigation">
+            <button class="nav-btn prev" onclick="goToStep(1)">
+              ← Previous
+            </button>
+            <button class="nav-btn next" onclick="goToStep(3)">
+              Next: Branch Naming Conventions →
+            </button>
+          </div>
         </div>
-        
-        <!-- Step 6 -->
-        <div class="step-page" id="step6">
-            <div class="step-content">
-                <div class="step-header">
-                    <span class="step-badge">Step 6 of 6</span>
-                    <h1>🎉 Module Complete!</h1>
-                    <p>You've learned branch strategy fundamentals</p>
-                </div>
-                
-                <div class="content-card" style="text-align: center; padding: 2.5rem;">
-                    <div style="font-size: 4rem; margin-bottom: 1rem;">🌿</div>
-                    <h2>Branch Strategy Mastered!</h2>
-                    <p style="font-size: 1.1rem; max-width: 500px; margin: 1rem auto;">You now know how to structure branches for effective team collaboration.</p>
-                </div>
-                
-                <div class="content-card">
-                    <h2>📋 Key Takeaways</h2>
-                    <ul>
-                        <li><strong>Main should always be deployable</strong></li>
-                        <li><strong>Feature branches</strong> isolate work until it's ready</li>
-                        <li><strong>Naming conventions</strong> communicate intent (feature/, fix/, hotfix/)</li>
-                        <li><strong>Trunk-based</strong> works well for most teams</li>
-                        <li><strong>Branch protection</strong> enforces quality gates</li>
-                    </ul>
-                </div>
-                
-                <div class="content-card" style="background: linear-gradient(135deg, var(--module-color), #6366f1); color: white;">
-                    <h2 style="color: white;">Next Up: Avoiding Merge Conflicts</h2>
-                    <p style="color: rgba(255,255,255,0.9);">Learn strategies to prevent conflicts and resolve them when they occur.</p>
-                    <div style="margin-top: 1rem;">
-                        <a href="dev-module3-avoiding-conflicts.html" class="nav-btn" style="background: white; color: var(--module-color);">Start Module 3 →</a>
-                    </div>
-                </div>
-                
-                <div class="step-navigation">
-                    <button class="nav-btn prev" onclick="goToStep(5)">← Previous</button>
-                    <button class="nav-btn next" onclick="completeModule()" style="background: var(--primary);">✓ Complete Module</button>
-                </div>
+      </div>
+
+      <!-- Step 3 -->
+      <div class="step-page" id="step3">
+        <div class="step-content">
+          <div class="step-header">
+            <span class="step-badge">Step 3 of 6</span>
+            <h1>Branch Naming Conventions</h1>
+            <p>Consistent names improve team communication</p>
+          </div>
+
+          <div class="content-card">
+            <h2>📝 Recommended Naming Pattern</h2>
+            <div class="code-block">
+              <span class="string">&lt;type&gt;/&lt;description&gt;</span>
+
+              <span class="comment"># Examples:</span>
+              <span class="branch">feature/user-authentication</span>
+              <span class="branch">fix/login-button-disabled</span>
+              <span class="branch">hotfix/security-vulnerability</span>
+              <span class="branch">refactor/api-cleanup</span>
             </div>
+          </div>
+
+          <div class="content-card">
+            <h2>📋 Branch Type Prefixes</h2>
+            <table class="data-table">
+              <tr>
+                <th>Prefix</th>
+                <th>Purpose</th>
+                <th>Example</th>
+              </tr>
+              <tr>
+                <td><code>feature/</code></td>
+                <td>New functionality or enhancement</td>
+                <td><code>feature/dark-mode</code></td>
+              </tr>
+              <tr>
+                <td><code>fix/</code></td>
+                <td>Bug fixes (non-urgent)</td>
+                <td><code>fix/date-format-issue</code></td>
+              </tr>
+              <tr>
+                <td><code>hotfix/</code></td>
+                <td>Urgent production fixes</td>
+                <td><code>hotfix/payment-crash</code></td>
+              </tr>
+              <tr>
+                <td><code>refactor/</code></td>
+                <td>Code improvements (no behavior change)</td>
+                <td><code>refactor/service-layer</code></td>
+              </tr>
+              <tr>
+                <td><code>docs/</code></td>
+                <td>Documentation only</td>
+                <td><code>docs/api-readme</code></td>
+              </tr>
+              <tr>
+                <td><code>test/</code></td>
+                <td>Adding or updating tests</td>
+                <td><code>test/user-service</code></td>
+              </tr>
+            </table>
+          </div>
+
+          <div class="content-card">
+            <h2>🎯 Naming Rules</h2>
+            <ul>
+              <li>
+                <strong>Use lowercase</strong> -
+                <code>feature/add-login</code> not
+                <code>Feature/Add-Login</code>
+              </li>
+              <li>
+                <strong>Use hyphens</strong> - <code>fix/button-color</code> not
+                <code>fix/button_color</code>
+              </li>
+              <li>
+                <strong>Be descriptive but concise</strong> - 2-4 words is ideal
+              </li>
+              <li>
+                <strong>Include ticket number</strong> (optional) -
+                <code>feature/JIRA-123-user-search</code>
+              </li>
+              <li>
+                <strong>Avoid special characters</strong> - only letters,
+                numbers, hyphens, slashes
+              </li>
+            </ul>
+
+            <div class="warning-box">
+              <strong>⚠️ Avoid These</strong>
+              <code>mybranch</code>, <code>test123</code>,
+              <code>johns-stuff</code>, <code>WIP</code> - these tell teammates
+              nothing useful.
+            </div>
+          </div>
+
+          <div class="step-navigation">
+            <button class="nav-btn prev" onclick="goToStep(2)">
+              ← Previous
+            </button>
+            <button class="nav-btn next" onclick="goToStep(4)">
+              Next: GitFlow vs Trunk-Based →
+            </button>
+          </div>
         </div>
+      </div>
+
+      <!-- Step 4 -->
+      <div class="step-page" id="step4">
+        <div class="step-content">
+          <div class="step-header">
+            <span class="step-badge">Step 4 of 6</span>
+            <h1>GitFlow vs Trunk-Based</h1>
+            <p>Choosing the right workflow for your team</p>
+          </div>
+
+          <div class="content-card">
+            <h2>🔀 Two Popular Approaches</h2>
+
+            <div class="comparison-grid">
+              <div class="comparison-card">
+                <h4>🌳 GitFlow</h4>
+                <p>Multiple long-running branches for different purposes.</p>
+                <ul>
+                  <li><code>main</code> - production code</li>
+                  <li><code>develop</code> - integration branch</li>
+                  <li><code>feature/*</code> - new features</li>
+                  <li><code>release/*</code> - release prep</li>
+                  <li><code>hotfix/*</code> - urgent fixes</li>
+                </ul>
+              </div>
+              <div class="comparison-card">
+                <h4>🎯 Trunk-Based</h4>
+                <p>Short-lived branches, frequent merges to main.</p>
+                <ul>
+                  <li><code>main</code> - the only long-lived branch</li>
+                  <li>Feature branches last hours/days</li>
+                  <li>Merge to main multiple times daily</li>
+                  <li>Feature flags for incomplete work</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+
+          <div class="content-card">
+            <h2>📊 When to Use Each</h2>
+            <table class="data-table">
+              <tr>
+                <th>Factor</th>
+                <th>GitFlow</th>
+                <th>Trunk-Based</th>
+              </tr>
+              <tr>
+                <td>Team Size</td>
+                <td>Large teams</td>
+                <td>Small to medium teams</td>
+              </tr>
+              <tr>
+                <td>Release Cadence</td>
+                <td>Scheduled releases</td>
+                <td>Continuous deployment</td>
+              </tr>
+              <tr>
+                <td>Code Review</td>
+                <td>Extensive review cycles</td>
+                <td>Quick reviews, small PRs</td>
+              </tr>
+              <tr>
+                <td>Complexity</td>
+                <td>More complex</td>
+                <td>Simpler</td>
+              </tr>
+              <tr>
+                <td>Best For</td>
+                <td>Products with versions</td>
+                <td>Web apps, SaaS</td>
+              </tr>
+            </table>
+          </div>
+
+          <div class="success-box">
+            <strong>💡 Our Recommendation</strong>
+            For most teams, <strong>simplified trunk-based</strong> is ideal:
+            short-lived feature branches, quick PRs, frequent merges to main.
+            Save GitFlow for products that need versioned releases.
+          </div>
+
+          <div class="step-navigation">
+            <button class="nav-btn prev" onclick="goToStep(3)">
+              ← Previous
+            </button>
+            <button class="nav-btn next" onclick="goToStep(5)">
+              Next: Protecting Main Branch →
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Step 5 -->
+      <div class="step-page" id="step5">
+        <div class="step-content">
+          <div class="step-header">
+            <span class="step-badge">Step 5 of 6</span>
+            <h1>Protecting Main Branch</h1>
+            <p>Enforce quality with branch protection rules</p>
+          </div>
+
+          <div class="content-card">
+            <h2>🛡️ Why Protect Main?</h2>
+            <p>
+              Branch protection rules prevent accidents and enforce standards:
+            </p>
+            <ul>
+              <li>No direct pushes - all changes go through PRs</li>
+              <li>Required reviews before merge</li>
+              <li>Status checks must pass (tests, linting)</li>
+              <li>Force pushes prohibited</li>
+            </ul>
+          </div>
+
+          <div class="content-card">
+            <h2>⚙️ Recommended Protection Rules</h2>
+            <p>In GitHub: Settings → Branches → Add branch protection rule</p>
+
+            <table class="data-table">
+              <tr>
+                <th>Rule</th>
+                <th>Setting</th>
+                <th>Why</th>
+              </tr>
+              <tr>
+                <td>Require pull request</td>
+                <td>✅ Enabled</td>
+                <td>No direct commits to main</td>
+              </tr>
+              <tr>
+                <td>Required reviewers</td>
+                <td>1-2</td>
+                <td>Second pair of eyes</td>
+              </tr>
+              <tr>
+                <td>Dismiss stale reviews</td>
+                <td>✅ Enabled</td>
+                <td>New changes need re-review</td>
+              </tr>
+              <tr>
+                <td>Require status checks</td>
+                <td>✅ Enabled</td>
+                <td>Tests must pass</td>
+              </tr>
+              <tr>
+                <td>Require branch up-to-date</td>
+                <td>✅ Enabled</td>
+                <td>Must have latest main</td>
+              </tr>
+              <tr>
+                <td>Include administrators</td>
+                <td>✅ Enabled</td>
+                <td>Rules apply to everyone</td>
+              </tr>
+            </table>
+          </div>
+
+          <div class="content-card">
+            <h2>🔒 Sample Branch Protection Setup</h2>
+            <div class="code-block">
+              <span class="comment"># In GitHub, protect these branches:</span>
+
+              <span class="branch">main</span> → Full protection (required
+              reviews, status checks) <span class="branch">develop</span> →
+              Partial protection (required reviews)
+              <span class="branch">release/*</span> → Protected (no force push)
+            </div>
+
+            <div class="warning-box">
+              <strong>⚠️ Don't Skip Reviews</strong>
+              Even for "small" changes. Today's "quick fix" is tomorrow's
+              production bug.
+            </div>
+          </div>
+
+          <div class="step-navigation">
+            <button class="nav-btn prev" onclick="goToStep(4)">
+              ← Previous
+            </button>
+            <button class="nav-btn next" onclick="goToStep(6)">
+              Complete Module →
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Step 6 -->
+      <div class="step-page" id="step6">
+        <div class="step-content">
+          <div class="step-header">
+            <span class="step-badge">Step 6 of 6</span>
+            <h1>🎉 Module Complete!</h1>
+            <p>You've learned branch strategy fundamentals</p>
+          </div>
+
+          <div class="content-card" style="text-align: center; padding: 2.5rem">
+            <div style="font-size: 4rem; margin-bottom: 1rem">🌿</div>
+            <h2>Branch Strategy Mastered!</h2>
+            <p style="font-size: 1.1rem; max-width: 500px; margin: 1rem auto">
+              You now know how to structure branches for effective team
+              collaboration.
+            </p>
+          </div>
+
+          <div class="content-card">
+            <h2>📋 Key Takeaways</h2>
+            <ul>
+              <li><strong>Main should always be deployable</strong></li>
+              <li>
+                <strong>Feature branches</strong> isolate work until it's ready
+              </li>
+              <li>
+                <strong>Naming conventions</strong> communicate intent
+                (feature/, fix/, hotfix/)
+              </li>
+              <li><strong>Trunk-based</strong> works well for most teams</li>
+              <li><strong>Branch protection</strong> enforces quality gates</li>
+            </ul>
+          </div>
+
+          <div
+            class="content-card"
+            style="
+              background: linear-gradient(135deg, var(--module-color), #6366f1);
+              color: white;
+            "
+          >
+            <h2 style="color: white">Next Up: Avoiding Merge Conflicts</h2>
+            <p style="color: rgba(255, 255, 255, 0.9)">
+              Learn strategies to prevent conflicts and resolve them when they
+              occur.
+            </p>
+            <div style="margin-top: 1rem">
+              <a
+                href="dev-module3-avoiding-conflicts.html"
+                class="nav-btn"
+                style="background: white; color: var(--module-color)"
+                >Start Module 3 →</a
+              >
+            </div>
+          </div>
+
+          <div class="step-navigation">
+            <button class="nav-btn prev" onclick="goToStep(5)">
+              ← Previous
+            </button>
+            <button
+              class="nav-btn next"
+              onclick="completeModule()"
+              style="background: var(--primary)"
+            >
+              ✓ Complete Module
+            </button>
+          </div>
+        </div>
+      </div>
     </main>
-    
+
     <script>
-        const totalSteps = 6;
-        let currentStep = 1;
-        let completedSteps = [];
-        
-        function loadProgress() {
-            const saved = localStorage.getItem('dev-module2-step');
-            if (saved) {
-                currentStep = parseInt(saved);
-                for (let i = 1; i < currentStep; i++) {
-                    completedSteps.push(i);
-                }
-            }
-            updateUI();
+      const totalSteps = 6;
+      let currentStep = 1;
+      let completedSteps = [];
+
+      function loadProgress() {
+        const saved = localStorage.getItem("dev-module2-step");
+        if (saved) {
+          currentStep = parseInt(saved);
+          for (let i = 1; i < currentStep; i++) {
+            completedSteps.push(i);
+          }
         }
-        
-        function saveProgress() {
-            localStorage.setItem('dev-module2-step', currentStep);
-            if (currentStep > 1) {
-                localStorage.setItem('dev-module2', 'in-progress');
-            }
+        updateUI();
+      }
+
+      function saveProgress() {
+        localStorage.setItem("dev-module2-step", currentStep);
+        if (currentStep > 1) {
+          localStorage.setItem("dev-module2", "in-progress");
         }
-        
-        function goToStep(step) {
-            if (step > currentStep) {
-                for (let i = currentStep; i < step; i++) {
-                    if (!completedSteps.includes(i)) completedSteps.push(i);
-                }
-            }
-            currentStep = step;
-            saveProgress();
-            updateUI();
-            window.scrollTo(0, 0);
+      }
+
+      function goToStep(step) {
+        if (step > currentStep) {
+          for (let i = currentStep; i < step; i++) {
+            if (!completedSteps.includes(i)) completedSteps.push(i);
+          }
         }
-        
-        function updateUI() {
-            document.querySelectorAll('.step-page').forEach((page, index) => {
-                page.classList.remove('active');
-                if (index + 1 === currentStep) page.classList.add('active');
-            });
-            
-            document.querySelectorAll('.step-item').forEach((item, index) => {
-                const stepNum = index + 1;
-                item.classList.remove('active', 'completed');
-                if (stepNum === currentStep) item.classList.add('active');
-                else if (completedSteps.includes(stepNum)) item.classList.add('completed');
-            });
-            
-            const progress = ((currentStep - 1) / (totalSteps - 1)) * 100;
-            document.getElementById('progressFill').style.width = `${progress}%`;
-        }
-        
-        function completeModule() {
-            localStorage.setItem('dev-module2', 'completed');
-            localStorage.setItem('dev-module2-step', totalSteps);
-            window.location.href = 'developer-training.html';
-        }
-        
-        loadProgress();
+        currentStep = step;
+        saveProgress();
+        updateUI();
+        window.scrollTo(0, 0);
+      }
+
+      function updateUI() {
+        document.querySelectorAll(".step-page").forEach((page, index) => {
+          page.classList.remove("active");
+          if (index + 1 === currentStep) page.classList.add("active");
+        });
+
+        document.querySelectorAll(".step-item").forEach((item, index) => {
+          const stepNum = index + 1;
+          item.classList.remove("active", "completed");
+          if (stepNum === currentStep) item.classList.add("active");
+          else if (completedSteps.includes(stepNum))
+            item.classList.add("completed");
+        });
+
+        const progress = ((currentStep - 1) / (totalSteps - 1)) * 100;
+        document.getElementById("progressFill").style.width = `${progress}%`;
+      }
+
+      function completeModule() {
+        localStorage.setItem("dev-module2", "completed");
+        localStorage.setItem("dev-module2-step", totalSteps);
+        window.location.href = "developer-training.html";
+      }
+
+      loadProgress();
     </script>
-</body>
+  </body>
 </html>

@@ -1,513 +1,682 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>How to Schedule Interviews - Interactive Guide</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            padding: 20px;
-            line-height: 1.6;
-        }
-        
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            background: white;
-            border-radius: 12px;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
-            overflow: hidden;
-        }
-        
-        header {
-            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
-            color: white;
-            padding: 30px;
-            text-align: center;
-        }
-        
-        header h1 {
-            font-size: 2.5em;
-            margin-bottom: 10px;
-        }
-        
-        header p {
-            font-size: 1.2em;
-            opacity: 0.9;
-        }
-        
-        .content {
-            padding: 40px;
-        }
-        
-        .step {
-            margin-bottom: 40px;
-            padding: 25px;
-            background: #f8f9fa;
-            border-radius: 8px;
-            border-left: 5px solid #667eea;
-        }
-        
-        .step-number {
-            display: inline-block;
-            background: #667eea;
-            color: white;
-            width: 40px;
-            height: 40px;
-            line-height: 40px;
-            text-align: center;
-            border-radius: 50%;
-            font-weight: bold;
-            font-size: 1.3em;
-            margin-right: 15px;
-        }
-        
-        .step h2 {
-            display: inline;
-            font-size: 1.8em;
-            color: #2c3e50;
-        }
-        
-        .step-description {
-            margin: 20px 0;
-            font-size: 1.1em;
-            color: #555;
-        }
-        
-        .screenshot-placeholder {
-            background: linear-gradient(135deg, #e0e7ff 0%, #f3e7e9 100%);
-            border: 2px dashed #667eea;
-            border-radius: 8px;
-            padding: 80px 20px;
-            text-align: center;
-            color: #667eea;
-            font-size: 1.2em;
-            margin: 20px 0;
-        }
-        
-        .field-card {
-            background: white;
-            border: 2px solid #e1e8ed;
-            border-radius: 8px;
-            padding: 20px;
-            margin: 15px 0;
-            transition: all 0.3s ease;
-        }
-        
-        .field-card:hover {
-            border-color: #667eea;
-            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.2);
-        }
-        
-        .field-name {
-            font-weight: bold;
-            color: #1e3c72;
-            font-size: 1.2em;
-            margin-bottom: 10px;
-        }
-        
-        .required-badge {
-            display: inline-block;
-            background: #e74c3c;
-            color: white;
-            padding: 3px 10px;
-            border-radius: 12px;
-            font-size: 0.75em;
-            margin-left: 10px;
-            vertical-align: middle;
-        }
-        
-        .optional-badge {
-            display: inline-block;
-            background: #95a5a6;
-            color: white;
-            padding: 3px 10px;
-            border-radius: 12px;
-            font-size: 0.75em;
-            margin-left: 10px;
-            vertical-align: middle;
-        }
-        
-        .field-type {
-            color: #7f8c8d;
-            font-style: italic;
-            margin-bottom: 8px;
-        }
-        
-        .field-description {
-            color: #555;
-            line-height: 1.8;
-        }
-        
-        .dropdown-options {
-            background: #f1f3f5;
-            padding: 15px;
-            border-radius: 6px;
-            margin-top: 10px;
-        }
-        
-        .dropdown-options ul {
-            list-style-position: inside;
-            color: #2c3e50;
-        }
-        
-        .dropdown-options ul li {
-            padding: 5px 0;
-        }
-        
-        .tip-box {
-            background: #e8f5e9;
-            border-left: 4px solid #4caf50;
-            padding: 15px 20px;
-            margin: 20px 0;
-            border-radius: 4px;
-        }
-        
-        .tip-box strong {
-            color: #2e7d32;
-        }
-        
-        .warning-box {
-            background: #fff3cd;
-            border-left: 4px solid #ffc107;
-            padding: 15px 20px;
-            margin: 20px 0;
-            border-radius: 4px;
-        }
-        
-        .warning-box strong {
-            color: #856404;
-        }
-        
-        .error-box {
-            background: #f8d7da;
-            border-left: 4px solid #dc3545;
-            padding: 15px 20px;
-            margin: 20px 0;
-            border-radius: 4px;
-        }
-        
-        .error-box strong {
-            color: #721c24;
-        }
-        
-        .action-button {
-            background: #667eea;
-            color: white;
-            padding: 12px 30px;
-            border: none;
-            border-radius: 6px;
-            font-size: 1.1em;
-            cursor: pointer;
-            transition: background 0.3s ease;
-            display: inline-block;
-            margin: 10px 5px;
-        }
-        
-        .action-button:hover {
-            background: #5568d3;
-        }
-        
-        footer {
-            background: #2c3e50;
-            color: white;
-            text-align: center;
-            padding: 20px;
-            margin-top: 40px;
-        }
-        
-        .back-link {
-            color: #667eea;
-            text-decoration: none;
-            font-weight: bold;
-            display: inline-block;
-            margin: 20px 0;
-        }
-        
-        .back-link:hover {
-            text-decoration: underline;
-        }
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        padding: 20px;
+        line-height: 1.6;
+      }
+
+      .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        background: white;
+        border-radius: 12px;
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+        overflow: hidden;
+      }
+
+      header {
+        background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+        color: white;
+        padding: 30px;
+        text-align: center;
+      }
+
+      header h1 {
+        font-size: 2.5em;
+        margin-bottom: 10px;
+      }
+
+      header p {
+        font-size: 1.2em;
+        opacity: 0.9;
+      }
+
+      .content {
+        padding: 40px;
+      }
+
+      .step {
+        margin-bottom: 40px;
+        padding: 25px;
+        background: #f8f9fa;
+        border-radius: 8px;
+        border-left: 5px solid #667eea;
+      }
+
+      .step-number {
+        display: inline-block;
+        background: #667eea;
+        color: white;
+        width: 40px;
+        height: 40px;
+        line-height: 40px;
+        text-align: center;
+        border-radius: 50%;
+        font-weight: bold;
+        font-size: 1.3em;
+        margin-right: 15px;
+      }
+
+      .step h2 {
+        display: inline;
+        font-size: 1.8em;
+        color: #2c3e50;
+      }
+
+      .step-description {
+        margin: 20px 0;
+        font-size: 1.1em;
+        color: #555;
+      }
+
+      .screenshot-placeholder {
+        background: linear-gradient(135deg, #e0e7ff 0%, #f3e7e9 100%);
+        border: 2px dashed #667eea;
+        border-radius: 8px;
+        padding: 80px 20px;
+        text-align: center;
+        color: #667eea;
+        font-size: 1.2em;
+        margin: 20px 0;
+      }
+
+      .field-card {
+        background: white;
+        border: 2px solid #e1e8ed;
+        border-radius: 8px;
+        padding: 20px;
+        margin: 15px 0;
+        transition: all 0.3s ease;
+      }
+
+      .field-card:hover {
+        border-color: #667eea;
+        box-shadow: 0 4px 12px rgba(102, 126, 234, 0.2);
+      }
+
+      .field-name {
+        font-weight: bold;
+        color: #1e3c72;
+        font-size: 1.2em;
+        margin-bottom: 10px;
+      }
+
+      .required-badge {
+        display: inline-block;
+        background: #e74c3c;
+        color: white;
+        padding: 3px 10px;
+        border-radius: 12px;
+        font-size: 0.75em;
+        margin-left: 10px;
+        vertical-align: middle;
+      }
+
+      .optional-badge {
+        display: inline-block;
+        background: #95a5a6;
+        color: white;
+        padding: 3px 10px;
+        border-radius: 12px;
+        font-size: 0.75em;
+        margin-left: 10px;
+        vertical-align: middle;
+      }
+
+      .field-type {
+        color: #7f8c8d;
+        font-style: italic;
+        margin-bottom: 8px;
+      }
+
+      .field-description {
+        color: #555;
+        line-height: 1.8;
+      }
+
+      .dropdown-options {
+        background: #f1f3f5;
+        padding: 15px;
+        border-radius: 6px;
+        margin-top: 10px;
+      }
+
+      .dropdown-options ul {
+        list-style-position: inside;
+        color: #2c3e50;
+      }
+
+      .dropdown-options ul li {
+        padding: 5px 0;
+      }
+
+      .tip-box {
+        background: #e8f5e9;
+        border-left: 4px solid #4caf50;
+        padding: 15px 20px;
+        margin: 20px 0;
+        border-radius: 4px;
+      }
+
+      .tip-box strong {
+        color: #2e7d32;
+      }
+
+      .warning-box {
+        background: #fff3cd;
+        border-left: 4px solid #ffc107;
+        padding: 15px 20px;
+        margin: 20px 0;
+        border-radius: 4px;
+      }
+
+      .warning-box strong {
+        color: #856404;
+      }
+
+      .error-box {
+        background: #f8d7da;
+        border-left: 4px solid #dc3545;
+        padding: 15px 20px;
+        margin: 20px 0;
+        border-radius: 4px;
+      }
+
+      .error-box strong {
+        color: #721c24;
+      }
+
+      .action-button {
+        background: #667eea;
+        color: white;
+        padding: 12px 30px;
+        border: none;
+        border-radius: 6px;
+        font-size: 1.1em;
+        cursor: pointer;
+        transition: background 0.3s ease;
+        display: inline-block;
+        margin: 10px 5px;
+      }
+
+      .action-button:hover {
+        background: #5568d3;
+      }
+
+      footer {
+        background: #2c3e50;
+        color: white;
+        text-align: center;
+        padding: 20px;
+        margin-top: 40px;
+      }
+
+      .back-link {
+        color: #667eea;
+        text-decoration: none;
+        font-weight: bold;
+        display: inline-block;
+        margin: 20px 0;
+      }
+
+      .back-link:hover {
+        text-decoration: underline;
+      }
     </style>
-</head>
-<body>
+  </head>
+  <body>
     <div class="container">
-        <header>
-            <h1>🎯 How to Schedule Interviews</h1>
-            <p>Step-by-Step Interactive Guide</p>
-        </header>
-        
-        <div class="content">
-            <a href="training-portal.html" class="back-link">← Back to Training Portal</a>
-            
-            <!-- STEP 1 -->
-            <div class="step">
-                <span class="step-number">1</span>
-                <h2>Navigate to the Dashboard</h2>
-                <div class="step-description">
-                    Log into Salesforce and open the <strong>Recruiter Portal</strong> application. You should see the dashboard home page with action buttons in the header. The "Schedule Interview" button is the 5th button from the left.
-                </div>
-                <div class="screenshot-placeholder">
-                    📸 Screenshot: Dashboard Home Page with Schedule Interview Button (5th button)
-                </div>
-                <div class="tip-box">
-                    <strong>💡 Tip:</strong> If you don't see the Recruiter Portal, click the App Launcher (⋮⋮⋮ grid icon) in the top left and search for "Recruiter Portal".
-                </div>
-            </div>
-            
-            <!-- STEP 2 -->
-            <div class="step">
-                <span class="step-number">2</span>
-                <h2>Click "Schedule Interview" Button</h2>
-                <div class="step-description">
-                    In the dashboard header, locate the <strong>"Schedule Interview"</strong> button. This is the 5th button from the left in the action button row.
-                </div>
-                <div class="screenshot-placeholder">
-                    📸 Screenshot: Dashboard Header with "Schedule Interview" Button Highlighted
-                </div>
-                <div class="tip-box">
-                    <strong>💡 Note:</strong> You can only schedule interviews for candidates that already exist in the system. If you need to create a new candidate first, use the "Create New Candidate" button (4th button).
-                </div>
-            </div>
-            
-            <!-- STEP 3 -->
-            <div class="step">
-                <span class="step-number">3</span>
-                <h2>The Schedule Interview Modal Opens</h2>
-                <div class="step-description">
-                    A modal window will appear with the interview scheduling form. You'll see 5 fields total—<strong>3 required</strong> and 2 optional.
-                </div>
-                <div class="screenshot-placeholder">
-                    📸 Screenshot: Schedule Interview Modal with All Fields Visible
-                </div>
-                <div class="warning-box">
-                    <strong>⚠️ Important:</strong> The three required fields are Candidate, Interview Type, and Scheduled Date/Time. You cannot save the interview without these.
-                </div>
-            </div>
-            
-            <!-- STEP 4: FIELD DETAILS -->
-            <div class="step">
-                <span class="step-number">4</span>
-                <h2>Fill Out Form Fields</h2>
-                <div class="step-description">
-                    Let's go through each field in detail:
-                </div>
-                
-                <!-- Field 1: Candidate -->
-                <div class="field-card">
-                    <div class="field-name">
-                        Candidate
-                        <span class="required-badge">REQUIRED</span>
-                    </div>
-                    <div class="field-type">Type: Lookup (Searchable Dropdown)</div>
-                    <div class="field-description">
-                        <p><strong>Purpose:</strong> Select which candidate this interview is for. This is a searchable lookup field that connects the interview to an existing Candidate record.</p>
-                        <p><strong>How to use:</strong> Start typing the candidate's name and select from the dropdown list. The field searches across all active candidates in the system.</p>
-                        <p><strong>Example:</strong> Type "John Smith" and select the matching candidate from the list.</p>
-                        <p><strong>Validation:</strong> Must select an existing candidate. You cannot type in a name that doesn't exist in the system.</p>
-                    </div>
-                    <div class="tip-box">
-                        <strong>💡 Pro Tip:</strong> If you don't see the candidate you're looking for, they may not exist in the system yet. Create them first using the "Create New Candidate" button.
-                    </div>
-                </div>
-                
-                <!-- Field 2: Interview Type -->
-                <div class="field-card">
-                    <div class="field-name">
-                        Interview Type
-                        <span class="required-badge">REQUIRED</span>
-                    </div>
-                    <div class="field-type">Type: Picklist (Dropdown)</div>
-                    <div class="field-description">
-                        <p><strong>Purpose:</strong> Indicates which stage of the interview process this is. This is critical for tracking candidate progression through the recruitment pipeline.</p>
-                        <p><strong>How to use:</strong> Select the appropriate interview type from the dropdown based on where the candidate is in the process.</p>
-                    </div>
-                    <div class="dropdown-options">
-                        <strong>Available Options:</strong>
-                        <ul>
-                            <li><strong>Attraction Interview (Ci-First)</strong> - Initial contact call to gauge interest and explain opportunity. This is typically the first conversation with a candidate.</li>
-                            <li><strong>SI1 (Align-2nd)</strong> - First structured interview. Deeper discussion about role expectations, candidate background, and initial alignment assessment.</li>
-                            <li><strong>SI2 (Plan-3rd)</strong> - Second structured interview. Focus on career plans, compensation expectations, and business plan discussion.</li>
-                            <li><strong>SI3 (Present-4th)</strong> - Third structured interview. Final assessment, presentation of offer details, and addressing any remaining questions.</li>
-                            <li><strong>Career (Optional-5th)</strong> - Career presentation meeting. Optional additional meeting to present career path and long-term opportunities.</li>
-                        </ul>
-                    </div>
-                    <div class="warning-box">
-                        <strong>⚠️ Important:</strong> Select the correct interview type—it affects reporting and candidate stage tracking. The numbers (1st, 2nd, 3rd, 4th, 5th) indicate the typical sequence of interviews.
-                    </div>
-                </div>
-                
-                <!-- Field 3: Scheduled Date/Time -->
-                <div class="field-card">
-                    <div class="field-name">
-                        Scheduled Date/Time
-                        <span class="required-badge">REQUIRED</span>
-                    </div>
-                    <div class="field-type">Type: DateTime Picker</div>
-                    <div class="field-description">
-                        <p><strong>Purpose:</strong> The date and time when the interview will take place. This field sets when the interview is scheduled to occur.</p>
-                        <p><strong>How to use:</strong> Click the calendar icon to select a date, then use the time picker to set the exact time. The system will display times in your timezone.</p>
-                        <p><strong>Example:</strong> January 15, 2026 at 2:00 PM</p>
-                        <p><strong>Validation:</strong> Must be a future date and time. You cannot schedule interviews in the past.</p>
-                    </div>
-                    <div class="error-box">
-                        <strong>🚫 Common Error:</strong> If you try to schedule an interview in the past, you'll receive a validation error. Always ensure the date/time is in the future.
-                    </div>
-                    <div class="tip-box">
-                        <strong>💡 Best Practice:</strong> Schedule interviews with at least 24-48 hours notice to give candidates time to prepare and confirm availability.
-                    </div>
-                </div>
-                
-                <!-- Field 4: Interviewer(s) -->
-                <div class="field-card">
-                    <div class="field-name">
-                        Interviewer(s)
-                        <span class="optional-badge">OPTIONAL</span>
-                    </div>
-                    <div class="field-type">Type: Text Field</div>
-                    <div class="field-description">
-                        <p><strong>Purpose:</strong> The name(s) of the person or people who will conduct the interview. This helps track who is interviewing which candidates.</p>
-                        <p><strong>How to use:</strong> Type the name(s) of the interviewer(s). If multiple people are interviewing, separate names with commas.</p>
-                        <p><strong>Example:</strong> Sarah Johnson, Michael Chen</p>
-                        <p><strong>Recommendation:</strong> Fill this in to ensure clarity on who owns the interview and who the candidate should expect to meet with.</p>
-                    </div>
-                    <div class="tip-box">
-                        <strong>💡 Tip:</strong> Recording interviewers helps with accountability and makes it easy to find interviews by who conducted them.
-                    </div>
-                </div>
-                
-                <!-- Field 5: Notes -->
-                <div class="field-card">
-                    <div class="field-name">
-                        Notes
-                        <span class="optional-badge">OPTIONAL</span>
-                    </div>
-                    <div class="field-type">Type: Long Text Area</div>
-                    <div class="field-description">
-                        <p><strong>Purpose:</strong> Capture any additional context, preparation notes, or special instructions for this specific interview.</p>
-                        <p><strong>How to use:</strong> Type any relevant notes that will help prepare for or conduct the interview effectively.</p>
-                        <p><strong>Example:</strong> "Focus on candidate's financial services background. Ask about willingness to relocate. Candidate mentioned interest in management track during screening call."</p>
-                        <p><strong>Recommendation:</strong> Use this field for anything you'll want to remember before or during the interview. These notes are visible on the interview record.</p>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- STEP 5 -->
-            <div class="step">
-                <span class="step-number">5</span>
-                <h2>Click "Schedule Interview" Button</h2>
-                <div class="step-description">
-                    After filling out all required fields (Candidate, Interview Type, and Scheduled Date/Time), click the <strong>"Schedule Interview"</strong> button at the bottom of the modal.
-                </div>
-                <div class="screenshot-placeholder">
-                    📸 Screenshot: "Schedule Interview" Button at Bottom of Modal
-                </div>
-                <div class="tip-box">
-                    <strong>⏱️ What Happens Next:</strong> The system will create an Interview record linked to the selected Candidate, set the Status to "Scheduled", and update dashboard metrics. You'll see a brief loading indicator.
-                </div>
-            </div>
-            
-            <!-- STEP 6 -->
-            <div class="step">
-                <span class="step-number">6</span>
-                <h2>Verify Interview Creation</h2>
-                <div class="step-description">
-                    The modal will close automatically. Your dashboard metrics will update to reflect the new scheduled interview count. The interview will appear in your scheduled interviews list.
-                </div>
-                <div class="screenshot-placeholder">
-                    📸 Screenshot: Dashboard with Updated Scheduled Interview Count
-                </div>
-                <div class="tip-box">
-                    <strong>✅ Success!</strong> Your interview has been scheduled. You can now find it in the Scheduled Interviews section or by viewing the candidate's record.
-                </div>
-            </div>
-            
-            <!-- STEP 7: NEXT STEPS -->
-            <div class="step">
-                <span class="step-number">7</span>
-                <h2>Next Steps: Completing Interviews</h2>
-                <div class="step-description">
-                    After the interview takes place, you need to mark it as complete. Navigate to the interview record and change the <strong>Status</strong> field from "Scheduled" to "Completed".
-                </div>
-                <div class="warning-box">
-                    <strong>⚠️ Important Change:</strong> The system has been updated—you NO LONGER need to manually enter a "Completed Date". When you change Status to "Completed", the system automatically sets the completed date to the current date/time. The old "Completed Date" field has been removed to simplify the process.
-                </div>
-                <div class="tip-box">
-                    <strong>💡 Best Practice:</strong> Mark interviews complete as soon as possible after they occur. This keeps your metrics accurate and helps you track candidate progress in real-time.
-                </div>
-            </div>
-            
-            <!-- COMMON MISTAKES -->
-            <div class="step">
-                <h2 style="color: #e74c3c;">❌ Common Mistakes to Avoid</h2>
-                
-                <div class="error-box">
-                    <strong>Mistake #1:</strong> Confusing scheduled date/time with completed date.
-                    <br><strong>Solution:</strong> The new system only has one date field—Scheduled Date/Time. When you mark Status as "Completed", the system automatically records when it was completed. You don't need to worry about completed dates anymore.
-                </div>
-                
-                <div class="error-box">
-                    <strong>Mistake #2:</strong> Not marking interviews complete after they happen.
-                    <br><strong>Solution:</strong> Always update the Status field to "Completed" after conducting an interview. This keeps your dashboard metrics accurate.
-                </div>
-                
-                <div class="error-box">
-                    <strong>Mistake #3:</strong> Selecting the wrong interview type.
-                    <br><strong>Solution:</strong> Pay attention to the interview stage—selecting "SI2" when it should be "SI1" affects reporting and candidate progression tracking.
-                </div>
-                
-                <div class="error-box">
-                    <strong>Mistake #4:</strong> Scheduling interviews in the past.
-                    <br><strong>Solution:</strong> The system prevents this with validation. Scheduled Date/Time must be in the future. If you conducted an interview already, create it with a future date then immediately mark it complete.
-                </div>
-                
-                <div class="error-box">
-                    <strong>Mistake #5:</strong> Creating multiple interviews for the same stage.
-                    <br><strong>Solution:</strong> Each candidate should only have one interview per type (one "SI1", one "SI2", etc.). If you need to reschedule, edit the existing interview record rather than creating a duplicate.
-                </div>
-            </div>
-            
-            <!-- QUICK REFERENCE -->
-            <div class="step">
-                <h2>📋 Quick Reference Summary</h2>
-                <div class="field-description">
-                    <ol style="line-height: 2.5; font-size: 1.1em;">
-                        <li>Click <strong>"Schedule Interview"</strong> button (5th button in header)</li>
-                        <li>Select <strong>Candidate</strong> from searchable lookup (required)</li>
-                        <li>Select <strong>Interview Type</strong> from dropdown (required) - Choose from Ci-First, SI1, SI2, SI3, or Career</li>
-                        <li>Set <strong>Scheduled Date/Time</strong> using date/time picker (required) - Must be future date</li>
-                        <li>Add <strong>Interviewer(s)</strong> name(s) (optional but recommended)</li>
-                        <li>Add <strong>Notes</strong> for context (optional but helpful)</li>
-                        <li>Click <strong>"Schedule Interview"</strong> button</li>
-                        <li>Verify interview appears in dashboard scheduled count</li>
-                        <li>After interview occurs, change Status to "Completed" (no completed date needed)</li>
-                    </ol>
-                </div>
-            </div>
-            
-            <!-- RELATED GUIDES -->
-            <div class="step">
-                <h2>📚 Related Guides</h2>
-                <button class="action-button" onclick="window.location.href='interactive-candidate-creation-guide.html'">
-                    ← How to Create a Candidate
-                </button>
-                <button class="action-button" onclick="window.location.href='training-portal.html'">
-                    🏠 Back to Training Portal
-                </button>
-            </div>
+      <header>
+        <h1>🎯 How to Schedule Interviews</h1>
+        <p>Step-by-Step Interactive Guide</p>
+      </header>
+
+      <div class="content">
+        <a href="training-portal.html" class="back-link"
+          >← Back to Training Portal</a
+        >
+
+        <!-- STEP 1 -->
+        <div class="step">
+          <span class="step-number">1</span>
+          <h2>Navigate to the Dashboard</h2>
+          <div class="step-description">
+            Log into Salesforce and open the
+            <strong>Recruiter Portal</strong> application. You should see the
+            dashboard home page with action buttons in the header. The "Schedule
+            Interview" button is the 5th button from the left.
+          </div>
+          <div class="screenshot-placeholder">
+            📸 Screenshot: Dashboard Home Page with Schedule Interview Button
+            (5th button)
+          </div>
+          <div class="tip-box">
+            <strong>💡 Tip:</strong> If you don't see the Recruiter Portal,
+            click the App Launcher (⋮⋮⋮ grid icon) in the top left and search
+            for "Recruiter Portal".
+          </div>
         </div>
-        
-        <footer>
-            <p>&copy; 2026 Recruiter Portal Training. All rights reserved.</p>
-            <p>Last Updated: January 7, 2026</p>
-        </footer>
+
+        <!-- STEP 2 -->
+        <div class="step">
+          <span class="step-number">2</span>
+          <h2>Click "Schedule Interview" Button</h2>
+          <div class="step-description">
+            In the dashboard header, locate the
+            <strong>"Schedule Interview"</strong> button. This is the 5th button
+            from the left in the action button row.
+          </div>
+          <div class="screenshot-placeholder">
+            📸 Screenshot: Dashboard Header with "Schedule Interview" Button
+            Highlighted
+          </div>
+          <div class="tip-box">
+            <strong>💡 Note:</strong> You can only schedule interviews for
+            candidates that already exist in the system. If you need to create a
+            new candidate first, use the "Create New Candidate" button (4th
+            button).
+          </div>
+        </div>
+
+        <!-- STEP 3 -->
+        <div class="step">
+          <span class="step-number">3</span>
+          <h2>The Schedule Interview Modal Opens</h2>
+          <div class="step-description">
+            A modal window will appear with the interview scheduling form.
+            You'll see 5 fields total—<strong>3 required</strong> and 2
+            optional.
+          </div>
+          <div class="screenshot-placeholder">
+            📸 Screenshot: Schedule Interview Modal with All Fields Visible
+          </div>
+          <div class="warning-box">
+            <strong>⚠️ Important:</strong> The three required fields are
+            Candidate, Interview Type, and Scheduled Date/Time. You cannot save
+            the interview without these.
+          </div>
+        </div>
+
+        <!-- STEP 4: FIELD DETAILS -->
+        <div class="step">
+          <span class="step-number">4</span>
+          <h2>Fill Out Form Fields</h2>
+          <div class="step-description">
+            Let's go through each field in detail:
+          </div>
+
+          <!-- Field 1: Candidate -->
+          <div class="field-card">
+            <div class="field-name">
+              Candidate
+              <span class="required-badge">REQUIRED</span>
+            </div>
+            <div class="field-type">Type: Lookup (Searchable Dropdown)</div>
+            <div class="field-description">
+              <p>
+                <strong>Purpose:</strong> Select which candidate this interview
+                is for. This is a searchable lookup field that connects the
+                interview to an existing Candidate record.
+              </p>
+              <p>
+                <strong>How to use:</strong> Start typing the candidate's name
+                and select from the dropdown list. The field searches across all
+                active candidates in the system.
+              </p>
+              <p>
+                <strong>Example:</strong> Type "John Smith" and select the
+                matching candidate from the list.
+              </p>
+              <p>
+                <strong>Validation:</strong> Must select an existing candidate.
+                You cannot type in a name that doesn't exist in the system.
+              </p>
+            </div>
+            <div class="tip-box">
+              <strong>💡 Pro Tip:</strong> If you don't see the candidate you're
+              looking for, they may not exist in the system yet. Create them
+              first using the "Create New Candidate" button.
+            </div>
+          </div>
+
+          <!-- Field 2: Interview Type -->
+          <div class="field-card">
+            <div class="field-name">
+              Interview Type
+              <span class="required-badge">REQUIRED</span>
+            </div>
+            <div class="field-type">Type: Picklist (Dropdown)</div>
+            <div class="field-description">
+              <p>
+                <strong>Purpose:</strong> Indicates which stage of the interview
+                process this is. This is critical for tracking candidate
+                progression through the recruitment pipeline.
+              </p>
+              <p>
+                <strong>How to use:</strong> Select the appropriate interview
+                type from the dropdown based on where the candidate is in the
+                process.
+              </p>
+            </div>
+            <div class="dropdown-options">
+              <strong>Available Options:</strong>
+              <ul>
+                <li>
+                  <strong>Attraction Interview (Ci-First)</strong> - Initial
+                  contact call to gauge interest and explain opportunity. This
+                  is typically the first conversation with a candidate.
+                </li>
+                <li>
+                  <strong>SI1 (Align-2nd)</strong> - First structured interview.
+                  Deeper discussion about role expectations, candidate
+                  background, and initial alignment assessment.
+                </li>
+                <li>
+                  <strong>SI2 (Plan-3rd)</strong> - Second structured interview.
+                  Focus on career plans, compensation expectations, and business
+                  plan discussion.
+                </li>
+                <li>
+                  <strong>SI3 (Present-4th)</strong> - Third structured
+                  interview. Final assessment, presentation of offer details,
+                  and addressing any remaining questions.
+                </li>
+                <li>
+                  <strong>Career (Optional-5th)</strong> - Career presentation
+                  meeting. Optional additional meeting to present career path
+                  and long-term opportunities.
+                </li>
+              </ul>
+            </div>
+            <div class="warning-box">
+              <strong>⚠️ Important:</strong> Select the correct interview
+              type—it affects reporting and candidate stage tracking. The
+              numbers (1st, 2nd, 3rd, 4th, 5th) indicate the typical sequence of
+              interviews.
+            </div>
+          </div>
+
+          <!-- Field 3: Scheduled Date/Time -->
+          <div class="field-card">
+            <div class="field-name">
+              Scheduled Date/Time
+              <span class="required-badge">REQUIRED</span>
+            </div>
+            <div class="field-type">Type: DateTime Picker</div>
+            <div class="field-description">
+              <p>
+                <strong>Purpose:</strong> The date and time when the interview
+                will take place. This field sets when the interview is scheduled
+                to occur.
+              </p>
+              <p>
+                <strong>How to use:</strong> Click the calendar icon to select a
+                date, then use the time picker to set the exact time. The system
+                will display times in your timezone.
+              </p>
+              <p><strong>Example:</strong> January 15, 2026 at 2:00 PM</p>
+              <p>
+                <strong>Validation:</strong> Must be a future date and time. You
+                cannot schedule interviews in the past.
+              </p>
+            </div>
+            <div class="error-box">
+              <strong>🚫 Common Error:</strong> If you try to schedule an
+              interview in the past, you'll receive a validation error. Always
+              ensure the date/time is in the future.
+            </div>
+            <div class="tip-box">
+              <strong>💡 Best Practice:</strong> Schedule interviews with at
+              least 24-48 hours notice to give candidates time to prepare and
+              confirm availability.
+            </div>
+          </div>
+
+          <!-- Field 4: Interviewer(s) -->
+          <div class="field-card">
+            <div class="field-name">
+              Interviewer(s)
+              <span class="optional-badge">OPTIONAL</span>
+            </div>
+            <div class="field-type">Type: Text Field</div>
+            <div class="field-description">
+              <p>
+                <strong>Purpose:</strong> The name(s) of the person or people
+                who will conduct the interview. This helps track who is
+                interviewing which candidates.
+              </p>
+              <p>
+                <strong>How to use:</strong> Type the name(s) of the
+                interviewer(s). If multiple people are interviewing, separate
+                names with commas.
+              </p>
+              <p><strong>Example:</strong> Sarah Johnson, Michael Chen</p>
+              <p>
+                <strong>Recommendation:</strong> Fill this in to ensure clarity
+                on who owns the interview and who the candidate should expect to
+                meet with.
+              </p>
+            </div>
+            <div class="tip-box">
+              <strong>💡 Tip:</strong> Recording interviewers helps with
+              accountability and makes it easy to find interviews by who
+              conducted them.
+            </div>
+          </div>
+
+          <!-- Field 5: Notes -->
+          <div class="field-card">
+            <div class="field-name">
+              Notes
+              <span class="optional-badge">OPTIONAL</span>
+            </div>
+            <div class="field-type">Type: Long Text Area</div>
+            <div class="field-description">
+              <p>
+                <strong>Purpose:</strong> Capture any additional context,
+                preparation notes, or special instructions for this specific
+                interview.
+              </p>
+              <p>
+                <strong>How to use:</strong> Type any relevant notes that will
+                help prepare for or conduct the interview effectively.
+              </p>
+              <p>
+                <strong>Example:</strong> "Focus on candidate's financial
+                services background. Ask about willingness to relocate.
+                Candidate mentioned interest in management track during
+                screening call."
+              </p>
+              <p>
+                <strong>Recommendation:</strong> Use this field for anything
+                you'll want to remember before or during the interview. These
+                notes are visible on the interview record.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- STEP 5 -->
+        <div class="step">
+          <span class="step-number">5</span>
+          <h2>Click "Schedule Interview" Button</h2>
+          <div class="step-description">
+            After filling out all required fields (Candidate, Interview Type,
+            and Scheduled Date/Time), click the
+            <strong>"Schedule Interview"</strong> button at the bottom of the
+            modal.
+          </div>
+          <div class="screenshot-placeholder">
+            📸 Screenshot: "Schedule Interview" Button at Bottom of Modal
+          </div>
+          <div class="tip-box">
+            <strong>⏱️ What Happens Next:</strong> The system will create an
+            Interview record linked to the selected Candidate, set the Status to
+            "Scheduled", and update dashboard metrics. You'll see a brief
+            loading indicator.
+          </div>
+        </div>
+
+        <!-- STEP 6 -->
+        <div class="step">
+          <span class="step-number">6</span>
+          <h2>Verify Interview Creation</h2>
+          <div class="step-description">
+            The modal will close automatically. Your dashboard metrics will
+            update to reflect the new scheduled interview count. The interview
+            will appear in your scheduled interviews list.
+          </div>
+          <div class="screenshot-placeholder">
+            📸 Screenshot: Dashboard with Updated Scheduled Interview Count
+          </div>
+          <div class="tip-box">
+            <strong>✅ Success!</strong> Your interview has been scheduled. You
+            can now find it in the Scheduled Interviews section or by viewing
+            the candidate's record.
+          </div>
+        </div>
+
+        <!-- STEP 7: NEXT STEPS -->
+        <div class="step">
+          <span class="step-number">7</span>
+          <h2>Next Steps: Completing Interviews</h2>
+          <div class="step-description">
+            After the interview takes place, you need to mark it as complete.
+            Navigate to the interview record and change the
+            <strong>Status</strong> field from "Scheduled" to "Completed".
+          </div>
+          <div class="warning-box">
+            <strong>⚠️ Important Change:</strong> The system has been
+            updated—you NO LONGER need to manually enter a "Completed Date".
+            When you change Status to "Completed", the system automatically sets
+            the completed date to the current date/time. The old "Completed
+            Date" field has been removed to simplify the process.
+          </div>
+          <div class="tip-box">
+            <strong>💡 Best Practice:</strong> Mark interviews complete as soon
+            as possible after they occur. This keeps your metrics accurate and
+            helps you track candidate progress in real-time.
+          </div>
+        </div>
+
+        <!-- COMMON MISTAKES -->
+        <div class="step">
+          <h2 style="color: #e74c3c">❌ Common Mistakes to Avoid</h2>
+
+          <div class="error-box">
+            <strong>Mistake #1:</strong> Confusing scheduled date/time with
+            completed date. <br /><strong>Solution:</strong> The new system only
+            has one date field—Scheduled Date/Time. When you mark Status as
+            "Completed", the system automatically records when it was completed.
+            You don't need to worry about completed dates anymore.
+          </div>
+
+          <div class="error-box">
+            <strong>Mistake #2:</strong> Not marking interviews complete after
+            they happen. <br /><strong>Solution:</strong> Always update the
+            Status field to "Completed" after conducting an interview. This
+            keeps your dashboard metrics accurate.
+          </div>
+
+          <div class="error-box">
+            <strong>Mistake #3:</strong> Selecting the wrong interview type.
+            <br /><strong>Solution:</strong> Pay attention to the interview
+            stage—selecting "SI2" when it should be "SI1" affects reporting and
+            candidate progression tracking.
+          </div>
+
+          <div class="error-box">
+            <strong>Mistake #4:</strong> Scheduling interviews in the past.
+            <br /><strong>Solution:</strong> The system prevents this with
+            validation. Scheduled Date/Time must be in the future. If you
+            conducted an interview already, create it with a future date then
+            immediately mark it complete.
+          </div>
+
+          <div class="error-box">
+            <strong>Mistake #5:</strong> Creating multiple interviews for the
+            same stage. <br /><strong>Solution:</strong> Each candidate should
+            only have one interview per type (one "SI1", one "SI2", etc.). If
+            you need to reschedule, edit the existing interview record rather
+            than creating a duplicate.
+          </div>
+        </div>
+
+        <!-- QUICK REFERENCE -->
+        <div class="step">
+          <h2>📋 Quick Reference Summary</h2>
+          <div class="field-description">
+            <ol style="line-height: 2.5; font-size: 1.1em">
+              <li>
+                Click <strong>"Schedule Interview"</strong> button (5th button
+                in header)
+              </li>
+              <li>
+                Select <strong>Candidate</strong> from searchable lookup
+                (required)
+              </li>
+              <li>
+                Select <strong>Interview Type</strong> from dropdown (required)
+                - Choose from Ci-First, SI1, SI2, SI3, or Career
+              </li>
+              <li>
+                Set <strong>Scheduled Date/Time</strong> using date/time picker
+                (required) - Must be future date
+              </li>
+              <li>
+                Add <strong>Interviewer(s)</strong> name(s) (optional but
+                recommended)
+              </li>
+              <li>
+                Add <strong>Notes</strong> for context (optional but helpful)
+              </li>
+              <li>Click <strong>"Schedule Interview"</strong> button</li>
+              <li>Verify interview appears in dashboard scheduled count</li>
+              <li>
+                After interview occurs, change Status to "Completed" (no
+                completed date needed)
+              </li>
+            </ol>
+          </div>
+        </div>
+
+        <!-- RELATED GUIDES -->
+        <div class="step">
+          <h2>📚 Related Guides</h2>
+          <button
+            class="action-button"
+            onclick="
+              window.location.href = 'interactive-candidate-creation-guide.html'
+            "
+          >
+            ← How to Create a Candidate
+          </button>
+          <button
+            class="action-button"
+            onclick="window.location.href = 'training-portal.html'"
+          >
+            🏠 Back to Training Portal
+          </button>
+        </div>
+      </div>
+
+      <footer>
+        <p>&copy; 2026 Recruiter Portal Training. All rights reserved.</p>
+        <p>Last Updated: January 7, 2026</p>
+      </footer>
     </div>
-</body>
+  </body>
 </html>

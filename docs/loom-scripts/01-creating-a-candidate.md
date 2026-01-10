@@ -90,6 +90,7 @@
 "The Position field lets you specify what role this candidate is being recruited for. Click the dropdown to see all available options."
 
 **[Action: Scroll through dropdown showing:]**
+
 - Insurance Agent (default)
 - Senior Insurance Agent
 - Insurance Sales Representative
@@ -113,6 +114,7 @@
 "Lead Source tells you where this candidate came from. This is valuable for tracking which recruiting channels are most effective."
 
 **[Action: Scroll through dropdown showing:]**
+
 - Recruiter Portal (default)
 - LinkedIn
 - Indeed

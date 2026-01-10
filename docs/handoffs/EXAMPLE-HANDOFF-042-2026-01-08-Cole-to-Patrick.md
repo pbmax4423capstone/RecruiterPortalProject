@@ -11,9 +11,11 @@
 ## Work Completed
 
 ### Overview
+
 Implemented dark mode toggle functionality across 6 dashboard components using Lightning Message Service for centralized state management.
 
 ### Components Modified
+
 1. ✅ `portalHeaderNew` - Dark mode publisher (toggle button)
 2. ✅ `candidateKanban` - Dark mode subscriber
 3. ✅ `recentActivity` - Dark mode subscriber
@@ -22,6 +24,7 @@ Implemented dark mode toggle functionality across 6 dashboard components using L
 6. ✅ `interviewLeaderboard` - Dark mode subscriber
 
 ### Technical Implementation
+
 - Created `DarkModeChannel__c` Lightning Message Service channel
 - Publisher: `portalHeaderNew` has sun/moon icon toggle
 - Subscribers: All components subscribe via `@wire(MessageContext)`
@@ -29,6 +32,7 @@ Implemented dark mode toggle functionality across 6 dashboard components using L
 - CSS: Used `containerClass` getter to conditionally apply `.dark-mode` class
 
 ### Testing Completed
+
 - ✅ Toggle works in all components
 - ✅ State persists across page navigation
 - ✅ No console errors
@@ -40,12 +44,15 @@ Implemented dark mode toggle functionality across 6 dashboard components using L
 ## Next Steps (For Patrick)
 
 ### Deployment Tasks
+
 1. Deploy `DarkModeChannel__c` to ProductionCapstone
+
    ```bash
    sf project deploy start --source-dir "force-app/main/default/messageChannels"
    ```
 
 2. Deploy all modified LWC components
+
    ```bash
    sf project deploy start --source-dir "force-app/main/default/lwc/portalHeaderNew"
    sf project deploy start --source-dir "force-app/main/default/lwc/candidateKanban"
@@ -60,7 +67,9 @@ Implemented dark mode toggle functionality across 6 dashboard components using L
 4. (Optional) Update training documentation if needed
 
 ### Deployment Order
+
 **Important:** Deploy in this order:
+
 1. First: `DarkModeChannel__c` (dependencies)
 2. Then: `portalHeaderNew` (publisher)
 3. Finally: All subscriber components (order doesn't matter)
@@ -70,9 +79,11 @@ Implemented dark mode toggle functionality across 6 dashboard components using L
 ## Files Modified
 
 ### New Files
+
 - `force-app/main/default/messageChannels/DarkModeChannel__c.messageChannel-meta.xml`
 
 ### Modified Files
+
 ```
 force-app/main/default/lwc/portalHeaderNew/
 ├── portalHeaderNew.html (added toggle button)
@@ -106,6 +117,7 @@ force-app/main/default/lwc/interviewLeaderboard/
 ```
 
 **Git Commits:**
+
 - `abc123` - Cole Agent: Add dark mode toggle to portalHeaderNew
 - `def456` - Cole Agent: Implement dark mode in subscriber components
 - `ghi789` - Cole Agent: Test and refine dark mode styles
@@ -164,6 +176,7 @@ force-app/main/default/lwc/interviewLeaderboard/
 ## Testing Checklist
 
 ### Manual Testing (Completed in ProdTest)
+
 - [x] Toggle button appears in header
 - [x] Click toggle switches to dark mode
 - [x] All 6 components update simultaneously
@@ -174,6 +187,7 @@ force-app/main/default/lwc/interviewLeaderboard/
 - [x] Responsive on mobile viewport
 
 ### Production Testing (To Do)
+
 - [ ] Smoke test after deployment
 - [ ] Get user feedback
 - [ ] Monitor for errors in production logs
