@@ -1,0 +1,221 @@
+/* Capstone Brand Colors */
+:host {
+    --capstone-navy: #003366;
+    --capstone-navy-primary: #202A44;
+    --capstone-blue-accent: #193F74;
+    --capstone-gold: #f4a024;
+    --capstone-white: #ffffff;
+    
+    /* Dark mode colors */
+    --dark-bg-primary: #16325c;
+    --dark-bg-secondary: #1a3a52;
+    --dark-bg-tertiary: #243649;
+    --dark-text-primary: #ffffff;
+    --dark-text-secondary: #e8f4fd;
+    --dark-border: #3e5771;
+}
+
+/* Main Container */
+.activity-container {
+    background: #f3f3f3;
+    padding: 1.5rem;
+    min-height: 400px;
+}
+
+.activity-container.dark-mode {
+    background: var(--dark-bg-primary);
+}
+
+/* Loading */
+.loading-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 400px;
+}
+
+/* Section Headers */
+.section-title {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--capstone-navy);
+    margin-bottom: 1rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid var(--capstone-blue-accent);
+}
+
+.dark-mode .section-title {
+    color: var(--dark-text-primary);
+    border-bottom-color: var(--capstone-gold);
+}
+
+/* Summary Section */
+.summary-section {
+    margin-bottom: 2rem;
+}
+
+/* Metrics Grid */
+.metrics-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+/* Metric Cards */
+.metric-card {
+    background: linear-gradient(135deg, var(--capstone-navy-primary) 0%, var(--capstone-blue-accent) 100%);
+    border-radius: 12px;
+    padding: 1.5rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+    color: var(--capstone-white);
+    cursor: pointer;
+}
+
+.metric-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 16px rgba(25, 63, 116, 0.3);
+}
+
+.dark-mode .metric-card {
+    background: linear-gradient(135deg, var(--dark-bg-secondary) 0%, var(--dark-bg-tertiary) 100%);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+}
+
+.dark-mode .metric-card:hover {
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.6);
+}
+
+/* Metric Header */
+.metric-header {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 0.75rem;
+}
+
+.metric-icon {
+    --slds-c-icon-color-foreground-default: var(--capstone-gold);
+}
+
+.metric-title {
+    font-size: 0.875rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    opacity: 0.9;
+}
+
+/* Metric Value */
+.metric-value {
+    font-size: 2.5rem;
+    font-weight: 700;
+    line-height: 1;
+    margin-bottom: 0.5rem;
+}
+
+/* Metric Footer */
+.metric-footer {
+    font-size: 0.75rem;
+    opacity: 0.8;
+    font-weight: 500;
+}
+
+/* Detail Section */
+.detail-section {
+    background: white;
+    border-radius: 12px;
+    padding: 1.5rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.dark-mode .detail-section {
+    background: var(--dark-bg-secondary);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+}
+
+/* Data Table Styling */
+.activity-table {
+    --slds-c-table-cell-spacing-block: 0.75rem;
+    --slds-c-table-header-font-weight: 600;
+}
+
+.dark-mode .activity-table {
+    --slds-c-table-color-background: var(--dark-bg-tertiary);
+    --slds-c-table-color-border: var(--dark-border);
+    --slds-c-table-text-color: var(--dark-text-primary);
+    --slds-c-table-header-color-background: var(--dark-bg-secondary);
+}
+
+/* Modal styles */
+.modal-header {
+    padding: 1rem 1.5rem;
+    border-bottom: 1px solid #d8dde6;
+    background: linear-gradient(135deg, var(--capstone-navy-primary) 0%, var(--capstone-blue-accent) 100%);
+    color: var(--capstone-white);
+}
+
+.dark-mode .modal-header {
+    border-bottom-color: var(--dark-border);
+    background: linear-gradient(135deg, var(--dark-bg-secondary) 0%, var(--dark-bg-tertiary) 100%);
+}
+
+.modal-title {
+    font-size: 1.125rem;
+    font-weight: 700;
+    margin: 0;
+    color: var(--capstone-white);
+}
+
+.modal-content {
+    padding: 1.5rem;
+    max-height: 60vh;
+    overflow-y: auto;
+}
+
+.dark-mode .modal-content {
+    background-color: var(--dark-bg-secondary);
+}
+
+.modal-footer {
+    padding: 1rem 1.5rem;
+    border-top: 1px solid #d8dde6;
+    display: flex;
+    justify-content: flex-end;
+    background: white;
+}
+
+.dark-mode .modal-footer {
+    border-top-color: var(--dark-border);
+    background-color: var(--dark-bg-secondary);
+}
+
+/* Loading spinner in modal */
+.spinner-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 200px;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .metrics-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .metric-value {
+        font-size: 2rem;
+    }
+    
+    .modal-content {
+        max-height: 50vh;
+    }
+}
+
+@media (max-width: 1024px) {
+    .metrics-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}

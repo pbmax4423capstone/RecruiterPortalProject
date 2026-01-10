@@ -17,6 +17,14 @@
         <apexClass>CandidatesInContractingController</apexClass>
         <enabled>true</enabled>
     </classAccesses>
+    <classAccesses>
+        <apexClass>UnifiedDashboardController</apexClass>
+        <enabled>true</enabled>
+    </classAccesses>
+    <classAccesses>
+        <apexClass>UnifiedDashboardController_Test</apexClass>
+        <enabled>true</enabled>
+    </classAccesses>
     
     <!-- Custom Metadata Type Access -->
     <customMetadataTypeAccesses>

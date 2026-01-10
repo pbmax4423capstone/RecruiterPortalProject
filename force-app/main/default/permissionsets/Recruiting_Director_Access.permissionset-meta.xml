@@ -11,4 +11,20 @@
         <apexClass>RecruitingDirectorControllerTest</apexClass>
         <enabled>true</enabled>
     </classAccesses>
+    <classAccesses>
+        <apexClass>SalesManagerActivityController</apexClass>
+        <enabled>true</enabled>
+    </classAccesses>
+    <classAccesses>
+        <apexClass>SalesManagerActivityController_Test</apexClass>
+        <enabled>true</enabled>
+    </classAccesses>
+    <classAccesses>
+        <apexClass>UnifiedDashboardController</apexClass>
+        <enabled>true</enabled>
+    </classAccesses>
+    <classAccesses>
+        <apexClass>UnifiedDashboardController_Test</apexClass>
+        <enabled>true</enabled>
+    </classAccesses>
 </PermissionSet>

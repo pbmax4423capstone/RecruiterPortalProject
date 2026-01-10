@@ -49,7 +49,7 @@ private class CandidateKanbanController_Test {
                 City__c = 'Los Angeles',
                 State_Province__c = 'CA',
                 Highest_Level_Achieved__c = '0-Prequal',
-                Status__c = 'Active',
+                Status__c = 'Active/In Process',
                 Recruiter__c = user1.Id,
                 Sales_Manager__c = 'Tim Denton'
             ));
@@ -61,7 +61,7 @@ private class CandidateKanbanController_Test {
                 City__c = 'San Francisco',
                 State_Province__c = 'CA',
                 Highest_Level_Achieved__c = 'Ci_1st',
-                Status__c = 'Active',
+                Status__c = 'Active/In Process',
                 Recruiter__c = user1.Id,
                 Sales_Manager__c = 'Tim Denton'
             ));
@@ -79,7 +79,7 @@ private class CandidateKanbanController_Test {
                 City__c = 'Seattle',
                 State_Province__c = 'WA',
                 Highest_Level_Achieved__c = 'Align (2nd)',
-                Status__c = 'Active',
+                Status__c = 'Active/In Process',
                 Recruiter__c = user2.Id,
                 Sales_Manager__c = 'Van Hess'
             ));
@@ -91,7 +91,7 @@ private class CandidateKanbanController_Test {
                 City__c = 'Portland',
                 State_Province__c = 'OR',
                 Highest_Level_Achieved__c = 'Plan_3rd',
-                Status__c = 'Active',
+                Status__c = 'Active/In Process',
                 Recruiter__c = user2.Id,
                 Sales_Manager__c = 'Van Hess'
             ));
@@ -180,7 +180,7 @@ private class CandidateKanbanController_Test {
                 First_Name__c = 'Contracted',
                 Last_Name__c = 'Candidate',
                 Email__c = 'contracted@test.com',
-                Status__c = 'Active',
+                Status__c = 'Active/In Process',
                 Highest_Level_Achieved__c = '7-Contracted',
                 Recruiter__c = user1.Id,
                 Sales_Manager__c = 'Tim Denton'

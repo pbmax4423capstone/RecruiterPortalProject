@@ -1,50 +1,7 @@
 <template>
-    <lightning-card title="Recruiting Director Dashboard" icon-name="custom:custom63">
-            
-            <!-- Filters Section -->
-            <div class="slds-card__body slds-card__body_inner">
-                <div class="filter-container">
-                    
-                    <!-- Sales Manager Picker -->
-                    <div class="filter-item">
-                        <lightning-combobox
-                            name="salesManager"
-                            label="Sales Manager"
-                            value={selectedManager}
-                            placeholder="Select a manager"
-                            options={salesManagerOptions}
-                            onchange={handleManagerChange}
-                            class="manager-picker">
-                        </lightning-combobox>
-                    </div>
-
-                    <!-- Date Range Toggle -->
-                    <div class="filter-item">
-                        <div class="slds-form-element">
-                            <label class="slds-form-element__label" for="date-range">Date Range</label>
-                            <lightning-button-group id="date-range">
-                                <lightning-button 
-                                    label="Month" 
-                                    onclick={handleMonthClick}
-                                    variant={isMonth}>
-                                </lightning-button>
-                                <lightning-button 
-                                    label="Quarter" 
-                                    onclick={handleQuarterClick}
-                                    variant={isQuarter}>
-                                </lightning-button>
-                                <lightning-button 
-                                    label="Year" 
-                                    onclick={handleYearClick}
-                                    variant={isYear}>
-                                </lightning-button>
-                            </lightning-button-group>
-                        </div>
-                    </div>
-
-                </div>
-            </div>
-
+    <div class={containerClass}>
+        <lightning-card icon-name="custom:custom63">
+                
             <!-- Loading Spinner -->
             <template if:true={isLoading}>
                 <div class="slds-text-align_center slds-p-around_large">
@@ -188,4 +145,5 @@
         </template>
 
     </lightning-card>
+    </div>
 </template>

@@ -98,6 +98,63 @@
     text-align: center;
 }
 
+/* Dark Mode Styles */
+.kanban-container.dark-mode {
+    background: #16325c;
+}
+
+.kanban-column.dark-mode {
+    background: #1a3a52;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
+}
+
+.kanban-column.dark-mode.drag-over {
+    background: #243649;
+    border: 2px dashed #5ea3f2;
+}
+
+.kanban-column.dark-mode .kanban-header {
+    background: linear-gradient(180deg, #202A44 0%, #193F74 100%) !important;
+}
+
+.kanban-column.dark-mode:nth-child(even) .kanban-header {
+    background: linear-gradient(180deg, #193F74 0%, #202A44 100%) !important;
+}
+
+.kanban-column.dark-mode .kanban-count {
+    background: rgba(255, 255, 255, 0.95);
+    color: #202A44;
+}
+
+.kanban-column.dark-mode .empty-column-message {
+    color: #b0c4de;
+}
+
+.kanban-column.dark-mode .candidate-card {
+    background: #2c4460;
+    border: 1px solid #3e5771;
+    color: #e8f4fd;
+}
+
+.kanban-column.dark-mode .candidate-card:hover {
+    background: #243649;
+    border-color: #5ea3f2;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+.kanban-column.dark-mode .candidate-name {
+    color: #ffffff;
+}
+
+.kanban-column.dark-mode .candidate-details {
+    color: #b0c4de;
+}
+
+.kanban-column.dark-mode .stage-history {
+    color: #b0c4de;
+    border-top: 1px solid #3e5771;
+}
+
 .kanban-card {
     background: white;
     border: 1px solid #e5e5e5;

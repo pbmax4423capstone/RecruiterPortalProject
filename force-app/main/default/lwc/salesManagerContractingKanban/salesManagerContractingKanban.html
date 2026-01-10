@@ -37,10 +37,10 @@
 
             <template if:false={isLoading}>
                 <template if:true={hasData}>
-                    <div class="kanban-container">
+                    <div class={containerClass}>
                         <template for:each={stageColumns} for:item="stageColumn">
                             <div key={stageColumn.stageKey} 
-                                 class="kanban-column"
+                                 class={stageClass}
                                  data-stage={stageColumn.stageApiValue}
                                  ondragover={handleDragOver}
                                  ondrop={handleDrop}>

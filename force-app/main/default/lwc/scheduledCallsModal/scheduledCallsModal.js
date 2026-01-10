@@ -2,6 +2,7 @@ import { LightningElement, track, api, wire } from 'lwc';
 import { ShowToastEvent } from 'lightning/platformShowToastEvent';
 import { subscribe, MessageContext } from 'lightning/messageService';
 import DARK_MODE_CHANNEL from '@salesforce/messageChannel/DarkModeChannel__c';
+import DASHBOARD_FILTER_CHANNEL from '@salesforce/messageChannel/DashboardFilterChannel__c';
 import getCurrentUserCallDetails from '@salesforce/apex/RecruiterDashboardController.getCurrentUserCallDetails';
 import getTaskDetails from '@salesforce/apex/RecruiterDashboardController.getTaskDetails';
 import updateTaskRecord from '@salesforce/apex/RecruiterDashboardController.updateTaskRecord';
@@ -18,8 +19,11 @@ export default class ScheduledCallsModal extends LightningElement {
   @track selectedTaskId = null;
   @track taskRecord = null;
   @api isOpen = false; // Legacy property for backward compatibility
+  @api embedded = false; // True when embedded in unified dashboard
   @api darkMode = false;
   @track showFollowUpModal = false;
+  salesManagerFilter = 'All Sales Managers';
+  dateRangeFilter = 'THIS_MONTH';
   @track followUpSubject = '';
   @track followUpDate = null;
   @track selectedCallResults = [];
@@ -79,20 +83,61 @@ export default class ScheduledCallsModal extends LightningElement {
 
   // Load calls when component renders
   connectedCallback() {
-    this.subscribeToMessageChannel();
-    this.loadAllCalls();
+    this.subscribeToMessageChannels();
+    
+    // Only auto-load if not embedded (standalone mode)
+    if (!this.embedded) {
+      this.loadAllCalls();
+    }
   }
 
-  subscribeToMessageChannel() {
-    this.subscription = subscribe(
+  subscribeToMessageChannels() {
+    // Subscribe to dark mode
+    subscribe(
       this.messageContext,
       DARK_MODE_CHANNEL,
       (message) => this.handleDarkModeChange(message)
+    );
+    
+    // Subscribe to filter changes (for embedded mode)
+    subscribe(
+      this.messageContext,
+      DASHBOARD_FILTER_CHANNEL,
+      (message) => this.handleFilterChange(message)
     );
   }
 
   handleDarkModeChange(message) {
     this.darkMode = message.darkModeEnabled;
+  }
+
+  handleFilterChange(message) {
+    if (!this.embedded) return;
+    
+    this.salesManagerFilter = message.salesManagerFilter || 'All Sales Managers';
+    this.dateRangeFilter = message.dateRangeFilter || 'THIS_MONTH';
+    
+    if (message.refreshRequested) {
+      this.refreshData();
+    }
+  }
+
+  // Public API method for parent to trigger refresh
+  @api
+  async refreshData() {
+    try {
+      await this.loadAllCalls();
+      // Dispatch event to notify parent that refresh is complete
+      this.dispatchEvent(new CustomEvent('refreshcomplete', {
+        detail: { success: true }
+      }));
+      return Promise.resolve();
+    } catch (error) {
+      this.dispatchEvent(new CustomEvent('refreshcomplete', {
+        detail: { success: false, error: error }
+      }));
+      return Promise.reject(error);
+    }
   }
 
   // Handle call card click to open record modal

@@ -4,6 +4,7 @@ import { ShowToastEvent } from 'lightning/platformShowToastEvent';
 import { refreshApex } from '@salesforce/apex';
 import { subscribe, MessageContext } from 'lightning/messageService';
 import DARK_MODE_CHANNEL from '@salesforce/messageChannel/DarkModeChannel__c';
+import DASHBOARD_FILTER_CHANNEL from '@salesforce/messageChannel/DashboardFilterChannel__c';
 import getKanbanData from '@salesforce/apex/CandidateKanbanController.getKanbanData';
 import updateCandidateStage from '@salesforce/apex/CandidateKanbanController.updateCandidateStage';
 import canViewAllCandidates from '@salesforce/apex/CandidateKanbanController.canViewAllCandidates';
@@ -17,6 +18,7 @@ export default class CandidateKanban extends NavigationMixin(LightningElement) {
     messageContext;
     
     @api darkMode = false;
+    @api embedded = false; // True when embedded in unified dashboard
     @track stagesWithCandidates = [];
     @track isLoading = true;
     @track error;
@@ -37,10 +39,13 @@ export default class CandidateKanban extends NavigationMixin(LightningElement) {
 
     connectedCallback() {
         this.subscribeToMessageChannel();
-        // Auto-refresh every 30 seconds
-        this.refreshInterval = setInterval(() => {
-            this.handleRefresh();
-        }, 30000);
+        
+        // Only set auto-refresh in standalone mode (not embedded)
+        if (!this.embedded) {
+            this.refreshInterval = setInterval(() => {
+                this.handleRefresh();
+            }, 30000);
+        }
     }
 
     disconnectedCallback() {
@@ -51,11 +56,54 @@ export default class CandidateKanban extends NavigationMixin(LightningElement) {
     }
 
     subscribeToMessageChannel() {
-        this.subscription = subscribe(
+        // Subscribe to dark mode
+        subscribe(
             this.messageContext,
             DARK_MODE_CHANNEL,
             (message) => this.handleDarkModeChange(message)
         );
+        
+        // Subscribe to filter changes (for embedded mode)
+        subscribe(
+            this.messageContext,
+            DASHBOARD_FILTER_CHANNEL,
+            (message) => this.handleFilterChange(message)
+        );
+    }
+
+    handleDarkModeChange(message) {
+        this.darkMode = message.darkModeEnabled;
+    }
+
+    handleFilterChange(message) {
+        if (!this.embedded) return;
+        
+        // Apply Sales Manager filter from parent
+        if (message.salesManagerFilter && message.salesManagerFilter !== this.selectedSalesManager) {
+            this.selectedSalesManager = message.salesManagerFilter;
+            localStorage.setItem(STORAGE_KEY_SALES_MANAGER, this.selectedSalesManager);
+        }
+        
+        if (message.refreshRequested) {
+            this.refreshData();
+        }
+    }
+
+    // Public API method for parent to trigger refresh
+    @api
+    async refreshData() {
+        try {
+            await this.handleRefresh();
+            this.dispatchEvent(new CustomEvent('refreshcomplete', {
+                detail: { success: true }
+            }));
+            return Promise.resolve();
+        } catch (error) {
+            this.dispatchEvent(new CustomEvent('refreshcomplete', {
+                detail: { success: false, error: error }
+            }));
+            return Promise.reject(error);
+        }
     }
 
     @wire(canViewAllCandidates)

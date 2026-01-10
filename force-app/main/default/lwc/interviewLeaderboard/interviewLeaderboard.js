@@ -1,6 +1,7 @@
 import { LightningElement, track, api, wire } from 'lwc';
 import { subscribe, MessageContext } from 'lightning/messageService';
 import DARK_MODE_CHANNEL from '@salesforce/messageChannel/DarkModeChannel__c';
+import DASHBOARD_FILTER_CHANNEL from '@salesforce/messageChannel/DashboardFilterChannel__c';
 import getCurrentMonthLeaderboard from '@salesforce/apex/InterviewLeaderboardNewController.getCurrentMonthLeaderboard';
 import getThisWeekInterviews from '@salesforce/apex/InterviewLeaderboardNewController.getThisWeekInterviews';
 import getThisMonthInterviews from '@salesforce/apex/InterviewLeaderboardNewController.getThisMonthInterviews';
@@ -11,6 +12,7 @@ export default class InterviewLeaderboard extends LightningElement {
     messageContext;
     
     @api darkMode = false;
+    @api embedded = false; // True when embedded in unified dashboard
     @track leaderboardData = [];
     @track error;
     @track isLoading = true;
@@ -48,15 +50,50 @@ export default class InterviewLeaderboard extends LightningElement {
     }
 
     subscribeToMessageChannel() {
-        this.subscription = subscribe(
+        // Subscribe to dark mode
+        subscribe(
             this.messageContext,
             DARK_MODE_CHANNEL,
             (message) => this.handleDarkModeChange(message)
+        );
+        
+        // Subscribe to filter changes (for embedded mode)
+        subscribe(
+            this.messageContext,
+            DASHBOARD_FILTER_CHANNEL,
+            (message) => this.handleFilterChange(message)
         );
     }
 
     handleDarkModeChange(message) {
         this.darkMode = message.darkModeEnabled;
+    }
+
+    handleFilterChange(message) {
+        if (!this.embedded) return;
+        
+        // Interview leaderboard doesn't filter by Sales Manager or Date Range
+        // but responds to refresh requests
+        if (message.refreshRequested) {
+            this.refreshData();
+        }
+    }
+
+    // Public API method for parent to trigger refresh
+    @api
+    async refreshData() {
+        try {
+            await this.loadLeaderboard();
+            this.dispatchEvent(new CustomEvent('refreshcomplete', {
+                detail: { success: true }
+            }));
+            return Promise.resolve();
+        } catch (error) {
+            this.dispatchEvent(new CustomEvent('refreshcomplete', {
+                detail: { success: false, error: error }
+            }));
+            return Promise.reject(error);
+        }
     }
 
     loadLeaderboard() {

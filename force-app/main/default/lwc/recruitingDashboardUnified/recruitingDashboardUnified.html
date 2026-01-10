@@ -1,0 +1,127 @@
+<template>
+    <div class={containerClass}>
+        <!-- Dashboard Header with Controls -->
+        <div class={headerClass}>
+            <div class="header-content">
+                <h1 class="dashboard-title">
+                    <lightning-icon icon-name="standard:dashboard" size="small" class="title-icon"></lightning-icon>
+                    Unified Recruiting Dashboard
+                </h1>
+                
+                <div class="header-controls">
+                    <!-- Toggle Recruiting Metrics Button (Directors only) -->
+                    <template if:true={showToggleButton}>
+                        <lightning-button
+                            variant="neutral"
+                            label={toggleMetricsLabel}
+                            icon-name={toggleMetricsIcon}
+                            onclick={handleToggleRecruitingMetrics}
+                            class="control-button toggle-button">
+                        </lightning-button>
+                    </template>
+                    
+                    <!-- Global Refresh Button -->
+                    <lightning-button
+                        variant="brand"
+                        label={refreshButtonLabel}
+                        icon-name="utility:refresh"
+                        disabled={refreshButtonDisabled}
+                        onclick={handleRefreshAll}
+                        class="control-button refresh-button">
+                    </lightning-button>
+                </div>
+            </div>
+            
+            <!-- Filter Bar -->
+            <div class="filter-bar">
+                <!-- Sales Manager Filter -->
+                <div class="filter-item sales-manager-buttons">
+                    <label class="filter-label">Sales Manager</label>
+                    <div class="button-grid">
+                        <template for:each={salesManagerOptions} for:item="manager">
+                            <lightning-button
+                                key={manager.value}
+                                label={manager.label}
+                                variant={manager.variant}
+                                data-value={manager.value}
+                                onclick={handleSalesManagerClick}
+                                class="manager-button">
+                            </lightning-button>
+                        </template>
+                    </div>
+                </div>
+                
+                <!-- Date Range Filter -->
+                <div class="filter-item">
+                    <label class="filter-label">Date Range</label>
+                    <lightning-button-group class="date-range-group">
+                        <lightning-button
+                            label="Month"
+                            variant={isMonthSelected}
+                            data-range="THIS_MONTH"
+                            onclick={handleDateRangeClick}>
+                        </lightning-button>
+                        <lightning-button
+                            label="Quarter"
+                            variant={isQuarterSelected}
+                            data-range="THIS_QUARTER"
+                            onclick={handleDateRangeClick}>
+                        </lightning-button>
+                        <lightning-button
+                            label="Year"
+                            variant={isYearSelected}
+                            data-range="THIS_YEAR"
+                            onclick={handleDateRangeClick}>
+                        </lightning-button>
+                    </lightning-button-group>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Refreshing Overlay -->
+        <template if:true={isRefreshing}>
+            <div class="refresh-overlay">
+                <lightning-spinner alternative-text="Refreshing dashboard..." size="medium"></lightning-spinner>
+            </div>
+        </template>
+        
+        <!-- Tab Container -->
+        <div class="tab-container">
+            <lightning-tabset active-tab-value={activeTabValue} onselect={handleTabChange}>
+                
+                <!-- Scheduled Calls Tab (Rachyll/Directors with toggle) -->
+                <template if:true={showRecruitingMetricsTab}>
+                    <lightning-tab label="Scheduled Calls" value="recruitingMetrics" class="recruiting-metrics-tab">
+                        <c-scheduled-calls-modal embedded="true"></c-scheduled-calls-modal>
+                    </lightning-tab>
+                </template>
+                
+                <!-- Recruiting Metrics Tab -->
+                <lightning-tab label="Recruiting Metrics" value="directorMetrics">
+                    <c-recruiting-director-dashboard embedded="true"></c-recruiting-director-dashboard>
+                </lightning-tab>
+                
+                <!-- Candidate Pipeline Tab -->
+                <lightning-tab label="Candidate Pipeline" value="candidatePipeline">
+                    <c-candidate-kanban embedded="true"></c-candidate-kanban>
+                </lightning-tab>
+                
+                <!-- Candidates in Contracting Tab -->
+                <lightning-tab label="Candidates in Contracting" value="careerContracting">
+                    <c-sales-manager-contracting-kanban embedded="true"></c-sales-manager-contracting-kanban>
+                </lightning-tab>
+                
+                <!-- Interview Metrics Tab -->
+                <lightning-tab label="Interview Metrics" value="interviewLeaderboard">
+                    <c-interview-leaderboard embedded="true"></c-interview-leaderboard>
+                </lightning-tab>
+                
+                <!-- Sales Manager Activity Tab -->
+                <lightning-tab label="Sales Manager Activity" value="salesManagerActivity">
+                    <c-sales-manager-activity embedded="true"></c-sales-manager-activity>
+                </lightning-tab>
+                
+            </lightning-tabset>
+        </div>
+    </div>
+</template>

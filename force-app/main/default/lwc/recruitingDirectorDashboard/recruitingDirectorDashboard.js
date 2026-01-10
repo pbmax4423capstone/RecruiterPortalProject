@@ -1,6 +1,9 @@
-import { LightningElement, track, wire } from 'lwc';
+import { LightningElement, track, wire, api } from 'lwc';
 import { NavigationMixin } from 'lightning/navigation';
 import { ShowToastEvent } from 'lightning/platformShowToastEvent';
+import { subscribe, MessageContext } from 'lightning/messageService';
+import DARK_MODE_CHANNEL from '@salesforce/messageChannel/DarkModeChannel__c';
+import DASHBOARD_FILTER_CHANNEL from '@salesforce/messageChannel/DashboardFilterChannel__c';
 import getSalesManagerList from '@salesforce/apex/RecruitingDirectorController.getSalesManagerList';
 import getMetricsForManager from '@salesforce/apex/RecruitingDirectorController.getMetricsForManager';
 import getGlobalMetrics from '@salesforce/apex/RecruitingDirectorController.getGlobalMetrics';
@@ -14,6 +17,13 @@ import getCompletedInterviewsList from '@salesforce/apex/RecruitingDirectorContr
 import exportToCsv from '@salesforce/apex/RecruitingDirectorController.exportToCsv';
 
 export default class RecruitingDirectorDashboard extends NavigationMixin(LightningElement) {
+    @wire(MessageContext)
+    messageContext;
+    
+    @api darkMode = false;
+    subscription = null;
+    @api embedded = false; // True when embedded in unified dashboard
+    
     @track salesManagerOptions = [];
     @track selectedManager = 'All Sales Managers';  // Fixed: was 'All', should match dropdown value
     @track selectedDateRange = 'THIS_MONTH';
@@ -37,7 +47,66 @@ export default class RecruitingDirectorDashboard extends NavigationMixin(Lightni
     @track currentDrillDownMetric = '';
 
     connectedCallback() {
+        this.subscribeToMessageChannel();
         this.loadSalesManagerList();
+    }
+
+    subscribeToMessageChannel() {
+        // Subscribe to dark mode
+        subscribe(
+            this.messageContext,
+            DARK_MODE_CHANNEL,
+            (message) => this.handleDarkModeChange(message)
+        );
+        
+        // Subscribe to filter changes (for embedded mode)
+        subscribe(
+            this.messageContext,
+            DASHBOARD_FILTER_CHANNEL,
+            (message) => this.handleFilterChange(message)
+        );
+    }
+
+    handleDarkModeChange(message) {
+        this.darkMode = message.darkModeEnabled;
+    }
+
+    handleFilterChange(message) {
+        if (!this.embedded) return;
+        
+        // Apply filters from parent dashboard
+        if (message.salesManagerFilter && message.salesManagerFilter !== this.selectedManager) {
+            this.selectedManager = message.salesManagerFilter;
+        }
+        
+        if (message.dateRangeFilter && message.dateRangeFilter !== this.selectedDateRange) {
+            this.selectedDateRange = message.dateRangeFilter;
+        }
+        
+        if (message.refreshRequested) {
+            this.refreshData();
+        }
+    }
+
+    // Public API method for parent to trigger refresh
+    @api
+    async refreshData() {
+        try {
+            await this.loadMetrics();
+            this.dispatchEvent(new CustomEvent('refreshcomplete', {
+                detail: { success: true }
+            }));
+            return Promise.resolve();
+        } catch (error) {
+            this.dispatchEvent(new CustomEvent('refreshcomplete', {
+                detail: { success: false, error: error }
+            }));
+            return Promise.reject(error);
+        }
+    }
+
+    get containerClass() {
+        return this.darkMode ? 'director-dashboard dark-mode' : 'director-dashboard';
     }
 
     // Load sales manager picker options

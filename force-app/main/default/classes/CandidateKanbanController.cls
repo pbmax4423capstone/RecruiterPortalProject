@@ -136,7 +136,7 @@ public with sharing class CandidateKanbanController {
                        'ALC__c, ALC__r.Name, ALC__r.Stage__c, ' +
                        'CreatedDate, LastModifiedDate ' +
                        'FROM Candidate__c ' +
-                       'WHERE Status__c NOT IN (\'Closed Lost\', \'Not Interesting\', \'Hired\', \'Terminated\') ' +
+                       'WHERE Status__c = \'Active/In Process\' ' +
                        'AND Highest_Level_Achieved__c != \'7-Contracted\' ';
         
         // Add filtering based on user role and filter parameter

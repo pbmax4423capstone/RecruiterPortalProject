@@ -1,7 +1,10 @@
-import { LightningElement, wire } from 'lwc';
+import { LightningElement, wire, api } from 'lwc';
 import { refreshApex } from '@salesforce/apex';
 import { ShowToastEvent } from 'lightning/platformShowToastEvent';
 import { NavigationMixin } from 'lightning/navigation';
+import { subscribe, MessageContext } from 'lightning/messageService';
+import DARK_MODE_CHANNEL from '@salesforce/messageChannel/DarkModeChannel__c';
+import DASHBOARD_FILTER_CHANNEL from '@salesforce/messageChannel/DashboardFilterChannel__c';
 import getALCDataForSalesManager from '@salesforce/apex/CandidatesInContractingController.getALCDataForSalesManager';
 import getCurrentUserSalesManagerName from '@salesforce/apex/CandidatesInContractingController.getCurrentUserSalesManagerName';
 import getSalesManagerOptions from '@salesforce/apex/CandidatesInContractingController.getSalesManagerOptions';
@@ -11,6 +14,13 @@ import updateCandidateStage from '@salesforce/apex/CandidatesInContractingContro
 const STORAGE_KEY_SALES_MANAGER = 'smContractingKanban_salesManagerFilter';
 
 export default class SalesManagerContractingKanban extends NavigationMixin(LightningElement) {
+    @wire(MessageContext)
+    messageContext;
+    
+    @api darkMode = false;
+    darkModeSubscription = null;
+    @api embedded = false; // True when embedded in unified dashboard
+    
     stageColumns = [];
     salesManagerFilters = [];
     selectedSalesManager = 'All Sales Managers'; // Default to avoid "Loading..."
@@ -27,13 +37,75 @@ export default class SalesManagerContractingKanban extends NavigationMixin(Light
     refreshInterval;
 
     connectedCallback() {
+        this.subscribeToMessageChannel();
         // Don't load from localStorage here - let the wires determine the correct value
         // based on user permissions
         
-        // Set up auto-refresh every 30 seconds
-        this.refreshInterval = setInterval(() => {
-            this.autoRefresh();
-        }, 30000);
+        // Set up auto-refresh every 30 seconds only in standalone mode
+        if (!this.embedded) {
+            this.refreshInterval = setInterval(() => {
+                this.autoRefresh();
+            }, 30000);
+        }
+    }
+
+    subscribeToMessageChannel() {
+        // Subscribe to dark mode
+        this.darkModeSubscription = subscribe(
+            this.messageContext,
+            DARK_MODE_CHANNEL,
+            (message) => this.handleDarkModeChange(message)
+        );
+        
+        // Subscribe to filter changes (for embedded mode)
+        subscribe(
+            this.messageContext,
+            DASHBOARD_FILTER_CHANNEL,
+            (message) => this.handleFilterChange(message)
+        );
+    }
+
+    handleDarkModeChange(message) {
+        this.darkMode = message.darkModeEnabled;
+    }
+
+    handleFilterChange(message) {
+        if (!this.embedded) return;
+        
+        // Apply Sales Manager filter from parent
+        if (message.salesManagerFilter && message.salesManagerFilter !== this.selectedSalesManager) {
+            this.selectedSalesManager = message.salesManagerFilter;
+            localStorage.setItem(STORAGE_KEY_SALES_MANAGER, this.selectedSalesManager);
+        }
+        
+        if (message.refreshRequested) {
+            this.refreshData();
+        }
+    }
+
+    // Public API method for parent to trigger refresh
+    @api
+    async refreshData() {
+        try {
+            await this.autoRefresh();
+            this.dispatchEvent(new CustomEvent('refreshcomplete', {
+                detail: { success: true }
+            }));
+            return Promise.resolve();
+        } catch (error) {
+            this.dispatchEvent(new CustomEvent('refreshcomplete', {
+                detail: { success: false, error: error }
+            }));
+            return Promise.reject(error);
+        }
+    }
+
+    get containerClass() {
+        return this.darkMode ? 'kanban-container dark-mode' : 'kanban-container';
+    }
+
+    get stageClass() {
+        return this.darkMode ? 'kanban-column dark-mode' : 'kanban-column';
     }
 
     disconnectedCallback() {

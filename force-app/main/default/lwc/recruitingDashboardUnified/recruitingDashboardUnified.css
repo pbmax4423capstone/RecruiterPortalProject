@@ -1,0 +1,298 @@
+/* Capstone Brand Colors */
+:host {
+    --capstone-navy: #003366;
+    --capstone-navy-primary: #202A44;
+    --capstone-blue-accent: #193F74;
+    --capstone-gold: #f4a024;
+    --capstone-white: #ffffff;
+    
+    /* Dark mode colors */
+    --dark-bg-primary: #16325c;
+    --dark-bg-secondary: #1a3a52;
+    --dark-bg-tertiary: #243649;
+    --dark-bg-quaternary: #2c4460;
+    --dark-text-primary: #ffffff;
+    --dark-text-secondary: #e8f4fd;
+    --dark-text-tertiary: #b0c4de;
+    --dark-border: #3e5771;
+    --dark-accent: #5ea3f2;
+}
+
+/* Main Container */
+.unified-dashboard {
+    background: #f3f3f3;
+    min-height: 100vh;
+    padding: 0;
+}
+
+.unified-dashboard.dark-mode {
+    background: var(--dark-bg-primary);
+}
+
+/* Dashboard Header */
+.dashboard-header {
+    background: var(--capstone-navy);
+    color: var(--capstone-white);
+    padding: 1.5rem 2rem;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.dashboard-header.dark-mode {
+    background: var(--capstone-navy-primary);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+}
+
+.header-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.dashboard-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    color: var(--capstone-white);
+}
+
+.title-icon {
+    --slds-c-icon-color-foreground-default: var(--capstone-gold);
+}
+
+.header-controls {
+    display: flex;
+    gap: 0.75rem;
+    align-items: center;
+}
+
+.control-button {
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.control-button:hover {
+    transform: translateY(-2px);
+}
+
+.refresh-button {
+    --slds-c-button-brand-color-background: var(--capstone-blue-accent);
+    --slds-c-button-brand-color-border: var(--capstone-blue-accent);
+}
+
+.refresh-button:hover {
+    --slds-c-button-brand-color-background-hover: #2451a0;
+}
+
+.refresh-button:active {
+    animation: pulse 0.2s ease;
+}
+
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+    100% { transform: scale(1); }
+}
+
+.toggle-button {
+    --slds-c-button-neutral-color-background: rgba(255, 255, 255, 0.1);
+    --slds-c-button-neutral-text-color: var(--capstone-white);
+}
+
+.toggle-button:hover {
+    --slds-c-button-neutral-color-background-hover: rgba(244, 160, 36, 0.2);
+}
+
+/* Filter Bar */
+.filter-bar {
+    display: flex;
+    gap: 1.5rem;
+    align-items: flex-end;
+    flex-wrap: wrap;
+}
+
+.filter-item {
+    flex: 0 0 auto;
+    min-width: 250px;
+}
+
+.sales-manager-buttons {
+    flex: 1 1 auto;
+    max-width: 100%;
+}
+
+.button-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    align-items: center;
+}
+
+.manager-button {
+    --slds-c-button-neutral-color-background: rgba(255, 255, 255, 0.1);
+    --slds-c-button-neutral-text-color: var(--capstone-white);
+    --slds-c-button-brand-color-background: var(--capstone-blue-accent);
+    --slds-c-button-brand-color-border: var(--capstone-blue-accent);
+    --slds-c-button-brand-text-color: var(--capstone-white);
+    transition: all 0.2s ease;
+}
+
+.manager-button:hover {
+    --slds-c-button-neutral-color-background-hover: rgba(255, 255, 255, 0.2);
+    transform: translateY(-1px);
+}
+
+.filter-label {
+    display: block;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 0.25rem;
+    color: var(--capstone-white);
+    opacity: 0.9;
+}
+
+.sales-manager-filter {
+    --slds-c-combobox-color-background: rgba(255, 255, 255, 0.95);
+}
+
+.date-range-group {
+    display: flex;
+}
+
+.date-range-group lightning-button {
+    --slds-c-button-neutral-color-background: rgba(255, 255, 255, 0.1);
+    --slds-c-button-neutral-text-color: var(--capstone-white);
+    --slds-c-button-brand-color-background: var(--capstone-blue-accent);
+    --slds-c-button-brand-color-border: var(--capstone-blue-accent);
+    --slds-c-button-brand-text-color: var(--capstone-white);
+}
+
+.date-range-group lightning-button:hover {
+    --slds-c-button-neutral-color-background-hover: rgba(255, 255, 255, 0.2);
+}
+
+/* Refresh Overlay */
+.refresh-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+}
+
+/* Tab Container */
+.tab-container {
+    padding: 1rem 2rem;
+    background: transparent;
+}
+
+/* Tab Styling */
+lightning-tabset {
+    --slds-c-tabs-color-background: transparent;
+}
+
+lightning-tab {
+    transition: opacity 0.3ms ease;
+}
+
+/* Recruiting Metrics Tab with fade transition */
+.recruiting-metrics-tab {
+    transition: opacity 300ms ease;
+    opacity: 1;
+}
+
+/* Active Tab Styling */
+lightning-tabset::part(tabs-nav) {
+    border-bottom: 2px solid var(--capstone-navy);
+}
+
+lightning-tab[aria-selected="true"]::part(tab) {
+    border-bottom: 4px solid var(--capstone-navy);
+    font-weight: 700;
+}
+
+/* Dark Mode Tab Styling */
+.dark-mode lightning-tabset::part(tabs-nav) {
+    border-bottom: 2px solid var(--dark-border);
+    background: var(--dark-bg-secondary);
+}
+
+.dark-mode lightning-tab::part(tab) {
+    color: var(--dark-text-secondary);
+}
+
+.dark-mode lightning-tab[aria-selected="true"]::part(tab) {
+    border-bottom: 4px solid var(--dark-accent);
+    color: var(--dark-text-primary);
+}
+
+.dark-mode lightning-tab:hover::part(tab) {
+    background: var(--dark-bg-tertiary);
+    color: var(--dark-text-primary);
+}
+
+/* Embedded Component Containers */
+c-scheduled-calls-modal,
+c-recruiting-director-dashboard,
+c-candidate-kanban,
+c-sales-manager-contracting-kanban,
+c-interview-leaderboard {
+    display: block;
+    margin-top: 1rem;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .dashboard-header {
+        padding: 1rem;
+    }
+    
+    .header-content {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1rem;
+    }
+    
+    .header-controls {
+        width: 100%;
+        justify-content: flex-end;
+    }
+    
+    .filter-bar {
+        flex-direction: column;
+        gap: 1rem;
+    }
+    
+    .filter-item {
+        width: 100%;
+        min-width: unset;
+    }
+    
+    .tab-container {
+        padding: 0.5rem;
+    }
+    
+    .dashboard-title {
+        font-size: 1.25rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .header-controls {
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+    
+    .control-button {
+        width: 100%;
+    }
+}

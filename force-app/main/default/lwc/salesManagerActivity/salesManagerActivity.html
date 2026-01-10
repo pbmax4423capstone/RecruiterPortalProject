@@ -1,0 +1,119 @@
+<template>
+    <div class={containerClass}>
+        
+        <!-- Loading Spinner -->
+        <template if:true={isLoading}>
+            <div class="loading-container">
+                <lightning-spinner alternative-text="Loading activity data..." size="medium"></lightning-spinner>
+            </div>
+        </template>
+        
+        <!-- Summary Cards Section -->
+        <template if:false={isLoading}>
+            <div class="summary-section">
+                <div class="metrics-grid">
+                    <!-- Candidates Added Card -->
+                    <div class="metric-card" data-card-type="candidatesAdded" onclick={handleCardClick}>
+                        <div class="metric-header">
+                            <lightning-icon icon-name="standard:account" size="small" class="metric-icon"></lightning-icon>
+                            <div class="metric-title">Candidates Added</div>
+                        </div>
+                        <div class="metric-value">{summaryMetrics.totalCandidatesAdded}</div>
+                        <div class="metric-footer">Click to view details</div>
+                    </div>
+
+                    <!-- Interviews Scheduled Card -->
+                    <div class="metric-card" data-card-type="interviewsScheduled" onclick={handleCardClick}>
+                        <div class="metric-header">
+                            <lightning-icon icon-name="standard:event" size="small" class="metric-icon"></lightning-icon>
+                            <div class="metric-title">Interviews Scheduled</div>
+                        </div>
+                        <div class="metric-value">{summaryMetrics.totalInterviewsScheduled}</div>
+                        <div class="metric-footer">Click to view details</div>
+                    </div>
+
+                    <!-- Interviews Completed Card -->
+                    <div class="metric-card" data-card-type="interviewsCompleted" onclick={handleCardClick}>
+                        <div class="metric-header">
+                            <lightning-icon icon-name="standard:task2" size="small" class="metric-icon"></lightning-icon>
+                            <div class="metric-title">Interviews Completed</div>
+                        </div>
+                        <div class="metric-value">{summaryMetrics.totalInterviewsCompleted}</div>
+                        <div class="metric-footer">Click to view details</div>
+                    </div>
+
+                    <!-- In Contracting Card -->
+                    <div class="metric-card" data-card-type="inContracting" onclick={handleCardClick}>
+                        <div class="metric-header">
+                            <lightning-icon icon-name="standard:contract" size="small" class="metric-icon"></lightning-icon>
+                            <div class="metric-title">In Contracting</div>
+                        </div>
+                        <div class="metric-value">{summaryMetrics.totalInContracting}</div>
+                        <div class="metric-footer">Click to view details</div>
+                    </div>
+
+                    <!-- Onboarding Card -->
+                    <div class="metric-card" data-card-type="onboarding" onclick={handleCardClick}>
+                        <div class="metric-header">
+                            <lightning-icon icon-name="standard:person_account" size="small" class="metric-icon"></lightning-icon>
+                            <div class="metric-title">Onboarding</div>
+                        </div>
+                        <div class="metric-value">{summaryMetrics.totalOnboarding}</div>
+                        <div class="metric-footer">Click to view details</div>
+                    </div>
+                </div>
+            </div>
+        
+            <!-- Sales Manager Details Table -->
+            <div class="detail-section">
+                <h2 class="section-title">Sales Manager Details - {dateRangeLabel}</h2>
+                <lightning-datatable
+                    key-field="id"
+                    data={activityData}
+                    columns={columns}
+                    hide-checkbox-column
+                    show-row-number-column
+                    class="activity-table">
+                </lightning-datatable>
+            </div>
+        </template>
+        
+        <!-- Drill-Down Modal -->
+        <template if:true={showModal}>
+            <section role="dialog" tabindex="-1" class="slds-modal slds-fade-in-open">
+                <div class="slds-modal__container">
+                    <header class="slds-modal__header">
+                        <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" 
+                                title="Close" onclick={closeModal}>
+                            <lightning-icon icon-name="utility:close" alternative-text="close" size="small"></lightning-icon>
+                        </button>
+                        <h2 class="slds-modal__title slds-hyphenate">{modalTitle}</h2>
+                    </header>
+                    <div class="slds-modal__content slds-p-around_medium" style="min-height: 300px;">
+                        <template if:true={isLoadingModal}>
+                            <div class="slds-align_absolute-center" style="height: 200px;">
+                                <lightning-spinner alternative-text="Loading..." size="medium"></lightning-spinner>
+                            </div>
+                        </template>
+                        
+                        <template if:false={isLoadingModal}>
+                            <lightning-datatable
+                                key-field="id"
+                                data={modalData}
+                                columns={modalColumns}
+                                hide-checkbox-column
+                                onrowaction={handleRowAction}
+                                class="modal-table">
+                            </lightning-datatable>
+                        </template>
+                    </div>
+                    <footer class="slds-modal__footer">
+                        <lightning-button variant="neutral" label="Close" onclick={closeModal}></lightning-button>
+                    </footer>
+                </div>
+            </section>
+            <div class="slds-backdrop slds-backdrop_open"></div>
+        </template>
+        
+    </div>
+</template>
