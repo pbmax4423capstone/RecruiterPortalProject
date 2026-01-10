@@ -119,21 +119,46 @@
     border-radius: 20px;
     font-weight: 700;
     font-size: 0.95rem;
-    display: inline-block;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
     border: 2px solid;
     text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    background: transparent;
+    color: white;
+}
+
+.device-inspection-badge:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+.device-inspection-badge:active {
+    transform: translateY(0);
 }
 
 .device-inspection-badge.passed {
     background: #4bca81;
-    color: white;
     border-color: #2e844a;
+}
+
+.device-inspection-badge.passed:hover {
+    background: #3fb56f;
 }
 
 .device-inspection-badge.failed {
     background: #ea001e;
-    color: white;
     border-color: #c23934;
+}
+
+.device-inspection-badge.failed:hover {
+    background: #d4001a;
+}
+
+.device-inspection-badge .badge-icon {
+    flex-shrink: 0;
 }
 
 /* Tab Container */

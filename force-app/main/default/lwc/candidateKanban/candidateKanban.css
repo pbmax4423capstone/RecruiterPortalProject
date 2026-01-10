@@ -58,6 +58,12 @@
     background: linear-gradient(180deg, #202A44 0%, #193F74 100%);
     border-radius: 8px 8px 0 0;
     color: white;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
+}
+
+/* Alternate gradient for even columns */
+.kanban-column:nth-child(even) .column-header {
+    background: linear-gradient(180deg, #193F74 0%, #202A44 100%);
 }
 
 .column-title {
@@ -69,14 +75,15 @@
 }
 
 .column-count {
-    background: rgba(255, 255, 255, 0.2);
-    color: white;
+    background: rgba(255, 255, 255, 0.95);
+    color: #202A44;
     font-size: 12px;
-    font-weight: 600;
-    padding: 2px 8px;
+    font-weight: 700;
+    padding: 4px 12px;
     border-radius: 12px;
-    min-width: 24px;
+    min-width: 30px;
     text-align: center;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 /* Cards Container */

@@ -5,6 +5,8 @@ import { NavigationMixin } from 'lightning/navigation';
 import getALCDataWithConfig from '@salesforce/apex/CandidatesInContractingController.getALCDataWithConfig';
 import getAgencyPicklistValues from '@salesforce/apex/CandidatesInContractingController.getAgencyPicklistValues';
 import updateCandidateStage from '@salesforce/apex/CandidatesInContractingController.updateCandidateStage';
+import { subscribe, unsubscribe, MessageContext } from 'lightning/messageService';
+import DARK_MODE_CHANNEL from '@salesforce/messageChannel/DarkModeChannel__c';
 
 const STORAGE_KEY_AGENCY = 'candidatesInContracting_selectedAgency';
 const RECORD_TYPE_ORDER = ['Broker', 'Career', 'NRF', 'Registration', 'Financing'];
@@ -15,6 +17,12 @@ const AGENCY_LABELS = {
 };
 
 export default class CandidatesInContracting extends NavigationMixin(LightningElement) {
+    darkMode = false;
+    subscription = null;
+
+    @wire(MessageContext)
+    messageContext;
+
     recordTypeTabs = [];
     agencyFilters = [];
     selectedAgency = 'A157';
@@ -27,6 +35,7 @@ export default class CandidatesInContracting extends NavigationMixin(LightningEl
     draggedFromStage;
 
     connectedCallback() {
+        this.subscribeToMessageChannel();
         // Restore agency filter from localStorage
         const storedAgency = localStorage.getItem(STORAGE_KEY_AGENCY);
         if (storedAgency) {
@@ -34,6 +43,27 @@ export default class CandidatesInContracting extends NavigationMixin(LightningEl
         } else {
             // Default to A157
             this.selectedAgency = 'A157';
+        }
+    }
+
+    subscribeToMessageChannel() {
+        if (!this.subscription) {
+            this.subscription = subscribe(
+                this.messageContext,
+                DARK_MODE_CHANNEL,
+                (message) => this.handleDarkModeChange(message)
+            );
+        }
+    }
+
+    handleDarkModeChange(message) {
+        this.darkMode = message.darkModeEnabled;
+    }
+
+    disconnectedCallback() {
+        if (this.subscription) {
+            unsubscribe(this.subscription);
+            this.subscription = null;
         }
     }
 
@@ -253,5 +283,9 @@ export default class CandidatesInContracting extends NavigationMixin(LightningEl
 
     set errorMessage(value) {
         this._errorMessage = value;
+    }
+
+    get containerClass() {
+        return this.darkMode ? 'container dark-mode' : 'container';
     }
 }

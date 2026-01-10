@@ -621,4 +621,25 @@ export default class CandidateRecordView extends NavigationMixin(LightningElemen
     handleRefreshInterviews() {
         this.loadInterviews();
     }
+
+    handleOpenDeviceInspection() {
+        if (this.deviceInspection) {
+            this[NavigationMixin.Navigate]({
+                type: 'standard__recordPage',
+                attributes: {
+                    recordId: this.deviceInspection,
+                    objectApiName: 'Device_Inspection__c',
+                    actionName: 'view'
+                }
+            });
+        } else {
+            this.dispatchEvent(
+                new ShowToastEvent({
+                    title: 'No Device Inspection',
+                    message: 'No Device Inspection record is linked to this candidate.',
+                    variant: 'warning'
+                })
+            );
+        }
+    }
 }

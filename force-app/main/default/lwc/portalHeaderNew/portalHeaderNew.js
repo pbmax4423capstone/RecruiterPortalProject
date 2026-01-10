@@ -80,6 +80,18 @@ export default class PortalHeaderNew extends NavigationMixin(LightningElement) {
   @track callPriority = 'Normal';
 
   connectedCallback() {
+    // Load dark mode preference from localStorage (default: OFF/false)
+    const savedDarkMode = localStorage.getItem('capstone_dark_mode');
+    if (savedDarkMode !== null) {
+      this.darkMode = savedDarkMode === 'true';
+      // Immediately publish to all subscribers on load
+      if (this.messageContext) {
+        publish(this.messageContext, DARK_MODE_CHANNEL, { 
+          darkModeEnabled: this.darkMode 
+        });
+      }
+    }
+    
     this.fetchCurrentUser();
     this.updateAppLabel();
   }
@@ -321,6 +333,9 @@ export default class PortalHeaderNew extends NavigationMixin(LightningElement) {
 
   handleToggleDarkMode() {
     this.darkMode = !this.darkMode;
+    // Save preference to localStorage for persistence
+    localStorage.setItem('capstone_dark_mode', this.darkMode.toString());
+    // Publish to all subscribers
     publish(this.messageContext, DARK_MODE_CHANNEL, { darkModeEnabled: this.darkMode });
   }
 

@@ -1,0 +1,223 @@
+/**
+ * Capstone Partners Brand Tokens
+ * 
+ * Centralized CSS custom properties for brand consistency across all LWC components.
+ * Import this file in your component CSS to access Capstone brand colors and tokens.
+ * 
+ * Usage:
+ *   @import 'c/capstoneBrandTokens';
+ * 
+ * Then use variables:
+ *   background: var(--capstone-navy);
+ *   color: var(--capstone-white);
+ * 
+ * @author Capstone Styling Agent
+ * @version 1.0
+ * @created 2026-01-09
+ */
+
+:root {
+    /* ========================================
+       PRIMARY BRAND COLORS
+       ======================================== */
+    --capstone-navy: #003366;
+    --capstone-gold: #f4a024;
+    --capstone-white: #ffffff;
+
+    /* ========================================
+       LIGHT MODE COLORS
+       ======================================== */
+    
+    /* Backgrounds */
+    --light-bg-primary: #ffffff;
+    --light-bg-secondary: #f8f9fa;
+    --light-bg-tertiary: #e6f2ff;
+    --light-bg-hover: #f0f4f8;
+    
+    /* Text */
+    --light-text-primary: #2c3e50;
+    --light-text-secondary: #706e6b;
+    --light-text-tertiary: #5e5e5e;
+    --light-text-link: #003366;
+    
+    /* Borders */
+    --light-border: #e5e5e5;
+    --light-border-medium: #dddbda;
+    --light-border-dark: #c9c7c5;
+
+    /* ========================================
+       DARK MODE COLORS
+       ======================================== */
+    
+    /* Backgrounds */
+    --dark-bg-primary: #16325c;
+    --dark-bg-secondary: #1a3a52;
+    --dark-bg-tertiary: #243649;
+    --dark-bg-quaternary: #2c4460;
+    
+    /* Text */
+    --dark-text-primary: #ffffff;
+    --dark-text-secondary: #e8f4fd;
+    --dark-text-tertiary: #b0c4de;
+    
+    /* Borders */
+    --dark-border: #3e5771;
+    --dark-border-light: #4a5d7a;
+    
+    /* Accents */
+    --dark-accent: #5ea3f2;
+    --dark-gold: #f4a024;
+
+    /* ========================================
+       STATUS COLORS (Mode-Independent)
+       ======================================== */
+    --success: #4bca81;
+    --success-light: #e8f5e9;
+    --success-dark: #2e7d32;
+    
+    --warning: #ff6b35;
+    --warning-light: #fff3e0;
+    --warning-dark: #e65100;
+    
+    --error: #c23934;
+    --error-light: #ffebee;
+    --error-dark: #b71c1c;
+    
+    --info: #1589ee;
+    --info-light: #e3f2fd;
+    --info-dark: #0d47a1;
+
+    /* ========================================
+       SHADOWS
+       ======================================== */
+    
+    /* Light Mode Shadows */
+    --shadow-light: rgba(0, 0, 0, 0.1);
+    --shadow-medium: rgba(0, 0, 0, 0.15);
+    --shadow-heavy: rgba(0, 0, 0, 0.25);
+    --shadow-navy: rgba(0, 51, 102, 0.15);
+    --shadow-navy-hover: rgba(0, 51, 102, 0.25);
+    --shadow-gold: rgba(244, 160, 36, 0.2);
+    
+    /* Dark Mode Shadows */
+    --shadow-dark-light: rgba(0, 0, 0, 0.3);
+    --shadow-dark-medium: rgba(0, 0, 0, 0.4);
+    --shadow-dark-heavy: rgba(0, 0, 0, 0.6);
+
+    /* ========================================
+       TYPOGRAPHY
+       ======================================== */
+    
+    /* Font Sizes */
+    --font-size-hero: 3.5rem;
+    --font-size-large: 2.5rem;
+    --font-size-medium: 1.5rem;
+    --font-size-base: 1rem;
+    --font-size-small: 0.875rem;
+    --font-size-tiny: 0.75rem;
+    
+    /* Font Weights */
+    --font-weight-light: 300;
+    --font-weight-regular: 400;
+    --font-weight-medium: 500;
+    --font-weight-semibold: 600;
+    --font-weight-bold: 700;
+    
+    /* Line Heights */
+    --line-height-tight: 1;
+    --line-height-normal: 1.4;
+    --line-height-relaxed: 1.6;
+    
+    /* Letter Spacing */
+    --letter-spacing-tight: 0.3px;
+    --letter-spacing-normal: 0.5px;
+    --letter-spacing-wide: 0.8px;
+
+    /* ========================================
+       SPACING
+       ======================================== */
+    --spacing-xs: 0.25rem;
+    --spacing-sm: 0.5rem;
+    --spacing-md: 1rem;
+    --spacing-lg: 1.5rem;
+    --spacing-xl: 2rem;
+    --spacing-xxl: 3rem;
+
+    /* ========================================
+       BORDER RADIUS
+       ======================================== */
+    --radius-sm: 4px;
+    --radius-md: 8px;
+    --radius-lg: 12px;
+    --radius-xl: 16px;
+    --radius-round: 50%;
+    --radius-pill: 9999px;
+
+    /* ========================================
+       TRANSITIONS
+       ======================================== */
+    --transition-fast: 0.15s ease;
+    --transition-normal: 0.2s ease;
+    --transition-slow: 0.3s ease;
+
+    /* ========================================
+       Z-INDEX LAYERS
+       ======================================== */
+    --z-base: 1;
+    --z-dropdown: 1000;
+    --z-sticky: 1020;
+    --z-fixed: 1030;
+    --z-modal-backdrop: 1040;
+    --z-modal: 1050;
+    --z-popover: 1060;
+    --z-tooltip: 1070;
+}
+
+/* ========================================
+   UTILITY CLASSES
+   ======================================== */
+
+/* Text Colors */
+.text-navy { color: var(--capstone-navy); }
+.text-gold { color: var(--capstone-gold); }
+.text-success { color: var(--success); }
+.text-warning { color: var(--warning); }
+.text-error { color: var(--error); }
+.text-info { color: var(--info); }
+
+/* Background Colors */
+.bg-navy { background-color: var(--capstone-navy); }
+.bg-gold { background-color: var(--capstone-gold); }
+.bg-light { background-color: var(--light-bg-secondary); }
+
+/* Gradients */
+.gradient-navy-vertical {
+    background: linear-gradient(180deg, #003366 0%, #004d99 100%);
+}
+
+.gradient-light-vertical {
+    background: linear-gradient(180deg, #f8f9fa 0%, #e6f2ff 100%);
+}
+
+.gradient-dark-vertical {
+    background: linear-gradient(180deg, #16325c 0%, #1a3a52 100%);
+}
+
+/* Shadows */
+.shadow-sm { box-shadow: 0 1px 2px var(--shadow-light); }
+.shadow-md { box-shadow: 0 2px 4px var(--shadow-medium); }
+.shadow-lg { box-shadow: 0 4px 8px var(--shadow-heavy); }
+.shadow-xl { box-shadow: 0 8px 16px var(--shadow-heavy); }
+
+/* Border Radius */
+.rounded-sm { border-radius: var(--radius-sm); }
+.rounded-md { border-radius: var(--radius-md); }
+.rounded-lg { border-radius: var(--radius-lg); }
+.rounded-xl { border-radius: var(--radius-xl); }
+.rounded-full { border-radius: var(--radius-round); }
+.rounded-pill { border-radius: var(--radius-pill); }
+
+/* Transitions */
+.transition-fast { transition: all var(--transition-fast); }
+.transition-normal { transition: all var(--transition-normal); }
+.transition-slow { transition: all var(--transition-slow); }

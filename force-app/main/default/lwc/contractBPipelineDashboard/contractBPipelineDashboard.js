@@ -5,8 +5,15 @@ import getRecruitingMetrics from '@salesforce/apex/ContractBDashboardController.
 import getContractAProgressData from '@salesforce/apex/ContractBDashboardController.getContractAProgressData';
 import { NavigationMixin } from 'lightning/navigation';
 import { ShowToastEvent } from 'lightning/platformShowToastEvent';
+import { subscribe, unsubscribe, MessageContext } from 'lightning/messageService';
+import DARK_MODE_CHANNEL from '@salesforce/messageChannel/DarkModeChannel__c';
 
 export default class ContractBPipelineDashboard extends NavigationMixin(LightningElement) {
+    darkMode = false;
+    subscription = null;
+
+    @wire(MessageContext)
+    messageContext;
     // Pipeline Data
     @track pipelineData = [];
     @track atRiskCandidates = [];
@@ -37,7 +44,29 @@ export default class ContractBPipelineDashboard extends NavigationMixin(Lightnin
     ];
     
     connectedCallback() {
+        this.subscribeToMessageChannel();
         this.loadAllData();
+    }
+
+    subscribeToMessageChannel() {
+        if (!this.subscription) {
+            this.subscription = subscribe(
+                this.messageContext,
+                DARK_MODE_CHANNEL,
+                (message) => this.handleDarkModeChange(message)
+            );
+        }
+    }
+
+    handleDarkModeChange(message) {
+        this.darkMode = message.darkModeEnabled;
+    }
+
+    disconnectedCallback() {
+        if (this.subscription) {
+            unsubscribe(this.subscription);
+            this.subscription = null;
+        }
     }
     
     async loadAllData() {
@@ -293,5 +322,9 @@ export default class ContractBPipelineDashboard extends NavigationMixin(Lightnin
     
     get terminationRateFormatted() {
         return `${this.ytdTotals.terminationRate || 0}%`;
+    }
+
+    get containerClass() {
+        return this.darkMode ? 'dashboard-container dark-mode' : 'dashboard-container';
     }
 }

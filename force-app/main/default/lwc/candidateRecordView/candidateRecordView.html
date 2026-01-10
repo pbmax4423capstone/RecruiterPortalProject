@@ -50,14 +50,16 @@
                                 {status}
                             </span>
                             <template if:true={hasDeviceInspectionResult}>
-                                <span class={deviceInspectionBadgeClass}>
+                                <button class={deviceInspectionBadgeClass} onclick={handleOpenDeviceInspection} title="Click to view Device Inspection details">
                                     <template if:true={isDeviceInspectionPassed}>
+                                        <lightning-icon icon-name="utility:success" size="x-small" class="badge-icon"></lightning-icon>
                                         Device Inspection Passed
                                     </template>
                                     <template if:true={isDeviceInspectionFailed}>
+                                        <lightning-icon icon-name="utility:warning" size="x-small" class="badge-icon"></lightning-icon>
                                         Device Inspection Failed
                                     </template>
-                                </span>
+                                </button>
                             </template>
                         </div>
                     </div>

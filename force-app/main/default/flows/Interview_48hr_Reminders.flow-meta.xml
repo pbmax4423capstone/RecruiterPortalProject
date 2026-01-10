@@ -238,7 +238,7 @@
         </connector>
         <schedule>
             <frequency>Daily</frequency>
-            <startDate>2025-12-10</startDate>
+            <startDate>2026-01-09</startDate>
             <startTime>09:00:00.000Z</startTime>
         </schedule>
         <triggerType>Scheduled</triggerType>

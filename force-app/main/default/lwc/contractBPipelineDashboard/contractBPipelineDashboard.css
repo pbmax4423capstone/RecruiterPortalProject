@@ -1,8 +1,19 @@
+/* Light Mode Styles */
+.dashboard-container {
+    background: #ffffff;
+}
+
 .summary-card {
     border-radius: 8px;
     padding: 1rem;
     text-align: center;
     color: white;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.summary-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
 }
 
 .summary-value {
@@ -16,27 +27,27 @@
 }
 
 .summary-total {
-    background: linear-gradient(135deg, #0176d3, #032d60);
+    background: linear-gradient(180deg, #003366 0%, #004d99 100%);
 }
 
 .summary-success {
-    background: linear-gradient(135deg, #2e844a, #194e2e);
+    background: linear-gradient(180deg, #4bca81 0%, #2e844a 100%);
 }
 
 .summary-ontrack {
-    background: linear-gradient(135deg, #06a59a, #014d48);
+    background: linear-gradient(180deg, #1589ee 0%, #0070d2 100%);
 }
 
 .summary-atrisk {
-    background: linear-gradient(135deg, #e74c3c, #a72d20);
+    background: linear-gradient(180deg, #c23934 0%, #a72d20 100%);
 }
 
 .summary-fyc {
-    background: linear-gradient(135deg, #f39c12, #b37209);
+    background: linear-gradient(180deg, #ff6b35 0%, #f39c12 100%);
 }
 
 .summary-avg {
-    background: linear-gradient(135deg, #9b59b6, #6c3483);
+    background: linear-gradient(180deg, #003366 0%, #002244 100%);
 }
 
 /* Interview Stats */
@@ -45,6 +56,11 @@
     padding: 0.75rem;
     text-align: center;
     color: white;
+    transition: transform 0.2s ease;
+}
+
+.interview-stat:hover {
+    transform: scale(1.05);
 }
 
 .stat-value {
@@ -57,27 +73,27 @@
 }
 
 .interview-attraction {
-    background: #0176d3;
+    background: #003366;
 }
 
 .interview-si1 {
-    background: #06a59a;
+    background: #1589ee;
 }
 
 .interview-si2 {
-    background: #e74c3c;
+    background: #c23934;
 }
 
 .interview-si3 {
-    background: #f39c12;
+    background: #ff6b35;
 }
 
 .interview-career {
-    background: #9b59b6;
+    background: #003366;
 }
 
 .interview-total {
-    background: #3e3e3c;
+    background: #2c3e50;
 }
 
 /* Recruiting Metrics */
@@ -86,6 +102,11 @@
     padding: 0.75rem;
     text-align: center;
     color: white;
+    transition: transform 0.2s ease;
+}
+
+.metric-card:hover {
+    transform: scale(1.05);
 }
 
 .metric-value {
@@ -98,47 +119,47 @@
 }
 
 .metric-a {
-    background: #0176d3;
+    background: #003366;
 }
 
 .metric-b {
-    background: #06a59a;
+    background: #1589ee;
 }
 
 .metric-transition {
-    background: #2e844a;
+    background: #4bca81;
 }
 
 .metric-terminations {
-    background: #e74c3c;
+    background: #c23934;
 }
 
 .metric-rate-good {
-    background: #2e844a;
+    background: #4bca81;
 }
 
 .metric-rate-bad {
-    background: #ba0517;
+    background: #c23934;
 }
 
 /* Progress indicators */
 .progress-on-track {
-    color: #2e844a;
+    color: #4bca81;
     font-weight: bold;
 }
 
 .progress-at-risk {
-    color: #f39c12;
+    color: #ff6b35;
     font-weight: bold;
 }
 
 .progress-critical {
-    color: #e74c3c;
+    color: #c23934;
     font-weight: bold;
 }
 
 .progress-complete {
-    color: #0176d3;
+    color: #003366;
     font-weight: bold;
 }
 
@@ -159,11 +180,11 @@
 }
 
 .progress-bar-fyc {
-    background: linear-gradient(90deg, #f39c12, #2e844a);
+    background: linear-gradient(90deg, #ff6b35, #4bca81);
 }
 
 .progress-bar-subs {
-    background: linear-gradient(90deg, #0176d3, #06a59a);
+    background: linear-gradient(90deg, #003366, #1589ee);
 }
 
 .progress-text {
@@ -196,6 +217,77 @@ tr.at-risk-row {
 
 /* Status badge styling */
 .slds-theme_warning {
-    background-color: #f39c12 !important;
+    background-color: #ff6b35 !important;
     color: white !important;
+}
+
+/* Dark Mode Styles */
+.dark-mode.dashboard-container {
+    background: #16325c;
+}
+
+.dark-mode .summary-card {
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.dark-mode .summary-card:hover {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
+}
+
+.dark-mode .summary-total {
+    background: linear-gradient(180deg, #004d99 0%, #003366 100%);
+}
+
+.dark-mode .summary-success {
+    background: linear-gradient(180deg, #4bca81 0%, #2e844a 100%);
+}
+
+.dark-mode .summary-ontrack {
+    background: linear-gradient(180deg, #1589ee 0%, #0070d2 100%);
+}
+
+.dark-mode .summary-atrisk {
+    background: linear-gradient(180deg, #c23934 0%, #a72d20 100%);
+}
+
+.dark-mode .summary-fyc {
+    background: linear-gradient(180deg, #ff6b35 0%, #f39c12 100%);
+}
+
+.dark-mode .summary-avg {
+    background: linear-gradient(180deg, #004d99 0%, #003366 100%);
+}
+
+.dark-mode .slds-card {
+    background: #1a3a52;
+    border-color: #3e5771;
+}
+
+.dark-mode .slds-text-heading_medium,
+.dark-mode .slds-card__header-title {
+    color: #ffffff;
+}
+
+.dark-mode .progress-bar-container {
+    background: #3e5771;
+}
+
+.dark-mode .progress-text {
+    color: #b0c4de;
+}
+
+.dark-mode tr.at-risk-row {
+    background-color: rgba(194, 57, 52, 0.2) !important;
+}
+
+.dark-mode .progress-met {
+    background-color: rgba(75, 202, 129, 0.15) !important;
+}
+
+.dark-mode .progress-not-on-target {
+    background-color: rgba(255, 107, 53, 0.15) !important;
+}
+
+.dark-mode .progress-na {
+    background-color: rgba(176, 196, 222, 0.1) !important;
 }
