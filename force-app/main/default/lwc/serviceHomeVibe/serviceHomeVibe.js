@@ -2,6 +2,8 @@ import { LightningElement, track, wire } from 'lwc';
 import { ShowToastEvent } from 'lightning/platformShowToastEvent';
 import { NavigationMixin } from 'lightning/navigation';
 import { refreshApex } from '@salesforce/apex';
+import { subscribe, MessageContext } from 'lightning/messageService';
+import DARK_MODE_CHANNEL from '@salesforce/messageChannel/DarkModeChannel__c';
 import getUserName from '@salesforce/apex/ServiceHomeVibeController.getUserName';
 import getMyOpenCases from '@salesforce/apex/MyOpenCasesController.getMyOpenCases';
 import refreshMyOpenCases from '@salesforce/apex/MyOpenCasesController.refreshMyOpenCases';
@@ -9,9 +11,11 @@ import refreshMyOpenCases from '@salesforce/apex/MyOpenCasesController.refreshMy
 export default class ServiceHomeVibe extends NavigationMixin(LightningElement) {
   @track darkMode = false;
   @track greetingMessage = '';
-  @track themeLabel = 'Enable Dark Mode';
-  @track themeIcon = 'utility:light';
   @track userName = '';
+  subscription = null;
+  
+  @wire(MessageContext)
+  messageContext;
   @track upcomingTasks = [];
   @track pastDueTasks = [];
   @track showCreateTicketModal = false;
@@ -70,6 +74,21 @@ export default class ServiceHomeVibe extends NavigationMixin(LightningElement) {
     this.loadTasks();
     this.loadRecentItems();
     // Remove loadMyOpenCases() call since we're now using wire service
+    this.subscribeToMessageChannel();
+  }
+
+  subscribeToMessageChannel() {
+    if (!this.subscription) {
+      this.subscription = subscribe(
+        this.messageContext,
+        DARK_MODE_CHANNEL,
+        (message) => this.handleDarkModeChange(message)
+      );
+    }
+  }
+
+  handleDarkModeChange(message) {
+    this.darkMode = message.darkModeEnabled;
   }
 
   getPriorityClass(priority) {
@@ -124,16 +143,7 @@ export default class ServiceHomeVibe extends NavigationMixin(LightningElement) {
     this.greetingMessage = `${greeting}, ${this.userName} 👋`;
   }
 
-  toggleTheme() {
-    this.darkMode = !this.darkMode;
-    if (this.darkMode) {
-      this.themeLabel = 'Disable Dark Mode';
-      this.themeIcon = 'utility:moon';
-    } else {
-      this.themeLabel = 'Enable Dark Mode';
-      this.themeIcon = 'utility:light';
-    }
-  }
+  // Dark mode now controlled globally via DarkModeChannel from portalHeaderNew
 
   loadTasks() {
     // Mock task data - in real implementation, this would come from Apex/SOQL

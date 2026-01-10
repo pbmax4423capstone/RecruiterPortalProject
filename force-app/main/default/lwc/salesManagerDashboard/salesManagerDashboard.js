@@ -1,9 +1,38 @@
-import { LightningElement, track } from 'lwc';
+import { LightningElement, track, wire } from 'lwc';
+import { subscribe, MessageContext } from 'lightning/messageService';
+import DARK_MODE_CHANNEL from '@salesforce/messageChannel/DarkModeChannel__c';
 
 export default class SalesManagerDashboard extends LightningElement {
     @track filterType = null;
     @track filterValue = null;
     @track filterLabel = '';
+    @track darkMode = false;
+    subscription = null;
+
+    @wire(MessageContext)
+    messageContext;
+
+    connectedCallback() {
+        this.subscribeToMessageChannel();
+    }
+
+    subscribeToMessageChannel() {
+        if (!this.subscription) {
+            this.subscription = subscribe(
+                this.messageContext,
+                DARK_MODE_CHANNEL,
+                (message) => this.handleDarkModeChange(message)
+            );
+        }
+    }
+
+    handleDarkModeChange(message) {
+        this.darkMode = message.darkModeEnabled;
+    }
+
+    get containerClass() {
+        return this.darkMode ? 'sales-manager-dashboard dark-mode' : 'sales-manager-dashboard';
+    }
 
     /**
      * Handles card click events from Sales Manager Key Metrics component

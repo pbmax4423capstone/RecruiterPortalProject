@@ -14,3 +14,26 @@
 .pipeline-section lightning-card {
     border: none;
 }
+
+/* Capstone Dark Mode */
+.sales-manager-dashboard.dark-mode {
+    background-color: #16325c;
+    color: #ffffff;
+}
+
+.sales-manager-dashboard.dark-mode .metrics-section,
+.sales-manager-dashboard.dark-mode .pipeline-section {
+    background-color: #16325c;
+}
+
+.sales-manager-dashboard.dark-mode lightning-card {
+    --slds-c-card-color-background: #1a3a52;
+    --slds-c-card-color-border: #3e5771;
+    --slds-c-card-text-color: #ffffff;
+}
+
+.sales-manager-dashboard.dark-mode .slds-text-heading_small,
+.sales-manager-dashboard.dark-mode .slds-text-heading_medium,
+.sales-manager-dashboard.dark-mode .slds-text-body_regular {
+    color: #ffffff !important;
+}

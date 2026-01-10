@@ -1,20 +1,44 @@
 import { LightningElement, track, wire, api } from 'lwc';
 import { refreshApex } from '@salesforce/apex';
+import { subscribe, MessageContext } from 'lightning/messageService';
+import DARK_MODE_CHANNEL from '@salesforce/messageChannel/DarkModeChannel__c';
 import getUnassignedCases from '@salesforce/apex/UnassignedCasesController.getUnassignedCases';
 import assignCaseToCurrentUser from '@salesforce/apex/UnassignedCasesController.assignCaseToCurrentUser';
 import { ShowToastEvent } from 'lightning/platformShowToastEvent';
 import { NavigationMixin } from 'lightning/navigation';
 
 export default class UnassignedCases extends NavigationMixin(LightningElement) {
-    @api darkMode = false;
+    @track darkMode = false;
     @track cases = [];
     @track isLoading = true;
     @track error = null;
     @track selectedCaseId = null;
     @track showCompactView = false;
     @track showCaseModal = false;
+    subscription = null;
+    
+    @wire(MessageContext)
+    messageContext;
     
     wiredCasesResult;
+
+    connectedCallback() {
+        this.subscribeToMessageChannel();
+    }
+
+    subscribeToMessageChannel() {
+        if (!this.subscription) {
+            this.subscription = subscribe(
+                this.messageContext,
+                DARK_MODE_CHANNEL,
+                (message) => this.handleDarkModeChange(message)
+            );
+        }
+    }
+
+    handleDarkModeChange(message) {
+        this.darkMode = message.darkModeEnabled;
+    }
 
     @wire(getUnassignedCases)
     wiredCases(result) {
