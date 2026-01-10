@@ -96,7 +96,6 @@ export default class TaskRecordModal extends NavigationMixin(LightningElement) {
     }
 
     handleClose(event) {
-        console.log('Task modal close event dispatched');
         
         // Prevent event bubbling if it exists
         if (event && event.stopPropagation) {

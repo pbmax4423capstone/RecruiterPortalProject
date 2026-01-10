@@ -72,3 +72,20 @@ $RECYCLE.BIN/
 
 # Agent logs (optional - keep if needed)
 # docs/agent-logs/
+
+# Deployment Results (comprehensive patterns)
+/*-failed-records.csv
+/*-success-records.csv
+/deploy-results/
+
+# Enhanced Data Files
+/data/*.csv
+/temp-data/
+/*-backup-*.csv
+/*-import-*.csv
+
+# VS Code workspace files
+*.code-workspace
+
+# OS-specific (enhanced)
+*.hs_err_pid*

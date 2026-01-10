@@ -167,7 +167,6 @@ export default class ScheduledCallsModal extends LightningElement {
           }));
         }
       } catch (error) {
-        console.error('Error loading task:', error);
         this.showToast('Error', 'Failed to load task details', 'error');
         this.closeRecordModal();
       }
@@ -257,7 +256,6 @@ export default class ScheduledCallsModal extends LightningElement {
       this.closeRecordModal();
       this.loadAllCalls();
     } catch (error) {
-      console.error('Error saving task:', error);
       this.showToast('Error', 'Failed to save task: ' + (error.body?.message || error.message), 'error');
     }
   }
@@ -293,7 +291,6 @@ export default class ScheduledCallsModal extends LightningElement {
       this.closeFollowUpModal();
       this.loadAllCalls();
     } catch (error) {
-      console.error('Error scheduling follow up:', error);
       this.showToast('Error', 'Failed to schedule follow up: ' + (error.body?.message || error.message), 'error');
     }
   }
@@ -319,12 +316,8 @@ export default class ScheduledCallsModal extends LightningElement {
 
       this.scheduledCalls = this.formatCallsForDisplay(scheduledData);
       this.pastDueCalls = this.formatCallsForDisplay(pastDueData);
-
-      console.log('Scheduled calls loaded:', this.scheduledCalls.length);
-      console.log('Past due calls loaded:', this.pastDueCalls.length);
       
     } catch (error) {
-      console.error('Error loading calls:', error);
       this.showToast('Error', 'Failed to load calls: ' + (error.body?.message || error.message), 'error');
     } finally {
       this.isLoading = false;
@@ -356,7 +349,7 @@ export default class ScheduledCallsModal extends LightningElement {
           });
         }
       } catch (error) {
-        console.error('Error formatting date for call:', call.id, error);
+        // Date formatting failed, continue with empty values
       }
 
       // Better candidate name resolution

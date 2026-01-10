@@ -66,7 +66,6 @@ public without sharing class SalesManagerActivityController {
             
             return results;
         } catch (Exception e) {
-            System.debug('Error in getSalesManagerActivity: ' + e.getMessage());
             throw new AuraHandledException('Error retrieving sales manager activity: ' + e.getMessage());
         }
     }
@@ -111,7 +110,6 @@ public without sharing class SalesManagerActivityController {
             
             return summary;
         } catch (Exception e) {
-            System.debug('Error in getSalesManagerSummary: ' + e.getMessage());
             throw new AuraHandledException('Error retrieving summary: ' + e.getMessage());
         }
     }
@@ -209,6 +207,18 @@ public without sharing class SalesManagerActivityController {
         ];
     }
     
+    /**
+     * Normalize name by trimming and removing extra spaces
+     * This ensures consistent name matching even with whitespace variations
+     */
+    private static String normalizeName(String name) {
+        if (String.isBlank(name)) {
+            return '';
+        }
+        // Trim and replace multiple spaces with single space
+        return name.trim().replaceAll('\\s+', ' ');
+    }
+    
     private static Integer getCandidatesOnboardingCount(String salesManager) {
         // Get candidates with completed ALCs
         Set<String> candidateNames = new Set<String>();
@@ -224,7 +234,7 @@ public without sharing class SalesManagerActivityController {
                 AND Stage__c = 'Candidate Complete'
             )
         ]) {
-            candidateNames.add(candidate.Name);
+            candidateNames.add(normalizeName(candidate.Name));
         }
         
         // Return count of matching Agents_Staff records with Onboarding status
@@ -232,12 +242,18 @@ public without sharing class SalesManagerActivityController {
             return 0;
         }
         
-        return [
-            SELECT COUNT()
+        // Query with LIKE pattern to handle whitespace variations
+        Integer count = 0;
+        for (Agents_Staff__c agent : [
+            SELECT Name
             FROM Agents_Staff__c
             WHERE Status__c = 'Onboarding'
-            AND Name IN :candidateNames
-        ];
+        ]) {
+            if (candidateNames.contains(normalizeName(agent.Name))) {
+                count++;
+            }
+        }
+        return count;
     }
     
     /**
@@ -378,8 +394,11 @@ public without sharing class SalesManagerActivityController {
             
             // Step 2: Get Agents_Staff records with Onboarding status
             Set<String> candidateNames = new Set<String>();
+            Map<String, String> normalizedToOriginalName = new Map<String, String>();
             for (Candidate__c candidate : candidates) {
-                candidateNames.add(candidate.Name);
+                String normalized = normalizeName(candidate.Name);
+                candidateNames.add(normalized);
+                normalizedToOriginalName.put(normalized, candidate.Name);
             }
             
             Map<String, Agents_Staff__c> agentsStaffByName = new Map<String, Agents_Staff__c>();
@@ -388,16 +407,20 @@ public without sharing class SalesManagerActivityController {
                     SELECT Id, Name, Status__c
                     FROM Agents_Staff__c
                     WHERE Status__c = 'Onboarding'
-                    AND Name IN :candidateNames
                 ]) {
-                    agentsStaffByName.put(agentStaff.Name, agentStaff);
+                    String normalizedAgentName = normalizeName(agentStaff.Name);
+                    if (candidateNames.contains(normalizedAgentName)) {
+                        // Map normalized name to agent staff record
+                        agentsStaffByName.put(normalizedAgentName, agentStaff);
+                    }
                 }
             }
             
             // Step 3: Build results by matching names
             for (Candidate__c candidate : candidates) {
+                String normalizedCandidateName = normalizeName(candidate.Name);
                 // Only include if there's a matching Agents_Staff record
-                if (agentsStaffByName.containsKey(candidate.Name)) {
+                if (agentsStaffByName.containsKey(normalizedCandidateName)) {
                     Map<String, Object> record = new Map<String, Object>();
                     record.put('id', candidate.Id);
                     record.put('name', candidate.Name);
@@ -413,7 +436,7 @@ public without sharing class SalesManagerActivityController {
                         record.put('alcId', candidate.ALC__r[0].Id);
                     }
                     
-                    Agents_Staff__c agentStaff = agentsStaffByName.get(candidate.Name);
+                    Agents_Staff__c agentStaff = agentsStaffByName.get(normalizedCandidateName);
                     record.put('agentStaffStatus', agentStaff.Status__c);
                     record.put('agentStaffId', agentStaff.Id);
                     

@@ -15,7 +15,11 @@ module.exports = defineConfig([
   // LWC configuration
   {
     files: ["**/lwc/**/*.js"],
-    extends: [lwcConfig]
+    extends: [lwcConfig],
+    rules: {
+      // Prevent console.log in production code (allow console.warn and console.error)
+      "no-console": ["error", { allow: ["warn", "error"] }]
+    }
   },
 
   // LWC configuration with override for LWC test files

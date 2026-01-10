@@ -204,7 +204,6 @@ export default class ServiceDashboard extends LightningElement {
     // Event handlers for report links
     handleViewReport(event) {
         const reportType = event.target.dataset.report;
-        console.log('Viewing report:', reportType);
         // In production, this would navigate to the actual report
     }
 }

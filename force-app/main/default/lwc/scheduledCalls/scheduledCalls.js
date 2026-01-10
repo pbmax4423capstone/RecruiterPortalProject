@@ -63,13 +63,8 @@ export default class ScheduledCalls extends NavigationMixin(LightningElement) {
     loadCalls() {
         // Force refresh - queries only Call tasks with TaskSubtype = 'Call'
         this.isLoading = true;
-        console.log('🔄 [ScheduledCalls] Loading calls for current user...');
-        console.log('🔄 [ScheduledCalls] Calling ScheduledCallsController.getScheduledCalls()');
         getScheduledCalls()
             .then(data => {
-                console.log('✅ [ScheduledCalls] Received data from controller:', data);
-                console.log('✅ [ScheduledCalls] Scheduled:', data.scheduled?.length || 0, 'Past Due:', data.pastDue?.length || 0);
-                
                 // Map scheduled calls
                 this.scheduledCalls = (data.scheduled || []).map(task => {
                     return {
@@ -88,16 +83,11 @@ export default class ScheduledCalls extends NavigationMixin(LightningElement) {
                     };
                 });
                 
-                console.log('Scheduled calls:', this.scheduledCalls.length);
-                console.log('Past due calls:', this.pastDueCalls.length);
-                
                 this.error = undefined;
                 this.isLoading = false;
                 this.updateLastRefreshed();
             })
             .catch(error => {
-                console.error('Error loading scheduled calls:', error);
-                console.error('Error details:', JSON.stringify(error));
                 this.error = error;
                 this.scheduledCalls = [];
                 this.pastDueCalls = [];

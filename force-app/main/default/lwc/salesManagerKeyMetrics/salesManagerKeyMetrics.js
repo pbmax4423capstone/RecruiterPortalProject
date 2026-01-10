@@ -48,8 +48,6 @@ export default class SalesManagerKeyMetrics extends NavigationMixin(LightningEle
             
             this.isLoading = false;
             this.error = undefined;
-            
-            console.log('Metrics loaded:', data);
         } else if (error) {
             console.error('Error fetching metrics:', error);
             this.error = error;
@@ -76,13 +74,6 @@ export default class SalesManagerKeyMetrics extends NavigationMixin(LightningEle
     handleCardClick(event) {
         const label = event.currentTarget.dataset.label;
         const value = event.currentTarget.dataset.value;
-        
-        // Console logging for debugging
-        console.log('Summary card clicked:', {
-            label: label,
-            value: value,
-            timestamp: new Date().toISOString()
-        });
         
         // Open drill-down modal
         this.openDrilldown(label);

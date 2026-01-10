@@ -42,16 +42,13 @@ export default class ServiceHomeVibe extends NavigationMixin(LightningElement) {
   wiredMyOpenCases(result) {
     this.wiredMyOpenCasesResult = result;
     if (result.data) {
-      console.log('Wire service returned', result.data.length, 'cases');
       this.myOpenCases = result.data.map(caseRecord => ({
         ...caseRecord,
         PriorityClass: this.getPriorityClass(caseRecord.Priority),
         CreatedDate: this.formatDate(caseRecord.CreatedDate),
         Account: caseRecord.Account || { Name: 'No Account' }
       }));
-      console.log('Processed myOpenCases:', this.myOpenCases);
     } else if (result.error) {
-      console.error('Error loading open cases:', result.error);
       this.myOpenCases = [];
       this.dispatchEvent(new ShowToastEvent({
         title: 'Error',
@@ -124,8 +121,6 @@ export default class ServiceHomeVibe extends NavigationMixin(LightningElement) {
       this.setGreeting();
     } catch (error) {
       // Fallback if Apex fails or not yet deployed
-      // eslint-disable-next-line no-console
-      console.error('Error fetching user name:', error);
       this.userName = 'Agent';
       this.setGreeting();
     }
