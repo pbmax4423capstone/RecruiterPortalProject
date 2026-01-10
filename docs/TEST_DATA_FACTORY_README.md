@@ -6,13 +6,13 @@ The `TestDataFactory` Apex class generates comprehensive test data for the Recru
 
 ## What It Creates
 
-| Object Type | Count | Details |
-|------------|-------|---------|
-| **Candidates** | 500 | Linked to Contacts, distributed across sales managers |
-| **Contacts** | 500 | One per candidate, linked to capstone account |
-| **Interviews** | 800 | Distributed: 500 Ci-First, 150 Plan-3rd, 100 Present-4th, 50 Optional-5th |
-| **ALC Records** | 300 | For first 300 candidates (contracting scenarios) |
-| **Opportunities** | 1000 | Linked to agent Contacts for FYC rollup testing |
+| Object Type       | Count | Details                                                                   |
+| ----------------- | ----- | ------------------------------------------------------------------------- |
+| **Candidates**    | 500   | Linked to Contacts, distributed across sales managers                     |
+| **Contacts**      | 500   | One per candidate, linked to capstone account                             |
+| **Interviews**    | 800   | Distributed: 500 Ci-First, 150 Plan-3rd, 100 Present-4th, 50 Optional-5th |
+| **ALC Records**   | 300   | For first 300 candidates (contracting scenarios)                          |
+| **Opportunities** | 1000  | Linked to agent Contacts for FYC rollup testing                           |
 
 ## Key Features
 
@@ -20,7 +20,7 @@ The `TestDataFactory` Apex class generates comprehensive test data for the Recru
 ✅ **Realistic Relationships** - Proper linking: Account → Contact → Candidate → Interview/ALC → Opportunity  
 ✅ **Data Variety** - Varied statuses, stages, types, and field values  
 ✅ **Bulk Operation Safe** - Batches large DML operations (200 records per batch)  
-✅ **Cleanup Method** - `deleteAllTestData()` for resetting between test runs  
+✅ **Cleanup Method** - `deleteAllTestData()` for resetting between test runs
 
 ## Usage Instructions
 
@@ -39,17 +39,19 @@ sf apex run --target-org ProdTest --file scripts\TestDataFactoryInvoker.apex
 1. Open Developer Console in your sandbox
 2. Go to **Debug → Open Execute Anonymous Window**
 3. Paste this code (choose version based on your environment):
-   
+
    **For Production or properly configured sandboxes:**
+
    ```apex
    TestDataFactory.generateCompleteTestData();
    ```
-   
+
    **For sandboxes with Flow automation issues:**
+
    ```apex
    TestDataFactory.generateSandboxSafeTestData();
    ```
-   
+
 4. Check **"Open Log"** checkbox
 5. Click **Execute**
 6. Review debug logs for execution progress
@@ -77,6 +79,7 @@ TestDataFactory.deleteAllTestData();
 ```
 
 **What Gets Deleted:**
+
 - All Opportunities linked to capstone account
 - All ALC records
 - All Interview records
@@ -89,22 +92,26 @@ TestDataFactory.deleteAllTestData();
 ### 1. Flow Automation Triggers
 
 ⚠️ **This factory creates real Candidate records that trigger production flows:**
+
 - `Candidate_Stage_Email_Automation` flow
 - `Add Contact Name to Newly Created Activity Record` flow
 
 **If flows fail in your sandbox due to missing configuration:**
 
 **Option A: Temporarily Deactivate Flows**
+
 1. In sandbox Setup, go to **Process Automation → Flows**
 2. Find: `Candidate Stage Email Automation`
 3. Click **Deactivate** (you can reactivate later)
 
 **Option B: Configure Required Email Templates**
+
 1. Ensure email templates exist in sandbox (check `force-app/main/default/email/Candidate_Outreach/`)
 2. Verify org-wide email address is configured (`help@capstonetechsupport.com`)
 3. Update flow to use sandbox-safe email settings
 
 **Option C: Use Sandbox-Safe Method** (Recommended for sandboxes)
+
 ```apex
 TestDataFactory.generateSandboxSafeTestData();
 ```
@@ -114,11 +121,13 @@ This method uses `Database.insert(records, false)` with `allOrNone=false` to all
 ### 2. Governor Limits
 
 The factory is designed to work within Salesforce governor limits:
+
 - Uses batches of 200 records for Opportunity creation
 - Total DML statements: ~10 (well under limit of 150)
 - Total records created: ~2,600 (under single transaction limit)
 
 **If you need MORE data:**
+
 - Run the factory multiple times (incremental data support)
 - Or modify constants in the class and run in separate executions
 
@@ -141,6 +150,7 @@ Interview__c (800)   ALC__c (300)
 ```
 
 **Key Relationship Fields:**
+
 - `Candidate__c.Contact__c` → Links candidate to Contact
 - `Interview__c.Candidate__c` → Links interview to Candidate
 - `ALC__c.Candidate__c` & `ALC__c.Contact__c` → Links contracting to both
@@ -165,6 +175,7 @@ The factory uses production-like values:
 **Recommended workflow for sandbox testing:**
 
 1. **Initial Setup:**
+
    ```apex
    TestDataFactory.generateCompleteTestData();
    ```
@@ -176,6 +187,7 @@ The factory uses production-like values:
    - Verify Contract B lifecycle tracking
 
 3. **Clean Up Before Next Test Run:**
+
    ```apex
    TestDataFactory.deleteAllTestData();
    ```
@@ -202,6 +214,7 @@ private static final Integer INTERVIEW_OPTIONAL_5TH = 50;
 ```
 
 **After changes:**
+
 1. Save the file
 2. Re-deploy to your sandbox
 3. Execute the factory
@@ -213,6 +226,7 @@ private static final Integer INTERVIEW_OPTIONAL_5TH = 50;
 **Cause:** Flow automation is trying to send emails but missing required configuration.
 
 **Solution:**
+
 - Option 1: Deactivate the flow in sandbox (see Section 1 above)
 - Option 2: Configure email templates and org-wide email in sandbox
 
@@ -227,6 +241,7 @@ private static final Integer INTERVIEW_OPTIONAL_5TH = 50;
 **Cause:** Governor limit exceeded (unlikely with current implementation).
 
 **Solution:**
+
 - Reduce data volumes in constants
 - Run factory multiple times with smaller batches
 
@@ -249,16 +264,16 @@ System.debug('ALCs: ' + [SELECT COUNT() FROM ALC__c]);
 System.debug('Opportunities: ' + [SELECT COUNT() FROM Opportunity]);
 
 // Check interview type distribution
-for (AggregateResult ar : [SELECT Interview_Type__c, COUNT(Id) cnt 
-                            FROM Interview__c 
+for (AggregateResult ar : [SELECT Interview_Type__c, COUNT(Id) cnt
+                            FROM Interview__c
                             GROUP BY Interview_Type__c]) {
     System.debug(ar.get('Interview_Type__c') + ': ' + ar.get('cnt'));
 }
 
 // Check FYC rollup (should show aggregated values)
-List<Candidate__c> candidatesWithFYC = [SELECT Name, Total_FYC__c, Opportunity_Count__c 
-                                         FROM Candidate__c 
-                                         WHERE Total_FYC__c > 0 
+List<Candidate__c> candidatesWithFYC = [SELECT Name, Total_FYC__c, Opportunity_Count__c
+                                         FROM Candidate__c
+                                         WHERE Total_FYC__c > 0
                                          LIMIT 10];
 for (Candidate__c c : candidatesWithFYC) {
     System.debug(c.Name + ' - FYC: ' + c.Total_FYC__c + ', Opps: ' + c.Opportunity_Count__c);
@@ -276,16 +291,17 @@ for (Candidate__c c : candidatesWithFYC) {
 
 ## Files Reference
 
-| File | Purpose |
-|------|---------|
-| `force-app/main/default/classes/TestDataFactory.cls` | Main factory class |
-| `force-app/main/default/classes/TestDataFactory.cls-meta.xml` | Metadata file |
-| `scripts/TestDataFactoryInvoker.apex` | Anonymous Apex execution script |
-| `docs/TEST_DATA_FACTORY_README.md` | This documentation file |
+| File                                                          | Purpose                         |
+| ------------------------------------------------------------- | ------------------------------- |
+| `force-app/main/default/classes/TestDataFactory.cls`          | Main factory class              |
+| `force-app/main/default/classes/TestDataFactory.cls-meta.xml` | Metadata file                   |
+| `scripts/TestDataFactoryInvoker.apex`                         | Anonymous Apex execution script |
+| `docs/TEST_DATA_FACTORY_README.md`                            | This documentation file         |
 
 ## Support
 
 For issues or questions about the TestDataFactory:
+
 1. Check the troubleshooting section above
 2. Review debug logs for detailed error messages
 3. Verify sandbox configuration (flows, email templates, users)

@@ -18,6 +18,7 @@ This is your action checklist to get the training portal live and distribute it 
 7. You'll see: **"Your site is live at `https://pbmax4423capstone.github.io/RecruiterPortalProject/`"**
 
 **Your Training Portal URL:**
+
 ```
 https://pbmax4423capstone.github.io/RecruiterPortalProject/training-portal.html
 ```
@@ -31,21 +32,25 @@ https://pbmax4423capstone.github.io/RecruiterPortalProject/training-portal.html
 You have 3 videos to record. Each script is in `docs/loom-scripts/` folder.
 
 ### Video 1: Creating a Candidate (3-4 min)
+
 - **Script:** [docs/loom-scripts/01-creating-a-candidate.md](loom-scripts/01-creating-a-candidate.md)
 - **What to show:** Dashboard → Click "Create New Candidate" → Fill form with all 6 fields → Submit
 - **Key points:** Required vs optional fields, duplicate check, Position/Lead Source dropdowns
 
 ### Video 2: Scheduling Interviews (4-5 min)
+
 - **Script:** [docs/loom-scripts/02-scheduling-interviews.md](loom-scripts/02-scheduling-interviews.md)
 - **What to show:** Dashboard → Click "Schedule Interview" → Select candidate → Choose interview type → Set date → Submit → Mark complete
 - **Key points:** 5 interview types, single date system, completion workflow
 
 ### Video 3: Sales Manager Dashboard (5-6 min)
+
 - **Script:** [docs/loom-scripts/03-sales-manager-dashboard.md](loom-scripts/03-sales-manager-dashboard.md)
 - **What to show:** All dashboard sections, clickable metrics, Current Month/YTD toggle, call management, Contract B pipeline
 - **Key points:** Metric meanings, interactive features, priority actions
 
 ### Recording Tips:
+
 - Log into your Salesforce org with real data
 - Use "Browser Tab" recording mode for cleaner view
 - Speak clearly and at moderate pace
@@ -129,7 +134,7 @@ https://pbmax4423capstone.github.io/RecruiterPortalProject/training-portal.html
 
 Includes videos, guides, and quick references for:
 • Creating candidates
-• Scheduling interviews  
+• Scheduling interviews
 • Understanding the dashboard
 
 Questions? DM me or contact Help Desk.
@@ -140,15 +145,18 @@ Questions? DM me or contact Help Desk.
 ## 📊 Step 5: Track Completion (Optional)
 
 ### Method 1: Loom Analytics
+
 - If you have Loom Pro, view analytics to see who watched videos
 - Go to each video → Analytics tab
 
 ### Method 2: Google Form
+
 - Create a form: "Training Completion Survey"
 - Ask: Name, Date Completed, Feedback
 - Share form link at end of training
 
 ### Method 3: Spreadsheet
+
 - Create Excel/Google Sheet with team names
 - Check off as people confirm completion
 - Send reminders to incomplete users
@@ -158,16 +166,19 @@ Questions? DM me or contact Help Desk.
 ## 🛠️ Troubleshooting
 
 ### "GitHub Pages URL doesn't work"
+
 - Wait 2-3 minutes after enabling Pages
 - Check that you selected `/docs` folder (not root)
 - Verify you're on `main` branch
 
 ### "Videos won't embed"
+
 - Check Loom video privacy is "Anyone with the link" (not "Private")
 - Verify `<iframe>` src URL is correct
 - Clear browser cache (Ctrl+F5)
 
 ### "Links are broken"
+
 - All links use relative paths (they should work automatically)
 - Test by clicking every link in the portal
 
@@ -204,7 +215,7 @@ Before announcing to team:
 
 Your training portal is complete and ready to launch. Just follow the 5 steps above:
 
-1. Enable GitHub Pages (5 min) ✅ 
+1. Enable GitHub Pages (5 min) ✅
 2. Record videos (30-40 min)
 3. Embed videos (10 min)
 4. Distribute to team (5 min)

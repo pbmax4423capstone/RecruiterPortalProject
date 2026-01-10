@@ -57,6 +57,7 @@ This system enables Patrick Baker, Cole Arnold, and their respective Copilot age
 ### 1. Coordination Protocol
 
 **Before Starting Work:**
+
 ```bash
 # Three-step check
 1. Check SHARED_PLANNING.md for active work
@@ -67,6 +68,7 @@ This system enables Patrick Baker, Cole Arnold, and their respective Copilot age
 ### 2. Task Management
 
 **Task Board (SHARED_PLANNING.md):**
+
 - 🔵 In Progress
 - 🟡 Ready to Start
 - 🔴 Blocked
@@ -77,6 +79,7 @@ This system enables Patrick Baker, Cole Arnold, and their respective Copilot age
 ### 3. Handoff Process
 
 **Structured handoffs include:**
+
 - Work completed summary
 - Next steps with specific instructions
 - Files modified with git commit references
@@ -87,21 +90,25 @@ This system enables Patrick Baker, Cole Arnold, and their respective Copilot age
 ### 4. Agent Coordination Patterns
 
 **Pattern A: Sequential Pipeline**
+
 - Agent 1 → Handoff → Agent 2 → Complete
 - Example: Backend (Patrick) → Frontend (Cole)
 
 **Pattern B: Parallel Development**
+
 - Agent 1 and Agent 2 work independently
 - Meet at integration point
 - Example: Multiple templates updated simultaneously
 
 **Pattern C: Research → Review → Implement**
+
 - Research phase → Human review → Implementation
 - Example: Technical spike before feature work
 
 ### 5. Protected Files List
 
 Centralized list of files requiring coordination:
+
 - LWC components (candidateRecordView, recruiterDashboard, etc.)
 - Email templates (Candidate_Outreach folder)
 - Browser extensions (content.js, popup.js)
@@ -180,6 +187,7 @@ Centralized list of files requiring coordination:
 ### For Patrick's Copilot Agent
 
 **Specializations:**
+
 - Salesforce DX deployment
 - Apex development
 - FYC calculations
@@ -187,6 +195,7 @@ Centralized list of files requiring coordination:
 - Flow automation
 
 **Prompt Template:**
+
 ```
 Patrick's Agent,
 
@@ -205,6 +214,7 @@ Files: [List expected files]
 ### For Cole's Copilot Agent
 
 **Specializations:**
+
 - Lightning Web Components
 - Dark mode implementation
 - UI/UX components
@@ -212,6 +222,7 @@ Files: [List expected files]
 - Browser extensions
 
 **Prompt Template:**
+
 ```
 Cole's Agent,
 
@@ -231,12 +242,12 @@ Files: [List expected files]
 
 ## 📊 Coordination Files Quick Reference
 
-| Document | Size | Primary Use | Audience |
-|----------|------|-------------|----------|
-| QUICK_COORDINATION.md | 3.8 KB | Daily quick reference | Both, frequent use |
-| WORK_COORDINATION.md | 8.6 KB | Protocols & patterns | Both, reference |
-| SHARED_PLANNING.md | 7.8 KB | Active task tracking | Both, daily updates |
-| AGENT_COORDINATION.md | 13 KB | Agent-specific guidance | Both + Agents |
+| Document              | Size   | Primary Use             | Audience            |
+| --------------------- | ------ | ----------------------- | ------------------- |
+| QUICK_COORDINATION.md | 3.8 KB | Daily quick reference   | Both, frequent use  |
+| WORK_COORDINATION.md  | 8.6 KB | Protocols & patterns    | Both, reference     |
+| SHARED_PLANNING.md    | 7.8 KB | Active task tracking    | Both, daily updates |
+| AGENT_COORDINATION.md | 13 KB  | Agent-specific guidance | Both + Agents       |
 
 ---
 
@@ -260,6 +271,7 @@ Files: [List expected files]
 ### For Both
 
 **Daily workflow:**
+
 ```bash
 # Morning: Check status
 cat SHARED_PLANNING.md | grep "🔵"
@@ -293,7 +305,7 @@ git push origin main
 - **Is this file protected?** → WORK_COORDINATION.md
 - **What's in progress?** → SHARED_PLANNING.md
 - **How do I prompt my agent?** → AGENT_COORDINATION.md
-- **How do I hand off work?** → WORK_COORDINATION.md (template) or docs/handoffs/EXAMPLE-*.md
+- **How do I hand off work?** → WORK_COORDINATION.md (template) or docs/handoffs/EXAMPLE-\*.md
 
 ### "Someone is working on the same area"
 
@@ -336,6 +348,7 @@ This system should evolve:
 4. **Share learnings** with each other
 
 **Feedback channels:**
+
 - Update "What's Working Well" in SHARED_PLANNING.md
 - Add notes to WORK_COORDINATION.md
 - Discuss in team meetings
@@ -348,16 +361,19 @@ This system should evolve:
 ### For New Team Members
 
 **Day 1:**
+
 - Read QUICK_COORDINATION.md
 - Skim WORK_COORDINATION.md
 - Review SHARED_PLANNING.md structure
 
 **Week 1:**
+
 - Complete first task with handoff to teammate
 - Experience both sides of a handoff
 - Review example handoff document
 
 **Week 2:**
+
 - Work on parallel tasks independently
 - Practice coordination protocols
 - Provide feedback on the system

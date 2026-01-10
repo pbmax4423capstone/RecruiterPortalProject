@@ -1,125 +1,137 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
-<head>
-  <title>Extension Redirect URI</title>
-  <style>
-    body {
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-      padding: 30px;
-      background: #f5f7fa;
-      color: #2c3e50;
-    }
-    .container {
-      max-width: 600px;
-      margin: 0 auto;
-      background: white;
-      padding: 30px;
-      border-radius: 8px;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-    }
-    h1 {
-      color: #667eea;
-      margin-bottom: 20px;
-    }
-    .redirect-uri {
-      background: #f0f0f0;
-      padding: 15px;
-      border-radius: 4px;
-      font-family: 'Courier New', monospace;
-      font-size: 14px;
-      word-break: break-all;
-      margin: 20px 0;
-      border: 2px solid #667eea;
-    }
-    button {
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-      color: white;
-      border: none;
-      padding: 12px 24px;
-      border-radius: 6px;
-      cursor: pointer;
-      font-size: 14px;
-      font-weight: 500;
-      margin-top: 10px;
-    }
-    button:hover {
-      transform: translateY(-1px);
-      box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
-    }
-    .success {
-      color: #28a745;
-      font-weight: 500;
-      margin-top: 10px;
-      display: none;
-    }
-    .instructions {
-      background: #fff3cd;
-      border: 1px solid #ffc107;
-      padding: 15px;
-      border-radius: 4px;
-      margin-top: 20px;
-      line-height: 1.6;
-    }
-    .instructions h2 {
-      color: #856404;
-      font-size: 16px;
-      margin-top: 0;
-    }
-    .instructions ol {
-      margin: 10px 0 0 20px;
-      padding: 0;
-    }
-    .instructions li {
-      margin-bottom: 8px;
-    }
-  </style>
-</head>
-<body>
-  <div class="container">
-    <h1>🔐 Extension OAuth Setup</h1>
-    
-    <p><strong>Your Extension's Redirect URI:</strong></p>
-    <div class="redirect-uri" id="redirectUri">Loading...</div>
-    
-    <button id="copyBtn">📋 Copy to Clipboard</button>
-    <div class="success" id="successMsg">✓ Copied to clipboard!</div>
-    
-    <div class="instructions">
-      <h2>⚠️ Next Steps - Add to Salesforce</h2>
-      <ol>
-        <li><strong>Log into Salesforce</strong> (test.salesforce.com for sandbox)</li>
-        <li>Go to <strong>Setup</strong> → <strong>App Manager</strong></li>
-        <li>Find your Connected App (Client ID: <code>3MVG9AR068fT4usy...</code>)</li>
-        <li>Click dropdown → <strong>Edit</strong></li>
-        <li>Scroll to <strong>OAuth Settings</strong></li>
-        <li>In <strong>Callback URL</strong> field, add the redirect URI above on a new line</li>
-        <li>Click <strong>Save</strong></li>
-        <li>Wait 2-10 minutes for changes to take effect</li>
-        <li>Return to extension and click "Connect to Salesforce"</li>
-      </ol>
+  <head>
+    <title>Extension Redirect URI</title>
+    <style>
+      body {
+        font-family:
+          -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        padding: 30px;
+        background: #f5f7fa;
+        color: #2c3e50;
+      }
+      .container {
+        max-width: 600px;
+        margin: 0 auto;
+        background: white;
+        padding: 30px;
+        border-radius: 8px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      }
+      h1 {
+        color: #667eea;
+        margin-bottom: 20px;
+      }
+      .redirect-uri {
+        background: #f0f0f0;
+        padding: 15px;
+        border-radius: 4px;
+        font-family: "Courier New", monospace;
+        font-size: 14px;
+        word-break: break-all;
+        margin: 20px 0;
+        border: 2px solid #667eea;
+      }
+      button {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        border: none;
+        padding: 12px 24px;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 14px;
+        font-weight: 500;
+        margin-top: 10px;
+      }
+      button:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+      }
+      .success {
+        color: #28a745;
+        font-weight: 500;
+        margin-top: 10px;
+        display: none;
+      }
+      .instructions {
+        background: #fff3cd;
+        border: 1px solid #ffc107;
+        padding: 15px;
+        border-radius: 4px;
+        margin-top: 20px;
+        line-height: 1.6;
+      }
+      .instructions h2 {
+        color: #856404;
+        font-size: 16px;
+        margin-top: 0;
+      }
+      .instructions ol {
+        margin: 10px 0 0 20px;
+        padding: 0;
+      }
+      .instructions li {
+        margin-bottom: 8px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>🔐 Extension OAuth Setup</h1>
+
+      <p><strong>Your Extension's Redirect URI:</strong></p>
+      <div class="redirect-uri" id="redirectUri">Loading...</div>
+
+      <button id="copyBtn">📋 Copy to Clipboard</button>
+      <div class="success" id="successMsg">✓ Copied to clipboard!</div>
+
+      <div class="instructions">
+        <h2>⚠️ Next Steps - Add to Salesforce</h2>
+        <ol>
+          <li>
+            <strong>Log into Salesforce</strong> (test.salesforce.com for
+            sandbox)
+          </li>
+          <li>Go to <strong>Setup</strong> → <strong>App Manager</strong></li>
+          <li>
+            Find your Connected App (Client ID:
+            <code>3MVG9AR068fT4usy...</code>)
+          </li>
+          <li>Click dropdown → <strong>Edit</strong></li>
+          <li>Scroll to <strong>OAuth Settings</strong></li>
+          <li>
+            In <strong>Callback URL</strong> field, add the redirect URI above
+            on a new line
+          </li>
+          <li>Click <strong>Save</strong></li>
+          <li>Wait 2-10 minutes for changes to take effect</li>
+          <li>Return to extension and click "Connect to Salesforce"</li>
+        </ol>
+      </div>
     </div>
-  </div>
-  
-  <script>
-    // Get redirect URI from extension
-    chrome.runtime.sendMessage({action: 'getRedirectUri'}, response => {
-      const redirectUri = response.redirectUri;
-      document.getElementById('redirectUri').textContent = redirectUri;
-      
-      // Set up copy button
-      document.getElementById('copyBtn').addEventListener('click', async () => {
-        try {
-          await navigator.clipboard.writeText(redirectUri);
-          const successMsg = document.getElementById('successMsg');
-          successMsg.style.display = 'block';
-          setTimeout(() => {
-            successMsg.style.display = 'none';
-          }, 3000);
-        } catch (err) {
-          alert('Failed to copy. Please select and copy manually.');
-        }
+
+    <script>
+      // Get redirect URI from extension
+      chrome.runtime.sendMessage({ action: "getRedirectUri" }, (response) => {
+        const redirectUri = response.redirectUri;
+        document.getElementById("redirectUri").textContent = redirectUri;
+
+        // Set up copy button
+        document
+          .getElementById("copyBtn")
+          .addEventListener("click", async () => {
+            try {
+              await navigator.clipboard.writeText(redirectUri);
+              const successMsg = document.getElementById("successMsg");
+              successMsg.style.display = "block";
+              setTimeout(() => {
+                successMsg.style.display = "none";
+              }, 3000);
+            } catch (err) {
+              alert("Failed to copy. Please select and copy manually.");
+            }
+          });
       });
-    });
-  </script>
-</body>
+    </script>
+  </body>
 </html>

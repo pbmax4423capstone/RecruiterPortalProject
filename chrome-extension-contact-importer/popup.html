@@ -1,634 +1,664 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Contact Importer - Capstone Recruiter</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
-            min-width: 380px;
-            max-width: 420px;
-            background: #f5f7fa;
-        }
-
-        /* Header */
-        .header {
-            background: linear-gradient(135deg, #0176d3 0%, #014486 100%);
-            color: white;
-            padding: 16px;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .header img {
-            width: 36px;
-            height: 36px;
-        }
-
-        .header-text h1 {
-            font-size: 16px;
-            font-weight: 600;
-        }
-
-        .header-text .subtitle {
-            font-size: 11px;
-            opacity: 0.9;
-        }
-
-        /* Site Badge */
-        .site-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            padding: 4px 10px;
-            border-radius: 12px;
-            font-size: 11px;
-            font-weight: 500;
-            margin-left: auto;
-        }
-
-        .site-badge.linkedin {
-            background: #0077b5;
-            color: white;
-        }
-
-        .site-badge.zoominfo {
-            background: #ff6b00;
-            color: white;
-        }
-
-        .site-badge.generic {
-            background: #6c757d;
-            color: white;
-        }
-
-        .site-badge .icon {
-            font-size: 14px;
-        }
-
-        /* Status Messages */
-        .status {
-            padding: 10px 16px;
-            font-size: 12px;
-            display: none;
-        }
-
-        .status.info {
-            background: #e3f2fd;
-            color: #1565c0;
-            border-left: 3px solid #1976d2;
-        }
-
-        .status.success {
-            background: #e8f5e9;
-            color: #2e7d32;
-            border-left: 3px solid #4caf50;
-        }
-
-        .status.error {
-            background: #ffebee;
-            color: #c62828;
-            border-left: 3px solid #f44336;
-        }
-
-        .status.warning {
-            background: #fff3e0;
-            color: #e65100;
-            border-left: 3px solid #ff9800;
-        }
-
-        .status.show {
-            display: block;
-        }
-
-        /* Login Section */
-        .login-section {
-            padding: 24px 16px;
-            text-align: center;
-            display: none;
-        }
-
-        .login-section.show {
-            display: block;
-        }
-
-        .login-section h2 {
-            font-size: 18px;
-            color: #333;
-            margin-bottom: 8px;
-        }
-
-        .login-section p {
-            color: #666;
-            font-size: 13px;
-            margin-bottom: 20px;
-        }
-
-        /* Form Section */
-        .form-section {
-            padding: 16px;
-            display: none;
-        }
-
-        .form-section.show {
-            display: block;
-        }
-
-        .section-title {
-            font-size: 13px;
-            font-weight: 600;
-            color: #666;
-            margin-bottom: 12px;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        /* Form Groups */
-        .form-row {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 12px;
-            margin-bottom: 12px;
-        }
-
-        .form-group {
-            margin-bottom: 12px;
-        }
-
-        .form-group.half {
-            margin-bottom: 0;
-        }
-
-        .form-group label {
-            display: block;
-            font-size: 11px;
-            font-weight: 500;
-            color: #555;
-            margin-bottom: 4px;
-            text-transform: uppercase;
-            letter-spacing: 0.3px;
-        }
-
-        .form-group input,
-        .form-group select {
-            width: 100%;
-            padding: 10px 12px;
-            border: 1px solid #ddd;
-            border-radius: 6px;
-            font-size: 13px;
-            transition: border-color 0.2s, box-shadow 0.2s;
-        }
-
-        .form-group input:focus,
-        .form-group select:focus {
-            outline: none;
-            border-color: #0176d3;
-            box-shadow: 0 0 0 3px rgba(1, 118, 211, 0.1);
-        }
-
-        .form-group input::placeholder {
-            color: #aaa;
-        }
-
-        .form-group input.auto-filled {
-            background: #f0f9ff;
-            border-color: #0176d3;
-        }
-
-        /* Checkbox */
-        .checkbox-group {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            margin: 16px 0;
-            padding: 12px;
-            background: #f8f9fa;
-            border-radius: 6px;
-        }
-
-        .checkbox-group input[type="checkbox"] {
-            width: 18px;
-            height: 18px;
-            cursor: pointer;
-        }
-
-        .checkbox-group label {
-            font-size: 13px;
-            color: #333;
-            cursor: pointer;
-        }
-
-        /* Buttons */
-        .btn {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            padding: 12px 24px;
-            border: none;
-            border-radius: 6px;
-            font-size: 14px;
-            font-weight: 500;
-            cursor: pointer;
-            transition: all 0.2s;
-            width: 100%;
-        }
-
-        .btn-primary {
-            background: linear-gradient(135deg, #0176d3 0%, #014486 100%);
-            color: white;
-        }
-
-        .btn-primary:hover:not(:disabled) {
-            background: linear-gradient(135deg, #0288e1 0%, #015999 100%);
-            transform: translateY(-1px);
-            box-shadow: 0 4px 12px rgba(1, 118, 211, 0.3);
-        }
-
-        .btn-primary:disabled {
-            background: #ccc;
-            cursor: not-allowed;
-        }
-
-        .btn-secondary {
-            background: white;
-            color: #0176d3;
-            border: 1px solid #0176d3;
-        }
-
-        .btn-secondary:hover {
-            background: #f0f7ff;
-        }
-
-        .btn-danger {
-            background: #dc3545;
-            color: white;
-        }
-
-        .btn-danger:hover {
-            background: #c82333;
-        }
-
-        /* Button Group */
-        .btn-group {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 12px;
-            margin-top: 16px;
-        }
-
-        .btn-group .btn {
-            width: auto;
-        }
-
-        /* Profile Preview */
-        .profile-preview {
-            background: white;
-            border-radius: 8px;
-            padding: 16px;
-            margin-bottom: 16px;
-            border: 1px solid #e0e0e0;
-        }
-
-        .profile-preview h3 {
-            font-size: 15px;
-            color: #333;
-            margin-bottom: 4px;
-        }
-
-        .profile-preview .subtitle {
-            font-size: 12px;
-            color: #666;
-            margin-bottom: 8px;
-        }
-
-        .profile-preview .meta {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 12px;
-            font-size: 11px;
-            color: #888;
-        }
-
-        .profile-preview .meta span {
-            display: flex;
-            align-items: center;
-            gap: 4px;
-        }
-
-        /* Divider */
-        .divider {
-            height: 1px;
-            background: #e0e0e0;
-            margin: 16px 0;
-        }
-
-        /* Tips Section */
-        .tips {
-            background: #fffbeb;
-            border: 1px solid #fbbf24;
-            border-radius: 6px;
-            padding: 12px;
-            margin-top: 16px;
-        }
-
-        .tips h4 {
-            font-size: 12px;
-            color: #92400e;
-            margin-bottom: 8px;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-
-        .tips ul {
-            margin: 0;
-            padding-left: 20px;
-            font-size: 11px;
-            color: #78350f;
-        }
-
-        .tips li {
-            margin-bottom: 4px;
-        }
-
-        /* Footer */
-        .footer {
-            padding: 12px 16px;
-            text-align: center;
-            border-top: 1px solid #e0e0e0;
-            background: white;
-        }
-
-        .footer a {
-            font-size: 11px;
-            color: #0176d3;
-            text-decoration: none;
-        }
-
-        .footer a:hover {
-            text-decoration: underline;
-        }
-
-        /* User Info */
-        .user-info {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 10px 16px;
-            background: #e8f5e9;
-            border-bottom: 1px solid #c8e6c9;
-        }
-
-        .user-info .user-name {
-            font-size: 12px;
-            color: #2e7d32;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-
-        .user-info .logout-btn {
-            font-size: 11px;
-            color: #c62828;
-            background: none;
-            border: none;
-            cursor: pointer;
-            text-decoration: underline;
-        }
-
-        /* Loading Spinner */
-        .spinner {
-            width: 18px;
-            height: 18px;
-            border: 2px solid #ffffff40;
-            border-top-color: white;
-            border-radius: 50%;
-            animation: spin 0.8s linear infinite;
-        }
-
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
-
-        /* Refresh Button */
-        .refresh-btn {
-            background: none;
-            border: none;
-            cursor: pointer;
-            font-size: 16px;
-            padding: 4px 8px;
-            border-radius: 4px;
-            transition: background 0.2s;
-        }
-
-        .refresh-btn:hover {
-            background: rgba(0,0,0,0.1);
-        }
-
-        /* Manual Mode Toggle */
-        .mode-toggle {
-            display: flex;
-            gap: 8px;
-            margin-bottom: 16px;
-        }
-
-        .mode-toggle button {
-            flex: 1;
-            padding: 8px 12px;
-            border: 1px solid #ddd;
-            background: white;
-            border-radius: 6px;
-            font-size: 12px;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-
-        .mode-toggle button.active {
-            background: #0176d3;
-            color: white;
-            border-color: #0176d3;
-        }
-
-        .mode-toggle button:hover:not(.active) {
-            background: #f0f7ff;
-        }
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family:
+          -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu,
+          sans-serif;
+        min-width: 380px;
+        max-width: 420px;
+        background: #f5f7fa;
+      }
+
+      /* Header */
+      .header {
+        background: linear-gradient(135deg, #0176d3 0%, #014486 100%);
+        color: white;
+        padding: 16px;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+
+      .header img {
+        width: 36px;
+        height: 36px;
+      }
+
+      .header-text h1 {
+        font-size: 16px;
+        font-weight: 600;
+      }
+
+      .header-text .subtitle {
+        font-size: 11px;
+        opacity: 0.9;
+      }
+
+      /* Site Badge */
+      .site-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 4px 10px;
+        border-radius: 12px;
+        font-size: 11px;
+        font-weight: 500;
+        margin-left: auto;
+      }
+
+      .site-badge.linkedin {
+        background: #0077b5;
+        color: white;
+      }
+
+      .site-badge.zoominfo {
+        background: #ff6b00;
+        color: white;
+      }
+
+      .site-badge.generic {
+        background: #6c757d;
+        color: white;
+      }
+
+      .site-badge .icon {
+        font-size: 14px;
+      }
+
+      /* Status Messages */
+      .status {
+        padding: 10px 16px;
+        font-size: 12px;
+        display: none;
+      }
+
+      .status.info {
+        background: #e3f2fd;
+        color: #1565c0;
+        border-left: 3px solid #1976d2;
+      }
+
+      .status.success {
+        background: #e8f5e9;
+        color: #2e7d32;
+        border-left: 3px solid #4caf50;
+      }
+
+      .status.error {
+        background: #ffebee;
+        color: #c62828;
+        border-left: 3px solid #f44336;
+      }
+
+      .status.warning {
+        background: #fff3e0;
+        color: #e65100;
+        border-left: 3px solid #ff9800;
+      }
+
+      .status.show {
+        display: block;
+      }
+
+      /* Login Section */
+      .login-section {
+        padding: 24px 16px;
+        text-align: center;
+        display: none;
+      }
+
+      .login-section.show {
+        display: block;
+      }
+
+      .login-section h2 {
+        font-size: 18px;
+        color: #333;
+        margin-bottom: 8px;
+      }
+
+      .login-section p {
+        color: #666;
+        font-size: 13px;
+        margin-bottom: 20px;
+      }
+
+      /* Form Section */
+      .form-section {
+        padding: 16px;
+        display: none;
+      }
+
+      .form-section.show {
+        display: block;
+      }
+
+      .section-title {
+        font-size: 13px;
+        font-weight: 600;
+        color: #666;
+        margin-bottom: 12px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+      }
+
+      /* Form Groups */
+      .form-row {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 12px;
+        margin-bottom: 12px;
+      }
+
+      .form-group {
+        margin-bottom: 12px;
+      }
+
+      .form-group.half {
+        margin-bottom: 0;
+      }
+
+      .form-group label {
+        display: block;
+        font-size: 11px;
+        font-weight: 500;
+        color: #555;
+        margin-bottom: 4px;
+        text-transform: uppercase;
+        letter-spacing: 0.3px;
+      }
+
+      .form-group input,
+      .form-group select {
+        width: 100%;
+        padding: 10px 12px;
+        border: 1px solid #ddd;
+        border-radius: 6px;
+        font-size: 13px;
+        transition:
+          border-color 0.2s,
+          box-shadow 0.2s;
+      }
+
+      .form-group input:focus,
+      .form-group select:focus {
+        outline: none;
+        border-color: #0176d3;
+        box-shadow: 0 0 0 3px rgba(1, 118, 211, 0.1);
+      }
+
+      .form-group input::placeholder {
+        color: #aaa;
+      }
+
+      .form-group input.auto-filled {
+        background: #f0f9ff;
+        border-color: #0176d3;
+      }
+
+      /* Checkbox */
+      .checkbox-group {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        margin: 16px 0;
+        padding: 12px;
+        background: #f8f9fa;
+        border-radius: 6px;
+      }
+
+      .checkbox-group input[type="checkbox"] {
+        width: 18px;
+        height: 18px;
+        cursor: pointer;
+      }
+
+      .checkbox-group label {
+        font-size: 13px;
+        color: #333;
+        cursor: pointer;
+      }
+
+      /* Buttons */
+      .btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        padding: 12px 24px;
+        border: none;
+        border-radius: 6px;
+        font-size: 14px;
+        font-weight: 500;
+        cursor: pointer;
+        transition: all 0.2s;
+        width: 100%;
+      }
+
+      .btn-primary {
+        background: linear-gradient(135deg, #0176d3 0%, #014486 100%);
+        color: white;
+      }
+
+      .btn-primary:hover:not(:disabled) {
+        background: linear-gradient(135deg, #0288e1 0%, #015999 100%);
+        transform: translateY(-1px);
+        box-shadow: 0 4px 12px rgba(1, 118, 211, 0.3);
+      }
+
+      .btn-primary:disabled {
+        background: #ccc;
+        cursor: not-allowed;
+      }
+
+      .btn-secondary {
+        background: white;
+        color: #0176d3;
+        border: 1px solid #0176d3;
+      }
+
+      .btn-secondary:hover {
+        background: #f0f7ff;
+      }
+
+      .btn-danger {
+        background: #dc3545;
+        color: white;
+      }
+
+      .btn-danger:hover {
+        background: #c82333;
+      }
+
+      /* Button Group */
+      .btn-group {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 12px;
+        margin-top: 16px;
+      }
+
+      .btn-group .btn {
+        width: auto;
+      }
+
+      /* Profile Preview */
+      .profile-preview {
+        background: white;
+        border-radius: 8px;
+        padding: 16px;
+        margin-bottom: 16px;
+        border: 1px solid #e0e0e0;
+      }
+
+      .profile-preview h3 {
+        font-size: 15px;
+        color: #333;
+        margin-bottom: 4px;
+      }
+
+      .profile-preview .subtitle {
+        font-size: 12px;
+        color: #666;
+        margin-bottom: 8px;
+      }
+
+      .profile-preview .meta {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+        font-size: 11px;
+        color: #888;
+      }
+
+      .profile-preview .meta span {
+        display: flex;
+        align-items: center;
+        gap: 4px;
+      }
+
+      /* Divider */
+      .divider {
+        height: 1px;
+        background: #e0e0e0;
+        margin: 16px 0;
+      }
+
+      /* Tips Section */
+      .tips {
+        background: #fffbeb;
+        border: 1px solid #fbbf24;
+        border-radius: 6px;
+        padding: 12px;
+        margin-top: 16px;
+      }
+
+      .tips h4 {
+        font-size: 12px;
+        color: #92400e;
+        margin-bottom: 8px;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+      }
+
+      .tips ul {
+        margin: 0;
+        padding-left: 20px;
+        font-size: 11px;
+        color: #78350f;
+      }
+
+      .tips li {
+        margin-bottom: 4px;
+      }
+
+      /* Footer */
+      .footer {
+        padding: 12px 16px;
+        text-align: center;
+        border-top: 1px solid #e0e0e0;
+        background: white;
+      }
+
+      .footer a {
+        font-size: 11px;
+        color: #0176d3;
+        text-decoration: none;
+      }
+
+      .footer a:hover {
+        text-decoration: underline;
+      }
+
+      /* User Info */
+      .user-info {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 10px 16px;
+        background: #e8f5e9;
+        border-bottom: 1px solid #c8e6c9;
+      }
+
+      .user-info .user-name {
+        font-size: 12px;
+        color: #2e7d32;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+      }
+
+      .user-info .logout-btn {
+        font-size: 11px;
+        color: #c62828;
+        background: none;
+        border: none;
+        cursor: pointer;
+        text-decoration: underline;
+      }
+
+      /* Loading Spinner */
+      .spinner {
+        width: 18px;
+        height: 18px;
+        border: 2px solid #ffffff40;
+        border-top-color: white;
+        border-radius: 50%;
+        animation: spin 0.8s linear infinite;
+      }
+
+      @keyframes spin {
+        to {
+          transform: rotate(360deg);
+        }
+      }
+
+      /* Refresh Button */
+      .refresh-btn {
+        background: none;
+        border: none;
+        cursor: pointer;
+        font-size: 16px;
+        padding: 4px 8px;
+        border-radius: 4px;
+        transition: background 0.2s;
+      }
+
+      .refresh-btn:hover {
+        background: rgba(0, 0, 0, 0.1);
+      }
+
+      /* Manual Mode Toggle */
+      .mode-toggle {
+        display: flex;
+        gap: 8px;
+        margin-bottom: 16px;
+      }
+
+      .mode-toggle button {
+        flex: 1;
+        padding: 8px 12px;
+        border: 1px solid #ddd;
+        background: white;
+        border-radius: 6px;
+        font-size: 12px;
+        cursor: pointer;
+        transition: all 0.2s;
+      }
+
+      .mode-toggle button.active {
+        background: #0176d3;
+        color: white;
+        border-color: #0176d3;
+      }
+
+      .mode-toggle button:hover:not(.active) {
+        background: #f0f7ff;
+      }
     </style>
-</head>
-<body>
+  </head>
+  <body>
     <!-- Header -->
     <div class="header">
-        <img src="icons/icon48.png" alt="Logo" onerror="this.style.display='none'">
-        <div class="header-text">
-            <h1>Contact Importer</h1>
-            <div class="subtitle">Capstone Recruiter Portal</div>
-        </div>
-        <span id="siteBadge" class="site-badge generic">
-            <span class="icon">🌐</span>
-            <span class="site-name">Website</span>
-        </span>
+      <img
+        src="icons/icon48.png"
+        alt="Logo"
+        onerror="this.style.display = 'none'"
+      />
+      <div class="header-text">
+        <h1>Contact Importer</h1>
+        <div class="subtitle">Capstone Recruiter Portal</div>
+      </div>
+      <span id="siteBadge" class="site-badge generic">
+        <span class="icon">🌐</span>
+        <span class="site-name">Website</span>
+      </span>
     </div>
 
     <!-- Status Messages -->
     <div id="statusMessage" class="status"></div>
 
     <!-- User Info (when logged in) -->
-    <div id="userInfo" class="user-info" style="display: none;">
-        <span class="user-name">
-            <span>✓</span>
-            <span id="userName">Logged in</span>
-        </span>
-        <button class="logout-btn" id="logoutBtn">Logout</button>
+    <div id="userInfo" class="user-info" style="display: none">
+      <span class="user-name">
+        <span>✓</span>
+        <span id="userName">Logged in</span>
+      </span>
+      <button class="logout-btn" id="logoutBtn">Logout</button>
     </div>
 
     <!-- Login Section -->
     <div id="loginSection" class="login-section">
-        <h2>Connect to Salesforce</h2>
-        <p>Login to your Salesforce account to import contacts as Candidates.</p>
-        <button id="loginBtn" class="btn btn-primary">
-            <span>🔐</span>
-            Login with Salesforce
-        </button>
+      <h2>Connect to Salesforce</h2>
+      <p>Login to your Salesforce account to import contacts as Candidates.</p>
+      <button id="loginBtn" class="btn btn-primary">
+        <span>🔐</span>
+        Login with Salesforce
+      </button>
     </div>
 
     <!-- Form Section -->
     <div id="formSection" class="form-section">
-        <!-- Mode Toggle -->
-        <div class="mode-toggle">
-            <button id="autoModeBtn" class="active" onclick="setMode('auto')">🔍 Auto Detect</button>
-            <button id="manualModeBtn" onclick="setMode('manual')">✏️ Manual Entry</button>
-        </div>
-
-        <!-- Profile Preview -->
-        <div id="profilePreview" class="profile-preview">
-            <h3 id="previewName">Loading...</h3>
-            <div id="previewSubtitle" class="subtitle"></div>
-            <div class="meta">
-                <span id="previewSource"><span>📍</span> <span id="sourceText">Unknown</span></span>
-                <span id="previewLocation" style="display:none;"><span>📍</span> <span id="locationText"></span></span>
-            </div>
-            <button class="refresh-btn" id="refreshBtn" title="Refresh data">🔄</button>
-        </div>
-
-        <!-- Contact Information -->
-        <div class="section-title">Contact Information</div>
-        
-        <div class="form-row">
-            <div class="form-group half">
-                <label for="firstName">First Name *</label>
-                <input type="text" id="firstName" placeholder="John">
-            </div>
-            <div class="form-group half">
-                <label for="lastName">Last Name *</label>
-                <input type="text" id="lastName" placeholder="Doe">
-            </div>
-        </div>
-
-        <div class="form-group">
-            <label for="email">Email</label>
-            <input type="email" id="email" placeholder="john.doe@example.com">
-        </div>
-
-        <div class="form-group">
-            <label for="phone">Phone</label>
-            <input type="tel" id="phone" placeholder="(555) 123-4567">
-        </div>
-
-        <div class="divider"></div>
-
-        <!-- Professional Information -->
-        <div class="section-title">Professional Information</div>
-
-        <div class="form-group">
-            <label for="company">Company / Organization</label>
-            <input type="text" id="company" placeholder="Acme Corp">
-        </div>
-
-        <div class="form-group">
-            <label for="headline">Title / Headline</label>
-            <input type="text" id="headline" placeholder="Senior Financial Advisor">
-        </div>
-
-        <div class="form-group">
-            <label for="location">Location</label>
-            <input type="text" id="location" placeholder="Boston, MA">
-        </div>
-
-        <div class="divider"></div>
-
-        <!-- Salesforce Settings -->
-        <div class="section-title">Salesforce Settings</div>
-
-        <div class="form-row">
-            <div class="form-group half">
-                <label for="agency">Agency</label>
-                <select id="agency">
-                    <option value="A157" selected>A157 - General</option>
-                    <option value="A158">A158</option>
-                    <option value="A159">A159</option>
-                </select>
-            </div>
-            <div class="form-group half">
-                <label for="position">Position</label>
-                <select id="position">
-                    <option value="Agent" selected>Agent</option>
-                    <option value="Manager">Manager</option>
-                    <option value="Advisor">Advisor</option>
-                </select>
-            </div>
-        </div>
-
-        <div class="form-group">
-            <label for="status">Candidate Status</label>
-            <select id="status">
-                <option value="Lead" selected>Lead</option>
-                <option value="Contacted">Contacted</option>
-                <option value="Qualified">Qualified</option>
-                <option value="Interview Scheduled">Interview Scheduled</option>
-            </select>
-        </div>
-
-        <div class="checkbox-group">
-            <input type="checkbox" id="openRecord">
-            <label for="openRecord">Open Candidate record after creation</label>
-        </div>
-
-        <!-- Action Buttons -->
-        <button id="createBtn" class="btn btn-primary" disabled>
-            <span>➕</span>
-            Create Candidate
+      <!-- Mode Toggle -->
+      <div class="mode-toggle">
+        <button id="autoModeBtn" class="active" onclick="setMode('auto')">
+          🔍 Auto Detect
         </button>
+        <button id="manualModeBtn" onclick="setMode('manual')">
+          ✏️ Manual Entry
+        </button>
+      </div>
 
-        <!-- Tips -->
-        <div class="tips">
-            <h4>💡 Tips</h4>
-            <ul>
-                <li>Works on LinkedIn, ZoomInfo, and any website</li>
-                <li>Highlight text on the page to capture specific info</li>
-                <li>Switch to Manual Entry to type in contact details</li>
-            </ul>
+      <!-- Profile Preview -->
+      <div id="profilePreview" class="profile-preview">
+        <h3 id="previewName">Loading...</h3>
+        <div id="previewSubtitle" class="subtitle"></div>
+        <div class="meta">
+          <span id="previewSource"
+            ><span>📍</span> <span id="sourceText">Unknown</span></span
+          >
+          <span id="previewLocation" style="display: none"
+            ><span>📍</span> <span id="locationText"></span
+          ></span>
         </div>
+        <button class="refresh-btn" id="refreshBtn" title="Refresh data">
+          🔄
+        </button>
+      </div>
+
+      <!-- Contact Information -->
+      <div class="section-title">Contact Information</div>
+
+      <div class="form-row">
+        <div class="form-group half">
+          <label for="firstName">First Name *</label>
+          <input type="text" id="firstName" placeholder="John" />
+        </div>
+        <div class="form-group half">
+          <label for="lastName">Last Name *</label>
+          <input type="text" id="lastName" placeholder="Doe" />
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="email">Email</label>
+        <input type="email" id="email" placeholder="john.doe@example.com" />
+      </div>
+
+      <div class="form-group">
+        <label for="phone">Phone</label>
+        <input type="tel" id="phone" placeholder="(555) 123-4567" />
+      </div>
+
+      <div class="divider"></div>
+
+      <!-- Professional Information -->
+      <div class="section-title">Professional Information</div>
+
+      <div class="form-group">
+        <label for="company">Company / Organization</label>
+        <input type="text" id="company" placeholder="Acme Corp" />
+      </div>
+
+      <div class="form-group">
+        <label for="headline">Title / Headline</label>
+        <input
+          type="text"
+          id="headline"
+          placeholder="Senior Financial Advisor"
+        />
+      </div>
+
+      <div class="form-group">
+        <label for="location">Location</label>
+        <input type="text" id="location" placeholder="Boston, MA" />
+      </div>
+
+      <div class="divider"></div>
+
+      <!-- Salesforce Settings -->
+      <div class="section-title">Salesforce Settings</div>
+
+      <div class="form-row">
+        <div class="form-group half">
+          <label for="agency">Agency</label>
+          <select id="agency">
+            <option value="A157" selected>A157 - General</option>
+            <option value="A158">A158</option>
+            <option value="A159">A159</option>
+          </select>
+        </div>
+        <div class="form-group half">
+          <label for="position">Position</label>
+          <select id="position">
+            <option value="Agent" selected>Agent</option>
+            <option value="Manager">Manager</option>
+            <option value="Advisor">Advisor</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="status">Candidate Status</label>
+        <select id="status">
+          <option value="Lead" selected>Lead</option>
+          <option value="Contacted">Contacted</option>
+          <option value="Qualified">Qualified</option>
+          <option value="Interview Scheduled">Interview Scheduled</option>
+        </select>
+      </div>
+
+      <div class="checkbox-group">
+        <input type="checkbox" id="openRecord" />
+        <label for="openRecord">Open Candidate record after creation</label>
+      </div>
+
+      <!-- Action Buttons -->
+      <button id="createBtn" class="btn btn-primary" disabled>
+        <span>➕</span>
+        Create Candidate
+      </button>
+
+      <!-- Tips -->
+      <div class="tips">
+        <h4>💡 Tips</h4>
+        <ul>
+          <li>Works on LinkedIn, ZoomInfo, and any website</li>
+          <li>Highlight text on the page to capture specific info</li>
+          <li>Switch to Manual Entry to type in contact details</li>
+        </ul>
+      </div>
     </div>
 
     <!-- Footer -->
     <div class="footer">
-        <a href="https://pbmax4423capstone.github.io/RecruiterPortalProject/training-center.html" target="_blank">
-            Training Center
-        </a>
-        &nbsp;•&nbsp;
-        <a href="https://pbmax4423capstone.github.io/RecruiterPortalProject/docs/recruiter-quickstart.html" target="_blank">
-            Quick Start Guide
-        </a>
+      <a
+        href="https://pbmax4423capstone.github.io/RecruiterPortalProject/training-center.html"
+        target="_blank"
+      >
+        Training Center
+      </a>
+      &nbsp;•&nbsp;
+      <a
+        href="https://pbmax4423capstone.github.io/RecruiterPortalProject/docs/recruiter-quickstart.html"
+        target="_blank"
+      >
+        Quick Start Guide
+      </a>
     </div>
 
     <script src="popup.js"></script>
-</body>
+  </body>
 </html>

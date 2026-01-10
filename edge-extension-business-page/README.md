@@ -1,16 +1,19 @@
 # Business Page to Salesforce Extension
 
 ## Overview
+
 This Microsoft Edge extension allows recruiters to import candidates from **any business page** into Salesforce with built-in duplicate detection.
 
 ## Key Features
 
 ### 🌐 Universal Business Page Support
+
 - Works on any webpage, not just LinkedIn
 - Extracts contact information from business pages
 - Floating "Save to Salesforce" button on all pages
 
 ### 🔍 Duplicate Detection
+
 - Automatically checks for existing candidates before creating
 - Matches by:
   - Email address
@@ -20,12 +23,14 @@ This Microsoft Edge extension allows recruiters to import candidates from **any 
 - Option to create anyway if needed
 
 ### 📋 Smart Data Extraction
+
 - Email addresses (from mailto: links or page text)
 - Phone numbers (from tel: links or formatted text)
 - Company information
 - Page URL (stored in Website field)
 
 ### 💬 User-Friendly Modal
+
 - Clean, readable duplicate display
 - Record links open in new tabs
 - Shows key fields: Email, Phone, Status, Agency
@@ -76,6 +81,7 @@ This Microsoft Edge extension allows recruiters to import candidates from **any 
 ## Usage
 
 ### Method 1: Using the Floating Button
+
 1. Navigate to any business page with contact information
 2. Look for the floating "☁️ Save to Salesforce" button (bottom right)
 3. Click the button to open the extension popup
@@ -90,6 +96,7 @@ This Microsoft Edge extension allows recruiters to import candidates from **any 
 9. The new candidate record opens in a new tab
 
 ### Method 2: Using the Extension Icon
+
 1. Navigate to any business page
 2. Click the extension icon in Edge toolbar
 3. Follow steps 4-9 above
@@ -103,7 +110,9 @@ The extension checks for duplicates using the following criteria:
 3. **Name Match**: Checks exact match on `First_Name__c` AND `Last_Name__c`
 
 ### Duplicate Modal Display
+
 When duplicates are found, the modal shows:
+
 - Clear warning message explaining the situation
 - Each matching record with:
   - Candidate name
@@ -119,12 +128,14 @@ When duplicates are found, the modal shows:
 ## Field Mapping
 
 ### Contact Fields
+
 - `FirstName` → First Name
 - `LastName` → Last Name
 - `Email` → Email
 - `Phone` → Phone
 
 ### Candidate Fields
+
 - `Name` → Full Name
 - `First_Name__c` → First Name
 - `Last_Name__c` → Last Name
@@ -144,20 +155,24 @@ When duplicates are found, the modal shows:
 ## Troubleshooting
 
 ### "Failed to connect" error
+
 - Verify the Consumer Key is correct in popup.js
 - Check that the Callback URL matches exactly
 - For sandbox, ensure you're using test.salesforce.com
 
 ### Duplicate detection not working
+
 - Ensure you're connected to Salesforce
 - Check that you have the required permissions
-- Verify the Candidate__c object fields exist
+- Verify the Candidate\_\_c object fields exist
 
 ### "Session expired"
+
 - Click "Disconnect from Salesforce"
 - Click "Connect to Salesforce" to re-authenticate
 
 ### Data not auto-filling
+
 - Not all websites have structured contact information
 - Manually enter missing information
 - Email and phone detection works best with mailto: and tel: links

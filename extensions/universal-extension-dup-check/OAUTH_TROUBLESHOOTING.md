@@ -10,7 +10,9 @@ This error occurs when the Salesforce Connected App doesn't have the Chrome exte
 2. Open Chrome DevTools Console (F12)
 3. Run this command:
    ```javascript
-   chrome.runtime.sendMessage({action: 'getRedirectUri'}, response => console.log('Redirect URI:', response.redirectUri));
+   chrome.runtime.sendMessage({ action: "getRedirectUri" }, (response) =>
+     console.log("Redirect URI:", response.redirectUri)
+   );
    ```
 4. Copy the redirect URI (should look like: `https://abcdefghijklmnop.chromiumapp.org/`)
 
@@ -74,10 +76,10 @@ Your extension ID is visible in `chrome://extensions/` under the extension name.
 Run this in Salesforce Developer Console (Anonymous Apex) to verify your Connected App:
 
 ```apex
-ConnectedApplication app = [SELECT Id, Name, OptionsAllowAdminApprovedUsersOnly, 
-                             MobileStartUrl, CallbackUrl 
-                             FROM ConnectedApplication 
-                             WHERE Name LIKE '%Recruiter%' 
+ConnectedApplication app = [SELECT Id, Name, OptionsAllowAdminApprovedUsersOnly,
+                             MobileStartUrl, CallbackUrl
+                             FROM ConnectedApplication
+                             WHERE Name LIKE '%Recruiter%'
                              LIMIT 1];
 System.debug('App Name: ' + app.Name);
 System.debug('Callback URLs: ' + app.CallbackUrl);
@@ -100,9 +102,9 @@ If OAuth continues to fail, you can manually obtain tokens:
 4. Store them manually in the extension:
    ```javascript
    chrome.storage.local.set({
-     accessToken: 'YOUR_ACCESS_TOKEN',
-     instanceUrl: 'YOUR_INSTANCE_URL',
-     userId: 'YOUR_USER_ID'
+     accessToken: "YOUR_ACCESS_TOKEN",
+     instanceUrl: "YOUR_INSTANCE_URL",
+     userId: "YOUR_USER_ID"
    });
    ```
 5. Reload extension popup

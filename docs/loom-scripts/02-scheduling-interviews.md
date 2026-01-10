@@ -78,6 +78,7 @@
 **[Action: Scroll through dropdown showing each option with brief pause:]**
 
 **On screen as you scroll:**
+
 - **Attraction Interview (Ci-First)** - "This is the initial contact call"
 - **SI1 (Align-2nd)** - "First structured interview"
 - **SI2 (Plan-3rd)** - "Second structured interview"

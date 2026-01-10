@@ -88,30 +88,30 @@ See [OAUTH_TROUBLESHOOTING.md](OAUTH_TROUBLESHOOTING.md) for detailed OAuth setu
 
 ### Extracted from Web Pages
 
-| Web Page Field | Salesforce Field |
-|----------------|------------------|
-| First Name | `Contact.FirstName` and `Candidate__c.First_Name__c` |
-| Last Name | `Contact.LastName` and `Candidate__c.Last_Name__c` |
-| Email | `Contact.Email`, `Candidate__c.Email__c`, `Candidate__c.Email_2__c` |
-| Phone | `Contact.Phone` and `Candidate__c.Phone__c` |
-| Birthday (text) | `Contact.Birthdate_Text__c` |
-| Title/Headline | `Candidate__c.Title__c` |
-| Company | `Candidate__c.Company__c` |
-| Location | `Candidate__c.Location__c` |
-| LinkedIn URL | `Candidate__c.LinkedIn_URL__c` |
-| Page URL | `Candidate__c.Source_URL__c` |
+| Web Page Field  | Salesforce Field                                                    |
+| --------------- | ------------------------------------------------------------------- |
+| First Name      | `Contact.FirstName` and `Candidate__c.First_Name__c`                |
+| Last Name       | `Contact.LastName` and `Candidate__c.Last_Name__c`                  |
+| Email           | `Contact.Email`, `Candidate__c.Email__c`, `Candidate__c.Email_2__c` |
+| Phone           | `Contact.Phone` and `Candidate__c.Phone__c`                         |
+| Birthday (text) | `Contact.Birthdate_Text__c`                                         |
+| Title/Headline  | `Candidate__c.Title__c`                                             |
+| Company         | `Candidate__c.Company__c`                                           |
+| Location        | `Candidate__c.Location__c`                                          |
+| LinkedIn URL    | `Candidate__c.LinkedIn_URL__c`                                      |
+| Page URL        | `Candidate__c.Source_URL__c`                                        |
 
 ### Hardcoded Defaults (Not Shown in UI)
 
-| Field | Value |
-|-------|-------|
-| `Agency__c` | A157 |
-| `Position_Interested_In__c` | Agent |
-| `Status__c` | Lead |
-| `Next_Step__c` | F/up to schedule AI |
-| `Type__c` | Candidate |
-| `RecordTypeId` | 0125f000000a5IlAAI |
-| `Recruiter__c` | Current logged-in user |
+| Field                       | Value                  |
+| --------------------------- | ---------------------- |
+| `Agency__c`                 | A157                   |
+| `Position_Interested_In__c` | Agent                  |
+| `Status__c`                 | Lead                   |
+| `Next_Step__c`              | F/up to schedule AI    |
+| `Type__c`                   | Candidate              |
+| `RecordTypeId`              | 0125f000000a5IlAAI     |
+| `Recruiter__c`              | Current logged-in user |
 
 ## Supported Sites
 
@@ -218,14 +218,14 @@ Edit `background.js` CONFIG section:
 
 ```javascript
 const CONFIG = {
-  salesforceLoginUrl: 'https://test.salesforce.com', // Change for production
-  clientId: 'YOUR_CLIENT_ID',
+  salesforceLoginUrl: "https://test.salesforce.com", // Change for production
+  clientId: "YOUR_CLIENT_ID",
   defaults: {
-    agency: 'A157',        // Change default agency
-    position: 'Agent',     // Change default position
-    status: 'Lead',        // Change default status
-    nextStep: 'F/up to schedule AI',
-    recordTypeId: '0125f000000a5IlAAI'
+    agency: "A157", // Change default agency
+    position: "Agent", // Change default position
+    status: "Lead", // Change default status
+    nextStep: "F/up to schedule AI",
+    recordTypeId: "0125f000000a5IlAAI"
   }
 };
 ```
@@ -275,6 +275,7 @@ For issues or questions:
 ## Version History
 
 ### v1.0.0 (Initial Release)
+
 - Universal site support (LinkedIn, ZoomInfo, Apollo, generic)
 - Duplicate detection with "Proceed Anyway" option
 - LinkedIn contact info modal auto-extraction

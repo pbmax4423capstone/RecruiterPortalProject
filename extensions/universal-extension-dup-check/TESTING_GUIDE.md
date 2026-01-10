@@ -1,6 +1,7 @@
 # Universal Candidate Creator Extension - Testing Guide
 
 ## Extension Location
+
 `c:\Users\patba\OneDrive - MassMutual\SF Projects VS Code\SalesforceRecruiterPortal\RecruiterPortal\extensions\universal-extension-dup-check`
 
 ## Installation Steps
@@ -15,6 +16,7 @@
 ## Test Scenarios
 
 ### Test 1: OAuth Authentication
+
 **Goal**: Verify Salesforce connection works
 
 1. Click extension icon in Chrome toolbar
@@ -29,6 +31,7 @@
 ---
 
 ### Test 2: LinkedIn Profile Extraction
+
 **Goal**: Verify LinkedIn-specific features work
 
 1. Navigate to any LinkedIn profile: `https://www.linkedin.com/in/[profile]`
@@ -52,12 +55,15 @@
 ---
 
 ### Test 3: Duplicate Detection - Contact Match
+
 **Goal**: Verify duplicate detection for existing Contact
 
-**Setup**: 
+**Setup**:
+
 - Create a test Contact in Salesforce with email: `testdup@example.com`
 
 **Test**:
+
 1. Open extension popup
 2. Enter:
    - First Name: Test
@@ -76,27 +82,30 @@
 ---
 
 ### Test 4: Duplicate Detection - Proceed Anyway
+
 **Goal**: Verify override works
 
 **Continuation from Test 3**:
+
 1. Click "Proceed Anyway" button
 2. Extension should create records despite duplicate
 3. Success message should appear
 4. New tab should open with Candidate record
 5. Verify in Salesforce:
    - Contact created (new one, not duplicate)
-   - Candidate__c created
-   - Candidate__c linked to new Contact
-   - Agency__c = 'A157' (hardcoded)
-   - Position_Interested_In__c = 'Agent' (hardcoded)
-   - Status__c = 'Lead' (hardcoded)
-   - Recruiter__c = current user ID
+   - Candidate\_\_c created
+   - Candidate\_\_c linked to new Contact
+   - Agency\_\_c = 'A157' (hardcoded)
+   - Position_Interested_In\_\_c = 'Agent' (hardcoded)
+   - Status\_\_c = 'Lead' (hardcoded)
+   - Recruiter\_\_c = current user ID
 
 **Expected**: Record created with hardcoded defaults
 
 ---
 
 ### Test 5: No Duplicates - Direct Creation
+
 **Goal**: Verify normal creation flow
 
 1. Open extension popup
@@ -116,6 +125,7 @@
 ---
 
 ### Test 6: Generic Website Extraction
+
 **Goal**: Verify non-LinkedIn extraction
 
 1. Navigate to a company website or ZoomInfo page
@@ -132,6 +142,7 @@
 ---
 
 ### Test 7: Right-Click Context Menu
+
 **Goal**: Verify context menu integration
 
 1. Navigate to any webpage
@@ -145,6 +156,7 @@
 ---
 
 ### Test 8: LinkedIn SPA Navigation
+
 **Goal**: Verify button persists during LinkedIn navigation
 
 1. Navigate to LinkedIn profile page
@@ -159,6 +171,7 @@
 ---
 
 ### Test 9: Field Validation
+
 **Goal**: Verify required field validation
 
 1. Open extension popup
@@ -172,6 +185,7 @@
 ---
 
 ### Test 10: Logout and Re-authentication
+
 **Goal**: Verify logout clears tokens
 
 1. Open extension popup (while authenticated)
@@ -189,15 +203,15 @@
 
 After any successful Candidate creation, check Salesforce record has:
 
-| Field | Expected Value |
-|-------|----------------|
-| `Agency__c` | A157 |
-| `Position_Interested_In__c` | Agent |
-| `Status__c` | Lead |
-| `Next_Step__c` | F/up to schedule AI |
-| `Type__c` | Candidate |
-| `RecordTypeId` | 0125f000000a5IlAAI |
-| `Recruiter__c` | Current user's Salesforce ID |
+| Field                       | Expected Value               |
+| --------------------------- | ---------------------------- |
+| `Agency__c`                 | A157                         |
+| `Position_Interested_In__c` | Agent                        |
+| `Status__c`                 | Lead                         |
+| `Next_Step__c`              | F/up to schedule AI          |
+| `Type__c`                   | Candidate                    |
+| `RecordTypeId`              | 0125f000000a5IlAAI           |
+| `Recruiter__c`              | Current user's Salesforce ID |
 
 These should **NOT** appear in the popup UI - verify they're hidden.
 
@@ -220,12 +234,12 @@ If you find issues, report with:
 ```
 **Test Scenario**: [Test # and name]
 **Steps to Reproduce**:
-1. 
-2. 
-3. 
+1.
+2.
+3.
 
-**Expected Behavior**: 
-**Actual Behavior**: 
+**Expected Behavior**:
+**Actual Behavior**:
 **Console Errors**: [From F12 DevTools]
 **Screenshots**: [If applicable]
 **Browser**: Chrome [version]
@@ -245,18 +259,19 @@ If you find issues, report with:
 ✅ Hardcoded defaults (A157, Agent, Lead) applied correctly  
 ✅ Hardcoded fields NOT shown in UI  
 ✅ Contact created before Candidate  
-✅ Recruiter__c set to current user dynamically  
+✅ Recruiter\_\_c set to current user dynamically  
 ✅ FAB appears on non-LinkedIn sites  
 ✅ Inline button appears on LinkedIn  
 ✅ Context menu works  
 ✅ Logout clears authentication  
-✅ SPA navigation maintains button on LinkedIn  
+✅ SPA navigation maintains button on LinkedIn
 
 ---
 
 ## Handoff to Coding Agent
 
 If bugs found, provide:
+
 1. List of failing tests
 2. Console error logs
 3. Expected vs actual behavior

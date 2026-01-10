@@ -1,4 +1,5 @@
 # Recruiter Portal ATS Training Program
+
 ## Comprehensive Guide for Recruiters and Sales Managers
 
 **Version:** 1.0  
@@ -90,12 +91,12 @@ The Recruiter Portal is a Salesforce-based Applicant Tracking System designed to
 
 ### Contract Types
 
-| Contract Type | Description | Requirements |
-|---------------|-------------|--------------|
-| **Contract A** | Experienced agents | Prior industry experience |
-| **Contract B** | Career changers | $2,500 FYC + 5 submissions in 4 months |
-| **Career Contract** | Career contract agents | Varies |
-| **Broker** | Broker agents | Varies |
+| Contract Type       | Description            | Requirements                           |
+| ------------------- | ---------------------- | -------------------------------------- |
+| **Contract A**      | Experienced agents     | Prior industry experience              |
+| **Contract B**      | Career changers        | $2,500 FYC + 5 submissions in 4 months |
+| **Career Contract** | Career contract agents | Varies                                 |
+| **Broker**          | Broker agents          | Varies                                 |
 
 ---
 
@@ -118,18 +119,19 @@ The main dashboard is your home base. You'll see:
 
 ### Step 3: Understand the Navigation
 
-| Tab/Section | Purpose |
-|-------------|---------|
-| Home | Main dashboard with all metrics |
-| Candidates | List of all candidate records |
-| Interviews | Interview scheduling and tracking |
-| Reports | Custom reports and analytics |
+| Tab/Section | Purpose                           |
+| ----------- | --------------------------------- |
+| Home        | Main dashboard with all metrics   |
+| Candidates  | List of all candidate records     |
+| Interviews  | Interview scheduling and tracking |
+| Reports     | Custom reports and analytics      |
 
 ---
 
 ## Module 1: Dashboard Navigation
 
 ### Learning Objectives
+
 - Interpret summary cards and their meanings
 - Use the interview period toggle
 - Read progress bars and status indicators
@@ -139,16 +141,17 @@ The main dashboard is your home base. You'll see:
 
 The top of the dashboard displays six key metrics:
 
-| Card | What It Shows | Why It Matters |
-|------|---------------|----------------|
-| **Active Contract B** | Total Contract B agents currently in probation | Overall pipeline size |
-| **Requirements Met** | Contract B's who achieved $2,500 FYC + 5 submissions | Ready for transition |
-| **On Track** | Candidates progressing well | Low concern |
-| **At Risk** | <30 days remaining, requirements not met | **Needs immediate attention** |
-| **Total FYC** | Combined FYC of all active Contract B | Revenue indicator |
-| **Avg FYC** | Average FYC per candidate | Performance benchmark |
+| Card                  | What It Shows                                        | Why It Matters                |
+| --------------------- | ---------------------------------------------------- | ----------------------------- |
+| **Active Contract B** | Total Contract B agents currently in probation       | Overall pipeline size         |
+| **Requirements Met**  | Contract B's who achieved $2,500 FYC + 5 submissions | Ready for transition          |
+| **On Track**          | Candidates progressing well                          | Low concern                   |
+| **At Risk**           | <30 days remaining, requirements not met             | **Needs immediate attention** |
+| **Total FYC**         | Combined FYC of all active Contract B                | Revenue indicator             |
+| **Avg FYC**           | Average FYC per candidate                            | Performance benchmark         |
 
 **Interactive Features:**
+
 - **Clickable Cards:** Click any summary card to open a detailed modal with filtered candidates
 - **Auto-Refresh:** The dashboard automatically refreshes data to show real-time updates
 - **Priority Focus:** The "At Risk" count should ideally be zero - prioritize these candidates for immediate attention
@@ -158,6 +161,7 @@ The top of the dashboard displays six key metrics:
 This section shows completed interviews by type:
 
 **Interview Types:**
+
 - **Attraction** - Initial attraction interview (Ci-First)
 - **SI 1** - Structured Interview 1 (Align-2nd)
 - **SI 2** - Structured Interview 2 (Plan-3rd)
@@ -166,6 +170,7 @@ This section shows completed interviews by type:
 - **Total** - Sum of all interviews
 
 **Period Toggle:**
+
 - **Current Month** - Shows only this month's completed interviews
 - **Year to Date** - Shows all interviews completed this calendar year
 
@@ -177,43 +182,44 @@ This section shows completed interviews by type:
 
 This section tracks your recruiting funnel:
 
-| Metric | Description | Target |
-|--------|-------------|--------|
-| **Contract A** | Experienced agents recruited YTD | Varies by region |
-| **Contract B** | Career changers recruited YTD | Varies by region |
-| **B→A Transitions** | Contract B's who transitioned to A | Higher is better |
-| **Terminations** | Agents who left | Lower is better |
-| **Transition Rate** | (Transitions / Total B's) × 100 | Goal: >70% |
-| **Termination Rate** | (Terminations / Total B's) × 100 | Goal: <30% |
+| Metric               | Description                        | Target           |
+| -------------------- | ---------------------------------- | ---------------- |
+| **Contract A**       | Experienced agents recruited YTD   | Varies by region |
+| **Contract B**       | Career changers recruited YTD      | Varies by region |
+| **B→A Transitions**  | Contract B's who transitioned to A | Higher is better |
+| **Terminations**     | Agents who left                    | Lower is better  |
+| **Transition Rate**  | (Transitions / Total B's) × 100    | Goal: >70%       |
+| **Termination Rate** | (Terminations / Total B's) × 100   | Goal: <30%       |
 
 ### 1.4 Contract A Progress Section
 
 Track Contract A candidates through the interview pipeline:
 
-| Stage | Description |
-|-------|-------------|
-| **Ci (1st)** | Initial contact interview |
-| **Align (2nd)** | Alignment interview |
-| **Plan (3rd)** | Planning interview |
-| **Present (4th)** | Presentation interview |
+| Stage              | Description                    |
+| ------------------ | ------------------------------ |
+| **Ci (1st)**       | Initial contact interview      |
+| **Align (2nd)**    | Alignment interview            |
+| **Plan (3rd)**     | Planning interview             |
+| **Present (4th)**  | Presentation interview         |
 | **Optional (5th)** | Additional interview if needed |
 
 ### 1.5 Pipeline Details Table
 
 The bottom table shows individual Contract B candidates:
 
-| Column | What to Look For |
-|--------|------------------|
-| **Candidate** | Click name to open record |
-| **Manager** | Assigned sales manager |
-| **Start** | Contract start date |
-| **Days Left** | Days until deadline (⚠️ watch for low numbers) |
-| **FYC** | Total commission earned |
-| **FYC Progress** | Visual bar showing % of $2,500 |
-| **Submissions** | X/5 opportunities submitted |
-| **Status** | On Track / At Risk / Critical / Complete |
+| Column           | What to Look For                               |
+| ---------------- | ---------------------------------------------- |
+| **Candidate**    | Click name to open record                      |
+| **Manager**      | Assigned sales manager                         |
+| **Start**        | Contract start date                            |
+| **Days Left**    | Days until deadline (⚠️ watch for low numbers) |
+| **FYC**          | Total commission earned                        |
+| **FYC Progress** | Visual bar showing % of $2,500                 |
+| **Submissions**  | X/5 opportunities submitted                    |
+| **Status**       | On Track / At Risk / Critical / Complete       |
 
 **Status Badge Colors:**
+
 - 🟢 **Complete** - Requirements met
 - 🟡 **On Track** - Progressing well
 - 🟠 **At Risk** - <30 days, needs attention
@@ -224,6 +230,7 @@ The bottom table shows individual Contract B candidates:
 ## Module 2: Candidate Management
 
 ### Learning Objectives
+
 - Create new candidate records
 - Update candidate information
 - Link contacts to candidates
@@ -248,6 +255,7 @@ The bottom table shows individual Contract B candidates:
 5. Modal closes and candidate is created
 
 **Position Options:**
+
 - Insurance Agent (default)
 - Senior Insurance Agent
 - Insurance Sales Representative
@@ -257,6 +265,7 @@ The bottom table shows individual Contract B candidates:
 - Other
 
 **Lead Source Options:**
+
 - Recruiter Portal (default)
 - LinkedIn
 - Indeed
@@ -283,15 +292,15 @@ The bottom table shows individual Contract B candidates:
 
 ### 2.2 Essential Candidate Fields
 
-| Field | Description | When to Update |
-|-------|-------------|----------------|
-| **First Name / Last Name** | Candidate's name | At creation |
-| **Contract Type** | Contract A, B, Career, Broker | At creation or transition |
-| **Status** | Active, Terminated, etc. | When status changes |
-| **Start Date** | Contract start date | When contracted |
-| **Contact** | Linked Contact record | After contracting |
-| **Recruiter** | Assigned recruiter | At creation |
-| **Sales Manager** | Assigned manager | When assigned |
+| Field                      | Description                   | When to Update            |
+| -------------------------- | ----------------------------- | ------------------------- |
+| **First Name / Last Name** | Candidate's name              | At creation               |
+| **Contract Type**          | Contract A, B, Career, Broker | At creation or transition |
+| **Status**                 | Active, Terminated, etc.      | When status changes       |
+| **Start Date**             | Contract start date           | When contracted           |
+| **Contact**                | Linked Contact record         | After contracting         |
+| **Recruiter**              | Assigned recruiter            | At creation               |
+| **Sales Manager**          | Assigned manager              | When assigned             |
 
 ### 2.3 Candidate Stages (Highest Level Achieved)
 
@@ -303,16 +312,16 @@ Track candidates through the recruiting pipeline:
 
 **Stage Descriptions:**
 
-| Stage | Description | Next Step |
-|-------|-------------|-----------|
-| **0-Prequal** | Initial qualification | Schedule Ci interview |
-| **Ci(1st)** | Contact interview completed | Schedule Align interview |
-| **Align(2nd)** | Alignment interview completed | Schedule Plan interview |
-| **Plan(3rd)** | Planning interview completed | Schedule Present interview |
-| **Present(4th)** | Presentation completed | Optional or Offer |
-| **Optional(5th)** | Additional interview | Make offer |
-| **6-Offer Acc** | Offer accepted | Begin contracting |
-| **7-Contracted** | Fully contracted | Monitor lifecycle |
+| Stage             | Description                   | Next Step                  |
+| ----------------- | ----------------------------- | -------------------------- |
+| **0-Prequal**     | Initial qualification         | Schedule Ci interview      |
+| **Ci(1st)**       | Contact interview completed   | Schedule Align interview   |
+| **Align(2nd)**    | Alignment interview completed | Schedule Plan interview    |
+| **Plan(3rd)**     | Planning interview completed  | Schedule Present interview |
+| **Present(4th)**  | Presentation completed        | Optional or Offer          |
+| **Optional(5th)** | Additional interview          | Make offer                 |
+| **6-Offer Acc**   | Offer accepted                | Begin contracting          |
+| **7-Contracted**  | Fully contracted              | Monitor lifecycle          |
 
 ### 2.4 Updating Candidate Records
 
@@ -328,6 +337,7 @@ Track candidates through the recruiting pipeline:
 ## Module 3: Interview Tracking
 
 ### Learning Objectives
+
 - Schedule interviews
 - Record interview outcomes
 - Track interview completion by type
@@ -335,13 +345,13 @@ Track candidates through the recruiting pipeline:
 
 ### 3.1 Interview Types
 
-| Type | Purpose | Typical Duration |
-|------|---------|------------------|
-| **Ci-First** | Initial contact, assess interest | 30 min |
-| **Align-2nd** | Deeper alignment discussion | 45-60 min |
-| **Plan-3rd** | Career planning | 60 min |
-| **Present-4th** | Final presentation | 60 min |
-| **Optional-5th** | Additional if needed | 30-60 min |
+| Type             | Purpose                          | Typical Duration |
+| ---------------- | -------------------------------- | ---------------- |
+| **Ci-First**     | Initial contact, assess interest | 30 min           |
+| **Align-2nd**    | Deeper alignment discussion      | 45-60 min        |
+| **Plan-3rd**     | Career planning                  | 60 min           |
+| **Present-4th**  | Final presentation               | 60 min           |
+| **Optional-5th** | Additional if needed             | 30-60 min        |
 
 ### 3.2 Scheduling an Interview
 
@@ -361,6 +371,7 @@ Track candidates through the recruiting pipeline:
 5. Modal closes and interview is created
 
 **Interview Type Options:**
+
 - **Attraction Interview (Ci-First)** - Initial contact to assess interest
 - **SI1 (Align-2nd)** - First structured interview to discuss alignment
 - **SI2 (Plan-3rd)** - Second structured interview for career planning
@@ -395,11 +406,13 @@ After conducting an interview:
 ### 3.4 Interview Best Practices
 
 ✅ **Do:**
+
 - Schedule interviews promptly after previous stage completion
 - Record completion dates accurately (affects metrics)
 - Add meaningful notes for handoff to sales managers
 
 ❌ **Don't:**
+
 - Leave interviews in "Scheduled" status after completion
 - Schedule multiple interview types for same day
 - Forget to update the candidate's Highest Level Achieved
@@ -409,6 +422,7 @@ After conducting an interview:
 ## Module 4: Contract B Lifecycle
 
 ### Learning Objectives
+
 - Understand Contract B requirements
 - Monitor FYC and submission progress
 - Process extensions when appropriate
@@ -418,10 +432,10 @@ After conducting an interview:
 
 To transition from Contract B to Contract A, candidates must achieve:
 
-| Requirement | Target | Timeframe |
-|-------------|--------|-----------|
-| **FYC (First Year Commission)** | $2,500 | 4 months |
-| **Business Submissions** | 5 opportunities | 4 months |
+| Requirement                     | Target          | Timeframe |
+| ------------------------------- | --------------- | --------- |
+| **FYC (First Year Commission)** | $2,500          | 4 months  |
+| **Business Submissions**        | 5 opportunities | 4 months  |
 
 ### 4.2 Contract B Timeline
 
@@ -443,11 +457,13 @@ START DATE                    4 MONTHS                      8 MONTHS (if extende
 ### 4.3 Understanding Progress Fields
 
 **FYC Progress:**
+
 - Calculated from Opportunities linked to candidate's Contact
 - Updates daily via scheduled job (6 AM) or when opportunities change
 - Formula: (Total FYC / $2,500) × 100
 
 **Submission Progress:**
+
 - Count of Opportunities linked to candidate's Contact
 - Formula: (Opportunity Count / 5) × 100
 
@@ -460,11 +476,13 @@ When a Contract B has pipeline but hasn't met requirements:
 3. Save the record
 
 **Automatic Actions:**
+
 - Extension Granted Date = Today
 - Extended End Date = Today + 4 months
 - Days remaining recalculates
 
 > 📋 **When to Grant Extensions:**
+>
 > - Candidate has active pipeline/opportunities
 > - Close to meeting one or both requirements
 > - Demonstrates commitment and progress
@@ -478,6 +496,7 @@ When a Contract B meets requirements:
 3. Save the record
 
 **Automatic Actions:**
+
 - Transition to A Date = Today
 - Contract Outcome = "Transitioned to A"
 
@@ -509,18 +528,19 @@ When a Contract B doesn't meet requirements:
 
 **Action Items for At-Risk Candidates:**
 
-| Days Remaining | Action |
-|----------------|--------|
-| 30 days | Schedule check-in with candidate and manager |
-| 14 days | Escalate to leadership, discuss extension |
-| 7 days | Final decision: extend or prepare termination |
-| 0 days | Process extension or termination |
+| Days Remaining | Action                                        |
+| -------------- | --------------------------------------------- |
+| 30 days        | Schedule check-in with candidate and manager  |
+| 14 days        | Escalate to leadership, discuss extension     |
+| 7 days         | Final decision: extend or prepare termination |
+| 0 days         | Process extension or termination              |
 
 ---
 
 ## Module 5: LinkedIn Integration
 
 ### Learning Objectives
+
 - Install the LinkedIn browser extension
 - Import candidates from LinkedIn profiles
 - Troubleshoot common issues
@@ -528,6 +548,7 @@ When a Contract B doesn't meet requirements:
 ### 5.1 Installing the Extension
 
 **For Chrome:**
+
 1. Contact your administrator for the extension files
 2. Open Chrome → `chrome://extensions/`
 3. Enable **Developer mode**
@@ -535,6 +556,7 @@ When a Contract B doesn't meet requirements:
 5. Select the `chrome-extension-linkedin` folder
 
 **For Edge:**
+
 1. Contact your administrator for the extension files
 2. Open Edge → `edge://extensions/`
 3. Enable **Developer mode**
@@ -564,31 +586,32 @@ When a Contract B doesn't meet requirements:
 
 When you create a candidate via the extension:
 
-| Field | Value |
-|-------|-------|
-| First Name | Extracted from LinkedIn |
-| Last Name | Extracted from LinkedIn |
-| Agency | Capstone Financial |
-| Position | Financial Advisor |
-| Status | SOURCED |
-| Next Step | Outreach |
-| Recruiter | Your user record |
-| LinkedIn Profile | Profile URL |
+| Field            | Value                   |
+| ---------------- | ----------------------- |
+| First Name       | Extracted from LinkedIn |
+| Last Name        | Extracted from LinkedIn |
+| Agency           | Capstone Financial      |
+| Position         | Financial Advisor       |
+| Status           | SOURCED                 |
+| Next Step        | Outreach                |
+| Recruiter        | Your user record        |
+| LinkedIn Profile | Profile URL             |
 
 ### 5.5 Troubleshooting
 
-| Issue | Solution |
-|-------|----------|
-| "Failed to connect" | Verify Connected App is set up correctly |
-| Name not extracted | Manually enter the name |
-| "Access token expired" | Click "Disconnect" then reconnect |
-| Extension not working | Refresh the LinkedIn page |
+| Issue                  | Solution                                 |
+| ---------------------- | ---------------------------------------- |
+| "Failed to connect"    | Verify Connected App is set up correctly |
+| Name not extracted     | Manually enter the name                  |
+| "Access token expired" | Click "Disconnect" then reconnect        |
+| Extension not working  | Refresh the LinkedIn page                |
 
 ---
 
 ## Module 6: ALC Contact/Candidate Automation
 
 **Learning Objectives:**
+
 - Understand how the ALC automation system works
 - Know what happens when an ALC record is created
 - Learn to use the monitoring dashboard
@@ -604,6 +627,7 @@ When you create a candidate via the extension:
 The **ALC Contact/Candidate Automation** system automatically creates and links Contact and Candidate records whenever a new ALC (Agent Licensing & Contracting) record is created in Salesforce.
 
 **Benefits:**
+
 - ✅ **No Manual Entry** - Contact and Candidate records are created automatically
 - ✅ **Data Consistency** - Single source of truth from ALC data
 - ✅ **No Duplicates** - System matches existing Contacts by email/phone
@@ -629,23 +653,25 @@ The **ALC Contact/Candidate Automation** system automatically creates and links 
 
 #### What Gets Created?
 
-| ALC Record Type | Contact Created? | Candidate Contract Type |
-|-----------------|------------------|-------------------------|
-| **Career** | ✅ Yes | Career Contract |
-| **Broker** | ✅ Yes | Broker |
-| **NRF** | ✅ Yes | (blank) |
-| **Registration** | ✅ Yes | (blank) |
+| ALC Record Type  | Contact Created? | Candidate Contract Type |
+| ---------------- | ---------------- | ----------------------- |
+| **Career**       | ✅ Yes           | Career Contract         |
+| **Broker**       | ✅ Yes           | Broker                  |
+| **NRF**          | ✅ Yes           | (blank)                 |
+| **Registration** | ✅ Yes           | (blank)                 |
 
 #### What Gets Matched?
 
 The system searches for existing Contacts using:
 
 **Priority 1 - Email Match:**
+
 - Compares ALC email to Contact email
 - Case-insensitive (john@example.com = JOHN@example.com)
 - Exact match required
 
 **Priority 2 - Phone Match:**
+
 - Compares standardized 10-digit phone numbers
 - Strips formatting: (555) 123-4567 → 5551234567
 - Handles 11-digit with country code: 1-555-123-4567 → 5551234567
@@ -656,20 +682,21 @@ The system searches for existing Contacts using:
 
 #### ALC → Contact Mapping
 
-| ALC Field | → | Contact Field |
-|-----------|---|---------------|
-| First Name | → | FirstName |
-| Last Name | → | LastName |
-| Email | → | Email |
-| Phone | → | Phone |
-| Street | → | MailingStreet |
-| City | → | MailingCity |
-| State | → | MailingState |
-| Zip | → | MailingPostalCode |
+| ALC Field  | →   | Contact Field     |
+| ---------- | --- | ----------------- |
+| First Name | →   | FirstName         |
+| Last Name  | →   | LastName          |
+| Email      | →   | Email             |
+| Phone      | →   | Phone             |
+| Street     | →   | MailingStreet     |
+| City       | →   | MailingCity       |
+| State      | →   | MailingState      |
+| Zip        | →   | MailingPostalCode |
 
 #### Candidate Defaults
 
 All auto-created Candidates start with:
+
 - **Status:** "Contracting Started"
 - **Record Type:** Candidate
 - **Contact:** Linked to the Contact
@@ -680,12 +707,14 @@ All auto-created Candidates start with:
 The system **SKIPS** ALCs in these cases:
 
 ❌ **Excluded Stages:**
+
 - CANCELLED
 - TERMINATED
 - Cancelled
 - Terminated
 
 ❌ **Excluded Record Types:**
+
 - Any record type not in the list (Career, Broker, NRF, Registration)
 
 **Why?** No need to create Contact/Candidate for cancelled or terminated contracts.
@@ -701,6 +730,7 @@ The system **SKIPS** ALCs in these cases:
 **1. Summary Cards**
 
 Quick metrics at a glance:
+
 - **ALCs Without Contacts** - How many ALCs are missing Contact links (by record type)
 - **ALCs Without Candidates** - How many ALCs are missing Candidate links
 - **Candidates Without Contacts** - Orphaned Candidate records
@@ -710,37 +740,38 @@ Quick metrics at a glance:
 
 Shows ALCs that are missing Contact or Candidate relationships:
 
-| What You See | What It Means |
-|--------------|---------------|
-| ALC Name | Link to the ALC record |
-| Record Type | Career, Broker, NRF, or Registration |
-| Email/Phone | Contact information from ALC |
-| Missing | "Contact", "Candidate", or "Both" |
-| Fix Button | Click to trigger backfill for that ALC |
+| What You See | What It Means                          |
+| ------------ | -------------------------------------- |
+| ALC Name     | Link to the ALC record                 |
+| Record Type  | Career, Broker, NRF, or Registration   |
+| Email/Phone  | Contact information from ALC           |
+| Missing      | "Contact", "Candidate", or "Both"      |
+| Fix Button   | Click to trigger backfill for that ALC |
 
 **3. Candidates Without Contacts**
 
 Lists Candidate records that don't have a linked Contact:
 
-| What You See | What It Means |
-|--------------|---------------|
-| Candidate Name | Link to Candidate record |
-| First/Last Name | From the Candidate |
-| Related ALC | Link to the ALC (if exists) |
+| What You See          | What It Means                   |
+| --------------------- | ------------------------------- |
+| Candidate Name        | Link to Candidate record        |
+| First/Last Name       | From the Candidate              |
+| Related ALC           | Link to the ALC (if exists)     |
 | Create Contact Button | Click to create missing Contact |
 
 **4. Audit Logs**
 
 Complete history of automation operations:
 
-| What You See | What It Means |
-|--------------|---------------|
+| What You See   | What It Means                            |
+| -------------- | ---------------------------------------- |
 | Operation Type | CONTACT_CREATED, CANDIDATE_CREATED, etc. |
-| Success | ✅ Success or ❌ Error |
-| Created Date | When the operation occurred |
-| Actions | View Details, Mark Resolved |
+| Success        | ✅ Success or ❌ Error                   |
+| Created Date   | When the operation occurred              |
+| Actions        | View Details, Mark Resolved              |
 
 **Filters:**
+
 - **All Logs** - Show everything
 - **Errors Only** - Show only failed operations
 - **Successes Only** - Show only successful operations
@@ -759,6 +790,7 @@ The dashboard automatically refreshes every 30 seconds to show real-time data.
 **Cause:** ALC record is missing both email and phone.
 
 **Solution:**
+
 1. Click on the ALC name in the Relationship Gaps table
 2. Add either an Email or Phone number
 3. Click **Save**
@@ -770,6 +802,7 @@ The dashboard automatically refreshes every 30 seconds to show real-time data.
 **Cause:** ALC is missing First Name or Last Name.
 
 **Solution:**
+
 1. Open the ALC record
 2. Populate First Name and Last Name fields
 3. Click **Save**
@@ -780,6 +813,7 @@ The dashboard automatically refreshes every 30 seconds to show real-time data.
 **Cause:** Multiple Contacts exist with the same email.
 
 **Solution:**
+
 1. Navigate to Contacts
 2. Search for the email address
 3. Merge duplicate Contacts using Salesforce merge tool
@@ -799,25 +833,30 @@ When you see an error in the Audit Logs:
 ### 6.7 Best Practices
 
 ✅ **Always Include Email or Phone**
+
 - At least one is required for matching
 - Both are recommended for best results
 
 ✅ **Use Standard Phone Formats**
+
 - (555) 123-4567
 - 555-123-4567
 - 1-555-123-4567
-All of these work!
+  All of these work!
 
 ✅ **Check for Duplicates Before Creating ALCs**
+
 - Search for existing Contacts by email
 - Link to existing Contact instead of creating duplicate ALC
 
 ✅ **Monitor the Dashboard Weekly**
+
 - Review Summary Cards for gaps
 - Check Error logs for issues
 - Resolve errors promptly
 
 ✅ **Populate First and Last Name**
+
 - Required for Contact creation
 - Ensure they're correct before saving ALC
 
@@ -836,8 +875,8 @@ All of these work!
 2. **Save the ALC**
 
 3. **Verify Automation:**
-   - Check Contact__c field - should be populated
-   - Check Candidate__c field - should be populated
+   - Check Contact\_\_c field - should be populated
+   - Check Candidate\_\_c field - should be populated
    - Click on Contact name - verify details match
    - Click on Candidate name - verify Contract Type = "Career Contract"
 
@@ -912,7 +951,7 @@ All of these work!
 ✅ **Intelligent Matching** - Prevents duplicate Contacts  
 ✅ **Monitor Dashboard** - Check weekly for issues  
 ✅ **Quick Resolution** - Use Fix buttons to resolve gaps  
-✅ **Complete Audit Trail** - Every operation is logged  
+✅ **Complete Audit Trail** - Every operation is logged
 
 **For detailed technical documentation, see:** [ALC-RELATIONSHIP-AUTOMATION.md](ALC-RELATIONSHIP-AUTOMATION.md)
 
@@ -923,6 +962,7 @@ All of these work!
 ### For Recruiters
 
 **Primary Responsibilities:**
+
 - Source and create candidate records using "Create New Candidate" button
 - Schedule interviews using "Schedule Interview" button (separate from candidate creation)
 - Monitor candidate pipeline progress
@@ -931,6 +971,7 @@ All of these work!
 - Update candidate stages as they progress
 
 **Daily Workflow:**
+
 1. Check Dashboard for new at-risk candidates
 2. Follow up on scheduled interviews
 3. **Update completed interview statuses** (change Status to "Completed" - system tracks date automatically)
@@ -939,6 +980,7 @@ All of these work!
 6. Review and update candidate stages
 
 **Weekly Review:**
+
 - Review YTD interview counts vs goals
 - Check transition and termination rates
 - Identify pipeline gaps by stage
@@ -946,23 +988,27 @@ All of these work!
 ### For Sales Managers
 
 **Primary Responsibilities:**
+
 - Monitor Contract B agents on your team
 - Track FYC and submission progress
 - Recommend extensions or escalate concerns
 - Support candidates in meeting requirements
 
 **Daily Workflow:**
+
 1. Review Contract B Pipeline for your candidates
 2. Check "Days Left" for upcoming deadlines
 3. Review FYC and submission progress bars
 4. Coach candidates who are behind
 
 **Key Metrics to Watch:**
+
 - FYC Progress (should increase weekly)
 - Submission Count (should reach 5 within timeline)
 - Days Remaining (plan ahead for deadlines)
 
 **Escalation Triggers:**
+
 - Candidate at <30 days with <50% progress
 - No new submissions in 2+ weeks
 - FYC flat for 3+ weeks
@@ -973,41 +1019,41 @@ All of these work!
 
 ### Card 1: Status Meanings
 
-| Status | Meaning | Action Required |
-|--------|---------|-----------------|
-| 🟢 **Complete** | Requirements met | Transition to A |
-| 🟡 **On Track** | Good progress | Continue monitoring |
-| 🟠 **At Risk** | <30 days, behind | Immediate attention |
-| 🔴 **Critical** | <14 days, behind | Urgent escalation |
+| Status          | Meaning          | Action Required     |
+| --------------- | ---------------- | ------------------- |
+| 🟢 **Complete** | Requirements met | Transition to A     |
+| 🟡 **On Track** | Good progress    | Continue monitoring |
+| 🟠 **At Risk**  | <30 days, behind | Immediate attention |
+| 🔴 **Critical** | <14 days, behind | Urgent escalation   |
 
 ### Card 2: Common Tasks
 
-| Task | Steps |
-|------|-------|
-| Create Candidate | Dashboard → "Create New Candidate" button → Fill required fields (Name, Email) → Click "Create Candidate" |
+| Task               | Steps                                                                                                                 |
+| ------------------ | --------------------------------------------------------------------------------------------------------------------- |
+| Create Candidate   | Dashboard → "Create New Candidate" button → Fill required fields (Name, Email) → Click "Create Candidate"             |
 | Schedule Interview | Dashboard → "Schedule Interview" button → Select candidate → Choose type → Set date/time → Click "Schedule Interview" |
-| Complete Interview | Open interview record → Status = "Completed" → Save (date tracked automatically) |
-| Grant Extension | Candidate → Check Extension Granted → Save |
-| Record Termination | Candidate → Status = Terminated → Fill dates/reason → Save |
+| Complete Interview | Open interview record → Status = "Completed" → Save (date tracked automatically)                                      |
+| Grant Extension    | Candidate → Check Extension Granted → Save                                                                            |
+| Record Termination | Candidate → Status = Terminated → Fill dates/reason → Save                                                            |
 
 ### Card 3: Key Formulas
 
-| Field | Formula |
-|-------|---------|
-| Days Left | Contract End Date - Today (or Extended End Date if extension) |
-| FYC Progress % | (Total FYC / $2,500) × 100 |
-| Submissions Progress % | (Opportunity Count / 5) × 100 |
-| Requirements Met | FYC ≥ $2,500 AND Submissions ≥ 5 |
+| Field                  | Formula                                                       |
+| ---------------------- | ------------------------------------------------------------- |
+| Days Left              | Contract End Date - Today (or Extended End Date if extension) |
+| FYC Progress %         | (Total FYC / $2,500) × 100                                    |
+| Submissions Progress % | (Opportunity Count / 5) × 100                                 |
+| Requirements Met       | FYC ≥ $2,500 AND Submissions ≥ 5                              |
 
 ### Card 4: Interview Type Codes
 
-| Code | Full Name |
-|------|-----------|
-| Ci | Contact Interview (1st) |
-| Align | Alignment Interview (2nd) |
-| Plan | Planning Interview (3rd) |
-| Present | Presentation Interview (4th) |
-| Optional | Optional Interview (5th) |
+| Code     | Full Name                    |
+| -------- | ---------------------------- |
+| Ci       | Contact Interview (1st)      |
+| Align    | Alignment Interview (2nd)    |
+| Plan     | Planning Interview (3rd)     |
+| Present  | Presentation Interview (4th) |
+| Optional | Optional Interview (5th)     |
 
 ---
 
@@ -1016,26 +1062,31 @@ All of these work!
 ### Knowledge Check Questions
 
 **Module 1: Dashboard Navigation**
+
 1. What does the "At Risk" summary card indicate?
 2. How do you switch between Current Month and YTD views?
 3. What does a red "Critical" status badge mean?
 
 **Module 2: Candidate Management**
+
 1. What are the required fields when creating a candidate?
 2. What is the correct order of candidate stages?
 3. When should you update the "Highest Level Achieved" field?
 
 **Module 3: Interview Tracking**
+
 1. How many interview types are there?
 2. What fields must be updated when completing an interview?
 3. Why is accurate completion date important?
 
 **Module 4: Contract B Lifecycle**
+
 1. What are the two requirements for Contract B to transition?
 2. How long is the initial contract period?
 3. What happens automatically when you check "Extension Granted"?
 
 **Module 5: LinkedIn Integration**
+
 1. How do you connect the extension to Salesforce?
 2. What fields are auto-populated when importing?
 3. What should you do if the name isn't extracted?
@@ -1043,6 +1094,7 @@ All of these work!
 ### Certification Requirements
 
 To receive certification:
+
 - [ ] Complete all training modules
 - [ ] Score 80% or higher on knowledge check
 - [ ] Demonstrate system proficiency (practical exercise)
@@ -1054,12 +1106,12 @@ To receive certification:
 
 ### Getting Help
 
-| Issue Type | Contact |
-|------------|---------|
-| Login/Access Issues | IT Help Desk |
-| Training Questions | Recruiting Operations |
-| System Bugs | Salesforce Administrator |
-| Process Questions | Your Manager |
+| Issue Type          | Contact                  |
+| ------------------- | ------------------------ |
+| Login/Access Issues | IT Help Desk             |
+| Training Questions  | Recruiting Operations    |
+| System Bugs         | Salesforce Administrator |
+| Process Questions   | Your Manager             |
 
 ### Helpful Links
 
@@ -1069,14 +1121,15 @@ To receive certification:
 
 ### Scheduled System Updates
 
-| Event | Time | Impact |
-|-------|------|--------|
-| FYC Rollup Job | 6:00 AM Daily | FYC/Submissions recalculated |
-| Salesforce Maintenance | Sundays 2-6 AM | System may be slow |
+| Event                  | Time           | Impact                       |
+| ---------------------- | -------------- | ---------------------------- |
+| FYC Rollup Job         | 6:00 AM Daily  | FYC/Submissions recalculated |
+| Salesforce Maintenance | Sundays 2-6 AM | System may be slow           |
 
 ### Feedback & Suggestions
 
 We're continuously improving the Recruiter Portal. Submit feedback to:
+
 - Email: recruiting-ops@company.com
 - Slack: #recruiter-portal-support
 
@@ -1084,35 +1137,35 @@ We're continuously improving the Recruiter Portal. Submit feedback to:
 
 ## Appendix A: Glossary
 
-| Term | Definition |
-|------|------------|
-| **ATS** | Applicant Tracking System |
+| Term           | Definition                                                        |
+| -------------- | ----------------------------------------------------------------- |
+| **ATS**        | Applicant Tracking System                                         |
 | **Contract B** | New-to-industry financial advisor contract with 4-month probation |
-| **FYC** | First Year Commission - commission earned in first year |
-| **Pipeline** | Active opportunities/prospects a candidate is working |
-| **Submission** | A business opportunity submitted for processing |
-| **Transition** | Moving from Contract B to Contract A status |
-| **YTD** | Year to Date - from January 1 to current date |
+| **FYC**        | First Year Commission - commission earned in first year           |
+| **Pipeline**   | Active opportunities/prospects a candidate is working             |
+| **Submission** | A business opportunity submitted for processing                   |
+| **Transition** | Moving from Contract B to Contract A status                       |
+| **YTD**        | Year to Date - from January 1 to current date                     |
 
 ---
 
 ## Appendix B: System Requirements
 
-| Component | Requirement |
-|-----------|-------------|
-| Browser | Chrome 90+ or Edge 90+ |
-| Screen Resolution | 1920×1080 recommended |
-| Internet | Stable broadband connection |
+| Component          | Requirement                   |
+| ------------------ | ----------------------------- |
+| Browser            | Chrome 90+ or Edge 90+        |
+| Screen Resolution  | 1920×1080 recommended         |
+| Internet           | Stable broadband connection   |
 | Salesforce License | Salesforce Platform or higher |
 
 ---
 
 ## Document History
 
-| Version | Date | Changes |
-|---------|------|---------|
-| 1.0 | Dec 19, 2025 | Initial release |
+| Version | Date         | Changes         |
+| ------- | ------------ | --------------- |
+| 1.0     | Dec 19, 2025 | Initial release |
 
 ---
 
-*Thank you for completing the Recruiter Portal ATS Training Program!*
+_Thank you for completing the Recruiter Portal ATS Training Program!_

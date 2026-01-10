@@ -27,6 +27,7 @@ Thank you for laying out your concerns so clearly. I want to address each of you
 - **Contract B Pipeline Dashboard**: Tracks agents through the entire lifecycle from Active Learning Commitment through Contract B completion, showing exactly where candidates are in the funnel and where drop-off occurs
 
 These dashboards show:
+
 - YTD Recruiting Metrics (hires, terminations, net gain)
 - Candidates by status with visual progress indicators
 - Interview completion rates
@@ -35,14 +36,14 @@ These dashboards show:
 
 **Cost Comparison**
 
-| | LOXO | Our Salesforce ATS |
-|---|---|---|
-| Annual Cost | $7,700/year (recurring) | $0 (already built) |
-| LinkedIn Integration | Yes | ✅ Yes (Chrome/Edge extension) |
-| Automated Emails | Yes | ✅ Yes (Flow + Outlook integration) |
-| Pipeline Visualization | Yes | ✅ Yes (Custom dashboards) |
-| Existing Data | Requires migration | ✅ Already in Salesforce |
-| Learning Curve | New system | ✅ Same platform you know |
+|                        | LOXO                    | Our Salesforce ATS                  |
+| ---------------------- | ----------------------- | ----------------------------------- |
+| Annual Cost            | $7,700/year (recurring) | $0 (already built)                  |
+| LinkedIn Integration   | Yes                     | ✅ Yes (Chrome/Edge extension)      |
+| Automated Emails       | Yes                     | ✅ Yes (Flow + Outlook integration) |
+| Pipeline Visualization | Yes                     | ✅ Yes (Custom dashboards)          |
+| Existing Data          | Requires migration      | ✅ Already in Salesforce            |
+| Learning Curve         | New system              | ✅ Same platform you know           |
 
 **The Bottom Line**
 

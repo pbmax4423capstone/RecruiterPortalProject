@@ -7,6 +7,7 @@ This document describes the new **Business Page to Salesforce** browser extensio
 ## Location
 
 The extension is available in two versions:
+
 - **Chrome**: `/chrome-extension-business-page/`
 - **Edge**: `/edge-extension-business-page/`
 
@@ -15,7 +16,9 @@ Both versions are functionally identical and share the same codebase, with only 
 ## Key Features
 
 ### 1. Universal Business Page Support
+
 Unlike the LinkedIn-specific extension, this extension works on any webpage:
+
 - Company websites
 - Business directories
 - Professional profiles on any platform
@@ -24,14 +27,17 @@ Unlike the LinkedIn-specific extension, this extension works on any webpage:
 - Any webpage with contact information
 
 ### 2. Built-in Duplicate Detection
+
 **This is the major new feature requested by the user.**
 
 The extension automatically checks for existing candidates before creating new ones. It searches for duplicates using:
+
 - **Email address** (checks both `Email__c` and `Personal_Email__c` fields)
 - **Phone number** (checks `Mobile__c` field, matches last 10 digits)
 - **Exact name match** (checks both `First_Name__c` AND `Last_Name__c`)
 
 When duplicates are found:
+
 1. A clear, user-friendly modal appears
 2. Shows all matching records with key details:
    - Candidate name
@@ -45,14 +51,18 @@ When duplicates are found:
    - **Create Anyway** - Proceed despite duplicates
 
 ### 3. Smart Data Extraction
+
 The extension intelligently extracts contact information from any page:
+
 - Email addresses (from `mailto:` links or text patterns)
 - Phone numbers (from `tel:` links or formatted text)
 - Company name (from meta tags, headers, or page title)
 - Page URL (stored in the `Website__c` field)
 
 ### 4. Floating Action Button
+
 A persistent "☁️ Save to Salesforce" button appears on every webpage:
+
 - Fixed position (bottom right corner)
 - Always visible
 - Modern gradient design
@@ -64,12 +74,14 @@ A persistent "☁️ Save to Salesforce" button appears on every webpage:
 ### Files and Components
 
 #### 1. `manifest.json`
+
 - Defines extension permissions and configuration
 - Requests access to all URLs (`<all_urls>`)
 - Configures content scripts to run on all pages
 - Sets up background service worker
 
 #### 2. `content.js`
+
 - Runs on every webpage
 - Extracts contact information intelligently:
   - Searches for email in links and text
@@ -80,6 +92,7 @@ A persistent "☁️ Save to Salesforce" button appears on every webpage:
 - Communicates with background service worker
 
 #### 3. `popup.html` & `popup.js`
+
 - Extension popup interface (480px width)
 - Form fields for candidate information:
   - First Name & Last Name (required)
@@ -98,6 +111,7 @@ A persistent "☁️ Save to Salesforce" button appears on every webpage:
 - Status messages and error handling
 
 #### 4. `background.js`
+
 - Service worker handling API calls
 - **Duplicate checking logic**:
   - `handleCheckDuplicates()` - Queries Salesforce for matches
@@ -111,10 +125,12 @@ A persistent "☁️ Save to Salesforce" button appears on every webpage:
 - CORS workaround for Salesforce API calls
 
 #### 5. `content.css`
+
 - Minimal styles for floating button
 - Ensures consistent look across websites
 
 #### 6. `README.md`
+
 - Complete setup and usage instructions
 - Troubleshooting guide
 - Field mapping documentation
@@ -123,6 +139,7 @@ A persistent "☁️ Save to Salesforce" button appears on every webpage:
 ## Duplicate Detection Flow
 
 ### User Flow
+
 1. User fills in candidate information (at minimum: First Name, Last Name)
 2. User clicks "🔍 Check for Duplicates & Create"
 3. Extension button shows "Checking..." with spinner
@@ -140,7 +157,9 @@ A persistent "☁️ Save to Salesforce" button appears on every webpage:
    - Opens new candidate record in Salesforce
 
 ### Technical Flow
+
 1. **Frontend (`popup.js`)**:
+
    ```javascript
    handleCheckDuplicates() {
      // Collect form data
@@ -151,6 +170,7 @@ A persistent "☁️ Save to Salesforce" button appears on every webpage:
    ```
 
 2. **Background (`background.js`)**:
+
    ```javascript
    handleCheckDuplicates(data) {
      // Build SOQL query with OR conditions
@@ -162,10 +182,10 @@ A persistent "☁️ Save to Salesforce" button appears on every webpage:
 
 3. **SOQL Query Example**:
    ```sql
-   SELECT Id, Name, First_Name__c, Last_Name__c, 
-          Email__c, Personal_Email__c, Mobile__c, 
-          Status__c, Agency__c, Position__c 
-   FROM Candidate__c 
+   SELECT Id, Name, First_Name__c, Last_Name__c,
+          Email__c, Personal_Email__c, Mobile__c,
+          Status__c, Agency__c, Position__c
+   FROM Candidate__c
    WHERE Email__c = 'john@example.com'
       OR Personal_Email__c = 'john@example.com'
       OR Mobile__c LIKE '%5551234567%'
@@ -175,29 +195,32 @@ A persistent "☁️ Save to Salesforce" button appears on every webpage:
 
 ## Differences from LinkedIn Extension
 
-| Feature | LinkedIn Extension | Business Page Extension |
-|---------|-------------------|------------------------|
-| **Page Support** | LinkedIn profiles only | Any business webpage |
-| **Duplicate Detection** | No | Yes, with modal display |
-| **Action Button** | In LinkedIn page layout | Floating button on all pages |
-| **Data Extraction** | LinkedIn-specific selectors | Generic patterns and smart detection |
-| **Birthday Field** | Yes | No (not commonly available on business pages) |
-| **Modal Design** | Standard form | Follows ultra-compact guidelines |
+| Feature                 | LinkedIn Extension          | Business Page Extension                       |
+| ----------------------- | --------------------------- | --------------------------------------------- |
+| **Page Support**        | LinkedIn profiles only      | Any business webpage                          |
+| **Duplicate Detection** | No                          | Yes, with modal display                       |
+| **Action Button**       | In LinkedIn page layout     | Floating button on all pages                  |
+| **Data Extraction**     | LinkedIn-specific selectors | Generic patterns and smart detection          |
+| **Birthday Field**      | Yes                         | No (not commonly available on business pages) |
+| **Modal Design**        | Standard form               | Follows ultra-compact guidelines              |
 
 ## Setup & Configuration
 
 ### Salesforce Requirements
+
 1. **Connected App** with OAuth enabled
 2. **Callback URL**: `https://<extension-id>.chromiumapp.org/`
 3. **OAuth Scopes**: api, refresh_token, offline_access, id, profile, email, address, phone
 
 ### Extension Configuration
+
 In `popup.js`, update the CONFIG object:
+
 ```javascript
 const CONFIG = {
-  salesforceLoginUrl: 'https://test.salesforce.com', // or 'https://login.salesforce.com'
-  clientId: 'YOUR_CONNECTED_APP_CLIENT_ID',
-  redirectUri: chrome.identity.getRedirectURL(),
+  salesforceLoginUrl: "https://test.salesforce.com", // or 'https://login.salesforce.com'
+  clientId: "YOUR_CONNECTED_APP_CLIENT_ID",
+  redirectUri: chrome.identity.getRedirectURL()
   // ... other settings
 };
 ```
@@ -205,12 +228,14 @@ const CONFIG = {
 ### Field Mappings
 
 **Contact Object**:
+
 - `FirstName` ← First Name
 - `LastName` ← Last Name
 - `Email` ← Email
 - `Phone` ← Phone
 
-**Candidate__c Object**:
+**Candidate\_\_c Object**:
+
 - `Name` ← Full Name
 - `First_Name__c` ← First Name
 - `Last_Name__c` ← Last Name
@@ -251,11 +276,13 @@ const CONFIG = {
 ## Deployment
 
 ### Development (ProdTest Sandbox)
+
 1. Use `salesforceLoginUrl: 'https://test.salesforce.com'`
 2. Create Connected App in ProdTest
 3. Use test recruiter ID
 
 ### Production
+
 1. Change to `salesforceLoginUrl: 'https://login.salesforce.com'`
 2. Create or promote Connected App to Production
 3. Update Consumer Key in CONFIG
@@ -282,6 +309,7 @@ const CONFIG = {
 ## Future Enhancements
 
 Possible improvements for future versions:
+
 1. **Fuzzy Name Matching**: Catch similar names (e.g., "Bob" vs "Robert")
 2. **Merge Duplicate UI**: Allow merging duplicates directly from extension
 3. **Bulk Import**: Import multiple candidates from a list
@@ -293,6 +321,7 @@ Possible improvements for future versions:
 ## Support
 
 For issues or questions:
+
 1. Check the README.md in the extension folder
 2. Review Salesforce setup (Connected App, permissions)
 3. Check browser console for error messages

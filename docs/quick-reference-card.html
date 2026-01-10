@@ -1,469 +1,653 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Quick Reference Card - Recruiter Portal ATS</title>
     <style>
-        :root {
-            --primary: #0176d3;
-            --primary-dark: #014486;
-            --primary-light: #e0f2fe;
-            --success: #2e844a;
-            --success-light: #dcfce7;
-            --warning: #b45309;
-            --warning-bg: #fef3c7;
-            --error: #ea001e;
-            --error-light: #fee2e2;
-            --gray-100: #f3f3f3;
-            --gray-200: #e5e5e5;
-            --gray-300: #d1d5db;
-            --gray-500: #6b7280;
-            --gray-700: #444;
-            --gray-900: #181818;
-        }
-        
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        
-        body {
-            font-family: 'Salesforce Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: var(--gray-100);
-            min-height: 100vh;
-            font-size: 14px;
-        }
-        
-        /* Navigation */
+      :root {
+        --primary: #0176d3;
+        --primary-dark: #014486;
+        --primary-light: #e0f2fe;
+        --success: #2e844a;
+        --success-light: #dcfce7;
+        --warning: #b45309;
+        --warning-bg: #fef3c7;
+        --error: #ea001e;
+        --error-light: #fee2e2;
+        --gray-100: #f3f3f3;
+        --gray-200: #e5e5e5;
+        --gray-300: #d1d5db;
+        --gray-500: #6b7280;
+        --gray-700: #444;
+        --gray-900: #181818;
+      }
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family:
+          "Salesforce Sans",
+          -apple-system,
+          BlinkMacSystemFont,
+          "Segoe UI",
+          Roboto,
+          sans-serif;
+        background: var(--gray-100);
+        min-height: 100vh;
+        font-size: 14px;
+      }
+
+      /* Navigation */
+      .nav {
+        background: white;
+        padding: 0.75rem 1.5rem;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        position: sticky;
+        top: 0;
+        z-index: 100;
+      }
+
+      .nav a {
+        color: var(--primary);
+        text-decoration: none;
+        font-weight: 500;
+      }
+      .nav a:hover {
+        text-decoration: underline;
+      }
+      .nav h1 {
+        font-size: 1.1rem;
+        color: var(--gray-900);
+        margin-left: auto;
+      }
+
+      .print-btn {
+        background: var(--primary);
+        color: white;
+        border: none;
+        padding: 0.5rem 1rem;
+        border-radius: 6px;
+        cursor: pointer;
+        font-weight: 600;
+        font-size: 0.85rem;
+      }
+
+      .print-btn:hover {
+        background: var(--primary-dark);
+      }
+
+      /* Main Container */
+      .container {
+        max-width: 1100px;
+        margin: 0 auto;
+        padding: 1.5rem;
+      }
+
+      /* Header */
+      .page-header {
+        text-align: center;
+        margin-bottom: 1.5rem;
+        padding-bottom: 1rem;
+        border-bottom: 2px solid var(--primary);
+      }
+
+      .page-header h1 {
+        font-size: 1.75rem;
+        color: var(--gray-900);
+        margin-bottom: 0.25rem;
+      }
+      .page-header p {
+        color: var(--gray-500);
+        font-size: 0.95rem;
+      }
+
+      /* Section Styling */
+      .section {
+        background: white;
+        border-radius: 10px;
+        padding: 1.25rem;
+        margin-bottom: 1rem;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+      }
+
+      .section-title {
+        font-size: 1rem;
+        color: var(--primary);
+        margin-bottom: 0.75rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+      }
+
+      /* Grid Layout */
+      .grid-2 {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1rem;
+      }
+      .grid-3 {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 1rem;
+      }
+      .grid-4 {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 0.75rem;
+      }
+
+      /* Info Box */
+      .info-box {
+        background: var(--primary-light);
+        border-left: 4px solid var(--primary);
+        padding: 0.75rem 1rem;
+        border-radius: 0 6px 6px 0;
+      }
+
+      .info-box strong {
+        color: var(--gray-900);
+      }
+      .info-box code {
+        background: white;
+        padding: 0.2rem 0.5rem;
+        border-radius: 4px;
+        font-family: "Consolas", monospace;
+        font-size: 0.85rem;
+        color: var(--primary-dark);
+      }
+
+      /* Tables */
+      .data-table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 0.9rem;
+      }
+      .data-table th,
+      .data-table td {
+        padding: 0.5rem 0.75rem;
+        text-align: left;
+        border-bottom: 1px solid var(--gray-200);
+      }
+      .data-table th {
+        background: var(--gray-100);
+        font-weight: 600;
+        color: var(--gray-700);
+        font-size: 0.8rem;
+        text-transform: uppercase;
+      }
+      .data-table tr:last-child td {
+        border-bottom: none;
+      }
+
+      /* Status Badges */
+      .badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.3rem;
+        padding: 0.25rem 0.6rem;
+        border-radius: 12px;
+        font-size: 0.8rem;
+        font-weight: 600;
+      }
+
+      .badge-complete {
+        background: var(--success-light);
+        color: var(--success);
+      }
+      .badge-ontrack {
+        background: #fef9c3;
+        color: #a16207;
+      }
+      .badge-atrisk {
+        background: #ffedd5;
+        color: #c2410c;
+      }
+      .badge-critical {
+        background: var(--error-light);
+        color: var(--error);
+      }
+
+      /* Metric Boxes */
+      .metric-box {
+        background: var(--primary-light);
+        border-radius: 8px;
+        padding: 1rem;
+        text-align: center;
+      }
+
+      .metric-box .value {
+        font-size: 1.75rem;
+        font-weight: 700;
+        color: var(--primary);
+      }
+      .metric-box .label {
+        font-size: 0.75rem;
+        color: var(--gray-700);
+        margin-top: 0.25rem;
+        text-transform: uppercase;
+      }
+
+      /* Task Cards */
+      .task-card {
+        background: var(--gray-100);
+        border-radius: 8px;
+        padding: 0.75rem 1rem;
+        border-left: 3px solid var(--primary);
+      }
+
+      .task-card .task-name {
+        font-weight: 600;
+        color: var(--gray-900);
+        margin-bottom: 0.25rem;
+        font-size: 0.9rem;
+      }
+      .task-card .task-steps {
+        color: var(--gray-700);
+        font-size: 0.85rem;
+        font-family: "Consolas", monospace;
+      }
+
+      /* Pipeline */
+      .pipeline {
+        display: flex;
+        align-items: center;
+        gap: 0.25rem;
+        flex-wrap: wrap;
+        justify-content: center;
+      }
+
+      .pipeline-stage {
+        background: var(--primary);
+        color: white;
+        padding: 0.4rem 0.75rem;
+        border-radius: 4px;
+        font-size: 0.8rem;
+        font-weight: 500;
+      }
+
+      .pipeline-arrow {
+        color: var(--gray-400);
+        font-size: 1.2rem;
+      }
+
+      /* Steps List */
+      .steps-list {
+        list-style: none;
+      }
+      .steps-list li {
+        display: flex;
+        align-items: flex-start;
+        gap: 0.5rem;
+        margin-bottom: 0.5rem;
+      }
+
+      .step-num {
+        background: var(--primary);
+        color: white;
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.75rem;
+        font-weight: 600;
+        flex-shrink: 0;
+      }
+
+      /* Warning Box */
+      .warning-box {
+        background: var(--warning-bg);
+        border-left: 4px solid var(--warning);
+        padding: 0.75rem 1rem;
+        border-radius: 0 6px 6px 0;
+      }
+
+      .warning-box ul {
+        margin-left: 1.25rem;
+        margin-top: 0.5rem;
+      }
+      .warning-box li {
+        margin-bottom: 0.25rem;
+        color: var(--gray-700);
+        font-size: 0.9rem;
+      }
+
+      /* Print Styles */
+      @media print {
         .nav {
-            background: white;
-            padding: 0.75rem 1.5rem;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-            position: sticky;
-            top: 0;
-            z-index: 100;
+          display: none;
         }
-        
-        .nav a { color: var(--primary); text-decoration: none; font-weight: 500; }
-        .nav a:hover { text-decoration: underline; }
-        .nav h1 { font-size: 1.1rem; color: var(--gray-900); margin-left: auto; }
-        
-        .print-btn {
-            background: var(--primary);
-            color: white;
-            border: none;
-            padding: 0.5rem 1rem;
-            border-radius: 6px;
-            cursor: pointer;
-            font-weight: 600;
-            font-size: 0.85rem;
+        body {
+          background: white;
+          font-size: 11px;
         }
-        
-        .print-btn:hover { background: var(--primary-dark); }
-        
-        /* Main Container */
         .container {
-            max-width: 1100px;
-            margin: 0 auto;
-            padding: 1.5rem;
+          padding: 0;
+          max-width: 100%;
         }
-        
-        /* Header */
-        .page-header {
-            text-align: center;
-            margin-bottom: 1.5rem;
-            padding-bottom: 1rem;
-            border-bottom: 2px solid var(--primary);
-        }
-        
-        .page-header h1 { font-size: 1.75rem; color: var(--gray-900); margin-bottom: 0.25rem; }
-        .page-header p { color: var(--gray-500); font-size: 0.95rem; }
-        
-        /* Section Styling */
         .section {
-            background: white;
-            border-radius: 10px;
-            padding: 1.25rem;
-            margin-bottom: 1rem;
-            box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+          box-shadow: none;
+          border: 1px solid var(--gray-200);
+          break-inside: avoid;
         }
-        
-        .section-title {
-            font-size: 1rem;
-            color: var(--primary);
-            margin-bottom: 0.75rem;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
+        .page-header {
+          margin-bottom: 1rem;
         }
-        
-        /* Grid Layout */
-        .grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; }
-        .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; }
-        .grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.75rem; }
-        
-        /* Info Box */
-        .info-box {
-            background: var(--primary-light);
-            border-left: 4px solid var(--primary);
-            padding: 0.75rem 1rem;
-            border-radius: 0 6px 6px 0;
+      }
+
+      @media (max-width: 768px) {
+        .grid-2,
+        .grid-3,
+        .grid-4 {
+          grid-template-columns: 1fr;
         }
-        
-        .info-box strong { color: var(--gray-900); }
-        .info-box code {
-            background: white;
-            padding: 0.2rem 0.5rem;
-            border-radius: 4px;
-            font-family: 'Consolas', monospace;
-            font-size: 0.85rem;
-            color: var(--primary-dark);
-        }
-        
-        /* Tables */
-        .data-table { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
-        .data-table th, .data-table td { padding: 0.5rem 0.75rem; text-align: left; border-bottom: 1px solid var(--gray-200); }
-        .data-table th { background: var(--gray-100); font-weight: 600; color: var(--gray-700); font-size: 0.8rem; text-transform: uppercase; }
-        .data-table tr:last-child td { border-bottom: none; }
-        
-        /* Status Badges */
-        .badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.3rem;
-            padding: 0.25rem 0.6rem;
-            border-radius: 12px;
-            font-size: 0.8rem;
-            font-weight: 600;
-        }
-        
-        .badge-complete { background: var(--success-light); color: var(--success); }
-        .badge-ontrack { background: #fef9c3; color: #a16207; }
-        .badge-atrisk { background: #ffedd5; color: #c2410c; }
-        .badge-critical { background: var(--error-light); color: var(--error); }
-        
-        /* Metric Boxes */
-        .metric-box {
-            background: var(--primary-light);
-            border-radius: 8px;
-            padding: 1rem;
-            text-align: center;
-        }
-        
-        .metric-box .value { font-size: 1.75rem; font-weight: 700; color: var(--primary); }
-        .metric-box .label { font-size: 0.75rem; color: var(--gray-700); margin-top: 0.25rem; text-transform: uppercase; }
-        
-        /* Task Cards */
-        .task-card {
-            background: var(--gray-100);
-            border-radius: 8px;
-            padding: 0.75rem 1rem;
-            border-left: 3px solid var(--primary);
-        }
-        
-        .task-card .task-name { font-weight: 600; color: var(--gray-900); margin-bottom: 0.25rem; font-size: 0.9rem; }
-        .task-card .task-steps { color: var(--gray-700); font-size: 0.85rem; font-family: 'Consolas', monospace; }
-        
-        /* Pipeline */
-        .pipeline {
-            display: flex;
-            align-items: center;
-            gap: 0.25rem;
-            flex-wrap: wrap;
-            justify-content: center;
-        }
-        
-        .pipeline-stage {
-            background: var(--primary);
-            color: white;
-            padding: 0.4rem 0.75rem;
-            border-radius: 4px;
-            font-size: 0.8rem;
-            font-weight: 500;
-        }
-        
-        .pipeline-arrow { color: var(--gray-400); font-size: 1.2rem; }
-        
-        /* Steps List */
-        .steps-list { list-style: none; }
-        .steps-list li {
-            display: flex;
-            align-items: flex-start;
-            gap: 0.5rem;
-            margin-bottom: 0.5rem;
-        }
-        
-        .step-num {
-            background: var(--primary);
-            color: white;
-            width: 20px;
-            height: 20px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 0.75rem;
-            font-weight: 600;
-            flex-shrink: 0;
-        }
-        
-        /* Warning Box */
-        .warning-box {
-            background: var(--warning-bg);
-            border-left: 4px solid var(--warning);
-            padding: 0.75rem 1rem;
-            border-radius: 0 6px 6px 0;
-        }
-        
-        .warning-box ul { margin-left: 1.25rem; margin-top: 0.5rem; }
-        .warning-box li { margin-bottom: 0.25rem; color: var(--gray-700); font-size: 0.9rem; }
-        
-        /* Print Styles */
-        @media print {
-            .nav { display: none; }
-            body { background: white; font-size: 11px; }
-            .container { padding: 0; max-width: 100%; }
-            .section { box-shadow: none; border: 1px solid var(--gray-200); break-inside: avoid; }
-            .page-header { margin-bottom: 1rem; }
-        }
-        
-        @media (max-width: 768px) {
-            .grid-2, .grid-3, .grid-4 { grid-template-columns: 1fr; }
-        }
+      }
     </style>
-</head>
-<body>
+  </head>
+  <body>
     <nav class="nav">
-        <a href="index.html">← Training Center</a>
-        <h1>📋 Quick Reference Card</h1>
-        <button class="print-btn" onclick="window.print()">🖨️ Print</button>
+      <a href="index.html">← Training Center</a>
+      <h1>📋 Quick Reference Card</h1>
+      <button class="print-btn" onclick="window.print()">🖨️ Print</button>
     </nav>
-    
+
     <div class="container">
-        <div class="page-header">
-            <h1>Recruiter Portal ATS - Quick Reference</h1>
-            <p>One-Page Reference Card | v1.0 December 2025</p>
-        </div>
-        
-        <!-- Getting Started Section -->
-        <section class="section">
-            <h2 class="section-title">🚀 Getting Started</h2>
-            <div class="grid-2">
-                <div class="info-box">
-                    <strong>Login URL:</strong><br>
-                    <code>https://massmutual--recruiting.sandbox.lightning.force.com</code>
-                </div>
-                <div class="info-box">
-                    <strong>Navigation:</strong><br>
-                    App Launcher (⋮⋮⋮) → <code>Recruiter Portal</code>
-                </div>
-            </div>
-        </section>
-        
-        <!-- Dashboard At-A-Glance Section -->
-        <section class="section">
-            <h2 class="section-title">📊 Dashboard At-A-Glance</h2>
-            <div class="grid-2">
-                <div>
-                    <h3 style="font-size: 0.85rem; color: var(--gray-700); margin-bottom: 0.5rem; text-transform: uppercase;">Summary Cards</h3>
-                    <table class="data-table">
-                        <thead>
-                            <tr>
-                                <th>Card</th>
-                                <th>Meaning</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td><strong>Active Contract B</strong></td>
-                                <td>Total in probation</td>
-                            </tr>
-                            <tr>
-                                <td><strong>Requirements Met</strong></td>
-                                <td>Ready to transition</td>
-                            </tr>
-                            <tr>
-                                <td><strong>At Risk</strong></td>
-                                <td>Needs attention (&lt;30 days)</td>
-                            </tr>
-                            <tr>
-                                <td><strong>Total/Avg FYC</strong></td>
-                                <td>Revenue metrics</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-                <div>
-                    <h3 style="font-size: 0.85rem; color: var(--gray-700); margin-bottom: 0.5rem; text-transform: uppercase;">Status Badges</h3>
-                    <table class="data-table">
-                        <thead>
-                            <tr>
-                                <th>Status</th>
-                                <th>Action</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td><span class="badge badge-complete">🟢 Complete</span></td>
-                                <td>Transition to A</td>
-                            </tr>
-                            <tr>
-                                <td><span class="badge badge-ontrack">🟡 On Track</span></td>
-                                <td>Monitor</td>
-                            </tr>
-                            <tr>
-                                <td><span class="badge badge-atrisk">🟠 At Risk</span></td>
-                                <td>Action needed</td>
-                            </tr>
-                            <tr>
-                                <td><span class="badge badge-critical">🔴 Critical</span></td>
-                                <td>Urgent!</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </section>
-        
-        <!-- Contract B Requirements Section -->
-        <section class="section">
-            <h2 class="section-title">✅ Contract B Requirements</h2>
-            <div class="grid-4">
-                <div class="metric-box">
-                    <div class="value">4</div>
-                    <div class="label">Months Duration</div>
-                </div>
-                <div class="metric-box">
-                    <div class="value">$2,500</div>
-                    <div class="label">FYC Target</div>
-                </div>
-                <div class="metric-box">
-                    <div class="value">5</div>
-                    <div class="label">Submissions</div>
-                </div>
-                <div class="metric-box">
-                    <div class="value">+4</div>
-                    <div class="label">Max Extension</div>
-                </div>
-            </div>
-            <p style="text-align: center; margin-top: 0.75rem; color: var(--gray-500); font-size: 0.85rem;">
-                Both FYC ($2,500) AND Submissions (5) must be met to transition to Contract A
-            </p>
-        </section>
-        
-        <!-- Common Tasks Section -->
-        <section class="section">
-            <h2 class="section-title">🔧 Common Tasks</h2>
-            <div class="grid-3">
-                <div class="task-card">
-                    <div class="task-name">Create Candidate</div>
-                    <div class="task-steps">Candidates → New → Fill Form → Save</div>
-                </div>
-                <div class="task-card">
-                    <div class="task-name">Schedule Interview</div>
-                    <div class="task-steps">Candidate → Interviews → New → Save</div>
-                </div>
-                <div class="task-card">
-                    <div class="task-name">Complete Interview</div>
-                    <div class="task-steps">Interview → Status = "Completed" → Save</div>
-                </div>
-                <div class="task-card">
-                    <div class="task-name">Grant Extension</div>
-                    <div class="task-steps">Candidate → ☑️ Extension Granted → Save</div>
-                </div>
-                <div class="task-card">
-                    <div class="task-name">Record Termination</div>
-                    <div class="task-steps">Status = "Terminated" → Date → Reason → Save</div>
-                </div>
-                <div class="task-card">
-                    <div class="task-name">Transition B → A</div>
-                    <div class="task-steps">Contract Type = "Contract A" → Save</div>
-                </div>
-            </div>
-        </section>
-        
-        <!-- Interview Pipeline Section -->
-        <section class="section">
-            <h2 class="section-title">📈 Interview Pipeline Stages</h2>
-            <div class="pipeline">
-                <span class="pipeline-stage">0-Prequal</span>
-                <span class="pipeline-arrow">→</span>
-                <span class="pipeline-stage">Ci (1st)</span>
-                <span class="pipeline-arrow">→</span>
-                <span class="pipeline-stage">Align (2nd)</span>
-                <span class="pipeline-arrow">→</span>
-                <span class="pipeline-stage">Plan (3rd)</span>
-                <span class="pipeline-arrow">→</span>
-                <span class="pipeline-stage">Present (4th)</span>
-                <span class="pipeline-arrow">→</span>
-                <span class="pipeline-stage">Optional (5th)</span>
-                <span class="pipeline-arrow">→</span>
-                <span class="pipeline-stage" style="background: var(--success);">Offer Acc</span>
-                <span class="pipeline-arrow">→</span>
-                <span class="pipeline-stage" style="background: var(--success);">Contracted</span>
-            </div>
-        </section>
-        
-        <!-- LinkedIn Extension + Reminders Row -->
+      <div class="page-header">
+        <h1>Recruiter Portal ATS - Quick Reference</h1>
+        <p>One-Page Reference Card | v1.0 December 2025</p>
+      </div>
+
+      <!-- Getting Started Section -->
+      <section class="section">
+        <h2 class="section-title">🚀 Getting Started</h2>
         <div class="grid-2">
-            <section class="section">
-                <h2 class="section-title">🔌 LinkedIn Extension</h2>
-                <ol class="steps-list">
-                    <li>
-                        <span class="step-num">1</span>
-                        <span><strong>Install:</strong> Load unpacked extension in Chrome/Edge</span>
-                    </li>
-                    <li>
-                        <span class="step-num">2</span>
-                        <span><strong>Connect:</strong> Click extension → Connect to Salesforce → Login</span>
-                    </li>
-                    <li>
-                        <span class="step-num">3</span>
-                        <span><strong>Import:</strong> Go to LinkedIn profile → Click extension → Create Candidate</span>
-                    </li>
-                </ol>
-            </section>
-            
-            <section class="section">
-                <h2 class="section-title">⚠️ Important Reminders</h2>
-                <div class="warning-box">
-                    <ul>
-                        <li><strong>Termination Date</strong> must be filled for YTD metrics</li>
-                        <li><strong>FYC updates</strong> run daily at 6:00 AM</li>
-                        <li><strong>Interview toggle</strong> switches Current Month / YTD view</li>
-                        <li><strong>Extension checkbox</strong> auto-calculates new deadline (+4 months)</li>
-                    </ul>
-                </div>
-            </section>
+          <div class="info-box">
+            <strong>Login URL:</strong><br />
+            <code
+              >https://massmutual--recruiting.sandbox.lightning.force.com</code
+            >
+          </div>
+          <div class="info-box">
+            <strong>Navigation:</strong><br />
+            App Launcher (⋮⋮⋮) → <code>Recruiter Portal</code>
+          </div>
         </div>
-        
-        <!-- Support Section -->
-        <section class="section">
-            <h2 class="section-title">📞 Support Contacts</h2>
-            <div class="grid-3">
-                <div class="info-box">
-                    <strong>Login Issues</strong><br>
-                    IT Help Desk
-                </div>
-                <div class="info-box">
-                    <strong>Training Questions</strong><br>
-                    Recruiting Operations
-                </div>
-                <div class="info-box">
-                    <strong>System Bugs</strong><br>
-                    Salesforce Administrator
-                </div>
+      </section>
+
+      <!-- Dashboard At-A-Glance Section -->
+      <section class="section">
+        <h2 class="section-title">📊 Dashboard At-A-Glance</h2>
+        <div class="grid-2">
+          <div>
+            <h3
+              style="
+                font-size: 0.85rem;
+                color: var(--gray-700);
+                margin-bottom: 0.5rem;
+                text-transform: uppercase;
+              "
+            >
+              Summary Cards
+            </h3>
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Card</th>
+                  <th>Meaning</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>Active Contract B</strong></td>
+                  <td>Total in probation</td>
+                </tr>
+                <tr>
+                  <td><strong>Requirements Met</strong></td>
+                  <td>Ready to transition</td>
+                </tr>
+                <tr>
+                  <td><strong>At Risk</strong></td>
+                  <td>Needs attention (&lt;30 days)</td>
+                </tr>
+                <tr>
+                  <td><strong>Total/Avg FYC</strong></td>
+                  <td>Revenue metrics</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div>
+            <h3
+              style="
+                font-size: 0.85rem;
+                color: var(--gray-700);
+                margin-bottom: 0.5rem;
+                text-transform: uppercase;
+              "
+            >
+              Status Badges
+            </h3>
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Status</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><span class="badge badge-complete">🟢 Complete</span></td>
+                  <td>Transition to A</td>
+                </tr>
+                <tr>
+                  <td><span class="badge badge-ontrack">🟡 On Track</span></td>
+                  <td>Monitor</td>
+                </tr>
+                <tr>
+                  <td><span class="badge badge-atrisk">🟠 At Risk</span></td>
+                  <td>Action needed</td>
+                </tr>
+                <tr>
+                  <td><span class="badge badge-critical">🔴 Critical</span></td>
+                  <td>Urgent!</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- Contract B Requirements Section -->
+      <section class="section">
+        <h2 class="section-title">✅ Contract B Requirements</h2>
+        <div class="grid-4">
+          <div class="metric-box">
+            <div class="value">4</div>
+            <div class="label">Months Duration</div>
+          </div>
+          <div class="metric-box">
+            <div class="value">$2,500</div>
+            <div class="label">FYC Target</div>
+          </div>
+          <div class="metric-box">
+            <div class="value">5</div>
+            <div class="label">Submissions</div>
+          </div>
+          <div class="metric-box">
+            <div class="value">+4</div>
+            <div class="label">Max Extension</div>
+          </div>
+        </div>
+        <p
+          style="
+            text-align: center;
+            margin-top: 0.75rem;
+            color: var(--gray-500);
+            font-size: 0.85rem;
+          "
+        >
+          Both FYC ($2,500) AND Submissions (5) must be met to transition to
+          Contract A
+        </p>
+      </section>
+
+      <!-- Common Tasks Section -->
+      <section class="section">
+        <h2 class="section-title">🔧 Common Tasks</h2>
+        <div class="grid-3">
+          <div class="task-card">
+            <div class="task-name">Create Candidate</div>
+            <div class="task-steps">Candidates → New → Fill Form → Save</div>
+          </div>
+          <div class="task-card">
+            <div class="task-name">Schedule Interview</div>
+            <div class="task-steps">Candidate → Interviews → New → Save</div>
+          </div>
+          <div class="task-card">
+            <div class="task-name">Complete Interview</div>
+            <div class="task-steps">
+              Interview → Status = "Completed" → Save
             </div>
+          </div>
+          <div class="task-card">
+            <div class="task-name">Grant Extension</div>
+            <div class="task-steps">
+              Candidate → ☑️ Extension Granted → Save
+            </div>
+          </div>
+          <div class="task-card">
+            <div class="task-name">Record Termination</div>
+            <div class="task-steps">
+              Status = "Terminated" → Date → Reason → Save
+            </div>
+          </div>
+          <div class="task-card">
+            <div class="task-name">Transition B → A</div>
+            <div class="task-steps">Contract Type = "Contract A" → Save</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Interview Pipeline Section -->
+      <section class="section">
+        <h2 class="section-title">📈 Interview Pipeline Stages</h2>
+        <div class="pipeline">
+          <span class="pipeline-stage">0-Prequal</span>
+          <span class="pipeline-arrow">→</span>
+          <span class="pipeline-stage">Ci (1st)</span>
+          <span class="pipeline-arrow">→</span>
+          <span class="pipeline-stage">Align (2nd)</span>
+          <span class="pipeline-arrow">→</span>
+          <span class="pipeline-stage">Plan (3rd)</span>
+          <span class="pipeline-arrow">→</span>
+          <span class="pipeline-stage">Present (4th)</span>
+          <span class="pipeline-arrow">→</span>
+          <span class="pipeline-stage">Optional (5th)</span>
+          <span class="pipeline-arrow">→</span>
+          <span class="pipeline-stage" style="background: var(--success)"
+            >Offer Acc</span
+          >
+          <span class="pipeline-arrow">→</span>
+          <span class="pipeline-stage" style="background: var(--success)"
+            >Contracted</span
+          >
+        </div>
+      </section>
+
+      <!-- LinkedIn Extension + Reminders Row -->
+      <div class="grid-2">
+        <section class="section">
+          <h2 class="section-title">🔌 LinkedIn Extension</h2>
+          <ol class="steps-list">
+            <li>
+              <span class="step-num">1</span>
+              <span
+                ><strong>Install:</strong> Load unpacked extension in
+                Chrome/Edge</span
+              >
+            </li>
+            <li>
+              <span class="step-num">2</span>
+              <span
+                ><strong>Connect:</strong> Click extension → Connect to
+                Salesforce → Login</span
+              >
+            </li>
+            <li>
+              <span class="step-num">3</span>
+              <span
+                ><strong>Import:</strong> Go to LinkedIn profile → Click
+                extension → Create Candidate</span
+              >
+            </li>
+          </ol>
         </section>
-        
-        <footer style="text-align: center; padding: 1rem; color: var(--gray-500); font-size: 0.85rem;">
-            Recruiter Portal ATS v1.0 | December 2025 | <a href="recruiter-training.html" style="color: var(--primary);">Full Training Program</a>
-        </footer>
-        
+
+        <section class="section">
+          <h2 class="section-title">⚠️ Important Reminders</h2>
+          <div class="warning-box">
+            <ul>
+              <li>
+                <strong>Termination Date</strong> must be filled for YTD metrics
+              </li>
+              <li><strong>FYC updates</strong> run daily at 6:00 AM</li>
+              <li>
+                <strong>Interview toggle</strong> switches Current Month / YTD
+                view
+              </li>
+              <li>
+                <strong>Extension checkbox</strong> auto-calculates new deadline
+                (+4 months)
+              </li>
+            </ul>
+          </div>
+        </section>
+      </div>
+
+      <!-- Support Section -->
+      <section class="section">
+        <h2 class="section-title">📞 Support Contacts</h2>
+        <div class="grid-3">
+          <div class="info-box">
+            <strong>Login Issues</strong><br />
+            IT Help Desk
+          </div>
+          <div class="info-box">
+            <strong>Training Questions</strong><br />
+            Recruiting Operations
+          </div>
+          <div class="info-box">
+            <strong>System Bugs</strong><br />
+            Salesforce Administrator
+          </div>
+        </div>
+      </section>
+
+      <footer
+        style="
+          text-align: center;
+          padding: 1rem;
+          color: var(--gray-500);
+          font-size: 0.85rem;
+        "
+      >
+        Recruiter Portal ATS v1.0 | December 2025 |
+        <a href="recruiter-training.html" style="color: var(--primary)"
+          >Full Training Program</a
+        >
+      </footer>
     </div>
-</body>
+  </body>
 </html>

@@ -1,789 +1,1040 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Module 4: Pull Request Best Practices - Developer Training</title>
     <style>
-        :root {
-            --primary: #238636;
-            --primary-dark: #1a7f37;
-            --primary-light: #d1fae5;
-            --module-color: #8250df;
-            --module-light: #f3e8ff;
-            --gray-100: #f6f8fa;
-            --gray-200: #e5e5e5;
-            --gray-300: #d0d7de;
-            --gray-500: #6e7781;
-            --gray-700: #444;
-            --gray-900: #1f2328;
-            --code-bg: #161b22;
-            --warning-bg: #fff8c5;
-            --warning-border: #d4a72c;
-            --info-bg: #ddf4ff;
-            --info-border: #54aeff;
-        }
-        
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans', Helvetica, Arial, sans-serif;
-            background: var(--gray-100);
-            min-height: 100vh;
-            display: flex;
-        }
-        
-        .sidebar {
-            width: 300px;
-            background: white;
-            border-right: 1px solid var(--gray-300);
-            padding: 1.5rem;
-            position: fixed;
-            height: 100vh;
-            overflow-y: auto;
-        }
-        
-        .sidebar-header {
-            padding-bottom: 1rem;
-            border-bottom: 1px solid var(--gray-200);
-            margin-bottom: 1rem;
-        }
-        
-        .sidebar-header a {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            color: var(--primary);
-            text-decoration: none;
-            font-size: 0.9rem;
-            margin-bottom: 0.5rem;
-        }
-        
-        .sidebar-header a:hover { text-decoration: underline; }
-        .sidebar-header h2 { font-size: 1.1rem; color: var(--gray-900); }
-        
-        .sidebar-header .module-badge {
-            display: inline-block;
-            background: var(--module-color);
-            color: white;
-            padding: 0.2rem 0.6rem;
-            border-radius: 10px;
-            font-size: 0.75rem;
-            font-weight: 600;
-            margin-top: 0.5rem;
-        }
-        
-        .steps-list { list-style: none; }
-        
-        .step-item {
-            padding: 0.75rem;
-            border-radius: 8px;
-            margin-bottom: 0.5rem;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-            transition: all 0.2s;
-        }
-        
-        .step-item:hover { background: var(--gray-100); }
-        .step-item.active { background: var(--module-light); }
-        .step-item.completed { opacity: 0.7; }
-        
-        .step-number {
-            width: 28px;
-            height: 28px;
-            border-radius: 50%;
-            background: var(--gray-200);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 0.85rem;
-            font-weight: 600;
-            color: var(--gray-500);
-            flex-shrink: 0;
-        }
-        
-        .step-item.active .step-number { background: var(--module-color); color: white; }
-        .step-item.completed .step-number { background: var(--primary); color: white; }
-        .step-item.completed .step-number::before { content: "✓"; }
-        
-        .step-info { flex-grow: 1; }
-        .step-title { font-size: 0.9rem; color: var(--gray-900); font-weight: 500; }
-        .step-duration { font-size: 0.75rem; color: var(--gray-500); }
-        
-        .main-content { flex-grow: 1; margin-left: 300px; padding: 2rem; }
-        .step-content { max-width: 800px; margin: 0 auto; }
-        
-        .step-header { margin-bottom: 2rem; }
-        
-        .step-header .step-badge {
-            display: inline-block;
-            background: var(--module-color);
-            color: white;
-            padding: 0.3rem 1rem;
-            border-radius: 20px;
-            font-size: 0.85rem;
-            font-weight: 600;
-            margin-bottom: 0.75rem;
-        }
-        
-        .step-header h1 { font-size: 2rem; color: var(--gray-900); margin-bottom: 0.5rem; }
-        .step-header p { font-size: 1.1rem; color: var(--gray-500); }
-        
-        .content-card {
-            background: white;
-            border-radius: 12px;
-            padding: 1.5rem;
-            border: 1px solid var(--gray-300);
-            margin-bottom: 1.5rem;
-        }
-        
-        .content-card h2 { font-size: 1.25rem; color: var(--gray-900); margin-bottom: 1rem; }
-        .content-card h3 { font-size: 1rem; color: var(--gray-700); margin: 1.5rem 0 0.75rem; }
-        .content-card p { color: var(--gray-700); line-height: 1.7; margin-bottom: 1rem; }
-        .content-card ul, .content-card ol { margin-left: 1.5rem; margin-bottom: 1rem; color: var(--gray-700); line-height: 1.8; }
-        
-        .code-block {
-            background: var(--code-bg);
-            color: #e6edf3;
-            border-radius: 8px;
-            padding: 1rem;
-            margin: 1rem 0;
-            overflow-x: auto;
-            font-family: 'Consolas', 'Monaco', monospace;
-            font-size: 0.9rem;
-            line-height: 1.6;
-        }
-        
-        .code-block .comment { color: #8b949e; }
-        .code-block .command { color: #79c0ff; }
-        .code-block .string { color: #a5d6ff; }
-        .code-block .flag { color: #ffa657; }
-        .code-block .heading { color: #7ee787; font-weight: bold; }
-        .code-block .label { color: #ffa657; }
-        
-        code {
-            background: var(--gray-100);
-            padding: 0.2rem 0.4rem;
-            border-radius: 4px;
-            font-family: 'Consolas', monospace;
-            font-size: 0.9em;
-            color: #cf222e;
-        }
-        
-        .info-box {
-            background: var(--info-bg);
-            border-left: 4px solid var(--info-border);
-            padding: 1rem 1.25rem;
-            border-radius: 0 8px 8px 0;
-            margin: 1.5rem 0;
-        }
-        
-        .warning-box {
-            background: var(--warning-bg);
-            border-left: 4px solid var(--warning-border);
-            padding: 1rem 1.25rem;
-            border-radius: 0 8px 8px 0;
-            margin: 1.5rem 0;
-        }
-        
-        .success-box {
-            background: var(--primary-light);
-            border-left: 4px solid var(--primary);
-            padding: 1rem 1.25rem;
-            border-radius: 0 8px 8px 0;
-            margin: 1.5rem 0;
-        }
-        
-        .info-box strong, .warning-box strong, .success-box strong { display: block; margin-bottom: 0.25rem; color: var(--gray-900); }
-        
-        .data-table { width: 100%; border-collapse: collapse; margin: 1rem 0; font-size: 0.9rem; }
-        .data-table th, .data-table td { padding: 0.75rem; text-align: left; border-bottom: 1px solid var(--gray-200); }
-        .data-table th { background: var(--gray-100); font-weight: 600; color: var(--gray-700); }
-        
-        .checklist { list-style: none; margin-left: 0 !important; }
-        .checklist li { padding: 0.5rem 0; display: flex; gap: 0.75rem; align-items: flex-start; }
-        .checklist li::before { content: "☐"; font-size: 1.2rem; color: var(--module-color); }
-        
-        .template-box {
-            background: #f0f4f8;
-            border: 2px dashed var(--gray-300);
-            border-radius: 12px;
-            padding: 1.25rem;
-            margin: 1rem 0;
-        }
-        
-        .template-box h4 { color: var(--module-color); margin-bottom: 0.75rem; }
-        
-        .step-navigation {
-            display: flex;
-            justify-content: space-between;
-            margin-top: 2rem;
-            padding-top: 2rem;
-            border-top: 1px solid var(--gray-200);
-        }
-        
-        .nav-btn {
-            padding: 0.75rem 1.5rem;
-            border-radius: 8px;
-            font-weight: 600;
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-            cursor: pointer;
-            border: none;
-            font-size: 1rem;
-            transition: all 0.3s;
-            text-decoration: none;
-        }
-        
-        .nav-btn.prev { background: var(--gray-200); color: var(--gray-700); }
-        .nav-btn.prev:hover { background: var(--gray-300); }
-        .nav-btn.next { background: var(--module-color); color: white; }
-        .nav-btn.next:hover { opacity: 0.9; }
-        .nav-btn:disabled { opacity: 0.5; cursor: not-allowed; }
-        
-        .progress-indicator {
-            background: var(--gray-200);
-            height: 4px;
-            position: fixed;
-            top: 0;
-            left: 300px;
-            right: 0;
-            z-index: 100;
-        }
-        
-        .progress-fill { height: 100%; background: var(--module-color); transition: width 0.3s; }
-        .step-page { display: none; }
-        .step-page.active { display: block; }
+      :root {
+        --primary: #238636;
+        --primary-dark: #1a7f37;
+        --primary-light: #d1fae5;
+        --module-color: #8250df;
+        --module-light: #f3e8ff;
+        --gray-100: #f6f8fa;
+        --gray-200: #e5e5e5;
+        --gray-300: #d0d7de;
+        --gray-500: #6e7781;
+        --gray-700: #444;
+        --gray-900: #1f2328;
+        --code-bg: #161b22;
+        --warning-bg: #fff8c5;
+        --warning-border: #d4a72c;
+        --info-bg: #ddf4ff;
+        --info-border: #54aeff;
+      }
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family:
+          -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans", Helvetica,
+          Arial, sans-serif;
+        background: var(--gray-100);
+        min-height: 100vh;
+        display: flex;
+      }
+
+      .sidebar {
+        width: 300px;
+        background: white;
+        border-right: 1px solid var(--gray-300);
+        padding: 1.5rem;
+        position: fixed;
+        height: 100vh;
+        overflow-y: auto;
+      }
+
+      .sidebar-header {
+        padding-bottom: 1rem;
+        border-bottom: 1px solid var(--gray-200);
+        margin-bottom: 1rem;
+      }
+
+      .sidebar-header a {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        color: var(--primary);
+        text-decoration: none;
+        font-size: 0.9rem;
+        margin-bottom: 0.5rem;
+      }
+
+      .sidebar-header a:hover {
+        text-decoration: underline;
+      }
+      .sidebar-header h2 {
+        font-size: 1.1rem;
+        color: var(--gray-900);
+      }
+
+      .sidebar-header .module-badge {
+        display: inline-block;
+        background: var(--module-color);
+        color: white;
+        padding: 0.2rem 0.6rem;
+        border-radius: 10px;
+        font-size: 0.75rem;
+        font-weight: 600;
+        margin-top: 0.5rem;
+      }
+
+      .steps-list {
+        list-style: none;
+      }
+
+      .step-item {
+        padding: 0.75rem;
+        border-radius: 8px;
+        margin-bottom: 0.5rem;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        transition: all 0.2s;
+      }
+
+      .step-item:hover {
+        background: var(--gray-100);
+      }
+      .step-item.active {
+        background: var(--module-light);
+      }
+      .step-item.completed {
+        opacity: 0.7;
+      }
+
+      .step-number {
+        width: 28px;
+        height: 28px;
+        border-radius: 50%;
+        background: var(--gray-200);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.85rem;
+        font-weight: 600;
+        color: var(--gray-500);
+        flex-shrink: 0;
+      }
+
+      .step-item.active .step-number {
+        background: var(--module-color);
+        color: white;
+      }
+      .step-item.completed .step-number {
+        background: var(--primary);
+        color: white;
+      }
+      .step-item.completed .step-number::before {
+        content: "✓";
+      }
+
+      .step-info {
+        flex-grow: 1;
+      }
+      .step-title {
+        font-size: 0.9rem;
+        color: var(--gray-900);
+        font-weight: 500;
+      }
+      .step-duration {
+        font-size: 0.75rem;
+        color: var(--gray-500);
+      }
+
+      .main-content {
+        flex-grow: 1;
+        margin-left: 300px;
+        padding: 2rem;
+      }
+      .step-content {
+        max-width: 800px;
+        margin: 0 auto;
+      }
+
+      .step-header {
+        margin-bottom: 2rem;
+      }
+
+      .step-header .step-badge {
+        display: inline-block;
+        background: var(--module-color);
+        color: white;
+        padding: 0.3rem 1rem;
+        border-radius: 20px;
+        font-size: 0.85rem;
+        font-weight: 600;
+        margin-bottom: 0.75rem;
+      }
+
+      .step-header h1 {
+        font-size: 2rem;
+        color: var(--gray-900);
+        margin-bottom: 0.5rem;
+      }
+      .step-header p {
+        font-size: 1.1rem;
+        color: var(--gray-500);
+      }
+
+      .content-card {
+        background: white;
+        border-radius: 12px;
+        padding: 1.5rem;
+        border: 1px solid var(--gray-300);
+        margin-bottom: 1.5rem;
+      }
+
+      .content-card h2 {
+        font-size: 1.25rem;
+        color: var(--gray-900);
+        margin-bottom: 1rem;
+      }
+      .content-card h3 {
+        font-size: 1rem;
+        color: var(--gray-700);
+        margin: 1.5rem 0 0.75rem;
+      }
+      .content-card p {
+        color: var(--gray-700);
+        line-height: 1.7;
+        margin-bottom: 1rem;
+      }
+      .content-card ul,
+      .content-card ol {
+        margin-left: 1.5rem;
+        margin-bottom: 1rem;
+        color: var(--gray-700);
+        line-height: 1.8;
+      }
+
+      .code-block {
+        background: var(--code-bg);
+        color: #e6edf3;
+        border-radius: 8px;
+        padding: 1rem;
+        margin: 1rem 0;
+        overflow-x: auto;
+        font-family: "Consolas", "Monaco", monospace;
+        font-size: 0.9rem;
+        line-height: 1.6;
+      }
+
+      .code-block .comment {
+        color: #8b949e;
+      }
+      .code-block .command {
+        color: #79c0ff;
+      }
+      .code-block .string {
+        color: #a5d6ff;
+      }
+      .code-block .flag {
+        color: #ffa657;
+      }
+      .code-block .heading {
+        color: #7ee787;
+        font-weight: bold;
+      }
+      .code-block .label {
+        color: #ffa657;
+      }
+
+      code {
+        background: var(--gray-100);
+        padding: 0.2rem 0.4rem;
+        border-radius: 4px;
+        font-family: "Consolas", monospace;
+        font-size: 0.9em;
+        color: #cf222e;
+      }
+
+      .info-box {
+        background: var(--info-bg);
+        border-left: 4px solid var(--info-border);
+        padding: 1rem 1.25rem;
+        border-radius: 0 8px 8px 0;
+        margin: 1.5rem 0;
+      }
+
+      .warning-box {
+        background: var(--warning-bg);
+        border-left: 4px solid var(--warning-border);
+        padding: 1rem 1.25rem;
+        border-radius: 0 8px 8px 0;
+        margin: 1.5rem 0;
+      }
+
+      .success-box {
+        background: var(--primary-light);
+        border-left: 4px solid var(--primary);
+        padding: 1rem 1.25rem;
+        border-radius: 0 8px 8px 0;
+        margin: 1.5rem 0;
+      }
+
+      .info-box strong,
+      .warning-box strong,
+      .success-box strong {
+        display: block;
+        margin-bottom: 0.25rem;
+        color: var(--gray-900);
+      }
+
+      .data-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 1rem 0;
+        font-size: 0.9rem;
+      }
+      .data-table th,
+      .data-table td {
+        padding: 0.75rem;
+        text-align: left;
+        border-bottom: 1px solid var(--gray-200);
+      }
+      .data-table th {
+        background: var(--gray-100);
+        font-weight: 600;
+        color: var(--gray-700);
+      }
+
+      .checklist {
+        list-style: none;
+        margin-left: 0 !important;
+      }
+      .checklist li {
+        padding: 0.5rem 0;
+        display: flex;
+        gap: 0.75rem;
+        align-items: flex-start;
+      }
+      .checklist li::before {
+        content: "☐";
+        font-size: 1.2rem;
+        color: var(--module-color);
+      }
+
+      .template-box {
+        background: #f0f4f8;
+        border: 2px dashed var(--gray-300);
+        border-radius: 12px;
+        padding: 1.25rem;
+        margin: 1rem 0;
+      }
+
+      .template-box h4 {
+        color: var(--module-color);
+        margin-bottom: 0.75rem;
+      }
+
+      .step-navigation {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 2rem;
+        padding-top: 2rem;
+        border-top: 1px solid var(--gray-200);
+      }
+
+      .nav-btn {
+        padding: 0.75rem 1.5rem;
+        border-radius: 8px;
+        font-weight: 600;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        cursor: pointer;
+        border: none;
+        font-size: 1rem;
+        transition: all 0.3s;
+        text-decoration: none;
+      }
+
+      .nav-btn.prev {
+        background: var(--gray-200);
+        color: var(--gray-700);
+      }
+      .nav-btn.prev:hover {
+        background: var(--gray-300);
+      }
+      .nav-btn.next {
+        background: var(--module-color);
+        color: white;
+      }
+      .nav-btn.next:hover {
+        opacity: 0.9;
+      }
+      .nav-btn:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+      }
+
+      .progress-indicator {
+        background: var(--gray-200);
+        height: 4px;
+        position: fixed;
+        top: 0;
+        left: 300px;
+        right: 0;
+        z-index: 100;
+      }
+
+      .progress-fill {
+        height: 100%;
+        background: var(--module-color);
+        transition: width 0.3s;
+      }
+      .step-page {
+        display: none;
+      }
+      .step-page.active {
+        display: block;
+      }
     </style>
-</head>
-<body>
+  </head>
+  <body>
     <div class="progress-indicator">
-        <div class="progress-fill" id="progressFill" style="width: 0%"></div>
+      <div class="progress-fill" id="progressFill" style="width: 0%"></div>
     </div>
-    
+
     <aside class="sidebar">
-        <div class="sidebar-header">
-            <a href="developer-training.html">← Back to Developer Training</a>
-            <h2>Module 4: Pull Requests</h2>
-            <span class="module-badge">20 minutes</span>
-        </div>
-        
-        <ul class="steps-list" id="stepsList">
-            <li class="step-item active" data-step="1" onclick="goToStep(1)">
-                <span class="step-number">1</span>
-                <div class="step-info">
-                    <div class="step-title">Why PRs Matter</div>
-                    <div class="step-duration">2 min</div>
-                </div>
-            </li>
-            <li class="step-item" data-step="2" onclick="goToStep(2)">
-                <span class="step-number">2</span>
-                <div class="step-info">
-                    <div class="step-title">Creating a Great PR</div>
-                    <div class="step-duration">4 min</div>
-                </div>
-            </li>
-            <li class="step-item" data-step="3" onclick="goToStep(3)">
-                <span class="step-number">3</span>
-                <div class="step-info">
-                    <div class="step-title">PR Templates</div>
-                    <div class="step-duration">3 min</div>
-                </div>
-            </li>
-            <li class="step-item" data-step="4" onclick="goToStep(4)">
-                <span class="step-number">4</span>
-                <div class="step-info">
-                    <div class="step-title">Code Review Etiquette</div>
-                    <div class="step-duration">4 min</div>
-                </div>
-            </li>
-            <li class="step-item" data-step="5" onclick="goToStep(5)">
-                <span class="step-number">5</span>
-                <div class="step-info">
-                    <div class="step-title">Merge Strategies</div>
-                    <div class="step-duration">4 min</div>
-                </div>
-            </li>
-            <li class="step-item" data-step="6" onclick="goToStep(6)">
-                <span class="step-number">6</span>
-                <div class="step-info">
-                    <div class="step-title">Module Complete</div>
-                    <div class="step-duration">3 min</div>
-                </div>
-            </li>
-        </ul>
+      <div class="sidebar-header">
+        <a href="developer-training.html">← Back to Developer Training</a>
+        <h2>Module 4: Pull Requests</h2>
+        <span class="module-badge">20 minutes</span>
+      </div>
+
+      <ul class="steps-list" id="stepsList">
+        <li class="step-item active" data-step="1" onclick="goToStep(1)">
+          <span class="step-number">1</span>
+          <div class="step-info">
+            <div class="step-title">Why PRs Matter</div>
+            <div class="step-duration">2 min</div>
+          </div>
+        </li>
+        <li class="step-item" data-step="2" onclick="goToStep(2)">
+          <span class="step-number">2</span>
+          <div class="step-info">
+            <div class="step-title">Creating a Great PR</div>
+            <div class="step-duration">4 min</div>
+          </div>
+        </li>
+        <li class="step-item" data-step="3" onclick="goToStep(3)">
+          <span class="step-number">3</span>
+          <div class="step-info">
+            <div class="step-title">PR Templates</div>
+            <div class="step-duration">3 min</div>
+          </div>
+        </li>
+        <li class="step-item" data-step="4" onclick="goToStep(4)">
+          <span class="step-number">4</span>
+          <div class="step-info">
+            <div class="step-title">Code Review Etiquette</div>
+            <div class="step-duration">4 min</div>
+          </div>
+        </li>
+        <li class="step-item" data-step="5" onclick="goToStep(5)">
+          <span class="step-number">5</span>
+          <div class="step-info">
+            <div class="step-title">Merge Strategies</div>
+            <div class="step-duration">4 min</div>
+          </div>
+        </li>
+        <li class="step-item" data-step="6" onclick="goToStep(6)">
+          <span class="step-number">6</span>
+          <div class="step-info">
+            <div class="step-title">Module Complete</div>
+            <div class="step-duration">3 min</div>
+          </div>
+        </li>
+      </ul>
     </aside>
-    
+
     <main class="main-content">
-        <!-- Step 1 -->
-        <div class="step-page active" id="step1">
-            <div class="step-content">
-                <div class="step-header">
-                    <span class="step-badge">Step 1 of 6</span>
-                    <h1>Why PRs Matter</h1>
-                    <p>The cornerstone of team collaboration</p>
-                </div>
-                
-                <div class="content-card">
-                    <h2>🔄 What is a Pull Request?</h2>
-                    <p>A Pull Request (PR) is a formal request to merge your changes into another branch. It's where:</p>
-                    <ul>
-                        <li><strong>Code review</strong> happens - teammates examine your changes</li>
-                        <li><strong>Discussion</strong> occurs - questions, suggestions, alternatives</li>
-                        <li><strong>Tests run</strong> - automated checks validate your code</li>
-                        <li><strong>Knowledge transfers</strong> - team learns about new changes</li>
-                    </ul>
-                </div>
-                
-                <div class="content-card">
-                    <h2>🎯 Benefits of Pull Requests</h2>
-                    <table class="data-table">
-                        <tr>
-                            <th>Benefit</th>
-                            <th>How It Helps</th>
-                        </tr>
-                        <tr>
-                            <td><strong>Quality Gate</strong></td>
-                            <td>Catches bugs before they reach main branch</td>
-                        </tr>
-                        <tr>
-                            <td><strong>Knowledge Sharing</strong></td>
-                            <td>Team stays aware of changes across codebase</td>
-                        </tr>
-                        <tr>
-                            <td><strong>Documentation</strong></td>
-                            <td>Creates a record of what changed and why</td>
-                        </tr>
-                        <tr>
-                            <td><strong>Mentorship</strong></td>
-                            <td>Junior devs learn from review feedback</td>
-                        </tr>
-                        <tr>
-                            <td><strong>Accountability</strong></td>
-                            <td>Clear ownership of changes</td>
-                        </tr>
-                    </table>
-                </div>
-                
-                <div class="info-box">
-                    <strong>💡 PR Golden Rule</strong>
-                    Never merge your own PR without review (except hotfixes). Even senior developers benefit from a second pair of eyes.
-                </div>
-                
-                <div class="step-navigation">
-                    <button class="nav-btn prev" disabled>← Previous</button>
-                    <button class="nav-btn next" onclick="goToStep(2)">Next: Creating a Great PR →</button>
-                </div>
-            </div>
+      <!-- Step 1 -->
+      <div class="step-page active" id="step1">
+        <div class="step-content">
+          <div class="step-header">
+            <span class="step-badge">Step 1 of 6</span>
+            <h1>Why PRs Matter</h1>
+            <p>The cornerstone of team collaboration</p>
+          </div>
+
+          <div class="content-card">
+            <h2>🔄 What is a Pull Request?</h2>
+            <p>
+              A Pull Request (PR) is a formal request to merge your changes into
+              another branch. It's where:
+            </p>
+            <ul>
+              <li>
+                <strong>Code review</strong> happens - teammates examine your
+                changes
+              </li>
+              <li>
+                <strong>Discussion</strong> occurs - questions, suggestions,
+                alternatives
+              </li>
+              <li>
+                <strong>Tests run</strong> - automated checks validate your code
+              </li>
+              <li>
+                <strong>Knowledge transfers</strong> - team learns about new
+                changes
+              </li>
+            </ul>
+          </div>
+
+          <div class="content-card">
+            <h2>🎯 Benefits of Pull Requests</h2>
+            <table class="data-table">
+              <tr>
+                <th>Benefit</th>
+                <th>How It Helps</th>
+              </tr>
+              <tr>
+                <td><strong>Quality Gate</strong></td>
+                <td>Catches bugs before they reach main branch</td>
+              </tr>
+              <tr>
+                <td><strong>Knowledge Sharing</strong></td>
+                <td>Team stays aware of changes across codebase</td>
+              </tr>
+              <tr>
+                <td><strong>Documentation</strong></td>
+                <td>Creates a record of what changed and why</td>
+              </tr>
+              <tr>
+                <td><strong>Mentorship</strong></td>
+                <td>Junior devs learn from review feedback</td>
+              </tr>
+              <tr>
+                <td><strong>Accountability</strong></td>
+                <td>Clear ownership of changes</td>
+              </tr>
+            </table>
+          </div>
+
+          <div class="info-box">
+            <strong>💡 PR Golden Rule</strong>
+            Never merge your own PR without review (except hotfixes). Even
+            senior developers benefit from a second pair of eyes.
+          </div>
+
+          <div class="step-navigation">
+            <button class="nav-btn prev" disabled>← Previous</button>
+            <button class="nav-btn next" onclick="goToStep(2)">
+              Next: Creating a Great PR →
+            </button>
+          </div>
         </div>
-        
-        <!-- Step 2 -->
-        <div class="step-page" id="step2">
-            <div class="step-content">
-                <div class="step-header">
-                    <span class="step-badge">Step 2 of 6</span>
-                    <h1>Creating a Great PR</h1>
-                    <p>Set your reviewers up for success</p>
-                </div>
-                
-                <div class="content-card">
-                    <h2>📝 Anatomy of a Good PR</h2>
-                    
-                    <h3>1. Clear, Descriptive Title</h3>
-                    <table class="data-table">
-                        <tr>
-                            <th style="width: 50%;">❌ Bad</th>
-                            <th style="width: 50%;">✅ Good</th>
-                        </tr>
-                        <tr>
-                            <td>"Fixed bug"</td>
-                            <td>"Fix: Prevent duplicate submissions on login form"</td>
-                        </tr>
-                        <tr>
-                            <td>"Updates"</td>
-                            <td>"Feature: Add export to CSV functionality"</td>
-                        </tr>
-                        <tr>
-                            <td>"WIP"</td>
-                            <td>"[WIP] Refactor user authentication - feedback needed"</td>
-                        </tr>
-                    </table>
-                    
-                    <h3>2. Meaningful Description</h3>
-                    <p>Your description should answer:</p>
-                    <ul>
-                        <li><strong>What</strong> - What does this PR do?</li>
-                        <li><strong>Why</strong> - Why is this change needed?</li>
-                        <li><strong>How</strong> - How does it work? (for complex changes)</li>
-                        <li><strong>Testing</strong> - How was this tested?</li>
-                    </ul>
-                    
-                    <h3>3. Right Size</h3>
-                    <ul>
-                        <li><strong>Ideal:</strong> 100-400 lines changed</li>
-                        <li><strong>Maximum:</strong> 500 lines (beyond this, split into multiple PRs)</li>
-                        <li>One logical change per PR</li>
-                    </ul>
-                </div>
-                
-                <div class="warning-box">
-                    <strong>⚠️ Large PRs Get Ignored</strong>
-                    Studies show reviewers spend less total time on 1000+ line PRs than on 200-line PRs. Keep them small for better reviews.
-                </div>
-                
-                <div class="step-navigation">
-                    <button class="nav-btn prev" onclick="goToStep(1)">← Previous</button>
-                    <button class="nav-btn next" onclick="goToStep(3)">Next: PR Templates →</button>
-                </div>
-            </div>
+      </div>
+
+      <!-- Step 2 -->
+      <div class="step-page" id="step2">
+        <div class="step-content">
+          <div class="step-header">
+            <span class="step-badge">Step 2 of 6</span>
+            <h1>Creating a Great PR</h1>
+            <p>Set your reviewers up for success</p>
+          </div>
+
+          <div class="content-card">
+            <h2>📝 Anatomy of a Good PR</h2>
+
+            <h3>1. Clear, Descriptive Title</h3>
+            <table class="data-table">
+              <tr>
+                <th style="width: 50%">❌ Bad</th>
+                <th style="width: 50%">✅ Good</th>
+              </tr>
+              <tr>
+                <td>"Fixed bug"</td>
+                <td>"Fix: Prevent duplicate submissions on login form"</td>
+              </tr>
+              <tr>
+                <td>"Updates"</td>
+                <td>"Feature: Add export to CSV functionality"</td>
+              </tr>
+              <tr>
+                <td>"WIP"</td>
+                <td>"[WIP] Refactor user authentication - feedback needed"</td>
+              </tr>
+            </table>
+
+            <h3>2. Meaningful Description</h3>
+            <p>Your description should answer:</p>
+            <ul>
+              <li><strong>What</strong> - What does this PR do?</li>
+              <li><strong>Why</strong> - Why is this change needed?</li>
+              <li>
+                <strong>How</strong> - How does it work? (for complex changes)
+              </li>
+              <li><strong>Testing</strong> - How was this tested?</li>
+            </ul>
+
+            <h3>3. Right Size</h3>
+            <ul>
+              <li><strong>Ideal:</strong> 100-400 lines changed</li>
+              <li>
+                <strong>Maximum:</strong> 500 lines (beyond this, split into
+                multiple PRs)
+              </li>
+              <li>One logical change per PR</li>
+            </ul>
+          </div>
+
+          <div class="warning-box">
+            <strong>⚠️ Large PRs Get Ignored</strong>
+            Studies show reviewers spend less total time on 1000+ line PRs than
+            on 200-line PRs. Keep them small for better reviews.
+          </div>
+
+          <div class="step-navigation">
+            <button class="nav-btn prev" onclick="goToStep(1)">
+              ← Previous
+            </button>
+            <button class="nav-btn next" onclick="goToStep(3)">
+              Next: PR Templates →
+            </button>
+          </div>
         </div>
-        
-        <!-- Step 3 -->
-        <div class="step-page" id="step3">
-            <div class="step-content">
-                <div class="step-header">
-                    <span class="step-badge">Step 3 of 6</span>
-                    <h1>PR Templates</h1>
-                    <p>Standardize your pull requests</p>
-                </div>
-                
-                <div class="content-card">
-                    <h2>📄 Using PR Templates</h2>
-                    <p>Create a file at <code>.github/PULL_REQUEST_TEMPLATE.md</code> to auto-populate PR descriptions:</p>
-                    
-                    <div class="code-block">
-<span class="heading">## Summary</span>
-Brief description of the changes.
+      </div>
 
-<span class="heading">## Type of Change</span>
-- [ ] 🐛 Bug fix
-- [ ] ✨ New feature
-- [ ] 🔄 Refactoring
-- [ ] 📝 Documentation
-- [ ] 🔧 Configuration
+      <!-- Step 3 -->
+      <div class="step-page" id="step3">
+        <div class="step-content">
+          <div class="step-header">
+            <span class="step-badge">Step 3 of 6</span>
+            <h1>PR Templates</h1>
+            <p>Standardize your pull requests</p>
+          </div>
 
-<span class="heading">## Related Issues</span>
-Closes #<span class="label">[issue number]</span>
+          <div class="content-card">
+            <h2>📄 Using PR Templates</h2>
+            <p>
+              Create a file at <code>.github/PULL_REQUEST_TEMPLATE.md</code> to
+              auto-populate PR descriptions:
+            </p>
 
-<span class="heading">## Changes Made</span>
-- Change 1
-- Change 2
+            <div class="code-block">
+              <span class="heading">## Summary</span>
+              Brief description of the changes.
 
-<span class="heading">## Testing</span>
-- [ ] Unit tests added/updated
-- [ ] Manual testing completed
-- Describe test scenarios:
+              <span class="heading">## Type of Change</span>
+              - [ ] 🐛 Bug fix - [ ] ✨ New feature - [ ] 🔄 Refactoring - [ ]
+              📝 Documentation - [ ] 🔧 Configuration
 
-<span class="heading">## Screenshots</span>
-(if applicable)
+              <span class="heading">## Related Issues</span>
+              Closes #<span class="label">[issue number]</span>
 
-<span class="heading">## Checklist</span>
-- [ ] Code follows team style guide
-- [ ] Self-review completed
-- [ ] Comments added for complex logic
-- [ ] Documentation updated (if needed)
-                    </div>
-                </div>
-                
-                <div class="content-card">
-                    <h2>📋 Quick PR Template (Minimal)</h2>
-                    <p>For teams just starting out, here's a simpler template:</p>
-                    
-                    <div class="template-box">
-                        <h4>📌 Simple PR Template</h4>
-                        <div class="code-block" style="background: var(--code-bg); margin-top: 0.5rem;">
-<span class="heading">## What does this PR do?</span>
-<span class="comment">[One paragraph explanation]</span>
+              <span class="heading">## Changes Made</span>
+              - Change 1 - Change 2
 
-<span class="heading">## Why?</span>
-<span class="comment">[Link to issue or explain the need]</span>
+              <span class="heading">## Testing</span>
+              - [ ] Unit tests added/updated - [ ] Manual testing completed -
+              Describe test scenarios:
 
-<span class="heading">## How to test</span>
-<span class="comment">[Steps to verify the changes work]</span>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="success-box">
-                    <strong>✅ Pro Tip</strong>
-                    Even without a formal template, spend 2 minutes writing a good description. Your reviewer (and future you) will thank you.
-                </div>
-                
-                <div class="step-navigation">
-                    <button class="nav-btn prev" onclick="goToStep(2)">← Previous</button>
-                    <button class="nav-btn next" onclick="goToStep(4)">Next: Code Review Etiquette →</button>
-                </div>
+              <span class="heading">## Screenshots</span>
+              (if applicable)
+
+              <span class="heading">## Checklist</span>
+              - [ ] Code follows team style guide - [ ] Self-review completed -
+              [ ] Comments added for complex logic - [ ] Documentation updated
+              (if needed)
             </div>
-        </div>
-        
-        <!-- Step 4 -->
-        <div class="step-page" id="step4">
-            <div class="step-content">
-                <div class="step-header">
-                    <span class="step-badge">Step 4 of 6</span>
-                    <h1>Code Review Etiquette</h1>
-                    <p>Review with respect and purpose</p>
-                </div>
-                
-                <div class="content-card">
-                    <h2>👤 As a Reviewer</h2>
-                    
-                    <h3>Do:</h3>
-                    <ul>
-                        <li><strong>Be kind</strong> - You're reviewing code, not the person</li>
-                        <li><strong>Explain why</strong> - Don't just say "change this," explain why</li>
-                        <li><strong>Ask questions</strong> - "What's the reasoning here?" vs "This is wrong"</li>
-                        <li><strong>Suggest, don't demand</strong> - "Consider using..." vs "You must use..."</li>
-                        <li><strong>Highlight positives</strong> - Call out good code too!</li>
-                    </ul>
-                    
-                    <h3>Don't:</h3>
-                    <ul>
-                        <li>Use harsh language or sarcasm</li>
-                        <li>Nitpick on style (automate with linters instead)</li>
-                        <li>Request changes on unrelated code</li>
-                        <li>Leave dozens of tiny comments</li>
-                    </ul>
-                    
-                    <div class="info-box">
-                        <strong>💡 Helpful Comment Examples</strong>
-                        <ul style="margin-top: 0.5rem;">
-                            <li>"Nit: minor suggestion, not blocking" → low priority</li>
-                            <li>"Consider: alternative approach..." → optional suggestion</li>
-                            <li>"Question: Could this cause X?" → request for clarification</li>
-                        </ul>
-                    </div>
-                </div>
-                
-                <div class="content-card">
-                    <h2>👤 As the Author</h2>
-                    
-                    <h3>Do:</h3>
-                    <ul>
-                        <li><strong>Assume good intent</strong> - Reviewers want to help</li>
-                        <li><strong>Explain your thinking</strong> - If you disagree, explain why</li>
-                        <li><strong>Say thank you</strong> - Appreciate thorough reviews</li>
-                        <li><strong>Learn from feedback</strong> - Every review is a learning opportunity</li>
-                    </ul>
-                    
-                    <h3>Don't:</h3>
-                    <ul>
-                        <li>Take feedback personally</li>
-                        <li>Argue over minor style preferences</li>
-                        <li>Ignore comments without responding</li>
-                    </ul>
-                </div>
-                
-                <div class="step-navigation">
-                    <button class="nav-btn prev" onclick="goToStep(3)">← Previous</button>
-                    <button class="nav-btn next" onclick="goToStep(5)">Next: Merge Strategies →</button>
-                </div>
+          </div>
+
+          <div class="content-card">
+            <h2>📋 Quick PR Template (Minimal)</h2>
+            <p>For teams just starting out, here's a simpler template:</p>
+
+            <div class="template-box">
+              <h4>📌 Simple PR Template</h4>
+              <div
+                class="code-block"
+                style="background: var(--code-bg); margin-top: 0.5rem"
+              >
+                <span class="heading">## What does this PR do?</span>
+                <span class="comment">[One paragraph explanation]</span>
+
+                <span class="heading">## Why?</span>
+                <span class="comment">[Link to issue or explain the need]</span>
+
+                <span class="heading">## How to test</span>
+                <span class="comment">[Steps to verify the changes work]</span>
+              </div>
             </div>
+          </div>
+
+          <div class="success-box">
+            <strong>✅ Pro Tip</strong>
+            Even without a formal template, spend 2 minutes writing a good
+            description. Your reviewer (and future you) will thank you.
+          </div>
+
+          <div class="step-navigation">
+            <button class="nav-btn prev" onclick="goToStep(2)">
+              ← Previous
+            </button>
+            <button class="nav-btn next" onclick="goToStep(4)">
+              Next: Code Review Etiquette →
+            </button>
+          </div>
         </div>
-        
-        <!-- Step 5 -->
-        <div class="step-page" id="step5">
-            <div class="step-content">
-                <div class="step-header">
-                    <span class="step-badge">Step 5 of 6</span>
-                    <h1>Merge Strategies</h1>
-                    <p>How to integrate your changes</p>
-                </div>
-                
-                <div class="content-card">
-                    <h2>🔀 Three Ways to Merge</h2>
-                    
-                    <h3>1. Merge Commit</h3>
-                    <div class="code-block">
-<span class="command">git merge</span> feature-branch
-<span class="comment"># Creates a merge commit preserving all history</span>
-                    </div>
-                    <ul>
-                        <li>✅ Preserves complete history</li>
-                        <li>✅ Clear where branches joined</li>
-                        <li>❌ History can look cluttered</li>
-                    </ul>
-                    
-                    <h3>2. Squash and Merge</h3>
-                    <div class="code-block">
-<span class="command">git merge</span> <span class="flag">--squash</span> feature-branch
-<span class="comment"># Combines all commits into one</span>
-                    </div>
-                    <ul>
-                        <li>✅ Clean, linear history</li>
-                        <li>✅ One commit per feature</li>
-                        <li>❌ Loses granular commit history</li>
-                    </ul>
-                    
-                    <h3>3. Rebase and Merge</h3>
-                    <div class="code-block">
-<span class="command">git rebase</span> main
-<span class="command">git checkout</span> main
-<span class="command">git merge</span> feature-branch
-<span class="comment"># Replays commits on top of main</span>
-                    </div>
-                    <ul>
-                        <li>✅ Linear history with all commits</li>
-                        <li>✅ No merge commits</li>
-                        <li>❌ Can be confusing</li>
-                        <li>❌ Rewrites history (dangerous if shared)</li>
-                    </ul>
-                </div>
-                
-                <div class="content-card">
-                    <h2>📊 Which Strategy to Use?</h2>
-                    <table class="data-table">
-                        <tr>
-                            <th>Scenario</th>
-                            <th>Recommended</th>
-                        </tr>
-                        <tr>
-                            <td>Simple feature, few commits</td>
-                            <td><strong>Squash and Merge</strong></td>
-                        </tr>
-                        <tr>
-                            <td>Important granular history</td>
-                            <td><strong>Merge Commit</strong></td>
-                        </tr>
-                        <tr>
-                            <td>Need clean linear history</td>
-                            <td><strong>Rebase and Merge</strong></td>
-                        </tr>
-                        <tr>
-                            <td>Not sure / team default</td>
-                            <td><strong>Squash and Merge</strong></td>
-                        </tr>
-                    </table>
-                </div>
-                
-                <div class="success-box">
-                    <strong>✅ Team Recommendation</strong>
-                    We suggest <strong>Squash and Merge</strong> as the default. It keeps main history clean while preserving the PR as the source of detailed history.
-                </div>
-                
-                <div class="step-navigation">
-                    <button class="nav-btn prev" onclick="goToStep(4)">← Previous</button>
-                    <button class="nav-btn next" onclick="goToStep(6)">Complete Module →</button>
-                </div>
+      </div>
+
+      <!-- Step 4 -->
+      <div class="step-page" id="step4">
+        <div class="step-content">
+          <div class="step-header">
+            <span class="step-badge">Step 4 of 6</span>
+            <h1>Code Review Etiquette</h1>
+            <p>Review with respect and purpose</p>
+          </div>
+
+          <div class="content-card">
+            <h2>👤 As a Reviewer</h2>
+
+            <h3>Do:</h3>
+            <ul>
+              <li>
+                <strong>Be kind</strong> - You're reviewing code, not the person
+              </li>
+              <li>
+                <strong>Explain why</strong> - Don't just say "change this,"
+                explain why
+              </li>
+              <li>
+                <strong>Ask questions</strong> - "What's the reasoning here?" vs
+                "This is wrong"
+              </li>
+              <li>
+                <strong>Suggest, don't demand</strong> - "Consider using..." vs
+                "You must use..."
+              </li>
+              <li>
+                <strong>Highlight positives</strong> - Call out good code too!
+              </li>
+            </ul>
+
+            <h3>Don't:</h3>
+            <ul>
+              <li>Use harsh language or sarcasm</li>
+              <li>Nitpick on style (automate with linters instead)</li>
+              <li>Request changes on unrelated code</li>
+              <li>Leave dozens of tiny comments</li>
+            </ul>
+
+            <div class="info-box">
+              <strong>💡 Helpful Comment Examples</strong>
+              <ul style="margin-top: 0.5rem">
+                <li>"Nit: minor suggestion, not blocking" → low priority</li>
+                <li>
+                  "Consider: alternative approach..." → optional suggestion
+                </li>
+                <li>
+                  "Question: Could this cause X?" → request for clarification
+                </li>
+              </ul>
             </div>
+          </div>
+
+          <div class="content-card">
+            <h2>👤 As the Author</h2>
+
+            <h3>Do:</h3>
+            <ul>
+              <li>
+                <strong>Assume good intent</strong> - Reviewers want to help
+              </li>
+              <li>
+                <strong>Explain your thinking</strong> - If you disagree,
+                explain why
+              </li>
+              <li>
+                <strong>Say thank you</strong> - Appreciate thorough reviews
+              </li>
+              <li>
+                <strong>Learn from feedback</strong> - Every review is a
+                learning opportunity
+              </li>
+            </ul>
+
+            <h3>Don't:</h3>
+            <ul>
+              <li>Take feedback personally</li>
+              <li>Argue over minor style preferences</li>
+              <li>Ignore comments without responding</li>
+            </ul>
+          </div>
+
+          <div class="step-navigation">
+            <button class="nav-btn prev" onclick="goToStep(3)">
+              ← Previous
+            </button>
+            <button class="nav-btn next" onclick="goToStep(5)">
+              Next: Merge Strategies →
+            </button>
+          </div>
         </div>
-        
-        <!-- Step 6 -->
-        <div class="step-page" id="step6">
-            <div class="step-content">
-                <div class="step-header">
-                    <span class="step-badge">Step 6 of 6</span>
-                    <h1>🎉 Module Complete!</h1>
-                    <p>You're now a PR pro</p>
-                </div>
-                
-                <div class="content-card" style="text-align: center; padding: 2.5rem;">
-                    <div style="font-size: 4rem; margin-bottom: 1rem;">🔀</div>
-                    <h2>Pull Request Mastery!</h2>
-                    <p style="font-size: 1.1rem; max-width: 500px; margin: 1rem auto;">You now know how to create effective PRs and conduct meaningful code reviews.</p>
-                </div>
-                
-                <div class="content-card">
-                    <h2>📋 Key Takeaways</h2>
-                    <ul>
-                        <li><strong>Write descriptive PRs</strong> - Clear title, meaningful description</li>
-                        <li><strong>Keep PRs small</strong> - Under 500 lines when possible</li>
-                        <li><strong>Use templates</strong> - Standardize what information is included</li>
-                        <li><strong>Review with kindness</strong> - Critique code, not people</li>
-                        <li><strong>Squash for cleanliness</strong> - Keep main branch history readable</li>
-                    </ul>
-                </div>
-                
-                <div class="content-card">
-                    <h2>✅ PR Checklist</h2>
-                    <ul class="checklist">
-                        <li>Title clearly describes the change</li>
-                        <li>Description explains what, why, and how to test</li>
-                        <li>PR is appropriately sized (&lt;500 lines)</li>
-                        <li>Self-review completed before requesting review</li>
-                        <li>All tests passing</li>
-                        <li>At least one approval before merging</li>
-                    </ul>
-                </div>
-                
-                <div class="content-card" style="background: linear-gradient(135deg, var(--module-color), #a855f7); color: white;">
-                    <h2 style="color: white;">Next Up: GitHub Copilot Agent</h2>
-                    <p style="color: rgba(255,255,255,0.9);">Learn how to leverage AI-powered coding assistance to boost your productivity.</p>
-                    <div style="margin-top: 1rem;">
-                        <a href="dev-module5-copilot-agent.html" class="nav-btn" style="background: white; color: var(--module-color);">Start Module 5 →</a>
-                    </div>
-                </div>
-                
-                <div class="step-navigation">
-                    <button class="nav-btn prev" onclick="goToStep(5)">← Previous</button>
-                    <button class="nav-btn next" onclick="completeModule()" style="background: var(--primary);">✓ Complete Module</button>
-                </div>
+      </div>
+
+      <!-- Step 5 -->
+      <div class="step-page" id="step5">
+        <div class="step-content">
+          <div class="step-header">
+            <span class="step-badge">Step 5 of 6</span>
+            <h1>Merge Strategies</h1>
+            <p>How to integrate your changes</p>
+          </div>
+
+          <div class="content-card">
+            <h2>🔀 Three Ways to Merge</h2>
+
+            <h3>1. Merge Commit</h3>
+            <div class="code-block">
+              <span class="command">git merge</span> feature-branch
+              <span class="comment"
+                ># Creates a merge commit preserving all history</span
+              >
             </div>
+            <ul>
+              <li>✅ Preserves complete history</li>
+              <li>✅ Clear where branches joined</li>
+              <li>❌ History can look cluttered</li>
+            </ul>
+
+            <h3>2. Squash and Merge</h3>
+            <div class="code-block">
+              <span class="command">git merge</span>
+              <span class="flag">--squash</span> feature-branch
+              <span class="comment"># Combines all commits into one</span>
+            </div>
+            <ul>
+              <li>✅ Clean, linear history</li>
+              <li>✅ One commit per feature</li>
+              <li>❌ Loses granular commit history</li>
+            </ul>
+
+            <h3>3. Rebase and Merge</h3>
+            <div class="code-block">
+              <span class="command">git rebase</span> main
+              <span class="command">git checkout</span> main
+              <span class="command">git merge</span> feature-branch
+              <span class="comment"># Replays commits on top of main</span>
+            </div>
+            <ul>
+              <li>✅ Linear history with all commits</li>
+              <li>✅ No merge commits</li>
+              <li>❌ Can be confusing</li>
+              <li>❌ Rewrites history (dangerous if shared)</li>
+            </ul>
+          </div>
+
+          <div class="content-card">
+            <h2>📊 Which Strategy to Use?</h2>
+            <table class="data-table">
+              <tr>
+                <th>Scenario</th>
+                <th>Recommended</th>
+              </tr>
+              <tr>
+                <td>Simple feature, few commits</td>
+                <td><strong>Squash and Merge</strong></td>
+              </tr>
+              <tr>
+                <td>Important granular history</td>
+                <td><strong>Merge Commit</strong></td>
+              </tr>
+              <tr>
+                <td>Need clean linear history</td>
+                <td><strong>Rebase and Merge</strong></td>
+              </tr>
+              <tr>
+                <td>Not sure / team default</td>
+                <td><strong>Squash and Merge</strong></td>
+              </tr>
+            </table>
+          </div>
+
+          <div class="success-box">
+            <strong>✅ Team Recommendation</strong>
+            We suggest <strong>Squash and Merge</strong> as the default. It
+            keeps main history clean while preserving the PR as the source of
+            detailed history.
+          </div>
+
+          <div class="step-navigation">
+            <button class="nav-btn prev" onclick="goToStep(4)">
+              ← Previous
+            </button>
+            <button class="nav-btn next" onclick="goToStep(6)">
+              Complete Module →
+            </button>
+          </div>
         </div>
+      </div>
+
+      <!-- Step 6 -->
+      <div class="step-page" id="step6">
+        <div class="step-content">
+          <div class="step-header">
+            <span class="step-badge">Step 6 of 6</span>
+            <h1>🎉 Module Complete!</h1>
+            <p>You're now a PR pro</p>
+          </div>
+
+          <div class="content-card" style="text-align: center; padding: 2.5rem">
+            <div style="font-size: 4rem; margin-bottom: 1rem">🔀</div>
+            <h2>Pull Request Mastery!</h2>
+            <p style="font-size: 1.1rem; max-width: 500px; margin: 1rem auto">
+              You now know how to create effective PRs and conduct meaningful
+              code reviews.
+            </p>
+          </div>
+
+          <div class="content-card">
+            <h2>📋 Key Takeaways</h2>
+            <ul>
+              <li>
+                <strong>Write descriptive PRs</strong> - Clear title, meaningful
+                description
+              </li>
+              <li>
+                <strong>Keep PRs small</strong> - Under 500 lines when possible
+              </li>
+              <li>
+                <strong>Use templates</strong> - Standardize what information is
+                included
+              </li>
+              <li>
+                <strong>Review with kindness</strong> - Critique code, not
+                people
+              </li>
+              <li>
+                <strong>Squash for cleanliness</strong> - Keep main branch
+                history readable
+              </li>
+            </ul>
+          </div>
+
+          <div class="content-card">
+            <h2>✅ PR Checklist</h2>
+            <ul class="checklist">
+              <li>Title clearly describes the change</li>
+              <li>Description explains what, why, and how to test</li>
+              <li>PR is appropriately sized (&lt;500 lines)</li>
+              <li>Self-review completed before requesting review</li>
+              <li>All tests passing</li>
+              <li>At least one approval before merging</li>
+            </ul>
+          </div>
+
+          <div
+            class="content-card"
+            style="
+              background: linear-gradient(135deg, var(--module-color), #a855f7);
+              color: white;
+            "
+          >
+            <h2 style="color: white">Next Up: GitHub Copilot Agent</h2>
+            <p style="color: rgba(255, 255, 255, 0.9)">
+              Learn how to leverage AI-powered coding assistance to boost your
+              productivity.
+            </p>
+            <div style="margin-top: 1rem">
+              <a
+                href="dev-module5-copilot-agent.html"
+                class="nav-btn"
+                style="background: white; color: var(--module-color)"
+                >Start Module 5 →</a
+              >
+            </div>
+          </div>
+
+          <div class="step-navigation">
+            <button class="nav-btn prev" onclick="goToStep(5)">
+              ← Previous
+            </button>
+            <button
+              class="nav-btn next"
+              onclick="completeModule()"
+              style="background: var(--primary)"
+            >
+              ✓ Complete Module
+            </button>
+          </div>
+        </div>
+      </div>
     </main>
-    
+
     <script>
-        const totalSteps = 6;
-        let currentStep = 1;
-        let completedSteps = [];
-        
-        function loadProgress() {
-            const saved = localStorage.getItem('dev-module4-step');
-            if (saved) {
-                currentStep = parseInt(saved);
-                for (let i = 1; i < currentStep; i++) {
-                    completedSteps.push(i);
-                }
-            }
-            updateUI();
+      const totalSteps = 6;
+      let currentStep = 1;
+      let completedSteps = [];
+
+      function loadProgress() {
+        const saved = localStorage.getItem("dev-module4-step");
+        if (saved) {
+          currentStep = parseInt(saved);
+          for (let i = 1; i < currentStep; i++) {
+            completedSteps.push(i);
+          }
         }
-        
-        function saveProgress() {
-            localStorage.setItem('dev-module4-step', currentStep);
-            if (currentStep > 1) {
-                localStorage.setItem('dev-module4', 'in-progress');
-            }
+        updateUI();
+      }
+
+      function saveProgress() {
+        localStorage.setItem("dev-module4-step", currentStep);
+        if (currentStep > 1) {
+          localStorage.setItem("dev-module4", "in-progress");
         }
-        
-        function goToStep(step) {
-            if (step > currentStep) {
-                for (let i = currentStep; i < step; i++) {
-                    if (!completedSteps.includes(i)) completedSteps.push(i);
-                }
-            }
-            currentStep = step;
-            saveProgress();
-            updateUI();
-            window.scrollTo(0, 0);
+      }
+
+      function goToStep(step) {
+        if (step > currentStep) {
+          for (let i = currentStep; i < step; i++) {
+            if (!completedSteps.includes(i)) completedSteps.push(i);
+          }
         }
-        
-        function updateUI() {
-            document.querySelectorAll('.step-page').forEach((page, index) => {
-                page.classList.remove('active');
-                if (index + 1 === currentStep) page.classList.add('active');
-            });
-            
-            document.querySelectorAll('.step-item').forEach((item, index) => {
-                const stepNum = index + 1;
-                item.classList.remove('active', 'completed');
-                if (stepNum === currentStep) item.classList.add('active');
-                else if (completedSteps.includes(stepNum)) item.classList.add('completed');
-            });
-            
-            const progress = ((currentStep - 1) / (totalSteps - 1)) * 100;
-            document.getElementById('progressFill').style.width = `${progress}%`;
-        }
-        
-        function completeModule() {
-            localStorage.setItem('dev-module4', 'completed');
-            localStorage.setItem('dev-module4-step', totalSteps);
-            window.location.href = 'developer-training.html';
-        }
-        
-        loadProgress();
+        currentStep = step;
+        saveProgress();
+        updateUI();
+        window.scrollTo(0, 0);
+      }
+
+      function updateUI() {
+        document.querySelectorAll(".step-page").forEach((page, index) => {
+          page.classList.remove("active");
+          if (index + 1 === currentStep) page.classList.add("active");
+        });
+
+        document.querySelectorAll(".step-item").forEach((item, index) => {
+          const stepNum = index + 1;
+          item.classList.remove("active", "completed");
+          if (stepNum === currentStep) item.classList.add("active");
+          else if (completedSteps.includes(stepNum))
+            item.classList.add("completed");
+        });
+
+        const progress = ((currentStep - 1) / (totalSteps - 1)) * 100;
+        document.getElementById("progressFill").style.width = `${progress}%`;
+      }
+
+      function completeModule() {
+        localStorage.setItem("dev-module4", "completed");
+        localStorage.setItem("dev-module4-step", totalSteps);
+        window.location.href = "developer-training.html";
+      }
+
+      loadProgress();
     </script>
-</body>
+  </body>
 </html>

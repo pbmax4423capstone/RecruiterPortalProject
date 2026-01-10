@@ -1,11 +1,13 @@
 # LinkedIn to Salesforce Edge Extension
 
 ## Overview
+
 This Microsoft Edge extension allows recruiters to import LinkedIn profiles directly as Candidates into Salesforce.
 
 > **Note:** This is the Edge version of the Chrome extension. Both share the same Connected App configuration in Salesforce.
 
 ## Features
+
 - Extract profile data (First Name, Last Name) from LinkedIn profiles
 - Auto-fill Salesforce candidate fields (Agency, Position, Status, Next Step)
 - Sets the logged-in user as the Recruiter
@@ -56,8 +58,9 @@ This Microsoft Edge extension allows recruiters to import LinkedIn profiles dire
 
 ### Step 5: Create LinkedIn Profile URL Field (Optional)
 
-If you want to store the LinkedIn URL, create a custom field on Candidate__c:
-- **Field Name**: LinkedIn_Profile__c
+If you want to store the LinkedIn URL, create a custom field on Candidate\_\_c:
+
+- **Field Name**: LinkedIn_Profile\_\_c
 - **Type**: URL
 - **Label**: LinkedIn Profile
 
@@ -73,16 +76,19 @@ If you want to store the LinkedIn URL, create a custom field on Candidate__c:
 ## Troubleshooting
 
 ### "Failed to connect" error
+
 - Verify the Consumer Key is correct
 - Check that the Callback URL matches exactly
 - For sandbox, ensure you're using test.salesforce.com
 
 ### Profile data not extracted
+
 - LinkedIn frequently changes their page structure
 - Try refreshing the LinkedIn page
 - Manually enter the name in the extension
 
 ### "Access token expired"
+
 - Click "Disconnect from Salesforce" and reconnect
 
 ## Moving to Production

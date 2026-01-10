@@ -1,4 +1,5 @@
 # Deployment Results - Custom Metadata
+
 **Date:** 2026-01-08  
 **Agent:** Deployment Agent  
 **Previous Agent:** Documentation Agent  
@@ -18,9 +19,11 @@
 **Total Components:** 37 Custom Metadata records
 
 **Changed:** 1
+
 - `ALC_Stage_Config.NRF_Stage_07` - Changed `Is_Active__c` from `false` to `true`
 
 **Unchanged:** 36
+
 - All other stage configurations deployed without changes (verification deployment)
 
 ---
@@ -32,6 +35,7 @@ sf project deploy start --metadata CustomMetadata --target-org ProductionCapston
 ```
 
 **Results:**
+
 - ✅ Preparing: 204ms
 - ✅ Waiting for org response: 586ms
 - ✅ Deploying Metadata: 29.17s (100% - 37/37 components)
@@ -45,6 +49,7 @@ sf project deploy start --metadata CustomMetadata --target-org ProductionCapston
 **File:** `ALC_Stage_Config.NRF_Stage_07.md-meta.xml`
 
 **Change Applied:**
+
 ```xml
 <!-- BEFORE -->
 <field>Is_Active__c</field>
@@ -56,6 +61,7 @@ sf project deploy start --metadata CustomMetadata --target-org ProductionCapston
 ```
 
 **Impact:**
+
 - NRF records in "Request FieldNet/CoverPath Access" stage now included in queries
 - Stage will appear as a column in NRF tab of the component
 - NRF tab counts will include records in this stage
@@ -129,6 +135,7 @@ sf project deploy start --metadata CustomMetadata --target-org ProductionCapston
 **If issues are found:**
 
 Rollback command:
+
 ```bash
 # Revert NRF_Stage_07 to inactive
 # Edit file locally to set Is_Active__c = false

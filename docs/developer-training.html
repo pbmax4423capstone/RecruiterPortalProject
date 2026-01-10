@@ -1,433 +1,598 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Developer Collaboration Training - Git & GitHub Copilot</title>
     <style>
-        :root {
-            --primary: #238636;
-            --primary-dark: #1a7f37;
-            --primary-light: #d1fae5;
-            --secondary: #8b5cf6;
-            --secondary-light: #ede9fe;
-            --gray-100: #f6f8fa;
-            --gray-200: #e5e5e5;
-            --gray-300: #d0d7de;
-            --gray-500: #6e7781;
-            --gray-700: #444;
-            --gray-900: #1f2328;
-            --code-bg: #161b22;
-        }
-        
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans', Helvetica, Arial, sans-serif;
-            background: var(--gray-100);
-            min-height: 100vh;
-            color: var(--gray-900);
-        }
-        
-        /* Header */
-        .header {
-            background: linear-gradient(135deg, var(--gray-900) 0%, #2d333b 100%);
-            color: white;
-            padding: 3rem 2rem;
-            text-align: center;
-        }
-        
-        .header-content { max-width: 800px; margin: 0 auto; }
-        .header h1 { font-size: 2.5rem; margin-bottom: 0.5rem; }
-        .header p { font-size: 1.2rem; opacity: 0.9; margin-bottom: 1.5rem; }
-        
-        .header-stats {
-            display: flex;
-            justify-content: center;
-            gap: 2rem;
-            flex-wrap: wrap;
-        }
-        
-        .stat {
-            text-align: center;
-        }
-        
-        .stat-value { font-size: 2rem; font-weight: 700; color: var(--primary); }
-        .stat-label { font-size: 0.85rem; opacity: 0.8; }
-        
-        /* Navigation */
-        .nav {
-            background: white;
-            padding: 0.75rem 2rem;
-            border-bottom: 1px solid var(--gray-300);
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-        }
-        
-        .nav a { color: var(--primary); text-decoration: none; font-weight: 500; }
-        .nav a:hover { text-decoration: underline; }
-        
-        /* Main Content */
-        .container { max-width: 1200px; margin: 0 auto; padding: 2rem; }
-        
-        /* Progress Section */
-        .progress-section {
-            background: white;
-            border-radius: 12px;
-            padding: 1.5rem;
-            margin-bottom: 2rem;
-            border: 1px solid var(--gray-300);
-        }
-        
-        .progress-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 1rem;
-        }
-        
-        .progress-header h2 { font-size: 1.1rem; color: var(--gray-700); }
-        .progress-text { color: var(--gray-500); font-size: 0.9rem; }
-        
-        .progress-bar {
-            background: var(--gray-200);
-            height: 8px;
-            border-radius: 4px;
-            overflow: hidden;
-        }
-        
-        .progress-fill {
-            height: 100%;
-            background: var(--primary);
-            border-radius: 4px;
-            transition: width 0.5s ease;
-        }
-        
-        /* Module Grid */
-        .modules-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-            gap: 1.5rem;
-        }
-        
-        .module-card {
-            background: white;
-            border-radius: 12px;
-            border: 1px solid var(--gray-300);
-            overflow: hidden;
-            transition: all 0.3s ease;
-            text-decoration: none;
-            color: inherit;
-            display: block;
-        }
-        
-        .module-card:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 12px 24px rgba(0,0,0,0.1);
-            border-color: var(--primary);
-        }
-        
-        .module-card.locked {
-            opacity: 0.6;
-            pointer-events: none;
-        }
-        
-        .module-header {
-            padding: 1.25rem;
-            display: flex;
-            align-items: flex-start;
-            gap: 1rem;
-        }
-        
-        .module-icon {
-            width: 50px;
-            height: 50px;
-            border-radius: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.5rem;
-            flex-shrink: 0;
-        }
-        
-        .module-icon.git { background: #f14e32; color: white; }
-        .module-icon.branch { background: #8250df; color: white; }
-        .module-icon.merge { background: #bf8700; color: white; }
-        .module-icon.pr { background: #238636; color: white; }
-        .module-icon.copilot { background: linear-gradient(135deg, #7c3aed, #2563eb); color: white; }
-        .module-icon.setup { background: #0969da; color: white; }
-        
-        .module-info { flex-grow: 1; }
-        .module-number { font-size: 0.75rem; color: var(--gray-500); text-transform: uppercase; letter-spacing: 0.5px; }
-        .module-title { font-size: 1.1rem; font-weight: 600; margin: 0.25rem 0; color: var(--gray-900); }
-        .module-desc { font-size: 0.9rem; color: var(--gray-500); line-height: 1.5; }
-        
-        .module-footer {
-            padding: 1rem 1.25rem;
-            background: var(--gray-100);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-top: 1px solid var(--gray-200);
-        }
-        
-        .module-meta { display: flex; gap: 1rem; font-size: 0.85rem; color: var(--gray-500); }
-        
-        .module-status {
-            padding: 0.25rem 0.75rem;
-            border-radius: 12px;
-            font-size: 0.8rem;
-            font-weight: 600;
-        }
-        
-        .status-not-started { background: var(--gray-200); color: var(--gray-700); }
-        .status-in-progress { background: #ddf4ff; color: #0969da; }
-        .status-completed { background: var(--primary-light); color: var(--primary-dark); }
-        
-        /* Key Principles */
-        .principles {
-            background: white;
-            border-radius: 12px;
-            padding: 1.5rem;
-            margin-top: 2rem;
-            border: 1px solid var(--gray-300);
-        }
-        
-        .principles h2 {
-            font-size: 1.1rem;
-            color: var(--gray-900);
-            margin-bottom: 1rem;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-        
-        .principles-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 1rem;
-        }
-        
-        .principle {
-            background: var(--gray-100);
-            padding: 1rem;
-            border-radius: 8px;
-            border-left: 3px solid var(--primary);
-        }
-        
-        .principle strong { display: block; color: var(--gray-900); margin-bottom: 0.25rem; }
-        .principle span { font-size: 0.9rem; color: var(--gray-500); }
-        
-        /* Footer */
-        footer {
-            text-align: center;
-            padding: 2rem;
-            color: var(--gray-500);
-            font-size: 0.9rem;
-        }
-        
-        footer a { color: var(--primary); }
+      :root {
+        --primary: #238636;
+        --primary-dark: #1a7f37;
+        --primary-light: #d1fae5;
+        --secondary: #8b5cf6;
+        --secondary-light: #ede9fe;
+        --gray-100: #f6f8fa;
+        --gray-200: #e5e5e5;
+        --gray-300: #d0d7de;
+        --gray-500: #6e7781;
+        --gray-700: #444;
+        --gray-900: #1f2328;
+        --code-bg: #161b22;
+      }
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family:
+          -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans", Helvetica,
+          Arial, sans-serif;
+        background: var(--gray-100);
+        min-height: 100vh;
+        color: var(--gray-900);
+      }
+
+      /* Header */
+      .header {
+        background: linear-gradient(135deg, var(--gray-900) 0%, #2d333b 100%);
+        color: white;
+        padding: 3rem 2rem;
+        text-align: center;
+      }
+
+      .header-content {
+        max-width: 800px;
+        margin: 0 auto;
+      }
+      .header h1 {
+        font-size: 2.5rem;
+        margin-bottom: 0.5rem;
+      }
+      .header p {
+        font-size: 1.2rem;
+        opacity: 0.9;
+        margin-bottom: 1.5rem;
+      }
+
+      .header-stats {
+        display: flex;
+        justify-content: center;
+        gap: 2rem;
+        flex-wrap: wrap;
+      }
+
+      .stat {
+        text-align: center;
+      }
+
+      .stat-value {
+        font-size: 2rem;
+        font-weight: 700;
+        color: var(--primary);
+      }
+      .stat-label {
+        font-size: 0.85rem;
+        opacity: 0.8;
+      }
+
+      /* Navigation */
+      .nav {
+        background: white;
+        padding: 0.75rem 2rem;
+        border-bottom: 1px solid var(--gray-300);
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+      }
+
+      .nav a {
+        color: var(--primary);
+        text-decoration: none;
+        font-weight: 500;
+      }
+      .nav a:hover {
+        text-decoration: underline;
+      }
+
+      /* Main Content */
+      .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 2rem;
+      }
+
+      /* Progress Section */
+      .progress-section {
+        background: white;
+        border-radius: 12px;
+        padding: 1.5rem;
+        margin-bottom: 2rem;
+        border: 1px solid var(--gray-300);
+      }
+
+      .progress-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 1rem;
+      }
+
+      .progress-header h2 {
+        font-size: 1.1rem;
+        color: var(--gray-700);
+      }
+      .progress-text {
+        color: var(--gray-500);
+        font-size: 0.9rem;
+      }
+
+      .progress-bar {
+        background: var(--gray-200);
+        height: 8px;
+        border-radius: 4px;
+        overflow: hidden;
+      }
+
+      .progress-fill {
+        height: 100%;
+        background: var(--primary);
+        border-radius: 4px;
+        transition: width 0.5s ease;
+      }
+
+      /* Module Grid */
+      .modules-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+        gap: 1.5rem;
+      }
+
+      .module-card {
+        background: white;
+        border-radius: 12px;
+        border: 1px solid var(--gray-300);
+        overflow: hidden;
+        transition: all 0.3s ease;
+        text-decoration: none;
+        color: inherit;
+        display: block;
+      }
+
+      .module-card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 12px 24px rgba(0, 0, 0, 0.1);
+        border-color: var(--primary);
+      }
+
+      .module-card.locked {
+        opacity: 0.6;
+        pointer-events: none;
+      }
+
+      .module-header {
+        padding: 1.25rem;
+        display: flex;
+        align-items: flex-start;
+        gap: 1rem;
+      }
+
+      .module-icon {
+        width: 50px;
+        height: 50px;
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.5rem;
+        flex-shrink: 0;
+      }
+
+      .module-icon.git {
+        background: #f14e32;
+        color: white;
+      }
+      .module-icon.branch {
+        background: #8250df;
+        color: white;
+      }
+      .module-icon.merge {
+        background: #bf8700;
+        color: white;
+      }
+      .module-icon.pr {
+        background: #238636;
+        color: white;
+      }
+      .module-icon.copilot {
+        background: linear-gradient(135deg, #7c3aed, #2563eb);
+        color: white;
+      }
+      .module-icon.setup {
+        background: #0969da;
+        color: white;
+      }
+
+      .module-info {
+        flex-grow: 1;
+      }
+      .module-number {
+        font-size: 0.75rem;
+        color: var(--gray-500);
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+      }
+      .module-title {
+        font-size: 1.1rem;
+        font-weight: 600;
+        margin: 0.25rem 0;
+        color: var(--gray-900);
+      }
+      .module-desc {
+        font-size: 0.9rem;
+        color: var(--gray-500);
+        line-height: 1.5;
+      }
+
+      .module-footer {
+        padding: 1rem 1.25rem;
+        background: var(--gray-100);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-top: 1px solid var(--gray-200);
+      }
+
+      .module-meta {
+        display: flex;
+        gap: 1rem;
+        font-size: 0.85rem;
+        color: var(--gray-500);
+      }
+
+      .module-status {
+        padding: 0.25rem 0.75rem;
+        border-radius: 12px;
+        font-size: 0.8rem;
+        font-weight: 600;
+      }
+
+      .status-not-started {
+        background: var(--gray-200);
+        color: var(--gray-700);
+      }
+      .status-in-progress {
+        background: #ddf4ff;
+        color: #0969da;
+      }
+      .status-completed {
+        background: var(--primary-light);
+        color: var(--primary-dark);
+      }
+
+      /* Key Principles */
+      .principles {
+        background: white;
+        border-radius: 12px;
+        padding: 1.5rem;
+        margin-top: 2rem;
+        border: 1px solid var(--gray-300);
+      }
+
+      .principles h2 {
+        font-size: 1.1rem;
+        color: var(--gray-900);
+        margin-bottom: 1rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+
+      .principles-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 1rem;
+      }
+
+      .principle {
+        background: var(--gray-100);
+        padding: 1rem;
+        border-radius: 8px;
+        border-left: 3px solid var(--primary);
+      }
+
+      .principle strong {
+        display: block;
+        color: var(--gray-900);
+        margin-bottom: 0.25rem;
+      }
+      .principle span {
+        font-size: 0.9rem;
+        color: var(--gray-500);
+      }
+
+      /* Footer */
+      footer {
+        text-align: center;
+        padding: 2rem;
+        color: var(--gray-500);
+        font-size: 0.9rem;
+      }
+
+      footer a {
+        color: var(--primary);
+      }
     </style>
-</head>
-<body>
+  </head>
+  <body>
     <header class="header">
-        <div class="header-content">
-            <h1>🤝 Developer Collaboration Training</h1>
-            <p>Best practices for working together with Git, GitHub, and Copilot Agent</p>
-            <div class="header-stats">
-                <div class="stat">
-                    <div class="stat-value">6</div>
-                    <div class="stat-label">Modules</div>
-                </div>
-                <div class="stat">
-                    <div class="stat-value">~90</div>
-                    <div class="stat-label">Minutes</div>
-                </div>
-                <div class="stat">
-                    <div class="stat-value">40+</div>
-                    <div class="stat-label">Best Practices</div>
-                </div>
-            </div>
+      <div class="header-content">
+        <h1>🤝 Developer Collaboration Training</h1>
+        <p>
+          Best practices for working together with Git, GitHub, and Copilot
+          Agent
+        </p>
+        <div class="header-stats">
+          <div class="stat">
+            <div class="stat-value">6</div>
+            <div class="stat-label">Modules</div>
+          </div>
+          <div class="stat">
+            <div class="stat-value">~90</div>
+            <div class="stat-label">Minutes</div>
+          </div>
+          <div class="stat">
+            <div class="stat-value">40+</div>
+            <div class="stat-label">Best Practices</div>
+          </div>
         </div>
+      </div>
     </header>
-    
+
     <nav class="nav">
-        <a href="index.html">← Training Center</a>
+      <a href="index.html">← Training Center</a>
     </nav>
-    
+
     <main class="container">
-        <!-- Progress Section -->
-        <section class="progress-section">
-            <div class="progress-header">
-                <h2>Your Progress</h2>
-                <span class="progress-text" id="progressText">0 of 6 modules completed</span>
+      <!-- Progress Section -->
+      <section class="progress-section">
+        <div class="progress-header">
+          <h2>Your Progress</h2>
+          <span class="progress-text" id="progressText"
+            >0 of 6 modules completed</span
+          >
+        </div>
+        <div class="progress-bar">
+          <div class="progress-fill" id="progressFill" style="width: 0%"></div>
+        </div>
+      </section>
+
+      <!-- Modules Grid -->
+      <section class="modules-grid">
+        <a
+          href="dev-module1-git-fundamentals.html"
+          class="module-card"
+          data-module="1"
+        >
+          <div class="module-header">
+            <div class="module-icon git">📦</div>
+            <div class="module-info">
+              <div class="module-number">Module 1</div>
+              <div class="module-title">Git Fundamentals for Teams</div>
+              <div class="module-desc">
+                Core Git commands, commits, branches, and synchronization basics
+                every developer needs.
+              </div>
             </div>
-            <div class="progress-bar">
-                <div class="progress-fill" id="progressFill" style="width: 0%"></div>
+          </div>
+          <div class="module-footer">
+            <div class="module-meta">
+              <span>⏱️ 15 min</span>
+              <span>📝 6 steps</span>
             </div>
-        </section>
-        
-        <!-- Modules Grid -->
-        <section class="modules-grid">
-            <a href="dev-module1-git-fundamentals.html" class="module-card" data-module="1">
-                <div class="module-header">
-                    <div class="module-icon git">📦</div>
-                    <div class="module-info">
-                        <div class="module-number">Module 1</div>
-                        <div class="module-title">Git Fundamentals for Teams</div>
-                        <div class="module-desc">Core Git commands, commits, branches, and synchronization basics every developer needs.</div>
-                    </div>
-                </div>
-                <div class="module-footer">
-                    <div class="module-meta">
-                        <span>⏱️ 15 min</span>
-                        <span>📝 6 steps</span>
-                    </div>
-                    <span class="module-status status-not-started" id="status1">Not Started</span>
-                </div>
-            </a>
-            
-            <a href="dev-module2-branch-strategy.html" class="module-card" data-module="2">
-                <div class="module-header">
-                    <div class="module-icon branch">🌿</div>
-                    <div class="module-info">
-                        <div class="module-number">Module 2</div>
-                        <div class="module-title">Branch Strategy & Workflow</div>
-                        <div class="module-desc">Feature branches, naming conventions, and choosing the right workflow for your team.</div>
-                    </div>
-                </div>
-                <div class="module-footer">
-                    <div class="module-meta">
-                        <span>⏱️ 15 min</span>
-                        <span>📝 6 steps</span>
-                    </div>
-                    <span class="module-status status-not-started" id="status2">Not Started</span>
-                </div>
-            </a>
-            
-            <a href="dev-module3-avoiding-conflicts.html" class="module-card" data-module="3">
-                <div class="module-header">
-                    <div class="module-icon merge">⚔️</div>
-                    <div class="module-info">
-                        <div class="module-number">Module 3</div>
-                        <div class="module-title">Avoiding Merge Conflicts</div>
-                        <div class="module-desc">Strategies to prevent conflicts before they happen and resolve them when they do.</div>
-                    </div>
-                </div>
-                <div class="module-footer">
-                    <div class="module-meta">
-                        <span>⏱️ 15 min</span>
-                        <span>📝 6 steps</span>
-                    </div>
-                    <span class="module-status status-not-started" id="status3">Not Started</span>
-                </div>
-            </a>
-            
-            <a href="dev-module4-pull-requests.html" class="module-card" data-module="4">
-                <div class="module-header">
-                    <div class="module-icon pr">✅</div>
-                    <div class="module-info">
-                        <div class="module-number">Module 4</div>
-                        <div class="module-title">Pull Request Best Practices</div>
-                        <div class="module-desc">Creating effective PRs, code review etiquette, and merge strategies.</div>
-                    </div>
-                </div>
-                <div class="module-footer">
-                    <div class="module-meta">
-                        <span>⏱️ 15 min</span>
-                        <span>📝 6 steps</span>
-                    </div>
-                    <span class="module-status status-not-started" id="status4">Not Started</span>
-                </div>
-            </a>
-            
-            <a href="dev-module5-copilot-agent.html" class="module-card" data-module="5">
-                <div class="module-header">
-                    <div class="module-icon copilot">🤖</div>
-                    <div class="module-info">
-                        <div class="module-number">Module 5</div>
-                        <div class="module-title">GitHub Copilot Agent</div>
-                        <div class="module-desc">Leveraging AI assistants effectively for code generation and team collaboration.</div>
-                    </div>
-                </div>
-                <div class="module-footer">
-                    <div class="module-meta">
-                        <span>⏱️ 15 min</span>
-                        <span>📝 7 steps</span>
-                    </div>
-                    <span class="module-status status-not-started" id="status5">Not Started</span>
-                </div>
-            </a>
-            
-            <a href="dev-module6-project-setup.html" class="module-card" data-module="6">
-                <div class="module-header">
-                    <div class="module-icon setup">⚙️</div>
-                    <div class="module-info">
-                        <div class="module-number">Module 6</div>
-                        <div class="module-title">Project Setup Best Practices</div>
-                        <div class="module-desc">Repository structure, protection rules, and standards for your organization.</div>
-                    </div>
-                </div>
-                <div class="module-footer">
-                    <div class="module-meta">
-                        <span>⏱️ 15 min</span>
-                        <span>📝 6 steps</span>
-                    </div>
-                    <span class="module-status status-not-started" id="status6">Not Started</span>
-                </div>
-            </a>
-        </section>
-        
-        <!-- Key Principles -->
-        <section class="principles">
-            <h2>🎯 Core Collaboration Principles</h2>
-            <div class="principles-grid">
-                <div class="principle">
-                    <strong>Communicate Early</strong>
-                    <span>Let teammates know what you're working on before you start</span>
-                </div>
-                <div class="principle">
-                    <strong>Pull Often</strong>
-                    <span>Sync with remote frequently to catch conflicts early</span>
-                </div>
-                <div class="principle">
-                    <strong>Small Commits</strong>
-                    <span>Focused changes are easier to review and less likely to conflict</span>
-                </div>
-                <div class="principle">
-                    <strong>Review Thoroughly</strong>
-                    <span>Code reviews catch bugs and share knowledge across the team</span>
-                </div>
+            <span class="module-status status-not-started" id="status1"
+              >Not Started</span
+            >
+          </div>
+        </a>
+
+        <a
+          href="dev-module2-branch-strategy.html"
+          class="module-card"
+          data-module="2"
+        >
+          <div class="module-header">
+            <div class="module-icon branch">🌿</div>
+            <div class="module-info">
+              <div class="module-number">Module 2</div>
+              <div class="module-title">Branch Strategy & Workflow</div>
+              <div class="module-desc">
+                Feature branches, naming conventions, and choosing the right
+                workflow for your team.
+              </div>
             </div>
-        </section>
+          </div>
+          <div class="module-footer">
+            <div class="module-meta">
+              <span>⏱️ 15 min</span>
+              <span>📝 6 steps</span>
+            </div>
+            <span class="module-status status-not-started" id="status2"
+              >Not Started</span
+            >
+          </div>
+        </a>
+
+        <a
+          href="dev-module3-avoiding-conflicts.html"
+          class="module-card"
+          data-module="3"
+        >
+          <div class="module-header">
+            <div class="module-icon merge">⚔️</div>
+            <div class="module-info">
+              <div class="module-number">Module 3</div>
+              <div class="module-title">Avoiding Merge Conflicts</div>
+              <div class="module-desc">
+                Strategies to prevent conflicts before they happen and resolve
+                them when they do.
+              </div>
+            </div>
+          </div>
+          <div class="module-footer">
+            <div class="module-meta">
+              <span>⏱️ 15 min</span>
+              <span>📝 6 steps</span>
+            </div>
+            <span class="module-status status-not-started" id="status3"
+              >Not Started</span
+            >
+          </div>
+        </a>
+
+        <a
+          href="dev-module4-pull-requests.html"
+          class="module-card"
+          data-module="4"
+        >
+          <div class="module-header">
+            <div class="module-icon pr">✅</div>
+            <div class="module-info">
+              <div class="module-number">Module 4</div>
+              <div class="module-title">Pull Request Best Practices</div>
+              <div class="module-desc">
+                Creating effective PRs, code review etiquette, and merge
+                strategies.
+              </div>
+            </div>
+          </div>
+          <div class="module-footer">
+            <div class="module-meta">
+              <span>⏱️ 15 min</span>
+              <span>📝 6 steps</span>
+            </div>
+            <span class="module-status status-not-started" id="status4"
+              >Not Started</span
+            >
+          </div>
+        </a>
+
+        <a
+          href="dev-module5-copilot-agent.html"
+          class="module-card"
+          data-module="5"
+        >
+          <div class="module-header">
+            <div class="module-icon copilot">🤖</div>
+            <div class="module-info">
+              <div class="module-number">Module 5</div>
+              <div class="module-title">GitHub Copilot Agent</div>
+              <div class="module-desc">
+                Leveraging AI assistants effectively for code generation and
+                team collaboration.
+              </div>
+            </div>
+          </div>
+          <div class="module-footer">
+            <div class="module-meta">
+              <span>⏱️ 15 min</span>
+              <span>📝 7 steps</span>
+            </div>
+            <span class="module-status status-not-started" id="status5"
+              >Not Started</span
+            >
+          </div>
+        </a>
+
+        <a
+          href="dev-module6-project-setup.html"
+          class="module-card"
+          data-module="6"
+        >
+          <div class="module-header">
+            <div class="module-icon setup">⚙️</div>
+            <div class="module-info">
+              <div class="module-number">Module 6</div>
+              <div class="module-title">Project Setup Best Practices</div>
+              <div class="module-desc">
+                Repository structure, protection rules, and standards for your
+                organization.
+              </div>
+            </div>
+          </div>
+          <div class="module-footer">
+            <div class="module-meta">
+              <span>⏱️ 15 min</span>
+              <span>📝 6 steps</span>
+            </div>
+            <span class="module-status status-not-started" id="status6"
+              >Not Started</span
+            >
+          </div>
+        </a>
+      </section>
+
+      <!-- Key Principles -->
+      <section class="principles">
+        <h2>🎯 Core Collaboration Principles</h2>
+        <div class="principles-grid">
+          <div class="principle">
+            <strong>Communicate Early</strong>
+            <span
+              >Let teammates know what you're working on before you start</span
+            >
+          </div>
+          <div class="principle">
+            <strong>Pull Often</strong>
+            <span>Sync with remote frequently to catch conflicts early</span>
+          </div>
+          <div class="principle">
+            <strong>Small Commits</strong>
+            <span
+              >Focused changes are easier to review and less likely to
+              conflict</span
+            >
+          </div>
+          <div class="principle">
+            <strong>Review Thoroughly</strong>
+            <span
+              >Code reviews catch bugs and share knowledge across the team</span
+            >
+          </div>
+        </div>
+      </section>
     </main>
-    
+
     <footer>
-        Developer Collaboration Training v1.0 | December 2025 | <a href="index.html">Training Center Home</a>
+      Developer Collaboration Training v1.0 | December 2025 |
+      <a href="index.html">Training Center Home</a>
     </footer>
-    
+
     <script>
-        function loadProgress() {
-            let completed = 0;
-            for (let i = 1; i <= 6; i++) {
-                const status = localStorage.getItem(`dev-module${i}`);
-                const statusEl = document.getElementById(`status${i}`);
-                if (status === 'completed') {
-                    completed++;
-                    statusEl.textContent = 'Completed';
-                    statusEl.className = 'module-status status-completed';
-                } else if (status === 'in-progress') {
-                    statusEl.textContent = 'In Progress';
-                    statusEl.className = 'module-status status-in-progress';
-                }
-            }
-            
-            document.getElementById('progressText').textContent = `${completed} of 6 modules completed`;
-            document.getElementById('progressFill').style.width = `${(completed / 6) * 100}%`;
+      function loadProgress() {
+        let completed = 0;
+        for (let i = 1; i <= 6; i++) {
+          const status = localStorage.getItem(`dev-module${i}`);
+          const statusEl = document.getElementById(`status${i}`);
+          if (status === "completed") {
+            completed++;
+            statusEl.textContent = "Completed";
+            statusEl.className = "module-status status-completed";
+          } else if (status === "in-progress") {
+            statusEl.textContent = "In Progress";
+            statusEl.className = "module-status status-in-progress";
+          }
         }
-        
-        loadProgress();
+
+        document.getElementById("progressText").textContent =
+          `${completed} of 6 modules completed`;
+        document.getElementById("progressFill").style.width =
+          `${(completed / 6) * 100}%`;
+      }
+
+      loadProgress();
     </script>
-</body>
+  </body>
 </html>

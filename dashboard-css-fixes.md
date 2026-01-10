@@ -13,14 +13,16 @@ I've updated the CSS in your `recruiterDashboard.css` file to fix the readabilit
 ### 📋 **Specific Updates:**
 
 **Clickable Stat Items:**
+
 - Background: Dark blue (`#003366`)
 - Text: White with proper contrast
 - Hover: Lighter blue (`#0066cc`) with shadow effects
 - Enhanced padding and border radius
 
 **Text Overrides:**
+
 - `.slds-text-heading_large` → White
-- `.slds-text-body_regular` → White  
+- `.slds-text-body_regular` → White
 - `.slds-text-body_small` → Semi-transparent white
 - `.slds-text-color_success` → Light green (`#90ee90`)
 - `.slds-text-color_error` → Light red (`#ffcccb`)
@@ -31,6 +33,7 @@ The changes are ready in your CSS file at:
 `force-app/main/default/lwc/recruiterDashboard/recruiterDashboard.css`
 
 **To deploy (once Apex issues are resolved):**
+
 ```bash
 sf project deploy start --source-dir force-app/main/default/lwc/recruiterDashboard --target-org recruiting-sbx
 ```
@@ -38,6 +41,7 @@ sf project deploy start --source-dir force-app/main/default/lwc/recruiterDashboa
 ### 📱 **Expected Result:**
 
 The "My Call Management - Priority Section" will now have:
+
 - ✅ Dark blue background instead of unclear/unreadable background
 - ✅ Crisp white text that's easy to read
 - ✅ Better hover effects for interactivity
@@ -46,6 +50,7 @@ The "My Call Management - Priority Section" will now have:
 The deployment is currently blocked by an Apex controller issue, but the CSS changes are ready and will dramatically improve the readability of your dashboard once deployed.
 
 Would you like me to:
+
 1. Fix the Apex deployment issue so we can deploy the CSS changes?
 2. Create a standalone CSS file that you can manually copy?
 3. Focus on other dashboard improvements?

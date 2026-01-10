@@ -10,6 +10,7 @@
 4. **[AGENT_COORDINATION.md](AGENT_COORDINATION.md)** - 🤖 Agent handoff patterns
 
 **Quick Coordination Check:**
+
 ```bash
 # Check active work
 cat SHARED_PLANNING.md | grep "🔵 In Progress"
@@ -26,6 +27,7 @@ git pull origin main
 ## Getting Started
 
 ### 1. Pull Latest Changes
+
 Before starting any work, always pull the latest changes from the main branch:
 
 ```bash
@@ -35,17 +37,20 @@ git pull origin main
 ### 2. Target Orgs
 
 **Production (Primary Working Org):**
+
 - **Alias:** `ProductionCapstone` or `production`
 - **Username:** `patrickbakeradmin2@financialguide.com`
 - **Org Type:** Production - Live data org for daily work
 - **Set as default:** `sf config set target-org=ProductionCapstone`
 
 **ProdTest Sandbox (Testing Only):**
+
 - **Alias:** `ProdTest` or `prodtest`
 - **Username:** `patrickbakeradmin2@financialguide.com.prodtest`
 - **Org Type:** Partial Data Sandbox - For testing before production deployment
 
 Verify your connection:
+
 ```bash
 sf org list
 sf org display  # Should show 'ProductionCapstone' as target
@@ -58,15 +63,18 @@ sf org display  # Should show 'ProductionCapstone' as target
 The following components have been actively modified by Pat Baker. Coordinate before making changes:
 
 ### LWC Components
-| Component | Description | Last Modified |
-|-----------|-------------|---------------|
-| `salesManagerContractingKanban` | Sales Manager Career contracting Kanban with filtering | Jan 9, 2026 |
-| `candidateRecordView` | Main candidate record page with auto-refresh | Dec 18, 2025 |
-| `recruiterDashboard` | Main recruiter dashboard | Dec 2025 |
-| `contractBPipelineDashboard` | Contract B lifecycle tracking & YTD metrics | Dec 19, 2025 |
+
+| Component                       | Description                                            | Last Modified |
+| ------------------------------- | ------------------------------------------------------ | ------------- |
+| `salesManagerContractingKanban` | Sales Manager Career contracting Kanban with filtering | Jan 9, 2026   |
+| `candidateRecordView`           | Main candidate record page with auto-refresh           | Dec 18, 2025  |
+| `recruiterDashboard`            | Main recruiter dashboard                               | Dec 2025      |
+| `contractBPipelineDashboard`    | Contract B lifecycle tracking & YTD metrics            | Dec 19, 2025  |
 
 ### Email Templates (Candidate_Outreach folder)
+
 All 7 templates were updated Dec 18, 2025 - merge fields changed to `{!Contact.FirstName}`:
+
 - `Candidate_Welcome_Initial_Outreach.email`
 - `Candidate_Stage_Ci_First.email`
 - `Candidate_Stage_Align_Second.email`
@@ -76,16 +84,19 @@ All 7 templates were updated Dec 18, 2025 - merge fields changed to `{!Contact.F
 - `Candidate_Stage_Contracted.email`
 
 ### Flows
-| Flow | Description |
-|------|-------------|
-| `Candidate_Stage_Email_Automation` | Sends emails on stage changes |
-| `Test_Welcome_Email_Only` | Test flow - can be deactivated |
+
+| Flow                               | Description                    |
+| ---------------------------------- | ------------------------------ |
+| `Candidate_Stage_Email_Automation` | Sends emails on stage changes  |
+| `Test_Welcome_Email_Only`          | Test flow - can be deactivated |
 
 ### Browser Extensions
+
 - `chrome-extension-linkedin/` - LinkedIn to Salesforce importer
 - `edge-extension-linkedin/` - Edge version of above
 
 ### Connected Apps
+
 - `LinkedIn_Import_Extension` - OAuth for browser extensions
 
 ---
@@ -97,21 +108,25 @@ All 7 templates were updated Dec 18, 2025 - merge fields changed to `{!Contact.F
 ### Deploy to Production (Default)
 
 #### Deploy a Single Component
+
 ```bash
 sf project deploy start --source-dir "force-app/main/default/lwc/COMPONENT_NAME"
 ```
 
 #### Deploy a Folder
+
 ```bash
 sf project deploy start --source-dir "force-app/main/default/classes"
 ```
 
 #### Deploy Everything (Use Caution)
+
 ```bash
 sf project deploy start --source-dir force-app
 ```
 
 #### Retrieve Changes from Production
+
 ```bash
 sf project retrieve start --source-dir "force-app/main/default/lwc/COMPONENT_NAME"
 ```
@@ -131,17 +146,21 @@ sf project retrieve start --source-dir "force-app/main/default/lwc/COMPONENT_NAM
 ## Best Practices
 
 ### Before Making Changes
+
 1. **Pull latest:** `git pull origin main`
 2. **Check for conflicts:** Review recently modified files above
 3. **Communicate:** Slack/message Pat if touching shared components
 
 ### When Making Changes
+
 1. **Deploy incrementally:** Deploy only what you changed
 2. **Test in org:** Verify functionality before committing
 3. **Don't modify files you didn't change:** If a file appears in your git diff that you didn't intentionally edit, revert it
 
 ### After Making Changes
+
 1. **Commit with clear messages:**
+
    ```bash
    git add .
    git commit -m "Cole: Description of what was changed"
@@ -155,22 +174,28 @@ sf project retrieve start --source-dir "force-app/main/default/lwc/COMPONENT_NAM
 ## Common Issues & Solutions
 
 ### "Identifier already declared" errors in extensions
+
 The content scripts use an IIFE guard pattern. Don't remove:
+
 ```javascript
-(function() {
-    if (window.__linkedinToSalesforceLoaded) return;
-    window.__linkedinToSalesforceLoaded = true;
-    // ... rest of code
+(function () {
+  if (window.__linkedinToSalesforceLoaded) return;
+  window.__linkedinToSalesforceLoaded = true;
+  // ... rest of code
 })();
 ```
 
 ### Email merge fields showing raw code
+
 Use classic Salesforce syntax for text email templates:
+
 - ✅ Correct: `{!Contact.FirstName}`
 - ❌ Wrong: `{{{Recipient.FirstName}}}`
 
 ### LWC not refreshing after record edit
+
 The `candidateRecordView` component uses:
+
 - `@wire(getRecord)` for detecting standard edit saves
 - CDC subscription for real-time updates
 - `refreshApex` for manual refresh
@@ -180,6 +205,7 @@ The `candidateRecordView` component uses:
 ## Key Files Reference
 
 ### Apex Controllers
+
 - `CandidateRecordViewController.cls` - Data for candidate record view
 - `RecruiterDashboardController.cls` - Dashboard data
 - `CandidateNotesController.cls` - Notes functionality
@@ -187,12 +213,14 @@ The `candidateRecordView` component uses:
 - `CandidatesInContractingController.cls` - ALC contracting Kanban data (Career + Agency filtering)
 
 ### Objects
-- `Candidate__c` - Main candidate object with Sales_Manager__c picklist
+
+- `Candidate__c` - Main candidate object with Sales_Manager\_\_c picklist
 - `Interview__c` - Interview scheduling
 - `ALC__c` - Agent Licensing & Contracting records
 - `Contact` - Linked contact records
 
 ### Permission Sets
+
 - `Recruiter_Portal_User` - Main permissions for portal users
 - `Sales_Manager_Contracting_Dashboard_Access` - Access to salesManagerContractingKanban component (Jan 9, 2026)
 
@@ -203,30 +231,35 @@ The `candidateRecordView` component uses:
 **Purpose:** Sales Manager-specific view of Career candidates in contracting stages
 
 **Key Features:**
+
 - **Career-only filtering:** Hard-coded to show only Career record type (no Agency)
 - **Sales Manager filtering:** Each SM sees only their unit's candidates by default
 - **Director override:** Directors/Admins can toggle "All Sales Managers" view
 - **localStorage persistence:** Remembers filter selection across sessions (key: `smContractingKanban_salesManagerFilter`)
 - **Drag-and-drop:** Move candidates between contracting stages with visual feedback
-- **Stage columns:** Dynamically loaded from ALC_Stage_Config__mdt metadata
+- **Stage columns:** Dynamically loaded from ALC_Stage_Config\_\_mdt metadata
 
 **Apex Backend:**
+
 - `CandidatesInContractingController.getALCDataForSalesManager(String salesManagerFilter)` - Main data provider
 - `CandidatesInContractingController.getCurrentUserSalesManagerName()` - Returns current user name
 - `CandidatesInContractingController.getSalesManagerOptions()` - Returns distinct Sales Manager picklist values
 - `CandidatesInContractingController.canViewAllSalesManagers()` - Profile check for Director/Admin access
 
 **Files:**
+
 - `force-app/main/default/lwc/salesManagerContractingKanban/` (JS, HTML, CSS, XML)
 - `force-app/main/default/lwc/salesManagerContractingKanban/__tests__/` (Jest tests)
 - `force-app/main/default/permissionsets/Sales_Manager_Contracting_Dashboard_Access.permissionset-meta.xml`
 
 **Usage:**
+
 - Deployed to Sales_Manager_Home_Page.flexipage-meta.xml
 - Requires Sales_Manager_Contracting_Dashboard_Access permission set
 - Shows on Sales Manager home pages automatically
 
 **Testing:**
+
 - 15 Jest unit tests covering all functionality
 - Apex tests: CandidatesInContractingController_Test (28/28 passing)
 - `Recruiter_Portal_User` - Main permissions for portal users
@@ -234,6 +267,7 @@ The `candidateRecordView` component uses:
 ---
 
 ## Contact
+
 If you have questions about recent changes, contact Pat Baker.
 
 **Last Updated:** December 18, 2025

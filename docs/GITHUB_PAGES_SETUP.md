@@ -56,6 +56,7 @@ mv training-portal.html index.html
 ```
 
 Then the portal will be accessible at:
+
 ```
 https://pbmax4423capstone.github.io/RecruiterPortalProject/
 ```
@@ -129,13 +130,14 @@ After recording your videos, you need to embed them in the training portal.
 4. Copy the `<iframe>` code (it will look like this):
 
 ```html
-<iframe 
-  src="https://www.loom.com/embed/abc123xyz" 
-  frameborder="0" 
-  webkitallowfullscreen 
-  mozallowfullscreen 
-  allowfullscreen 
-  style="width: 100%; height: 400px;">
+<iframe
+  src="https://www.loom.com/embed/abc123xyz"
+  frameborder="0"
+  webkitallowfullscreen
+  mozallowfullscreen
+  allowfullscreen
+  style="width: 100%; height: 400px;"
+>
 </iframe>
 ```
 
@@ -145,21 +147,25 @@ After recording your videos, you need to embed them in the training portal.
 2. Find the placeholder for the corresponding video:
 
 **For Video 1 (Creating a Candidate):**
+
 ```html
 <!-- REPLACE THIS PLACEHOLDER -->
 <div class="video-placeholder">
-    📹 Video will be added here<br>
-    <small>Record using Loom script: loom-scripts/01-creating-a-candidate.md</small>
+  📹 Video will be added here<br />
+  <small
+    >Record using Loom script: loom-scripts/01-creating-a-candidate.md</small
+  >
 </div>
 
 <!-- WITH YOUR LOOM EMBED CODE -->
-<iframe 
-  src="https://www.loom.com/embed/YOUR_VIDEO_ID" 
-  frameborder="0" 
-  webkitallowfullscreen 
-  mozallowfullscreen 
-  allowfullscreen 
-  style="width: 100%; height: 400px; border-radius: 8px;">
+<iframe
+  src="https://www.loom.com/embed/YOUR_VIDEO_ID"
+  frameborder="0"
+  webkitallowfullscreen
+  mozallowfullscreen
+  allowfullscreen
+  style="width: 100%; height: 400px; border-radius: 8px;"
+>
 </iframe>
 ```
 
@@ -223,12 +229,14 @@ https://pbmax4423capstone.github.io/RecruiterPortalProject/training-portal.html
 ### Option 2: Short URL (Recommended)
 
 Use a URL shortener like:
+
 - **Bitly:** `https://bitly.com/` → Create short link like `https://bit.ly/capstone-training`
 - **TinyURL:** `https://tinyurl.com/` → Create short link like `https://tinyurl.com/capstone-training`
 
 ### Option 3: QR Code
 
 Generate a QR code pointing to your training portal:
+
 1. Go to `https://www.qr-code-generator.com/`
 2. Paste your training portal URL
 3. Download QR code image
@@ -243,7 +251,7 @@ Subject: 🎓 New Recruiter Portal Training Available Online
 
 Hi Team,
 
-We've created a comprehensive online training portal for the Recruiter Portal system. 
+We've created a comprehensive online training portal for the Recruiter Portal system.
 
 Access the training here: https://pbmax4423capstone.github.io/RecruiterPortalProject/training-portal.html
 
@@ -299,15 +307,18 @@ To track who has completed training, you can:
 ## 📅 Maintenance Schedule
 
 ### Weekly
+
 - Review Loom video analytics to see completion rates
 - Check for broken links or outdated content
 
 ### Monthly
+
 - Update training materials based on system changes
 - Re-record videos if major UI changes occur
 - Solicit feedback from new users
 
 ### Quarterly
+
 - Review all documentation for accuracy
 - Update screenshots and examples
 - Add new modules for new features
@@ -317,6 +328,7 @@ To track who has completed training, you can:
 ## 📞 Support
 
 If you encounter issues with:
+
 - **GitHub Pages setup:** Contact GitHub Support or post in GitHub Community
 - **Loom recording:** Visit Loom Help Center: `https://support.loom.com/`
 - **Training content:** Contact Recruiting Operations team

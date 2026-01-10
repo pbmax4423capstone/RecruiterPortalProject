@@ -5,11 +5,13 @@
 **IMPORTANT:** This repository is shared between Patrick Baker and Cole Arnold with their respective Copilot agents.
 
 **Before starting any work:**
+
 1. Check [WORK_COORDINATION.md](../WORK_COORDINATION.md) for active work and protected files
 2. Review [SHARED_PLANNING.md](../SHARED_PLANNING.md) for current tasks
 3. See [AGENT_COORDINATION.md](../AGENT_COORDINATION.md) for agent handoff patterns
 
 **When handing off work:**
+
 - Create handoff documentation using templates in WORK_COORDINATION.md
 - Update task status in SHARED_PLANNING.md
 - Provide full context for the next agent/person
@@ -19,12 +21,14 @@
 This is a Salesforce DX project for a Recruiter Portal application built on the Salesforce platform. The application manages candidate recruitment, interviews, and contract lifecycle tracking.
 
 **Tech Stack:**
+
 - Salesforce Lightning Web Components (LWC)
 - Apex (Salesforce backend)
 - JavaScript (Browser extensions)
 - TypeScript (MCP server)
 
 **Key Features:**
+
 - Recruiter dashboards with interview statistics
 - Candidate and interview management
 - Contract B lifecycle tracking with FYC rollups
@@ -34,6 +38,7 @@ This is a Salesforce DX project for a Recruiter Portal application built on the 
 ## Target Orgs
 
 ### Production (Primary)
+
 - **Org Alias:** `ProductionCapstone` or `production`
 - **Username:** `patrickbakeradmin2@financialguide.com`
 - **Org Type:** Production - Live data org for daily work
@@ -41,6 +46,7 @@ This is a Salesforce DX project for a Recruiter Portal application built on the 
 - **Set as Default:** `sf config set target-org=ProductionCapstone`
 
 ### ProdTest Sandbox (Testing)
+
 - **Org Alias:** `ProdTest` or `prodtest`
 - **Username:** `patrickbakeradmin2@financialguide.com.prodtest`
 - **Org Type:** Partial Data Sandbox - For testing before production deployment
@@ -49,6 +55,7 @@ This is a Salesforce DX project for a Recruiter Portal application built on the 
 ## Build, Test & Deploy
 
 ### Linting
+
 ```bash
 npm run lint              # Lint JavaScript/LWC files
 npm run prettier         # Format all files
@@ -56,6 +63,7 @@ npm run prettier:verify  # Check formatting without changes
 ```
 
 ### Testing
+
 ```bash
 npm run test                    # Run all unit tests
 npm run test:unit:watch        # Run tests in watch mode
@@ -67,6 +75,7 @@ npm run test:unit:coverage     # Run tests with coverage report
 **Note:** Production is set as the default target org, so `--target-org` flag is not required for production deployments.
 
 #### Deploy to Production (Default)
+
 ```bash
 # Deploy a single component
 sf project deploy start --source-dir "force-app/main/default/lwc/COMPONENT_NAME"
@@ -82,6 +91,7 @@ sf project retrieve start --source-dir "force-app/main/default/lwc/COMPONENT_NAM
 ```
 
 #### Test in ProdTest Sandbox
+
 ```bash
 # Deploy to sandbox for testing (explicit target required)
 sf project deploy start --source-dir "force-app/main/default/lwc/COMPONENT_NAME" --target-org ProdTest
@@ -113,6 +123,7 @@ scripts/                     # Utility scripts
 ## Key Components
 
 ### Lightning Web Components
+
 - **recruiterDashboard** - Main dashboard with interview statistics
 - **contractBPipelineDashboard** - Contract B lifecycle tracking with YTD metrics
 - **candidateRecordView** - Candidate record page with auto-refresh functionality
@@ -120,6 +131,7 @@ scripts/                     # Utility scripts
 - **serviceDashboard** - Service team dashboard
 
 ### Apex Classes
+
 - **RecruiterDashboardController** - Data provider for recruiter dashboard
 - **ContractBDashboardController** - Contract B pipeline and YTD recruiting metrics
 - **CandidateFYCRollupService** - FYC and opportunity rollup calculations
@@ -128,14 +140,16 @@ scripts/                     # Utility scripts
 - **CandidateNotesController** - Notes functionality
 
 ### Custom Objects
-- **Candidate__c** - Main candidate profiles with contract lifecycle tracking
-- **Interview__c** - Interview scheduling and tracking
-- **ALC__c** - Agent Licensing & Contracting
-- **Feedback__c** - User feedback from browser extensions
+
+- **Candidate\_\_c** - Main candidate profiles with contract lifecycle tracking
+- **Interview\_\_c** - Interview scheduling and tracking
+- **ALC\_\_c** - Agent Licensing & Contracting
+- **Feedback\_\_c** - User feedback from browser extensions
 
 ## Coding Conventions
 
 ### General Practices
+
 - Follow existing code style and patterns in the repository
 - Use Prettier for code formatting (configured in `.prettierrc`)
 - Run linter before committing changes
@@ -143,6 +157,7 @@ scripts/                     # Utility scripts
 - Deploy incrementally - only deploy what you changed
 
 ### Salesforce/LWC Specific
+
 - Use `@wire` decorators for reactive data fetching
 - Implement `refreshApex` for manual data refresh when needed
 - Follow LWC naming conventions: camelCase for properties/methods
@@ -150,17 +165,19 @@ scripts/                     # Utility scripts
 - Properly handle errors with `try-catch` and user-friendly error messages
 
 ### Email Templates
+
 - Use classic Salesforce merge field syntax: `{!Contact.FirstName}` ✅
 - Do NOT use: `{{{Recipient.FirstName}}}` or `{{{Candidate__c.First_Name__c}}}` ❌
 - All templates are in `force-app/main/default/email/Candidate_Outreach/`
 
 ### Browser Extensions
+
 - Content scripts MUST be wrapped in IIFE with guard pattern:
   ```javascript
-  (function() {
-      if (window.__linkedinToSalesforceLoaded) return;
-      window.__linkedinToSalesforceLoaded = true;
-      // ... rest of code
+  (function () {
+    if (window.__linkedinToSalesforceLoaded) return;
+    window.__linkedinToSalesforceLoaded = true;
+    // ... rest of code
   })();
   ```
 - Maintain consistent OAuth configuration between Chrome and Edge versions
@@ -171,12 +188,15 @@ scripts/                     # Utility scripts
 These components are actively maintained and should be modified with coordination:
 
 ### LWC Components (Recently Updated)
+
 - `candidateRecordView` - Has auto-refresh with CDC subscription, `@wire(getRecord)`, and `refreshApex`
 - `recruiterDashboard` - Main dashboard interface
 - `contractBPipelineDashboard` - Contract B tracking with complex metrics
 
 ### Email Templates (Candidate_Outreach folder)
+
 All 7 templates use `{!Contact.FirstName}` merge field syntax:
+
 - Candidate_Welcome_Initial_Outreach.email
 - Candidate_Stage_Ci_First.email
 - Candidate_Stage_Align_Second.email
@@ -186,23 +206,28 @@ All 7 templates use `{!Contact.FirstName}` merge field syntax:
 - Candidate_Stage_Contracted.email
 
 ### Browser Extensions
+
 - chrome-extension-linkedin/ (content.js, popup.js, background.js)
 - edge-extension-linkedin/ (content.js, popup.js, background.js)
 
 ### Connected Apps
+
 - LinkedIn_Import_Extension - OAuth for browser extensions
 
 ### Flows
+
 - Candidate_Stage_Email_Automation - Sends emails on stage changes
 
 ## Development Workflow
 
 ### Before Starting Work
+
 1. Pull latest changes: `git pull origin main`
 2. Verify org connection: `sf org list` and `sf org display` (ensure ProductionCapstone is set as default)
 3. Review recently modified files listed above
 
 ### Making Changes
+
 1. Deploy incrementally to test changes
 2. Test functionality in the org
 3. Run linter: `npm run lint`
@@ -210,6 +235,7 @@ All 7 templates use `{!Contact.FirstName}` merge field syntax:
 5. Review git diff to ensure only intended files changed
 
 ### Committing Changes
+
 1. Stage changes: `git add .`
 2. Commit with clear message: `git commit -m "Description of changes"`
 3. Push to remote: `git push origin main`
@@ -218,13 +244,17 @@ All 7 templates use `{!Contact.FirstName}` merge field syntax:
 ## Common Issues & Solutions
 
 ### "Identifier already declared" errors in extensions
+
 Don't remove the IIFE guard pattern in content scripts - it prevents duplicate declarations when scripts reload.
 
 ### Email merge fields showing raw code
+
 Use classic Salesforce syntax `{!Contact.FirstName}` in text email templates, not Lightning syntax.
 
 ### LWC not refreshing after record edit
+
 The `candidateRecordView` uses multiple refresh mechanisms:
+
 - `@wire(getRecord)` for standard edit modal saves
 - CDC subscription for real-time updates
 - `refreshApex` for manual refresh
@@ -233,6 +263,7 @@ The `candidateRecordView` uses multiple refresh mechanisms:
 Don't remove these mechanisms when modifying the component.
 
 ### Deployment failures
+
 - Check that you're deploying to the correct org (production by default, use `--target-org ProdTest` for sandbox)
 - Verify all metadata dependencies are included
 - Review deployment output for specific error messages
@@ -240,6 +271,7 @@ Don't remove these mechanisms when modifying the component.
 ## Documentation
 
 Comprehensive documentation is available in the `docs/` folder:
+
 - **ATS-Training-Program.md** - Complete recruiter training
 - **ATS-Quick-Start-Guide.md** - One-page reference
 - **Sales-Manager-Dashboard-Guide.md** - Dashboard guide
@@ -247,6 +279,7 @@ Comprehensive documentation is available in the `docs/` folder:
 - **LOXO-ATS-Design.md** - Technical design document
 
 See also:
+
 - **COLE_ARNOLD_DEVELOPMENT_GUIDE.md** - Developer-specific guide
 - **MODAL_DESIGN_GUIDELINES.md** - Modal design standards
 - **README.md** - Project overview
@@ -254,6 +287,7 @@ See also:
 ## Pre-commit Hooks
 
 This project uses Husky for pre-commit hooks via `lint-staged`:
+
 - Prettier automatically formats staged files
 - ESLint checks JavaScript/LWC files
 - LWC Jest tests run for related test files

@@ -1,4 +1,5 @@
 # Custom Metadata Audit - ALC Stage Configuration
+
 **Date:** 2026-01-08  
 **Agent:** Research Agent  
 **Handoff To:** Metadata Specialist Agent
@@ -15,19 +16,20 @@ Audited all 37 ALC_Stage_Config custom metadata records to identify incorrectly 
 
 ### Broker Record Type (9 stages)
 
-| Sort | Stage API Value | Stage Label | Is_Active | Color | Type |
-|------|----------------|-------------|-----------|-------|------|
-| 1 | Initial Form Sent | Initial Form Sent | ✅ true | #1589EE | Workflow |
-| 2 | MM_ONX_Sent | MM ONX sent | ✅ true | #0D47A1 | Workflow |
-| 3 | Background Check | Background Check | ✅ true | #9C27B0 | Workflow |
-| 4 | CORP- ECQ Request | CORP- ECQ Request | ✅ true | #E83A86 | Workflow |
-| 5 | Submit to HO | Submit to HO | ✅ true | #009688 | Workflow |
-| 6 | AA Received | AA Received | ✅ true | #E37C06 | Workflow |
-| 7 | Request FieldNet/CoverPath Access | Request FieldNet/CoverPath Access | ✅ true | #673AB7 | Workflow |
-| 8 | **COMPLETE** | **COMPLETE** | ❌ **false** | #4CAF50 | **Terminal** |
-| 9 | **CANCELED** | **CANCELED** | ❌ **false** | #F44336 | **Terminal** |
+| Sort | Stage API Value                   | Stage Label                       | Is_Active    | Color   | Type         |
+| ---- | --------------------------------- | --------------------------------- | ------------ | ------- | ------------ |
+| 1    | Initial Form Sent                 | Initial Form Sent                 | ✅ true      | #1589EE | Workflow     |
+| 2    | MM_ONX_Sent                       | MM ONX sent                       | ✅ true      | #0D47A1 | Workflow     |
+| 3    | Background Check                  | Background Check                  | ✅ true      | #9C27B0 | Workflow     |
+| 4    | CORP- ECQ Request                 | CORP- ECQ Request                 | ✅ true      | #E83A86 | Workflow     |
+| 5    | Submit to HO                      | Submit to HO                      | ✅ true      | #009688 | Workflow     |
+| 6    | AA Received                       | AA Received                       | ✅ true      | #E37C06 | Workflow     |
+| 7    | Request FieldNet/CoverPath Access | Request FieldNet/CoverPath Access | ✅ true      | #673AB7 | Workflow     |
+| 8    | **COMPLETE**                      | **COMPLETE**                      | ❌ **false** | #4CAF50 | **Terminal** |
+| 9    | **CANCELED**                      | **CANCELED**                      | ❌ **false** | #F44336 | **Terminal** |
 
 **Broker Summary:**
+
 - Total stages: 9
 - Active workflow stages: 7
 - Terminal stages (inactive): 2 (COMPLETE, CANCELED)
@@ -37,22 +39,23 @@ Audited all 37 ALC_Stage_Config custom metadata records to identify incorrectly 
 
 ### Career Record Type (12 stages)
 
-| Sort | Stage API Value | Stage Label | Is_Active | Color | Type |
-|------|----------------|-------------|-----------|-------|------|
-| 1 | Initial Form Sent | Initial Form Sent | ✅ true | #1589EE | Workflow |
-| 2 | MM_ONX_Sent | MM ONX sent | ✅ true | #0D47A1 | Workflow |
-| 3 | In Background | In Background | ✅ true | #9C27B0 | Workflow |
-| 4 | Post Background - Pending Rachyll | Post Background - Pending Rachyll | ✅ true | #E83A86 | Workflow |
-| 5 | Sent To Compliance | Sent To Compliance | ✅ true | #FF5722 | Workflow |
-| 6 | Pending SM | Pending SM | ✅ true | #FF9800 | Workflow |
-| 7 | Contract Codes (A/B) & DocuSign | Contract Codes (A/B) & DocuSign | ✅ true | #673AB7 | Workflow |
-| 8 | Submit to HO | Submit to HO | ✅ true | #009688 | Workflow |
-| 9 | AA Received | AA Received | ✅ true | #E37C06 | Workflow |
-| 10 | **Candidate Complete** | **Candidate Complete** | ❌ **false** | #4CAF50 | **Terminal** |
-| 11 | **TERMINATED** | **TERMINATED** | ❌ **false** | #9E9E9E | **Terminal** |
-| 12 | **CANCELED** | **CANCELED** | ❌ **false** | #F44336 | **Terminal** |
+| Sort | Stage API Value                   | Stage Label                       | Is_Active    | Color   | Type         |
+| ---- | --------------------------------- | --------------------------------- | ------------ | ------- | ------------ |
+| 1    | Initial Form Sent                 | Initial Form Sent                 | ✅ true      | #1589EE | Workflow     |
+| 2    | MM_ONX_Sent                       | MM ONX sent                       | ✅ true      | #0D47A1 | Workflow     |
+| 3    | In Background                     | In Background                     | ✅ true      | #9C27B0 | Workflow     |
+| 4    | Post Background - Pending Rachyll | Post Background - Pending Rachyll | ✅ true      | #E83A86 | Workflow     |
+| 5    | Sent To Compliance                | Sent To Compliance                | ✅ true      | #FF5722 | Workflow     |
+| 6    | Pending SM                        | Pending SM                        | ✅ true      | #FF9800 | Workflow     |
+| 7    | Contract Codes (A/B) & DocuSign   | Contract Codes (A/B) & DocuSign   | ✅ true      | #673AB7 | Workflow     |
+| 8    | Submit to HO                      | Submit to HO                      | ✅ true      | #009688 | Workflow     |
+| 9    | AA Received                       | AA Received                       | ✅ true      | #E37C06 | Workflow     |
+| 10   | **Candidate Complete**            | **Candidate Complete**            | ❌ **false** | #4CAF50 | **Terminal** |
+| 11   | **TERMINATED**                    | **TERMINATED**                    | ❌ **false** | #9E9E9E | **Terminal** |
+| 12   | **CANCELED**                      | **CANCELED**                      | ❌ **false** | #F44336 | **Terminal** |
 
 **Career Summary:**
+
 - Total stages: 12
 - Active workflow stages: 9
 - Terminal stages (inactive): 3 (Candidate Complete, TERMINATED, CANCELED)
@@ -62,18 +65,19 @@ Audited all 37 ALC_Stage_Config custom metadata records to identify incorrectly 
 
 ### NRF Record Type (8 stages)
 
-| Sort | Stage API Value | Stage Label | Is_Active | Color | Type |
-|------|----------------|-------------|-----------|-------|------|
-| 1 | Initial Form Sent | Initial Form Sent | ✅ true | #1589EE | Workflow |
-| 2 | Receive NRF Info | Receive NRF Info | ✅ true | #0D47A1 | Workflow |
-| 3 | Request AE | Request AE | ✅ true | #9C27B0 | Workflow |
-| 4 | Step 1 Email | Step 1 Email | ✅ true | #E83A86 | Workflow |
-| 5 | NRF BIG Review | NRF BIG Review | ✅ true | #FF5722 | Workflow |
-| 6 | Fingerprinting | Fingerprinting | ✅ true | #FF9800 | Workflow |
-| 7 | **Request FieldNet/CoverPath Access** | **Request FieldNet/CoverPath Access** | ⚠️ **false** | #673AB7 | **❌ WORKFLOW (SHOULD BE ACTIVE!)** |
-| 8 | **COMPLETE** | **COMPLETE** | ❌ **false** | #4CAF50 | **Terminal** |
+| Sort | Stage API Value                       | Stage Label                           | Is_Active    | Color   | Type                                |
+| ---- | ------------------------------------- | ------------------------------------- | ------------ | ------- | ----------------------------------- |
+| 1    | Initial Form Sent                     | Initial Form Sent                     | ✅ true      | #1589EE | Workflow                            |
+| 2    | Receive NRF Info                      | Receive NRF Info                      | ✅ true      | #0D47A1 | Workflow                            |
+| 3    | Request AE                            | Request AE                            | ✅ true      | #9C27B0 | Workflow                            |
+| 4    | Step 1 Email                          | Step 1 Email                          | ✅ true      | #E83A86 | Workflow                            |
+| 5    | NRF BIG Review                        | NRF BIG Review                        | ✅ true      | #FF5722 | Workflow                            |
+| 6    | Fingerprinting                        | Fingerprinting                        | ✅ true      | #FF9800 | Workflow                            |
+| 7    | **Request FieldNet/CoverPath Access** | **Request FieldNet/CoverPath Access** | ⚠️ **false** | #673AB7 | **❌ WORKFLOW (SHOULD BE ACTIVE!)** |
+| 8    | **COMPLETE**                          | **COMPLETE**                          | ❌ **false** | #4CAF50 | **Terminal**                        |
 
 **NRF Summary:**
+
 - Total stages: 8
 - Active workflow stages: 6 (should be 7)
 - Terminal stages (inactive): 1 (COMPLETE)
@@ -83,18 +87,19 @@ Audited all 37 ALC_Stage_Config custom metadata records to identify incorrectly 
 
 ### Registration Record Type (8 stages)
 
-| Sort | Stage API Value | Stage Label | Is_Active | Color | Type |
-|------|----------------|-------------|-----------|-------|------|
-| 1 | Pending Instructions | Pending Instructions | ✅ true | #1589EE | Workflow |
-| 2 | Pending Scheduling Zoom | Pending Scheduling Zoom | ✅ true | #0D47A1 | Workflow |
-| 3 | Complete U4 | Complete U4 | ✅ true | #9C27B0 | Workflow |
-| 4 | Follow Up with Agent | Follow Up with Agent | ✅ true | #E83A86 | Workflow |
-| 5 | Background Check (if 6 months or more) | Background Check (if 6 months or more) | ✅ true | #FF5722 | Workflow |
-| 6 | Submit to HO | Submit to HO | ✅ true | #009688 | Workflow |
-| 7 | **Received Approval Letter** | **Received Approval Letter** | ❌ **false** | #4CAF50 | **Terminal** |
-| 8 | **CANCELED** | **CANCELED** | ❌ **false** | #F44336 | **Terminal** |
+| Sort | Stage API Value                        | Stage Label                            | Is_Active    | Color   | Type         |
+| ---- | -------------------------------------- | -------------------------------------- | ------------ | ------- | ------------ |
+| 1    | Pending Instructions                   | Pending Instructions                   | ✅ true      | #1589EE | Workflow     |
+| 2    | Pending Scheduling Zoom                | Pending Scheduling Zoom                | ✅ true      | #0D47A1 | Workflow     |
+| 3    | Complete U4                            | Complete U4                            | ✅ true      | #9C27B0 | Workflow     |
+| 4    | Follow Up with Agent                   | Follow Up with Agent                   | ✅ true      | #E83A86 | Workflow     |
+| 5    | Background Check (if 6 months or more) | Background Check (if 6 months or more) | ✅ true      | #FF5722 | Workflow     |
+| 6    | Submit to HO                           | Submit to HO                           | ✅ true      | #009688 | Workflow     |
+| 7    | **Received Approval Letter**           | **Received Approval Letter**           | ❌ **false** | #4CAF50 | **Terminal** |
+| 8    | **CANCELED**                           | **CANCELED**                           | ❌ **false** | #F44336 | **Terminal** |
 
 **Registration Summary:**
+
 - Total stages: 8
 - Active workflow stages: 6
 - Terminal stages (inactive): 2 (Received Approval Letter, CANCELED)
@@ -107,12 +112,14 @@ Audited all 37 ALC_Stage_Config custom metadata records to identify incorrectly 
 **Total Stages Across All Record Types:** 37
 
 **Terminal Stages (correctly inactive):** 8
+
 - Broker: COMPLETE, CANCELED
 - Career: Candidate Complete, TERMINATED, CANCELED
 - NRF: COMPLETE
 - Registration: Received Approval Letter, CANCELED
 
 **Workflow Stages (should be active):** 29
+
 - Currently active: 28
 - **Incorrectly inactive: 1** ⚠️
 
@@ -132,12 +139,14 @@ Audited all 37 ALC_Stage_Config custom metadata records to identify incorrectly 
 ## Expected Count Impact
 
 After fixing NRF Stage 07, the component should display:
+
 - **Broker:** All active records excluding COMPLETE and CANCELED stages
 - **Career:** All active records excluding Candidate Complete, TERMINATED, and CANCELED stages
 - **NRF:** All active records INCLUDING "Request FieldNet/CoverPath Access" but excluding COMPLETE stage
 - **Registration:** All active records excluding Received Approval Letter and CANCELED stages
 
 **User's Expected Counts:**
+
 - Broker: 61
 - Career: 23
 - NRF: 21
@@ -161,6 +170,7 @@ The missing NRF Stage 07 may explain why counts are lower than expected.
 All 37 files in: `force-app/main/default/customMetadata/ALC_Stage_Config.*.md-meta.xml`
 
 **Priority Fix:**
+
 - `force-app/main/default/customMetadata/ALC_Stage_Config.NRF_Stage_07.md-meta.xml`
 
 ---

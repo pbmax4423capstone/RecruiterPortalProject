@@ -1,771 +1,1051 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Module 3: Avoiding Merge Conflicts - Developer Training</title>
     <style>
-        :root {
-            --primary: #238636;
-            --primary-dark: #1a7f37;
-            --primary-light: #d1fae5;
-            --module-color: #bf8700;
-            --module-light: #fff8c5;
-            --gray-100: #f6f8fa;
-            --gray-200: #e5e5e5;
-            --gray-300: #d0d7de;
-            --gray-500: #6e7781;
-            --gray-700: #444;
-            --gray-900: #1f2328;
-            --code-bg: #161b22;
-            --warning-bg: #fff8c5;
-            --warning-border: #d4a72c;
-            --info-bg: #ddf4ff;
-            --info-border: #54aeff;
-            --error-bg: #ffebe9;
-            --error-border: #ff7b72;
-        }
-        
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans', Helvetica, Arial, sans-serif;
-            background: var(--gray-100);
-            min-height: 100vh;
-            display: flex;
-        }
-        
-        .sidebar {
-            width: 300px;
-            background: white;
-            border-right: 1px solid var(--gray-300);
-            padding: 1.5rem;
-            position: fixed;
-            height: 100vh;
-            overflow-y: auto;
-        }
-        
-        .sidebar-header {
-            padding-bottom: 1rem;
-            border-bottom: 1px solid var(--gray-200);
-            margin-bottom: 1rem;
-        }
-        
-        .sidebar-header a {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            color: var(--primary);
-            text-decoration: none;
-            font-size: 0.9rem;
-            margin-bottom: 0.5rem;
-        }
-        
-        .sidebar-header a:hover { text-decoration: underline; }
-        .sidebar-header h2 { font-size: 1.1rem; color: var(--gray-900); }
-        
-        .sidebar-header .module-badge {
-            display: inline-block;
-            background: var(--module-color);
-            color: white;
-            padding: 0.2rem 0.6rem;
-            border-radius: 10px;
-            font-size: 0.75rem;
-            font-weight: 600;
-            margin-top: 0.5rem;
-        }
-        
-        .steps-list { list-style: none; }
-        
-        .step-item {
-            padding: 0.75rem;
-            border-radius: 8px;
-            margin-bottom: 0.5rem;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-            transition: all 0.2s;
-        }
-        
-        .step-item:hover { background: var(--gray-100); }
-        .step-item.active { background: var(--module-light); }
-        .step-item.completed { opacity: 0.7; }
-        
-        .step-number {
-            width: 28px;
-            height: 28px;
-            border-radius: 50%;
-            background: var(--gray-200);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 0.85rem;
-            font-weight: 600;
-            color: var(--gray-500);
-            flex-shrink: 0;
-        }
-        
-        .step-item.active .step-number { background: var(--module-color); color: white; }
-        .step-item.completed .step-number { background: var(--primary); color: white; }
-        .step-item.completed .step-number::before { content: "✓"; }
-        
-        .step-info { flex-grow: 1; }
-        .step-title { font-size: 0.9rem; color: var(--gray-900); font-weight: 500; }
-        .step-duration { font-size: 0.75rem; color: var(--gray-500); }
-        
-        .main-content { flex-grow: 1; margin-left: 300px; padding: 2rem; }
-        .step-content { max-width: 800px; margin: 0 auto; }
-        
-        .step-header { margin-bottom: 2rem; }
-        
-        .step-header .step-badge {
-            display: inline-block;
-            background: var(--module-color);
-            color: white;
-            padding: 0.3rem 1rem;
-            border-radius: 20px;
-            font-size: 0.85rem;
-            font-weight: 600;
-            margin-bottom: 0.75rem;
-        }
-        
-        .step-header h1 { font-size: 2rem; color: var(--gray-900); margin-bottom: 0.5rem; }
-        .step-header p { font-size: 1.1rem; color: var(--gray-500); }
-        
-        .content-card {
-            background: white;
-            border-radius: 12px;
-            padding: 1.5rem;
-            border: 1px solid var(--gray-300);
-            margin-bottom: 1.5rem;
-        }
-        
-        .content-card h2 { font-size: 1.25rem; color: var(--gray-900); margin-bottom: 1rem; }
-        .content-card h3 { font-size: 1rem; color: var(--gray-700); margin: 1.5rem 0 0.75rem; }
-        .content-card p { color: var(--gray-700); line-height: 1.7; margin-bottom: 1rem; }
-        .content-card ul, .content-card ol { margin-left: 1.5rem; margin-bottom: 1rem; color: var(--gray-700); line-height: 1.8; }
-        
-        .code-block {
-            background: var(--code-bg);
-            color: #e6edf3;
-            border-radius: 8px;
-            padding: 1rem;
-            margin: 1rem 0;
-            overflow-x: auto;
-            font-family: 'Consolas', 'Monaco', monospace;
-            font-size: 0.9rem;
-            line-height: 1.6;
-        }
-        
-        .code-block .comment { color: #8b949e; }
-        .code-block .command { color: #79c0ff; }
-        .code-block .string { color: #a5d6ff; }
-        .code-block .flag { color: #ffa657; }
-        .code-block .conflict { color: #ff7b72; }
-        .code-block .ours { color: #7ee787; }
-        .code-block .theirs { color: #79c0ff; }
-        
-        code {
-            background: var(--gray-100);
-            padding: 0.2rem 0.4rem;
-            border-radius: 4px;
-            font-family: 'Consolas', monospace;
-            font-size: 0.9em;
-            color: #cf222e;
-        }
-        
-        .info-box {
-            background: var(--info-bg);
-            border-left: 4px solid var(--info-border);
-            padding: 1rem 1.25rem;
-            border-radius: 0 8px 8px 0;
-            margin: 1.5rem 0;
-        }
-        
-        .warning-box {
-            background: var(--warning-bg);
-            border-left: 4px solid var(--warning-border);
-            padding: 1rem 1.25rem;
-            border-radius: 0 8px 8px 0;
-            margin: 1.5rem 0;
-        }
-        
-        .error-box {
-            background: var(--error-bg);
-            border-left: 4px solid var(--error-border);
-            padding: 1rem 1.25rem;
-            border-radius: 0 8px 8px 0;
-            margin: 1.5rem 0;
-        }
-        
-        .success-box {
-            background: var(--primary-light);
-            border-left: 4px solid var(--primary);
-            padding: 1rem 1.25rem;
-            border-radius: 0 8px 8px 0;
-            margin: 1.5rem 0;
-        }
-        
-        .info-box strong, .warning-box strong, .error-box strong, .success-box strong { display: block; margin-bottom: 0.25rem; color: var(--gray-900); }
-        
-        .data-table { width: 100%; border-collapse: collapse; margin: 1rem 0; font-size: 0.9rem; }
-        .data-table th, .data-table td { padding: 0.75rem; text-align: left; border-bottom: 1px solid var(--gray-200); }
-        .data-table th { background: var(--gray-100); font-weight: 600; color: var(--gray-700); }
-        
-        .checklist { list-style: none; margin-left: 0 !important; }
-        .checklist li { padding: 0.5rem 0; display: flex; gap: 0.75rem; align-items: flex-start; }
-        .checklist li::before { content: "☐"; font-size: 1.2rem; color: var(--module-color); }
-        
-        .step-navigation {
-            display: flex;
-            justify-content: space-between;
-            margin-top: 2rem;
-            padding-top: 2rem;
-            border-top: 1px solid var(--gray-200);
-        }
-        
-        .nav-btn {
-            padding: 0.75rem 1.5rem;
-            border-radius: 8px;
-            font-weight: 600;
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-            cursor: pointer;
-            border: none;
-            font-size: 1rem;
-            transition: all 0.3s;
-            text-decoration: none;
-        }
-        
-        .nav-btn.prev { background: var(--gray-200); color: var(--gray-700); }
-        .nav-btn.prev:hover { background: var(--gray-300); }
-        .nav-btn.next { background: var(--module-color); color: white; }
-        .nav-btn.next:hover { opacity: 0.9; }
-        .nav-btn:disabled { opacity: 0.5; cursor: not-allowed; }
-        
-        .progress-indicator {
-            background: var(--gray-200);
-            height: 4px;
-            position: fixed;
-            top: 0;
-            left: 300px;
-            right: 0;
-            z-index: 100;
-        }
-        
-        .progress-fill { height: 100%; background: var(--module-color); transition: width 0.3s; }
-        .step-page { display: none; }
-        .step-page.active { display: block; }
+      :root {
+        --primary: #238636;
+        --primary-dark: #1a7f37;
+        --primary-light: #d1fae5;
+        --module-color: #bf8700;
+        --module-light: #fff8c5;
+        --gray-100: #f6f8fa;
+        --gray-200: #e5e5e5;
+        --gray-300: #d0d7de;
+        --gray-500: #6e7781;
+        --gray-700: #444;
+        --gray-900: #1f2328;
+        --code-bg: #161b22;
+        --warning-bg: #fff8c5;
+        --warning-border: #d4a72c;
+        --info-bg: #ddf4ff;
+        --info-border: #54aeff;
+        --error-bg: #ffebe9;
+        --error-border: #ff7b72;
+      }
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family:
+          -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans", Helvetica,
+          Arial, sans-serif;
+        background: var(--gray-100);
+        min-height: 100vh;
+        display: flex;
+      }
+
+      .sidebar {
+        width: 300px;
+        background: white;
+        border-right: 1px solid var(--gray-300);
+        padding: 1.5rem;
+        position: fixed;
+        height: 100vh;
+        overflow-y: auto;
+      }
+
+      .sidebar-header {
+        padding-bottom: 1rem;
+        border-bottom: 1px solid var(--gray-200);
+        margin-bottom: 1rem;
+      }
+
+      .sidebar-header a {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        color: var(--primary);
+        text-decoration: none;
+        font-size: 0.9rem;
+        margin-bottom: 0.5rem;
+      }
+
+      .sidebar-header a:hover {
+        text-decoration: underline;
+      }
+      .sidebar-header h2 {
+        font-size: 1.1rem;
+        color: var(--gray-900);
+      }
+
+      .sidebar-header .module-badge {
+        display: inline-block;
+        background: var(--module-color);
+        color: white;
+        padding: 0.2rem 0.6rem;
+        border-radius: 10px;
+        font-size: 0.75rem;
+        font-weight: 600;
+        margin-top: 0.5rem;
+      }
+
+      .steps-list {
+        list-style: none;
+      }
+
+      .step-item {
+        padding: 0.75rem;
+        border-radius: 8px;
+        margin-bottom: 0.5rem;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        transition: all 0.2s;
+      }
+
+      .step-item:hover {
+        background: var(--gray-100);
+      }
+      .step-item.active {
+        background: var(--module-light);
+      }
+      .step-item.completed {
+        opacity: 0.7;
+      }
+
+      .step-number {
+        width: 28px;
+        height: 28px;
+        border-radius: 50%;
+        background: var(--gray-200);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.85rem;
+        font-weight: 600;
+        color: var(--gray-500);
+        flex-shrink: 0;
+      }
+
+      .step-item.active .step-number {
+        background: var(--module-color);
+        color: white;
+      }
+      .step-item.completed .step-number {
+        background: var(--primary);
+        color: white;
+      }
+      .step-item.completed .step-number::before {
+        content: "✓";
+      }
+
+      .step-info {
+        flex-grow: 1;
+      }
+      .step-title {
+        font-size: 0.9rem;
+        color: var(--gray-900);
+        font-weight: 500;
+      }
+      .step-duration {
+        font-size: 0.75rem;
+        color: var(--gray-500);
+      }
+
+      .main-content {
+        flex-grow: 1;
+        margin-left: 300px;
+        padding: 2rem;
+      }
+      .step-content {
+        max-width: 800px;
+        margin: 0 auto;
+      }
+
+      .step-header {
+        margin-bottom: 2rem;
+      }
+
+      .step-header .step-badge {
+        display: inline-block;
+        background: var(--module-color);
+        color: white;
+        padding: 0.3rem 1rem;
+        border-radius: 20px;
+        font-size: 0.85rem;
+        font-weight: 600;
+        margin-bottom: 0.75rem;
+      }
+
+      .step-header h1 {
+        font-size: 2rem;
+        color: var(--gray-900);
+        margin-bottom: 0.5rem;
+      }
+      .step-header p {
+        font-size: 1.1rem;
+        color: var(--gray-500);
+      }
+
+      .content-card {
+        background: white;
+        border-radius: 12px;
+        padding: 1.5rem;
+        border: 1px solid var(--gray-300);
+        margin-bottom: 1.5rem;
+      }
+
+      .content-card h2 {
+        font-size: 1.25rem;
+        color: var(--gray-900);
+        margin-bottom: 1rem;
+      }
+      .content-card h3 {
+        font-size: 1rem;
+        color: var(--gray-700);
+        margin: 1.5rem 0 0.75rem;
+      }
+      .content-card p {
+        color: var(--gray-700);
+        line-height: 1.7;
+        margin-bottom: 1rem;
+      }
+      .content-card ul,
+      .content-card ol {
+        margin-left: 1.5rem;
+        margin-bottom: 1rem;
+        color: var(--gray-700);
+        line-height: 1.8;
+      }
+
+      .code-block {
+        background: var(--code-bg);
+        color: #e6edf3;
+        border-radius: 8px;
+        padding: 1rem;
+        margin: 1rem 0;
+        overflow-x: auto;
+        font-family: "Consolas", "Monaco", monospace;
+        font-size: 0.9rem;
+        line-height: 1.6;
+      }
+
+      .code-block .comment {
+        color: #8b949e;
+      }
+      .code-block .command {
+        color: #79c0ff;
+      }
+      .code-block .string {
+        color: #a5d6ff;
+      }
+      .code-block .flag {
+        color: #ffa657;
+      }
+      .code-block .conflict {
+        color: #ff7b72;
+      }
+      .code-block .ours {
+        color: #7ee787;
+      }
+      .code-block .theirs {
+        color: #79c0ff;
+      }
+
+      code {
+        background: var(--gray-100);
+        padding: 0.2rem 0.4rem;
+        border-radius: 4px;
+        font-family: "Consolas", monospace;
+        font-size: 0.9em;
+        color: #cf222e;
+      }
+
+      .info-box {
+        background: var(--info-bg);
+        border-left: 4px solid var(--info-border);
+        padding: 1rem 1.25rem;
+        border-radius: 0 8px 8px 0;
+        margin: 1.5rem 0;
+      }
+
+      .warning-box {
+        background: var(--warning-bg);
+        border-left: 4px solid var(--warning-border);
+        padding: 1rem 1.25rem;
+        border-radius: 0 8px 8px 0;
+        margin: 1.5rem 0;
+      }
+
+      .error-box {
+        background: var(--error-bg);
+        border-left: 4px solid var(--error-border);
+        padding: 1rem 1.25rem;
+        border-radius: 0 8px 8px 0;
+        margin: 1.5rem 0;
+      }
+
+      .success-box {
+        background: var(--primary-light);
+        border-left: 4px solid var(--primary);
+        padding: 1rem 1.25rem;
+        border-radius: 0 8px 8px 0;
+        margin: 1.5rem 0;
+      }
+
+      .info-box strong,
+      .warning-box strong,
+      .error-box strong,
+      .success-box strong {
+        display: block;
+        margin-bottom: 0.25rem;
+        color: var(--gray-900);
+      }
+
+      .data-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 1rem 0;
+        font-size: 0.9rem;
+      }
+      .data-table th,
+      .data-table td {
+        padding: 0.75rem;
+        text-align: left;
+        border-bottom: 1px solid var(--gray-200);
+      }
+      .data-table th {
+        background: var(--gray-100);
+        font-weight: 600;
+        color: var(--gray-700);
+      }
+
+      .checklist {
+        list-style: none;
+        margin-left: 0 !important;
+      }
+      .checklist li {
+        padding: 0.5rem 0;
+        display: flex;
+        gap: 0.75rem;
+        align-items: flex-start;
+      }
+      .checklist li::before {
+        content: "☐";
+        font-size: 1.2rem;
+        color: var(--module-color);
+      }
+
+      .step-navigation {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 2rem;
+        padding-top: 2rem;
+        border-top: 1px solid var(--gray-200);
+      }
+
+      .nav-btn {
+        padding: 0.75rem 1.5rem;
+        border-radius: 8px;
+        font-weight: 600;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        cursor: pointer;
+        border: none;
+        font-size: 1rem;
+        transition: all 0.3s;
+        text-decoration: none;
+      }
+
+      .nav-btn.prev {
+        background: var(--gray-200);
+        color: var(--gray-700);
+      }
+      .nav-btn.prev:hover {
+        background: var(--gray-300);
+      }
+      .nav-btn.next {
+        background: var(--module-color);
+        color: white;
+      }
+      .nav-btn.next:hover {
+        opacity: 0.9;
+      }
+      .nav-btn:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+      }
+
+      .progress-indicator {
+        background: var(--gray-200);
+        height: 4px;
+        position: fixed;
+        top: 0;
+        left: 300px;
+        right: 0;
+        z-index: 100;
+      }
+
+      .progress-fill {
+        height: 100%;
+        background: var(--module-color);
+        transition: width 0.3s;
+      }
+      .step-page {
+        display: none;
+      }
+      .step-page.active {
+        display: block;
+      }
     </style>
-</head>
-<body>
+  </head>
+  <body>
     <div class="progress-indicator">
-        <div class="progress-fill" id="progressFill" style="width: 0%"></div>
+      <div class="progress-fill" id="progressFill" style="width: 0%"></div>
     </div>
-    
+
     <aside class="sidebar">
-        <div class="sidebar-header">
-            <a href="developer-training.html">← Back to Developer Training</a>
-            <h2>Module 3: Avoiding Conflicts</h2>
-            <span class="module-badge">15 minutes</span>
-        </div>
-        
-        <ul class="steps-list" id="stepsList">
-            <li class="step-item active" data-step="1" onclick="goToStep(1)">
-                <span class="step-number">1</span>
-                <div class="step-info">
-                    <div class="step-title">Why Conflicts Happen</div>
-                    <div class="step-duration">2 min</div>
-                </div>
-            </li>
-            <li class="step-item" data-step="2" onclick="goToStep(2)">
-                <span class="step-number">2</span>
-                <div class="step-info">
-                    <div class="step-title">Prevention Strategies</div>
-                    <div class="step-duration">3 min</div>
-                </div>
-            </li>
-            <li class="step-item" data-step="3" onclick="goToStep(3)">
-                <span class="step-number">3</span>
-                <div class="step-info">
-                    <div class="step-title">Communication Protocols</div>
-                    <div class="step-duration">3 min</div>
-                </div>
-            </li>
-            <li class="step-item" data-step="4" onclick="goToStep(4)">
-                <span class="step-number">4</span>
-                <div class="step-info">
-                    <div class="step-title">Recognizing Conflicts</div>
-                    <div class="step-duration">2 min</div>
-                </div>
-            </li>
-            <li class="step-item" data-step="5" onclick="goToStep(5)">
-                <span class="step-number">5</span>
-                <div class="step-info">
-                    <div class="step-title">Resolving Conflicts</div>
-                    <div class="step-duration">4 min</div>
-                </div>
-            </li>
-            <li class="step-item" data-step="6" onclick="goToStep(6)">
-                <span class="step-number">6</span>
-                <div class="step-info">
-                    <div class="step-title">Module Complete</div>
-                    <div class="step-duration">1 min</div>
-                </div>
-            </li>
-        </ul>
+      <div class="sidebar-header">
+        <a href="developer-training.html">← Back to Developer Training</a>
+        <h2>Module 3: Avoiding Conflicts</h2>
+        <span class="module-badge">15 minutes</span>
+      </div>
+
+      <ul class="steps-list" id="stepsList">
+        <li class="step-item active" data-step="1" onclick="goToStep(1)">
+          <span class="step-number">1</span>
+          <div class="step-info">
+            <div class="step-title">Why Conflicts Happen</div>
+            <div class="step-duration">2 min</div>
+          </div>
+        </li>
+        <li class="step-item" data-step="2" onclick="goToStep(2)">
+          <span class="step-number">2</span>
+          <div class="step-info">
+            <div class="step-title">Prevention Strategies</div>
+            <div class="step-duration">3 min</div>
+          </div>
+        </li>
+        <li class="step-item" data-step="3" onclick="goToStep(3)">
+          <span class="step-number">3</span>
+          <div class="step-info">
+            <div class="step-title">Communication Protocols</div>
+            <div class="step-duration">3 min</div>
+          </div>
+        </li>
+        <li class="step-item" data-step="4" onclick="goToStep(4)">
+          <span class="step-number">4</span>
+          <div class="step-info">
+            <div class="step-title">Recognizing Conflicts</div>
+            <div class="step-duration">2 min</div>
+          </div>
+        </li>
+        <li class="step-item" data-step="5" onclick="goToStep(5)">
+          <span class="step-number">5</span>
+          <div class="step-info">
+            <div class="step-title">Resolving Conflicts</div>
+            <div class="step-duration">4 min</div>
+          </div>
+        </li>
+        <li class="step-item" data-step="6" onclick="goToStep(6)">
+          <span class="step-number">6</span>
+          <div class="step-info">
+            <div class="step-title">Module Complete</div>
+            <div class="step-duration">1 min</div>
+          </div>
+        </li>
+      </ul>
     </aside>
-    
+
     <main class="main-content">
-        <!-- Step 1 -->
-        <div class="step-page active" id="step1">
-            <div class="step-content">
-                <div class="step-header">
-                    <span class="step-badge">Step 1 of 6</span>
-                    <h1>Why Conflicts Happen</h1>
-                    <p>Understanding the root cause</p>
-                </div>
-                
-                <div class="content-card">
-                    <h2>⚔️ What Causes Merge Conflicts?</h2>
-                    <p>A merge conflict occurs when Git can't automatically combine changes. This happens when:</p>
-                    <ul>
-                        <li><strong>Same lines edited</strong> - Two people change the same line(s) differently</li>
-                        <li><strong>Adjacent edits</strong> - Changes too close together for Git to merge safely</li>
-                        <li><strong>File renamed/deleted</strong> - One person edits a file another person deleted</li>
-                        <li><strong>Long-running branches</strong> - Branches diverge significantly over time</li>
-                    </ul>
-                </div>
-                
-                <div class="content-card">
-                    <h2>📊 The Real Problem: Time</h2>
-                    <p>The #1 predictor of conflicts is <strong>how long branches stay separate</strong>:</p>
-                    
-                    <table class="data-table">
-                        <tr>
-                            <th>Branch Age</th>
-                            <th>Conflict Risk</th>
-                            <th>Resolution Difficulty</th>
-                        </tr>
-                        <tr>
-                            <td>Hours</td>
-                            <td>🟢 Low</td>
-                            <td>Usually trivial</td>
-                        </tr>
-                        <tr>
-                            <td>1-2 Days</td>
-                            <td>🟡 Moderate</td>
-                            <td>Quick to resolve</td>
-                        </tr>
-                        <tr>
-                            <td>3-7 Days</td>
-                            <td>🟠 High</td>
-                            <td>May need discussion</td>
-                        </tr>
-                        <tr>
-                            <td>1+ Week</td>
-                            <td>🔴 Very High</td>
-                            <td>Can be painful</td>
-                        </tr>
-                    </table>
-                </div>
-                
-                <div class="info-box">
-                    <strong>💡 Key Insight</strong>
-                    Most conflicts are preventable. The goal isn't to become great at resolving conflicts—it's to rarely have them in the first place.
-                </div>
-                
-                <div class="step-navigation">
-                    <button class="nav-btn prev" disabled>← Previous</button>
-                    <button class="nav-btn next" onclick="goToStep(2)">Next: Prevention Strategies →</button>
-                </div>
-            </div>
-        </div>
-        
-        <!-- Step 2 -->
-        <div class="step-page" id="step2">
-            <div class="step-content">
-                <div class="step-header">
-                    <span class="step-badge">Step 2 of 6</span>
-                    <h1>Prevention Strategies</h1>
-                    <p>Best practices to avoid conflicts</p>
-                </div>
-                
-                <div class="content-card">
-                    <h2>🛡️ The Big Four Prevention Tactics</h2>
-                    
-                    <h3>1. Pull Early, Pull Often</h3>
-                    <div class="code-block">
-<span class="comment"># Start every coding session with:</span>
-<span class="command">git checkout</span> main
-<span class="command">git pull</span>
-<span class="command">git checkout</span> your-branch
-<span class="command">git merge</span> main
-                    </div>
-                    <p>Sync with main at least once daily, ideally more.</p>
-                    
-                    <h3>2. Keep Branches Short-Lived</h3>
-                    <ul>
-                        <li>Aim for branches that last <strong>hours to 2 days</strong>, not weeks</li>
-                        <li>Break large features into smaller, mergeable pieces</li>
-                        <li>Use feature flags to ship incomplete features safely</li>
-                    </ul>
-                    
-                    <h3>3. Make Small, Focused Commits</h3>
-                    <ul>
-                        <li>Each commit should do <strong>one thing</strong></li>
-                        <li>Easier to review, easier to resolve if conflicts occur</li>
-                        <li>"Commit early, commit often"</li>
-                    </ul>
-                    
-                    <h3>4. Don't Reformat Entire Files</h3>
-                    <ul>
-                        <li>Reformatting creates conflicts with everyone else's changes</li>
-                        <li>If formatting is needed, do it in a <strong>separate PR</strong></li>
-                        <li>Better: set up auto-formatting so everyone's code looks the same</li>
-                    </ul>
-                </div>
-                
-                <div class="success-box">
-                    <strong>✅ Daily Sync Habit</strong>
-                    Before starting work each day: <code>git pull origin main</code> into your branch. This 10-second habit prevents hours of conflict resolution.
-                </div>
-                
-                <div class="step-navigation">
-                    <button class="nav-btn prev" onclick="goToStep(1)">← Previous</button>
-                    <button class="nav-btn next" onclick="goToStep(3)">Next: Communication Protocols →</button>
-                </div>
-            </div>
-        </div>
-        
-        <!-- Step 3 -->
-        <div class="step-page" id="step3">
-            <div class="step-content">
-                <div class="step-header">
-                    <span class="step-badge">Step 3 of 6</span>
-                    <h1>Communication Protocols</h1>
-                    <p>Coordinate with your team</p>
-                </div>
-                
-                <div class="content-card">
-                    <h2>🗣️ Talk Before You Code</h2>
-                    <p>Many conflicts happen because two people unknowingly work on the same thing:</p>
-                    
-                    <ul class="checklist">
-                        <li><strong>Announce your work</strong> - Post in team chat what you're starting</li>
-                        <li><strong>Check who's working where</strong> - Look at open PRs before starting</li>
-                        <li><strong>Claim files/areas</strong> - If you're doing a large refactor, let others know</li>
-                        <li><strong>Review open branches</strong> - See what teammates are working on</li>
-                    </ul>
-                </div>
-                
-                <div class="content-card">
-                    <h2>📋 Sample Team Workflow</h2>
-                    
-                    <h3>Before Starting Work</h3>
-                    <div class="code-block">
-<span class="comment"># Post in team Slack/Teams:</span>
-"🚀 Starting work on user authentication - will be touching:
- - src/auth/*
- - src/components/LoginForm.js
- - src/api/userService.js
-Anyone else working in these areas?"
-                    </div>
-                    
-                    <h3>During Work</h3>
-                    <ul>
-                        <li>Push your branch regularly (even WIP) so others can see it</li>
-                        <li>If you see overlap, reach out immediately</li>
-                        <li>Consider pairing or coordinating timing</li>
-                    </ul>
-                    
-                    <h3>When Conflicts Are Likely</h3>
-                    <ul>
-                        <li>Talk to the other developer <strong>before</strong> attempting to resolve</li>
-                        <li>Understand the intent of both changes</li>
-                        <li>Decide together how to combine them</li>
-                    </ul>
-                </div>
-                
-                <div class="warning-box">
-                    <strong>⚠️ Don't Guess at Others' Intent</strong>
-                    If you're resolving a conflict with someone else's code and you're not 100% sure what they intended, <strong>ask them</strong>. A 2-minute conversation beats a broken feature.
-                </div>
-                
-                <div class="step-navigation">
-                    <button class="nav-btn prev" onclick="goToStep(2)">← Previous</button>
-                    <button class="nav-btn next" onclick="goToStep(4)">Next: Recognizing Conflicts →</button>
-                </div>
-            </div>
-        </div>
-        
-        <!-- Step 4 -->
-        <div class="step-page" id="step4">
-            <div class="step-content">
-                <div class="step-header">
-                    <span class="step-badge">Step 4 of 6</span>
-                    <h1>Recognizing Conflicts</h1>
-                    <p>What conflicts look like</p>
-                </div>
-                
-                <div class="content-card">
-                    <h2>🚨 When Git Can't Merge</h2>
-                    <p>When you pull or merge and there's a conflict, Git will tell you:</p>
-                    <div class="code-block">
-<span class="command">$ git merge main</span>
-<span class="conflict">Auto-merging src/components/Header.js
-CONFLICT (content): Merge conflict in src/components/Header.js
-Automatic merge failed; fix conflicts and then commit the result.</span>
-                    </div>
-                </div>
-                
-                <div class="content-card">
-                    <h2>📄 Conflict Markers in Files</h2>
-                    <p>Git marks the conflicting sections with special markers:</p>
-                    <div class="code-block">
-function getGreeting(user) {
-<span class="conflict">&lt;&lt;&lt;&lt;&lt;&lt;&lt; HEAD</span>
-<span class="ours">  return `Hello, ${user.firstName}!`;</span>
-<span class="conflict">=======</span>
-<span class="theirs">  return `Welcome back, ${user.name}!`;</span>
-<span class="conflict">&gt;&gt;&gt;&gt;&gt;&gt;&gt; main</span>
-}
-                    </div>
-                    
-                    <table class="data-table">
-                        <tr>
-                            <th>Marker</th>
-                            <th>Meaning</th>
-                        </tr>
-                        <tr>
-                            <td><code>&lt;&lt;&lt;&lt;&lt;&lt;&lt; HEAD</code></td>
-                            <td>Start of YOUR changes (current branch)</td>
-                        </tr>
-                        <tr>
-                            <td><code>=======</code></td>
-                            <td>Separator between versions</td>
-                        </tr>
-                        <tr>
-                            <td><code>&gt;&gt;&gt;&gt;&gt;&gt;&gt; main</code></td>
-                            <td>End of THEIR changes (incoming branch)</td>
-                        </tr>
-                    </table>
-                </div>
-                
-                <div class="content-card">
-                    <h2>🔍 Check Conflict Status</h2>
-                    <div class="code-block">
-<span class="comment"># See which files have conflicts</span>
-<span class="command">git status</span>
+      <!-- Step 1 -->
+      <div class="step-page active" id="step1">
+        <div class="step-content">
+          <div class="step-header">
+            <span class="step-badge">Step 1 of 6</span>
+            <h1>Why Conflicts Happen</h1>
+            <p>Understanding the root cause</p>
+          </div>
 
-<span class="comment"># Output shows:</span>
-Unmerged paths:
-  (use "git add &lt;file&gt;..." to mark resolution)
-        <span class="conflict">both modified:   src/components/Header.js</span>
-                    </div>
-                </div>
-                
-                <div class="step-navigation">
-                    <button class="nav-btn prev" onclick="goToStep(3)">← Previous</button>
-                    <button class="nav-btn next" onclick="goToStep(5)">Next: Resolving Conflicts →</button>
-                </div>
-            </div>
-        </div>
-        
-        <!-- Step 5 -->
-        <div class="step-page" id="step5">
-            <div class="step-content">
-                <div class="step-header">
-                    <span class="step-badge">Step 5 of 6</span>
-                    <h1>Resolving Conflicts</h1>
-                    <p>Step-by-step conflict resolution</p>
-                </div>
-                
-                <div class="content-card">
-                    <h2>🔧 Resolution Process</h2>
-                    
-                    <h3>Step 1: Understand Both Changes</h3>
-                    <p>Before editing, understand what each version is trying to do:</p>
-                    <ul>
-                        <li>What was YOUR intent with your change?</li>
-                        <li>What was THEIR intent with their change?</li>
-                        <li>Can both intents coexist?</li>
-                    </ul>
-                    
-                    <h3>Step 2: Edit the File</h3>
-                    <p>Choose one of these approaches:</p>
-                    <ul>
-                        <li><strong>Keep yours</strong> - Delete their section and conflict markers</li>
-                        <li><strong>Keep theirs</strong> - Delete your section and conflict markers</li>
-                        <li><strong>Keep both</strong> - Combine the changes logically</li>
-                        <li><strong>Write new</strong> - Create entirely new code that satisfies both needs</li>
-                    </ul>
-                    
-                    <div class="code-block">
-<span class="comment"># Before (conflicted)</span>
-<span class="conflict">&lt;&lt;&lt;&lt;&lt;&lt;&lt; HEAD</span>
-<span class="ours">  return `Hello, ${user.firstName}!`;</span>
-<span class="conflict">=======</span>
-<span class="theirs">  return `Welcome back, ${user.name}!`;</span>
-<span class="conflict">&gt;&gt;&gt;&gt;&gt;&gt;&gt; main</span>
+          <div class="content-card">
+            <h2>⚔️ What Causes Merge Conflicts?</h2>
+            <p>
+              A merge conflict occurs when Git can't automatically combine
+              changes. This happens when:
+            </p>
+            <ul>
+              <li>
+                <strong>Same lines edited</strong> - Two people change the same
+                line(s) differently
+              </li>
+              <li>
+                <strong>Adjacent edits</strong> - Changes too close together for
+                Git to merge safely
+              </li>
+              <li>
+                <strong>File renamed/deleted</strong> - One person edits a file
+                another person deleted
+              </li>
+              <li>
+                <strong>Long-running branches</strong> - Branches diverge
+                significantly over time
+              </li>
+            </ul>
+          </div>
 
-<span class="comment"># After (resolved - combined both)</span>
-<span class="ours">  return `Welcome back, ${user.firstName}!`;</span>
-                    </div>
-                    
-                    <h3>Step 3: Mark as Resolved</h3>
-                    <div class="code-block">
-<span class="comment"># Stage the resolved file</span>
-<span class="command">git add</span> src/components/Header.js
+          <div class="content-card">
+            <h2>📊 The Real Problem: Time</h2>
+            <p>
+              The #1 predictor of conflicts is
+              <strong>how long branches stay separate</strong>:
+            </p>
 
-<span class="comment"># Commit the merge</span>
-<span class="command">git commit</span> <span class="flag">-m</span> <span class="string">"Merge main, resolve Header.js conflict"</span>
-                    </div>
-                </div>
-                
-                <div class="content-card">
-                    <h2>🛠️ Using VS Code to Resolve</h2>
-                    <p>VS Code provides visual conflict resolution:</p>
-                    <ul>
-                        <li><strong>Accept Current Change</strong> - Keep your version</li>
-                        <li><strong>Accept Incoming Change</strong> - Keep their version</li>
-                        <li><strong>Accept Both Changes</strong> - Keep both (stacked)</li>
-                        <li><strong>Compare Changes</strong> - Side-by-side diff view</li>
-                    </ul>
-                    
-                    <div class="info-box">
-                        <strong>💡 Pro Tip</strong>
-                        After resolving, <strong>always test your code</strong>. A syntactically correct resolution can still be logically broken.
-                    </div>
-                </div>
-                
-                <div class="content-card">
-                    <h2>🚑 Emergency: Abort the Merge</h2>
-                    <p>If things go wrong and you need to start over:</p>
-                    <div class="code-block">
-<span class="comment"># Abort merge and return to pre-merge state</span>
-<span class="command">git merge</span> <span class="flag">--abort</span>
+            <table class="data-table">
+              <tr>
+                <th>Branch Age</th>
+                <th>Conflict Risk</th>
+                <th>Resolution Difficulty</th>
+              </tr>
+              <tr>
+                <td>Hours</td>
+                <td>🟢 Low</td>
+                <td>Usually trivial</td>
+              </tr>
+              <tr>
+                <td>1-2 Days</td>
+                <td>🟡 Moderate</td>
+                <td>Quick to resolve</td>
+              </tr>
+              <tr>
+                <td>3-7 Days</td>
+                <td>🟠 High</td>
+                <td>May need discussion</td>
+              </tr>
+              <tr>
+                <td>1+ Week</td>
+                <td>🔴 Very High</td>
+                <td>Can be painful</td>
+              </tr>
+            </table>
+          </div>
 
-<span class="comment"># Or if you've already made changes you want to discard</span>
-<span class="command">git reset</span> <span class="flag">--hard</span> HEAD
-                    </div>
-                    
-                    <div class="error-box">
-                        <strong>⚠️ Warning</strong>
-                        <code>git reset --hard</code> will discard ALL uncommitted changes. Make sure that's what you want.
-                    </div>
-                </div>
-                
-                <div class="step-navigation">
-                    <button class="nav-btn prev" onclick="goToStep(4)">← Previous</button>
-                    <button class="nav-btn next" onclick="goToStep(6)">Complete Module →</button>
-                </div>
-            </div>
+          <div class="info-box">
+            <strong>💡 Key Insight</strong>
+            Most conflicts are preventable. The goal isn't to become great at
+            resolving conflicts—it's to rarely have them in the first place.
+          </div>
+
+          <div class="step-navigation">
+            <button class="nav-btn prev" disabled>← Previous</button>
+            <button class="nav-btn next" onclick="goToStep(2)">
+              Next: Prevention Strategies →
+            </button>
+          </div>
         </div>
-        
-        <!-- Step 6 -->
-        <div class="step-page" id="step6">
-            <div class="step-content">
-                <div class="step-header">
-                    <span class="step-badge">Step 6 of 6</span>
-                    <h1>🎉 Module Complete!</h1>
-                    <p>You can now prevent and resolve conflicts</p>
-                </div>
-                
-                <div class="content-card" style="text-align: center; padding: 2.5rem;">
-                    <div style="font-size: 4rem; margin-bottom: 1rem;">⚔️</div>
-                    <h2>Conflict Resolution Mastered!</h2>
-                    <p style="font-size: 1.1rem; max-width: 500px; margin: 1rem auto;">You now know how to avoid conflicts and handle them when they occur.</p>
-                </div>
-                
-                <div class="content-card">
-                    <h2>📋 Key Takeaways</h2>
-                    <ul>
-                        <li><strong>Pull frequently</strong> - Sync with main at least daily</li>
-                        <li><strong>Keep branches short</strong> - Hours to days, not weeks</li>
-                        <li><strong>Communicate</strong> - Tell teammates what you're working on</li>
-                        <li><strong>Understand both sides</strong> - Before resolving, know the intent</li>
-                        <li><strong>Test after resolving</strong> - Merges can break logic</li>
-                    </ul>
-                </div>
-                
-                <div class="content-card" style="background: linear-gradient(135deg, var(--module-color), #d97706); color: white;">
-                    <h2 style="color: white;">Next Up: Pull Request Best Practices</h2>
-                    <p style="color: rgba(255,255,255,0.9);">Learn how to create effective PRs and conduct meaningful code reviews.</p>
-                    <div style="margin-top: 1rem;">
-                        <a href="dev-module4-pull-requests.html" class="nav-btn" style="background: white; color: var(--module-color);">Start Module 4 →</a>
-                    </div>
-                </div>
-                
-                <div class="step-navigation">
-                    <button class="nav-btn prev" onclick="goToStep(5)">← Previous</button>
-                    <button class="nav-btn next" onclick="completeModule()" style="background: var(--primary);">✓ Complete Module</button>
-                </div>
+      </div>
+
+      <!-- Step 2 -->
+      <div class="step-page" id="step2">
+        <div class="step-content">
+          <div class="step-header">
+            <span class="step-badge">Step 2 of 6</span>
+            <h1>Prevention Strategies</h1>
+            <p>Best practices to avoid conflicts</p>
+          </div>
+
+          <div class="content-card">
+            <h2>🛡️ The Big Four Prevention Tactics</h2>
+
+            <h3>1. Pull Early, Pull Often</h3>
+            <div class="code-block">
+              <span class="comment"># Start every coding session with:</span>
+              <span class="command">git checkout</span> main
+              <span class="command">git pull</span>
+              <span class="command">git checkout</span> your-branch
+              <span class="command">git merge</span> main
             </div>
+            <p>Sync with main at least once daily, ideally more.</p>
+
+            <h3>2. Keep Branches Short-Lived</h3>
+            <ul>
+              <li>
+                Aim for branches that last <strong>hours to 2 days</strong>, not
+                weeks
+              </li>
+              <li>Break large features into smaller, mergeable pieces</li>
+              <li>Use feature flags to ship incomplete features safely</li>
+            </ul>
+
+            <h3>3. Make Small, Focused Commits</h3>
+            <ul>
+              <li>Each commit should do <strong>one thing</strong></li>
+              <li>Easier to review, easier to resolve if conflicts occur</li>
+              <li>"Commit early, commit often"</li>
+            </ul>
+
+            <h3>4. Don't Reformat Entire Files</h3>
+            <ul>
+              <li>
+                Reformatting creates conflicts with everyone else's changes
+              </li>
+              <li>
+                If formatting is needed, do it in a <strong>separate PR</strong>
+              </li>
+              <li>
+                Better: set up auto-formatting so everyone's code looks the same
+              </li>
+            </ul>
+          </div>
+
+          <div class="success-box">
+            <strong>✅ Daily Sync Habit</strong>
+            Before starting work each day:
+            <code>git pull origin main</code> into your branch. This 10-second
+            habit prevents hours of conflict resolution.
+          </div>
+
+          <div class="step-navigation">
+            <button class="nav-btn prev" onclick="goToStep(1)">
+              ← Previous
+            </button>
+            <button class="nav-btn next" onclick="goToStep(3)">
+              Next: Communication Protocols →
+            </button>
+          </div>
         </div>
+      </div>
+
+      <!-- Step 3 -->
+      <div class="step-page" id="step3">
+        <div class="step-content">
+          <div class="step-header">
+            <span class="step-badge">Step 3 of 6</span>
+            <h1>Communication Protocols</h1>
+            <p>Coordinate with your team</p>
+          </div>
+
+          <div class="content-card">
+            <h2>🗣️ Talk Before You Code</h2>
+            <p>
+              Many conflicts happen because two people unknowingly work on the
+              same thing:
+            </p>
+
+            <ul class="checklist">
+              <li>
+                <strong>Announce your work</strong> - Post in team chat what
+                you're starting
+              </li>
+              <li>
+                <strong>Check who's working where</strong> - Look at open PRs
+                before starting
+              </li>
+              <li>
+                <strong>Claim files/areas</strong> - If you're doing a large
+                refactor, let others know
+              </li>
+              <li>
+                <strong>Review open branches</strong> - See what teammates are
+                working on
+              </li>
+            </ul>
+          </div>
+
+          <div class="content-card">
+            <h2>📋 Sample Team Workflow</h2>
+
+            <h3>Before Starting Work</h3>
+            <div class="code-block">
+              <span class="comment"># Post in team Slack/Teams:</span>
+              "🚀 Starting work on user authentication - will be touching: -
+              src/auth/* - src/components/LoginForm.js - src/api/userService.js
+              Anyone else working in these areas?"
+            </div>
+
+            <h3>During Work</h3>
+            <ul>
+              <li>
+                Push your branch regularly (even WIP) so others can see it
+              </li>
+              <li>If you see overlap, reach out immediately</li>
+              <li>Consider pairing or coordinating timing</li>
+            </ul>
+
+            <h3>When Conflicts Are Likely</h3>
+            <ul>
+              <li>
+                Talk to the other developer <strong>before</strong> attempting
+                to resolve
+              </li>
+              <li>Understand the intent of both changes</li>
+              <li>Decide together how to combine them</li>
+            </ul>
+          </div>
+
+          <div class="warning-box">
+            <strong>⚠️ Don't Guess at Others' Intent</strong>
+            If you're resolving a conflict with someone else's code and you're
+            not 100% sure what they intended, <strong>ask them</strong>. A
+            2-minute conversation beats a broken feature.
+          </div>
+
+          <div class="step-navigation">
+            <button class="nav-btn prev" onclick="goToStep(2)">
+              ← Previous
+            </button>
+            <button class="nav-btn next" onclick="goToStep(4)">
+              Next: Recognizing Conflicts →
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Step 4 -->
+      <div class="step-page" id="step4">
+        <div class="step-content">
+          <div class="step-header">
+            <span class="step-badge">Step 4 of 6</span>
+            <h1>Recognizing Conflicts</h1>
+            <p>What conflicts look like</p>
+          </div>
+
+          <div class="content-card">
+            <h2>🚨 When Git Can't Merge</h2>
+            <p>
+              When you pull or merge and there's a conflict, Git will tell you:
+            </p>
+            <div class="code-block">
+              <span class="command">$ git merge main</span>
+              <span class="conflict"
+                >Auto-merging src/components/Header.js CONFLICT (content): Merge
+                conflict in src/components/Header.js Automatic merge failed; fix
+                conflicts and then commit the result.</span
+              >
+            </div>
+          </div>
+
+          <div class="content-card">
+            <h2>📄 Conflict Markers in Files</h2>
+            <p>Git marks the conflicting sections with special markers:</p>
+            <div class="code-block">
+              function getGreeting(user) {
+              <span class="conflict">&lt;&lt;&lt;&lt;&lt;&lt;&lt; HEAD</span>
+              <span class="ours"> return `Hello, ${user.firstName}!`;</span>
+              <span class="conflict">=======</span>
+              <span class="theirs"> return `Welcome back, ${user.name}!`;</span>
+              <span class="conflict">&gt;&gt;&gt;&gt;&gt;&gt;&gt; main</span>
+              }
+            </div>
+
+            <table class="data-table">
+              <tr>
+                <th>Marker</th>
+                <th>Meaning</th>
+              </tr>
+              <tr>
+                <td><code>&lt;&lt;&lt;&lt;&lt;&lt;&lt; HEAD</code></td>
+                <td>Start of YOUR changes (current branch)</td>
+              </tr>
+              <tr>
+                <td><code>=======</code></td>
+                <td>Separator between versions</td>
+              </tr>
+              <tr>
+                <td><code>&gt;&gt;&gt;&gt;&gt;&gt;&gt; main</code></td>
+                <td>End of THEIR changes (incoming branch)</td>
+              </tr>
+            </table>
+          </div>
+
+          <div class="content-card">
+            <h2>🔍 Check Conflict Status</h2>
+            <div class="code-block">
+              <span class="comment"># See which files have conflicts</span>
+              <span class="command">git status</span>
+
+              <span class="comment"># Output shows:</span>
+              Unmerged paths: (use "git add &lt;file&gt;..." to mark resolution)
+              <span class="conflict"
+                >both modified: src/components/Header.js</span
+              >
+            </div>
+          </div>
+
+          <div class="step-navigation">
+            <button class="nav-btn prev" onclick="goToStep(3)">
+              ← Previous
+            </button>
+            <button class="nav-btn next" onclick="goToStep(5)">
+              Next: Resolving Conflicts →
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Step 5 -->
+      <div class="step-page" id="step5">
+        <div class="step-content">
+          <div class="step-header">
+            <span class="step-badge">Step 5 of 6</span>
+            <h1>Resolving Conflicts</h1>
+            <p>Step-by-step conflict resolution</p>
+          </div>
+
+          <div class="content-card">
+            <h2>🔧 Resolution Process</h2>
+
+            <h3>Step 1: Understand Both Changes</h3>
+            <p>Before editing, understand what each version is trying to do:</p>
+            <ul>
+              <li>What was YOUR intent with your change?</li>
+              <li>What was THEIR intent with their change?</li>
+              <li>Can both intents coexist?</li>
+            </ul>
+
+            <h3>Step 2: Edit the File</h3>
+            <p>Choose one of these approaches:</p>
+            <ul>
+              <li>
+                <strong>Keep yours</strong> - Delete their section and conflict
+                markers
+              </li>
+              <li>
+                <strong>Keep theirs</strong> - Delete your section and conflict
+                markers
+              </li>
+              <li>
+                <strong>Keep both</strong> - Combine the changes logically
+              </li>
+              <li>
+                <strong>Write new</strong> - Create entirely new code that
+                satisfies both needs
+              </li>
+            </ul>
+
+            <div class="code-block">
+              <span class="comment"># Before (conflicted)</span>
+              <span class="conflict">&lt;&lt;&lt;&lt;&lt;&lt;&lt; HEAD</span>
+              <span class="ours"> return `Hello, ${user.firstName}!`;</span>
+              <span class="conflict">=======</span>
+              <span class="theirs"> return `Welcome back, ${user.name}!`;</span>
+              <span class="conflict">&gt;&gt;&gt;&gt;&gt;&gt;&gt; main</span>
+
+              <span class="comment"># After (resolved - combined both)</span>
+              <span class="ours">
+                return `Welcome back, ${user.firstName}!`;</span
+              >
+            </div>
+
+            <h3>Step 3: Mark as Resolved</h3>
+            <div class="code-block">
+              <span class="comment"># Stage the resolved file</span>
+              <span class="command">git add</span> src/components/Header.js
+
+              <span class="comment"># Commit the merge</span>
+              <span class="command">git commit</span>
+              <span class="flag">-m</span>
+              <span class="string"
+                >"Merge main, resolve Header.js conflict"</span
+              >
+            </div>
+          </div>
+
+          <div class="content-card">
+            <h2>🛠️ Using VS Code to Resolve</h2>
+            <p>VS Code provides visual conflict resolution:</p>
+            <ul>
+              <li>
+                <strong>Accept Current Change</strong> - Keep your version
+              </li>
+              <li>
+                <strong>Accept Incoming Change</strong> - Keep their version
+              </li>
+              <li>
+                <strong>Accept Both Changes</strong> - Keep both (stacked)
+              </li>
+              <li><strong>Compare Changes</strong> - Side-by-side diff view</li>
+            </ul>
+
+            <div class="info-box">
+              <strong>💡 Pro Tip</strong>
+              After resolving, <strong>always test your code</strong>. A
+              syntactically correct resolution can still be logically broken.
+            </div>
+          </div>
+
+          <div class="content-card">
+            <h2>🚑 Emergency: Abort the Merge</h2>
+            <p>If things go wrong and you need to start over:</p>
+            <div class="code-block">
+              <span class="comment"
+                ># Abort merge and return to pre-merge state</span
+              >
+              <span class="command">git merge</span>
+              <span class="flag">--abort</span>
+
+              <span class="comment"
+                ># Or if you've already made changes you want to discard</span
+              >
+              <span class="command">git reset</span>
+              <span class="flag">--hard</span> HEAD
+            </div>
+
+            <div class="error-box">
+              <strong>⚠️ Warning</strong>
+              <code>git reset --hard</code> will discard ALL uncommitted
+              changes. Make sure that's what you want.
+            </div>
+          </div>
+
+          <div class="step-navigation">
+            <button class="nav-btn prev" onclick="goToStep(4)">
+              ← Previous
+            </button>
+            <button class="nav-btn next" onclick="goToStep(6)">
+              Complete Module →
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Step 6 -->
+      <div class="step-page" id="step6">
+        <div class="step-content">
+          <div class="step-header">
+            <span class="step-badge">Step 6 of 6</span>
+            <h1>🎉 Module Complete!</h1>
+            <p>You can now prevent and resolve conflicts</p>
+          </div>
+
+          <div class="content-card" style="text-align: center; padding: 2.5rem">
+            <div style="font-size: 4rem; margin-bottom: 1rem">⚔️</div>
+            <h2>Conflict Resolution Mastered!</h2>
+            <p style="font-size: 1.1rem; max-width: 500px; margin: 1rem auto">
+              You now know how to avoid conflicts and handle them when they
+              occur.
+            </p>
+          </div>
+
+          <div class="content-card">
+            <h2>📋 Key Takeaways</h2>
+            <ul>
+              <li>
+                <strong>Pull frequently</strong> - Sync with main at least daily
+              </li>
+              <li>
+                <strong>Keep branches short</strong> - Hours to days, not weeks
+              </li>
+              <li>
+                <strong>Communicate</strong> - Tell teammates what you're
+                working on
+              </li>
+              <li>
+                <strong>Understand both sides</strong> - Before resolving, know
+                the intent
+              </li>
+              <li>
+                <strong>Test after resolving</strong> - Merges can break logic
+              </li>
+            </ul>
+          </div>
+
+          <div
+            class="content-card"
+            style="
+              background: linear-gradient(135deg, var(--module-color), #d97706);
+              color: white;
+            "
+          >
+            <h2 style="color: white">Next Up: Pull Request Best Practices</h2>
+            <p style="color: rgba(255, 255, 255, 0.9)">
+              Learn how to create effective PRs and conduct meaningful code
+              reviews.
+            </p>
+            <div style="margin-top: 1rem">
+              <a
+                href="dev-module4-pull-requests.html"
+                class="nav-btn"
+                style="background: white; color: var(--module-color)"
+                >Start Module 4 →</a
+              >
+            </div>
+          </div>
+
+          <div class="step-navigation">
+            <button class="nav-btn prev" onclick="goToStep(5)">
+              ← Previous
+            </button>
+            <button
+              class="nav-btn next"
+              onclick="completeModule()"
+              style="background: var(--primary)"
+            >
+              ✓ Complete Module
+            </button>
+          </div>
+        </div>
+      </div>
     </main>
-    
+
     <script>
-        const totalSteps = 6;
-        let currentStep = 1;
-        let completedSteps = [];
-        
-        function loadProgress() {
-            const saved = localStorage.getItem('dev-module3-step');
-            if (saved) {
-                currentStep = parseInt(saved);
-                for (let i = 1; i < currentStep; i++) {
-                    completedSteps.push(i);
-                }
-            }
-            updateUI();
+      const totalSteps = 6;
+      let currentStep = 1;
+      let completedSteps = [];
+
+      function loadProgress() {
+        const saved = localStorage.getItem("dev-module3-step");
+        if (saved) {
+          currentStep = parseInt(saved);
+          for (let i = 1; i < currentStep; i++) {
+            completedSteps.push(i);
+          }
         }
-        
-        function saveProgress() {
-            localStorage.setItem('dev-module3-step', currentStep);
-            if (currentStep > 1) {
-                localStorage.setItem('dev-module3', 'in-progress');
-            }
+        updateUI();
+      }
+
+      function saveProgress() {
+        localStorage.setItem("dev-module3-step", currentStep);
+        if (currentStep > 1) {
+          localStorage.setItem("dev-module3", "in-progress");
         }
-        
-        function goToStep(step) {
-            if (step > currentStep) {
-                for (let i = currentStep; i < step; i++) {
-                    if (!completedSteps.includes(i)) completedSteps.push(i);
-                }
-            }
-            currentStep = step;
-            saveProgress();
-            updateUI();
-            window.scrollTo(0, 0);
+      }
+
+      function goToStep(step) {
+        if (step > currentStep) {
+          for (let i = currentStep; i < step; i++) {
+            if (!completedSteps.includes(i)) completedSteps.push(i);
+          }
         }
-        
-        function updateUI() {
-            document.querySelectorAll('.step-page').forEach((page, index) => {
-                page.classList.remove('active');
-                if (index + 1 === currentStep) page.classList.add('active');
-            });
-            
-            document.querySelectorAll('.step-item').forEach((item, index) => {
-                const stepNum = index + 1;
-                item.classList.remove('active', 'completed');
-                if (stepNum === currentStep) item.classList.add('active');
-                else if (completedSteps.includes(stepNum)) item.classList.add('completed');
-            });
-            
-            const progress = ((currentStep - 1) / (totalSteps - 1)) * 100;
-            document.getElementById('progressFill').style.width = `${progress}%`;
-        }
-        
-        function completeModule() {
-            localStorage.setItem('dev-module3', 'completed');
-            localStorage.setItem('dev-module3-step', totalSteps);
-            window.location.href = 'developer-training.html';
-        }
-        
-        loadProgress();
+        currentStep = step;
+        saveProgress();
+        updateUI();
+        window.scrollTo(0, 0);
+      }
+
+      function updateUI() {
+        document.querySelectorAll(".step-page").forEach((page, index) => {
+          page.classList.remove("active");
+          if (index + 1 === currentStep) page.classList.add("active");
+        });
+
+        document.querySelectorAll(".step-item").forEach((item, index) => {
+          const stepNum = index + 1;
+          item.classList.remove("active", "completed");
+          if (stepNum === currentStep) item.classList.add("active");
+          else if (completedSteps.includes(stepNum))
+            item.classList.add("completed");
+        });
+
+        const progress = ((currentStep - 1) / (totalSteps - 1)) * 100;
+        document.getElementById("progressFill").style.width = `${progress}%`;
+      }
+
+      function completeModule() {
+        localStorage.setItem("dev-module3", "completed");
+        localStorage.setItem("dev-module3-step", totalSteps);
+        window.location.href = "developer-training.html";
+      }
+
+      loadProgress();
     </script>
-</body>
+  </body>
 </html>

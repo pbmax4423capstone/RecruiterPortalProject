@@ -1,293 +1,424 @@
-/* Light Mode Styles */
-.dashboard-container {
-    background: #ffffff;
-}
-
 .summary-card {
-    border-radius: 8px;
-    padding: 1rem;
-    text-align: center;
-    color: white;
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
-}
-
-.summary-card:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+  border-radius: 8px;
+  padding: 1rem;
+  text-align: center;
+  color: white;
+  min-height: 100px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
 .summary-value {
-    font-size: 2rem;
-    font-weight: bold;
+  font-size: 2rem;
+  font-weight: bold;
 }
 
 .summary-label {
-    font-size: 0.75rem;
-    opacity: 0.9;
+  font-size: 0.75rem;
+  opacity: 0.9;
 }
 
 .summary-total {
-    background: linear-gradient(180deg, #003366 0%, #004d99 100%);
+  background: linear-gradient(135deg, #0176d3, #032d60);
 }
 
 .summary-success {
-    background: linear-gradient(180deg, #4bca81 0%, #2e844a 100%);
+  background: linear-gradient(135deg, #2e844a, #194e2e);
 }
 
 .summary-ontrack {
-    background: linear-gradient(180deg, #1589ee 0%, #0070d2 100%);
+  background: linear-gradient(135deg, #06a59a, #014d48);
 }
 
 .summary-atrisk {
-    background: linear-gradient(180deg, #c23934 0%, #a72d20 100%);
+  background: linear-gradient(135deg, #e74c3c, #a72d20);
 }
 
 .summary-fyc {
-    background: linear-gradient(180deg, #ff6b35 0%, #f39c12 100%);
+  background: linear-gradient(135deg, #f39c12, #b37209);
 }
 
 .summary-avg {
-    background: linear-gradient(180deg, #003366 0%, #002244 100%);
+  background: linear-gradient(135deg, #9b59b6, #6c3483);
 }
 
 /* Interview Stats */
 .interview-stat {
-    border-radius: 8px;
-    padding: 0.75rem;
-    text-align: center;
-    color: white;
-    transition: transform 0.2s ease;
-}
-
-.interview-stat:hover {
-    transform: scale(1.05);
+  border-radius: 8px;
+  padding: 0.75rem;
+  text-align: center;
+  color: white;
 }
 
 .stat-value {
-    font-size: 1.5rem;
-    font-weight: bold;
+  font-size: 1.5rem;
+  font-weight: bold;
 }
 
 .stat-label {
-    font-size: 0.7rem;
+  font-size: 0.7rem;
 }
 
 .interview-attraction {
-    background: #003366;
+  background: #0176d3;
 }
 
 .interview-si1 {
-    background: #1589ee;
+  background: #06a59a;
 }
 
 .interview-si2 {
-    background: #c23934;
+  background: #e74c3c;
 }
 
 .interview-si3 {
-    background: #ff6b35;
+  background: #f39c12;
 }
 
 .interview-career {
-    background: #003366;
+  background: #9b59b6;
 }
 
 .interview-total {
-    background: #2c3e50;
+  background: #3e3e3c;
 }
 
 /* Recruiting Metrics */
 .metric-card {
-    border-radius: 8px;
-    padding: 0.75rem;
-    text-align: center;
-    color: white;
-    transition: transform 0.2s ease;
-}
-
-.metric-card:hover {
-    transform: scale(1.05);
+  border-radius: 8px;
+  padding: 0.75rem;
+  text-align: center;
+  color: white;
 }
 
 .metric-value {
-    font-size: 1.25rem;
-    font-weight: bold;
+  font-size: 1.25rem;
+  font-weight: bold;
 }
 
 .metric-label {
-    font-size: 0.65rem;
+  font-size: 0.65rem;
 }
 
 .metric-a {
-    background: #003366;
+  background: #0176d3;
 }
 
 .metric-b {
-    background: #1589ee;
+  background: #06a59a;
 }
 
 .metric-transition {
-    background: #4bca81;
+  background: #2e844a;
 }
 
 .metric-terminations {
-    background: #c23934;
+  background: #e74c3c;
 }
 
 .metric-rate-good {
-    background: #4bca81;
+  background: #2e844a;
 }
 
 .metric-rate-bad {
-    background: #c23934;
+  background: #ba0517;
 }
 
 /* Progress indicators */
 .progress-on-track {
-    color: #4bca81;
-    font-weight: bold;
+  color: #2e844a;
+  font-weight: bold;
 }
 
 .progress-at-risk {
-    color: #ff6b35;
-    font-weight: bold;
+  color: #f39c12;
+  font-weight: bold;
 }
 
 .progress-critical {
-    color: #c23934;
-    font-weight: bold;
+  color: #e74c3c;
+  font-weight: bold;
 }
 
 .progress-complete {
-    color: #003366;
-    font-weight: bold;
+  color: #0176d3;
+  font-weight: bold;
 }
 
 /* Progress bars */
 .progress-bar-container {
-    background: #e5e5e5;
-    border-radius: 4px;
-    height: 8px;
-    width: 100%;
-    overflow: hidden;
-    margin-top: 4px;
+  background: #e5e5e5;
+  border-radius: 4px;
+  height: 8px;
+  width: 100%;
+  overflow: hidden;
+  margin-top: 4px;
 }
 
 .progress-bar {
-    height: 100%;
-    border-radius: 4px;
-    transition: width 0.3s ease;
+  height: 100%;
+  border-radius: 4px;
+  transition: width 0.3s ease;
 }
 
 .progress-bar-fyc {
-    background: linear-gradient(90deg, #ff6b35, #4bca81);
+  background: linear-gradient(90deg, #f39c12, #2e844a);
 }
 
 .progress-bar-subs {
-    background: linear-gradient(90deg, #003366, #1589ee);
+  background: linear-gradient(90deg, #0176d3, #06a59a);
 }
 
 .progress-text {
-    font-size: 0.7rem;
-    color: #706e6b;
+  font-size: 0.7rem;
+  color: #706e6b;
 }
 
 /* Table row highlighting */
 tr.at-risk-row {
-    background-color: rgba(231, 76, 60, 0.1) !important;
+  background-color: rgba(231, 76, 60, 0.1) !important;
 }
 
 /* Period toggle */
 .period-toggle {
-    width: 150px;
+  width: 150px;
 }
 
 /* Contract A Progress Status Classes */
 .progress-met {
-    background-color: rgba(46, 132, 74, 0.1) !important;
+  background-color: rgba(46, 132, 74, 0.1) !important;
 }
 
 .progress-not-on-target {
-    background-color: rgba(243, 156, 18, 0.1) !important;
+  background-color: rgba(243, 156, 18, 0.1) !important;
 }
 
 .progress-na {
-    background-color: rgba(112, 110, 107, 0.05) !important;
+  background-color: rgba(112, 110, 107, 0.05) !important;
 }
 
 /* Status badge styling */
 .slds-theme_warning {
-    background-color: #ff6b35 !important;
-    color: white !important;
+  background-color: #f39c12 !important;
+  color: white !important;
 }
 
-/* Dark Mode Styles */
-.dark-mode.dashboard-container {
-    background: #16325c;
+/* ========================================
+   MOBILE-RESPONSIVE DESIGN
+   ======================================== */
+
+/* Tablet Layout (768px - 1024px) */
+@media (max-width: 1024px) and (min-width: 768px) {
+  /* Summary cards 3 per row on tablet */
+  .slds-size_1-of-6 {
+    width: 33.333% !important;
+    flex: 0 0 33.333% !important;
+  }
+
+  .summary-card {
+    padding: 0.75rem;
+  }
+
+  .summary-value {
+    font-size: 1.5rem;
+  }
+
+  /* Interview stats 3 per row */
+  .interview-stat {
+    padding: 0.5rem;
+  }
+
+  .stat-value {
+    font-size: 1.25rem;
+  }
+
+  /* Metric cards 3 per row */
+  .metric-card {
+    padding: 0.5rem;
+  }
+
+  .metric-value {
+    font-size: 1rem;
+  }
 }
 
-.dark-mode .summary-card {
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+/* Mobile Layout (< 768px) */
+@media (max-width: 767px) {
+  /* Stack all 6-column grids to full width */
+  .slds-size_1-of-6,
+  .slds-col,
+  .slds-size_1-of-4 {
+    width: 100% !important;
+    flex: 0 0 100% !important;
+    max-width: 100% !important;
+    margin-bottom: 0.5rem;
+  }
+
+  /* Summary cards optimized for mobile */
+  .summary-card {
+    padding: 0.75rem;
+    margin-bottom: 0.5rem;
+    min-height: 80px;
+  }
+
+  .summary-value {
+    font-size: 1.75rem;
+  }
+
+  .summary-label {
+    font-size: 0.7rem;
+  }
+
+  /* Interview stats vertical stack */
+  .interview-stat {
+    padding: 0.75rem;
+    margin-bottom: 0.5rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .stat-value {
+    font-size: 1.5rem;
+  }
+
+  .stat-label {
+    font-size: 0.8rem;
+  }
+
+  /* Metric cards vertical stack */
+  .metric-card {
+    padding: 0.75rem;
+    margin-bottom: 0.5rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .metric-value {
+    font-size: 1.25rem;
+  }
+
+  .metric-label {
+    font-size: 0.7rem;
+  }
+
+  /* Period toggle full width */
+  .period-toggle {
+    width: 100%;
+  }
+
+  /* Progress bars */
+  .progress-bar-container {
+    height: 6px;
+  }
+
+  .progress-text {
+    font-size: 0.65rem;
+  }
+
+  /* Tables - horizontal scroll */
+  .slds-table_bordered {
+    display: block;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    white-space: nowrap;
+  }
+
+  .slds-table th,
+  .slds-table td {
+    min-width: 100px;
+    padding: 0.5rem 0.25rem;
+    font-size: 0.75rem;
+  }
+
+  .slds-table th:first-child,
+  .slds-table td:first-child {
+    min-width: 120px;
+    position: sticky;
+    left: 0;
+    background: white;
+    z-index: 1;
+  }
+
+  /* Alert sections */
+  .slds-notify {
+    padding: 0.75rem;
+    font-size: 0.875rem;
+  }
+
+  /* Box sections */
+  .slds-box {
+    padding: 0.75rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .slds-text-heading_small {
+    font-size: 0.875rem;
+  }
+
+  /* Touch-friendly elements */
+  lightning-button,
+  lightning-button-icon,
+  .slds-button {
+    min-height: 44px;
+    min-width: 44px;
+  }
+
+  /* Combobox */
+  lightning-combobox {
+    font-size: 0.875rem;
+  }
+
+  /* Section headers */
+  .slds-section__title {
+    font-size: 0.875rem;
+    padding: 0.5rem;
+  }
+
+  /* Badge sizing */
+  lightning-badge,
+  .slds-badge {
+    font-size: 0.7rem;
+    padding: 0.25rem 0.5rem;
+  }
 }
 
-.dark-mode .summary-card:hover {
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
-}
+/* Extra Small Mobile (< 375px) */
+@media (max-width: 374px) {
+  .summary-card {
+    padding: 0.5rem;
+    min-height: 70px;
+  }
 
-.dark-mode .summary-total {
-    background: linear-gradient(180deg, #004d99 0%, #003366 100%);
-}
+  .summary-value {
+    font-size: 1.5rem;
+  }
 
-.dark-mode .summary-success {
-    background: linear-gradient(180deg, #4bca81 0%, #2e844a 100%);
-}
+  .summary-label {
+    font-size: 0.65rem;
+  }
 
-.dark-mode .summary-ontrack {
-    background: linear-gradient(180deg, #1589ee 0%, #0070d2 100%);
-}
+  .interview-stat,
+  .metric-card {
+    padding: 0.5rem;
+  }
 
-.dark-mode .summary-atrisk {
-    background: linear-gradient(180deg, #c23934 0%, #a72d20 100%);
-}
+  .stat-value,
+  .metric-value {
+    font-size: 1.25rem;
+  }
 
-.dark-mode .summary-fyc {
-    background: linear-gradient(180deg, #ff6b35 0%, #f39c12 100%);
-}
+  .stat-label,
+  .metric-label {
+    font-size: 0.65rem;
+  }
 
-.dark-mode .summary-avg {
-    background: linear-gradient(180deg, #004d99 0%, #003366 100%);
-}
-
-.dark-mode .slds-card {
-    background: #1a3a52;
-    border-color: #3e5771;
-}
-
-.dark-mode .slds-text-heading_medium,
-.dark-mode .slds-card__header-title {
-    color: #ffffff;
-}
-
-.dark-mode .progress-bar-container {
-    background: #3e5771;
-}
-
-.dark-mode .progress-text {
-    color: #b0c4de;
-}
-
-.dark-mode tr.at-risk-row {
-    background-color: rgba(194, 57, 52, 0.2) !important;
-}
-
-.dark-mode .progress-met {
-    background-color: rgba(75, 202, 129, 0.15) !important;
-}
-
-.dark-mode .progress-not-on-target {
-    background-color: rgba(255, 107, 53, 0.15) !important;
-}
-
-.dark-mode .progress-na {
-    background-color: rgba(176, 196, 222, 0.1) !important;
+  .slds-table th,
+  .slds-table td {
+    min-width: 80px;
+    padding: 0.25rem;
+    font-size: 0.7rem;
+  }
 }

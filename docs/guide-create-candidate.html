@@ -1,553 +1,1064 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Guide 1: Create Your First Candidate - Recruiter Portal ATS</title>
     <style>
-        :root {
-            --primary: #0176d3;
-            --primary-dark: #014486;
-            --primary-light: #e0f2fe;
-            --success: #2e844a;
-            --success-light: #dcfce7;
-            --warning: #fe9339;
-            --warning-light: #fef3c7;
-            --danger: #ea001e;
-            --gray-100: #f3f3f3;
-            --gray-200: #e5e5e5;
-            --gray-300: #d1d5db;
-            --gray-500: #6b7280;
-            --gray-700: #444;
-            --gray-900: #181818;
+      :root {
+        --primary: #0176d3;
+        --primary-dark: #014486;
+        --primary-light: #e0f2fe;
+        --success: #2e844a;
+        --success-light: #dcfce7;
+        --warning: #fe9339;
+        --warning-light: #fef3c7;
+        --danger: #ea001e;
+        --gray-100: #f3f3f3;
+        --gray-200: #e5e5e5;
+        --gray-300: #d1d5db;
+        --gray-500: #6b7280;
+        --gray-700: #444;
+        --gray-900: #181818;
+      }
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family:
+          "Salesforce Sans",
+          -apple-system,
+          BlinkMacSystemFont,
+          "Segoe UI",
+          Roboto,
+          sans-serif;
+        background: var(--gray-100);
+        min-height: 100vh;
+      }
+
+      .nav {
+        background: white;
+        padding: 1rem 2rem;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        position: sticky;
+        top: 0;
+        z-index: 100;
+      }
+
+      .nav-left {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+      }
+      .nav a {
+        color: var(--primary);
+        text-decoration: none;
+        font-weight: 500;
+      }
+      .nav a:hover {
+        text-decoration: underline;
+      }
+      .nav-title {
+        font-size: 1.1rem;
+        color: var(--gray-900);
+        font-weight: 600;
+      }
+      .nav-progress {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        font-size: 0.9rem;
+        color: var(--gray-500);
+      }
+      .nav-progress-bar {
+        width: 150px;
+        height: 8px;
+        background: var(--gray-200);
+        border-radius: 4px;
+        overflow: hidden;
+      }
+      .nav-progress-fill {
+        height: 100%;
+        background: var(--primary);
+        border-radius: 4px;
+        transition: width 0.3s;
+      }
+
+      .main-container {
+        display: flex;
+        max-width: 1400px;
+        margin: 0 auto;
+        gap: 2rem;
+        padding: 2rem;
+      }
+      .sidebar {
+        width: 280px;
+        flex-shrink: 0;
+      }
+      .steps-list {
+        background: white;
+        border-radius: 12px;
+        padding: 1rem;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        position: sticky;
+        top: 80px;
+      }
+      .steps-list h3 {
+        font-size: 0.875rem;
+        color: var(--gray-500);
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        padding: 0.5rem 1rem;
+        margin-bottom: 0.5rem;
+      }
+
+      .step-item {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        padding: 0.75rem 1rem;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: background 0.2s;
+      }
+      .step-item:hover {
+        background: var(--gray-100);
+      }
+      .step-item.active {
+        background: var(--primary-light);
+      }
+      .step-item.completed {
+        opacity: 0.7;
+      }
+      .step-number {
+        width: 28px;
+        height: 28px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.8rem;
+        font-weight: 600;
+        background: var(--gray-200);
+        color: var(--gray-500);
+        flex-shrink: 0;
+      }
+      .step-item.active .step-number {
+        background: var(--primary);
+        color: white;
+      }
+      .step-item.completed .step-number {
+        background: var(--success);
+        color: white;
+      }
+      .step-item.completed .step-number::after {
+        content: "✓";
+      }
+      .step-item.completed .step-number span {
+        display: none;
+      }
+      .step-title {
+        font-size: 0.9rem;
+        color: var(--gray-700);
+      }
+      .step-item.active .step-title {
+        color: var(--primary-dark);
+        font-weight: 600;
+      }
+
+      .content-area {
+        flex: 1;
+        max-width: 800px;
+      }
+      .step-content {
+        display: none;
+        background: white;
+        border-radius: 12px;
+        padding: 2rem;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      }
+      .step-content.active {
+        display: block;
+      }
+      .step-header {
+        margin-bottom: 1.5rem;
+      }
+      .step-header h1 {
+        font-size: 1.5rem;
+        color: var(--gray-900);
+        margin-bottom: 0.5rem;
+      }
+      .step-header p {
+        color: var(--gray-500);
+      }
+
+      .instruction {
+        background: var(--gray-100);
+        border-radius: 8px;
+        padding: 1.5rem;
+        margin-bottom: 1.5rem;
+      }
+      .instruction h3 {
+        font-size: 1rem;
+        color: var(--gray-900);
+        margin-bottom: 0.75rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+      .instruction p {
+        color: var(--gray-700);
+        line-height: 1.6;
+        margin-bottom: 0.75rem;
+      }
+      .instruction ol,
+      .instruction ul {
+        margin-left: 1.5rem;
+        color: var(--gray-700);
+      }
+      .instruction li {
+        margin-bottom: 0.5rem;
+        line-height: 1.5;
+      }
+
+      .callout {
+        border-radius: 8px;
+        padding: 1rem 1.25rem;
+        margin: 1rem 0;
+        display: flex;
+        gap: 0.75rem;
+      }
+      .callout-icon {
+        font-size: 1.25rem;
+        flex-shrink: 0;
+      }
+      .callout-content {
+        flex: 1;
+      }
+      .callout-content strong {
+        display: block;
+        margin-bottom: 0.25rem;
+      }
+      .callout.tip {
+        background: #eff6ff;
+        border-left: 4px solid var(--primary);
+      }
+      .callout.warning {
+        background: #fef3c7;
+        border-left: 4px solid var(--warning);
+      }
+      .callout.success {
+        background: var(--success-light);
+        border-left: 4px solid var(--success);
+      }
+      .callout.important {
+        background: #fce7f3;
+        border-left: 4px solid #db2777;
+      }
+
+      .screenshot {
+        background: linear-gradient(135deg, #e0e7ff, #c7d2fe);
+        border-radius: 8px;
+        padding: 3rem;
+        text-align: center;
+        margin: 1rem 0;
+        border: 2px dashed #818cf8;
+      }
+      .screenshot p {
+        color: #4f46e5;
+        font-weight: 500;
+      }
+
+      .action-buttons-visual {
+        background: #f8fafc;
+        border: 2px solid var(--gray-200);
+        border-radius: 8px;
+        padding: 1rem;
+        margin: 1rem 0;
+        display: flex;
+        gap: 0.5rem;
+        flex-wrap: wrap;
+        align-items: center;
+      }
+      .action-buttons-visual .btn-mock {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        background: var(--primary);
+        color: white;
+        padding: 0.5rem 0.75rem;
+        border-radius: 4px;
+        font-size: 0.85rem;
+        font-weight: 500;
+      }
+      .action-buttons-visual .btn-mock.highlight {
+        background: #059669;
+        box-shadow: 0 0 0 3px rgba(5, 150, 105, 0.3);
+        animation: pulse 2s infinite;
+      }
+      @keyframes pulse {
+        0%,
+        100% {
+          box-shadow: 0 0 0 3px rgba(5, 150, 105, 0.3);
         }
-        
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        
-        body {
-            font-family: 'Salesforce Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: var(--gray-100);
-            min-height: 100vh;
+        50% {
+          box-shadow: 0 0 0 6px rgba(5, 150, 105, 0.1);
         }
-        
-        .nav {
-            background: white;
-            padding: 1rem 2rem;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            position: sticky;
-            top: 0;
-            z-index: 100;
+      }
+
+      .field-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 1rem 0;
+      }
+      .field-table th,
+      .field-table td {
+        padding: 0.75rem;
+        text-align: left;
+        border-bottom: 1px solid var(--gray-200);
+      }
+      .field-table th {
+        background: var(--gray-100);
+        font-weight: 600;
+        color: var(--gray-700);
+      }
+      .field-table td {
+        color: var(--gray-700);
+      }
+      .field-required {
+        color: var(--danger);
+        font-weight: bold;
+      }
+
+      .checkbox-group {
+        display: flex;
+        align-items: flex-start;
+        gap: 0.75rem;
+        padding: 1rem;
+        background: var(--primary-light);
+        border-radius: 8px;
+        margin: 1.5rem 0;
+        cursor: pointer;
+      }
+      .checkbox-group input[type="checkbox"] {
+        width: 20px;
+        height: 20px;
+        cursor: pointer;
+        margin-top: 2px;
+      }
+      .checkbox-group label {
+        color: var(--gray-700);
+        cursor: pointer;
+        line-height: 1.5;
+      }
+
+      .step-nav {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 2rem;
+        padding-top: 1.5rem;
+        border-top: 1px solid var(--gray-200);
+      }
+      .btn {
+        padding: 0.75rem 1.5rem;
+        border-radius: 6px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.2s;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        border: none;
+        font-size: 1rem;
+      }
+      .btn-secondary {
+        background: var(--gray-200);
+        color: var(--gray-700);
+      }
+      .btn-secondary:hover {
+        background: var(--gray-300);
+      }
+      .btn-primary {
+        background: var(--primary);
+        color: white;
+      }
+      .btn-primary:hover {
+        background: var(--primary-dark);
+      }
+      .btn-success {
+        background: var(--success);
+        color: white;
+      }
+
+      .modal-overlay {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0, 0, 0, 0.5);
+        z-index: 1000;
+        align-items: center;
+        justify-content: center;
+      }
+      .modal-overlay.active {
+        display: flex;
+      }
+      .modal {
+        background: white;
+        border-radius: 16px;
+        padding: 2rem;
+        max-width: 500px;
+        text-align: center;
+        animation: modalIn 0.3s ease;
+      }
+      @keyframes modalIn {
+        from {
+          transform: scale(0.9);
+          opacity: 0;
         }
-        
-        .nav-left { display: flex; align-items: center; gap: 1rem; }
-        .nav a { color: var(--primary); text-decoration: none; font-weight: 500; }
-        .nav a:hover { text-decoration: underline; }
-        .nav-title { font-size: 1.1rem; color: var(--gray-900); font-weight: 600; }
-        .nav-progress { display: flex; align-items: center; gap: 0.5rem; font-size: 0.9rem; color: var(--gray-500); }
-        .nav-progress-bar { width: 150px; height: 8px; background: var(--gray-200); border-radius: 4px; overflow: hidden; }
-        .nav-progress-fill { height: 100%; background: var(--primary); border-radius: 4px; transition: width 0.3s; }
-        
-        .main-container { display: flex; max-width: 1400px; margin: 0 auto; gap: 2rem; padding: 2rem; }
-        .sidebar { width: 280px; flex-shrink: 0; }
-        .steps-list { background: white; border-radius: 12px; padding: 1rem; box-shadow: 0 2px 8px rgba(0,0,0,0.1); position: sticky; top: 80px; }
-        .steps-list h3 { font-size: 0.875rem; color: var(--gray-500); text-transform: uppercase; letter-spacing: 0.5px; padding: 0.5rem 1rem; margin-bottom: 0.5rem; }
-        
-        .step-item { display: flex; align-items: center; gap: 0.75rem; padding: 0.75rem 1rem; border-radius: 8px; cursor: pointer; transition: background 0.2s; }
-        .step-item:hover { background: var(--gray-100); }
-        .step-item.active { background: var(--primary-light); }
-        .step-item.completed { opacity: 0.7; }
-        .step-number { width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.8rem; font-weight: 600; background: var(--gray-200); color: var(--gray-500); flex-shrink: 0; }
-        .step-item.active .step-number { background: var(--primary); color: white; }
-        .step-item.completed .step-number { background: var(--success); color: white; }
-        .step-item.completed .step-number::after { content: "✓"; }
-        .step-item.completed .step-number span { display: none; }
-        .step-title { font-size: 0.9rem; color: var(--gray-700); }
-        .step-item.active .step-title { color: var(--primary-dark); font-weight: 600; }
-        
-        .content-area { flex: 1; max-width: 800px; }
-        .step-content { display: none; background: white; border-radius: 12px; padding: 2rem; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
-        .step-content.active { display: block; }
-        .step-header { margin-bottom: 1.5rem; }
-        .step-header h1 { font-size: 1.5rem; color: var(--gray-900); margin-bottom: 0.5rem; }
-        .step-header p { color: var(--gray-500); }
-        
-        .instruction { background: var(--gray-100); border-radius: 8px; padding: 1.5rem; margin-bottom: 1.5rem; }
-        .instruction h3 { font-size: 1rem; color: var(--gray-900); margin-bottom: 0.75rem; display: flex; align-items: center; gap: 0.5rem; }
-        .instruction p { color: var(--gray-700); line-height: 1.6; margin-bottom: 0.75rem; }
-        .instruction ol, .instruction ul { margin-left: 1.5rem; color: var(--gray-700); }
-        .instruction li { margin-bottom: 0.5rem; line-height: 1.5; }
-        
-        .callout { border-radius: 8px; padding: 1rem 1.25rem; margin: 1rem 0; display: flex; gap: 0.75rem; }
-        .callout-icon { font-size: 1.25rem; flex-shrink: 0; }
-        .callout-content { flex: 1; }
-        .callout-content strong { display: block; margin-bottom: 0.25rem; }
-        .callout.tip { background: #eff6ff; border-left: 4px solid var(--primary); }
-        .callout.warning { background: #fef3c7; border-left: 4px solid var(--warning); }
-        .callout.success { background: var(--success-light); border-left: 4px solid var(--success); }
-        .callout.important { background: #fce7f3; border-left: 4px solid #db2777; }
-        
-        .screenshot { background: linear-gradient(135deg, #e0e7ff, #c7d2fe); border-radius: 8px; padding: 3rem; text-align: center; margin: 1rem 0; border: 2px dashed #818cf8; }
-        .screenshot p { color: #4f46e5; font-weight: 500; }
-        
-        .action-buttons-visual { background: #f8fafc; border: 2px solid var(--gray-200); border-radius: 8px; padding: 1rem; margin: 1rem 0; display: flex; gap: 0.5rem; flex-wrap: wrap; align-items: center; }
-        .action-buttons-visual .btn-mock { display: inline-flex; align-items: center; gap: 0.5rem; background: var(--primary); color: white; padding: 0.5rem 0.75rem; border-radius: 4px; font-size: 0.85rem; font-weight: 500; }
-        .action-buttons-visual .btn-mock.highlight { background: #059669; box-shadow: 0 0 0 3px rgba(5, 150, 105, 0.3); animation: pulse 2s infinite; }
-        @keyframes pulse { 0%, 100% { box-shadow: 0 0 0 3px rgba(5, 150, 105, 0.3); } 50% { box-shadow: 0 0 0 6px rgba(5, 150, 105, 0.1); } }
-        
-        .field-table { width: 100%; border-collapse: collapse; margin: 1rem 0; }
-        .field-table th, .field-table td { padding: 0.75rem; text-align: left; border-bottom: 1px solid var(--gray-200); }
-        .field-table th { background: var(--gray-100); font-weight: 600; color: var(--gray-700); }
-        .field-table td { color: var(--gray-700); }
-        .field-required { color: var(--danger); font-weight: bold; }
-        
-        .checkbox-group { display: flex; align-items: flex-start; gap: 0.75rem; padding: 1rem; background: var(--primary-light); border-radius: 8px; margin: 1.5rem 0; cursor: pointer; }
-        .checkbox-group input[type="checkbox"] { width: 20px; height: 20px; cursor: pointer; margin-top: 2px; }
-        .checkbox-group label { color: var(--gray-700); cursor: pointer; line-height: 1.5; }
-        
-        .step-nav { display: flex; justify-content: space-between; margin-top: 2rem; padding-top: 1.5rem; border-top: 1px solid var(--gray-200); }
-        .btn { padding: 0.75rem 1.5rem; border-radius: 6px; font-weight: 600; cursor: pointer; transition: all 0.2s; text-decoration: none; display: inline-flex; align-items: center; gap: 0.5rem; border: none; font-size: 1rem; }
-        .btn-secondary { background: var(--gray-200); color: var(--gray-700); }
-        .btn-secondary:hover { background: var(--gray-300); }
-        .btn-primary { background: var(--primary); color: white; }
-        .btn-primary:hover { background: var(--primary-dark); }
-        .btn-success { background: var(--success); color: white; }
-        
-        .modal-overlay { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); z-index: 1000; align-items: center; justify-content: center; }
-        .modal-overlay.active { display: flex; }
-        .modal { background: white; border-radius: 16px; padding: 2rem; max-width: 500px; text-align: center; animation: modalIn 0.3s ease; }
-        @keyframes modalIn { from { transform: scale(0.9); opacity: 0; } to { transform: scale(1); opacity: 1; } }
-        .modal-icon { font-size: 4rem; margin-bottom: 1rem; }
-        .modal h2 { color: var(--gray-900); margin-bottom: 0.5rem; }
-        .modal p { color: var(--gray-500); margin-bottom: 1.5rem; }
-        .modal-buttons { display: flex; gap: 1rem; justify-content: center; }
+        to {
+          transform: scale(1);
+          opacity: 1;
+        }
+      }
+      .modal-icon {
+        font-size: 4rem;
+        margin-bottom: 1rem;
+      }
+      .modal h2 {
+        color: var(--gray-900);
+        margin-bottom: 0.5rem;
+      }
+      .modal p {
+        color: var(--gray-500);
+        margin-bottom: 1.5rem;
+      }
+      .modal-buttons {
+        display: flex;
+        gap: 1rem;
+        justify-content: center;
+      }
     </style>
-</head>
-<body>
+  </head>
+  <body>
     <nav class="nav">
-        <div class="nav-left">
-            <a href="quick-start-interactive.html">← Back to Guides</a>
-            <span class="nav-title">Guide 1: Create Your First Candidate</span>
+      <div class="nav-left">
+        <a href="quick-start-interactive.html">← Back to Guides</a>
+        <span class="nav-title">Guide 1: Create Your First Candidate</span>
+      </div>
+      <div class="nav-progress">
+        <span>Step <span id="currentStepNum">1</span> of 8</span>
+        <div class="nav-progress-bar">
+          <div
+            class="nav-progress-fill"
+            id="progressFill"
+            style="width: 12.5%"
+          ></div>
         </div>
-        <div class="nav-progress">
-            <span>Step <span id="currentStepNum">1</span> of 8</span>
-            <div class="nav-progress-bar">
-                <div class="nav-progress-fill" id="progressFill" style="width: 12.5%"></div>
-            </div>
-        </div>
+      </div>
     </nav>
-    
+
     <div class="main-container">
-        <aside class="sidebar">
-            <div class="steps-list">
-                <h3>Steps</h3>
-                <div class="step-item active" data-step="1" onclick="goToStep(1)"><div class="step-number"><span>1</span></div><span class="step-title">Introduction</span></div>
-                <div class="step-item" data-step="2" onclick="goToStep(2)"><div class="step-number"><span>2</span></div><span class="step-title">Open Recruiter Console</span></div>
-                <div class="step-item" data-step="3" onclick="goToStep(3)"><div class="step-number"><span>3</span></div><span class="step-title">Click Create New Candidate</span></div>
-                <div class="step-item" data-step="4" onclick="goToStep(4)"><div class="step-number"><span>4</span></div><span class="step-title">Enter Basic Info</span></div>
-                <div class="step-item" data-step="5" onclick="goToStep(5)"><div class="step-number"><span>5</span></div><span class="step-title">Set Lead Source</span></div>
-                <div class="step-item" data-step="6" onclick="goToStep(6)"><div class="step-number"><span>6</span></div><span class="step-title">Complete the Flow</span></div>
-                <div class="step-item" data-step="7" onclick="goToStep(7)"><div class="step-number"><span>7</span></div><span class="step-title">Verify in Dashboard</span></div>
-                <div class="step-item" data-step="8" onclick="goToStep(8)"><div class="step-number"><span>8</span></div><span class="step-title">Complete!</span></div>
-            </div>
-        </aside>
-        
-        <main class="content-area">
-            <!-- Step 1: Introduction -->
-            <div class="step-content active" data-step="1">
-                <div class="step-header">
-                    <h1>👋 Welcome to Your First Guide</h1>
-                    <p>Learn how to create candidate records using the Recruiter Portal</p>
-                </div>
-                
-                <div class="callout important">
-                    <span class="callout-icon">⭐</span>
-                    <div class="callout-content">
-                        <strong>Always Use the Dashboard Action Buttons!</strong>
-                        The Recruiter Portal has action buttons that run our custom workflows. These automatically link records correctly and ensure data integrity. Never create candidates manually through standard Salesforce navigation.
-                    </div>
-                </div>
-                
-                <div class="instruction">
-                    <h3>📋 What You'll Learn</h3>
-                    <ul>
-                        <li>Access the Recruiter Console</li>
-                        <li>Use the <strong>"Create New Candidate"</strong> button</li>
-                        <li>Fill out the guided flow form</li>
-                        <li>Verify the candidate appears in your pipeline</li>
-                    </ul>
-                </div>
-                
-                <div class="instruction">
-                    <h3>🎯 The Action Buttons</h3>
-                    <p>The Recruiter Dashboard header contains these action buttons:</p>
-                    <div class="action-buttons-visual">
-                        <span class="btn-mock">➕ Create Ticket</span>
-                        <span class="btn-mock">📞 Schedule Call</span>
-                        <span class="btn-mock">📅 Reschedule Calls</span>
-                        <span class="btn-mock highlight">👤 Create New Candidate</span>
-                        <span class="btn-mock">📋 Schedule Interview</span>
-                    </div>
-                    <p><em>We'll use the highlighted button in this guide.</em></p>
-                </div>
-                
-                <div class="checkbox-group">
-                    <input type="checkbox" id="ready1">
-                    <label for="ready1">I'm ready to begin! I have Salesforce open in another tab.</label>
-                </div>
-                
-                <div class="step-nav">
-                    <div></div>
-                    <button class="btn btn-primary" onclick="nextStep()">Let's Get Started →</button>
-                </div>
-            </div>
-            
-            <!-- Step 2: Open Recruiter Console -->
-            <div class="step-content" data-step="2">
-                <div class="step-header">
-                    <h1>🏠 Open the Recruiter Console</h1>
-                    <p>Navigate to your home base for all recruiting activities</p>
-                </div>
-                
-                <div class="instruction">
-                    <h3>📍 Action Steps</h3>
-                    <ol>
-                        <li>Log into Salesforce (if not already logged in)</li>
-                        <li>Click on <strong>"Recruiter Console"</strong> in the navigation tabs</li>
-                        <li>Or use the <strong>App Launcher</strong> (9 dots) and search for "Recruiter Console"</li>
-                    </ol>
-                </div>
-                
-                <div class="screenshot">
-                    <p>📸 Screenshot: Navigation showing Recruiter Console app</p>
-                </div>
-                
-                <div class="instruction">
-                    <h3>✓ You Should See</h3>
-                    <ul>
-                        <li><strong>Recruiter Console</strong> header at the top</li>
-                        <li><strong>Action Buttons</strong> at the bottom (Create Candidate, Notes, To Do List)</li>
-                        <li><strong>Recruiter Portal Home</strong> tab displaying the dashboard</li>
-                    </ul>
-                </div>
-                
-                <div class="checkbox-group">
-                    <input type="checkbox" id="ready2">
-                    <label for="ready2">I can see the Recruiter Console with the Recruiter Portal Home dashboard</label>
-                </div>
-                
-                <div class="step-nav">
-                    <button class="btn btn-secondary" onclick="prevStep()">← Previous</button>
-                    <button class="btn btn-primary" onclick="nextStep()">Continue →</button>
-                </div>
-            </div>
-            
-            <!-- Step 3: Click Create New Candidate -->
-            <div class="step-content" data-step="3">
-                <div class="step-header">
-                    <h1>👤 Click "Create New Candidate"</h1>
-                    <p>Use the action button to launch the candidate creation flow</p>
-                </div>
-                
-                <div class="instruction">
-                    <h3>📍 Action Steps</h3>
-                    <ol>
-                        <li>Look at the <strong>header area</strong> of the Recruiter Dashboard</li>
-                        <li>Find the row of blue action buttons</li>
-                        <li>Click <strong>"Create New Candidate"</strong></li>
-                    </ol>
-                </div>
-                
-                <div class="instruction">
-                    <h3>🎯 Find This Button</h3>
-                    <div class="action-buttons-visual">
-                        <span class="btn-mock">➕ Create Ticket</span>
-                        <span class="btn-mock">📞 Schedule Call</span>
-                        <span class="btn-mock">📅 Reschedule Calls</span>
-                        <span class="btn-mock highlight">👤 Create New Candidate</span>
-                        <span class="btn-mock">📋 Schedule Interview</span>
-                    </div>
-                </div>
-                
-                <div class="callout important">
-                    <span class="callout-icon">⭐</span>
-                    <div class="callout-content">
-                        <strong>Why Use This Button?</strong>
-                        This button launches a guided Flow that:
-                        <ul style="margin-top: 0.5rem; margin-left: 1rem;">
-                            <li>Automatically creates a linked Contact record</li>
-                            <li>Sets default values correctly</li>
-                            <li>Triggers welcome email automation</li>
-                            <li>Ensures proper data relationships</li>
-                        </ul>
-                    </div>
-                </div>
-                
-                <div class="checkbox-group">
-                    <input type="checkbox" id="ready3">
-                    <label for="ready3">The Create New Candidate flow/modal is open</label>
-                </div>
-                
-                <div class="step-nav">
-                    <button class="btn btn-secondary" onclick="prevStep()">← Previous</button>
-                    <button class="btn btn-primary" onclick="nextStep()">Continue →</button>
-                </div>
-            </div>
-            
-            <!-- Step 4: Enter Basic Info -->
-            <div class="step-content" data-step="4">
-                <div class="step-header">
-                    <h1>✏️ Enter Basic Information</h1>
-                    <p>Fill in the candidate's details in the flow</p>
-                </div>
-                
-                <div class="instruction">
-                    <h3>📍 Required Fields</h3>
-                    <table class="field-table">
-                        <thead><tr><th>Field</th><th>Required</th><th>Description</th></tr></thead>
-                        <tbody>
-                            <tr><td>First Name</td><td><span class="field-required">*</span></td><td>Candidate's first name</td></tr>
-                            <tr><td>Last Name</td><td><span class="field-required">*</span></td><td>Candidate's last name</td></tr>
-                            <tr><td>Email</td><td><span class="field-required">*</span></td><td>Primary email address</td></tr>
-                            <tr><td>Phone</td><td></td><td>Primary phone number</td></tr>
-                        </tbody>
-                    </table>
-                </div>
-                
-                <div class="callout tip">
-                    <span class="callout-icon">💡</span>
-                    <div class="callout-content">
-                        <strong>Test Data</strong>
-                        For practice, you can use: <strong>Test Candidate</strong>, <strong>test@example.com</strong>
-                    </div>
-                </div>
-                
-                <div class="checkbox-group">
-                    <input type="checkbox" id="ready4">
-                    <label for="ready4">I've entered the candidate's name and email</label>
-                </div>
-                
-                <div class="step-nav">
-                    <button class="btn btn-secondary" onclick="prevStep()">← Previous</button>
-                    <button class="btn btn-primary" onclick="nextStep()">Continue →</button>
-                </div>
-            </div>
-            
-            <!-- Step 5: Set Lead Source -->
-            <div class="step-content" data-step="5">
-                <div class="step-header">
-                    <h1>📊 Set Lead Source</h1>
-                    <p>Track where this candidate came from</p>
-                </div>
-                
-                <div class="instruction">
-                    <h3>📋 Lead Source Options</h3>
-                    <table class="field-table">
-                        <thead><tr><th>Source</th><th>When to Use</th></tr></thead>
-                        <tbody>
-                            <tr><td><strong>LinkedIn</strong></td><td>Candidate found via LinkedIn search or InMail</td></tr>
-                            <tr><td><strong>Referral</strong></td><td>Referred by existing agent or employee</td></tr>
-                            <tr><td><strong>ZoomInfo</strong></td><td>Sourced from ZoomInfo database</td></tr>
-                            <tr><td><strong>Indeed</strong></td><td>Applied through Indeed job posting</td></tr>
-                            <tr><td><strong>Website</strong></td><td>Applied through company website</td></tr>
-                        </tbody>
-                    </table>
-                </div>
-                
-                <div class="callout tip">
-                    <span class="callout-icon">💡</span>
-                    <div class="callout-content">
-                        <strong>Why Lead Source Matters</strong>
-                        Tracking lead sources helps measure which recruiting channels are most effective.
-                    </div>
-                </div>
-                
-                <div class="checkbox-group">
-                    <input type="checkbox" id="ready5">
-                    <label for="ready5">I've selected the appropriate Lead Source</label>
-                </div>
-                
-                <div class="step-nav">
-                    <button class="btn btn-secondary" onclick="prevStep()">← Previous</button>
-                    <button class="btn btn-primary" onclick="nextStep()">Continue →</button>
-                </div>
-            </div>
-            
-            <!-- Step 6: Complete the Flow -->
-            <div class="step-content" data-step="6">
-                <div class="step-header">
-                    <h1>✅ Complete the Flow</h1>
-                    <p>Finish and save the new candidate</p>
-                </div>
-                
-                <div class="instruction">
-                    <h3>📍 Action Steps</h3>
-                    <ol>
-                        <li>Review all the information you've entered</li>
-                        <li>Click <strong>Next</strong> or <strong>Save</strong> button in the flow</li>
-                        <li>Wait for the confirmation message</li>
-                    </ol>
-                </div>
-                
-                <div class="callout success">
-                    <span class="callout-icon">✅</span>
-                    <div class="callout-content">
-                        <strong>What Happens Automatically</strong>
-                        <ul style="margin-top: 0.5rem; margin-left: 1rem;">
-                            <li>Creates the Candidate record</li>
-                            <li>Creates a linked Contact record</li>
-                            <li>Sets Status to "New"</li>
-                            <li>Triggers welcome email (if configured)</li>
-                        </ul>
-                    </div>
-                </div>
-                
-                <div class="checkbox-group">
-                    <input type="checkbox" id="ready6">
-                    <label for="ready6">The flow completed successfully and I see the confirmation</label>
-                </div>
-                
-                <div class="step-nav">
-                    <button class="btn btn-secondary" onclick="prevStep()">← Previous</button>
-                    <button class="btn btn-primary" onclick="nextStep()">Continue →</button>
-                </div>
-            </div>
-            
-            <!-- Step 7: Verify in Dashboard -->
-            <div class="step-content" data-step="7">
-                <div class="step-header">
-                    <h1>🔍 Verify in Dashboard</h1>
-                    <p>Confirm your new candidate appears in the pipeline</p>
-                </div>
-                
-                <div class="instruction">
-                    <h3>📍 Action Steps</h3>
-                    <ol>
-                        <li>Look at the <strong>Recruiter Dashboard</strong> (refresh if needed)</li>
-                        <li>Find the <strong>Pipeline</strong> section</li>
-                        <li>Look for your new candidate in the "New" status column</li>
-                    </ol>
-                </div>
-                
-                <div class="instruction">
-                    <h3>✓ Verify These Items</h3>
-                    <ul>
-                        <li>☐ Candidate appears in the "New" status section</li>
-                        <li>☐ Name displays correctly</li>
-                        <li>☐ "New Candidates" count has increased by 1</li>
-                    </ul>
-                </div>
-                
-                <div class="checkbox-group">
-                    <input type="checkbox" id="ready7">
-                    <label for="ready7">I can see the new candidate in my dashboard pipeline</label>
-                </div>
-                
-                <div class="step-nav">
-                    <button class="btn btn-secondary" onclick="prevStep()">← Previous</button>
-                    <button class="btn btn-primary" onclick="nextStep()">Continue →</button>
-                </div>
-            </div>
-            
-            <!-- Step 8: Complete -->
-            <div class="step-content" data-step="8">
-                <div class="step-header">
-                    <h1>🎉 Congratulations!</h1>
-                    <p>You've created your first candidate using the Recruiter Portal</p>
-                </div>
-                
-                <div class="callout success">
-                    <span class="callout-icon">🏆</span>
-                    <div class="callout-content">
-                        <strong>Guide Complete!</strong>
-                        You've successfully learned how to create candidates the right way—using the dashboard action buttons.
-                    </div>
-                </div>
-                
-                <div class="instruction">
-                    <h3>📋 What You Learned</h3>
-                    <ul>
-                        <li>✅ How to access the Recruiter Dashboard</li>
-                        <li>✅ How to use the "Create New Candidate" action button</li>
-                        <li>✅ How to fill out the guided flow</li>
-                        <li>✅ How to set Lead Source correctly</li>
-                        <li>✅ How to verify candidates in the pipeline</li>
-                    </ul>
-                </div>
-                
-                <div class="callout important">
-                    <span class="callout-icon">⭐</span>
-                    <div class="callout-content">
-                        <strong>Remember!</strong>
-                        Always use the dashboard action buttons to create candidates. This ensures proper linking, automation triggers, and data integrity.
-                    </div>
-                </div>
-                
-                <div class="instruction">
-                    <h3>🚀 Next Steps</h3>
-                    <ul>
-                        <li><strong>Guide 2:</strong> Schedule an Interview - Track your candidate interviews</li>
-                        <li><strong>Guide 4:</strong> Use LinkedIn Extension - One-click candidate import</li>
-                    </ul>
-                </div>
-                
-                <div class="step-nav">
-                    <button class="btn btn-secondary" onclick="prevStep()">← Review Steps</button>
-                    <button class="btn btn-success" onclick="completeGuide()">Complete Guide ✓</button>
-                </div>
-            </div>
-        </main>
-    </div>
-    
-    <div class="modal-overlay" id="completionModal">
-        <div class="modal">
-            <div class="modal-icon">🎉</div>
-            <h2>Guide Completed!</h2>
-            <p>Great job! You've mastered creating candidates using the Recruiter Portal.</p>
-            <div class="modal-buttons">
-                <a href="quick-start-interactive.html" class="btn btn-secondary">Back to Guides</a>
-                <a href="guide-schedule-interview.html" class="btn btn-primary">Next: Schedule Interview →</a>
-            </div>
+      <aside class="sidebar">
+        <div class="steps-list">
+          <h3>Steps</h3>
+          <div class="step-item active" data-step="1" onclick="goToStep(1)">
+            <div class="step-number"><span>1</span></div>
+            <span class="step-title">Introduction</span>
+          </div>
+          <div class="step-item" data-step="2" onclick="goToStep(2)">
+            <div class="step-number"><span>2</span></div>
+            <span class="step-title">Open Recruiter Console</span>
+          </div>
+          <div class="step-item" data-step="3" onclick="goToStep(3)">
+            <div class="step-number"><span>3</span></div>
+            <span class="step-title">Click Create New Candidate</span>
+          </div>
+          <div class="step-item" data-step="4" onclick="goToStep(4)">
+            <div class="step-number"><span>4</span></div>
+            <span class="step-title">Enter Basic Info</span>
+          </div>
+          <div class="step-item" data-step="5" onclick="goToStep(5)">
+            <div class="step-number"><span>5</span></div>
+            <span class="step-title">Set Lead Source</span>
+          </div>
+          <div class="step-item" data-step="6" onclick="goToStep(6)">
+            <div class="step-number"><span>6</span></div>
+            <span class="step-title">Complete the Flow</span>
+          </div>
+          <div class="step-item" data-step="7" onclick="goToStep(7)">
+            <div class="step-number"><span>7</span></div>
+            <span class="step-title">Verify in Dashboard</span>
+          </div>
+          <div class="step-item" data-step="8" onclick="goToStep(8)">
+            <div class="step-number"><span>8</span></div>
+            <span class="step-title">Complete!</span>
+          </div>
         </div>
+      </aside>
+
+      <main class="content-area">
+        <!-- Step 1: Introduction -->
+        <div class="step-content active" data-step="1">
+          <div class="step-header">
+            <h1>👋 Welcome to Your First Guide</h1>
+            <p>
+              Learn how to create candidate records using the Recruiter Portal
+            </p>
+          </div>
+
+          <div class="callout important">
+            <span class="callout-icon">⭐</span>
+            <div class="callout-content">
+              <strong>Always Use the Dashboard Action Buttons!</strong>
+              The Recruiter Portal has action buttons that run our custom
+              workflows. These automatically link records correctly and ensure
+              data integrity. Never create candidates manually through standard
+              Salesforce navigation.
+            </div>
+          </div>
+
+          <div class="instruction">
+            <h3>📋 What You'll Learn</h3>
+            <ul>
+              <li>Access the Recruiter Console</li>
+              <li>Use the <strong>"Create New Candidate"</strong> button</li>
+              <li>Fill out the guided flow form</li>
+              <li>Verify the candidate appears in your pipeline</li>
+            </ul>
+          </div>
+
+          <div class="instruction">
+            <h3>🎯 The Action Buttons</h3>
+            <p>The Recruiter Dashboard header contains these action buttons:</p>
+            <div class="action-buttons-visual">
+              <span class="btn-mock">➕ Create Ticket</span>
+              <span class="btn-mock">📞 Schedule Call</span>
+              <span class="btn-mock">📅 Reschedule Calls</span>
+              <span class="btn-mock highlight">👤 Create New Candidate</span>
+              <span class="btn-mock">📋 Schedule Interview</span>
+            </div>
+            <p><em>We'll use the highlighted button in this guide.</em></p>
+          </div>
+
+          <div class="checkbox-group">
+            <input type="checkbox" id="ready1" />
+            <label for="ready1"
+              >I'm ready to begin! I have Salesforce open in another tab.</label
+            >
+          </div>
+
+          <div class="step-nav">
+            <div></div>
+            <button class="btn btn-primary" onclick="nextStep()">
+              Let's Get Started →
+            </button>
+          </div>
+        </div>
+
+        <!-- Step 2: Open Recruiter Console -->
+        <div class="step-content" data-step="2">
+          <div class="step-header">
+            <h1>🏠 Open the Recruiter Console</h1>
+            <p>Navigate to your home base for all recruiting activities</p>
+          </div>
+
+          <div class="instruction">
+            <h3>📍 Action Steps</h3>
+            <ol>
+              <li>Log into Salesforce (if not already logged in)</li>
+              <li>
+                Click on <strong>"Recruiter Console"</strong> in the navigation
+                tabs
+              </li>
+              <li>
+                Or use the <strong>App Launcher</strong> (9 dots) and search for
+                "Recruiter Console"
+              </li>
+            </ol>
+          </div>
+
+          <div class="screenshot">
+            <p>📸 Screenshot: Navigation showing Recruiter Console app</p>
+          </div>
+
+          <div class="instruction">
+            <h3>✓ You Should See</h3>
+            <ul>
+              <li><strong>Recruiter Console</strong> header at the top</li>
+              <li>
+                <strong>Action Buttons</strong> at the bottom (Create Candidate,
+                Notes, To Do List)
+              </li>
+              <li>
+                <strong>Recruiter Portal Home</strong> tab displaying the
+                dashboard
+              </li>
+            </ul>
+          </div>
+
+          <div class="checkbox-group">
+            <input type="checkbox" id="ready2" />
+            <label for="ready2"
+              >I can see the Recruiter Console with the Recruiter Portal Home
+              dashboard</label
+            >
+          </div>
+
+          <div class="step-nav">
+            <button class="btn btn-secondary" onclick="prevStep()">
+              ← Previous
+            </button>
+            <button class="btn btn-primary" onclick="nextStep()">
+              Continue →
+            </button>
+          </div>
+        </div>
+
+        <!-- Step 3: Click Create New Candidate -->
+        <div class="step-content" data-step="3">
+          <div class="step-header">
+            <h1>👤 Click "Create New Candidate"</h1>
+            <p>Use the action button to launch the candidate creation flow</p>
+          </div>
+
+          <div class="instruction">
+            <h3>📍 Action Steps</h3>
+            <ol>
+              <li>
+                Look at the <strong>header area</strong> of the Recruiter
+                Dashboard
+              </li>
+              <li>Find the row of blue action buttons</li>
+              <li>Click <strong>"Create New Candidate"</strong></li>
+            </ol>
+          </div>
+
+          <div class="instruction">
+            <h3>🎯 Find This Button</h3>
+            <div class="action-buttons-visual">
+              <span class="btn-mock">➕ Create Ticket</span>
+              <span class="btn-mock">📞 Schedule Call</span>
+              <span class="btn-mock">📅 Reschedule Calls</span>
+              <span class="btn-mock highlight">👤 Create New Candidate</span>
+              <span class="btn-mock">📋 Schedule Interview</span>
+            </div>
+          </div>
+
+          <div class="callout important">
+            <span class="callout-icon">⭐</span>
+            <div class="callout-content">
+              <strong>Why Use This Button?</strong>
+              This button launches a guided Flow that:
+              <ul style="margin-top: 0.5rem; margin-left: 1rem">
+                <li>Automatically creates a linked Contact record</li>
+                <li>Sets default values correctly</li>
+                <li>Triggers welcome email automation</li>
+                <li>Ensures proper data relationships</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="checkbox-group">
+            <input type="checkbox" id="ready3" />
+            <label for="ready3"
+              >The Create New Candidate flow/modal is open</label
+            >
+          </div>
+
+          <div class="step-nav">
+            <button class="btn btn-secondary" onclick="prevStep()">
+              ← Previous
+            </button>
+            <button class="btn btn-primary" onclick="nextStep()">
+              Continue →
+            </button>
+          </div>
+        </div>
+
+        <!-- Step 4: Enter Basic Info -->
+        <div class="step-content" data-step="4">
+          <div class="step-header">
+            <h1>✏️ Enter Basic Information</h1>
+            <p>Fill in the candidate's details in the flow</p>
+          </div>
+
+          <div class="instruction">
+            <h3>📍 Required Fields</h3>
+            <table class="field-table">
+              <thead>
+                <tr>
+                  <th>Field</th>
+                  <th>Required</th>
+                  <th>Description</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>First Name</td>
+                  <td><span class="field-required">*</span></td>
+                  <td>Candidate's first name</td>
+                </tr>
+                <tr>
+                  <td>Last Name</td>
+                  <td><span class="field-required">*</span></td>
+                  <td>Candidate's last name</td>
+                </tr>
+                <tr>
+                  <td>Email</td>
+                  <td><span class="field-required">*</span></td>
+                  <td>Primary email address</td>
+                </tr>
+                <tr>
+                  <td>Phone</td>
+                  <td></td>
+                  <td>Primary phone number</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="callout tip">
+            <span class="callout-icon">💡</span>
+            <div class="callout-content">
+              <strong>Test Data</strong>
+              For practice, you can use: <strong>Test Candidate</strong>,
+              <strong>test@example.com</strong>
+            </div>
+          </div>
+
+          <div class="checkbox-group">
+            <input type="checkbox" id="ready4" />
+            <label for="ready4"
+              >I've entered the candidate's name and email</label
+            >
+          </div>
+
+          <div class="step-nav">
+            <button class="btn btn-secondary" onclick="prevStep()">
+              ← Previous
+            </button>
+            <button class="btn btn-primary" onclick="nextStep()">
+              Continue →
+            </button>
+          </div>
+        </div>
+
+        <!-- Step 5: Set Lead Source -->
+        <div class="step-content" data-step="5">
+          <div class="step-header">
+            <h1>📊 Set Lead Source</h1>
+            <p>Track where this candidate came from</p>
+          </div>
+
+          <div class="instruction">
+            <h3>📋 Lead Source Options</h3>
+            <table class="field-table">
+              <thead>
+                <tr>
+                  <th>Source</th>
+                  <th>When to Use</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>LinkedIn</strong></td>
+                  <td>Candidate found via LinkedIn search or InMail</td>
+                </tr>
+                <tr>
+                  <td><strong>Referral</strong></td>
+                  <td>Referred by existing agent or employee</td>
+                </tr>
+                <tr>
+                  <td><strong>ZoomInfo</strong></td>
+                  <td>Sourced from ZoomInfo database</td>
+                </tr>
+                <tr>
+                  <td><strong>Indeed</strong></td>
+                  <td>Applied through Indeed job posting</td>
+                </tr>
+                <tr>
+                  <td><strong>Website</strong></td>
+                  <td>Applied through company website</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="callout tip">
+            <span class="callout-icon">💡</span>
+            <div class="callout-content">
+              <strong>Why Lead Source Matters</strong>
+              Tracking lead sources helps measure which recruiting channels are
+              most effective.
+            </div>
+          </div>
+
+          <div class="checkbox-group">
+            <input type="checkbox" id="ready5" />
+            <label for="ready5"
+              >I've selected the appropriate Lead Source</label
+            >
+          </div>
+
+          <div class="step-nav">
+            <button class="btn btn-secondary" onclick="prevStep()">
+              ← Previous
+            </button>
+            <button class="btn btn-primary" onclick="nextStep()">
+              Continue →
+            </button>
+          </div>
+        </div>
+
+        <!-- Step 6: Complete the Flow -->
+        <div class="step-content" data-step="6">
+          <div class="step-header">
+            <h1>✅ Complete the Flow</h1>
+            <p>Finish and save the new candidate</p>
+          </div>
+
+          <div class="instruction">
+            <h3>📍 Action Steps</h3>
+            <ol>
+              <li>Review all the information you've entered</li>
+              <li>
+                Click <strong>Next</strong> or <strong>Save</strong> button in
+                the flow
+              </li>
+              <li>Wait for the confirmation message</li>
+            </ol>
+          </div>
+
+          <div class="callout success">
+            <span class="callout-icon">✅</span>
+            <div class="callout-content">
+              <strong>What Happens Automatically</strong>
+              <ul style="margin-top: 0.5rem; margin-left: 1rem">
+                <li>Creates the Candidate record</li>
+                <li>Creates a linked Contact record</li>
+                <li>Sets Status to "New"</li>
+                <li>Triggers welcome email (if configured)</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="checkbox-group">
+            <input type="checkbox" id="ready6" />
+            <label for="ready6"
+              >The flow completed successfully and I see the confirmation</label
+            >
+          </div>
+
+          <div class="step-nav">
+            <button class="btn btn-secondary" onclick="prevStep()">
+              ← Previous
+            </button>
+            <button class="btn btn-primary" onclick="nextStep()">
+              Continue →
+            </button>
+          </div>
+        </div>
+
+        <!-- Step 7: Verify in Dashboard -->
+        <div class="step-content" data-step="7">
+          <div class="step-header">
+            <h1>🔍 Verify in Dashboard</h1>
+            <p>Confirm your new candidate appears in the pipeline</p>
+          </div>
+
+          <div class="instruction">
+            <h3>📍 Action Steps</h3>
+            <ol>
+              <li>
+                Look at the <strong>Recruiter Dashboard</strong> (refresh if
+                needed)
+              </li>
+              <li>Find the <strong>Pipeline</strong> section</li>
+              <li>Look for your new candidate in the "New" status column</li>
+            </ol>
+          </div>
+
+          <div class="instruction">
+            <h3>✓ Verify These Items</h3>
+            <ul>
+              <li>☐ Candidate appears in the "New" status section</li>
+              <li>☐ Name displays correctly</li>
+              <li>☐ "New Candidates" count has increased by 1</li>
+            </ul>
+          </div>
+
+          <div class="checkbox-group">
+            <input type="checkbox" id="ready7" />
+            <label for="ready7"
+              >I can see the new candidate in my dashboard pipeline</label
+            >
+          </div>
+
+          <div class="step-nav">
+            <button class="btn btn-secondary" onclick="prevStep()">
+              ← Previous
+            </button>
+            <button class="btn btn-primary" onclick="nextStep()">
+              Continue →
+            </button>
+          </div>
+        </div>
+
+        <!-- Step 8: Complete -->
+        <div class="step-content" data-step="8">
+          <div class="step-header">
+            <h1>🎉 Congratulations!</h1>
+            <p>
+              You've created your first candidate using the Recruiter Portal
+            </p>
+          </div>
+
+          <div class="callout success">
+            <span class="callout-icon">🏆</span>
+            <div class="callout-content">
+              <strong>Guide Complete!</strong>
+              You've successfully learned how to create candidates the right
+              way—using the dashboard action buttons.
+            </div>
+          </div>
+
+          <div class="instruction">
+            <h3>📋 What You Learned</h3>
+            <ul>
+              <li>✅ How to access the Recruiter Dashboard</li>
+              <li>✅ How to use the "Create New Candidate" action button</li>
+              <li>✅ How to fill out the guided flow</li>
+              <li>✅ How to set Lead Source correctly</li>
+              <li>✅ How to verify candidates in the pipeline</li>
+            </ul>
+          </div>
+
+          <div class="callout important">
+            <span class="callout-icon">⭐</span>
+            <div class="callout-content">
+              <strong>Remember!</strong>
+              Always use the dashboard action buttons to create candidates. This
+              ensures proper linking, automation triggers, and data integrity.
+            </div>
+          </div>
+
+          <div class="instruction">
+            <h3>🚀 Next Steps</h3>
+            <ul>
+              <li>
+                <strong>Guide 2:</strong> Schedule an Interview - Track your
+                candidate interviews
+              </li>
+              <li>
+                <strong>Guide 4:</strong> Use LinkedIn Extension - One-click
+                candidate import
+              </li>
+            </ul>
+          </div>
+
+          <div class="step-nav">
+            <button class="btn btn-secondary" onclick="prevStep()">
+              ← Review Steps
+            </button>
+            <button class="btn btn-success" onclick="completeGuide()">
+              Complete Guide ✓
+            </button>
+          </div>
+        </div>
+      </main>
     </div>
-    
+
+    <div class="modal-overlay" id="completionModal">
+      <div class="modal">
+        <div class="modal-icon">🎉</div>
+        <h2>Guide Completed!</h2>
+        <p>
+          Great job! You've mastered creating candidates using the Recruiter
+          Portal.
+        </p>
+        <div class="modal-buttons">
+          <a href="quick-start-interactive.html" class="btn btn-secondary"
+            >Back to Guides</a
+          >
+          <a href="guide-schedule-interview.html" class="btn btn-primary"
+            >Next: Schedule Interview →</a
+          >
+        </div>
+      </div>
+    </div>
+
     <script>
-        let currentStep = 1;
-        const totalSteps = 8;
-        
-        function updateUI() {
-            document.querySelectorAll('.step-content').forEach(el => el.classList.remove('active'));
-            document.querySelector(`.step-content[data-step="${currentStep}"]`).classList.add('active');
-            
-            document.querySelectorAll('.step-item').forEach(el => {
-                const step = parseInt(el.dataset.step);
-                el.classList.remove('active');
-                if (step === currentStep) el.classList.add('active');
-                if (step < currentStep) el.classList.add('completed');
-                else el.classList.remove('completed');
-            });
-            
-            document.getElementById('currentStepNum').textContent = currentStep;
-            document.getElementById('progressFill').style.width = `${(currentStep / totalSteps) * 100}%`;
-            
-            if (currentStep > 1) {
-                localStorage.setItem('ats-quickstart-guide1', 'in-progress');
-                localStorage.setItem('ats-quickstart-guide1-step', currentStep);
-            }
-            document.querySelector('.content-area').scrollIntoView({ behavior: 'smooth', block: 'start' });
+      let currentStep = 1;
+      const totalSteps = 8;
+
+      function updateUI() {
+        document
+          .querySelectorAll(".step-content")
+          .forEach((el) => el.classList.remove("active"));
+        document
+          .querySelector(`.step-content[data-step="${currentStep}"]`)
+          .classList.add("active");
+
+        document.querySelectorAll(".step-item").forEach((el) => {
+          const step = parseInt(el.dataset.step);
+          el.classList.remove("active");
+          if (step === currentStep) el.classList.add("active");
+          if (step < currentStep) el.classList.add("completed");
+          else el.classList.remove("completed");
+        });
+
+        document.getElementById("currentStepNum").textContent = currentStep;
+        document.getElementById("progressFill").style.width =
+          `${(currentStep / totalSteps) * 100}%`;
+
+        if (currentStep > 1) {
+          localStorage.setItem("ats-quickstart-guide1", "in-progress");
+          localStorage.setItem("ats-quickstart-guide1-step", currentStep);
         }
-        
-        function nextStep() { if (currentStep < totalSteps) { currentStep++; updateUI(); } }
-        function prevStep() { if (currentStep > 1) { currentStep--; updateUI(); } }
-        function goToStep(step) { currentStep = step; updateUI(); }
-        function completeGuide() { localStorage.setItem('ats-quickstart-guide1', 'completed'); document.getElementById('completionModal').classList.add('active'); }
-        
-        window.onload = function() {
-            const savedStep = localStorage.getItem('ats-quickstart-guide1-step');
-            if (savedStep) { currentStep = parseInt(savedStep); updateUI(); }
-        };
+        document
+          .querySelector(".content-area")
+          .scrollIntoView({ behavior: "smooth", block: "start" });
+      }
+
+      function nextStep() {
+        if (currentStep < totalSteps) {
+          currentStep++;
+          updateUI();
+        }
+      }
+      function prevStep() {
+        if (currentStep > 1) {
+          currentStep--;
+          updateUI();
+        }
+      }
+      function goToStep(step) {
+        currentStep = step;
+        updateUI();
+      }
+      function completeGuide() {
+        localStorage.setItem("ats-quickstart-guide1", "completed");
+        document.getElementById("completionModal").classList.add("active");
+      }
+
+      window.onload = function () {
+        const savedStep = localStorage.getItem("ats-quickstart-guide1-step");
+        if (savedStep) {
+          currentStep = parseInt(savedStep);
+          updateUI();
+        }
+      };
     </script>
-</body>
+  </body>
 </html>
