@@ -1,0 +1,395 @@
+/* ======================================
+   MOBILE UTILITIES & HELPER CLASSES
+   Universal Mobile Styles for All Components
+   ====================================== */
+
+/* ===========================
+   MOBILE UTILITY CLASSES
+   =========================== */
+
+/* Display Utilities */
+.mobile-hide {
+  display: inherit;
+}
+
+.mobile-show {
+  display: none;
+}
+
+@media screen and (max-width: 767px) {
+  .mobile-hide {
+    display: none !important;
+  }
+
+  .mobile-show {
+    display: inherit !important;
+  }
+
+  .mobile-full-width {
+    width: 100% !important;
+  }
+
+  .mobile-center {
+    text-align: center !important;
+  }
+}
+
+/* ===========================
+   RESPONSIVE GRID SYSTEM
+   =========================== */
+
+/* Mobile First - Stack by Default */
+@media screen and (max-width: 767px) {
+  .responsive-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .responsive-grid > * {
+    width: 100%;
+    flex: 0 0 100%;
+  }
+
+  /* Force single column on mobile */
+  [class*='slds-size_'] {
+    width: 100% !important;
+    flex: 0 0 100% !important;
+    max-width: 100% !important;
+  }
+}
+
+/* Tablet - Two Columns */
+@media screen and (min-width: 768px) and (max-width: 1024px) {
+  .responsive-grid-tablet-2 {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+  }
+
+  .responsive-grid-tablet-3 {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+  }
+}
+
+/* ===========================
+   TOUCH-FRIENDLY BUTTONS
+   =========================== */
+
+@media (hover: none) and (pointer: coarse) {
+  /* Minimum touch target size */
+  button,
+  .slds-button,
+  lightning-button,
+  a.slds-button,
+  [role='button'] {
+    min-height: 44px;
+    min-width: 44px;
+    padding: 0.75rem;
+  }
+
+  /* Icon buttons */
+  .slds-button_icon,
+  lightning-button-icon {
+    width: 44px;
+    height: 44px;
+  }
+
+  /* Remove hover states on touch devices */
+  .slds-button:hover,
+  lightning-button:hover {
+    transform: none;
+  }
+
+  /* Add active/pressed state */
+  .slds-button:active,
+  lightning-button:active {
+    opacity: 0.8;
+    transform: scale(0.97);
+  }
+}
+
+/* ===========================
+   MOBILE-FRIENDLY FORMS
+   =========================== */
+
+@media screen and (max-width: 767px) {
+  /* Full width inputs */
+  .slds-input,
+  .slds-textarea,
+  .slds-select,
+  lightning-input,
+  lightning-textarea,
+  lightning-combobox {
+    width: 100%;
+    min-height: 44px;
+    font-size: 16px; /* Prevent iOS zoom */
+  }
+
+  /* Form element spacing */
+  .slds-form-element {
+    margin-bottom: 1rem;
+  }
+
+  /* Labels */
+  .slds-form-element__label {
+    font-size: 0.875rem;
+    font-weight: 600;
+  }
+
+  /* Help text */
+  .slds-form-element__help {
+    font-size: 0.75rem;
+  }
+
+  /* Stack form rows */
+  .slds-form__row {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .slds-form__item {
+    width: 100%;
+  }
+}
+
+/* ===========================
+   MOBILE CARDS & CONTAINERS
+   =========================== */
+
+@media screen and (max-width: 767px) {
+  /* Cards - full width with minimal padding */
+  .slds-card,
+  lightning-card {
+    margin: 0.5rem 0;
+    border-radius: 8px;
+  }
+
+  .slds-card__header {
+    padding: 0.75rem;
+  }
+
+  .slds-card__body {
+    padding: 0.75rem !important;
+  }
+
+  .slds-card__footer {
+    padding: 0.75rem;
+  }
+
+  /* Box containers */
+  .slds-box {
+    padding: 0.75rem;
+    margin: 0.5rem 0;
+  }
+
+  /* Panels */
+  .slds-panel {
+    width: 100%;
+    max-width: 100%;
+  }
+}
+
+/* ===========================
+   MOBILE TABLES
+   =========================== */
+
+@media screen and (max-width: 767px) {
+  /* Horizontal scroll for tables */
+  .slds-table_bordered,
+  .slds-table,
+  lightning-datatable {
+    display: block;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    width: 100%;
+  }
+
+  /* Minimum table width */
+  .slds-table {
+    min-width: 500px;
+  }
+}
+
+/* ===========================
+   MOBILE MODALS
+   =========================== */
+
+@media screen and (max-width: 767px) {
+  /* Full screen modals on mobile */
+  .slds-modal__container {
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: auto !important;
+    height: 100vh;
+    max-height: 100vh;
+    border-radius: 0;
+    margin: 0;
+  }
+
+  .slds-modal__header {
+    padding: 1rem !important;
+    position: sticky;
+    top: 0;
+    z-index: 1;
+    background: white;
+    border-bottom: 1px solid #dddbda;
+  }
+
+  .slds-modal__content {
+    max-height: calc(100vh - 140px) !important;
+    padding: 1rem !important;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .slds-modal__footer {
+    padding: 1rem !important;
+    position: sticky;
+    bottom: 0;
+    background: white;
+    border-top: 1px solid #dddbda;
+    display: flex;
+    flex-direction: column-reverse;
+    gap: 0.5rem;
+  }
+
+  .slds-modal__footer button,
+  .slds-modal__footer lightning-button {
+    width: 100%;
+  }
+}
+
+/* Tablet - Optimized modals */
+@media screen and (min-width: 768px) and (max-width: 1024px) {
+  .slds-modal__container {
+    width: 90% !important;
+    max-width: 90% !important;
+  }
+
+  .slds-modal__content {
+    max-height: 70vh !important;
+  }
+}
+
+/* ===========================
+   MOBILE TYPOGRAPHY
+   =========================== */
+
+@media screen and (max-width: 767px) {
+  /* Heading sizes */
+  .slds-text-heading_large,
+  h1 {
+    font-size: 1.5rem !important;
+  }
+
+  .slds-text-heading_medium,
+  h2 {
+    font-size: 1.25rem !important;
+  }
+
+  .slds-text-heading_small,
+  h3 {
+    font-size: 1.125rem !important;
+  }
+
+  /* Body text */
+  .slds-text-body_regular,
+  body {
+    font-size: 14px;
+    line-height: 1.5;
+  }
+
+  .slds-text-body_small {
+    font-size: 12px;
+  }
+
+  /* Truncate text with ellipsis */
+  .slds-truncate {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+}
+
+/* ===========================
+   MOBILE SPACING
+   =========================== */
+
+@media screen and (max-width: 767px) {
+  /* Reduce large spacing */
+  .slds-p-around_large {
+    padding: 1rem !important;
+  }
+
+  .slds-p-around_medium {
+    padding: 0.75rem !important;
+  }
+
+  .slds-p-around_small {
+    padding: 0.5rem !important;
+  }
+
+  /* Vertical spacing */
+  .slds-p-vertical_large {
+    padding-top: 1rem !important;
+    padding-bottom: 1rem !important;
+  }
+
+  .slds-p-vertical_medium {
+    padding-top: 0.75rem !important;
+    padding-bottom: 0.75rem !important;
+  }
+}
+
+/* ===========================
+   MOBILE ACCESSIBILITY
+   =========================== */
+
+@media screen and (max-width: 1024px) {
+  /* Increase color contrast */
+  .slds-text-color_weak {
+    color: #3e3e3c !important;
+  }
+
+  /* Focus indicators */
+  *:focus,
+  *:focus-visible {
+    outline: 2px solid #0176d3;
+    outline-offset: 2px;
+  }
+
+  /* Underline all links */
+  a,
+  .slds-text-link {
+    text-decoration: underline;
+  }
+}
+
+/* ===========================
+   MOBILE PERFORMANCE
+   =========================== */
+
+@media screen and (max-width: 1024px) {
+  /* Reduce animation complexity */
+  * {
+    animation-duration: 0.2s !important;
+    transition-duration: 0.2s !important;
+  }
+
+  /* Simplify shadows */
+  .slds-card,
+  .slds-box,
+  lightning-card {
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12) !important;
+  }
+
+  /* Optimize scrolling */
+  .slds-scrollable,
+  .slds-scrollable_x,
+  .slds-scrollable_y {
+    -webkit-overflow-scrolling: touch;
+  }
+}

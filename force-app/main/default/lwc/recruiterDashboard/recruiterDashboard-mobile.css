@@ -1,0 +1,447 @@
+/* ======================================
+   MOBILE RESPONSIVE STYLES
+   Recruiter Dashboard - Mobile & Tablet
+   ====================================== */
+
+/* Base mobile-first approach - styles apply to all devices unless overridden */
+
+/* ===========================
+   MOBILE DEVICES (<768px)
+   =========================== */
+@media screen and (max-width: 767px) {
+  /* Dashboard Container */
+  .dashboard-container {
+    padding: 0;
+    min-height: auto;
+  }
+
+  /* Branded Header - Mobile */
+  .branded-header {
+    padding: 1rem;
+    flex-direction: column;
+  }
+
+  .branded-header .slds-page-header__row {
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .branded-header .slds-page-header__col-title {
+    width: 100%;
+    text-align: center;
+  }
+
+  .branded-header .slds-page-header__col-actions {
+    width: 100%;
+    align-items: stretch;
+  }
+
+  .company-logo {
+    width: 50px;
+    height: 50px;
+  }
+
+  .slds-page-header__title {
+    font-size: 1.25rem;
+  }
+
+  .welcome-message {
+    font-size: 0.875rem;
+  }
+
+  /* Action Buttons - Stack Vertically on Mobile */
+  .action-buttons-container {
+    width: 100%;
+  }
+
+  .action-buttons-container lightning-button-group {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    gap: 0.5rem;
+  }
+
+  .action-button {
+    width: 100%;
+    margin: 0;
+  }
+
+  /* Grid System - Single Column on Mobile */
+  .slds-col {
+    width: 100% !important;
+    flex: 0 0 100% !important;
+    max-width: 100% !important;
+  }
+
+  /* Override specific multi-column layouts */
+  .slds-size_6-of-12,
+  .slds-size_4-of-12,
+  .slds-size_3-of-12,
+  .slds-size_2-of-12 {
+    width: 100% !important;
+    flex: 0 0 100% !important;
+  }
+
+  /* Call Management Lists - Stack Vertically */
+  .call-list-section {
+    height: auto;
+    margin-bottom: 1rem;
+  }
+
+  .call-list-container {
+    max-height: 300px;
+  }
+
+  /* Cards - Full Width with Reduced Padding */
+  lightning-card {
+    margin-bottom: 1rem;
+  }
+
+  .slds-card__body {
+    padding: 0.75rem !important;
+  }
+
+  /* Interview Statistics - Responsive Grid */
+  .slds-grid.slds-wrap.slds-gutters {
+    gap: 0.5rem;
+  }
+
+  /* Interview Type Breakdown - Stack on Mobile */
+  .slds-col.slds-size_1-of-5 {
+    width: 50% !important;
+    flex: 0 0 50% !important;
+  }
+
+  /* Mini Charts - Adjust Size */
+  .mini-pie-chart {
+    width: 80px;
+    height: 80px;
+  }
+
+  .mini-pie-total {
+    font-size: 0.875rem;
+  }
+
+  .mini-pie-legend {
+    max-width: 100%;
+    font-size: 0.625rem;
+  }
+
+  /* Metric Tiles - Reduce Size */
+  .metric-number {
+    font-size: 2rem;
+  }
+
+  .metric-tile {
+    padding: 1rem;
+    margin: 0.5rem 0;
+  }
+
+  /* Priority Metrics */
+  .priority-number {
+    font-size: 2rem;
+  }
+
+  /* Modals - Full Screen on Mobile */
+  .slds-modal__container {
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: auto !important;
+    height: 100%;
+    max-height: 100%;
+    border-radius: 0;
+    margin: 0;
+  }
+
+  .slds-modal__content {
+    max-height: calc(100vh - 140px) !important;
+    padding: 0.75rem !important;
+  }
+
+  .slds-modal__header {
+    padding: 0.75rem !important;
+  }
+
+  .slds-modal__footer {
+    padding: 0.75rem !important;
+    flex-direction: column-reverse;
+    gap: 0.5rem;
+  }
+
+  .slds-modal__footer lightning-button {
+    width: 100%;
+  }
+
+  /* Form Elements - Touch Friendly */
+  lightning-input,
+  lightning-textarea,
+  lightning-combobox,
+  lightning-button {
+    min-height: 44px;
+  }
+
+  .slds-input,
+  .slds-textarea,
+  .slds-button {
+    min-height: 44px;
+    font-size: 16px; /* Prevents iOS zoom on focus */
+  }
+
+  /* Recent Activity - Better Mobile Scrolling */
+  .slds-col.slds-size_12-of-12 .slds-p-around_medium > div {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  /* Candidate List Items - Mobile Optimized */
+  .candidate-list-item {
+    padding: 1rem !important;
+    margin: 0.5rem 0 !important;
+  }
+
+  .candidate-list-item .slds-grid {
+    flex-direction: column !important;
+    gap: 0.75rem !important;
+  }
+
+  .candidate-list-item .slds-col {
+    padding: 0 !important;
+  }
+
+  /* Call Items - Mobile Layout */
+  .call-item .slds-grid {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .call-item .slds-col {
+    width: 100% !important;
+  }
+
+  /* Touch-Friendly Buttons */
+  lightning-button-icon {
+    width: 44px;
+    height: 44px;
+  }
+
+  /* Reduce Text Sizes for Mobile */
+  .slds-text-heading_large {
+    font-size: 1.25rem !important;
+  }
+
+  .slds-text-heading_medium {
+    font-size: 1.125rem !important;
+  }
+
+  .slds-text-heading_small {
+    font-size: 1rem !important;
+  }
+
+  /* Tables - Horizontal Scroll */
+  .slds-table_bordered,
+  .slds-table {
+    display: block;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  /* Hide unnecessary padding */
+  .slds-p-around_large {
+    padding: 1rem !important;
+  }
+
+  .slds-p-around_medium {
+    padding: 0.75rem !important;
+  }
+}
+
+/* ===========================
+   TABLET DEVICES (768px-1024px)
+   =========================== */
+@media screen and (min-width: 768px) and (max-width: 1024px) {
+  /* Dashboard Container */
+  .dashboard-container {
+    padding: 0.5rem;
+  }
+
+  /* Branded Header - Tablet */
+  .branded-header {
+    padding: 1.25rem;
+  }
+
+  /* Action Buttons - 2 Columns on Tablet */
+  .action-buttons-container lightning-button-group {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.5rem;
+  }
+
+  /* Call Lists - Side by Side on Tablet */
+  .slds-col.slds-size_6-of-12 {
+    width: 50% !important;
+    flex: 0 0 50% !important;
+  }
+
+  /* Interview Stats - 2 Columns */
+  .slds-col.slds-size_4-of-12 {
+    width: 50% !important;
+    flex: 0 0 50% !important;
+  }
+
+  /* 3 Column Layout becomes 2 Columns */
+  .slds-col.slds-size_3-of-12 {
+    width: 50% !important;
+    flex: 0 0 50% !important;
+  }
+
+  /* Modals - Not Full Screen, but Optimized */
+  .slds-modal__container {
+    width: 90% !important;
+    max-width: 90% !important;
+  }
+
+  /* Cards - Reduced Padding */
+  .slds-card__body {
+    padding: 1rem !important;
+  }
+
+  /* Touch-Friendly Tap Targets */
+  lightning-button {
+    min-height: 40px;
+  }
+
+  .slds-button {
+    min-height: 40px;
+  }
+}
+
+/* ===========================
+   LANDSCAPE ORIENTATION
+   =========================== */
+@media screen and (max-width: 1024px) and (orientation: landscape) {
+  /* Header - More Compact in Landscape */
+  .branded-header {
+    padding: 0.75rem 1rem;
+  }
+
+  .company-logo {
+    width: 45px;
+    height: 45px;
+  }
+
+  .slds-page-header__title {
+    font-size: 1.125rem;
+  }
+
+  /* Reduce vertical spacing in landscape */
+  .slds-p-vertical_large {
+    padding-top: 0.75rem !important;
+    padding-bottom: 0.75rem !important;
+  }
+
+  .slds-p-vertical_medium {
+    padding-top: 0.5rem !important;
+    padding-bottom: 0.5rem !important;
+  }
+}
+
+/* ===========================
+   TOUCH DEVICE ENHANCEMENTS
+   =========================== */
+@media (hover: none) and (pointer: coarse) {
+  /* Increase touch target sizes */
+  .clickable-stat-item,
+  .clickable-metric,
+  .call-list-item,
+  .candidate-list-item,
+  .activity-item {
+    min-height: 44px;
+    padding: 0.75rem;
+  }
+
+  /* Remove hover effects on touch devices */
+  .clickable-stat-item:hover,
+  .clickable-metric:hover,
+  .call-list-item:hover,
+  .candidate-list-item:hover {
+    transform: none;
+    box-shadow: none;
+  }
+
+  /* Add active state instead */
+  .clickable-stat-item:active,
+  .clickable-metric:active,
+  .call-list-item:active,
+  .candidate-list-item:active {
+    opacity: 0.7;
+    transform: scale(0.98);
+  }
+
+  /* Larger tap targets for buttons */
+  lightning-button,
+  .slds-button {
+    min-height: 44px;
+    min-width: 44px;
+  }
+
+  lightning-button-icon,
+  .slds-button_icon {
+    width: 44px;
+    height: 44px;
+  }
+}
+
+/* ===========================
+   ACCESSIBILITY ENHANCEMENTS
+   =========================== */
+@media screen and (max-width: 1024px) {
+  /* Ensure text is readable */
+  body,
+  .slds-text-body_regular,
+  .slds-text-body_small {
+    font-size: 14px;
+    line-height: 1.5;
+  }
+
+  /* Increase contrast for small text */
+  .slds-text-body_small,
+  .slds-text-color_weak {
+    color: #3e3e3c !important;
+  }
+
+  /* Ensure links are visible */
+  a,
+  .slds-text-link {
+    text-decoration: underline;
+  }
+
+  /* Focus indicators for keyboard navigation */
+  *:focus {
+    outline: 2px solid #0176d3;
+    outline-offset: 2px;
+  }
+}
+
+/* ===========================
+   PERFORMANCE OPTIMIZATIONS
+   =========================== */
+@media screen and (max-width: 1024px) {
+  /* Disable expensive animations on mobile */
+  * {
+    animation-duration: 0.2s !important;
+    transition-duration: 0.2s !important;
+  }
+
+  /* Simplify shadows on mobile */
+  .slds-card,
+  lightning-card,
+  .slds-box {
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12) !important;
+  }
+
+  /* Reduce gradient complexity */
+  .branded-header {
+    background: #003366 !important;
+    background-image: none !important;
+  }
+}

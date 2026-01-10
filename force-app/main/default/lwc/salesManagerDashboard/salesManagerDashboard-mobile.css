@@ -1,0 +1,137 @@
+/* ======================================
+   MOBILE RESPONSIVE STYLES
+   Sales Manager Dashboard - Mobile & Tablet
+   ====================================== */
+
+/* ===========================
+   MOBILE DEVICES (<768px)
+   =========================== */
+@media screen and (max-width: 767px) {
+  /* Dashboard Container */
+  .sales-manager-dashboard {
+    padding: 0;
+  }
+
+  /* Metrics Section - Full Width on Mobile */
+  .metrics-section {
+    margin-bottom: 1rem;
+  }
+
+  /* Pipeline Section */
+  .pipeline-section {
+    padding: 0;
+  }
+
+  .pipeline-section lightning-card {
+    margin: 0.5rem;
+  }
+
+  /* Card Body Padding */
+  .slds-card__body {
+    padding: 0.75rem !important;
+  }
+
+  /* Card Title - Smaller Font */
+  .slds-card__header-title {
+    font-size: 1rem;
+  }
+
+  /* Grid System - Single Column */
+  .slds-col {
+    width: 100% !important;
+    flex: 0 0 100% !important;
+    max-width: 100% !important;
+  }
+
+  /* Action Buttons - Full Width */
+  .slds-button,
+  lightning-button {
+    width: 100%;
+    min-height: 44px;
+  }
+
+  /* Touch-Friendly Elements */
+  * {
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0.1);
+  }
+
+  /* Scrollable Sections */
+  .slds-scrollable_y {
+    -webkit-overflow-scrolling: touch;
+  }
+}
+
+/* ===========================
+   TABLET DEVICES (768px-1024px)
+   =========================== */
+@media screen and (min-width: 768px) and (max-width: 1024px) {
+  /* Dashboard Container */
+  .sales-manager-dashboard {
+    padding: 0.5rem;
+  }
+
+  /* Metrics Section */
+  .metrics-section {
+    margin-bottom: 1.25rem;
+  }
+
+  /* Pipeline Section */
+  .pipeline-section {
+    padding: 0.5rem;
+  }
+
+  /* Card Padding */
+  .slds-card__body {
+    padding: 1rem !important;
+  }
+
+  /* Two Column Layout */
+  .slds-col.slds-size_6-of-12 {
+    width: 50% !important;
+    flex: 0 0 50% !important;
+  }
+
+  /* Touch-Friendly Buttons */
+  .slds-button,
+  lightning-button {
+    min-height: 40px;
+  }
+}
+
+/* ===========================
+   LANDSCAPE ORIENTATION
+   =========================== */
+@media screen and (max-width: 1024px) and (orientation: landscape) {
+  /* Compact Vertical Spacing */
+  .metrics-section {
+    margin-bottom: 0.75rem;
+  }
+
+  .slds-p-vertical_medium {
+    padding-top: 0.5rem !important;
+    padding-bottom: 0.5rem !important;
+  }
+}
+
+/* ===========================
+   TOUCH DEVICE ENHANCEMENTS
+   =========================== */
+@media (hover: none) and (pointer: coarse) {
+  /* Larger Touch Targets */
+  .slds-button,
+  lightning-button {
+    min-height: 44px;
+    min-width: 44px;
+  }
+
+  /* Remove Hover Effects */
+  .pipeline-section lightning-card:hover {
+    transform: none;
+  }
+
+  /* Active State Instead */
+  .slds-button:active,
+  lightning-button:active {
+    opacity: 0.7;
+  }
+}

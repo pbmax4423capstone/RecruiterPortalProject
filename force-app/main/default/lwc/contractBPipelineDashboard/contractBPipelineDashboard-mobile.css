@@ -1,0 +1,281 @@
+/* ======================================
+   MOBILE RESPONSIVE STYLES
+   Contract B Pipeline Dashboard - Mobile & Tablet
+   ====================================== */
+
+/* ===========================
+   MOBILE DEVICES (<768px)
+   =========================== */
+@media screen and (max-width: 767px) {
+  /* Dashboard Container */
+  .contract-b-dashboard {
+    padding: 0;
+  }
+
+  /* Summary Cards - Stack Vertically */
+  .summary-cards {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .summary-card {
+    width: 100%;
+    margin: 0;
+  }
+
+  /* Card Bodies */
+  .slds-card__body {
+    padding: 0.75rem !important;
+  }
+
+  /* Metrics - Reduce Font Sizes */
+  .metric-number {
+    font-size: 1.75rem;
+  }
+
+  .metric-label {
+    font-size: 0.75rem;
+  }
+
+  /* Toggle Buttons - Full Width */
+  .toggle-button-group {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    gap: 0.5rem;
+  }
+
+  .toggle-button {
+    width: 100%;
+    min-height: 44px;
+  }
+
+  /* Pipeline Table - Horizontal Scroll */
+  .pipeline-table {
+    display: block;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .slds-table {
+    min-width: 600px;
+  }
+
+  /* Progress Bars - Full Width */
+  .progress-bar-container {
+    width: 100%;
+  }
+
+  /* Grid System - Single Column */
+  .slds-col {
+    width: 100% !important;
+    flex: 0 0 100% !important;
+    max-width: 100% !important;
+  }
+
+  /* Charts - Adjust Size */
+  .chart-container {
+    max-width: 100%;
+    height: auto;
+  }
+
+  /* Touch-Friendly Elements */
+  .slds-button,
+  lightning-button {
+    min-height: 44px;
+  }
+
+  /* Interview Statistics - Stack */
+  .interview-stats-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  /* YTD Metrics - Two Columns */
+  .ytd-metrics-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.5rem;
+  }
+
+  /* Reduce Padding */
+  .slds-p-around_large {
+    padding: 0.75rem !important;
+  }
+
+  .slds-p-around_medium {
+    padding: 0.5rem !important;
+  }
+
+  /* Text Sizes */
+  .slds-text-heading_large {
+    font-size: 1.25rem !important;
+  }
+
+  .slds-text-heading_medium {
+    font-size: 1rem !important;
+  }
+
+  /* Section Headers */
+  .section-header {
+    font-size: 1.125rem;
+    padding: 0.75rem 0;
+  }
+}
+
+/* ===========================
+   TABLET DEVICES (768px-1024px)
+   =========================== */
+@media screen and (min-width: 768px) and (max-width: 1024px) {
+  /* Dashboard Container */
+  .contract-b-dashboard {
+    padding: 0.5rem;
+  }
+
+  /* Summary Cards - Two Columns */
+  .summary-cards {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+  }
+
+  /* Metrics - Slightly Reduced */
+  .metric-number {
+    font-size: 2rem;
+  }
+
+  /* Toggle Buttons - Inline */
+  .toggle-button-group {
+    display: flex;
+    flex-direction: row;
+    gap: 0.5rem;
+  }
+
+  .toggle-button {
+    flex: 1;
+    min-height: 40px;
+  }
+
+  /* Two Column Grid */
+  .slds-col.slds-size_6-of-12 {
+    width: 50% !important;
+    flex: 0 0 50% !important;
+  }
+
+  /* Interview Statistics - Two Columns */
+  .interview-stats-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.75rem;
+  }
+
+  /* YTD Metrics - Three Columns */
+  .ytd-metrics-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.75rem;
+  }
+
+  /* Card Padding */
+  .slds-card__body {
+    padding: 1rem !important;
+  }
+
+  /* Table - Allow Normal Flow */
+  .pipeline-table {
+    overflow-x: auto;
+  }
+}
+
+/* ===========================
+   LANDSCAPE ORIENTATION
+   =========================== */
+@media screen and (max-width: 1024px) and (orientation: landscape) {
+  /* Compact Spacing */
+  .summary-cards {
+    gap: 0.5rem;
+  }
+
+  .section-header {
+    padding: 0.5rem 0;
+  }
+
+  /* Reduce Vertical Padding */
+  .slds-p-vertical_large {
+    padding-top: 0.5rem !important;
+    padding-bottom: 0.5rem !important;
+  }
+
+  .slds-p-vertical_medium {
+    padding-top: 0.375rem !important;
+    padding-bottom: 0.375rem !important;
+  }
+}
+
+/* ===========================
+   TOUCH DEVICE ENHANCEMENTS
+   =========================== */
+@media (hover: none) and (pointer: coarse) {
+  /* Larger Touch Targets */
+  .slds-button,
+  lightning-button,
+  .toggle-button {
+    min-height: 44px;
+    min-width: 44px;
+  }
+
+  /* Table Rows - Touch Friendly */
+  .slds-table tbody tr {
+    min-height: 44px;
+  }
+
+  /* Remove Hover Effects */
+  .summary-card:hover,
+  .slds-table tbody tr:hover {
+    transform: none;
+    box-shadow: none;
+  }
+
+  /* Active State */
+  .summary-card:active,
+  .slds-table tbody tr:active {
+    opacity: 0.8;
+    transform: scale(0.98);
+  }
+
+  /* Progress Bar - Larger */
+  .progress-bar {
+    height: 12px;
+  }
+}
+
+/* ===========================
+   ACCESSIBILITY ENHANCEMENTS
+   =========================== */
+@media screen and (max-width: 1024px) {
+  /* Readable Text */
+  body,
+  .slds-text-body_regular {
+    font-size: 14px;
+    line-height: 1.5;
+  }
+
+  /* Increased Contrast */
+  .slds-text-color_weak {
+    color: #3e3e3c !important;
+  }
+
+  /* Focus Indicators */
+  *:focus {
+    outline: 2px solid #0176d3;
+    outline-offset: 2px;
+  }
+
+  /* Underline Links */
+  a,
+  .slds-text-link {
+    text-decoration: underline;
+  }
+}
