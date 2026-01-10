@@ -1,8 +1,14 @@
 /* Capstone Partners Company Branding */
 .dashboard-container {
-  background: linear-gradient(135deg, #e6f2ff 0%, #ffffff 100%);
+  background: linear-gradient(180deg, #e6f2ff 0%, #ffffff 100%);
   min-height: 100vh;
   color: #2c3e50;
+}
+
+/* Dark Mode Container */
+.dashboard-container.dark-mode {
+  background: linear-gradient(180deg, #16325c, #1a3a52);
+  color: #ffffff;
 }
 
 /* Branded Header */
@@ -13,6 +19,11 @@
   box-shadow: 0 4px 12px rgba(0, 51, 102, 0.15);
   border-bottom: 3px solid #f4a024;
   position: relative;
+}
+
+.dark-mode .branded-header {
+  background: #1a3a52 !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
 }
 
 /* Welcome Message Styling */
@@ -148,6 +159,13 @@
   justify-content: center;
 }
 
+/* Dark Mode Priority Metrics */
+.dark-mode .priority-metric {
+  background: #243649;
+  border-color: #3e5771;
+  color: #ffffff;
+}
+
 .priority-metric:hover {
   box-shadow: none !important; /* No hover effects */
   transform: none !important;
@@ -188,6 +206,16 @@
   font-size: 0.8rem;
   font-style: italic;
   line-height: 1.2;
+}
+
+/* Dark Mode Priority Text */
+.dark-mode .priority-number,
+.dark-mode .priority-label {
+  color: #ffffff;
+}
+
+.dark-mode .priority-sublabel {
+  color: #cccccc;
 }
 
 /* Priority Status Colors */
@@ -556,7 +584,7 @@ lightning-button[variant="success"] {
   padding: 1rem 1rem 0.5rem 1rem;
   border-bottom: 2px solid #0066cc;
   flex-shrink: 0;
-  background: linear-gradient(135deg, #ffffff 0%, #e6f2ff 100%);
+  background: linear-gradient(180deg, #ffffff 0%, #e6f2ff 100%);
   border-radius: 8px 8px 0 0;
 }
 
@@ -1279,7 +1307,7 @@ section[aria-labelledby="candidate-detail-modal-heading"] .slds-modal__content {
 }
 
 .clickable-metric:hover .slds-text-body_x-small {
-  color: #2e844a !important;
+  color: #4bca81 !important;
   font-weight: 600;
 }
 
@@ -1791,7 +1819,7 @@ div.candidate-list-item .slds-p-around_small {
 
 /* Modal header styling */
 .slds-modal__header {
-  background: linear-gradient(135deg, #003366 0%, #004080 100%);
+  background: linear-gradient(180deg, #003366, #004d99);
   color: white;
   border-radius: 8px 8px 0 0;
 }
@@ -1953,11 +1981,11 @@ div.candidate-list-item .slds-p-around_small {
 }
 
 /* Dynamic color classes for legend boxes */
-.legend-color-box[data-color="#0176d3"] { background-color: #0176d3; }
-.legend-color-box[data-color="#06a59a"] { background-color: #06a59a; }
-.legend-color-box[data-color="#e74c3c"] { background-color: #e74c3c; }
-.legend-color-box[data-color="#f39c12"] { background-color: #f39c12; }
-.legend-color-box[data-color="#9b59b6"] { background-color: #9b59b6; }
+.legend-color-box[data-color="#003366"] { background-color: #003366; }
+.legend-color-box[data-color="#4bca81"] { background-color: #4bca81; }
+.legend-color-box[data-color="#c23934"] { background-color: #c23934; }
+.legend-color-box[data-color="#f4a024"] { background-color: #f4a024; }
+.legend-color-box[data-color="#193F74"] { background-color: #193F74; }
 .legend-color-box[data-color="#2ecc71"] { background-color: #2ecc71; }
 .legend-color-box[data-color="#34495e"] { background-color: #34495e; }
 .legend-color-box[data-color="#e67e22"] { background-color: #e67e22; }
@@ -2552,41 +2580,159 @@ div.candidate-list-item .slds-p-around_small {
   line-height: 1;
 }
 
-/* Color classes for legend items */
+/* Color classes for legend items - Capstone Palette */
 .mini-pie-color-0 {
-  background-color: #0176d3;
+  background-color: #003366;
 }
 
 .mini-pie-color-1 {
-  background-color: #06a59a;
+  background-color: #4bca81;
 }
 
 .mini-pie-color-2 {
-  background-color: #e74c3c;
+  background-color: #c23934;
 }
 
 .mini-pie-color-3 {
-  background-color: #f39c12;
+  background-color: #f4a024;
 }
 
 .mini-pie-color-4 {
-  background-color: #9b59b6;
+  background-color: #193F74;
 }
 
 .mini-pie-color-5 {
-  background-color: #2ecc71;
+  background-color: #4bca81;
 }
 
 .mini-pie-color-6 {
-  background-color: #34495e;
+  background-color: #202A44;
 }
 
 .mini-pie-color-7 {
-  background-color: #e67e22;
+  background-color: #f4a024;
 }
 
 .mini-pie-color-8 {
-  background-color: #3498db;
+  background-color: #003366;
+}
+
+/* ============================================
+   COMPREHENSIVE DARK MODE SUPPORT
+   ============================================ */
+
+/* Global Dark Mode Styles */
+.dark-mode .slds-card {
+  background-color: #243649;
+  border-color: #3e5771;
+  color: #ffffff;
+}
+
+.dark-mode .slds-card__header {
+  background-color: #1a3a52;
+  border-bottom-color: #3e5771;
+}
+
+.dark-mode .slds-card__body,
+.dark-mode .slds-card__footer {
+  background-color: #243649;
+  color: #ffffff;
+}
+
+/* Dark Mode Text Colors */
+.dark-mode .slds-text-heading_small,
+.dark-mode .slds-text-heading_medium,
+.dark-mode .slds-text-heading_large,
+.dark-mode .slds-text-body_regular,
+.dark-mode .slds-text-body_small {
+  color: #ffffff !important;
+}
+
+.dark-mode .slds-text-color_weak {
+  color: #cccccc !important;
+}
+
+/* Dark Mode Modals */
+.dark-mode .slds-modal__container {
+  background-color: #1a3a52;
+}
+
+.dark-mode .slds-modal__header {
+  background-color: #243649;
+  border-bottom-color: #3e5771;
+}
+
+.dark-mode .slds-modal__content {
+  background-color: #1a3a52;
+  color: #ffffff;
+}
+
+/* Dark Mode Forms */
+.dark-mode .slds-input,
+.dark-mode .slds-textarea,
+.dark-mode .slds-select {
+  background-color: #243649;
+  border-color: #3e5771;
+  color: #ffffff;
+}
+
+.dark-mode .slds-form-element__label {
+  color: #ffffff;
+}
+
+/* Dark Mode Buttons */
+.dark-mode .slds-button_neutral {
+  background-color: #243649;
+  border-color: #3e5771;
+  color: #ffffff;
+}
+
+.dark-mode .slds-button_brand {
+  background: linear-gradient(180deg, #003366, #004d99);
+}
+
+/* Dark Mode Tables */
+.dark-mode .slds-table {
+  background-color: #243649;
+  color: #ffffff;
+}
+
+.dark-mode .slds-table thead th {
+  background-color: #1a3a52;
+  color: #ffffff;
+  border-color: #3e5771;
+}
+
+.dark-mode .slds-table tbody td {
+  border-color: #3e5771;
+}
+
+.dark-mode .slds-table tbody tr:hover {
+  background-color: #1a3a52;
+}
+
+/* Dark Mode Charts */
+.dark-mode .mini-pie-total {
+  color: #ffffff;
+}
+
+.dark-mode .legend-item {
+  color: #ffffff;
+}
+
+/* Dark Mode Stats Cards */
+.dark-mode .stat-card {
+  background-color: #243649;
+  border-color: #3e5771;
+}
+
+.dark-mode .stat-number {
+  color: #f4a024;
+}
+
+.dark-mode .stat-label {
+  color: #ffffff;
+}
 }
 
 .mini-pie-color-9 {

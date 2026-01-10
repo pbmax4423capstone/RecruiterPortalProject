@@ -1,4 +1,6 @@
 import { LightningElement, wire, track } from 'lwc';
+import { subscribe, MessageContext } from 'lightning/messageService';
+import DARK_MODE_CHANNEL from '@salesforce/messageChannel/DarkModeChannel__c';
 import getDashboardData from '@salesforce/apex/RecruiterDashboardController.getDashboardData';
 import getUserRecentActivity from '@salesforce/apex/RecruiterDashboardController.getUserRecentActivity';
 import getRachyllCallDetails from '@salesforce/apex/RecruiterDashboardController.getRachyllCallDetails';
@@ -26,6 +28,13 @@ import { loadStyle } from 'lightning/platformResourceLoader';
 // Removed dashboard_images import - no images used in this component
 
 export default class RecruiterDashboard extends NavigationMixin(LightningElement) {
+  // Dark Mode Support
+  @track darkMode = false;
+  subscription = null;
+
+  @wire(MessageContext)
+  messageContext;
+
   // Current User's Call Statistics (Priority Section)
   userScheduledCalls = 0;
   userPastDueCalls = 0;
@@ -59,6 +68,9 @@ export default class RecruiterDashboard extends NavigationMixin(LightningElement
     this.selectedCall = null;
     this.isLoadingCalls = false;
     
+    // Subscribe to dark mode channel
+    this.subscribeToMessageChannel();
+    
     // Load contract performance data
     this.loadContractPerformanceData();
     
@@ -72,6 +84,24 @@ export default class RecruiterDashboard extends NavigationMixin(LightningElement
     
     // Load interview leaderboard data
     this.loadInterviewLeaderboardData();
+  }
+
+  subscribeToMessageChannel() {
+    if (!this.subscription) {
+      this.subscription = subscribe(
+        this.messageContext,
+        DARK_MODE_CHANNEL,
+        (message) => this.handleDarkModeChange(message)
+      );
+    }
+  }
+
+  handleDarkModeChange(message) {
+    this.darkMode = message.darkModeEnabled;
+  }
+
+  get containerClass() {
+    return this.darkMode ? 'dashboard-container dark-mode' : 'dashboard-container';
   }
   
   loadInterviewLeaderboardData() {
