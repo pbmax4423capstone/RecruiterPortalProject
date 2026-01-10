@@ -16,7 +16,8 @@
  * @created 2026-01-09
  */
 
-:root {
+/* CSS Custom Properties - Use in any component */
+* {
     /* ========================================
        PRIMARY BRAND COLORS
        ======================================== */
