@@ -2,8 +2,10 @@
 
 ## 🎯 Current Sprint/Focus
 
-**Sprint:** January 2026
-**Focus:** Agent collaboration framework and system stability
+**Sprint:** January 2026  
+**Focus:** Technical debt remediation - Jest testing infrastructure
+
+**Week 2 Status:** ✅ Jest infrastructure complete, 🔵 Critical component testing next
 
 ---
 
@@ -13,12 +15,18 @@
 
 | ID | Task | Owner | Agent | Priority | Started | ETA | Notes |
 |----|------|-------|-------|----------|---------|-----|-------|
-| - | - | - | - | - | - | - | No tasks in progress |
+| 018 | Jest Phase 1 - Critical Components | Patrick/Agent | Copilot Agent | High | 2026-01-10 | 8-10h | Test recruiterDashboard (refactor first), contractBPipelineDashboard, salesManagerKeyMetrics. See TECHNICAL_DEBT_REMEDIATION_PLAN.md |
 
 ### 🟡 Ready to Start
 
 | ID | Task | Owner | Agent | Priority | Dependencies | Notes |
 |----|------|-------|-------|----------|--------------|-------|
+| 019 | Jest Phase 2 - Service Components | Patrick/Agent | Copilot Agent | High | Task #018 | Test serviceDashboard, serviceHomeVibe, scheduledCalls, scheduledCallsModal (4 components, 8-10h) |
+| 020 | Jest Phase 3 - Fix Existing Test Failures | Patrick/Agent | Copilot Agent | High | Task #019 | Fix salesManagerContractingKanban, alcRelationshipMonitor, candidateInformationEdit, alcRelationshipBackfillWizard (8-10h) |
+| 021 | Jest Phase 4 - Remaining 18 Components | Patrick/Agent | Copilot Agent | Medium | Task #020 | Test all remaining LWC components (16-20h) |
+| 022 | Remove Debug Statements | Patrick/Agent | Copilot Agent | Low | None | Remove 15 console statements from serviceHomeVibe, recruitingDirectorDashboard, recruiterPortalHeader (1h) |
+| 023 | TODO Feature Resolution | Patrick/Agent | Copilot Agent | Medium | None | Remove or implement 3 TODO items in recruiterDashboard (1h removal OR 4-6h implementation) |
+| 024 | Component Documentation | Cole/Agent | Cole's Agent | Medium | None | Document 5 critical components with README.md (3-4h) |
 | 003 | Sales Manager Qualification Dashboard - Apex Controller | Patrick/Agent | Patrick's Agent | High | Task #002 ✅ | **HANDOFF READY:** See HANDOFF-RESEARCH-TO-APEX-2026-01-08.md |
 | 004 | Sales Manager Qualification Dashboard - LWC Component | Cole/Agent | Cole's Agent | High | Task #003 | Awaiting Apex controller handoff |
 | 005 | Sales Manager Qualification Dashboard - Testing & Deployment | Cole/Agent | Cole's Agent | High | Task #004 | Final integration testing |
@@ -38,6 +46,7 @@
 
 | ID | Task | Owner | Agent | Completed | Notes |
 |----|------|-------|-------|-----------|-------|
+| 025 | Week 2 - Jest Infrastructure Setup | Patrick/Agent | Copilot Agent | 2026-01-10 | Enhanced jest.config.js with comprehensive LWC support (coverage thresholds, test paths, setup files, module mapper). Created force-app/test-utils/ with jest-setup.js (global config, localStorage mock) and lwc-test-helpers.js (20+ helper functions). Rewrote candidateKanban test suite - 10/10 tests passing ✅. Removed deprecated registerApexTestWireAdapter, used jest.mock for Apex/LMS. Created TECHNICAL_DEBT_REMEDIATION_PLAN.md (11 categories, 8-week roadmap, 52-75.5h remaining). Commit 4e49e1f. |
 | 017 | Sales Manager Activity History & Notes - Permission Fix | Patrick/Agent | Copilot Agent | 2026-01-09 | Fixed "Error loading activities" and "Error loading notes" errors for Sales Managers. Added CandidateActivityController and CandidateNotesController to Sales_Manager_Contracting_Dashboard_Access permission set. Added Task, Event, and ContentNote object permissions. Updated permission set description. All 10 existing users with permission set now have access. See SALES_MANAGER_ACTIVITY_NOTES_FIX.md. Deployed to ProductionCapstone. |
 | 016 | Candidate Pipeline - Sales Manager Filtering Fix | Patrick/Agent | Copilot Agent | 2026-01-09 | Fixed candidate pipeline to filter by logged-in Sales Manager. Added getSalesManagerOptions() method to CandidateKanbanController. Modified getKanbanData() to accept salesManagerFilter parameter. Updated candidateKanban LWC with 3 wire adapters (canViewAllCandidates, getCurrentUserName, getSalesManagerOptions), localStorage persistence with key 'candidateKanban_salesManagerFilter', and Sales Manager dropdown for Directors/Admins. Added 3 new Apex tests. All 19 tests passing. Deployed to ProductionCapstone. |
 | 015 | Interview Leaderboard - Capstone Rebrand | Patrick/Agent | Copilot Agent | 2026-01-09 | Restyled with Capstone Navy/Blue alternating pattern (Option A). Updated 2 summary cards (Week, Month), 5 category cards (CI-First through Optional-5th), 5 badge styles, hover shadows, and dark mode styles. All gradients use 180deg vertical direction with Navy #202A44 and Blue #193F74. Deployed to ProductionCapstone. |
@@ -47,10 +56,6 @@
 | 011 | SM Contracting Kanban - Production Deployment | Cole/Agent | Cole's Agent | 2026-01-09 | All deployment complete! Home page updated, docs updated, permission script ready (already in clipboard). See DEPLOYMENT_SUMMARY_SM_CONTRACTING_2026-01-09.md |
 | 010 | SM Contracting Kanban - Integration Testing | Cole/Agent | Cole's Agent | 2026-01-09 | Deployed to ProductionCapstone. Component fully functional with Sales Manager filtering, localStorage persistence, and drag-and-drop. |
 | 009 | SM Contracting Kanban - Jest Tests | Cole/Agent | Cole's Agent | 2026-01-09 | Created comprehensive test suite with 15 test cases covering all functionality. Tests ready for local execution. |
-| 008 | SM Contracting Kanban - LWC Component | Cole/Agent | Cole's Agent | 2026-01-09 | Created salesManagerContractingKanban component with 4 files (JS, HTML, CSS, XML). Wired to all Apex methods, localStorage implemented, Career-only filtering. |
-| 006 | SM Contracting Kanban - Backend Apex | Patrick/Agent | Patrick's Agent | 2026-01-09 | Added 4 new methods: getALCDataForSalesManager, getCurrentUserSalesManagerName, getSalesManagerOptions, canViewAllSalesManagers. All tests passing (28/28). |
-| 002 | Sales Manager Qualification Dashboard - Research & Audit | Patrick/Agent | Research Agent | 2026-01-08 | Handoff document: HANDOFF-RESEARCH-TO-APEX-2026-01-08.md |
-| 001 | Created collaborative planning system | Patrick's Agent | Copilot | 2026-01-08 | WORK_COORDINATION.md and SHARED_PLANNING.md |
 
 ---
 
