@@ -35,15 +35,7 @@
                                     class="action-button">
                                 </lightning-button>
                             </div>
-                            <div class="action-button-wrapper">
-                                <lightning-button 
-                                    label="Start Contracting" 
-                                    variant="brand-outline" 
-                                    icon-name="utility:contract"
-                                    onclick={handleStartContracting}
-                                    class="action-button">
-                                </lightning-button>
-                            </div>
+                            <!-- Start Contracting button removed: only on ALC record view -->
                         </div>
                         <div class="stage-badge-container">
                             <span class="stage-badge">
@@ -66,10 +58,7 @@
                 </div>
             </div>
 
-            <!-- TEST: Simple text right after hero to see if ANYTHING renders -->
-            <div style="background: red; color: white; padding: 30px; font-size: 20px; font-weight: bold; margin: 20px; z-index: 99999; position: relative;">
-                TEST VISIBLE? Name: {candidateName}
-            </div>
+            <!-- Removed temporary test banner -->
 
             <!-- Debug banner OUTSIDE tabs - visible on mobile to confirm data loads -->
             <div class="mobile-debug-banner" style="background: #ffeb3b; padding: 15px; margin: 10px; font-size: 14px; border: 2px solid red; display: none;">

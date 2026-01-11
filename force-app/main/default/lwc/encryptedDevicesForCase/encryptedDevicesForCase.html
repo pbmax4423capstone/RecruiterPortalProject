@@ -1,0 +1,53 @@
+<template>
+    <lightning-card title="Encrypted Devices" icon-name="utility:locker">
+        <div class="slds-var-p-around_medium">
+            <template lwc:if={isLoading}>
+                <lightning-spinner alternative-text="Loading devices"></lightning-spinner>
+            </template>
+
+            <template lwc:elseif={error}>
+                <div class="slds-theme_error slds-text-color_inverse slds-var-p-around_small">
+                    Error loading devices: {errorMessage}
+                </div>
+            </template>
+
+            <template lwc:elseif={hasDevices}>
+                <div class="device-list">
+                    <template for:each={devices} for:item="d">
+                        <div key={d.id} class="device-row">
+                            <div class="device-main">
+                                <lightning-icon icon-name="utility:device" size="x-small"></lightning-icon>
+                                <button class="slds-button slds-button_reset device-link" data-id={d.id} onclick={handleView}>
+                                    {d.name}
+                                </button>
+                            </div>
+                            <div class="device-meta">
+                                <span>
+                                    Created:
+                                    <lightning-formatted-date-time value={d.createdDate} year="numeric" month="short" day="2-digit"></lightning-formatted-date-time>
+                                </span>
+                                <span>
+                                    Updated:
+                                    <lightning-formatted-date-time value={d.lastModifiedDate} year="numeric" month="short" day="2-digit"></lightning-formatted-date-time>
+                                </span>
+                            </div>
+                        </div>
+                    </template>
+                </div>
+            </template>
+
+            <template lwc:else>
+                <div class="slds-text-color_weak">No encrypted devices found for this Case's contact.</div>
+            </template>
+        </div>
+    </lightning-card>
+    <!-- Universal record modal for in-portal viewing -->
+    <c-universal-record-modal
+        object-api-name="Encrypted_Device__c"
+        record-id={selectedRecordId}
+        fields={modalFields}
+        modal-title="Encrypted Device"
+        show-modal={showModal}
+        onclose={handleModalClose}
+    ></c-universal-record-modal>
+</template>

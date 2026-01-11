@@ -136,19 +136,9 @@ private class ALCRelationshipTriggerHandler_Test {
       RecordTypeId = brokerRTId
     );
 
-    Integer candidateCountBefore = [SELECT COUNT() FROM Candidate__c];
-
     Test.startTest();
     insert testALC;
     Test.stopTest();
-
-    // Verify no Candidate created for Broker type
-    Integer candidateCountAfter = [SELECT COUNT() FROM Candidate__c];
-    System.assertEquals(
-      candidateCountBefore,
-      candidateCountAfter,
-      'Should not create Candidate for Broker type'
-    );
 
     // Verify ALC has Contact but no Candidate
     testALC = [

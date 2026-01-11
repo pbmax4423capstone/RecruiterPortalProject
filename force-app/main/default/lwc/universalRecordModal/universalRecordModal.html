@@ -1,0 +1,26 @@
+<template>
+    <template if:true={showModal}>
+        <div class="modal-backdrop" onclick={handleClose}></div>
+        <section class="modal">
+            <header class="modal-header">
+                <h2>{modalTitle}</h2>
+                <button class="close-btn" onclick={handleClose}>×</button>
+            </header>
+            <div class="modal-body">
+                <template if:true={record.data}>
+                    <ul class="field-list">
+                        <template for:each={recordFields} for:item="field">
+                            <li key={field.apiName} class="field-row">
+                                <span class="field-label">{field.apiName}:</span>
+                                <span class="field-value">{field.value}</span>
+                            </li>
+                        </template>
+                    </ul>
+                </template>
+                <template if:true={record.error}>
+                    <div class="error">Error loading record.</div>
+                </template>
+            </div>
+        </section>
+    </template>
+</template>

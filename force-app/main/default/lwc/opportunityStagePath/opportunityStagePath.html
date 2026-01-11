@@ -1,0 +1,14 @@
+<template>
+    <div class="slds-var-p-around_small">
+        <template if:true={isReady}>
+            <lightning-progress-indicator type="path" current-step={currentStep} has-error="false" variant="base">
+                <template for:each={steps} for:item="step">
+                    <lightning-progress-step key={step.value} label={step.label} value={step.value}></lightning-progress-step>
+                </template>
+            </lightning-progress-indicator>
+        </template>
+        <template if:true={error}>
+            <div class="slds-text-color_error slds-var-p-around_x-small">{errorMessage}</div>
+        </template>
+    </div>
+</template>

@@ -1,0 +1,36 @@
+.device-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.device-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.5rem 0.75rem;
+    border: 1px solid #e5e5e5;
+    border-radius: 6px;
+}
+
+.device-main {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.device-link {
+    color: #193F74;
+    font-weight: 600;
+}
+
+.device-link:hover {
+    text-decoration: underline;
+}
+
+.device-meta {
+    display: flex;
+    gap: 1rem;
+    color: #6b6b6b;
+    font-size: 0.85rem;
+}

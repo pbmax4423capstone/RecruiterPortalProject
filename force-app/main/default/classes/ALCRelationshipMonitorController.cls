@@ -7,6 +7,21 @@
  */
 public with sharing class ALCRelationshipMonitorController {
   /**
+   * Overload to support String parameters from LWC/Apex callers and ensure
+   * consistent AuraHandledException behavior on invalid Ids.
+   */
+  @AuraEnabled
+  public static void fixCandidateContact(String candidateId, String contactId) {
+    try {
+      Id candId = (Id) candidateId;
+      Id contId = (Id) contactId;
+      fixCandidateContactInternal(candId, contId);
+    } catch (Exception e) {
+      // Normalize to AuraHandledException for callers and tests
+      throw new AuraHandledException('Error fixing candidate contact: ' + e.getMessage());
+    }
+  }
+  /**
    * Wrapper class for relationship gap data
    */
   public class RelationshipGap {
@@ -215,8 +230,7 @@ public with sharing class ALCRelationshipMonitorController {
    * @param candidateId Candidate record Id
    * @param contactId Contact record Id to link
    */
-  @AuraEnabled
-  public static void fixCandidateContact(Id candidateId, Id contactId) {
+  private static void fixCandidateContactInternal(Id candidateId, Id contactId) {
     try {
       Candidate__c candidate = [
         SELECT Id, Contact__c
@@ -229,21 +243,20 @@ public with sharing class ALCRelationshipMonitorController {
 
       // Create success audit log
       ALC_Automation_Log__c log = new ALC_Automation_Log__c();
-      log.Operation_Type__c = 'Manual Fix';
+      log.Operation_Type__c = 'Contact Linked';
       log.Candidate__c = candidateId;
       log.Contact__c = contactId;
       log.Success__c = true;
-      log.Error_Message__c = 'Manually linked Candidate to Contact';
+      log.Error_Message__c = 'Linked Candidate to Contact';
       insert log;
     } catch (Exception e) {
       // Create error audit log
       ALC_Automation_Log__c log = new ALC_Automation_Log__c();
-      log.Operation_Type__c = 'Manual Fix';
+      log.Operation_Type__c = 'Contact Linked';
       log.Candidate__c = candidateId;
       log.Success__c = false;
-      log.Error_Type__c = 'Update Error';
+      log.Error_Type__c = 'Validation Error';
       log.Error_Message__c = e.getMessage();
-      log.Stack_Trace__c = e.getStackTraceString();
       insert log;
 
       throw new AuraHandledException(

@@ -1,0 +1,149 @@
+<template>
+    <template if:true={caseRecord.data}>
+        <div class="container">
+            <div class="hero">
+                <div class="hero-content">
+                    <div class="hero-left">
+                        <div class="avatar">
+                            <lightning-icon icon-name="standard:case" size="large"></lightning-icon>
+                        </div>
+                        <div class="titles">
+                            <h1 class="title">{caseNumber} - {subject}
+                                <template if:true={isClosed}>
+                                    <span class="status-pill closed">CLOSED</span>
+                                </template>
+                            </h1>
+                            <div class="subtitle">Case</div>
+                        </div>
+                    </div>
+                    <div class="hero-right actions">
+                        <lightning-button variant="brand" label="Inline Edit" onclick={toggleEdit}></lightning-button>
+                        <lightning-button label="Edit" onclick={navigateToEdit}></lightning-button>
+                        <lightning-button label="Clone" onclick={navigateToClone}></lightning-button>
+                        <lightning-button label="Delete" variant="destructive" onclick={deleteCurrent}></lightning-button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Status Path -->
+            <div class="card full">
+                <div class="card-body">
+                    <c-case-status-path record-id={recordId}></c-case-status-path>
+                </div>
+            </div>
+
+            <div class="grid">
+                <!-- Communication: Email compose and in-page emails -->
+                <div class="card">
+                    <div class="card-header">
+                        <lightning-icon icon-name="utility:email" size="small"></lightning-icon>
+                        <h2>Communication</h2>
+                        <div class="spacer"></div>
+                        <lightning-button label="Email" variant="brand" onclick={openEmailComposer}></lightning-button>
+                        <lightning-button class="slds-var-m-left_x-small" label="View Emails" onclick={showEmailsTab}></lightning-button>
+                    </div>
+                    <div class="card-body">
+                        <lightning-tabset active-tab-value={commActiveTab} onselect={handleCommTabSelect}>
+                            <lightning-tab label={composeTabLabel} value="compose" icon-name="utility:edit_form">
+                                <c-case-email-compose record-id={recordId} onemailsent={handleEmailSent}></c-case-email-compose>
+                            </lightning-tab>
+                            <lightning-tab label={emailsTabLabel} value="emails" icon-name="utility:email">
+                                <c-case-email-panel record-id={recordId} onemailcount={handleEmailCount} onreply={handleReply}></c-case-email-panel>
+                            </lightning-tab>
+                        </lightning-tabset>
+                    </div>
+                </div>
+
+                <!-- Knowledge Search -->
+                <div class="card">
+                    <div class="card-header">
+                        <lightning-icon icon-name="standard:knowledge" size="small"></lightning-icon>
+                        <h2>Knowledge</h2>
+                    </div>
+                    <div class="card-body">
+                        <c-knowledge-search-card record-id={recordId}></c-knowledge-search-card>
+                    </div>
+                </div>
+
+                <!-- Case Comments -->
+                <div class="card">
+                    <div class="card-header">
+                        <lightning-icon icon-name="standard:case_comment" size="small"></lightning-icon>
+                        <h2>Comments</h2>
+                    </div>
+                    <div class="card-body">
+                        <c-case-comments-panel record-id={recordId}></c-case-comments-panel>
+                    </div>
+                </div>
+
+                <template if:true={isEditing}>
+                    <div class="card full">
+                        <div class="card-header">
+                            <lightning-icon icon-name="utility:edit" size="small"></lightning-icon>
+                            <h2>Inline Edit</h2>
+                            <div class="spacer"></div>
+                            <lightning-button label="Close" onclick={toggleEdit}></lightning-button>
+                        </div>
+                        <div class="card-body">
+                            <lightning-record-form record-id={recordId} object-api-name="Case" mode="edit" layout-type="Full" columns="2" density="compact" onsuccess={handleEditSuccess} onerror={handleEditError}>
+                                <lightning-messages></lightning-messages>
+                            </lightning-record-form>
+                        </div>
+                    </div>
+                </template>
+
+                <div class="card">
+                    <div class="card-header">
+                        <lightning-icon icon-name="utility:summary" size="small"></lightning-icon>
+                        <h2>Summary</h2>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="item">
+                                <span class="label">Status</span>
+                                <span class="value">{status}</span>
+                            </div>
+                            <div class="item">
+                                <span class="label">Priority</span>
+                                <span class="value">{priority}</span>
+                            </div>
+                            <div class="item">
+                                <span class="label">Owner</span>
+                                <span class="value">{ownerName}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Notes & Files using reusable component -->
+                <div class="card full">
+                    <div class="card-header">
+                        <lightning-icon icon-name="standard:note" size="small"></lightning-icon>
+                        <h2>Notes & Files</h2>
+                    </div>
+                    <div class="card-body">
+                        <c-record-notes-attachments record-id={recordId} object-api-name="Case"></c-record-notes-attachments>
+                    </div>
+                </div>
+
+                <div class="card full">
+                    <div class="card-header">
+                        <lightning-icon icon-name="standard:case" size="small"></lightning-icon>
+                        <h2>Details</h2>
+                    </div>
+                    <div class="card-body">
+                        <lightning-record-form record-id={recordId} object-api-name="Case" mode="view" layout-type="Full" columns="2" density="compact">
+                            <lightning-messages></lightning-messages>
+                        </lightning-record-form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </template>
+    <template if:true={caseRecord.error}>
+        <div class="error">
+            <lightning-icon icon-name="utility:error" size="small"></lightning-icon>
+            <span>Error loading case</span>
+        </div>
+    </template>
+</template>

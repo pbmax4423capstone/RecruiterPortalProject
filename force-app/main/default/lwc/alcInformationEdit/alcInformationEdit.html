@@ -1,0 +1,76 @@
+<template>
+    <div class="info-card">
+        <div class="card-header">
+            <h2>ALC Information</h2>
+            <lightning-button 
+                label={toggleButtonLabel}
+                variant={toggleButtonVariant}
+                onclick={handleToggleAllFields}
+                class="toggle-button">
+            </lightning-button>
+        </div>
+        <div class="card-body">
+            <lightning-record-edit-form 
+                record-id={recordId} 
+                object-api-name={objectApiName}
+                onsuccess={handleSuccess}
+                onerror={handleError}
+                onsubmit={handleSubmit}>
+
+                <lightning-messages></lightning-messages>
+
+                <div class="field-grid">
+                    <div class="field-item">
+                        <span class="field-label">Contract Type</span>
+                        <lightning-input-field field-name="Contract_Type__c" variant="label-hidden"></lightning-input-field>
+                    </div>
+                    <div class="field-item">
+                        <span class="field-label">Office</span>
+                        <lightning-input-field field-name="Office__c" variant="label-hidden"></lightning-input-field>
+                    </div>
+                    <div class="field-item">
+                        <span class="field-label">Effective Date</span>
+                        <lightning-input-field field-name="Contract_Effective__c" variant="label-hidden"></lightning-input-field>
+                    </div>
+                    <div class="field-item">
+                        <span class="field-label">Expiration Date</span>
+                        <lightning-input-field field-name="Contract_B_Expiration_Date__c" variant="label-hidden"></lightning-input-field>
+                    </div>
+                    <div class="field-item">
+                        <span class="field-label">Life Insurance Licensed</span>
+                        <lightning-input-field field-name="Life_Insurance_Licensed__c" variant="label-hidden"></lightning-input-field>
+                    </div>
+                    <div class="field-item">
+                        <span class="field-label">Registered</span>
+                        <lightning-input-field field-name="Registered__c" variant="label-hidden"></lightning-input-field>
+                    </div>
+                    <div class="field-item full lookup">
+                        <span class="field-label">Related Candidate</span>
+                        <lightning-input-field field-name="Related_Candidate__c" variant="label-hidden"></lightning-input-field>
+                    </div>
+                    <div class="field-item full lookup">
+                        <span class="field-label">Contact</span>
+                        <lightning-input-field field-name="Contact__c" variant="label-hidden"></lightning-input-field>
+                    </div>
+                </div>
+                <div class="save-row">
+                    <lightning-button variant="neutral" label="Cancel" onclick={handleCancel}></lightning-button>
+                    <lightning-button type="submit" variant="brand" label="Save"></lightning-button>
+                </div>
+
+                <template if:true={showAllFields}>
+                    <div class="all-fields-section">
+                        <h3 class="section-title">All Editable Fields</h3>
+                        <div class="field-grid">
+                            <template for:each={displayedFields} for:item="fieldName">
+                                <div key={fieldName} class="field-item">
+                                    <lightning-input-field field-name={fieldName} variant="label-stacked"></lightning-input-field>
+                                </div>
+                            </template>
+                        </div>
+                    </div>
+                </template>
+            </lightning-record-edit-form>
+        </div>
+    </div>
+</template>

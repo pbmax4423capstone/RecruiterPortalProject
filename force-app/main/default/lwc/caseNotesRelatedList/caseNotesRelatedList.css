@@ -1,0 +1,175 @@
+/* Container Styles - mirrors Candidate Notes */
+.notes-container {
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+}
+
+.card-header {
+    background: linear-gradient(180deg, #202A44 0%, #193F74 100%);
+    color: white;
+    padding: 1rem 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.card-header h2 {
+    font-size: 1.125rem;
+    font-weight: 600;
+    margin: 0;
+    flex: 1;
+}
+
+.header-actions {
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.utility-bar-hint {
+    font-size: 0.875rem;
+    opacity: 0.9;
+    font-style: italic;
+}
+
+.new-note-btn {
+    background: white;
+    color: #202A44 !important;
+}
+
+.new-note-btn:hover {
+    background: #f3f3f3;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.card-body {
+    padding: 1.5rem;
+}
+
+/* Notes List */
+.notes-list {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.note-item {
+    background: #f3f3f3;
+    border-left: 4px solid #202A44;
+    padding: 12px 16px;
+    border-radius: 4px;
+}
+
+.note-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 4px;
+}
+
+.note-title {
+    font-size: 1rem;
+    font-weight: 600;
+    color: #202A44;
+    margin: 0;
+}
+
+.note-date {
+    font-size: 0.875rem;
+    color: #706e6b;
+}
+
+.note-author {
+    font-size: 0.875rem;
+    color: #706e6b;
+    margin-bottom: 8px;
+}
+
+.note-content {
+    color: #3e3e3c;
+    line-height: 1.5;
+}
+
+/* Empty State */
+.empty-state {
+    text-align: center;
+    padding: 2rem;
+    color: #706e6b;
+}
+
+.empty-state lightning-icon {
+    opacity: 0.5;
+    margin-bottom: 0.5rem;
+}
+
+.empty-state p {
+    margin: 0.5rem 0 0 0;
+    font-size: 0.95rem;
+}
+
+/* Error Message */
+.error-message {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    background: #c23934;
+    color: white;
+    padding: 1rem;
+    border-radius: 8px;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .card-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.5rem;
+    }
+
+    .header-actions {
+        flex-direction: column;
+        align-items: flex-start;
+        width: 100%;
+        margin-left: 0;
+        gap: 0.5rem;
+    }
+
+    .utility-bar-hint {
+        font-size: 0.8rem;
+    }
+
+    .card-body {
+        padding: 1rem;
+    }
+}
+
+/* Modal Styles */
+.note-modal .slds-modal__container {
+    max-width: 42rem;
+}
+
+.modal-header {
+    background: linear-gradient(180deg, #202A44 0%, #193F74 100%);
+    color: white;
+}
+
+.modal-header .slds-modal__close {
+    color: white;
+}
+
+.modal-header .modal-subtitle {
+    opacity: 0.9;
+}
+
+.modal-content lightning-input,
+.modal-content lightning-textarea {
+    width: 100%;
+}
+
+.modal-footer {
+    display: flex;
+    justify-content: flex-end;
+}

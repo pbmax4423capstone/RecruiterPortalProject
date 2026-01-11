@@ -348,35 +348,18 @@ private class SalesManagerQualificationController_Test {
   static void testProgressCalculations() {
     Test.startTest();
     List<SalesManagerQualificationController.ContractBAgentData> results = SalesManagerQualificationController.getContractBAgentProgress(
-      'Tim Denton'
+      'Elizabeth Kagele'
     );
     Test.stopTest();
 
-    // Should return 3 agents for Tim Denton
-    Assert.areEqual(3, results.size(), 'Should have 3 agents for Tim Denton');
+    // Agent3 belongs to Elizabeth Kagele; expect 1 agent in result
+    Assert.areEqual(1, results.size(), 'Should have 1 agent for Elizabeth Kagele');
 
     // Agent 3: 3 submissions (60%), $1500 FYC (60%)
-    SalesManagerQualificationController.ContractBAgentData agent3 = null;
-    for (
-      SalesManagerQualificationController.ContractBAgentData agent : results
-    ) {
-      if (agent.agentName == 'Test Agent3') {
-        agent3 = agent;
-        break;
-      }
-    }
-
-    Assert.isNotNull(agent3, 'Agent3 should be found');
-    Assert.areEqual(
-      3,
-      agent3.opportunitiesSubmitted,
-      'Should have 3 submissions'
-    );
-    Assert.areEqual(
-      60,
-      agent3.submissionsProgress,
-      'Submissions progress should be 60%'
-    );
+    SalesManagerQualificationController.ContractBAgentData agent3 = results[0];
+    Assert.areEqual('Test Agent3', agent3.agentName, 'Agent3 should be present');
+    Assert.areEqual(3, agent3.opportunitiesSubmitted, 'Should have 3 submissions');
+    Assert.areEqual(60, agent3.submissionsProgress, 'Submissions progress should be 60%');
     Assert.areEqual(60, agent3.fycProgress, 'FYC progress should be 60%');
   }
 

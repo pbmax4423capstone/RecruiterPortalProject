@@ -1,0 +1,10 @@
+.comm-panel { background: #fff; border-radius: 6px; }
+.header { display:flex; align-items:center; justify-content:space-between; padding: 0 0 10px 0; }
+.content { display:grid; grid-template-columns: 1fr 1fr; gap: 12px; min-height: 280px; }
+.list { overflow:auto; }
+.preview { border-left: 1px solid #e5e5e5; padding-left: 12px; }
+.preview-header { display:flex; align-items:flex-start; justify-content:space-between; margin-bottom: 8px; }
+.subject { font-weight: 600; }
+.meta { color:#444; font-size: 12px; display:flex; gap:12px; }
+.placeholder { color:#888; }
+.body { background: #fafafa; border: 1px solid #eee; padding: 12px; border-radius: 4px; min-height: 180px; }

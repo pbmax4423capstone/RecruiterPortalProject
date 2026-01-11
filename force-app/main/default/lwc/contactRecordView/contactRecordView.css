@@ -1,0 +1,26 @@
+.contact-record-container { background: #f8f9fb; }
+/* Capstone brand gradient header: Navy → Blue (vertical) */
+.hero-header { background: linear-gradient(180deg, #202A44 0%, #193F74 100%); border-radius: 8px; box-shadow: 0 2px 6px rgba(0,0,0,0.12); margin-bottom: 16px; }
+.hero-content { display: flex; align-items: center; justify-content: space-between; padding: 16px; }
+.hero-left { display: flex; align-items: center; gap: 12px; }
+.avatar-circle { width: 48px; height: 48px; border-radius: 50%; background: rgba(255,255,255,0.22); display: flex; align-items: center; justify-content: center; }
+.hero-info { display: flex; flex-direction: column; }
+.hero-title { font-size: 20px; font-weight: 600; color: #ffffff; }
+.hero-subtitle { font-size: 14px; color: #e8edf3; }
+.action-buttons-row { display: flex; gap: 8px; }
+.action-button-wrapper { display: flex; }
+.content-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+.info-card { background: #fff; border-radius: 8px; box-shadow: 0 2px 6px rgba(25,63,116,0.18); }
+.full-width-card { grid-column: 1 / -1; }
+.card-header { display: flex; align-items: center; gap: 8px; padding: 12px 16px; border-bottom: 3px solid #193F74; background: linear-gradient(180deg, #F7F9FC 0%, #FFFFFF 100%); }
+.card-body { padding: 16px; }
+.field-row { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
+.field-item { display: flex; align-items: center; gap: 8px; }
+.field-item.full-width { grid-column: 1 / -1; }
+.field-icon { color: #193F74; }
+.field-content { display: flex; flex-direction: column; }
+.field-label { font-size: 12px; color: #506D8C; font-weight: 600; }
+.field-value { font-size: 14px; color: #202A44; }
+.link { color: #193F74; text-decoration: none; }
+.link:hover { text-decoration: underline; }
+.edit-mode-toggle { margin-left: auto; }

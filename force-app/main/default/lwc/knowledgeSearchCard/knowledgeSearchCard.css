@@ -1,0 +1,43 @@
+.card {
+  background: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.12);
+}
+.card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid #dddbda;
+}
+.card-body {
+  padding: 0.75rem 1rem;
+}
+.search-row {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+.article-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.article-item {
+  padding: 0.5rem 0;
+  border-bottom: 1px solid #f3f2f2;
+}
+.article-title {
+  font-weight: 600;
+}
+.article-meta {
+  color: #706e6b;
+  font-size: 0.75rem;
+}
+.article-summary {
+  color: #3e3e3c;
+}
+.empty {
+  color: #706e6b;
+  font-style: italic;
+}

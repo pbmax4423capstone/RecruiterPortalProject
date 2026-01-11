@@ -1,0 +1,116 @@
+<template>
+    <div>
+        <template if:true={contactRecord.data}>
+            <div class="contact-record-container">
+                <!-- Hero Header -->
+                <div class="hero-header">
+                    <div class="hero-content">
+                        <div class="hero-left">
+                            <div class="avatar-circle">
+                                <lightning-icon icon-name="standard:contact" size="large"></lightning-icon>
+                            </div>
+                            <div class="hero-info">
+                                <h1 class="hero-title">{fullName}</h1>
+                                <div class="hero-subtitle">
+                                    <span class="position-badge">Contact</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="hero-right action-buttons-row">
+                            <lightning-button variant="brand" label="Inline Edit" onclick={toggleEditMode}></lightning-button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Main Content Grid -->
+                <div class="content-grid">
+                    
+                    <!-- Inline Edit Card (toggle) -->
+                    <template if:true={isEditing}>
+                        <div class="info-card full-width-card">
+                            <div class="card-header">
+                                <lightning-icon icon-name="utility:edit" size="small"></lightning-icon>
+                                <h2>Inline Edit</h2>
+                                <div class="edit-mode-toggle">
+                                    <lightning-button label="Close" onclick={toggleEditMode}></lightning-button>
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <c-contact-information-edit record-id={recordId} onsuccess={handleEditSuccess} onerror={handleEditError}></c-contact-information-edit>
+                            </div>
+                        </div>
+                    </template>
+                    
+
+                    <!-- Details Card -->
+                    <div class="info-card">
+                        <div class="card-header">
+                            <lightning-icon icon-name="standard:contact" size="small"></lightning-icon>
+                            <h2>Details</h2>
+                        </div>
+                        <div class="card-body">
+                            <div class="field-row">
+                                <div class="field-item">
+                                    <lightning-icon icon-name="utility:user" size="x-small" class="field-icon"></lightning-icon>
+                                    <div class="field-content">
+                                        <span class="field-label">Name</span>
+                                        <template if:true={fullName}>
+                                            <a href="javascript:void(0)" class="field-value link" onclick={navigateToContact}>{fullName}</a>
+                                        </template>
+                                        <template if:false={fullName}>
+                                            <span class="field-value">—</span>
+                                        </template>
+                                    </div>
+                                </div>
+                                <div class="field-item">
+                                    <lightning-icon icon-name="utility:phone" size="x-small" class="field-icon"></lightning-icon>
+                                    <div class="field-content">
+                                        <span class="field-label">Phone</span>
+                                        <template if:true={contactPhone}>
+                                            <a href={contactPhoneLink} class="field-value link">{contactPhone}</a>
+                                        </template>
+                                        <template if:false={contactPhone}>
+                                            <span class="field-value">—</span>
+                                        </template>
+                                    </div>
+                                </div>
+                                <div class="field-item">
+                                    <lightning-icon icon-name="utility:email" size="x-small" class="field-icon"></lightning-icon>
+                                    <div class="field-content">
+                                        <span class="field-label">Email</span>
+                                        <template if:true={contactEmail}>
+                                            <a href={contactEmailLink} class="field-value link">{contactEmail}</a>
+                                        </template>
+                                        <template if:false={contactEmail}>
+                                            <span class="field-value">—</span>
+                                        </template>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="field-row">
+                                <div class="field-item full-width">
+                                    <lightning-icon icon-name="utility:location" size="x-small" class="field-icon"></lightning-icon>
+                                    <div class="field-content">
+                                        <span class="field-label">Address</span>
+                                        <template if:true={contactAddress}>
+                                            <span class="field-value">{contactAddress}</span>
+                                        </template>
+                                        <template if:false={contactAddress}>
+                                            <span class="field-value">—</span>
+                                        </template>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </template>
+        <template if:true={contactRecord.error}>
+            <div class="error-message">
+                <lightning-icon icon-name="utility:error" size="small"></lightning-icon>
+                <p>Error loading contact data</p>
+            </div>
+        </template>
+    </div>
+</template>

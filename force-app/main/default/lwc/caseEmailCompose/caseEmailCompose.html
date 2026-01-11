@@ -1,0 +1,23 @@
+<template>
+    <div class="compose">
+        <div class="row">
+            <lightning-input label="To" value={to} onchange={handleTo} placeholder="email1@example.com, email2@example.com"></lightning-input>
+            <lightning-input label="Cc" value={cc} onchange={handleCc}></lightning-input>
+            <lightning-input label="Bcc" value={bcc} onchange={handleBcc}></lightning-input>
+        </div>
+        <div class="row">
+            <lightning-input label="Subject" value={subject} onchange={handleSubject}></lightning-input>
+        </div>
+        <div class="row">
+            <lightning-input-rich-text value={body} onchange={handleBody} placeholder="Write your message..."></lightning-input-rich-text>
+        </div>
+        <div class="actions">
+            <lightning-button-icon icon-name={dictationIcon} alternative-text="Toggle dictation" title="Toggle dictation" onclick={toggleDictation}></lightning-button-icon>
+            <lightning-button variant="neutral" label="Clear" onclick={clear}></lightning-button>
+            <lightning-button variant="brand" label="Send" onclick={send} class="slds-m-left_small"></lightning-button>
+        </div>
+        <template if:true={sending}>
+            <lightning-spinner alternative-text="Sending email" size="small"></lightning-spinner>
+        </template>
+    </div>
+</template>

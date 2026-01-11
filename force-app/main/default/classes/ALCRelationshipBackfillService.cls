@@ -404,10 +404,10 @@ public class ALCRelationshipBackfillService {
     List<Contact> contactsToInsert = new List<Contact>();
     List<Candidate__c> candidatesToInsert = new List<Candidate__c>();
     List<ALC__c> alcsToUpdate = new List<ALC__c>();
-    Map<Integer, Id> indexToContactId = new Map<Integer, Id>();
-    Map<Integer, Id> indexToCandidateId = new Map<Integer, Id>();
+    Map<Id, Id> alcIdToContactId = new Map<Id, Id>();
+    Map<Id, Integer> alcIdToContactInsertIndex = new Map<Id, Integer>();
 
-    Integer index = 0;
+    // First pass: prepare Contacts to create
     for (BackfillDecision decision : decisions) {
       ALC__c alc = alcMap.get(decision.alcId);
 
@@ -416,26 +416,24 @@ public class ALCRelationshipBackfillService {
         continue;
       }
 
-      Id contactId;
-
       if (decision.createNewContact) {
         // Create new Contact
         Contact newContact = new Contact();
         newContact.FirstName = alc.First_Name__c;
-        newContact.LastName = alc.Last_Name__c != null
-          ? alc.Last_Name__c
-          : 'Unknown';
+        // Ensure LastName is never null or empty
+        if (String.isBlank(alc.Last_Name__c)) {
+          newContact.LastName = 'Unknown';
+        } else {
+          newContact.LastName = alc.Last_Name__c;
+        }
         newContact.Personal_Email__c = alc.Personal_Email_Address__c;
         newContact.MobilePhone = alc.Mobile__c;
 
+        alcIdToContactInsertIndex.put(alc.Id, contactsToInsert.size());
         contactsToInsert.add(newContact);
-        indexToContactId.put(index, null); // Will update after insert
-        index++;
       } else if (decision.selectedContactId != null) {
         // Use existing Contact
-        contactId = decision.selectedContactId;
-        indexToContactId.put(index, contactId);
-        index++;
+        alcIdToContactId.put(alc.Id, decision.selectedContactId);
       } else {
         result.errors.add('No decision made for ALC: ' + alc.Name);
         continue;
@@ -445,37 +443,76 @@ public class ALCRelationshipBackfillService {
     // Insert new Contacts
     if (!contactsToInsert.isEmpty()) {
       try {
-        insert contactsToInsert;
+        // Disable duplicate rules for backfill operations
+        Database.DMLOptions dml = new Database.DMLOptions();
+        dml.DuplicateRuleHeader.allowSave = true;
+        dml.DuplicateRuleHeader.runAsCurrentUser = true;
+
+        Database.SaveResult[] saveResults = Database.insert(
+          contactsToInsert,
+          dml
+        );
+
+        // Check for errors
+        for (Integer i = 0; i < saveResults.size(); i++) {
+          if (!saveResults[i].isSuccess()) {
+            for (Database.Error err : saveResults[i].getErrors()) {
+              result.errors.add(
+                'Contact ' +
+                  i +
+                  ' (' +
+                  contactsToInsert[i].FirstName +
+                  ' ' +
+                  contactsToInsert[i].LastName +
+                  '): ' +
+                  err.getMessage()
+              );
+            }
+          }
+        }
+
+        // If any errors, return early
+        if (!result.errors.isEmpty()) {
+          return result;
+        }
+
         result.contactsCreated = contactsToInsert.size();
 
-        // Update index map with new Contact IDs
-        Integer contactIndex = 0;
-        for (Integer i : indexToContactId.keySet()) {
-          if (
-            indexToContactId.get(i) == null &&
-            contactIndex < contactsToInsert.size()
-          ) {
-            indexToContactId.put(i, contactsToInsert[contactIndex].Id);
-            contactIndex++;
+        // Map ALC IDs to newly created Contact IDs
+        for (Id alcId : alcIdToContactInsertIndex.keySet()) {
+          Integer insertIndex = alcIdToContactInsertIndex.get(alcId);
+          if (insertIndex < contactsToInsert.size()) {
+            alcIdToContactId.put(alcId, contactsToInsert[insertIndex].Id);
           }
         }
       } catch (DmlException e) {
-        result.errors.add('Error inserting Contacts: ' + e.getMessage());
+        String errorMsg = 'Error inserting Contacts: ' + e.getMessage();
+        for (Integer i = 0; i < e.getNumDml(); i++) {
+          errorMsg +=
+            '\nRecord ' +
+            i +
+            ': ' +
+            e.getDmlMessage(i) +
+            ' (Fields: ' +
+            String.join(e.getDmlFieldNames(i), ', ') +
+            ')';
+        }
+        result.errors.add(errorMsg);
         return result;
       }
     }
 
     // Now process Candidates and ALC updates
-    index = 0;
+    Map<Id, Integer> alcIdToCandidateInsertIndex = new Map<Id, Integer>();
+    
     for (BackfillDecision decision : decisions) {
       ALC__c alc = alcMap.get(decision.alcId);
 
-      if (alc == null || !indexToContactId.containsKey(index)) {
-        index++;
+      if (alc == null || !alcIdToContactId.containsKey(alc.Id)) {
         continue;
       }
 
-      Id contactId = indexToContactId.get(index);
+      Id contactId = alcIdToContactId.get(alc.Id);
       alc.Contact__c = contactId;
 
       // Create Candidate for Career type ALCs
@@ -491,12 +528,11 @@ public class ALCRelationshipBackfillService {
         newCandidate.Contact__c = contactId;
         newCandidate.Status__c = 'Contract Sent';
 
+        alcIdToCandidateInsertIndex.put(alc.Id, candidatesToInsert.size());
         candidatesToInsert.add(newCandidate);
-        indexToCandidateId.put(index, null); // Will update after insert
       }
 
       alcsToUpdate.add(alc);
-      index++;
     }
 
     // Insert new Candidates
@@ -506,15 +542,12 @@ public class ALCRelationshipBackfillService {
         result.candidatesCreated = candidatesToInsert.size();
 
         // Update ALC Candidate relationships
-        Integer candidateIndex = 0;
-        for (Integer i : indexToCandidateId.keySet()) {
-          if (
-            indexToCandidateId.get(i) == null &&
-            candidateIndex < candidatesToInsert.size()
-          ) {
-            ALC__c alc = alcsToUpdate[i];
-            alc.Candidate__c = candidatesToInsert[candidateIndex].Id;
-            candidateIndex++;
+        for (ALC__c alc : alcsToUpdate) {
+          if (alcIdToCandidateInsertIndex.containsKey(alc.Id)) {
+            Integer insertIndex = alcIdToCandidateInsertIndex.get(alc.Id);
+            if (insertIndex < candidatesToInsert.size()) {
+              alc.Candidate__c = candidatesToInsert[insertIndex].Id;
+            }
           }
         }
       } catch (DmlException e) {

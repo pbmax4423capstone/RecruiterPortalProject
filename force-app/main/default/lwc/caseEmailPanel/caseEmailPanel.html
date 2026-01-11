@@ -1,0 +1,45 @@
+<template>
+    <div class="comm-panel">
+        <div class="header">
+            <h3>Emails</h3>
+            <div class="actions">
+                <lightning-button label="Refresh" icon-name="utility:refresh" onclick={refresh} variant="base"></lightning-button>
+            </div>
+        </div>
+
+        <div class="content">
+            <div class="list">
+                <lightning-datatable key-field="Id" data={rows} columns={columns} onrowaction={handleRowAction}
+                    onsort={handleSort} sorted-by={sortedBy} sorted-direction={sortedDirection}
+                    onrowselection={handleRowSelect} hide-checkbox-column>
+                </lightning-datatable>
+            </div>
+            <div class="preview">
+                <template if:true={selected}>
+                    <div class="preview-header">
+                        <div class="subject">{selected.Subject}</div>
+                        <div class="meta">
+                            <span class="from">From: {selected.FromAddress}</span>
+                            <span class="to">To: {selected.ToAddress}</span>
+                            <span class="date">{selected.MessageDate}</span>
+                        </div>
+                        <div class="preview-actions">
+                            <lightning-button variant="brand" label="Reply" onclick={reply}></lightning-button>
+                        </div>
+                    </div>
+                    <div class="body">
+                        <template if:true={selected.HtmlBody}>
+                            <lightning-formatted-rich-text value={selected.HtmlBody}></lightning-formatted-rich-text>
+                        </template>
+                        <template if:false={selected.HtmlBody}>
+                            <pre>{selected.TextBody}</pre>
+                        </template>
+                    </div>
+                </template>
+                <template if:false={selected}>
+                    <div class="placeholder">Select an email to preview</div>
+                </template>
+            </div>
+        </div>
+    </div>
+</template>

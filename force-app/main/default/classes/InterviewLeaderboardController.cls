@@ -1,4 +1,4 @@
-public with sharing class InterviewLeaderboardController {
+public without sharing class InterviewLeaderboardController {
   public class LeaderboardEntry {
     @AuraEnabled
     public String managerId { get; set; }

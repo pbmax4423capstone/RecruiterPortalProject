@@ -1,0 +1,50 @@
+<template>
+    <div class="container">
+        <div class="hero">
+            <div class="hero-content">
+                <div class="hero-left">
+                    <div class="avatar">
+                        <lightning-icon icon-name="standard:service_appointment" size="large"></lightning-icon>
+                    </div>
+                    <div class="titles">
+                        <h1 class="title">{name}</h1>
+                        <div class="subtitle">Device Inspection</div>
+                    </div>
+                </div>
+                <div class="hero-right">
+                    <lightning-button variant="brand" label="Inline Edit" onclick={toggleEdit}></lightning-button>
+                </div>
+            </div>
+        </div>
+
+        <div class="grid">
+            <template if:true={isEditing}>
+                <div class="card full">
+                    <div class="card-header">
+                        <lightning-icon icon-name="utility:edit" size="small"></lightning-icon>
+                        <h2>Inline Edit</h2>
+                        <div class="spacer"></div>
+                        <lightning-button label="Close" onclick={toggleEdit}></lightning-button>
+                    </div>
+                    <div class="card-body">
+                        <lightning-record-form record-id={recordId} object-api-name={objectApiName} mode="edit" layout-type="Full" columns="2" density="compact" onsuccess={handleEditSuccess} onerror={handleEditError}>
+                            <lightning-messages></lightning-messages>
+                        </lightning-record-form>
+                    </div>
+                </div>
+            </template>
+
+            <div class="card full">
+                <div class="card-header">
+                    <lightning-icon icon-name="standard:service_appointment" size="small"></lightning-icon>
+                    <h2>Details</h2>
+                </div>
+                <div class="card-body">
+                    <lightning-record-form record-id={recordId} object-api-name={objectApiName} mode="view" layout-type="Full" columns="2" density="compact">
+                        <lightning-messages></lightning-messages>
+                    </lightning-record-form>
+                </div>
+            </div>
+        </div>
+    </div>
+</template>

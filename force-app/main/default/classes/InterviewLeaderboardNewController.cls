@@ -1,4 +1,4 @@
-public with sharing class InterviewLeaderboardNewController {
+public without sharing class InterviewLeaderboardNewController {
   public class LeaderboardEntry implements Comparable {
     @AuraEnabled
     public String userId { get; set; }

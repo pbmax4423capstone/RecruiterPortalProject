@@ -1,0 +1,230 @@
+<template>
+    <template if:true={isLoading}>
+        <div class="slds-spinner_container slds-is-relative" style="min-height: 300px;">
+            <lightning-spinner alternative-text="Loading..." size="medium"></lightning-spinner>
+        </div>
+    </template>
+
+    <template if:true={alcData}>
+        <div class="alc-record-container">
+            <!-- Hero Header Section -->
+            <div class="hero-header">
+                <div class="hero-content">
+                    <div class="hero-left">
+                        <div class="avatar-circle">
+                            <lightning-icon icon-name="standard:contract" size="large"></lightning-icon>
+                        </div>
+                        <div class="hero-info">
+                            <h1 class="hero-title">{alcName}</h1>
+                            <div class="hero-subtitle">
+                                <span class="position-badge">{contractType}</span>
+                                <template if:true={office}>
+                                    {office}
+                                </template>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="hero-right">
+                        <div class="action-buttons-row">
+                            <div class="action-button-wrapper">
+                                <lightning-button 
+                                    label="Create Contract" 
+                                    variant="success" 
+                                    icon-name="utility:contract"
+                                    onclick={handleCreateContract}
+                                    class="action-button">
+                                </lightning-button>
+                            </div>
+                            <div class="action-button-wrapper">
+                                <lightning-button 
+                                    label={editModeLabel} 
+                                    variant={editModeVariant} 
+                                    icon-name={editModeIcon}
+                                    onclick={toggleEditMode}
+                                    class="action-button">
+                                </lightning-button>
+                            </div>
+                            <template if:true={hasCandidateLink}>
+                                <div class="action-button-wrapper">
+                                    <lightning-button 
+                                        label="View Candidate" 
+                                        variant="neutral" 
+                                        icon-name="utility:record"
+                                        onclick={navigateToCandidate}
+                                        class="action-button">
+                                    </lightning-button>
+                                </div>
+                            </template>
+                        </div>
+                        <div class="stage-badge-container">
+                            <span class="stage-badge">
+                                {status}
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Tabs for Notes and Activities -->
+            <div class="alc-tabs slds-m-top_large">
+                <lightning-button-group>
+                    <lightning-button label="ALC" name="alc" variant="neutral" onclick={handleTabChange}></lightning-button>
+                    <lightning-button label="Notes" name="notes" variant="neutral" onclick={handleTabChange}></lightning-button>
+                    <lightning-button label="Activities" name="activities" variant="neutral" onclick={handleTabChange}></lightning-button>
+                </lightning-button-group>
+                <div class="inline-toolbar slds-m-top_small">
+                    <lightning-button 
+                        label={editModeLabel}
+                        variant={editModeVariant}
+                        icon-name={editModeIcon}
+                        onclick={toggleEditMode}>
+                    </lightning-button>
+                </div>
+            </div>
+            <div class="alc-tab-content slds-m-top_medium">
+                <template if:true={isAlcTab}>
+                    <!-- Main ALC details with sections and optional edit forms -->
+                    <div class="alc-sections">
+                        <!-- Unified Edit Card (matches candidateRecordView style) -->
+                        <div class="info-card full-width-card">
+                            <div class="card-header">
+                                <lightning-icon icon-name="standard:contract" size="small"></lightning-icon>
+                                <h2>ALC Information</h2>
+                                <lightning-button 
+                                    label={editModeLabel}
+                                    variant={editModeVariant}
+                                    icon-name={editModeIcon}
+                                    onclick={toggleEditMode}
+                                    class="edit-mode-toggle">
+                                </lightning-button>
+                            </div>
+                            <template if:true={isEditMode}>
+                                <c-alc-information-edit record-id={recordId} oneditsuccess={handleALCSuccess}></c-alc-information-edit>
+                            </template>
+                        </div>
+                        <!-- Contact Information -->
+                        <section class="info-card">
+                            <div class="info-card-header">Contact Information</div>
+                            <div class="info-card-body">
+                                <template if:false={isEditMode}>
+                                    <p><b>Mobile:</b> {contactMobile}</p>
+                                    <p><b>Email:</b> {contactEmail}</p>
+                                    <p><b>Home Address:</b> {contactMailingStreet}, {contactMailingCity}, {contactMailingState} {contactMailingPostalCode}</p>
+                                    <p><b>Date of Birth:</b> <!-- optional if needed --></p>
+                                </template>
+                                <template if:true={isEditMode}>
+                                    <lightning-record-edit-form object-api-name="Contact" record-id={alcData.Contact__c} onsuccess={handleContactSuccess} onerror={handleError}>
+                                        <div class="edit-grid">
+                                            <lightning-input-field field-name="MobilePhone"></lightning-input-field>
+                                            <lightning-input-field field-name="Email"></lightning-input-field>
+                                            <lightning-input-field field-name="MailingStreet"></lightning-input-field>
+                                            <lightning-input-field field-name="MailingCity"></lightning-input-field>
+                                            <lightning-input-field field-name="MailingState"></lightning-input-field>
+                                            <lightning-input-field field-name="MailingPostalCode"></lightning-input-field>
+                                        </div>
+                                        <div class="save-row">
+                                            <lightning-button type="submit" variant="brand" label="Save Contact"></lightning-button>
+                                        </div>
+                                    </lightning-record-edit-form>
+                                </template>
+                            </div>
+                        </section>
+
+                        <!-- Career Details -->
+                        <section class="info-card">
+                            <div class="info-card-header">Career Details</div>
+                            <div class="info-card-body">
+                                <template if:false={isEditMode}>
+                                    <p><b>Office Location:</b> {office}</p>
+                                    <p><b>Start Date:</b> {effectiveDate}</p>
+                                    <p><b>MM ID:</b> <!-- optional if available --></p>
+                                </template>
+                                <template if:true={isEditMode}>
+                                    <lightning-record-edit-form object-api-name="ALC__c" record-id={recordId} onsuccess={handleALCSuccess} onerror={handleError}>
+                                        <div class="edit-grid">
+                                            <lightning-input-field field-name="Office__c"></lightning-input-field>
+                                            <lightning-input-field field-name="Contract_Effective__c"></lightning-input-field>
+                                            <lightning-input-field field-name="Related_Candidate__c"></lightning-input-field>
+                                        </div>
+                                        <div class="save-row">
+                                            <lightning-button type="submit" variant="brand" label="Save Career"></lightning-button>
+                                        </div>
+                                    </lightning-record-edit-form>
+                                </template>
+                            </div>
+                        </section>
+
+                        <!-- Contract Information -->
+                        <section class="info-card">
+                            <div class="info-card-header">Contract Information</div>
+                            <div class="info-card-body">
+                                <template if:false={isEditMode}>
+                                    <p><b>Contract Type:</b> {contractType}</p>
+                                    <p><b>Effective Date:</b> {effectiveDate}</p>
+                                </template>
+                                <template if:true={isEditMode}>
+                                    <lightning-record-edit-form object-api-name="ALC__c" record-id={recordId} onsuccess={handleALCSuccess} onerror={handleError}>
+                                        <div class="edit-grid">
+                                            <lightning-input-field field-name="Contract_Type__c"></lightning-input-field>
+                                            <lightning-input-field field-name="Contract_Effective__c"></lightning-input-field>
+                                        </div>
+                                        <div class="save-row">
+                                            <lightning-button type="submit" variant="brand" label="Save Contract"></lightning-button>
+                                        </div>
+                                    </lightning-record-edit-form>
+                                </template>
+                            </div>
+                        </section>
+
+                        <!-- Licensing & Compliance -->
+                        <section class="info-card">
+                            <div class="info-card-header">Licensing & Compliance</div>
+                            <div class="info-card-body">
+                                <div class="badge-row">
+                                    <div class="license-badge {isLifeLicensed ? 'badge-pass' : 'badge-fail'}">
+                                        <template if:true={isLifeLicensed}><span>Life Insurance Licensed</span></template>
+                                        <template if:false={isLifeLicensed}><span>Life Insurance Licensed</span></template>
+                                    </div>
+                                    <div class="license-badge {isRegistered ? 'badge-pass' : 'badge-fail'}">
+                                        <template if:true={isRegistered}><span>Registered</span></template>
+                                        <template if:false={isRegistered}><span>Registered</span></template>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+                    </div>
+                </template>
+                <template if:true={isNotesTab}>
+                    <div class="alc-notes-list">
+                        <template if:true={notes.length}>
+                            <template for:each={notes} for:item="note">
+                                <div key={note.Id} class="note-card">
+                                    <h3>{note.Title}</h3>
+                                    <p>{note.Content}</p>
+                                    <small>By {note.CreatedBy.Name} on {note.CreatedDate}</small>
+                                </div>
+                            </template>
+                        </template>
+                        <template if:false={notes.length}>
+                            <p>No notes found.</p>
+                        </template>
+                    </div>
+                </template>
+                <template if:true={isActivitiesTab}>
+                    <div class="alc-activities-list">
+                        <template if:true={activities.length}>
+                            <template for:each={activities} for:item="activity">
+                                <div key={activity.Id} class="activity-card">
+                                    <b>{activity.Subject}</b> ({activity.StartDateTime} - {activity.EndDateTime})<br/>
+                                    <small>Owner: {activity.Owner.Name}</small>
+                                </div>
+                            </template>
+                        </template>
+                        <template if:false={activities.length}>
+                            <p>No activities found.</p>
+                        </template>
+                    </div>
+                </template>
+            </div>
+        </div>
+    </template>
+</template>

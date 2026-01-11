@@ -1,0 +1,41 @@
+<template>
+    <section class="card">
+        <header class="card-header">
+            <h2>Knowledge</h2>
+            <div class="search-row">
+                <lightning-input type="search"
+                                 value={searchText}
+                                 placeholder="Search knowledge..."
+                                 onchange={handleSearchChange}
+                                 onkeyup={handleKeyup}
+                                 variant="label-hidden">
+                </lightning-input>
+                <lightning-button label="Search" variant="brand" onclick={runSearch}></lightning-button>
+                    <lightning-button class="slds-m-left_x-small" label="Use Description" onclick={useDescription}></lightning-button>
+            </div>
+        </header>
+        <div class="card-body">
+            <template if:true={isLoading}>
+                <lightning-spinner size="small" alternative-text="Loading knowledge"></lightning-spinner>
+            </template>
+            <template if:true={articles}>
+                <template if:true={articles.length}>
+                    <ul class="article-list">
+                        <template for:each={articles} for:item="a">
+                            <li key={a.id} class="article-item">
+                                <div class="article-title">
+                                    <lightning-button class="slds-m-right_small" variant="base" label={a.title} onclick={navigateToArticle} data-id={a.id}></lightning-button>
+                                </div>
+                                <div class="article-meta">Article #{a.articleNumber}</div>
+                                <div class="article-summary">{a.summary}</div>
+                            </li>
+                        </template>
+                    </ul>
+                </template>
+                <template if:false={articles.length}>
+                    <div class="empty">No articles found.</div>
+                </template>
+            </template>
+        </div>
+    </section>
+</template>

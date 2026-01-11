@@ -1,0 +1,80 @@
+<apex:page showHeader="false" sidebar="false" standardStylesheets="false" docType="html-5.0">
+    <html>
+    <head>
+        <style>
+            body {
+                margin: 0;
+                padding: 0;
+                overflow: hidden;
+            }
+            #navBar {
+                width: 100vw;
+                background: linear-gradient(90deg, #202A44 0%, #193F74 100%);
+                color: #fff;
+                display: flex;
+                align-items: center;
+                padding: 0.5rem 2rem;
+                font-family: 'Segoe UI', Roboto, sans-serif;
+            }
+            .nav-btn {
+                background: none;
+                border: none;
+                color: #fff;
+                margin-right: 2rem;
+                font-weight: 500;
+                font-size: 1.1rem;
+                cursor: pointer;
+                transition: color 0.2s;
+                padding: 0;
+            }
+            .nav-btn:hover {
+                color: #FA9E84;
+                text-decoration: underline;
+            }
+            #lwcContainer {
+                width: 100vw;
+                min-height: 90vh;
+            }
+        </style>
+    </head>
+    <body>
+        <div id="navBar">
+            <span style="font-weight:700;font-size:1.3rem;margin-right:2rem;">🎯 Capstone Recruiter Portal</span>
+            <button class="nav-btn" onclick="loadLWC('dashboard')">Dashboard</button>
+            <button class="nav-btn" onclick="loadLWC('candidates')">Candidates</button>
+            <button class="nav-btn" onclick="loadLWC('interviews')">Interviews</button>
+        </div>
+        <div id="lwcContainer"></div>
+        <script src="/lightning/lightning.out.js"></script>
+        <script>
+            var lwcMap = {
+                dashboard: "c:recruitingDashboardUnified",
+                candidates: "c:candidateRecordView",
+                interviews: "c:interviewLeaderboard"
+            };
+            var currentComponent = null;
+            function loadLWC(key) {
+                var lwcName = lwcMap[key] || lwcMap.dashboard;
+                var container = document.getElementById('lwcContainer');
+                container.innerHTML = '';
+                if (currentComponent && currentComponent.destroy) {
+                    try { currentComponent.destroy(); } catch(e) {}
+                }
+                $Lightning.use("c:CustomBrandedPortalApp", function() {
+                    $Lightning.createComponent(
+                        lwcName,
+                        {},
+                        "lwcContainer",
+                        function(component) {
+                            currentComponent = component;
+                            console.log(lwcName + " loaded");
+                        }
+                    );
+                });
+            }
+            // Initial load
+            window.onload = function() { loadLWC('dashboard'); };
+        </script>
+    </body>
+    </html>
+</apex:page>

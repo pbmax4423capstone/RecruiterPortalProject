@@ -122,10 +122,9 @@ public class ALCRelationshipTriggerHandler {
         // Link to existing Contact
         alc.Contact__c = existingContact.Id;
 
-        // Check if Contact has Candidate, if not and this is Career type, create one
-        String recordTypeName = recordTypeIdToName.get(alc.RecordTypeId);
-        if (recordTypeName == 'Career' && alc.Candidate__c == null) {
-          Id existingCandidateId = contactToCandidateId.get(existingContact.Id);
+        // Always link Candidate if possible, regardless of record type
+        Id existingCandidateId = contactToCandidateId.get(existingContact.Id);
+        if (alc.Candidate__c == null) {
           if (existingCandidateId != null) {
             // Link to existing Candidate
             alc.Candidate__c = existingCandidateId;
@@ -168,8 +167,8 @@ public class ALCRelationshipTriggerHandler {
           Contact newContact = contactsToInsert[i];
           alc.Contact__c = newContact.Id;
 
-          // Create Candidate for Career type
-          if (indexNeedsCandidate.containsKey(i)) {
+          // Always create Candidate for new Contact if ALC has no Candidate
+          if (alc.Candidate__c == null) {
             Candidate__c newCandidate = new Candidate__c();
             newCandidate.First_Name__c = alc.First_Name__c;
             newCandidate.Last_Name__c = alc.Last_Name__c;
@@ -177,7 +176,6 @@ public class ALCRelationshipTriggerHandler {
             newCandidate.Phone__c = alc.Mobile__c;
             newCandidate.Contact__c = newContact.Id;
             newCandidate.Status__c = 'Contract Sent';
-
             candidatesToInsert.add(newCandidate);
           }
         }

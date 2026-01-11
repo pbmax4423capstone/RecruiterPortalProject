@@ -1,0 +1,84 @@
+<template>
+    <div class="info-card">
+        <div class="card-header">
+            <h2>Contact Information</h2>
+            <lightning-button 
+                label={toggleButtonLabel}
+                variant={toggleButtonVariant}
+                onclick={handleToggleAllFields}
+                class="toggle-button">
+            </lightning-button>
+        </div>
+        <div class="card-body">
+            <lightning-record-edit-form 
+                record-id={recordId} 
+                object-api-name={objectApiName}
+                onsuccess={handleSuccess}
+                onerror={handleError}
+                onsubmit={handleSubmit}>
+
+                <lightning-messages></lightning-messages>
+
+                <div class="field-grid">
+                    <div class="field-item">
+                        <span class="field-label">First Name</span>
+                        <lightning-input-field field-name="FirstName" variant="label-hidden"></lightning-input-field>
+                    </div>
+                    <div class="field-item">
+                        <span class="field-label">Last Name</span>
+                        <lightning-input-field field-name="LastName" variant="label-hidden"></lightning-input-field>
+                    </div>
+                    <div class="field-item">
+                        <span class="field-label">Email</span>
+                        <lightning-input-field field-name="Email" variant="label-hidden"></lightning-input-field>
+                    </div>
+                    <div class="field-item">
+                        <span class="field-label">Mobile Phone</span>
+                        <lightning-input-field field-name="MobilePhone" variant="label-hidden"></lightning-input-field>
+                    </div>
+                    <div class="field-item">
+                        <span class="field-label">Home Phone</span>
+                        <lightning-input-field field-name="HomePhone" variant="label-hidden"></lightning-input-field>
+                    </div>
+                    <div class="field-item">
+                        <span class="field-label">Personal Email</span>
+                        <lightning-input-field field-name="Personal_Email__c" variant="label-hidden"></lightning-input-field>
+                    </div>
+                    <div class="field-item full">
+                        <span class="field-label">Mailing Street</span>
+                        <lightning-input-field field-name="MailingStreet" variant="label-hidden"></lightning-input-field>
+                    </div>
+                    <div class="field-item">
+                        <span class="field-label">Mailing City</span>
+                        <lightning-input-field field-name="MailingCity" variant="label-hidden"></lightning-input-field>
+                    </div>
+                    <div class="field-item">
+                        <span class="field-label">Mailing State</span>
+                        <lightning-input-field field-name="MailingState" variant="label-hidden"></lightning-input-field>
+                    </div>
+                    <div class="field-item">
+                        <span class="field-label">Mailing Postal Code</span>
+                        <lightning-input-field field-name="MailingPostalCode" variant="label-hidden"></lightning-input-field>
+                    </div>
+                </div>
+                <div class="save-row">
+                    <lightning-button variant="neutral" label="Cancel" onclick={handleCancel}></lightning-button>
+                    <lightning-button type="submit" variant="brand" label="Save"></lightning-button>
+                </div>
+
+                <template if:true={showAllFields}>
+                    <div class="all-fields-section">
+                        <h3 class="section-title">All Editable Fields</h3>
+                        <div class="field-grid">
+                            <template for:each={displayedFields} for:item="fieldName">
+                                <div key={fieldName} class="field-item">
+                                    <lightning-input-field field-name={fieldName} variant="label-stacked"></lightning-input-field>
+                                </div>
+                            </template>
+                        </div>
+                    </div>
+                </template>
+            </lightning-record-edit-form>
+        </div>
+    </div>
+</template>

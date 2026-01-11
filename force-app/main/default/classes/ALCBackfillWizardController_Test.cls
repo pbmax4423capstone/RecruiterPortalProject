@@ -60,12 +60,25 @@ private class ALCBackfillWizardController_Test {
     };
     insert testALCs;
 
+    // Collect auto-created Contact IDs before removing links
+    Set<Id> orphanedContactIds = new Set<Id>();
+    for (ALC__c alc : testALCs) {
+      if (alc.Contact__c != null) {
+        orphanedContactIds.add(alc.Contact__c);
+      }
+    }
+
     // Manually remove Contact links to create "unlinked" state
     for (ALC__c alc : testALCs) {
       alc.Contact__c = null;
       alc.Candidate__c = null;
     }
     update testALCs;
+
+    // Delete orphaned Contacts to avoid duplicate rule conflicts in tests
+    if (!orphanedContactIds.isEmpty()) {
+      delete [SELECT Id FROM Contact WHERE Id IN :orphanedContactIds];
+    }
   }
 
   @isTest
@@ -278,24 +291,23 @@ private class ALCBackfillWizardController_Test {
     if (careerRTId == null)
       return;
 
-    // Create unlinked ALC
+    // Create unlinked ALC - NOTE: No email to avoid unique constraint issues
     ALC__c testALC = new ALC__c(
-      First_Name__c = 'NewContact',
-      Last_Name__c = 'Test',
-      Personal_Email_Address__c = 'newcontact.test@test.com',
-      Mobile__c = '555-555-5555',
+      First_Name__c = 'NewContactUnique',
+      Last_Name__c = 'TestUnique',
+      Personal_Email_Address__c = null,  // Leave email blank to avoid unique constraint
+      Mobile__c = '555-555-9999',
       RecordTypeId = careerRTId
     );
     insert testALC;
 
     // Remove auto-created Contact/Candidate
+    Id autoCreatedContactId = testALC.Contact__c;
     testALC.Contact__c = null;
     testALC.Candidate__c = null;
     update testALC;
 
-    Integer contactCountBefore = [SELECT COUNT() FROM Contact];
-
-    // Build decision JSON
+    // Build decision JSON BEFORE starting test
     List<Map<String, Object>> decisions = new List<Map<String, Object>>{
       new Map<String, Object>{
         'alcId' => testALC.Id,
@@ -306,6 +318,16 @@ private class ALCBackfillWizardController_Test {
     String decisionsJson = JSON.serialize(decisions);
 
     Test.startTest();
+    
+    // Delete the auto-created Contact INSIDE Test.startTest() to ensure clean state
+    if (autoCreatedContactId != null) {
+      delete [SELECT Id FROM Contact WHERE Id = :autoCreatedContactId];
+      // Empty recycle bin to prevent duplicate rule violations
+      Database.emptyRecycleBin(new List<Id>{ autoCreatedContactId });
+    }
+
+    Integer contactCountBefore = [SELECT COUNT() FROM Contact];
+
     String resultJson = ALCBackfillWizardController.processBackfillBatch(
       decisionsJson
     );
@@ -316,11 +338,36 @@ private class ALCBackfillWizardController_Test {
     );
     System.assertNotEquals(null, result, 'Should return result map');
 
+    // Check for errors
+    List<Object> errors = (List<Object>) result.get('errors');
+    System.assertEquals(
+      0,
+      errors.size(),
+      'Should have no errors. Errors: ' + JSON.serialize(errors)
+    );
+
     // Verify new Contact was created
     Integer contactCountAfter = [SELECT COUNT() FROM Contact];
+    
+    // Debug info
+    System.debug('contactCountBefore: ' + contactCountBefore);
+    System.debug('contactCountAfter: ' + contactCountAfter);
+    System.debug('Result: ' + JSON.serialize(result));
+    System.debug('contactsCreated from result: ' + result.get('contactsCreated'));
+    
+    List<Contact> allContacts = [SELECT Id, FirstName, LastName, CreatedDate FROM Contact];
+    System.debug('All Contacts: ' + JSON.serializePretty(allContacts));
+    
     System.assert(
       contactCountAfter > contactCountBefore,
-      'Should create new Contact'
+      'Should create new Contact. Before: ' +
+        contactCountBefore +
+        ', After: ' +
+        contactCountAfter +
+        ', contactsCreated in result: ' +
+        result.get('contactsCreated') +
+        ', Result: ' +
+        JSON.serialize(result)
     );
 
     // Verify ALC is now linked
@@ -340,29 +387,33 @@ private class ALCBackfillWizardController_Test {
     if (careerRTId == null)
       return;
 
-    // Create multiple unlinked ALCs
+    // Create multiple unlinked ALCs - NOTE: No emails to avoid unique constraint
     List<ALC__c> testALCs = new List<ALC__c>();
     for (Integer i = 0; i < 3; i++) {
       testALCs.add(
         new ALC__c(
-          First_Name__c = 'Multi' + i,
-          Last_Name__c = 'Test' + i,
-          Personal_Email_Address__c = 'multi' + i + '@test.com',
-          Mobile__c = '555-666-000' + i,
+          First_Name__c = 'MultiUnique' + i,
+          Last_Name__c = 'TestUnique' + i,
+          Personal_Email_Address__c = null,  // Leave email blank to avoid unique constraint
+          Mobile__c = '555-777-999' + i,
           RecordTypeId = careerRTId
         )
       );
     }
     insert testALCs;
 
-    // Remove auto-created links
+    // Remove auto-created links and delete auto-created Contacts
+    Set<Id> autoCreatedContactIds = new Set<Id>();
     for (ALC__c alc : testALCs) {
+      if (alc.Contact__c != null) {
+        autoCreatedContactIds.add(alc.Contact__c);
+      }
       alc.Contact__c = null;
       alc.Candidate__c = null;
     }
     update testALCs;
 
-    // Build decisions for all ALCs
+    // Build decisions for all ALCs BEFORE Test.startTest()
     List<Map<String, Object>> decisions = new List<Map<String, Object>>();
     for (ALC__c alc : testALCs) {
       decisions.add(
@@ -375,7 +426,19 @@ private class ALCBackfillWizardController_Test {
     }
     String decisionsJson = JSON.serialize(decisions);
 
+    Integer candidateCountBefore = [SELECT COUNT() FROM Candidate__c];
+
     Test.startTest();
+    
+    // Delete auto-created Contacts INSIDE Test.startTest()
+    if (!autoCreatedContactIds.isEmpty()) {
+      delete [SELECT Id FROM Contact WHERE Id IN :autoCreatedContactIds];
+      // Empty recycle bin to prevent duplicate rule violations
+      Database.emptyRecycleBin(new List<Id>(autoCreatedContactIds));
+    }
+    
+    Integer contactCountBefore = [SELECT COUNT() FROM Contact];
+
     String resultJson = ALCBackfillWizardController.processBackfillBatch(
       decisionsJson
     );
@@ -385,6 +448,14 @@ private class ALCBackfillWizardController_Test {
       resultJson
     );
     System.assertNotEquals(null, result, 'Should return result map');
+
+    // Check for errors
+    List<Object> errors = (List<Object>) result.get('errors');
+    System.assertEquals(
+      0,
+      errors.size(),
+      'Should have no errors. Errors: ' + JSON.serialize(errors)
+    );
 
     // Verify all ALCs are now linked
     List<ALC__c> linkedALCs = [
@@ -396,7 +467,8 @@ private class ALCBackfillWizardController_Test {
       System.assertNotEquals(
         null,
         alc.Contact__c,
-        'Each ALC should be linked to Contact'
+        'Each ALC should be linked to Contact. Result: ' +
+          JSON.serialize(result)
       );
     }
   }

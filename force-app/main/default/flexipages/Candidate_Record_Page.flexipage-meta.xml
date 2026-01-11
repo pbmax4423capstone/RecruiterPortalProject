@@ -3,7 +3,7 @@
     <flexiPageRegions>
         <itemInstances>
             <componentInstance>
-                <componentName>candidateRecordView</componentName>
+                <componentName>c:candidateRecordView</componentName>
                 <identifier>c_candidateRecordView</identifier>
             </componentInstance>
         </itemInstances>

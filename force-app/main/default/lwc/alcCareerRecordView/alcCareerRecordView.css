@@ -1,3 +1,26 @@
+/* License/Registration Badges */
+.badge-green {
+    background: #e6f9ed;
+    color: #1a7f37;
+    border: 1px solid #1a7f37;
+    border-radius: 6px;
+    padding: 0.5rem 1rem;
+    margin-bottom: 0.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+.badge-red {
+    background: #ffeaea;
+    color: #b91c1c;
+    border: 1px solid #b91c1c;
+    border-radius: 6px;
+    padding: 0.5rem 1rem;
+    margin-bottom: 0.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
 .career-record-container {
     background: #f4f6f9;
     min-height: 100vh;

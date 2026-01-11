@@ -2001,7 +2001,7 @@ public without sharing class RecruiterDashboardController {
         // Use existing contact (duplicate scenario)
         try {
           candidateContact = [
-            SELECT Id, Name, Email, Phone
+            SELECT Id, FirstName, LastName, Name, Email, Phone
             FROM Contact
             WHERE Id = :contactId
             LIMIT 1
@@ -2010,11 +2010,16 @@ public without sharing class RecruiterDashboardController {
           return 'ERROR: Specified contact not found';
         }
       } else {
-        // Check if contact already exists with this email (shouldn't happen with proper duplicate detection)
+        // Parse name into First Name and Last Name
+        List<String> nameParts = candidateName.trim().split(' ');
+        String firstName = nameParts.size() >= 1 ? nameParts[0] : candidateName;
+        String lastName = nameParts.size() >= 2 ? nameParts[nameParts.size()-1] : 'Candidate';
+
+        // Check for existing contact with BOTH matching email and name
         List<Contact> existingContacts = [
-          SELECT Id, Name, Email, Phone
+          SELECT Id, FirstName, LastName, Name, Email, Phone
           FROM Contact
-          WHERE Email = :email
+          WHERE Email = :email AND FirstName = :firstName AND LastName = :lastName
           LIMIT 1
         ];
 
@@ -2023,24 +2028,8 @@ public without sharing class RecruiterDashboardController {
         } else {
           // Create new contact
           candidateContact = new Contact();
-
-          // Parse name into First Name and Last Name
-          List<String> nameParts = candidateName.trim().split('\\s+');
-          if (nameParts.size() >= 2) {
-            candidateContact.FirstName = nameParts[0];
-            // Join remaining parts as last name
-            String lastName = '';
-            for (Integer i = 1; i < nameParts.size(); i++) {
-              if (i > 1)
-                lastName += ' ';
-              lastName += nameParts[i];
-            }
-            candidateContact.LastName = lastName;
-          } else {
-            candidateContact.FirstName = candidateName;
-            candidateContact.LastName = 'Candidate';
-          }
-
+          candidateContact.FirstName = firstName;
+          candidateContact.LastName = lastName;
           candidateContact.Email = email;
           candidateContact.Phone = phone;
           candidateContact.Title = position; // Store position in contact title

@@ -493,15 +493,7 @@ export default class CandidateRecordView extends NavigationMixin(LightningElemen
         );
     }
 
-    handleStartContracting() {
-        // Navigate to Start Contracting for Candidate flow
-        this[NavigationMixin.Navigate]({
-            type: 'standard__webPage',
-            attributes: {
-                url: `/flow/Start_Contracting_for_Candidate?recordId=${this.recordId}`
-            }
-        });
-    }
+    // handleStartContracting removed: now handled by <c-start-contracting-action> LWC button
 
     handleDelete() {
         this[NavigationMixin.Navigate]({

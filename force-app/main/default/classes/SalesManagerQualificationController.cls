@@ -381,6 +381,8 @@ public with sharing class SalesManagerQualificationController {
         results.add(data);
       }
 
+      // Ensure deterministic ordering by agent name for UI/tests
+      results.sort();
       return results;
     } catch (Exception e) {
       System.debug(
@@ -528,7 +530,7 @@ public with sharing class SalesManagerQualificationController {
   /**
    * Wrapper class for Contract A agent data
    */
-  public class ContractAAgentData {
+  public class ContractAAgentData implements Comparable {
     @AuraEnabled
     public String agentName;
     @AuraEnabled
@@ -547,5 +549,12 @@ public with sharing class SalesManagerQualificationController {
     public Integer opportunitiesSubmitted;
     @AuraEnabled
     public Integer opportunitiesWon;
+
+    public Integer compareTo(Object other) {
+      ContractAAgentData o = (ContractAAgentData) other;
+      String aName = this.agentName != null ? this.agentName : '';
+      String bName = o != null && o.agentName != null ? o.agentName : '';
+      return aName.compareTo(bName);
+    }
   }
 }

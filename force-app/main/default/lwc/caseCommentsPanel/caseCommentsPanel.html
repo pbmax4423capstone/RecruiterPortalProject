@@ -1,0 +1,48 @@
+<template>
+    <section class="card">
+        <div class="card-header">
+            <div class="left">
+                <lightning-icon icon-name="standard:case_comment" size="small"></lightning-icon>
+                <h2>Case Comments</h2>
+            </div>
+            <div class="spacer"></div>
+            <lightning-button label="New" variant="brand" onclick={openNewModal}></lightning-button>
+        </div>
+        <div class="card-body">
+            <lightning-datatable key-field="Id"
+                                 data={rows}
+                                 columns={columns}
+                                 hide-checkbox-column
+                                 show-row-number-column
+                                 sorted-by={sortedBy}
+                                 sorted-direction={sortedDirection}
+                                 onsort={handleSort}>
+            </lightning-datatable>
+            <template if:true={rowsEmpty}>
+                <div class="empty">No comments yet.</div>
+            </template>
+        </div>
+    </section>
+
+    <template if:true={isModalOpen}>
+        <section role="dialog" tabindex="-1" aria-modal="true" aria-label="New Case Comment" class="slds-modal slds-fade-in-open">
+            <div class="slds-modal__container">
+                <header class="slds-modal__header">
+                    <h2 class="slds-text-heading_medium">New Case Comment</h2>
+                </header>
+                <div class="slds-modal__content slds-p-around_medium">
+                    <lightning-record-edit-form object-api-name="CaseComment" onsuccess={handleSuccess} onsubmit={handleSubmit} onerror={handleError}>
+                        <lightning-input-field field-name="CommentBody"></lightning-input-field>
+                        <lightning-input-field field-name="IsPublished"></lightning-input-field>
+                        <div class="slds-m-top_medium">
+                            <lightning-button-icon icon-name="utility:mic" alternative-text="Toggle dictation" title="Toggle dictation" onclick={toggleDictation}></lightning-button-icon>
+                            <lightning-button label="Cancel" onclick={closeModal}></lightning-button>
+                            <lightning-button class="slds-m-left_small" type="submit" variant="brand" label="Save"></lightning-button>
+                        </div>
+                    </lightning-record-edit-form>
+                </div>
+            </div>
+        </section>
+        <div class="slds-backdrop slds-backdrop_open"></div>
+    </template>
+</template>

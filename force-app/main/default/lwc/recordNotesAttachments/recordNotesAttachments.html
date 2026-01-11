@@ -1,0 +1,48 @@
+<template>
+    <lightning-card title="Notes &amp; Files" icon-name="utility:attach">
+        <div class="slds-var-p-around_small">
+            <div class="slds-grid slds-wrap slds-gutters_small">
+                <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2">
+                    <h3 class="slds-text-title_caps slds-var-m-bottom_small">Files</h3>
+                    <lightning-file-upload
+                        record-id={recordId}
+                        multiple
+                        onuploadfinished={handleUploadFinished}
+                    ></lightning-file-upload>
+                    <template lwc:if={files.length}>
+                        <lightning-datatable
+                            key-field="contentDocumentId"
+                            data={files}
+                            columns={fileColumns}
+                            hide-checkbox-column
+                            onrowaction={handleFileRowAction}
+                            class="slds-var-m-top_small"
+                        ></lightning-datatable>
+                    </template>
+                    <template lwc:else>
+                        <div class="slds-var-m-top_small slds-text-color_weak">No files yet.</div>
+                    </template>
+                </div>
+
+                <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2">
+                    <h3 class="slds-text-title_caps slds-var-m-bottom_small">Notes</h3>
+                    <template lwc:if={notes.length}>
+                        <lightning-datatable
+                            key-field="noteId"
+                            data={notes}
+                            columns={noteColumns}
+                            hide-checkbox-column
+                            onrowaction={handleNoteRowAction}
+                            class="slds-var-m-top_small"
+                        ></lightning-datatable>
+                    </template>
+                    <template lwc:else>
+                        <div class="slds-var-m-top_small slds-text-color_weak">No notes yet.</div>
+                    </template>
+                </div>
+            </div>
+
+            
+        </div>
+    </lightning-card>
+</template>

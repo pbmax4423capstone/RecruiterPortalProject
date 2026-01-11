@@ -1,0 +1,6 @@
+.card { background: #fff; border-radius: 8px; box-shadow: 0 2px 6px rgba(25,63,116,0.18); }
+.card-header { display: flex; align-items: center; gap: 8px; padding: 12px 16px; border-bottom: 3px solid #193F74; background: linear-gradient(180deg, #F7F9FC 0%, #FFFFFF 100%); }
+.card-header .left { display: flex; align-items: center; gap: 8px; }
+.card-body { padding: 16px; }
+.spacer { margin-left: auto; }
+.empty { color: #706e6b; font-style: italic; margin-top: 8px; }

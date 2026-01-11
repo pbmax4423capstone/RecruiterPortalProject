@@ -1,0 +1,103 @@
+<template>
+    <template if:true={opportunity.data}>
+        <div class="container">
+            <div class="hero">
+                <div class="hero-content">
+                    <div class="hero-left">
+                        <div class="avatar">
+                            <lightning-icon icon-name="standard:opportunity" size="large"></lightning-icon>
+                        </div>
+                        <div class="titles">
+                            <h1 class="title">{name}</h1>
+                            <div class="subtitle">Opportunity</div>
+                        </div>
+                    </div>
+                    <div class="hero-right actions">
+                        <lightning-button variant="brand" label="Inline Edit" onclick={toggleEdit}></lightning-button>
+                        <lightning-button label="Edit" onclick={navigateToEdit}></lightning-button>
+                        <lightning-button label="Clone" onclick={navigateToClone}></lightning-button>
+                        <lightning-button label="Delete" variant="destructive" onclick={deleteCurrent}></lightning-button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Stage Path -->
+            <div class="card full">
+                <div class="card-body">
+                    <c-opportunity-stage-path record-id={recordId}></c-opportunity-stage-path>
+                </div>
+            </div>
+
+            <div class="grid">
+                <template if:true={isEditing}>
+                    <div class="card full">
+                        <div class="card-header">
+                            <lightning-icon icon-name="utility:edit" size="small"></lightning-icon>
+                            <h2>Inline Edit</h2>
+                            <div class="spacer"></div>
+                            <lightning-button label="Close" onclick={toggleEdit}></lightning-button>
+                        </div>
+                        <div class="card-body">
+                            <lightning-record-form record-id={recordId} object-api-name="Opportunity" mode="edit" onsuccess={handleEditSuccess} onerror={handleEditError}></lightning-record-form>
+                        </div>
+                    </div>
+                </template>
+
+                <div class="card">
+                    <div class="card-header">
+                        <lightning-icon icon-name="utility:summary" size="small"></lightning-icon>
+                        <h2>Summary</h2>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="item">
+                                <span class="label">Stage</span>
+                                <span class="value">{stage}</span>
+                            </div>
+                            <div class="item">
+                                <span class="label">Amount</span>
+                                <span class="value">{amount}</span>
+                            </div>
+                            <div class="item">
+                                <span class="label">Close Date</span>
+                                <span class="value">{closeDate}</span>
+                            </div>
+                            <div class="item">
+                                <span class="label">Agency</span>
+                                <span class="value">{agencyDisplay}</span>
+                            </div>
+                            <div class="item">
+                                <span class="label">Soliciting Agent</span>
+                                <span class="value">{solicitingAgentDisplay}</span>
+                            </div>
+                            <div class="item">
+                                <span class="label">Forecast Category</span>
+                                <span class="value">{forecastCategoryDisplay}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card full">
+                    <div class="card-header">
+                        <lightning-icon icon-name="standard:opportunity" size="small"></lightning-icon>
+                        <h2>Details</h2>
+                    </div>
+                    <div class="card-body">
+                        <lightning-record-form record-id={recordId} object-api-name="Opportunity" mode="view" layout-type="Full" columns="2" density="compact">
+                            <lightning-messages></lightning-messages>
+                        </lightning-record-form>
+                    </div>
+                </div>
+
+                
+            </div>
+        </div>
+    </template>
+    <template if:true={opportunity.error}>
+        <div class="error">
+            <lightning-icon icon-name="utility:error" size="small"></lightning-icon>
+            <span>Error loading opportunity</span>
+        </div>
+    </template>
+</template>

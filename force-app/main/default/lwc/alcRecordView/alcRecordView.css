@@ -1,0 +1,168 @@
+/* Host component styles */
+:host {
+    display: block;
+    height: auto !important;
+    min-height: 100vh;
+    overflow: visible !important;
+}
+
+.alc-record-container {
+    background-color: #f3f3f3;
+    min-height: 100vh;
+    padding-bottom: 2rem;
+    width: 100%;
+    overflow-x: hidden;
+    overflow-y: visible !important;
+    position: relative;
+    height: auto !important;
+    max-height: none !important;
+}
+
+.hero-header {
+    background: linear-gradient(180deg, #202A44 0%, #193F74 100%);
+    color: white;
+    padding: 2rem 2rem 1.5rem;
+    margin-bottom: 0;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    position: relative;
+    z-index: 1;
+}
+
+.hero-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 1400px;
+    margin: 0 auto;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+}
+
+.hero-left {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    flex: 1;
+    min-width: 300px;
+}
+
+.avatar-circle {
+    background: white;
+    border-radius: 50%;
+    width: 80px;
+    height: 80px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.10);
+}
+
+.hero-info {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.hero-title {
+    font-size: 2.2rem;
+    font-weight: 700;
+    margin: 0;
+    color: white;
+}
+
+.hero-subtitle {
+    font-size: 1.1rem;
+    color: #e0e0e0;
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+}
+
+.position-badge {
+    background: #193F74;
+    color: #fff;
+    border-radius: 12px;
+    padding: 0.2rem 0.8rem;
+    font-size: 1rem;
+    font-weight: 600;
+    margin-right: 0.5rem;
+}
+
+.action-buttons-row {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 0.5rem;
+}
+
+.action-button-wrapper {
+    display: flex;
+    align-items: center;
+}
+
+.action-button lightning-button {
+    min-width: 140px;
+}
+
+.stage-badge-container {
+    margin-top: 0.5rem;
+}
+
+.stage-badge {
+    background: #fff;
+    color: #202A44;
+    border-radius: 12px;
+    padding: 0.3rem 1.2rem;
+    font-size: 1.1rem;
+    font-weight: 700;
+    box-shadow: 0 2px 8px rgba(25,63,116,0.10);
+}
+
+/* Info cards styling to mirror candidateRecordView */
+.alc-sections {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+}
+
+.info-card {
+    background: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    overflow: hidden;
+}
+.info-card-header {
+    background: #f8f9fb;
+    border-bottom: 2px solid #e1e6ee;
+    padding: 0.75rem 1rem;
+    font-weight: 700;
+}
+.info-card-body {
+    padding: 1rem;
+}
+
+.edit-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.75rem;
+}
+.save-row {
+    margin-top: 0.75rem;
+}
+
+.badge-row {
+    display: flex;
+    gap: 1rem;
+}
+.license-badge {
+    padding: 0.5rem 0.75rem;
+    border-radius: 6px;
+    font-weight: 600;
+}
+.badge-pass {
+    background: #d9f2e6;
+    color: #0a7b52;
+}
+.badge-fail {
+    background: #fbe4e6;
+    color: #9e1b32;
+}

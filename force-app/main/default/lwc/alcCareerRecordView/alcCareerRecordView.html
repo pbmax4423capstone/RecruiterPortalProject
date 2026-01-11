@@ -1,6 +1,7 @@
 <template>
-    <template if:true={alcRecord.data}>
-        <div class="career-record-container">
+    <div>
+        <template if:true={alcRecord.data}>
+            <div class="career-record-container">
             <!-- Hero Header Section -->
             <div class="hero-header">
                 <div class="hero-content">
@@ -20,10 +21,10 @@
                         <div class="action-buttons-row">
                             <div class="action-button-wrapper">
                                 <lightning-button 
-                                    label="Edit" 
-                                    variant="brand" 
-                                    icon-name="utility:edit"
-                                    onclick={handleEdit}
+                                    label={editModeLabel} 
+                                    variant={editModeVariant} 
+                                    icon-name={editModeIcon}
+                                    onclick={handleToggleEditMode}
                                     class="action-button">
                                 </lightning-button>
                             </div>
@@ -33,15 +34,6 @@
                                     variant="neutral" 
                                     icon-name="utility:case"
                                     onclick={handleCreateTicket}
-                                    class="action-button">
-                                </lightning-button>
-                            </div>
-                            <div class="action-button-wrapper">
-                                <lightning-button 
-                                    label="Start Contracting" 
-                                    variant="success" 
-                                    icon-name="utility:contract"
-                                    onclick={handleStartContracting}
                                     class="action-button">
                                 </lightning-button>
                             </div>
@@ -75,6 +67,23 @@
 
             <!-- Main Content Grid -->
             <div class="content-grid">
+                <!-- Unified Inline Edit Card -->
+                <div class="info-card full-width-card">
+                    <div class="card-header">
+                        <lightning-icon icon-name="standard:contract" size="small"></lightning-icon>
+                        <h2>ALC Information</h2>
+                        <lightning-button 
+                            label={editModeLabel}
+                            variant={editModeVariant}
+                            icon-name={editModeIcon}
+                            onclick={handleToggleEditMode}
+                            class="edit-mode-toggle">
+                        </lightning-button>
+                    </div>
+                    <template if:true={isEditMode}>
+                        <c-alc-information-edit record-id={recordId} oneditsuccess={handleEditSuccess} onediterror={handleEditError}></c-alc-information-edit>
+                    </template>
+                </div>
                 <!-- Contact Information Card -->
                 <div class="info-card">
                     <div class="card-header">
@@ -82,40 +91,63 @@
                         <h2>Contact Information</h2>
                     </div>
                     <div class="card-body">
-                        <div class="field-row">
-                            <div class="field-item">
-                                <lightning-icon icon-name="utility:phone" size="x-small" class="field-icon"></lightning-icon>
-                                <div class="field-content">
-                                    <span class="field-label">Mobile</span>
-                                    <a href={phoneLink} class="field-value link">{mobile}</a>
+                        <template if:true={effectiveContactId}>
+                            <div class="field-row">
+                                <div class="field-item">
+                                    <lightning-icon icon-name="utility:user" size="x-small" class="field-icon"></lightning-icon>
+                                    <div class="field-content">
+                                        <span class="field-label">Name</span>
+                                        <template if:true={contactName}>
+                                            <a href="javascript:void(0)" class="field-value link" onclick={navigateToContact}>{contactName}</a>
+                                        </template>
+                                        <template if:false={contactName}>
+                                            <span class="field-value">—</span>
+                                        </template>
+                                    </div>
+                                </div>
+                                <div class="field-item">
+                                    <lightning-icon icon-name="utility:phone" size="x-small" class="field-icon"></lightning-icon>
+                                    <div class="field-content">
+                                        <span class="field-label">Phone</span>
+                                        <template if:true={contactPhone}>
+                                            <a href={contactPhoneLink} class="field-value link">{contactPhone}</a>
+                                        </template>
+                                        <template if:false={contactPhone}>
+                                            <span class="field-value">—</span>
+                                        </template>
+                                    </div>
+                                </div>
+                                <div class="field-item">
+                                    <lightning-icon icon-name="utility:email" size="x-small" class="field-icon"></lightning-icon>
+                                    <div class="field-content">
+                                        <span class="field-label">Email</span>
+                                        <template if:true={contactEmail}>
+                                            <a href={contactEmailLink} class="field-value link">{contactEmail}</a>
+                                        </template>
+                                        <template if:false={contactEmail}>
+                                            <span class="field-value">—</span>
+                                        </template>
+                                    </div>
                                 </div>
                             </div>
-                            <div class="field-item">
-                                <lightning-icon icon-name="utility:email" size="x-small" class="field-icon"></lightning-icon>
-                                <div class="field-content">
-                                    <span class="field-label">Email</span>
-                                    <a href={emailLink} class="field-value link">{email}</a>
+                            <div class="field-row">
+                                <div class="field-item full-width">
+                                    <lightning-icon icon-name="utility:location" size="x-small" class="field-icon"></lightning-icon>
+                                    <div class="field-content">
+                                        <span class="field-label">Address</span>
+                                        <template if:true={contactAddress}>
+                                            <span class="field-value">{contactAddress}</span>
+                                        </template>
+                                        <template if:false={contactAddress}>
+                                            <span class="field-value">—</span>
+                                        </template>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="field-row">
-                            <div class="field-item full-width">
-                                <lightning-icon icon-name="utility:location" size="x-small" class="field-icon"></lightning-icon>
-                                <div class="field-content">
-                                    <span class="field-label">Home Address</span>
-                                    <span class="field-value">{homeAddress}</span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="field-row">
-                            <div class="field-item">
-                                <lightning-icon icon-name="utility:date_input" size="x-small" class="field-icon"></lightning-icon>
-                                <div class="field-content">
-                                    <span class="field-label">Date of Birth</span>
-                                    <span class="field-value">{dob}</span>
-                                </div>
-                            </div>
-                        </div>
+                        </template>
+                        <template if:false={effectiveContactId}>
+                            <span class="field-value">No linked contact found.</span>
+                        </template>
                     </div>
                 </div>
 
@@ -139,6 +171,13 @@
                                 <div class="field-content">
                                     <span class="field-label">Office Location</span>
                                     <span class="field-value">{office}</span>
+                                </div>
+                            </div>
+                            <div class="field-item">
+                                <lightning-icon icon-name="utility:users" size="x-small" class="field-icon"></lightning-icon>
+                                <div class="field-content">
+                                    <span class="field-label">Position</span>
+                                    <span class="field-value">{position}</span>
                                 </div>
                             </div>
                         </div>
@@ -183,6 +222,13 @@
                                     <span class="field-value">{contractEffective}</span>
                                 </div>
                             </div>
+                            <div class="field-item">
+                                <lightning-icon icon-name="utility:event" size="x-small" class="field-icon"></lightning-icon>
+                                <div class="field-content">
+                                    <span class="field-label">Expiration Date</span>
+                                    <span class="field-value">{contractExpiration}</span>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -195,7 +241,7 @@
                     </div>
                     <div class="card-body">
                         <div class="license-badges">
-                            <div class="license-badge" data-licensed={hasLicense}>
+                            <div class={licenseBadgeClass}>
                                 <lightning-icon 
                                     icon-name={licenseIcon} 
                                     size="small" 
@@ -203,7 +249,7 @@
                                 </lightning-icon>
                                 <span>Life Insurance Licensed</span>
                             </div>
-                            <div class="license-badge" data-registered={isRegistered}>
+                            <div class={registeredBadgeClass}>
                                 <lightning-icon 
                                     icon-name={registeredIcon} 
                                     size="small" 
@@ -257,12 +303,12 @@
                 </template>
             </div>
         </div>
-    </template>
-
-    <template if:true={alcRecord.error}>
-        <div class="error-message">
-            <lightning-icon icon-name="utility:error" size="small"></lightning-icon>
-            <p>Error loading record data</p>
-        </div>
-    </template>
+        </template>
+        <template if:true={alcRecord.error}>
+            <div class="error-message">
+                <lightning-icon icon-name="utility:error" size="small"></lightning-icon>
+                <p>Error loading record data</p>
+            </div>
+        </template>
+    </div>
 </template>
